@@ -19,14 +19,17 @@
 """
 Timetabling Schema views.
 """
+import urllib
 
 import zope.schema
 import zope.lifecycleevent
 from zope.proxy import sameProxiedObjects
 from zope.component import getMultiAdapter
 from zope.component import adapts
+from zope.component import getUtility
 from zope.container.interfaces import INameChooser
 from zope.interface import Interface, implements
+from zope.intid.interfaces import IIntIds
 from zope.i18n import translate
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.publisher.browser import BrowserView
@@ -45,7 +48,7 @@ from schooltool.common import format_time_range
 from schooltool.table.table import simple_form_key
 from schooltool.timetable.interfaces import ITimetable, ITimetableContainer
 from schooltool.timetable.interfaces import ISelectedPeriodsSchedule
-from schooltool.timetable.interfaces import IHaveSchedule
+from schooltool.timetable.interfaces import IHaveSchedule, IScheduleContainer
 from schooltool.timetable.browser.app import getActivityVocabulary
 from schooltool.timetable.browser.schedule import FlourishConfirmDeleteView
 from schooltool.timetable.timetable import SelectedPeriodsSchedule
@@ -330,7 +333,6 @@ class ISelectedPeriodsAddForm(Interface):
     last = zope.schema.Date(title=_("Apply until"))
 
 
-
 class SelectedPeriodsAddView(form.AddForm):
 
     template = ViewPageTemplateFile('templates/selected_periods_add.pt')
@@ -507,6 +509,122 @@ class SelectedPeriodsContent(ContentProvider):
         return self.template()
 
 
+class ISelectedPeriodsAddTermsForm(Interface):
+
+    timetable = zope.schema.Choice(
+        title=_("School timetable"),
+        source="schooltool.timetable.browser.timetable_vocabulary",
+        required=True,
+    )
+
+    first = zope.schema.Choice(
+        title=_("First term"),
+        required=True,
+        vocabulary='schooltool.course.section.linked_section_terms')
+
+    last = zope.schema.Choice(
+        title=_("Last term"),
+        required=True,
+        vocabulary='schooltool.course.section.linked_section_terms')
+
+
+class FlourishSelectedPeriodsAddTermsView(FlourishSelectedPeriodsAddView):
+    fields = field.Fields(ISelectedPeriodsAddTermsForm)
+
+    _objects_added = None
+    _objects_created = None
+
+    buttons = button.Buttons(
+        button.Button('add', title=_('Add')),
+        button.Button('cancel', title=_('Cancel')))
+
+    @property
+    def owner(self):
+        return IHaveSchedule(self.context)
+
+    @button.handler(buttons["add"])
+    def handleAdd(self, action):
+        return form.AddForm.handleAdd.func(self, action)
+
+    @button.handler(buttons["cancel"])
+    def handleCancel(self, action):
+        url = absoluteURL(self.context, self.request)
+        self.request.response.redirect(url)
+
+    def updateActions(self):
+        super(SelectedPeriodsAddView, self).updateActions()
+        self.actions['add'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+    def create(self, data):
+        section = self.owner
+        linked = section.linked_sections
+        terms = [(ITerm(s), s) for s in linked]
+        terms = [(term, section) for term, section in terms
+                 if (term.first >= data['first'].first and
+                     term.last <= data['last'].last)]
+        self._objects_created = []
+        timetable = data['timetable']
+        for term, section in terms:
+            schedule = SelectedPeriodsSchedule(
+                timetable, term.first, term.last,
+                title=timetable.title,
+                timezone=timetable.timezone)
+            self._objects_created.append((section, schedule))
+        return self._objects_created
+
+    def add(self, schedules):
+        self._objects_added = []
+        for section, schedule in self._objects_created:
+            schedules = IScheduleContainer(section)
+            chooser = INameChooser(schedules)
+            name = chooser.chooseName('', schedule)
+            schedules[name] = schedule
+            self._objects_added.append(schedule)
+
+    def nextURL(self):
+        if self._objects_added:
+            int_ids = getUtility(IIntIds)
+            also_apply = ''
+            this_section = self.owner
+            n = 0
+            for schedule in self._objects_added:
+                section = IHaveSchedule(schedule)
+                if sameProxiedObjects(this_section, section):
+                    continue
+                also_apply = '&'.join(
+                    [also_apply,
+                    'section-%d=%s&schedule-%d=%s' % (
+                        n, int_ids.getId(removeSecurityProxy(section)),
+                        n, urllib.quote(schedule.__name__)),
+                     ])
+                n += 1
+            if also_apply:
+                also_apply = '?' + also_apply
+            return '%s/edit_multi.html%s' % (
+                absoluteURL(self._objects_added[0], self.request),
+                also_apply)
+        return absoluteURL(self.context, self.request)
+
+
+TimetableAdd_default_first = widget.ComputedWidgetAttribute(
+    lambda adapter: adapter.view.term.first,
+    view=SelectedPeriodsAddView,
+    field=ISelectedPeriodsAddForm['first']
+    )
+
+
+TimetableAdd_default_last = widget.ComputedWidgetAttribute(
+    lambda adapter: adapter.view.term.last,
+    view=SelectedPeriodsAddView,
+    field=ISelectedPeriodsAddForm['last']
+    )
+
+
+class SelectedPeriodsAddTertiaryNav(flourish.page.TertiaryNavigationManager):
+    pass
+
+
 class SelectedPeriodsScheduleEditView(form.EditForm):
     implements(IRenderDayTableCells)
 
@@ -610,6 +728,114 @@ class FlourishSelectedPeriodsScheduleEditView(flourish.page.WideContainerPage,
                                               SelectedPeriodsScheduleEditView):
     __init__ = SelectedPeriodsScheduleEditView.__init__
     update = SelectedPeriodsScheduleEditView.update
+
+
+class FlourishSelectedPeriodsMultiScheduleEditView(flourish.page.WideContainerPage,
+                                                   SelectedPeriodsScheduleEditView):
+    __init__ = SelectedPeriodsScheduleEditView.__init__
+    update = SelectedPeriodsScheduleEditView.update
+
+    fields = field.Fields(ISelectedPeriodsSchedule).select(
+        'consecutive_periods_as_one')
+    fields['consecutive_periods_as_one'].widgetFactory = SingleCheckBoxFieldWidget
+
+    buttons = button.Buttons(
+        button.Button('cancel', title=_('Cancel')))
+
+    def applyChangesToSchedule(self, schedule, data):
+        changes = form.applyChanges(self, schedule, data)
+        # ``changes`` is a dictionary; if empty, there were no changes
+        if changes:
+            # Construct change-descriptions for the object-modified event
+            descriptions = []
+            for interface, names in changes.items():
+                descriptions.append(
+                    zope.lifecycleevent.Attributes(interface, *names))
+            # Send out a detailed object-modified event
+            zope.event.notify(
+                zope.lifecycleevent.ObjectModifiedEvent(schedule, *descriptions))
+        if not changes:
+            return False
+
+        schedule_changed = False
+        timetable = schedule.timetable
+        for day in timetable.periods.templates.values():
+            for period in day.values():
+                key = self.getPeriodKey(day, period)
+                selected = bool(self.request.get(key))
+                scheduled = schedule.hasPeriod(period)
+                if selected and not scheduled:
+                    schedule.addPeriod(period)
+                    schedule_changed = True
+                elif not selected and scheduled:
+                    schedule.removePeriod(period)
+                    schedule_changed = True
+        return schedule_changed
+
+    @property
+    def other_params(self):
+        params = []
+        n = 0
+        while ('section-%d' % n in self.request and
+               'schedule-%d' % n in self.request):
+            params.extend([
+                {'key': 'section-%d' % n, 'value': self.request.get('section-%d' % n)},
+                {'key': 'schedule-%d' % n, 'value': self.request.get('schedule-%d' % n)},
+                ])
+            n += 1
+        return params
+
+    @property
+    def other_schedules(self):
+        result = []
+        n = 0
+        int_ids = getUtility(IIntIds)
+        while ('section-%d' % n in self.request and
+               'schedule-%d' % n in self.request):
+            section_id = self.request.get('section-%d' % n)
+            schedule_name = self.request.get('schedule-%d' % n)
+            n += 1
+            try:
+                section_id = int(section_id)
+            except ValueError:
+                continue
+            section = int_ids.queryObject(section_id, None)
+            if section is None:
+                continue
+            schedules = IScheduleContainer(section)
+            schedule = schedules.get(schedule_name, None)
+            if schedule is None:
+                continue
+            result.append(schedule)
+        return result
+
+    @property
+    def other_info(self):
+        result = []
+        for schedule in self.other_schedules:
+            section = IHaveSchedule(schedule)
+            term = ITerm(section)
+            result.append({'owner': section, 'term': term})
+        return result
+
+    @button.buttonAndHandler(_('Save'), name='apply')
+    def handleApply(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        changed = self.applyChangesToSchedule(self.getContent(), data)
+        if changed:
+            zope.lifecycleevent.modified(self.getContent())
+
+        for schedule in self.other_schedules:
+            changed = self.applyChangesToSchedule(schedule, data)
+            if changed:
+                zope.lifecycleevent.modified(schedule)
+
+        self.status = self.successMessage
+
+        self.redirectToParent()
 
 
 class FlourishSelectedScheduleDeleteView(FlourishConfirmDeleteView):

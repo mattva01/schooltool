@@ -75,9 +75,9 @@
     <tal:block define="courses view/courses">
       <tal:block condition="courses"
                  content="structure context/schooltool:content/ajax/courses_table" />
-      <h3 tal:condition="not:courses" i18n:translate="">
+      <p tal:condition="not:courses" i18n:translate="">
         This section has no courses
-      </h3>
+      </p>
     </tal:block>
     <h3>
       <tal:block i18n:translate="">Terms</tal:block>
@@ -118,9 +118,9 @@
     <tal:block tal:condition="view/has_instructors">
       <tal:block content="structure context/schooltool:content/ajax/view/context/instructors/person_table" />
     </tal:block>
-    <h3 tal:condition="not:view/has_instructors" i18n:translate="">
+    <p tal:condition="not:view/has_instructors" i18n:translate="">
       This section has no instructors
-    </h3>
+    </p>
     <h3>
       <tal:block i18n:translate="">Students</tal:block>
       <a class="modify" href="" title="Edit students for this section"
@@ -134,9 +134,9 @@
     <tal:block tal:condition="view/has_learners">
       <tal:block content="structure context/schooltool:content/ajax/view/context/members/person_table" />
     </tal:block>
-    <h3 tal:condition="not:view/has_learners" i18n:translate="">
+    <p tal:condition="not:view/has_learners" i18n:translate="">
       This section has no students
-    </h3>
+    </p>
     <h3>
       <tal:block i18n:translate="">Locations</tal:block>
       <a class="modify" href="" title="Edit locations for this section"
@@ -150,9 +150,9 @@
     <tal:block tal:condition="view/has_locations">
       <tal:block content="structure context/schooltool:content/ajax/view/context/resources/location_table" />
     </tal:block>
-    <h3 tal:condition="not:view/has_locations" i18n:translate="">
+    <p tal:condition="not:view/has_locations" i18n:translate="">
       This section has no locations
-    </h3>
+    </p>
     <h3>
       <tal:block i18n:translate="">Equipment</tal:block>
       <a class="modify" href="" title="Edit equipment for this section"
@@ -166,11 +166,11 @@
     <tal:block tal:condition="view/has_equipment">
       <tal:block content="structure context/schooltool:content/ajax/view/context/resources/equipment_table" />
     </tal:block>
-    <h3 tal:condition="not:view/has_equipment" i18n:translate="">
+    <p tal:condition="not:view/has_equipment" i18n:translate="">
       This section has no equipment
-    </h3>
+    </p>
   </tal:block>
-  <h3>
+  <h3 class="done-link">
     <a tal:attributes="href view/done_link"
        i18n:translate="">Done</a>
   </h3>

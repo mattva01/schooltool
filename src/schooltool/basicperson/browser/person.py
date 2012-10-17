@@ -67,6 +67,7 @@ from schooltool.contact.interfaces import IContactable
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.browser.person import PersonTable, PersonTableFormatter
+from schooltool.person.browser.person import PersonTableFilter
 from schooltool.schoolyear.interfaces import ISchoolYearContainer, ISchoolYear
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
@@ -187,9 +188,11 @@ class IPersonAddForm(IBasicPerson):
 
 class IPhotoField(Interface):
 
-    photo = flourish.widgets.Photo(
+    photo = flourish.fields.Image(
         title=_('Photo'),
         description=_('An image file that will be converted to a JPEG no larger than 99x132 pixels (3:4 aspect ratio). Uploaded images must be JPEG or PNG files smaller than 10 MB'),
+        size=(99,132),
+        format='JPEG',
         required=False)
 
 
@@ -225,6 +228,7 @@ class PhotoFieldFormAdapter(object):
 
     def __getattr__(self, name):
         return getattr(self.context, name)
+
 
 class UsernameAlreadyUsed(ValidationError):
     __doc__ = _("This username is already in use")
@@ -1361,32 +1365,10 @@ def getPersonActiveViewlet(person, request, view, manager):
         person, request, view, manager)
 
 
-class PhotoView(BrowserPage):
+class PhotoView(flourish.widgets.ImageView):
+    attribute = "photo"
 
-    def __call__(self):
-        photo = self.context.photo
-        if photo is None:
-            raise NotFound(self.context, u'photo', self.request)
-        self.request.response.setHeader('Content-Type', photo.mimeType)
-        self.request.response.setHeader('Content-Length', photo.size)
-        try:
-            modified = IZopeDublinCore(self.context).modified
-        except TypeError:
-            modified=None
-        if modified is not None and isinstance(modified,datetime):
-            header= self.request.getHeader('If-Modified-Since', None)
-            lmt = long(mktime(modified.timetuple()))
-            if header is not None:
-                header = header.split(';')[0]
-                try:
-                    mod_since=long(time(header))
-                except:
-                    mod_since=None
-                if mod_since is not None:
-                    if lmt <= mod_since:
-                        self.request.response.setStatus(304)
-                        return ''
-            self.request.response.setHeader('Last-Modified',
-                                            rfc1123_date(lmt))
-        result = photo.openDetached()
-        return result
+
+class PersonContainerViewTableFilter(PersonTableFilter):
+
+    template = ViewPageTemplateFile('templates/f_container_table_filter.pt')

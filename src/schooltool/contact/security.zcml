@@ -22,6 +22,11 @@
       crowds="administration owner person_instructors contact_person_instructors"
       permission="schooltool.view" />
 
+  <allow
+      interface="schooltool.contact.interfaces.IContact"
+      crowds="administration contact_person_instructors"
+      permission="schooltool.edit" />
+
   <!-- Security descriptions -->
 
   <describe_group name="schooltool.contact" klass=".contact.ContactGroup" />
@@ -63,7 +68,7 @@
      group="schooltool.contact" name="modify"
      title="Modify an external contact"
      order="50"
-     interface="schooltool.app.interfaces.ISchoolToolApplication"
+     interface="schooltool.contact.interfaces.IContact"
      permission="schooltool.edit"
   />
 

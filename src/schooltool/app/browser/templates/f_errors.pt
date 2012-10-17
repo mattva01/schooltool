@@ -77,7 +77,7 @@
              i18n:attributes="value" />
     </div>
   </form>
-  <h3>
+  <h3 class="done-link">
     <a tal:attributes="href string:${context/@@absolute_url}/settings"
        i18n:translate="">
       Done

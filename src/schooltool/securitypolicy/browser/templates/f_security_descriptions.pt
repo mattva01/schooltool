@@ -63,7 +63,7 @@
   <p>
     <a href="#">Back to top</a>
   </p>
-  <h3>
+  <h3 class="done-link">
     <a tal:attributes="href view/done_link" i18n:translate="">
       Done
     </a>

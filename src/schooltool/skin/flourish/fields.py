@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2005 Shuttleworth Foundation
+# Copyright (c) 2012 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +17,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-Generations for database version upgrades.
-
-$Id$
+SchoolTool flourish fields.
 """
 
-from zope.app.generations.generations import SchemaManager
-
-schemaManager = SchemaManager(
-    minimum_generation=39,
-    generation=39,
-    package_name='schooltool.generations')
+from schooltool.common.fields import IImage, Image, ImageFile

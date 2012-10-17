@@ -19,6 +19,7 @@
 """
 SchoolTool flourish widgets.
 """
+import time, datetime
 import re
 import os
 import sys
@@ -30,18 +31,20 @@ except ImportError:
     from PIL import Image
 
 import zope.formlib.widgets
-from zope.component import getUtility, adapter, adapts
-from zope.file.file import File
+import zope.datetime
+from zope.component import getUtility, adapter, adapts, queryMultiAdapter
+from zope.dublincore.interfaces import IZopeDublinCore
 from zope.interface import implementer, Interface, implements
 from zope.i18n.interfaces import INegotiator
 from zope.traversing.browser.absoluteurl import absoluteURL
+from zope.publisher.interfaces import NotFound
+from zope.publisher.browser import BrowserPage
 from zope.publisher.browser import BrowserView
+from zope.security.proxy import removeSecurityProxy
 from zope.schema.interfaces import IField
-from zope.schema import Bytes
-from zope.schema.interfaces import TooLong
 
+import z3c.form.interfaces
 from z3c.form.browser.file import FileWidget
-from z3c.form.interfaces import IFieldWidget, NOT_CHANGED
 from z3c.form.widget import ComputedWidgetAttribute, FieldWidget
 from z3c.form.converter import FileUploadDataConverter
 from z3c.form.converter import FormatterValidationError
@@ -56,6 +59,8 @@ from schooltool.skin.widgets import FckeditorFormlibWidget
 from schooltool.skin.widgets import FckeditorZ3CFormWidget
 from schooltool.skin.flourish.resource import ResourceLibrary
 from schooltool.skin.flourish.interfaces import IFlourishLayer
+from schooltool.common.fields import IImage, ImageFile
+from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -166,7 +171,7 @@ class FlourishFckeditorZ3CFormWidget(FlourishFckeditorScriptBase,
 
 
 @adapter(IField, IFlourishLayer)
-@implementer(IFieldWidget)
+@implementer(z3c.form.interfaces.IFieldWidget)
 def FlourishFckeditorFieldWidget(field, request):
     return FieldWidget(field, FlourishFckeditorZ3CFormWidget(request))
 
@@ -189,48 +194,44 @@ class FileDataURI(BrowserView):
         return 'data:'+mime+';base64,'+payload
 
 
-class IPhoto(Interface):
-    """Marker interface for photos"""
+class IImageWidget(Interface):
+    """Marker for image widgets"""
 
 
-class Photo(Bytes):
+class ImageWidget(FileWidget):
 
-    implements(IPhoto)
-    _type = File
+    implements(IImageWidget)
 
-    def _validate(self, value):
-        if self.max_length is not None and value.size > self.max_length:
-            raise TooLong(value, self.max_length)
+    @property
+    def attribute(self):
+        return self.field.__name__
 
+    @property
+    def alt(self):
+        return self.field.title
 
-class IPhotoWidget(Interface):
-    """Marker for photo widgets"""
-
-
-class PhotoWidget(FileWidget):
-
-    implements(IPhotoWidget)
-
-    def has_photo(self):
-        return IBasicPerson.providedBy(self.context) and \
-               self.context.photo is not None
-
-
-def PhotoFieldWidget(field, request):
-    return FieldWidget(field, PhotoWidget(request))
+    def stored_value(self):
+        if self.ignoreContext:
+            return None
+        dm = queryMultiAdapter((self.context, self.field),
+                               z3c.form.interfaces.IDataManager)
+        if dm is None:
+            return None
+        value = dm.query()
+        return value
 
 
-class PhotoDataConverter(FileUploadDataConverter):
+def ImageFieldWidget(field, request):
+    return FieldWidget(field, ImageWidget(request))
 
-    adapts(IPhoto, IPhotoWidget)
 
-    SIZE = (99, 132)
-    FORMAT = 'JPEG'
-    MAX_UPLOAD_SIZE = 10 * (10**6)
+class ImageDataConverter(FileUploadDataConverter):
+
+    adapts(IImage, IImageWidget)
 
     def toFieldValue(self, value):
         if value is None or value == '':
-            return NOT_CHANGED
+            return z3c.form.interfaces.NOT_CHANGED
         if value == 'delete':
             # XXX: delete checkbox was marked
             return None
@@ -242,41 +243,47 @@ class PhotoDataConverter(FileUploadDataConverter):
         except (IOError,):
             raise FormatterValidationError(
                 _('The file uploaded is not a JPEG or PNG image'), value)
-        if len(data) > self.MAX_UPLOAD_SIZE:
+        size = len(data)
+        if size > self.field.max_file_size:
+            msg = _('The image uploaded cannot be larger than ${size} MB')
             raise FormatterValidationError(
-                _('The image uploaded cannot be larger than 10 MB'), value)
+                format_message(
+                    msg,
+                    mapping={'size': '%.2f' % (float(size) / (10**6))}),
+                value)
         data = self.processImage(image)
-        f = File()
+        f = ImageFile()
         self.updateFile(f, data)
         return f
 
     def processImage(self, image):
         kw = {'quality': 100, 'filter': Image.ANTIALIAS}
         result = image
-        if image.size != self.SIZE:
+        if (self.field.size is not None and
+            image.size != self.field.size):
             size = self.getMaxSize(image)
             image.thumbnail(size, kw['filter'])
-            if image.size != self.SIZE or image.mode == 'RGBA':
-                result = Image.new('RGB', self.SIZE, (255, 255, 255))
-                left = int(round((self.SIZE[0] - image.size[0])/float(2)))
-                up = int(round((self.SIZE[1] - image.size[1])/float(2)))
+            if image.size != self.field.size or image.mode == 'RGBA':
+                result = Image.new('RGB', self.field.size, (255, 255, 255))
+                left = int(round((self.field.size[0] - image.size[0])/float(2)))
+                up = int(round((self.field.size[1] - image.size[1])/float(2)))
                 mask = None
                 if image.mode == 'RGBA':
                     mask = image
                 result.paste(image, (left, up), mask)
         f = StringIO()
-        result.save(f, self.FORMAT, **kw)
+        result.save(f, self.field.format, **kw)
         return f.getvalue()
 
     def updateFile(self, ob, data):
-        ob.mimeType = Image.MIME[self.FORMAT]
+        ob.mimeType = Image.MIME[self.field.format]
         w = ob.open("w")
         w.write(data)
         w.close()
 
     def getMaxSize(self, image):
         image_size = image.size
-        desired_size = self.SIZE
+        desired_size = self.field.size
         x_ratio = float(desired_size[0])/image_size[0]
         y_ratio = float(desired_size[1])/image_size[1]
         if x_ratio < y_ratio:
@@ -286,4 +293,53 @@ class PhotoDataConverter(FileUploadDataConverter):
             new_size = (round(y_ratio*image_size[0]),
                         round(y_ratio*image_size[1]))
         return tuple(map(int, new_size))
+
+
+class ImageView(BrowserPage):
+
+    attribute = None
+
+    def renderImage(self, image):
+        self.request.response.setHeader('Content-Type', image.mimeType)
+        self.request.response.setHeader('Content-Length', image.size)
+        try:
+            modified = IZopeDublinCore(self.context).modified
+        except TypeError:
+            modified=None
+        if modified is not None and isinstance(modified, datetime.datetime):
+            header= self.request.getHeader('If-Modified-Since', None)
+            lmt = long(time.mktime(modified.timetuple()))
+            if header is not None:
+                header = header.split(';')[0]
+                try:
+                    mod_since=long(time(header))
+                except:
+                    mod_since=None
+                if mod_since is not None:
+                    if lmt <= mod_since:
+                        self.request.response.setStatus(304)
+                        return ''
+            self.request.response.setHeader(
+                'Last-Modified', zope.datetime.rfc1123_date(lmt))
+        result = image.openDetached()
+        return result
+
+    @property
+    def image(self):
+        if self.attribute:
+            try:
+                image = getattr(self.context, self.attribute)
+            except AttributeError:
+                raise NotFound(self.context, self.attribute, self.request)
+        else:
+            image = self.context
+        return image
+
+    def __call__(self):
+        image = self.image
+        if image is None:
+            return ''
+
+        result = self.renderImage(image)
+        return result
 

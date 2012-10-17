@@ -197,10 +197,12 @@ class PasswordWriterCrowd(ConfigurableCrowd):
     setting_key = 'persons_can_change_their_passwords'
 
     def contains(self, principal):
+        from schooltool.app.browser import same # XXX
         app = ISchoolToolApplication(None)
         super_user = app['persons'].super_user
         if self.context.person is super_user:
-            return principal is super_user
+            person = IPerson(principal, None)
+            return same(person, super_user)
         if AdministrationCrowd(self.context.person).contains(principal):
             return True
         return (ConfigurableCrowd.contains(self, principal) and

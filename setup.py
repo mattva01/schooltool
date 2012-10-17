@@ -170,6 +170,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     [console_scripts]
     start-schooltool-instance = schooltool.paste.run:main
     make-schooltool-instance = schooltool.paste.instance:make_schooltool_instance
+    schooltool-server = schooltool.app.main:main
 
     [paste.paster_create_template]
     schooltool_deploy = schooltool.paste.templates:SchoolToolDeploy

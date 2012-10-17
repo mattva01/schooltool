@@ -102,6 +102,10 @@
       component="schooltool.generations.schemaManager"
       />
 
+  <!-- Schema extension -->
+
+  <include file="fields.zcml" />
+
   <!-- *Core* sub-packages -->
 
   <include package="schooltool.traverser" />

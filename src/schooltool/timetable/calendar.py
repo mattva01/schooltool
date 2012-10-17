@@ -54,6 +54,22 @@ class ScheduleCalendarEvent(CalendarEvent):
             self.meeting_id = self.unique_id
 
 
+class UpdateEventTitles(ObjectEventAdapterSubscriber):
+    adapts(zope.lifecycleevent.interfaces.IObjectModifiedEvent,
+           interfaces.IHaveSchedule)
+
+    def __call__(self):
+        title = getattr(self.object, 'title', u'')
+        if not title:
+            return
+        calendar = interfaces.IScheduleCalendar(self.object, None)
+        if calendar is None:
+            return
+        for event in calendar:
+            if (interfaces.IScheduleCalendarEvent.providedBy(event)):
+                event.title = title
+
+
 class ImmutableScheduleCalendar(ImmutableCalendar):
     adapts(interfaces.ISchedule)
     implements(interfaces.IImmutableScheduleCalendar)

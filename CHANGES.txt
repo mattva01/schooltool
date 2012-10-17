@@ -2,10 +2,33 @@
 CHANGES
 =======
 
-2.2.4 (unreleased)
+2.2.5 (unreleased)
 ------------------
 
+- Update scheduled calendar event titles on section title change (https://launchpad.net/bugs/899368)
+- Allow student's instructors edit his contact's data (https://launchpad.net/bugs/479336)
+
+
+2.2.4 (2012-10-09)
+------------------
+
+New features
+++++++++++++
+
+- School logo (https://launchpad.net/bugs/314151)
+- Photos for contacts (https://launchpad.net/bugs/970201)
+- Highlight today in calendars (https://launchpad.net/bugs/79865)
+- Done links now look like buttons
+- New script, schooltool-server, to enable --pack and --restore-password
+  commands (https://launchpad.net/bugs/505824)
+
+Bugfixes
+++++++++
+
 - SectionTimetables sheet doesn't add calendar events (https://launchpad.net/bugs/1061385)
+- Log In button should remember where you came from (https://launchpad.net/bugs/1039194)
+- Permission fixes
+- Updated translations.
 
 
 2.2.3 (2012-09-13)

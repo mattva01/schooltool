@@ -47,7 +47,7 @@
            tal:content="structure entry/req_html" />
     </metal:block>
   </metal:block>
-  <h3>
+  <h3 class="done-link">
     <a tal:attributes="href string:${context/@@absolute_url}/errors"
        i18n:translate="">
       Done
