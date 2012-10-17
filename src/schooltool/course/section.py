@@ -43,6 +43,7 @@ from schooltool.app.app import InitBase
 from schooltool.app import relationships
 from schooltool.app.security import ConfigurableCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.utils import vocabulary_titled
 from schooltool.course import interfaces, booking
 from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.person.interfaces import IPerson
@@ -461,3 +462,13 @@ def copySection(section, target_term):
         section_copy.members.add(member)
     return section_copy
 
+
+def linkedSectionTermsVocabulary(context):
+    section = interfaces.ISection(context)
+    linked = section.linked_sections
+    terms = [ITerm(s) for s in linked]
+    return vocabulary_titled(terms)
+
+
+def LinkedSectionTermsVocabularyFactory():
+    return linkedSectionTermsVocabulary

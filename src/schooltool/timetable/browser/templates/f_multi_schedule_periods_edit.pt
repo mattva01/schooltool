@@ -1,0 +1,69 @@
+<div i18n:domain="schooltool">
+
+  <div tal:define="term view/term"
+       tal:condition="term">
+    <div>
+      <strong tal:content="structure view/owner/schooltool:content/title">
+      </strong>
+      -
+      <tal:block tal:content="structure term/schooltool:content/boundaries" />
+    </div>
+  </div>
+
+  <div tal:repeat="info view/other_info">
+    <div>
+      <strong tal:content="structure info/owner/schooltool:content/title">
+      </strong>
+      -
+      <tal:block tal:content="structure info/term/schooltool:content/boundaries" />
+    </div>
+  </div>
+
+  <div class="status" tal:condition="view/status">
+    <ul class="errors"
+        tal:condition="view/widgets/errors"
+        metal:define-macro="form-errors">
+      <li tal:repeat="error view/widgets/errors">
+        <tal:block condition="error/widget">
+          <span tal:replace="error/widget/label" />:
+        </tal:block>
+        <span tal:replace="structure error/render">Error Type</span>
+      </li>
+    </ul>
+  </div>
+
+<form action="." method="post" enctype="multipart/form-data"
+      metal:define-macro="form"
+      tal:attributes="method view/method;
+                      enctype view/enctype;
+                      acceptCharset view/acceptCharset;
+                      accept view/accept;
+                      action view/action;
+                      name view/name;
+                      id view/id">
+
+<tal:block repeat="param view/other_params">
+  <input type="hidden" tal:attributes="name param/key; value param/value" />
+</tal:block>
+
+<fieldset>
+  <legend>
+    <span i18n:translate="">Schedule</span>
+  </legend>
+  <div metal:use-macro="macro:widget-rows" />
+</fieldset>
+
+<fieldset>
+  <legend>
+    <span i18n:translate="">Scheduled periods</span>
+  </legend>
+
+  <div tal:replace="structure context/timetable/periods/schooltool:content/table"></div>
+</fieldset>
+
+  <div metal:use-macro="macro:form-buttons">
+  </div>
+
+</form>
+
+</div>
