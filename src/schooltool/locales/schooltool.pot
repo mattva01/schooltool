@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2012-10-09 03:07+0300\n"
+"POT-Creation-Date: 2012-10-19 03:44+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -5508,7 +5508,7 @@ msgid "A single .xls spreadsheet containing the basic structure of the school, i
 msgstr ""
 
 #: /src/schooltool/export/flourish.zcml:49
-msgid "Export as XLS"
+msgid "School Export"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:79
@@ -5751,18 +5751,17 @@ msgstr ""
 msgid "Data included in the spreadsheet will be added to data in the system; importing will not cause data to be removed."
 msgstr ""
 
-#: /src/schooltool/export/templates/f_import_related.pt:19
-#: /src/schooltool/export/templates/import.pt:50
+#: /src/schooltool/export/templates/f_import_related.pt:16
+msgid "You do not have to import all worksheets at the same time. You can import individual worksheets sequentially."
+msgstr ""
+
+#: /src/schooltool/export/templates/f_import_related.pt:23
+#: /src/schooltool/export/templates/import.pt:45
 msgid "For people interested in testing and exploring SchoolTool, we provide a set of sample data: ${link-to-sample-data-file}."
 msgstr ""
 
-#: /src/schooltool/export/templates/f_import_related.pt:24
+#: /src/schooltool/export/templates/f_import_related.pt:28
 msgid "We also provide a large data set: ${link-to-sample-data-file} -- 1000 students over multiple years -- for performance testing. This set can take a very long time to be imported and may fail on systems with inadequate memory."
-msgstr ""
-
-#: /src/schooltool/export/templates/f_import_related.pt:33
-#: /src/schooltool/export/templates/import.pt:53
-msgid "If you are importing your own data, we highly recommend downloading the sample spreadsheet as a reference."
 msgstr ""
 
 #: /src/schooltool/export/templates/import.pt:4
@@ -5771,6 +5770,10 @@ msgstr ""
 
 #: /src/schooltool/export/templates/import.pt:38
 msgid "Note that the import system does not handle duplicated data very well outside of the persons worksheet. That is, if you try to import a school year, for example, that already exists in the system, the import will fail with an error. Simply remove the duplicate data from the spreadsheet and run the import again. We're working on making this process even smoother."
+msgstr ""
+
+#: /src/schooltool/export/templates/import.pt:48
+msgid "If you are importing your own data, we highly recommend downloading the sample spreadsheet as a reference."
 msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:23
@@ -7712,7 +7715,15 @@ msgstr ""
 msgid "Schedule Timetable"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/flourish.zcml:531
+#: /src/schooltool/timetable/browser/flourish.zcml:549
+msgid "Custom date range"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:563
+msgid "Term(s)"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:587
 msgid "Exception Days"
 msgstr ""
 
@@ -7764,6 +7775,12 @@ msgstr ""
 msgid "timetables"
 msgstr ""
 
+#: /src/schooltool/timetable/browser/templates/f_multi_schedule_periods_edit.pt:58
+#: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:45
+#: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:55
+msgid "Scheduled periods"
+msgstr ""
+
 #: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:3
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:36
 msgid "Nothing scheduled yet."
@@ -7788,11 +7805,6 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:8
 #: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:24
 msgid "Using timetable: ${timetable}"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:45
-#: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:55
-msgid "Scheduled periods"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_specialday_change.pt:7
@@ -8023,7 +8035,16 @@ msgstr ""
 msgid "Schedule a school timetable"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/timetable.py:555
+#: /src/schooltool/timetable/browser/timetable.py:521
+msgid "First term"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/timetable.py:526
+msgid "Last term"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/timetable.py:678
+#: /src/schooltool/timetable/browser/timetable.py:821
 msgid "Save"
 msgstr ""
 
