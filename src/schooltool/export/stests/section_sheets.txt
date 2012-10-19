@@ -22,7 +22,7 @@ There should be no errors so we should be back at the School tab view:
 Let's export the just imported data.
 
     >>> manager.query.link('School').click()
-    >>> manager.query.link('Export as XLS').click()
+    >>> manager.query.link('School Export').click()
     >>> manager.query.button('Download').click()
     >>> manager.wait(downloads.new)
 

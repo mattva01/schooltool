@@ -65,7 +65,7 @@
 
   <allow
       interface="schooltool.person.interfaces.IPasswordWriter"
-      crowds="administration person_password_writers"
+      crowds="person_password_writers"
       permission="schooltool.edit" />
 
   <describe_group name="schooltool.person" title="Users" />

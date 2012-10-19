@@ -16,7 +16,7 @@
         </div>
       </tal:if>
       <tal:block tal:replace="structure view/table/filter_widget/render" />
-      <h3>
+      <h3 class="done-link">
         <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
            i18n:translate="">Done</a>
       </h3>

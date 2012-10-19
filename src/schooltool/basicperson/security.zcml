@@ -17,6 +17,11 @@
      crowds="person_advisors"
      permission="schooltool.view" />
 
+  <allow
+     interface="schooltool.basicperson.interfaces.IBasicPerson"
+     crowds="owner person_instructors person_advisors administration"
+     permission="schooltool.view" />
+
   <!-- Security descriptions -->
 
   <describe_group

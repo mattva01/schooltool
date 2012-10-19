@@ -203,6 +203,14 @@ class FlourishWeeklyCalendarView(FlourishCalendarView,
     def date_title(self):
         return WeeklyCalendarView.title(self)
 
+    def getCurrentWeek(self):
+        result = []
+        for n, day in enumerate(WeeklyCalendarView.getCurrentWeek(self)):
+            day.css_class = ' '.join(filter(None,
+               ['day-title', day.css_class, 'first' if n==0 else '']))
+            result.append(day)
+        return result
+
 
 class FlourishMonthlyCalendarView(FlourishCalendarView,
                                   MonthlyCalendarView):

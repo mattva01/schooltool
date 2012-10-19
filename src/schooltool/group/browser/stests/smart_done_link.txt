@@ -1,0 +1,66 @@
+Smart Done link
+===============
+
+When the user clicks on one of the people in a group, we want the Done link
+to come back to the group view.  Let's prove that's true.
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+Add a school year:
+
+    >>> manager.ui.schoolyear.add('2012', '2012-01-01', '2012-12-31')
+
+Add a few people:
+
+    >>> manager.ui.person.add('Tom', 'Hoffman', 'tom', 'pwd')
+    >>> manager.ui.person.add('Jeffrey', 'Elkner', 'jeffrey', 'pwd')
+    >>> manager.ui.person.add('David', 'Welsh', 'david', 'pwd')
+
+Add some groups and members:
+
+    >>> manager.ui.group.add('2012', 'Soccer')
+    >>> manager.ui.group.add('2012', 'Chess', description='Check mate!')
+    >>> manager.ui.group.members.add('2012', 'Soccer', ['tom', 'david'])
+
+Visit the Soccer group:
+
+    >>> manager.ui.group.go('2012', 'Soccer')
+
+Click on a person in the group view:
+
+    >>> manager.query.link('Hoffman').click()
+
+Check the person view url to see the done link:
+
+    >>> manager.url
+    u'http://localhost/persons/tom?done_link=http://localhost/schoolyears/2012/groups/soccer'
+
+Click on the Done link:
+
+    >>> manager.query.link('Done').click()
+
+We should be back in the group view:
+
+    >>> manager.url
+    u'http://localhost/schoolyears/2012/groups/soccer'
+
+The done links should also work when the user uses the Members search:
+
+    >>> sel = '#group_aware_person_table-ajax-view-context-members-group_aware_person_table- table'
+    >>> table = manager.query.css(sel)
+    >>> sel = 'group_aware_person_table-ajax-view-context-members-group_aware_person_table--title'
+    >>> manager.query.id(sel).ui.set_value('david')
+    >>> manager.query.name('SEARCH_BUTTON').click()
+    >>> manager.wait(lambda: table.expired)
+    >>> manager.query.link('David').click()
+    >>> manager.url
+    u'http://localhost/persons/david?done_link=http://localhost/schoolyears/2012/groups/soccer'
+    >>> manager.query.link('Done').click()
+
+We should be back in the group view:
+
+    >>> manager.url
+    u'http://localhost/schoolyears/2012/groups/soccer'

@@ -56,7 +56,7 @@ from zope.app.publication.zopepublication import ZopePublication
 from zope.traversing.interfaces import IContainmentRoot
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.app.dependable.interfaces import IDependable
-from zope.component.hooks import setSite, setHooks
+from zope.component.hooks import getSite, setSite, setHooks
 from zope.component import getUtility
 from zope.component import getAdapters
 from zope.interface import directlyProvidedBy
@@ -511,17 +511,18 @@ class SchoolToolServer(object):
                         "  -c, --config xxx       use this configuration file instead of the default\n"
                         "  -h, --help             show this help message\n"
                         "  -d, --daemon           go to background after starting\n"
+                        "  --pack                 pack the database\n"
                         "  -r, --restore-manager password\n"
                         "                         restore the manager user with the provided password\n"
                         "                         (read password from the standart input if 'password'\n"
                         "                         is '-')\n"
-                        "  --manage               only do management tasks, don't run the server\n"
                         % progname).strip()
                 sys.exit(0)
             if k in ('-c', '--config'):
                 options.config_file = v
             if k in ('-p', '--pack'):
                 options.pack = True
+                options.manage = True
             if k in ('-d', '--daemon'):
                 if not hasattr(os, 'fork'):
                     print >> sys.stderr, _("%s: daemon mode not supported on "
@@ -537,9 +538,9 @@ class SchoolToolServer(object):
                     print 'Manager password: ',
                     password = sys.stdin.readline().strip('\r\n')
                     options.manager_password = password
+                options.manage = True
             if k in ('--manage'):
                 options.manage = True
-                options.daemon = False
 
         # Read configuration file
         schema_string = open(self.ZCONFIG_SCHEMA).read()
@@ -622,6 +623,19 @@ class SchoolToolServer(object):
         transaction.commit()
         connection.close()
 
+    def startApplication(self, db):
+        last_site = getSite()
+        connection = db.open()
+        root = connection.root()
+        app = root[ZopePublication.root_name]
+        setSite(app)
+        notify(CatalogStartUpEvent(app))
+        notify(ApplicationStartUpEvent(app))
+        setSite(last_site)
+        transaction.commit()
+        connection.close()
+
+
     def restoreManagerUser(self, app, password):
         """Ensure there is a manager user
 
@@ -686,16 +700,7 @@ class SchoolToolServer(object):
             transaction.commit()
             connection.close()
 
-        # set up all the plugins
-        connection = db.open()
-        root = connection.root()
-        app = root[ZopePublication.root_name]
-        setSite(app)
-        notify(CatalogStartUpEvent(app))
-        notify(ApplicationStartUpEvent(app))
-        setSite(None)
-        transaction.commit()
-        connection.close()
+        self.startApplication(db)
 
         provideUtility(db, IDatabase)
         db.setActivityMonitor(ActivityMonitor())

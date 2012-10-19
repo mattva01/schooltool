@@ -78,6 +78,7 @@ class ZCMLLayer(_ZCMLLayer):
                 import schooltool.app.main
                 server = schooltool.app.main.StandaloneServer()
                 server.bootstrapSchoolTool(event.database, self.school_type)
+                server.startApplication(event.database)
 
         install_db_bootstrap_hook()
         try:
@@ -147,16 +148,19 @@ def collect_txt_ftests(package=None, level=None, layer=None, filenames=None,
     return unittest.TestSuite(suites)
 
 
-def collect_ftests(package=None, level=None, layer=None, filenames=None):
+def collect_ftests(package=None, level=None, layer=None, filenames=None,
+                   extra_globs=None):
     package = doctest._normalize_module(package)
+    extra_globs = extra_globs or {}
+    extra_globs.update({'analyze': analyze,
+                        'Browser': TestBrowser})
     def make_suite(filename, package=None):
         optionflags = (doctest.ELLIPSIS | doctest.REPORT_NDIFF |
                        doctest.NORMALIZE_WHITESPACE |
                        doctest.REPORT_ONLY_FIRST_FAILURE)
         suite = FunctionalDocFileSuite(filename, package=package,
                                        optionflags=optionflags,
-                                       globs={'analyze': analyze,
-                                              'Browser': TestBrowser})
+                                       globs=extra_globs)
         return suite
     return collect_txt_ftests(package=package, level=level,
                               layer=layer, filenames=filenames,

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <class class=".fields.ImageFile">
+    <require
+        permission="zope.View"
+        interface="zope.mimetype.interfaces.IContentTypeAware"
+        attributes="size openDetached"
+        />
+    <require
+        permission="zope.ManageContent"
+        set_attributes="mimeType parameters"
+        />
+    <require
+        permission="zope.ManageContent"
+        attributes="open"
+        />
+    <implements interface="zope.annotation.interfaces.IAttributeAnnotatable" />
+  </class>
+
+</configure>

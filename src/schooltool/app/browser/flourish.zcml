@@ -95,8 +95,24 @@
 
   <flourish:viewlet
       name="login"
+      view="schooltool.app.browser.app.LoginView"
       manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
       class="schooltool.app.browser.app.LoginNavigationViewlet"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="login"
+      manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
+      class="schooltool.app.browser.app.LoginRedirectBackNavigationViewlet"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="login"
+      for="schooltool.app.interfaces.ISchoolToolCalendar"
+      manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
+      class="schooltool.app.browser.app.CalendarLoginNavigationViewlet"
       permission="zope.Public"
       />
 
@@ -235,7 +251,7 @@
         subtitle="Edit"
         for="schooltool.app.interfaces.ISchoolToolApplication"
         class="schooltool.app.browser.app.FlourishSchoolNameEditView"
-        content_template="templates/z3c-schooltool-form.pt"
+        content_template="templates/z3c_form_edit.pt"
         permission="schooltool.edit"
         />
 
@@ -709,5 +725,34 @@
       factory="schooltool.traverser.traverser.PluggableTraverser"
       permission="zope.Public"
       />
+
+  <page
+      name="logo"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      class=".app.SchoolLogoView"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="school_logo"
+      before="*"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.app.browser.app.SchoolLogoViewlet"
+      view="schooltool.app.browser.app.ManageSchool"
+      title="School Logo"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="school_logo"
+      before="*"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.app.browser.app.SchoolLoginLogoViewlet"
+      view="schooltool.app.browser.app.LoginView"
+      title="School Logo"
+      permission="schooltool.view"
+      />
+
 
 </configure>

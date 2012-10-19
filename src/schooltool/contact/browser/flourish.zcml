@@ -302,4 +302,11 @@
       factory=".contact.SubmitLabel"
       name="title" />
 
+  <page
+      name="photo"
+      for="schooltool.contact.interfaces.IContact"
+      class="schooltool.contact.browser.contact.PhotoView"
+      permission="schooltool.view"
+      />
+
 </configure>

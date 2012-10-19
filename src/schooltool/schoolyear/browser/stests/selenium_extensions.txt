@@ -66,7 +66,7 @@ options from the helper:
     >>> manager.ui.group.members.add('2012', 'Chess', ['jeffrey', 'mario'])
 
     >>> manager.ui.group.go('2012', 'Soccer')
-    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    >>> sel = ('#group_aware_person_table-ajax-view-context-members-group_aware_person_table- '
     ...        'table tbody tr')
     >>> for row in manager.query_all.css(sel):
     ...     print format_person_row(row)
@@ -74,7 +74,7 @@ options from the helper:
     Elkner, Jeffrey, jeffrey
 
     >>> manager.ui.group.go('2012', 'Chess')
-    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    >>> sel = ('#group_aware_person_table-ajax-view-context-members-group_aware_person_table- '
     ...        'table tbody tr')
     >>> for row in manager.query_all.css(sel):
     ...     print format_person_row(row)
@@ -82,14 +82,14 @@ options from the helper:
     Tejada, Mario, mario
 
     >>> manager.ui.group.go('2012', 'Teachers')
-    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    >>> sel = ('#group_aware_person_table-ajax-view-context-members-group_aware_person_table- '
     ...        'table tbody tr')
     >>> for row in manager.query_all.css(sel):
     ...     print format_person_row(row)
     Hoffman, Tom, tom
 
     >>> manager.ui.group.go('2012', 'Students')
-    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    >>> sel = ('#group_aware_person_table-ajax-view-context-members-group_aware_person_table- '
     ...        'table tbody tr')
     >>> for row in manager.query_all.css(sel):
     ...     print format_person_row(row)
@@ -156,7 +156,7 @@ And check it was correctly added:
     Teachers
 
     >>> manager.ui.group.go('2013', 'Soccer')
-    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    >>> sel = ('#group_aware_person_table-ajax-view-context-members-group_aware_person_table- '
     ...        'table tbody tr')
     >>> for row in manager.query_all.css(sel):
     ...     print format_person_row(row)
@@ -164,13 +164,13 @@ And check it was correctly added:
     Elkner, Jeffrey, jeffrey
 
     >>> manager.ui.group.go('2013', 'Teachers')
-    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    >>> sel = ('#group_aware_person_table-ajax-view-context-members-group_aware_person_table- '
     ...        'table tbody tr')
     >>> manager.query_all.css(sel)
     []
 
     >>> manager.ui.group.go('2013', 'Students')
-    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    >>> sel = ('#group_aware_person_table-ajax-view-context-members-group_aware_person_table- '
     ...        'table tbody tr')
     >>> manager.query_all.css(sel)
     []

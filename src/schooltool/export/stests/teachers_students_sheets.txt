@@ -39,8 +39,8 @@ Let's look at the teachers group:
 We see the teachers we defined in the Teachers sheet.
 
     >>> print manager.query_all.xpath('//table[@class="data"]//td[1]//a').get_attribute('href')
-    http://localhost/persons/teacher001
-    http://localhost/persons/teacher000
+    http://localhost/persons/teacher001?done_link=http://localhost/schoolyears/2006-2008/groups/teachers
+    http://localhost/persons/teacher000?done_link=http://localhost/schoolyears/2006-2008/groups/teachers
 
 Their limit demos are set in the teachers objects.
 
@@ -67,10 +67,10 @@ Let's look at the students group:
 We see the students we defined in the Students sheet.
 
     >>> print manager.query_all.xpath('//table[@class="data"]//td[1]//a').get_attribute('href')
-    http://localhost/persons/student003
-    http://localhost/persons/student000
-    http://localhost/persons/student001
-    http://localhost/persons/student002
+    http://localhost/persons/student003?done_link=http://localhost/schoolyears/2006-2008/groups/students
+    http://localhost/persons/student000?done_link=http://localhost/schoolyears/2006-2008/groups/students
+    http://localhost/persons/student001?done_link=http://localhost/schoolyears/2006-2008/groups/students
+    http://localhost/persons/student002?done_link=http://localhost/schoolyears/2006-2008/groups/students
 
 Their limit demos are set in the students objects.
 

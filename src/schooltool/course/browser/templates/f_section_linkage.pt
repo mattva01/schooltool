@@ -140,7 +140,7 @@
       </tal:block>
     </tbody>
   </table>
-  <h3>
+  <h3 class="done-link">
     <a tal:attributes="href view/done_link"
        i18n:translate="">Done</a>
   </h3>

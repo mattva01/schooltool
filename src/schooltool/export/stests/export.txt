@@ -9,7 +9,7 @@ Selenium browser export test example
 
 Let's export the empty school set up.
 
-    >>> manager.query.link('Export as XLS').click()
+    >>> manager.query.link('School Export').click()
     >>> manager.query.button('Download').click()
 
 We have to wait until the download is saved:

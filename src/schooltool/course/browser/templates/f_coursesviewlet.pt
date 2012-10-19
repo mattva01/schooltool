@@ -62,7 +62,7 @@
 </div>
 
 <div tal:condition="python: not(view.isTeacher() or view.isLearner())">
-  <h3 i18n:translate="">This person has no sections.</h3>
+  <p i18n:translate="">This person has no sections.</p>
 </div>
 </div>
 </div>

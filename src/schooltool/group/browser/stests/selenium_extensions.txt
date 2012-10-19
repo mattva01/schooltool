@@ -109,7 +109,7 @@ Used for adding members to a group.
 
     >>> manager.ui.group.members.add('2012', 'Soccer', ['tom', 'david'])
     >>> manager.ui.group.go('2012', 'Soccer')
-    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    >>> sel = ('#group_aware_person_table-ajax-view-context-members-group_aware_person_table- '
     ...        'table tbody tr')
     >>> for row in manager.query_all.css(sel):
     ...     print format_person_row(row)
@@ -120,7 +120,7 @@ It doesn't matter if some usernames are already members of the group:
 
     >>> manager.ui.group.members.add('2012', 'Soccer', ['tom', 'jeffrey'])
     >>> manager.ui.group.go('2012', 'Soccer')
-    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
+    >>> sel = ('#group_aware_person_table-ajax-view-context-members-group_aware_person_table- '
     ...        'table tbody tr')
     >>> for row in manager.query_all.css(sel):
     ...     print format_person_row(row)

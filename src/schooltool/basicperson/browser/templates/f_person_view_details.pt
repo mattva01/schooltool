@@ -1,8 +1,9 @@
 <div class="person-info">
   <tal:block tal:replace="structure context/schooltool:content/schooltool.person.FlourishInfo"/>
 </div>
-<h3 tal:condition="view/canModify"><a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/persons"
-       i18n:domain="schooltool" i18n:translate="">Done</a></h3>
+<h3 tal:condition="view/canModify" class="done-link">
+  <a tal:attributes="href view/done_link" i18n:domain="schooltool" i18n:translate="">Done</a>
+</h3>
 <script>
 $(document).ready(function() {
     // accordion setup

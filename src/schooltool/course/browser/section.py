@@ -25,8 +25,8 @@ from urllib import urlencode
 
 import zc.table.table
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import adapts
-from zope.component import getMultiAdapter
+from zope.component import adapts, adapter
+from zope.component import getMultiAdapter, getAdapter
 from zope.component import getUtility
 from zope.container.contained import NameChooser
 from zope.container.interfaces import INameChooser
@@ -34,6 +34,7 @@ from zope.event import notify
 from zope.i18n import translate
 from zope.i18n.interfaces.locales import ICollator
 from zope.interface import implements, Invalid, directlyProvides
+from zope.interface import implementer, Interface
 from zope.intid.interfaces import IIntIds
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -1276,11 +1277,24 @@ class FlourishSectionView(DisplayForm):
                      if IEquipment(r, None) is not None])
 
 
+class ISectionAddTitleHint(Interface):
+    """Section add optional title hint text."""
+
+
+@adapter(ISchoolYear)
+@implementer(ISectionAddTitleHint)
+def getSectionAddTitleHint(context):
+    return _(u"If no title is specified, one will be created based on the "
+              "course title.")
+
+
 class FlourishSectionAddView(Form, SectionAddView):
 
     template = InheritTemplate(Page.template)
     label = None
     legend = _('Section Information')
+
+    fields = field.Fields(ISection).select('title', 'description')
 
     @property
     def title(self):
@@ -1288,8 +1302,15 @@ class FlourishSectionAddView(Form, SectionAddView):
         return _('Sections for ${schoolyear}',
                  mapping={'schoolyear': schoolyear.title})
 
+    def updateWidgets(self):
+        super(FlourishSectionAddView, self).updateWidgets()
+        self.widgets['title'].required = False
+        self.widgets['title'].field.required = False
+        self.widgets['title'].field.description = getAdapter(self.context,
+            ISectionAddTitleHint)
+
     def update(self):
-        super(FlourishSectionAddView, self).update()
+        super(SectionAddView, self).update()
         self._finishedAdd = False
 
         self.course_subform = FlourishNewSectionCoursesSubform(
@@ -1298,15 +1319,20 @@ class FlourishSectionAddView(Form, SectionAddView):
         self.term_subform = FlourishNewSectionTermsSubform(
             self.context, self.request, self,
             default_term=self.default_term)
+        self.location_subform = FlourishNewSectionLocationSubform(
+            self.context, self.request, self)
 
         self.course_subform.update()
         self.term_subform.update()
+        self.location_subform.update()
 
         if (self.course_subform.errors or
             self.term_subform.errors or
+            self.location_subform.errors or
             self.widgets.errors):
             self.errors = self.course_subform.errors  + \
                           self.term_subform.errors + \
+                          self.location_subform.errors + \
                           self.widgets.errors
             self.status = self.formErrorsMessage
         elif self._created_obj:
@@ -1316,6 +1342,7 @@ class FlourishSectionAddView(Form, SectionAddView):
     def add(self, section):
         course = self.course_subform.course
         terms = self.term_subform.terms
+        location = self.location_subform.location
         if course is None or not terms:
             return None
 
@@ -1326,14 +1353,21 @@ class FlourishSectionAddView(Form, SectionAddView):
         self._section = section
         section.courses.add(removeSecurityProxy(course))
 
-        # overwrite section title.
-        section.title = u"%s (%s)" % (course.title, section.__name__)
+        # if user provides no title, set it to default
+        if not section.title:
+            section.title = u"%s (%s)" % (course.title, section.__name__)
 
         # copy and link section in other selected terms
         for term in terms[1:]:
             new_section = copySection(section, term)
             new_section.previous = section
             section = new_section
+
+        # if the user provides a location, add it
+        if location is not None:
+            for section in self._section.linked_sections:
+                section.resources.add(removeSecurityProxy(location))
+
         self._finishedAdd = False
 
     def nextURL(self):
@@ -1418,6 +1452,56 @@ class FlourishNewSectionCoursesSubform(NewSectionCoursesSubform):
         super(FlourishNewSectionCoursesSubform, self).updateWidgets()
         self.widgets['course'].prompt = True
         self.widgets['course'].promptMessage = _('Select a course')
+
+    @button.handler(FlourishSectionAddView.buttons['add'])
+    def handleAdd(self, action):
+        data, self.errors = self.widgets.extract()
+        if self.errors:
+            return
+        changed = form.applyChanges(self, self.getContent(), data)
+
+
+class ISectionAddLocationHint(Interface):
+    """Section add optional location hint text."""
+
+
+@adapter(ISchoolYear)
+@implementer(ISectionAddLocationHint)
+def getSectionAddLocationHint(context):
+    return _(u"Additional locations can be added via the section view.")
+
+
+class FlourishNewSectionLocationSubform(subform.EditSubForm):
+
+    template = ViewPageTemplateFile('templates/section_add_location_subform.pt')
+    prefix = 'location'
+    errors = None
+
+    def __init__(self, *args, **kw):
+        super(FlourishNewSectionLocationSubform, self).__init__(*args, **kw)
+        self.values = {'location': None}
+
+        # add location field with titled lacation resources vocabulary
+        app = ISchoolToolApplication(None)
+        resources = [r for r in app['resources'].values()
+                     if ILocation(r, None) is not None]
+        schema_field = Choice(
+            __name__='location', title= _("Location"),
+            required=False, vocabulary=vocabulary_titled(resources))
+        self.fields += field.Fields(schema_field)
+        datamanager.DictionaryField(self.values, schema_field)
+
+    def updateWidgets(self):
+        super(FlourishNewSectionLocationSubform, self).updateWidgets()
+        self.widgets['location'].field.description = getAdapter(self.context,
+            ISectionAddLocationHint)
+
+    def getContent(self):
+        return self.values
+
+    @property
+    def location(self):
+        return self.values.get('location')
 
     @button.handler(FlourishSectionAddView.buttons['add'])
     def handleAdd(self, action):

@@ -24,7 +24,8 @@
     </tal:block>
   </form>
   <h3 tal:condition="not:batch" tal:content="view/empty_message" />
-      <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit">
+      <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit"
+          class="done-link">
         <tal:block condition="can_manage">
           <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
              i18n:translate="">Done</a>

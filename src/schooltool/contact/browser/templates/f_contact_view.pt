@@ -1,18 +1,23 @@
 <metal:block i18n:domain="schooltool">
+  <div class="photo-display" tal:condition="context/photo">
+    <img tal:attributes="src string:${context/@@absolute_url}/photo"
+         alt="Photo" i18n:attributes="alt" />
+  </div>
   <h3>
-    <metal:block i18n:translate="">
+    <tal:block i18n:translate="">
       Contact information
-    </metal:block>
+    </tal:block>
     <a class="modify" href="" title="Edit this contact"
        tal:attributes="href string:${context/@@absolute_url}/edit.html"
        i18n:attributes="title"
-       tal:condition="view/canModify">
+       tal:condition="context/schooltool:can_edit">
       <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
            alt="Edit"
            i18n:attributes="alt" />
     </a>
   </h3>
-  <table class="form-fields">
+  <table class="form-fields show-photo"
+         tal:attributes="class python:'form-fields' if context.photo is None else 'form-fields show-photo'">
     <tbody>
       <tal:loop repeat="widget view/widgets/values">
         <tr tal:condition="widget/value">

@@ -30,6 +30,7 @@ from zope.interface import Interface
 from zope.schema import TextLine
 from zope.schema.interfaces import IContainer
 
+from schooltool.skin import flourish
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.utils import vocabulary
 
@@ -46,6 +47,15 @@ class IContactPerson(Interface):
     last_name = TextLine(title=_(u"Last name"))
 
     suffix = TextLine(title=_(u"Suffix"), required=False)
+
+
+class IPhoto(Interface):
+
+    photo = flourish.fields.Image(
+        title=_('Photo'),
+        size=(99,132),
+        format='JPEG',
+        required=False)
 
 
 class IAddress(Interface):
@@ -89,7 +99,7 @@ class ILanguages(Interface):
     language = TextLine(title=_(u"Language"), required=False)
 
 
-class IContactInformation(IAddress, IEmails, IPhones, IOther, ILanguages):
+class IContactInformation(IPhoto, IAddress, IEmails, IPhones, IOther, ILanguages):
     """Collection of parts that define the contact information."""
 
 

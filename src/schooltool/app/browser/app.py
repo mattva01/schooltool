@@ -760,14 +760,43 @@ class LoginNavigationViewlet(flourish.page.LinkViewlet):
             return _("Log in")
         return _("Log out")
 
+
+    @property
+    def login_url(self):
+        app_url = absoluteURL(ISchoolToolApplication(None), self.request)
+        return '%s/%s' % (app_url, 'login.html')
+
+    @property
+    def logout_url(self):
+        app_url = absoluteURL(ISchoolToolApplication(None), self.request)
+        return '%s/%s' % (app_url, 'logout.html')
+
     @property
     def url(self):
         person = self.authenticated_person
-        app = ISchoolToolApplication(None)
-        app_url = absoluteURL(app, self.request)
         if person is None:
+            return self.login_url
+        return self.logout_url
+
+
+class LoginRedirectBackNavigationViewlet(LoginNavigationViewlet):
+
+    @property
+    def login_url(self):
+        app_url = absoluteURL(ISchoolToolApplication(None), self.request)
+        next_url = urllib.quote(str(self.request.URL))
+        return '%s/%s?nexturl=%s' % (app_url, 'login.html', next_url)
+
+
+class CalendarLoginNavigationViewlet(LoginNavigationViewlet):
+
+    @property
+    def login_url(self):
+        app_url = absoluteURL(ISchoolToolApplication(None), self.request)
+        if ISchoolToolApplication.providedBy(self.context.__parent__):
             return '%s/%s' % (app_url, 'login.html')
-        return '%s/%s' % (app_url, 'logout.html')
+        next_url = urllib.quote(str(self.request.URL))
+        return '%s/%s?nexturl=%s' % (app_url, 'login.html', next_url)
 
 
 class LoggedInNameViewlet(LoginNavigationViewlet):
@@ -880,7 +909,7 @@ class FlourishApplicationPreferencesView(Form, form.EditForm):
 
 class FlourishSchoolNameEditView(FlourishApplicationPreferencesView):
 
-    fields = field.Fields(IApplicationPreferences).select('title')
+    fields = field.Fields(IApplicationPreferences).select('title', 'logo')
     legend = _('School Name')
 
     def updateActions(self):
@@ -891,6 +920,7 @@ class FlourishSchoolNameEditView(FlourishApplicationPreferencesView):
     def updateWidgets(self):
         super(FlourishSchoolNameEditView, self).updateWidgets()
         self.widgets['title'].label = _('Name')
+        self.widgets['logo'].label = _('Logo')
 
     def nextURL(self):
         url = absoluteURL(self.context, self.request) + '/manage'
@@ -1097,7 +1127,9 @@ class ManageSchool(flourish.page.Page):
 
 class ManageItemDoneLink(flourish.viewlet.Viewlet):
     template = InlineViewPageTemplate('''
-      <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit">
+      <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit"
+          class="done-link"
+          i18n:domain="schooltool">
         <tal:block condition="can_manage">
           <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
              i18n:translate="">Done</a>
@@ -1423,3 +1455,56 @@ class TabsBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
 class FlourishAboutView(flourish.page.Page):
 
     pass
+
+
+class SchoolLogoView(flourish.widgets.ImageView):
+
+    @property
+    def image(self):
+        app = ISchoolToolApplication(None)
+        prefs = IApplicationPreferences(app)
+        return prefs.logo
+
+
+class SchoolLogoViewlet(flourish.viewlet.Viewlet):
+
+    template = InlineViewPageTemplate("""
+    <div class="header">
+      <div class="photo-display">
+        <img tal:attributes="src view/url; alt view/title" />
+      </div>
+    </div>
+    """)
+
+    @property
+    def enabled(self):
+        app = ISchoolToolApplication(None)
+        prefs = IApplicationPreferences(app)
+        return prefs.logo is not None
+
+    @property
+    def url(self):
+        app = ISchoolToolApplication(None)
+        base = absoluteURL(app, self.request)
+        return '%s/logo' % base
+
+    def render(self, *args, **kw):
+        if not self.enabled:
+            return ""
+        return self.template(*args, **kw)
+
+
+class SchoolLoginLogoViewlet(SchoolLogoViewlet):
+
+    template = InlineViewPageTemplate("""
+    <div class="header">
+      <div class="photo-display">
+        <img tal:attributes="src view/url; alt view/title" />
+      </div>
+    </div>
+    <div class="body">
+      <div>
+        <h3 tal:content="context/schooltool:app/title" />
+      </div>
+    </div>
+    """)

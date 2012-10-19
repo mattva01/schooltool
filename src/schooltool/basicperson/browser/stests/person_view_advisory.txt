@@ -13,7 +13,8 @@ Helpers:
     >>> def print_advisors(browser):
     ...     sel = '//h2[contains(@class, "ui-accordion-header")]'
     ...     accordion_header = browser.query_all.xpath(sel)[2]
-    ...     accordion_header.click()
+    ...     if 'ui-state-default' in accordion_header.get_attribute('class'):
+    ...         accordion_header.click()
     ...     sel = 'div.ui-accordion-content'
     ...     accordion_content = browser.query_all.css(sel)[2]
     ...     browser.wait(accordion_content.is_displayed)
@@ -27,7 +28,8 @@ Helpers:
     >>> def print_advisees(browser):
     ...     sel = '//h2[contains(@class, "ui-accordion-header")]'
     ...     accordion_header = browser.query_all.xpath(sel)[2]
-    ...     accordion_header.click()
+    ...     if 'ui-state-default' in accordion_header.get_attribute('class'):
+    ...         accordion_header.click()
     ...     sel = 'div.ui-accordion-content'
     ...     accordion_content = browser.query_all.css(sel)[2]
     ...     browser.wait(accordion_content.is_displayed)

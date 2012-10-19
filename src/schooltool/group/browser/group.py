@@ -45,6 +45,7 @@ from zope.i18n import translate
 from z3c.form import field, button, form
 from z3c.form.interfaces import HIDDEN_MODE
 from zc.table.interfaces import ISortableColumn
+from zope.security.interfaces import Unauthorized
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
@@ -514,6 +515,11 @@ class FlourishGroupsView(flourish.page.Page,
         schoolyear = self.schoolyear
         return IGroupContainer(schoolyear)
 
+    def __call__(self, *args, **kw):
+        if not flourish.canView(self.container):
+            raise Unauthorized("No permission to view groups.")
+        return flourish.page.Page.__call__(self, *args, **kw)
+
 
 class GroupsTable(table.ajax.Table):
 
@@ -821,6 +827,30 @@ class FlourishGroupIDCardsView(FlourishPersonIDCardsViewBase):
         result = [self.getPersonData(person)
                   for person in self.context.members]
         return result
+
+
+def done_link_url_cell_formatter(group):
+    def cell_formatter(value, item, formatter):
+        group_url = absoluteURL(group, formatter.request)
+        url = '%s?done_link=%s' % (absoluteURL(item, formatter.request),
+                                   group_url)
+        return '<a href="%s">%s</a>' % (url, value)
+    return cell_formatter
+
+
+class GroupAwarePersonTable(BasicPersonTable):
+
+    def updateFormatter(self):
+        group = self.view.context
+        self.setUp(formatters=[done_link_url_cell_formatter(group),
+                               done_link_url_cell_formatter(group)],
+                   table_formatter=self.table_formatter,
+                   batch_size=self.batch_size,
+                   prefix=self.__name__,
+                   css_classes={'table': 'data'})
+
+    def items(self):
+        return self.indexItems(self.context)
 
 
 class GroupAwarePersonTableFilter(PersonTableFilter):
