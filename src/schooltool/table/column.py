@@ -26,6 +26,7 @@ from zope.interface import implementer, implements, classImplements
 from zope.i18n.interfaces.locales import ICollator
 from zope.i18n import translate
 from zope.intid.interfaces import IIntIds
+from zope.interface import implementsOnly
 from zope.component import adapter, queryAdapter, queryMultiAdapter
 from zope.component import queryUtility
 from zope.security.proxy import removeSecurityProxy
@@ -384,3 +385,10 @@ def getIndexedSortableColumn(column):
         [RenderUnindexingMixin, SortUnindexingMixin], column)
     return column
 
+
+class NoSortIndexedGetterColumn(IndexedGetterColumn):
+    implementsOnly(IIndexedColumn)
+
+
+class NoSortIndexedLocaleAwareGetterColumn(IndexedLocaleAwareGetterColumn):
+    implementsOnly(IIndexedColumn)
