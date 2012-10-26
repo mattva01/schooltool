@@ -28,8 +28,9 @@ from zope.catalog.interfaces import ICatalogIndex
 from zope.catalog.interfaces import ICatalog
 from zope.intid.interfaces import IIntIds
 
-from zc.catalog.index import ValueIndex
-from zc.catalog.interfaces import IValueIndex, IExtentCatalog
+from zc.catalog.index import SetIndex, ValueIndex
+from zc.catalog.interfaces import IValueIndex, ISetIndex
+from zc.catalog.interfaces import IExtentCatalog
 
 from schooltool.table.interfaces import IIndexedTableFormatter
 from schooltool.table.interfaces import IIndexedColumn
@@ -71,6 +72,25 @@ class IConvertingIndex(IValueIndex, ICatalogIndex):
 
 class ConvertingIndex(ConvertingIndexMixin, ValueIndex, Contained):
     implements(IConvertingIndex)
+
+
+class ConvertingSetIndexMixin(object):
+    def __init__(self, converter=None, *args, **kwargs):
+        assert converter is not None
+        super(ConvertingSetIndexMixin, self).__init__(*args, **kwargs)
+        self.value_factory = converter
+
+    def index_doc(self, docid, texts):
+        value = self.value_factory(texts)
+        super(ConvertingSetIndexMixin, self).index_doc(docid, value)
+
+
+class IConvertingSetIndex(ISetIndex, ICatalogIndex):
+    """Index of values created by external converter."""
+
+
+class ConvertingSetIndex(ConvertingSetIndexMixin, SetIndex, Contained):
+    implements(IConvertingSetIndex)
 
 
 class IndexedFilterWidget(FilterWidget):
