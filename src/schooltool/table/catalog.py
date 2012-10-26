@@ -95,26 +95,26 @@ class ConvertingSetIndex(ConvertingSetIndexMixin, SetIndex, Contained):
 
 class IndexedFilterWidget(FilterWidget):
 
-    @Lazy
-    def catalog(self):
-        return ICatalog(self.source)
+    search_index = 'title'
 
-    def filter(self, list):
-        catalog = self.catalog
-        index = catalog['title']
+    @property
+    def catalog(self):
+        return self.manager.catalog
+
+    def filter(self, items):
+        index = self.catalog[self.search_index]
         if 'SEARCH' in self.request and 'CLEAR_SEARCH' not in self.request:
             searchstr = self.request['SEARCH'].lower()
             results = []
-            for item in list:
+            for item in items:
                 title = index.documents_to_values[item['id']]
                 if searchstr in title.lower():
                     results.append(item)
         else:
             self.request.form['SEARCH'] = ''
-            results = list
+            results = items
 
         return results
-
 
 
 class IndexedTableFormatter(SchoolToolTableFormatter):
