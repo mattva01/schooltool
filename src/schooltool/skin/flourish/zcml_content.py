@@ -34,8 +34,32 @@ from schooltool.skin.flourish.content import ContentProvider
 from schooltool.skin.flourish import interfaces
 
 
+TEMPLATE_CONTENT_TYPES = {
+    'xml': 'text/xml',
+    'html': 'text/html',
+}
+
+
+class TemplatePath(zope.configuration.fields.Path):
+
+    def fromUnicode(self, u):
+        parts = u.split(':')
+        content_type = None
+        if len(parts) > 1:
+            content_type_part = parts[0].strip().lower()
+            if content_type_part in TEMPLATE_CONTENT_TYPES:
+                content_type = TEMPLATE_CONTENT_TYPES.get(content_type_part)
+                parts.pop(0)
+        path = super(TemplatePath, self).fromUnicode(':'.join(parts))
+        return content_type, path
+
+
 class IContentDirective(ITemplatedContentProvider):
     """Define the SchoolTool content provider."""
+
+    template = TemplatePath(
+        title=u"Content-generating template.",
+        required=False)
 
     update = zope.configuration.fields.PythonIdentifier(
         title=u"The name of the view attribute implementing content update.",
@@ -119,9 +143,14 @@ def subclass_content(class_, name,
                      template_dict, class_dict):
     class_dict = dict(class_dict)
     class_dict['__name__'] = name
-    for attr, template in template_dict.items():
-        if template:
-            class_dict[attr] = ViewPageTemplateFile(template)
+    for attr, template_spec in template_dict.items():
+        if not template_spec:
+            continue
+        content_type, template = template_spec
+        if not template:
+            continue
+        class_dict[attr] = ViewPageTemplateFile(
+            template, content_type=content_type)
     classname = (u'%s_%s' % (class_.__name__, name)).encode('ASCII')
     new_class = type(classname, (class_, ), class_dict)
     for attr, base_attr in forward_call_dict.items():

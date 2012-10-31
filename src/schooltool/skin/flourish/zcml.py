@@ -34,6 +34,7 @@ from schooltool.skin.flourish.zcml_content import contentDirective
 from schooltool.skin.flourish.zcml_content import subclass_content
 from schooltool.skin.flourish.zcml_content import handle_interfaces
 from schooltool.skin.flourish.zcml_content import handle_security
+from schooltool.skin.flourish.zcml_content import TemplatePath
 from schooltool.skin.flourish import interfaces
 from schooltool.skin.flourish.page import Page
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
@@ -73,6 +74,10 @@ class IViewletDirective(zope.viewlet.metadirectives.IViewletDirective,
                         IRenderOverrides,
                         IViewletOrder):
     """A viewlet directive."""
+
+    template = TemplatePath(
+        title=u"Content-generating template.",
+        required=False)
 
     manager = zope.configuration.fields.GlobalObject(
         title=u"The viewlet Manager",
@@ -160,7 +165,7 @@ class IPageDirective(zope.browserpage.metadirectives.IPagesDirective,
         required=False,
         )
 
-    template = zope.configuration.fields.Path(
+    template = TemplatePath(
         title=u"Main template",
         description=u"""
         Change the main template that renders everything.
@@ -168,7 +173,7 @@ class IPageDirective(zope.browserpage.metadirectives.IPagesDirective,
         required=False,
         )
 
-    page_template = zope.configuration.fields.Path(
+    page_template = TemplatePath(
         title=u"Template for the page",
         description=u"""
         Change template that renders the page part between the header
@@ -177,7 +182,7 @@ class IPageDirective(zope.browserpage.metadirectives.IPagesDirective,
         required=False,
         )
 
-    content_template = zope.configuration.fields.Path(
+    content_template = TemplatePath(
         title=u"Template for the main page content.",
         description=u"""
         Set template that renders main content for this page.
