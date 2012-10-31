@@ -20,9 +20,6 @@
 SchoolTool flourish skin.
 """
 
-import zope.security
-import zope.container.interfaces
-
 import ajax
 import breadcrumbs
 import containers
@@ -38,60 +35,6 @@ import tal
 import viewlet
 import widgets
 
+from .helpers import *
+
 from schooltool.skin.flourish.interfaces import IFlourishLayer
-
-
-class Empty(object):
-
-    __name__ = None
-    __parent__ = None
-
-    def __init__(self, context, request, *args, **kw):
-        self.__parent__ = context
-        self.context = context
-        self.request = request
-
-    def update(self):
-        pass
-
-    def render(self, *args, **kw):
-        return ''
-
-    def __call__(self, *args, **kw):
-        return ''
-
-
-class EmptyContent(Empty):
-
-    def __init__(self, context, request, view, **kw):
-        Empty.__init__(self, context, request, **kw)
-        self.__parent__ = view
-        self.view = view
-
-
-class EmptyViewlet(EmptyContent):
-
-    def __init__(self, context, request, view, manager, **kw):
-        EmptyContent.__init__(self, context, request, view, **kw)
-        self.__parent__ = manager
-        self.manager = manager
-
-
-def canView(context):
-    return zope.security.checkPermission('schooltool.view', context)
-
-
-def canEdit(context):
-    return zope.security.checkPermission('schooltool.edit', context)
-
-
-def canDelete(context):
-    container = context.__parent__
-    if not zope.container.interfaces.IWriteContainer.providedBy(container):
-        raise NotImplementedError()
-    # XXX: if context has dependents, deletion may be prevented
-    return zope.security.canAccess(container, '__delitem__')
-
-
-def hasPermission(context, permission):
-    return zope.security.checkPermission(permission, context)
