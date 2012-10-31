@@ -26,32 +26,17 @@ from zope.interface import implementer, implements, classImplements
 from zope.i18n.interfaces.locales import ICollator
 from zope.i18n import translate
 from zope.intid.interfaces import IIntIds
-from zope.component import adapter, queryAdapter, queryMultiAdapter
+from zope.component import adapter, queryMultiAdapter
 from zope.component import queryUtility
 from zope.security.proxy import removeSecurityProxy
-from zope.traversing.browser.absoluteurl import absoluteURL
 
 import zc.table
 import zc.table.interfaces
 import zc.table.column
 
-from schooltool.common import stupid_form_key
+from schooltool.common import stupid_form_key, getResourceURL
 from schooltool.table.interfaces import ICheckboxColumn
 from schooltool.table.interfaces import IIndexedColumn
-
-
-#XXX: Misplaced helper
-def getResourceURL(library_name, image_name, request):
-    if not image_name:
-        return None
-    if library_name is not None:
-        library = queryAdapter(request, name=library_name)
-        image = library.get(image_name)
-    else:
-        image = queryAdapter(request, name=image_name)
-    if image is None:
-        return None
-    return absoluteURL(image, request)
 
 
 class CheckboxColumn(zc.table.column.Column):

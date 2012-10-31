@@ -25,9 +25,11 @@ import locale
 import datetime
 import urllib
 
+import zope.component
 from zope.publisher.interfaces import IApplicationRequest
 from zope.security.management import queryInteraction
 from zope.schema import Date
+from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.interface import Interface, implements
 
 __metaclass__ = type
@@ -655,3 +657,16 @@ def simple_form_key(item):
     key = unicode(name).encode('punycode')
     key = urllib.quote(key)
     return key
+
+
+def getResourceURL(library_name, image_name, request):
+    if not image_name:
+        return None
+    if library_name is not None:
+        library = zope.component.queryAdapter(request, name=library_name)
+        image = library.get(image_name)
+    else:
+        image = zope.component.queryAdapter(request, name=image_name)
+    if image is None:
+        return None
+    return absoluteURL(image, request)
