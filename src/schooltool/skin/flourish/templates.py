@@ -1,6 +1,6 @@
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2011 Shuttleworth Foundation
+# Copyright (c) 2012 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,25 +17,17 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolTool flourish skin.
+Common template class shorthands.
 """
 
-import ajax
-import breadcrumbs
-import containers
-import content
-import error
-import form
-import stesting
-import interfaces
-import page
-import resource
-import sorting
-import tal
-import templates
-import viewlet
-import widgets
+from schooltool.common.inlinept import InlineViewPageTemplate as Inline
+from schooltool.common.inlinept import InheritTemplate as Inherit
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile as File
 
-from .helpers import *
 
-from schooltool.skin.flourish.interfaces import IFlourishLayer
+class XMLFile(File):
+    def __init__(self, *args, **kw):
+        if 'content_type' not in kw:
+            kw = dict(kw)
+            kw['content_type'] = 'text/xml'
+        File.__init__(self, *args, **kw)
