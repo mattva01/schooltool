@@ -22,7 +22,6 @@ SchoolTool flourish pages.
 import re
 import urllib
 
-from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
 from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.interface import implements
@@ -35,26 +34,23 @@ from zope.traversing.browser.absoluteurl import absoluteURL, AbsoluteURL
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationTabs
-from schooltool.common.inlinept import InlineViewPageTemplate
-from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.viewlet import ManagerViewlet
 from schooltool.skin.flourish import interfaces
+from schooltool.skin.flourish import templates
 from schooltool.traverser.traverser import PluggableTraverser, TraverserPlugin
 
 
-class Page(BrowserPage):
-    implements(interfaces.IPage)
+class PageBase(BrowserPage):
+    implements(interfaces.IPageBase)
 
-    title = None
-    subtitle = None
-    has_header = True
-    page_class = 'page'
-    container_class = 'container'
+    template = None
 
-    template = ViewPageTemplateFile('templates/main.pt')
-    page_template = ViewPageTemplateFile('templates/page.pt')
-    content_template = None
+    def update(self):
+        pass
+
+    def render(self, *args, **kw):
+        return self.template(*args, **kw)
 
     def publishTraverse(self, request, name):
         traverser = PluggableTraverser(self, request)
@@ -67,11 +63,26 @@ class Page(BrowserPage):
             interfaces.IContentProviders)
         return providers
 
-    def update(self):
-        pass
+    def __call__(self, *args, **kw):
+        self.update()
+        result = self.render(*args, **kw)
+        return result
 
-    def render(self, *args, **kw):
-        return self.template(*args, **kw)
+
+class Page(PageBase):
+    implements(interfaces.IPage)
+
+    title = None
+    subtitle = None
+    has_header = True
+    page_class = 'page'
+    container_class = 'container'
+
+    template = templates.File('templates/main.pt')
+    page_template = templates.File('templates/page.pt')
+    content_template = None
+
+    render = PageBase.render
 
     def __call__(self, *args, **kw):
         self.update()
@@ -115,7 +126,7 @@ class PageAbsoluteURL(AbsoluteURL):
 class NoSidebarPage(Page):
     container_class = 'container expand_container'
 
-    page_template = ViewPageTemplateFile('templates/page_nosidebar.pt')
+    page_template = templates.File('templates/page_nosidebar.pt')
 
 
 class WideContainerPage(Page):
@@ -123,7 +134,7 @@ class WideContainerPage(Page):
 
 
 class ContentViewletManager(ViewletManager):
-    template = InlineViewPageTemplate("""
+    template = templates.Inline("""
         <tal:block repeat="viewlet view/viewlets">
           <div class="content"
                tal:define="rendered viewlet;
@@ -150,7 +161,7 @@ class DisabledViewlet(Viewlet):
 
 class Refine(Viewlet):
 
-    template = InlineViewPageTemplate('''
+    template = templates.Inline('''
       <div class="header"
            tal:condition="view/title"
            tal:content="view/title">
@@ -166,14 +177,14 @@ class Refine(Viewlet):
 
 
 class Content(Viewlet):
-    template = ViewPageTemplateFile('templates/page_content.pt')
+    template = templates.File('templates/page_content.pt')
     body_template = None
     render = lambda self, *a, **kw: self.template(*a, **kw)
 
 
 class Related(Viewlet):
 
-    template = InlineViewPageTemplate('''
+    template = templates.Inline('''
       <div class="header"
            tal:condition="view/title"
            tal:content="view/title">
@@ -218,7 +229,7 @@ def getParentActiveViewletName(context, request, view, manager):
 
 
 class ListNavigationBase(object):
-    template = InlineViewPageTemplate("""
+    template = templates.Inline("""
         <ul tal:attributes="class view/list_class"
             tal:condition="view/items">
           <li tal:repeat="item view/items"
@@ -278,7 +289,7 @@ class ListNavigationViewlet(ListNavigationBase, ManagerViewlet):
 
 
 class HeaderNavigationManager(ListNavigationContent):
-    template = InlineViewPageTemplate("""
+    template = templates.Inline("""
         <ul tal:attributes="class view/list_class">
           <li tal:repeat="item view/items"
               tal:attributes="class item/class"
@@ -302,7 +313,7 @@ class SecondaryNavigationManager(ListNavigationContent):
 
 
 class TertiaryNavigationManager(ListNavigationContent):
-    template = InlineViewPageTemplate("""
+    template = templates.Inline("""
         <ul tal:attributes="class view/list_class"
             tal:condition="view/items">
           <li tal:repeat="item view/items"
@@ -335,7 +346,7 @@ class PageNavigationManager(ListNavigationContent):
 
 class RefineLinksViewlet(Refine, ListNavigationViewlet):
     list_class = "filter"
-    body_template = InheritTemplate(ListNavigationBase.template)
+    body_template = templates.Inherit(ListNavigationBase.template)
 
     def render(self, *args, **kw):
         if not self.items:
@@ -380,7 +391,7 @@ class IPageRelatedManager(interfaces.IViewletManager):
 
 
 class LinkViewlet(Viewlet):
-    template = InlineViewPageTemplate('''
+    template = templates.Inline('''
     <tal:block define="url view/url">
       <a tal:condition="url"
          tal:attributes="href view/url"
@@ -445,7 +456,7 @@ def generic_viewlet_html_id(viewlet, prefix=''):
 
 
 class LinkIdViewlet(LinkViewlet):
-    template = InlineViewPageTemplate('''
+    template = templates.Inline('''
     <tal:block define="url view/url">
       <a tal:condition="url"
          tal:attributes="href view/url;
@@ -463,7 +474,7 @@ class LinkIdViewlet(LinkViewlet):
 
 
 class SimpleModalLinkViewlet(LinkIdViewlet):
-    template = InlineViewPageTemplate('''
+    template = templates.Inline('''
     <tal:block define="url view/url">
       <a tal:condition="url"
          href="#"
@@ -483,7 +494,7 @@ class SimpleModalLinkViewlet(LinkIdViewlet):
 
 
 class ModalFormLinkViewlet(LinkIdViewlet):
-    template = ViewPageTemplateFile('templates/modal_form_link.pt')
+    template = templates.File('templates/modal_form_link.pt')
 
     @property
     def form_container_id(self):

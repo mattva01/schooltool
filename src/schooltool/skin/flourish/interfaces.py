@@ -104,29 +104,30 @@ class IActiveViewletName(Interface):
     """Interface for adapter that returns the active viewlet name."""
 
 
-class IPage(IBrowserPage, ILocation):
-    title = zope.schema.TextLine(
-        title=u"Page title", required=False)
-
-    subtitle = zope.schema.TextLine(
-        title=u"Page subtitle", required=False)
+class IPageBase(IBrowserPage, ILocation):
 
     template = Attribute(
-        """Main page template, renders the whole browser page,
-        including header and footer.
-        """)
-
-    page_template = Attribute(
-        u"Template that renders all contents between header and footer.")
-
-    content_template = Attribute(
-        u"Template that renders the main content.")
+        """Main page template, often used to render the page""")
 
     def update(self):
         pass
 
     def render(*args, **kw):
         pass
+
+
+class IPage(IPageBase):
+    title = zope.schema.TextLine(
+        title=u"Page title", required=False)
+
+    subtitle = zope.schema.TextLine(
+        title=u"Page subtitle", required=False)
+
+    page_template = Attribute(
+        u"Template that renders all contents between header and footer.")
+
+    content_template = Attribute(
+        u"Template that renders the main content.")
 
 
 class IFromPublication(IPublishTraverse):

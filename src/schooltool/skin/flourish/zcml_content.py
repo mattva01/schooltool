@@ -111,7 +111,7 @@ class IContentFactoryDirective(zope.component.zcml.IAdapterDirective):
                      "default the provider is registered for all views, "
                      "the most common case."),
         required=False,
-        default=interfaces.IPage,
+        default=interfaces.IPageBase,
         )
 
     layer = zope.configuration.fields.GlobalInterface(
@@ -162,7 +162,7 @@ def subclass_content(class_, name,
 
 def contentDirective(
     _context, name, permission,
-    for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPage,
+    for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPageBase,
     class_=ContentProvider, template=None,
     update='update', render='render',
     allowed_interface=(), allowed_attributes=(),
@@ -209,7 +209,7 @@ def contentDirective(
 
 def contentFactory(
     _context, factory, name='', permission=None,
-    for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPage,
+    for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPageBase,
     provides=interfaces.IContentProvider,
     trusted=True, locate=False):
 

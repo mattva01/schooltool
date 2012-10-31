@@ -233,7 +233,7 @@ class IActiveViewletDirective(IContentOrientedDirective):
 
 def viewletManager(
     _context, name, permission,
-    for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPage,
+    for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPageBase,
     provides=interfaces.IViewletManager,
     class_=ViewletManager, template=None,
     update='update', render='render',
