@@ -220,6 +220,7 @@ class ReportPDFView(PDFView):
 
 
 class Box(object):
+    """XXX: Scheduled for demolition"""
 
     def __init__(self, top, right=None, bottom=None, left=None):
         self.top = top
@@ -237,10 +238,11 @@ class Box(object):
         else:
             assert bottom is not None, "Need to set bottom"
             self.left = left
-            self.bottom = bottom                
+            self.bottom = bottom
 
 
 class FlourishDefaultPageTemplate(ReportPageTemplate):
+    """XXX: Scheduled for demolition"""
 
     template = ViewPageTemplateFile(
         'templates/f_default_report_template.pt',
@@ -425,6 +427,7 @@ class FlourishDefaultPageTemplate(ReportPageTemplate):
 
 
 class FlourishReportPDFView(PDFView):
+    """XXX: Scheduled for demolition"""
 
     margin = Box(0.75*units.inch)
     rotation = 0

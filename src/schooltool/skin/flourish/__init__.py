@@ -30,6 +30,7 @@ import stesting
 import interfaces
 import page
 import resource
+import report
 import sorting
 import tal
 import templates

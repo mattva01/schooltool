@@ -130,6 +130,35 @@ class IPage(IPageBase):
         u"Template that renders the main content.")
 
 
+class IPDFPage(IPageBase):
+
+    title = zope.schema.TextLine(
+        title=u"PDF title", required=False)
+
+    author = zope.schema.TextLine(
+        title=u"PDF author", required=False)
+
+    filename = zope.schema.TextLine(
+        title=u"PDF file name", required=False)
+
+    inline = zope.schema.Bool(
+        title=u"Render inline", required=False)
+
+    page_size = zope.schema.Tuple(
+        title=_(u"Page size"),
+        value_type = zope.schema.Float(title=_("Size in pt (1/72 inch)")),
+        required=False
+        )
+
+    rotation = zope.schema.Float(
+        title=_(u"Page rotation"),
+        required=False
+        )
+
+    content_template = Attribute(
+        u"Template that renders the main content.")
+
+
 class IFromPublication(IPublishTraverse):
 
     fromPublication = zope.schema.Bool(

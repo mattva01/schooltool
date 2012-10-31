@@ -246,6 +246,7 @@
   <include file="tal.zcml" />
   <include file="containers.zcml" />
   <include file="widgets.zcml" />
+  <include file="report.zcml" />
 
   <configure package="schooltool.skin">
   <zope:view
