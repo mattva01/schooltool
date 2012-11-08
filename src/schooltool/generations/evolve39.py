@@ -24,7 +24,6 @@ Update person photos from File to schooltool.skin.flourish.fields.ImageFile.
 
 from zope.app.generations.utility import getRootFolder, findObjectsProviding
 from zope.component.hooks import getSite, setSite
-from ZODB.POSException import POSKeyError
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.fields import ImageFile
@@ -35,14 +34,10 @@ def evolvePerson(person):
         return
     photo = person.photo
     params = dict(photo.parameters) if photo.parameters else None
-
-    try:
-        fin = photo.open("r")
-    except POSKeyError:
-        person.photo = None
-        return
     new_photo = ImageFile(mimeType=photo.mimeType, parameters=params)
     person.photo = new_photo
+
+    fin = photo.open("r")
     fout = new_photo.open("w")
     data = fin.read()
     fout.write(data)
