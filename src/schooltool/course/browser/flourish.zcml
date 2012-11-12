@@ -623,10 +623,11 @@
       permission="schooltool.edit"
       />
 
-  <flourish:page
+  <flourish:pdf
       name="section_roster.pdf"
       for="schooltool.course.interfaces.ISection"
       class=".section.SectionRosterPDFView"
+      content_template="reports/section_roster.pt"
       permission="schooltool.edit"
       />
 

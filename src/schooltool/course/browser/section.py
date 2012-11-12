@@ -1598,9 +1598,7 @@ class FlourishRequestSectionRosterView(RequestReportDownloadDialog):
                                                      self.request)
 
 
-class SectionRosterPDFView(FlourishReportPDFView):
-
-    template = ViewPageTemplateFile('templates/f_section_roster_rml.pt')
+class SectionRosterPDFView(flourish.report.PDFPage):
 
     @property
     def title(self):
