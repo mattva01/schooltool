@@ -146,13 +146,13 @@ class IPDFPage(IPageBase):
         title=u"Render inline", required=False)
 
     page_size = zope.schema.Tuple(
-        title=_(u"Page size"),
-        value_type = zope.schema.Float(title=_("Size in pt (1/72 inch)")),
+        title=u"Page size",
+        value_type = zope.schema.Float(title=u"Size in pt (1/72 inch)"),
         required=False
         )
 
     rotation = zope.schema.Float(
-        title=_(u"Page rotation"),
+        title=u"Page rotation",
         required=False
         )
 
