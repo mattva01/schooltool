@@ -51,20 +51,33 @@
       name="colors"
       manager=".report.PDFInitSection"
       view=".report.PDFPage"
+      class=".report.PDFPart"
       template="reports/pdf_colors.pt"
       permission="zope.Public"
       />
 
   <flourish:viewlet
-      name="st.default"
+      name="shcooltool"
       manager=".report.PDFStylesheetSection"
       view=".report.PDFPage"
+      class=".report.PDFPart"
+      template="reports/pdf_schooltool_styles.pt"
+      permission="zope.Public"
+      />
+
+  <!-- Standard page template -->
+
+  <flourish:viewlet
+      name="default"
+      manager=".report.PDFStylesheetSection"
+      view=".report.PDFPage"
+      class=".report.PDFPart"
       template="reports/pdf_default_styles.pt"
       permission="zope.Public"
       />
 
   <flourish:viewlet
-      name="st.default"
+      name="default"
       class=".report.DefaultPageTemplate"
       manager=".report.PDFTemplateSection"
       render="template"

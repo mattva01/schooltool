@@ -354,3 +354,10 @@ class DefaultPageTemplate(viewlet.Viewlet):
             'x': x,
             'y': y,
             }
+
+
+class PDFPart(viewlet.Viewlet):
+
+    @property
+    def templates(self):
+        return self.view.providers.get('template')
