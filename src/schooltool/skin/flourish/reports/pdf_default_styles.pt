@@ -1,0 +1,18 @@
+<metal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+
+  <paraStyle
+      name="bottom_bar.page_number"
+      alignment="right"
+      fontName="Ubuntu_Regular"
+      spaceBefore="0"
+      spaceAfter="0"
+      tal:define="template nocall:view/templates/default"
+      tal:attributes="leading template/bottom_bar/height;
+                      fontSize template/bottom_bar/fontSize;"
+      />
+
+</metal:block>

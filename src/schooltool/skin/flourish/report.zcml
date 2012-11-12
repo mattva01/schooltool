@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:meta="http://namespaces.zope.org/meta"
+           xmlns:flourish="http://schooltool.org/flourish"
+           i18n_domain="schooltool">
+
+  <flourish:content
+      name="init"
+      class=".report.PDFInitSection"
+      view=".report.PDFPage"
+      template="reports/pdf_init.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:content
+      name="page_info"
+      class=".report.PDFPageInfoSection"
+      view=".report.PDFPage"
+      template="reports/pdf_pageinfo.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:content
+      name="aliases"
+      class=".report.PDFStylesheetInitSection"
+      view=".report.PDFStylesheetSection"
+      permission="zope.Public"
+      />
+
+  <flourish:content
+      name="stylesheet"
+      class=".report.PDFStylesheetSection"
+      view=".report.PDFPage"
+      template="reports/pdf_stylesheet.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:content
+      name="template"
+      class=".report.PDFTemplateSection"
+      view=".report.PDFPage"
+      template="reports/pdf_template.pt"
+      permission="zope.Public"
+      />
+
+  <!-- Standard report style -->
+
+  <flourish:viewlet
+      name="colors"
+      manager=".report.PDFInitSection"
+      view=".report.PDFPage"
+      class=".report.PDFPart"
+      template="reports/pdf_colors.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="shcooltool"
+      manager=".report.PDFStylesheetSection"
+      view=".report.PDFPage"
+      class=".report.PDFPart"
+      template="reports/pdf_schooltool_styles.pt"
+      permission="zope.Public"
+      />
+
+  <!-- Standard page template -->
+
+  <flourish:viewlet
+      name="default"
+      manager=".report.PDFStylesheetSection"
+      view=".report.PDFPage"
+      class=".report.PDFPart"
+      template="reports/pdf_default_styles.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="default"
+      class=".report.DefaultPageTemplate"
+      manager=".report.PDFTemplateSection"
+      render="template"
+      permission="zope.Public"
+      />
+
+</configure>

@@ -103,17 +103,24 @@ class IActiveViewletName(Interface):
     """Interface for adapter that returns the active viewlet name."""
 
 
-class IPage(IBrowserPage, ILocation):
+class IPageBase(IBrowserPage, ILocation):
+
+    template = Attribute(
+        """Main page template, often used to render the page""")
+
+    def update(self):
+        pass
+
+    def render(*args, **kw):
+        pass
+
+
+class IPage(IPageBase):
     title = zope.schema.TextLine(
         title=u"Page title", required=False)
 
     subtitle = zope.schema.TextLine(
         title=u"Page subtitle", required=False)
-
-    template = Attribute(
-        """Main page template, renders the whole browser page,
-        including header and footer.
-        """)
 
     page_template = Attribute(
         u"Template that renders all contents between header and footer.")
@@ -121,11 +128,38 @@ class IPage(IBrowserPage, ILocation):
     content_template = Attribute(
         u"Template that renders the main content.")
 
-    def update(self):
-        pass
+IPage.setTaggedValue('flourish.template_content_type', 'html')
 
-    def render(*args, **kw):
-        pass
+
+class IPDFPage(IPageBase):
+
+    title = zope.schema.TextLine(
+        title=u"PDF title", required=False)
+
+    author = zope.schema.TextLine(
+        title=u"PDF author", required=False)
+
+    filename = zope.schema.TextLine(
+        title=u"PDF file name", required=False)
+
+    inline = zope.schema.Bool(
+        title=u"Render inline", required=False)
+
+    page_size = zope.schema.Tuple(
+        title=_(u"Page size"),
+        value_type = zope.schema.Float(title=_("Size in pt (1/72 inch)")),
+        required=False
+        )
+
+    rotation = zope.schema.Float(
+        title=_(u"Page rotation"),
+        required=False
+        )
+
+    content_template = Attribute(
+        u"Template that renders the main content.")
+
+IPDFPage.setTaggedValue('flourish.template_content_type', 'xml')
 
 
 class IFromPublication(IPublishTraverse):

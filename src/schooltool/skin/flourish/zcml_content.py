@@ -34,8 +34,32 @@ from schooltool.skin.flourish.content import ContentProvider
 from schooltool.skin.flourish import interfaces
 
 
+TEMPLATE_CONTENT_TYPES = {
+    'xml': 'text/xml',
+    'html': 'text/html',
+}
+
+
+class TemplatePath(zope.configuration.fields.Path):
+
+    def fromUnicode(self, u):
+        parts = u.split(':')
+        content_type = None
+        if len(parts) > 1:
+            content_type_part = parts[0].strip().lower()
+            if content_type_part in TEMPLATE_CONTENT_TYPES:
+                content_type = TEMPLATE_CONTENT_TYPES.get(content_type_part)
+                parts.pop(0)
+        path = super(TemplatePath, self).fromUnicode(':'.join(parts))
+        return content_type, path
+
+
 class IContentDirective(ITemplatedContentProvider):
     """Define the SchoolTool content provider."""
+
+    template = TemplatePath(
+        title=u"Content-generating template.",
+        required=False)
 
     update = zope.configuration.fields.PythonIdentifier(
         title=u"The name of the view attribute implementing content update.",
@@ -87,7 +111,7 @@ class IContentFactoryDirective(zope.component.zcml.IAdapterDirective):
                      "default the provider is registered for all views, "
                      "the most common case."),
         required=False,
-        default=interfaces.IPage,
+        default=interfaces.IPageBase,
         )
 
     layer = zope.configuration.fields.GlobalInterface(
@@ -114,14 +138,47 @@ def handle_interfaces(_context, interfaces):
             zope.component.zcml.interface(_context, ifc)
 
 
+def template_specs(template_dict, content_type=None):
+    content_type = TEMPLATE_CONTENT_TYPES.get(content_type, content_type)
+    result = dict(template_dict)
+    for var in result:
+        if (result[var] is not None and
+            result[var][0] is None):
+            result[var] = (content_type, result[var][1])
+    return result
+
+
+_undefined = object()
+
+def update_specs(template_dict, target):
+    types = []
+    if issubclass(target, Interface):
+        types.append(
+            target.queryTaggedValue('flourish.template_content_type', _undefined))
+    implemented = getattr(target, '__implemented__')
+    if implemented:
+        for ifc in implemented.interfaces():
+            types.append(
+                ifc.queryTaggedValue('flourish.template_content_type', _undefined))
+    types = filter(lambda p: p is not _undefined, types)
+    if types:
+        return template_specs(template_dict, types[0])
+    return dict(template_dict)
+
+
 def subclass_content(class_, name,
                      forward_call_dict,
                      template_dict, class_dict):
     class_dict = dict(class_dict)
     class_dict['__name__'] = name
-    for attr, template in template_dict.items():
-        if template:
-            class_dict[attr] = ViewPageTemplateFile(template)
+    for attr, template_spec in template_dict.items():
+        if not template_spec:
+            continue
+        content_type, template = template_spec
+        if not template:
+            continue
+        class_dict[attr] = ViewPageTemplateFile(
+            template, content_type=content_type)
     classname = (u'%s_%s' % (class_.__name__, name)).encode('ASCII')
     new_class = type(classname, (class_, ), class_dict)
     for attr, base_attr in forward_call_dict.items():
@@ -133,7 +190,7 @@ def subclass_content(class_, name,
 
 def contentDirective(
     _context, name, permission,
-    for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPage,
+    for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPageBase,
     class_=ContentProvider, template=None,
     update='update', render='render',
     allowed_interface=(), allowed_attributes=(),
@@ -154,10 +211,11 @@ def contentDirective(
                 "When template and render not specified, "
                 "class must implement 'render' method")
 
+    templates = update_specs({'template': template}, view)
     class_ = subclass_content(
         class_, name,
         {'update': update, 'render': render},
-        {'template': template}, kwargs)
+        templates, kwargs)
 
     handle_interfaces(_context, (for_, view))
     handle_interfaces(_context, allowed_interface)
@@ -180,7 +238,7 @@ def contentDirective(
 
 def contentFactory(
     _context, factory, name='', permission=None,
-    for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPage,
+    for_=Interface, layer=interfaces.IFlourishLayer, view=interfaces.IPageBase,
     provides=interfaces.IContentProvider,
     trusted=True, locate=False):
 

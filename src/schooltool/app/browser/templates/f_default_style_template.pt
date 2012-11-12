@@ -1,0 +1,20 @@
+<tal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+  <paraStyle
+      name="bottom_bar_page_number"
+      alignment="right"
+      fontName="Ubuntu_Regular"
+      spaceBefore="0"
+      spaceAfter="0"
+      tal:attributes="leading view/bottom_bar/height;
+                      fontSize view/bottom_bar/fontSize;"
+      />
+  <blockTableStyle id="simple-header">
+    <blockFont start="0,0" stop="-1,0"
+               name="Ubuntu_Bold" />
+    <blockBackground start="0,0" stop="-1,-1"
+                     colorsByRow="#ffffff,#f5f4f5" />
+  </blockTableStyle>
+</tal:block>

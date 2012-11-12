@@ -754,5 +754,13 @@
       permission="schooltool.view"
       />
 
+  <zope:adapter
+      for="*
+           schooltool.skin.flourish.IFlourishLayer
+           .report.FlourishReportPDFView"
+      provides="schooltool.app.browser.interfaces.IReportPageTemplate"
+      name="default"
+      factory=".report.FlourishDefaultPageTemplate"
+      />
 
 </configure>

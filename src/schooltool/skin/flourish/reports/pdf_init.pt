@@ -1,0 +1,17 @@
+<metal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+
+    <docinit>
+      <tal:block repeat="viewlet view/viewlets">
+        <tal:block define="rendered viewlet;
+                           stripped rendered/strip|nothing"
+                   condition="stripped"
+                   content="structure stripped">
+        </tal:block>
+      </tal:block>
+    </docinit>
+
+</metal:block>
