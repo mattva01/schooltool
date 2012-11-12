@@ -7,8 +7,8 @@
     i18n:domain="schooltool">
   <document tal:attributes="filename view/filename;
                             compression view/use_compresion|nothing;
-                            debug XXX|nothing;
-                            invariant XXX|nothing;">
+                            debug view/render_debug;
+                            invariant view/render_invariant;">
     <tal:block content="structure view/providers/init|nothing" />
     <tal:block content="structure view/providers/stylesheet|nothing" />
     <tal:block content="structure view/providers/template|nothing" />

@@ -1,0 +1,16 @@
+<metal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+
+  <color id="top_bar.background" value="#636466" />
+  <color id="top_bar.text" value="#ffffff" />
+
+  <color id="table.header.background" value="#636466" />
+  <color id="table.text" value="#ffffff" />
+  <color id="table.subheader.background" value="#939598" />
+  <color id="table.row.background" value="#ffffff" />
+  <color id="table.row-alt.background" value="#f5f4f5" />
+
+</metal:block>

@@ -27,7 +27,11 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile as File
 
 class XMLFile(File):
     def __init__(self, *args, **kw):
-        if 'content_type' not in kw:
-            kw = dict(kw)
-            kw['content_type'] = 'text/xml'
+        kw['content_type'] = 'text/xml'
+        File.__init__(self, *args, **kw)
+
+
+class HTMLFile(File):
+    def __init__(self, *args, **kw):
+        kw['content_type'] = 'text/html'
         File.__init__(self, *args, **kw)

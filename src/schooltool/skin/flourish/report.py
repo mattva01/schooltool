@@ -20,6 +20,7 @@
 SchoolTool report pages.
 """
 import urllib
+import datetime
 
 from reportlab.lib import units, pagesizes
 
@@ -73,7 +74,8 @@ def quoteFilename(filename):
 class PDFPage(page.PageBase):
     implements(interfaces.IPDFPage)
 
-    template = templates.XMLFile('templates/pdf.pt')
+    default_content_type = 'xml'
+    template = templates.XMLFile('reports/pdf.pt')
     content_template = None
 
     page_size = pagesizes.A4
@@ -83,14 +85,14 @@ class PDFPage(page.PageBase):
     title = u''
     author = _("SchoolTool")
 
-    filename = '' # Suggested PDF file name
     inline = False # Display PDF in browser? (otherwise download)
 
     pdf_disabled_text = _("PDF support is disabled."
                           "  It can be enabled by your administrator.")
 
     def renderPDF(self, xml):
-        stream = rml2pdf.parseString(xml, filename=self.filename or None)
+        filename = self.filename
+        stream = rml2pdf.parseString(xml, filename=filename or None)
         data = stream.getvalue()
         response = self.request.response
         response.setHeader('Content-Type', 'application/pdf')
@@ -99,11 +101,38 @@ class PDFPage(page.PageBase):
         # report in the browser page if this header is not provided.
         response.setHeader('Accept-Ranges', 'bytes')
         disposition = self.inline and 'inline' or 'attachment'
-        quoted_filename = quoteFilename(self.filename)
+        quoted_filename = quoteFilename(filename)
         if quoted_filename:
             disposition += '; filename="%s"' % quoted_filename
         response.setHeader('Content-Disposition', disposition)
         return data
+
+    @property
+    def base_filename(self):
+        filename = self.__name__
+        if filename.strip().lower().endswith('.pdf'):
+            filename = filename[:-4]
+        return filename
+
+    def makeFileName(self, basename):
+        if self.render_invariant:
+            return '%s.pdf' % basename
+        timestamp = datetime.datetime.now().strftime('%y-%m-%d-%H-%M')
+        return '%s_%s.pdf' % (basename, timestamp)
+
+    @property
+    def filename(self):
+        return self.makeFileName(self.base_filename)
+
+    @property
+    def render_debug(self):
+        # TODO: Should return True when devmode enabled
+        return False
+
+    @property
+    def render_invariant(self):
+        # TODO: Should return True when running tests
+        return False
 
     def __call__(self):
         if not pdf.isEnabled():
@@ -150,7 +179,7 @@ class PDFTemplateSection(viewlet.ViewletManager):
 class DefaultPageTemplate(viewlet.Viewlet):
 
     template = templates.XMLFile(
-        'templates/pdf_default_page_template.pt')
+        'reports/pdf_default_page_template.pt')
 
     def lines(self, attr, top, left):
         content = attr['content']

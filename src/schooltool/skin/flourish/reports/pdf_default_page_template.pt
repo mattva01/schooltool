@@ -73,7 +73,7 @@
                           y bottom_bar/y;
                           width bottom_bar/width;
                           height bottom_bar/height">
-        <para style="st.default.bottom_page_number" i18n:translate="">
+        <para style="bottom_bar.page_number" i18n:translate="">
           Page <pageNumber i18n:name="page_number"/>
         </para>
       </place>

@@ -32,6 +32,7 @@ from zope.publisher.interfaces.browser import IBrowserView
 
 from schooltool.skin.flourish.zcml_content import contentDirective
 from schooltool.skin.flourish.zcml_content import subclass_content
+from schooltool.skin.flourish.zcml_content import template_specs, update_specs
 from schooltool.skin.flourish.zcml_content import handle_interfaces
 from schooltool.skin.flourish.zcml_content import handle_security
 from schooltool.skin.flourish.zcml_content import TemplatePath
@@ -286,7 +287,7 @@ def viewlet(
     class_ = subclass_content(
         class_, name,
         {'update': update, 'render': render},
-        {'template': template}, kwargs)
+        update_specs({'template': template}, view), kwargs)
 
     handle_interfaces(_context, (for_, view))
     handle_interfaces(_context, allowed_interface)
@@ -360,11 +361,11 @@ def page(_context, name, permission,
     # XXX: raise ConfigurationError if class_ is Page and
     #      no templates specified
 
-    templates = {
+    templates = template_specs({
         'template': template,
         'page_template': page_template,
         'content_template': content_template,
-        }
+        }, content_type='html')
 
     class_ = subclass_content(
         class_, name,

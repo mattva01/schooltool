@@ -129,6 +129,8 @@ class IPage(IPageBase):
     content_template = Attribute(
         u"Template that renders the main content.")
 
+IPage.setTaggedValue('flourish.template_content_type', 'html')
+
 
 class IPDFPage(IPageBase):
 
@@ -157,6 +159,8 @@ class IPDFPage(IPageBase):
 
     content_template = Attribute(
         u"Template that renders the main content.")
+
+IPDFPage.setTaggedValue('flourish.template_content_type', 'xml')
 
 
 class IFromPublication(IPublishTraverse):

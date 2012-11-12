@@ -44,6 +44,7 @@ from schooltool.traverser.traverser import PluggableTraverser, TraverserPlugin
 class PageBase(BrowserPage):
     implements(interfaces.IPageBase)
 
+    default_content_type = 'html'
     template = None
 
     def update(self):

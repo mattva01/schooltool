@@ -30,7 +30,7 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IBrowserView
 
 from schooltool.skin.flourish.zcml import IRenderOverrides
-from schooltool.skin.flourish.zcml_content import subclass_content
+from schooltool.skin.flourish.zcml_content import subclass_content, template_specs
 from schooltool.skin.flourish.zcml_content import handle_interfaces
 from schooltool.skin.flourish.zcml_content import handle_security
 from schooltool.skin.flourish.zcml_content import TemplatePath
@@ -117,10 +117,10 @@ def pdf(_context, name, permission,
     # XXX: raise ConfigurationError if class_ is PDFPage and
     #      no templates specified
 
-    templates = {
+    templates = template_specs({
         'template': template,
         'content_template': content_template,
-        }
+        }, content_type='xml')
 
     class_ = subclass_content(
         class_, name,

@@ -138,6 +138,34 @@ def handle_interfaces(_context, interfaces):
             zope.component.zcml.interface(_context, ifc)
 
 
+def template_specs(template_dict, content_type=None):
+    content_type = TEMPLATE_CONTENT_TYPES.get(content_type, content_type)
+    result = dict(template_dict)
+    for var in result:
+        if (result[var] is not None and
+            result[var][0] is None):
+            result[var] = (content_type, result[var][1])
+    return result
+
+
+_undefined = object()
+
+def update_specs(template_dict, target):
+    types = []
+    if issubclass(target, Interface):
+        types.append(
+            target.queryTaggedValue('flourish.template_content_type', _undefined))
+    implemented = getattr(target, '__implemented__')
+    if implemented:
+        for ifc in implemented.interfaces():
+            types.append(
+                ifc.queryTaggedValue('flourish.template_content_type', _undefined))
+    types = filter(lambda p: p is not _undefined, types)
+    if types:
+        return template_specs(template_dict, types[0])
+    return dict(template_dict)
+
+
 def subclass_content(class_, name,
                      forward_call_dict,
                      template_dict, class_dict):
@@ -183,10 +211,11 @@ def contentDirective(
                 "When template and render not specified, "
                 "class must implement 'render' method")
 
+    templates = update_specs({'template': template}, view)
     class_ = subclass_content(
         class_, name,
         {'update': update, 'render': render},
-        {'template': template}, kwargs)
+        templates, kwargs)
 
     handle_interfaces(_context, (for_, view))
     handle_interfaces(_context, allowed_interface)

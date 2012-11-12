@@ -5,7 +5,7 @@
     i18n:domain="schooltool">
 
   <paraStyle
-      name="st.default.bottom_page_number"
+      name="bottom_bar.page_number"
       alignment="right"
       fontName="Ubuntu_Regular"
       spaceBefore="0"
@@ -14,5 +14,12 @@
       tal:attributes="leading template/bottom_bar/height;
                       fontSize template/bottom_bar/fontSize;"
       />
+
+  <blockTableStyle id="table">
+    <blockFont start="0,0" stop="-1,0"
+               name="Ubuntu_Bold" />
+    <blockBackground start="0,0" stop="-1,-1"
+                     colorsByRow="table.row.background,table.row-alt.background" />
+  </blockTableStyle>
 
 </metal:block>
