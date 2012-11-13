@@ -3,14 +3,29 @@
     xmlns:metal="http://xml.zope.org/namespaces/metal"
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     i18n:domain="schooltool">
-    <blockTable style="table" repeatRows="1" alignment="left">
-      <tr>
-        <td i18n:translate="">Full name</td>
-        <td i18n:translate="">ID</td>
-      </tr>
-      <tr tal:repeat="student view/rows">
-        <td tal:content="student/full_name" />
-        <td tal:content="student/ID" />
-      </tr>
-    </blockTable>
+
+    <pto>
+      <pto_header>
+        <para style="info-title" i18n:translate="">Section Roster</para>
+        <hr width="100%" thickness="2" color="info-hr"
+            spaceAfter="14" spaceBefore="8" align="center" />
+      </pto_header>
+      <pto_trailer>
+        <para style="pagesplit-continued">Continued on next page &gt;</para>
+      </pto_trailer>
+
+      <para style="info-title" i18n:translate="">Section Roster</para>
+      <hr width="100%" thickness="2" color="info-hr"
+          spaceAfter="14" spaceBefore="8" align="center" />
+      <blockTable style="table" colWidths="50% 50%" repeatRows="1" alignment="left">
+        <tr>
+          <td i18n:translate="">Full name</td>
+          <td i18n:translate="">ID</td>
+        </tr>
+        <tr tal:repeat="student view/rows">
+          <td tal:content="student/full_name" />
+          <td tal:content="student/ID" />
+        </tr>
+      </blockTable>
+    </pto>
 </story>
