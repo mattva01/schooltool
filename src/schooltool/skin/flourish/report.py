@@ -75,7 +75,7 @@ class PDFPage(page.PageBase):
     implements(interfaces.IPDFPage)
 
     default_content_type = 'xml'
-    template = templates.XMLFile('reports/pdf.pt')
+    template = templates.XMLFile('rml/pdf.pt')
     content_template = None
 
     page_size = pagesizes.A4
@@ -179,7 +179,7 @@ class PDFTemplateSection(viewlet.ViewletManager):
 class DefaultPageTemplate(viewlet.Viewlet):
 
     template = templates.XMLFile(
-        'reports/pdf_default_page_template.pt')
+        'rml/pdf_default_page_template.pt')
 
     def lines(self, attr, top, left):
         content = attr['content']
