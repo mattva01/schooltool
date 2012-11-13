@@ -10,7 +10,7 @@
       name="init"
       class=".report.PDFInitSection"
       view=".report.PDFPage"
-      template="reports/pdf_init.pt"
+      template="rml/pdf_init.pt"
       permission="zope.Public"
       />
 
@@ -18,7 +18,7 @@
       name="page_info"
       class=".report.PDFPageInfoSection"
       view=".report.PDFPage"
-      template="reports/pdf_pageinfo.pt"
+      template="rml/pdf_pageinfo.pt"
       permission="zope.Public"
       />
 
@@ -33,7 +33,7 @@
       name="stylesheet"
       class=".report.PDFStylesheetSection"
       view=".report.PDFPage"
-      template="reports/pdf_stylesheet.pt"
+      template="rml/pdf_stylesheet.pt"
       permission="zope.Public"
       />
 
@@ -41,7 +41,7 @@
       name="template"
       class=".report.PDFTemplateSection"
       view=".report.PDFPage"
-      template="reports/pdf_template.pt"
+      template="rml/pdf_template.pt"
       permission="zope.Public"
       />
 
@@ -52,7 +52,7 @@
       manager=".report.PDFInitSection"
       view=".report.PDFPage"
       class=".report.PDFPart"
-      template="reports/pdf_colors.pt"
+      template="rml/pdf_colors.pt"
       permission="zope.Public"
       />
 
@@ -61,7 +61,7 @@
       manager=".report.PDFStylesheetSection"
       view=".report.PDFPage"
       class=".report.PDFPart"
-      template="reports/pdf_schooltool_styles.pt"
+      template="rml/pdf_schooltool_styles.pt"
       permission="zope.Public"
       />
 
@@ -72,7 +72,7 @@
       manager=".report.PDFStylesheetSection"
       view=".report.PDFPage"
       class=".report.PDFPart"
-      template="reports/pdf_default_styles.pt"
+      template="rml/pdf_default_styles.pt"
       permission="zope.Public"
       />
 

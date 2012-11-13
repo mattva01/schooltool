@@ -664,7 +664,7 @@
       name="section_roster.pdf"
       for="schooltool.course.interfaces.ISection"
       class=".section.SectionRosterPDFView"
-      content_template="reports/section_roster.pt"
+      content_template="rml/section_roster.pt"
       permission="schooltool.edit"
       />
 
