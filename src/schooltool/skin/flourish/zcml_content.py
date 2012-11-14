@@ -155,7 +155,7 @@ def update_specs(template_dict, target):
     if issubclass(target, Interface):
         types.append(
             target.queryTaggedValue('flourish.template_content_type', _undefined))
-    implemented = getattr(target, '__implemented__')
+    implemented = getattr(target, '__implemented__', None)
     if implemented:
         for ifc in implemented.interfaces():
             types.append(
