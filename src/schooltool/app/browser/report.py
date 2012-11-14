@@ -204,21 +204,6 @@ class DefaultPageTemplate(ReportPageTemplate):
             }
 
 
-class ReportPDFView(PDFView):
-    leftMargin = 0.25 * units.inch
-    rightMargin = 0.25 * units.inch
-    topMargin = 0.25 * units.inch
-    bottomMargin = 0.25 * units.inch
-    rotation = 0
-    pageSize = pagesizes.A4
-    title = u""
-
-    def __init__(self, *args, **kw):
-        PDFView.__init__(self, *args, **kw)
-        self.page_templates = []
-        self.use_template = PageTemplateEnablingHelper(self)
-
-
 class Box(object):
     """XXX: Scheduled for demolition"""
 
@@ -239,6 +224,22 @@ class Box(object):
             assert bottom is not None, "Need to set bottom"
             self.left = left
             self.bottom = bottom
+
+
+class ReportPDFView(PDFView):
+    leftMargin = 0.25 * units.inch
+    rightMargin = 0.25 * units.inch
+    topMargin = 0.25 * units.inch
+    bottomMargin = 0.25 * units.inch
+    margin = Box(topMargin, rightMargin, bottomMargin, leftMargin)
+    rotation = 0
+    pageSize = pagesizes.A4
+    title = u""
+
+    def __init__(self, *args, **kw):
+        PDFView.__init__(self, *args, **kw)
+        self.page_templates = []
+        self.use_template = PageTemplateEnablingHelper(self)
 
 
 class FlourishDefaultPageTemplate(ReportPageTemplate):
