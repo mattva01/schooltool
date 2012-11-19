@@ -20,6 +20,7 @@
 SchoolTool flourish skin interfaces.
 """
 
+import zope.interface.interfaces
 import zope.schema
 import zope.schema.interfaces
 import zope.viewlet.interfaces
@@ -162,6 +163,27 @@ class IPDFPage(IPageBase):
 IPDFPage.setTaggedValue('flourish.template_content_type', 'xml')
 
 
+class ITemplateSlots(ILocation):
+
+    context = Attribute("The context object the view renders")
+    request = Attribute("The request object driving the view")
+    view = Attribute("The view")
+    template = Attribute("A viewlet that renders a PDF <template>")
+
+
+class IPageTemplate(IViewlet):
+
+    slots = zope.schema.Object(
+        title=u"Slot data",
+        schema=ITemplateSlots,
+        required=True)
+
+    slots_interface = zope.schema.Object(
+        title=u"Slot inteface",
+        schema=zope.interface.interfaces.ISpecification,
+        required=False)
+
+
 class IFromPublication(IPublishTraverse):
 
     fromPublication = zope.schema.Bool(
@@ -186,5 +208,3 @@ class IAJAXPart(IViewlet, IFromPublication):
                      'was not obtained via publication).',
         default=True,
         required=False)
-
-

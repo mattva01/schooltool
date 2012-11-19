@@ -45,6 +45,16 @@
       permission="zope.Public"
       />
 
+  <flourish:content
+      name="story"
+      class=".report.PDFStory"
+      view=".report.PDFPage"
+      permission="zope.Public"
+      />
+
+  <zope:adapter factory=".report.PageTemplateSlots"
+                provides=".interfaces.ITemplateSlots"/>
+
   <!-- Standard report style -->
 
   <flourish:viewlet
@@ -57,7 +67,7 @@
       />
 
   <flourish:viewlet
-      name="shcooltool"
+      name="schooltool"
       manager=".report.PDFStylesheetSection"
       view=".report.PDFPage"
       class=".report.PDFPart"
@@ -70,18 +80,23 @@
   <flourish:viewlet
       name="default"
       manager=".report.PDFStylesheetSection"
-      view=".report.PDFPage"
+      view=".report.PlainPDFPage"
       class=".report.PDFPart"
-      template="rml/pdf_default_styles.pt"
+      template="rml/pdf_plain_styles.pt"
       permission="zope.Public"
       />
 
   <flourish:viewlet
       name="default"
-      class=".report.DefaultPageTemplate"
       manager=".report.PDFTemplateSection"
+      view=".report.PlainPDFPage"
+      class=".report.PlainPageTemplate"
       render="template"
+      template="rml/pdf_plain_page_template.pt"
       permission="zope.Public"
       />
+
+  <zope:adapter factory=".report.PlainPageTemplateSlots"
+                provides=".report.IPlainTemplateSlots"/>
 
 </configure>

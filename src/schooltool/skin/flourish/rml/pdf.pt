@@ -16,8 +16,7 @@
     <tal:block define="content_template nocall:view/content_template|nothing">
       <tal:block condition="nocall:content_template"
                  content="structure content_template" />
-      <tal:block condition="not:nocall:content_template"
-                 content="structure view/providers/story" />
+      <tal:block content="structure view/providers/story" />
     </tal:block>
   </document>
 </metal:block>

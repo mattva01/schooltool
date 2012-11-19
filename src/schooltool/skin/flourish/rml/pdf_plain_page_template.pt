@@ -30,19 +30,19 @@
           name="Ubuntu_Regular"
           tal:attributes="size top_bar/fontSize" />
       <drawString
-          tal:define="top_left view/parent/slots/top_left|nothing"
+          tal:define="top_left view/slots/top_left|nothing"
           tal:condition="top_left"
           tal:content="top_left"
           tal:attributes="x top_bar/slots/left/x;
                           y top_bar/slots/left/y;" />
       <drawCenteredString
-          tal:define="top_center view/parent/slots/top_center|nothing"
+          tal:define="top_center view/slots/top_center|nothing"
           tal:condition="top_center"
           tal:content="top_center"
           tal:attributes="x top_bar/slots/center/x;
                           y top_bar/slots/center/y;" />
       <drawRightString
-          tal:define="top_right view/parent/slots/top_right|nothing"
+          tal:define="top_right view/slots/top_right|nothing"
           tal:condition="top_right"
           tal:content="top_right"
           tal:attributes="x top_bar/slots/right/x;

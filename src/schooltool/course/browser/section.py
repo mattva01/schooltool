@@ -1832,40 +1832,55 @@ class FlourishRequestSectionRosterView(RequestReportDownloadDialog):
                                                      self.request)
 
 
-class SectionRosterPDFView(flourish.report.PDFPage):
+class SectionRosterPDFView(flourish.report.PlainPDFPage):
+
+    name = _("SECTION ROSTER")
+
+    def formatDate(self, date, format='mediumDate'):
+        if date is None:
+            return ''
+        formatter = getMultiAdapter((date, self.request), name=format)
+        return formatter()
+
+    @property
+    def scope(self):
+        term = ITerm(self.context)
+        first = self.formatDate(term.first)
+        last = self.formatDate(term.last)
+        return '%s | %s - %s' % (term.title, first, last)
+
+    @property
+    def subtitles_left(self):
+        section = removeSecurityProxy(self.context)
+        instructors = '; '.join([person.title
+                                 for person in section.instructors])
+        instructors_message = _('Instructors: ${instructors}',
+                                mapping={'instructors': instructors})
+        subtitles = [
+            '%s (%s)' % (section.title, section.__name__),
+            instructors_message,
+            'XXX: Grade: (level)',
+            ]
+        return subtitles
+
+    # XXX: inherit from simple view
+    @property
+    def subtitles_right(self):
+        return '''
+        '''
 
     @property
     def title(self):
         return ', '.join([course.title for course in self.context.courses])
 
     @property
-    def subtitle(self):
-        section = removeSecurityProxy(self.context)
-        instructors = '; '.join([person.title
-                                 for person in section.instructors])
-        instructors_message = _('Instructors: ${instructors}',
-                                mapping={'instructors': instructors})
-        return ['%s (%s)' % (section.title, section.__name__),
-                instructors_message]
-
-    def makeFileName(self, basename):
-        timestamp = datetime.now().strftime('%y%m%d%H%M')
-        return '%s_%s.pdf' % (basename, timestamp)
-
-    @property
-    def filename(self):
+    def base_filename(self):
         courses = [c.__name__ for c in self.context.courses]
-        return self.makeFileName('section_roster_%s' % '_'.join(courses))
+        return 'section_roster_%s' % '_'.join(courses)
 
     @property
-    def slots(self):
-        term = ITerm(self.context)
-        schoolyear = ISchoolYear(term)
-        top_right = '%s | %s' % (term.title, schoolyear.title)
-        return {
-            'top_left': _('SECTION ROSTER'),
-            'top_right': top_right,
-            }
+    def term(self):
+        return ITerm(self.context)
 
     def rows(self):
         result = []
@@ -1873,6 +1888,7 @@ class SectionRosterPDFView(flourish.report.PDFPage):
         for student in sorted(self.context.members,
                               key=lambda x:collator.key(x.title)):
             demographics = IDemographics(student)
+
             result.append({
                     'full_name': self.full_name(student),
                     'ID': demographics.get('ID', '')
@@ -1880,6 +1896,7 @@ class SectionRosterPDFView(flourish.report.PDFPage):
         return result
 
     def full_name(self, person):
+        # XXX: should be a content adapter somewhere
         return '%s, %s %s' % (person.last_name,
                               person.first_name,
                               person.middle_name or '')

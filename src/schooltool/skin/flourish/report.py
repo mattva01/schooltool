@@ -24,9 +24,11 @@ import datetime
 
 from reportlab.lib import units, pagesizes
 
+import zope.component
+import zope.location
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
-from zope.interface import implements
+from zope.interface import implements, Interface
 from zope.i18n import translate
 from z3c.rml import rml2pdf
 
@@ -148,6 +150,35 @@ class PDFPage(page.PageBase):
         return data
 
 
+
+class IPlainPDFPage(interfaces.IPDFPage):
+
+    name = zope.schema.TextLine(
+        title=u"Report name", required=False)
+
+    scope = zope.schema.TextLine(
+        title=u"Report scope (e.g. date range)", required=False)
+
+    title = zope.schema.TextLine(
+        title=u"Title", required=False)
+
+    subtitles_left = zope.schema.Text(
+        title=u"Subtitles at left", required=False)
+
+    subtitles_right = zope.schema.TextLine(
+        title=u"Subtitles at right", required=False)
+
+
+class PlainPDFPage(PDFPage):
+    implements(IPlainPDFPage)
+
+    name = None
+    scope = None
+    title = None
+    subtitles_left = None
+    subtitles_right = None
+
+
 class PDFInitSection(viewlet.ViewletManager):
     pass
 
@@ -176,10 +207,64 @@ class PDFTemplateSection(viewlet.ViewletManager):
     author = property(lambda self: self.view.author)
 
 
-class DefaultPageTemplate(viewlet.Viewlet):
+class PDFStory(viewlet.ViewletManager):
+    pass
 
-    template = templates.XMLFile(
-        'rml/pdf_default_page_template.pt')
+
+class PageTemplate(viewlet.Viewlet):
+    implements(interfaces.IPageTemplate)
+
+    template = None
+    slots_interface = interfaces.ITemplateSlots
+
+    @Lazy
+    def slots(self):
+        interface = self.slots_interface
+        if interface is None:
+            return None
+        slots = zope.component.queryMultiAdapter(
+            (self.context, self.request, self.view, self), interface)
+        return slots
+
+
+class PageTemplateSlots(object):
+    implements(interfaces.ITemplateSlots)
+    zope.component.adapts(Interface, interfaces.IFlourishLayer,
+                          interfaces.IPDFPage, interfaces.IPageTemplate)
+
+    __name__ = 'template_slots'
+
+    def __init__(self, context, request, view, template):
+        self.__parent__ = self.context = context
+        self.request = request
+        self.view = view
+        self.template = template
+
+
+class IPlainTemplateSlots(interfaces.ITemplateSlots):
+
+    top_left = zope.schema.TextLine(title=u"Text at top bar left", required=False)
+    top_center = zope.schema.TextLine(title=u"Text at top bar center", required=False)
+    top_right = zope.schema.TextLine(title=u"Text at top bar right", required=False)
+
+    title = zope.schema.TextLine(title=u"Title", required=False)
+    subtitles_left = zope.schema.Tuple(
+        title=u"Subtitles (left)",
+        value_type=zope.schema.TextLine(title=u"subtitle", required=False),
+        required=False,
+        max_length=4,
+        )
+    subtitles_right = zope.schema.Tuple(
+        title=u"Subtitles (right)",
+        value_type=zope.schema.TextLine(title=u"subtitle", required=False),
+        required=False,
+        max_length=6,
+        )
+
+
+class PlainPageTemplate(PageTemplate):
+
+    slots_interface = IPlainTemplateSlots
 
     def lines(self, attr, top, left):
         content = attr['content']
@@ -227,12 +312,12 @@ class DefaultPageTemplate(viewlet.Viewlet):
         title = {
             'fontSize': 24,
             'margin': Box(0, 0, 8, 0),
-            'content': self.manager.title,
+            'content': self.slots.title,
             }
         subtitle = {
             'fontSize': 12,
             'margin': Box(0, 0, 6, 0),
-            'content': 'XXX: NO SUBTITLES',
+            'content': self.slots.subtitles_left,
             }
         top = self.top_bar['y']
         left = self.manager.margin.left
@@ -354,6 +439,44 @@ class DefaultPageTemplate(viewlet.Viewlet):
             'x': x,
             'y': y,
             }
+
+
+class PlainPageTemplateSlots(PageTemplateSlots):
+    zope.component.adapts(Interface, interfaces.IFlourishLayer, interfaces.IPDFPage,
+                          PlainPageTemplate)
+    implements(IPlainTemplateSlots)
+
+    @property
+    def top_left(self):
+        return self.view.name
+
+    @property
+    def top_right(self):
+        return self.view.scope
+
+    @property
+    def title(self):
+        return self.view.title
+
+    @property
+    def subtitles_left(self):
+        subtitles = self.view.subtitles_left or []
+        if (subtitles and
+            not isinstance(subtitles, (list, tuple))):
+            subtitles = translate(subtitles, context=self.request)
+            subtitles = [s.strip() for s in subtitles.strip().splitlines()]
+        subtitles = subtitles[:IPlainTemplateSlots['subtitles_left'].max_length]
+        return subtitles
+
+    @property
+    def subtitles_right(self):
+        subtitles = self.view.subtitles_right or []
+        if (subtitles and
+            not isinstance(subtitles, (list, tuple))):
+            subtitles = translate(subtitles, context=self.request)
+            subtitles = [s.strip() for s in subtitles.strip().splitlines()]
+        subtitles = subtitles[:IPlainTemplateSlots['subtitles_right'].max_length]
+        return subtitles
 
 
 class PDFPart(viewlet.Viewlet):
