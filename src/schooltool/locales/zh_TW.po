@@ -4323,9 +4323,7 @@ msgid "List/Search"
 msgstr "列舉/搜索"
 
 #: /src/schooltool/contact/security.zcml:36
-msgid ""
-"Assign / remove contacts of a user,                   define user's "
-"relationship with a contact."
+msgid "Assign / remove contacts of a user, define user's relationship with a contact."
 msgstr "設定或移除用戶的聯絡人，定義他和每個聯絡人的關係。"
 
 #: /src/schooltool/contact/security.zcml:36

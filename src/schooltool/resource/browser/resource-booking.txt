@@ -12,14 +12,14 @@ And add a couple of resources to book:
 
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Resources').click()
-    >>> manager.getLink('New Location').click()
+    >>> manager.getLink('Add Location').click()
     >>> manager.getControl('Title').value = 'mud'
     >>> manager.getControl('Add').click()
     >>> manager.getLink('Resource', index=2).click()
     >>> 'mud' in manager.contents
     True
 
-    >>> manager.getLink('New Resource').click()
+    >>> manager.getLink('Add Resource').click()
     >>> manager.getControl('Title').value = 'fish'
     >>> manager.getControl('Add').click()
     >>> manager.getLink('Resource', index=3).click()

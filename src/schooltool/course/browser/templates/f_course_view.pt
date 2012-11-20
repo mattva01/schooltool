@@ -75,9 +75,9 @@
     <tal:block define="sections view/sections">
       <tal:block condition="sections"
                  content="structure context/schooltool:content/ajax/sections_table" />
-      <h3 tal:condition="not:sections" i18n:translate="">
+      <p tal:condition="not:sections" i18n:translate="">
         This course has no sections
-      </h3>
+      </p>
     </tal:block>
     <h3>
       <metal:block i18n:translate="">Responsible parties</metal:block>

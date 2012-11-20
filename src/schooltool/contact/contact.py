@@ -72,14 +72,13 @@ class ContactGroup(crowds.DescriptionGroup):
 
     title = _(u"Contacts")
 
-    description = _(u"""
-    All SchoolTool users have contact information, that includes home address,
-    phone number, email address, etc.
-
-    "External contacts" can be created - people who are not SchoolTool users,
-    but may need to recieve notifications and information about the student
-    or the school as a whole.
-    """)
+    description = _(u''
+        'All SchoolTool users have contact information, that includes home '
+        'address, phone number, email address, etc.'
+        '\n'
+        '"External contacts" can be created - people who are not SchoolTool '
+        'users, but may need to recieve notifications and information about '
+        'the student or the school as a whole.')
 
 
 class ContactContainer(BTreeContainer):
