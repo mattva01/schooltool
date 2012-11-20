@@ -20,6 +20,8 @@
 course browser views.
 """
 
+from urllib import urlencode
+
 import  zc.table.table
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
@@ -508,10 +510,10 @@ class FlourishCourseContainerDeleteView(ContainerDeleteView):
     def nextURL(self):
         if 'CONFIRM' in self.request:
             schoolyear = ISchoolYear(self.context)
-            url = '%s/%s?schoolyear_id=%s' % (
+            params = {'schoolyear_id': schoolyear.__name__.encode('utf-8')}
+            url = '%s/courses?%s' % (
                 absoluteURL(ISchoolToolApplication(None), self.request),
-                'courses',
-                schoolyear.__name__)
+                urlencode(params))
             return url
         return ContainerDeleteView.nextURL(self)
 
@@ -667,7 +669,7 @@ class FlourishCourseDeleteView(DialogForm, form.EditForm):
     def handleDelete(self, action):
         url = '%s/delete.html?delete.%s&CONFIRM' % (
             absoluteURL(self.context.__parent__, self.request),
-            self.context.__name__)
+            self.context.__name__.encode('utf-8'))
         self.request.response.redirect(url)
         # We never have errors, so just close the dialog.
         self.ajax_settings['dialog'] = 'close'
