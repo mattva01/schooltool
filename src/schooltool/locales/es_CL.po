@@ -3253,7 +3253,7 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/person.py:179
 #: /src/schooltool/basicperson/browser/person.py:237
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Las contraseñas no coinciden"
 
 #: /src/schooltool/basicperson/browser/person.py:190
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:5
@@ -3271,7 +3271,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:229
 msgid "This username is already in use"
-msgstr ""
+msgstr "Este nombre de usuario esta ya usado"
 
 #: /src/schooltool/basicperson/browser/person.py:366
 msgid "Usernames"

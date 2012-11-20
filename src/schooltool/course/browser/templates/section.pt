@@ -38,7 +38,7 @@
        i18n:attributes="title"
        i18n:translate=""
        tal:condition="context/schooltool:can_edit">
-       edit info
+       Edit Info
     </a>
 
     <div class="info-block">

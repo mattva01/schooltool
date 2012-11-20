@@ -22,7 +22,7 @@ Now let's create some resources that can be booked:
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Resources').click()
 
-    >>> manager.getLink('New Resource').click()
+    >>> manager.getLink('Add Resource').click()
     >>> manager.getControl('Title').value = 'lilly'
     >>> manager.getControl('Add').click()
 
@@ -38,14 +38,14 @@ Let's click on it:
     >>> 'lilly' in manager.contents
     True
 
-    >>> manager.getLink('New Resource').click()
+    >>> manager.getLink('Add Resource').click()
     >>> manager.getControl('Title').value = 'mud'
     >>> manager.getControl('Add').click()
     >>> manager.getLink('Resource', index=2).click()
     >>> 'mud' in manager.contents
     True
 
-    >>> manager.getLink('New Resource').click()
+    >>> manager.getLink('Add Resource').click()
     >>> manager.getControl('Title').value = 'fish'
     >>> manager.getControl('Add').click()
     >>> manager.getLink('Resource', index=2).click()
@@ -99,7 +99,7 @@ Frog should not be capable of booking any resources yet:
     >>> print frog.contents
     <BLANKLINE>
     ...
-    <legend>Available resources</legend>
+    <legend>Available Resources</legend>
     ...
 
 But we can give him that right by making him a leader of that
@@ -120,7 +120,7 @@ Frog should see the mud and the fish now:
     <BLANKLINE>
     ...
       <fieldset>
-          <legend>Available resources</legend>
+          <legend>Available Resources</legend>
     ...
           <input type="checkbox" name="add_item.fish" id="add_item.fish" />
     ...
@@ -148,7 +148,7 @@ We should see the resource as a booked resource:
     ...
 
      <fieldset>
-          <legend>Available resources</legend>
+          <legend>Available Resources</legend>
     ...
           <input type="checkbox" name="add_item.fish" id="add_item.fish"/>
     ...
@@ -215,7 +215,7 @@ The fish should stay in the bookable resources list:
     <BLANKLINE>
     ...
       <fieldset>
-        <legend>Booked resources</legend>
+        <legend>Booked Resources</legend>
     ...
         <input type="checkbox" name="remove_item.fish" id="remove_item.fish" />
     ...

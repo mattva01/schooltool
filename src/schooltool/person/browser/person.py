@@ -22,7 +22,7 @@ Person browser views.
 import urllib
 
 from zope.authentication.interfaces import IAuthentication
-from zope.interface import Interface, invariant, Invalid
+from zope.interface import Interface
 from zope.publisher.interfaces import NotFound
 from zope.schema import Password, TextLine, Bytes, Bool
 from zope.schema.interfaces import ValidationError
@@ -50,7 +50,6 @@ from zope.component import adapts
 from zope.catalog.interfaces import ICatalog
 from zope.intid.interfaces import IIntIds
 from zope.traversing.browser.absoluteurl import absoluteURL
-from zope.security.checker import canAccess
 from z3c.form import form, field, button, widget, term, validator
 from z3c.form.browser.radio import RadioWidget
 from zope.i18n import translate
@@ -631,10 +630,10 @@ class PersonAddView(AddView):
     def createAndAdd(self, data):
         """Create a Person from form data and add it to the container."""
         if data['password'] != data['verify_password']:
-            self.error = _("Passwords do not match!")
+            self.error = _("Passwords do not match")
             raise WidgetsError([ValidationError(self.error)])
         elif data['username'] in self.context:
-            self.error = _('This username is already used!')
+            self.error = _('This username is already in use')
             raise WidgetsError([ValidationError(self.error)])
         return AddView.createAndAdd(self, data)
 
@@ -729,11 +728,11 @@ class PersonEditView(BrowserView):
             if data.get('new_password') or data.get('verify_password'):
                 # We compare them
                 if data['new_password'] != data['verify_password']:
-                    self.error = _("Passwords do not match.")
+                    self.error = _("Passwords do not match")
                     return
 
                 self.context.setPassword(data['new_password'])
-                self.message = _("Password was successfully changed!")
+                self.message = _("Password changed successfully")
 
             self.context.title = data['title']
             if data.get('photo'):

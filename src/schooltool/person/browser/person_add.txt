@@ -31,7 +31,7 @@ If we try to add a user with the same login, we get a nice error message:
     >>> browser.getControl('Full name').value = 'John Doe'
     >>> browser.getControl('Username').value = 'jdoe'
     >>> browser.getControl('Add').click()
-    >>> 'This username is already used!' in browser.contents
+    >>> 'This username is already in use' in browser.contents
     True
 
 

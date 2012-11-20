@@ -6,33 +6,19 @@
   <table>
     <tbody>
       <tr>
-        <td>
-          <span i18n:translate="">Title</span>
-        </td>
-        <td>
-          <span tal:content="context/title">[event title]</span>
-        </td>
+        <td i18n:translate="">Title</td>
+        <td tal:content="context/title">[event title]</td>
       </tr>
       <tr>
-        <td>
-          <span i18n:translate="">Starts</span>
-        </td>
-        <td>
-          <span tal:content="view/start">[start time]</span>
-        </td>
+        <td i18n:translate="">Starts</td>
+        <td tal:content="view/start">[start time]</td>
       </tr>
       <tr>
-        <td>
-          <span i18n:translate="">Ends</span>
-        </td>
-        <td>
-          <span tal:content="view/end">[end time]</span>
-        </td>
+        <td i18n:translate="">Ends</td>
+        <td tal:content="view/end">[end time]</td>
       </tr>
       <tr tal:condition="context/recurrence">
-        <td colspan="2">
-          <span i18n:translate="">This is a recurring event!</span>
-        </td>
+        <td colspan="2" i18n:translate="">This is a recurring event.</td>
       </tr>
     </tbody>
   </table>

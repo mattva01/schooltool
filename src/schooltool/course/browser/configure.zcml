@@ -8,7 +8,7 @@
       i18n_domain="schooltool">
 
     <addform
-        label="Add a Course"
+        label="Add Course"
         name="addSchoolToolCourse.html"
         schema="schooltool.course.interfaces.ICourse"
         fields="title description course_id government_id credits"
@@ -95,7 +95,7 @@
 
   <menuItem
       menu="schooltool_actions"
-      title="New Course"
+      title="Add Course"
       for="..interfaces.ICourseContainer"
       action="+/addSchoolToolCourse.html"
       />
@@ -186,7 +186,7 @@
       class=".section.AddSectionForCourse"
       permission="schooltool.edit"
       menu="schooltool_actions"
-      title="New Section"
+      title="Add Section"
       layer="schooltool.skin.ISchoolToolLayer"
       />
 
@@ -196,7 +196,7 @@
       class=".section.AddSectionForTerm"
       permission="schooltool.edit"
       menu="schooltool_actions"
-      title="New Section"
+      title="Add Section"
       layer="schooltool.skin.ISchoolToolLayer"
       />
 

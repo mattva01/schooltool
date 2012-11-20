@@ -23,15 +23,14 @@ Schooltool grade level views.
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.container.interfaces import INameChooser
-from zope.component import adapts, getUtility, getMultiAdapter
+from zope.component import adapts
 from zope.interface import implements
-from zope.intid.interfaces import IIntIds
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 
-from z3c.form import form, subform, field, button
+from z3c.form import form, field, button
 
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.form
@@ -48,7 +47,7 @@ from schooltool.common import SchoolToolMessage as _
 class LevelAddForm(form.AddForm):
     """Contact add form for basic contact."""
 
-    label = _("Add a level")
+    label = _("Add new level")
     template = ViewPageTemplateFile('templates/add_level_subform.pt')
     fields = field.Fields(ILevel)
 

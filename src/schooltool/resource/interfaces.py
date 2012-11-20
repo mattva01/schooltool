@@ -21,9 +21,7 @@ Resource-related interfaces
 """
 
 import zope.schema
-from zope.configuration.fields import PythonIdentifier
 from zope.container.interfaces import IContainer, IContained
-from zope.container.interfaces import IContainer, IOrderedContainer
 from zope.container.constraints import contains, containers
 from zope.interface import Interface, Attribute
 
@@ -158,7 +156,7 @@ class IBookResources(Interface):
     """An object that can have booked resources."""
 
     resources = zope.schema.Iterable(
-        title=u"Booked resources")
+        title=u"Booked Resources")
 
 
 class IBookingCalendar(ICalendar):

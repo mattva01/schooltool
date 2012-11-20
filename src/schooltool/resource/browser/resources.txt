@@ -17,7 +17,7 @@ We can create generic resources
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Resources').click()
 
-    >>> manager.getLink('New Resource').click()
+    >>> manager.getLink('Add Resource').click()
     >>> manager.getControl('Title').value = 'Book'
     >>> manager.getControl('Add').click()
     >>> manager.getLink('Resource', index=2).click()
@@ -27,7 +27,7 @@ We can create generic resources
 We can create Location resources, the form is currently identical to
 other resources.
 
-    >>> manager.getLink('New Location').click()
+    >>> manager.getLink('Add Location').click()
     >>> manager.getControl('Title').value = 'Room 101'
     >>> manager.getControl('Add').click()
 
@@ -42,7 +42,7 @@ other resources.
 
 We can create Equipment resources also:
 
-    >>> manager.getLink('New Equipment').click()
+    >>> manager.getLink('Add Equipment').click()
     >>> manager.getControl('Title').value = 'Projector 1'
     >>> manager.getControl('Add').click()
 
@@ -58,7 +58,7 @@ We can create Equipment resources also:
 
 If we click Cancel in any of the forms, we get back to resources index.
 
-    >>> manager.getLink('New Equipment').click()
+    >>> manager.getLink('Add Equipment').click()
     >>> manager.getControl('Cancel').click()
     >>> manager.url
     'http://localhost/resources'

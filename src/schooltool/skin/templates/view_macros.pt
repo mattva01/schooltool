@@ -146,40 +146,40 @@
 <metal:block define-macro="update-button">
   <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Update"
          title="Shortcut: Alt-U" accesskey="U"
-         i18n:attributes="value update-button; accesskey; title" />
+         i18n:attributes="value; accesskey; title" />
 </metal:block>
 
 <metal:block define-macro="apply-button">
   <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Apply"
          title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value apply-button; accesskey; title" />
+         i18n:attributes="value; accesskey; title" />
 </metal:block>
 
 <metal:block define-macro="apply-button-formlib">
   <input type="submit" id="form.actions.apply" name="form.actions.apply"
          value="Apply" class="button-ok"
          title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value apply-button; accesskey; title" />
+         i18n:attributes="value; accesskey; title" />
 </metal:block>
 
 <metal:block define-macro="add-button">
   <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Add"
          title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value add-button; accesskey; title" />
+         i18n:attributes="value; accesskey; title" />
 </metal:block>
 
 <metal:block define-macro="add-button-disabled">
   <input class="disabled button-ok" disabled="disabled"
          type="submit" name="UPDATE_SUBMIT" value="Add"
          title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value add-button; accesskey; title" />
+         i18n:attributes="value; accesskey; title" />
 </metal:block>
 
 <metal:block define-macro="add-button-formlib">
   <input type="submit" id="form.actions.apply" name="form.actions.apply"
          value="Add" class="button-ok"
          title="Shortcut: Alt-A" accesskey="A"
-         i18n:attributes="value add-button; accesskey; title" />
+         i18n:attributes="value; accesskey; title" />
 </metal:block>
 
 <metal:block define-macro="delete-button">

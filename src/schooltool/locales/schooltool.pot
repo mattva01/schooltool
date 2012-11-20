@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2012-10-19 03:44+0300\n"
+"POT-Creation-Date: 2012-11-20 18:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -1762,36 +1762,21 @@ msgstr ""
 msgid "Resource Booking for ${title}"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:18
-msgid "Title:"
+#: /src/schooltool/app/browser/templates/event_booking.pt:17
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:5
+msgid "Event Details"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:22
-msgid "Starts:"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:26
-msgid "Ends:"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:30
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:34
-msgid "This is a recurring event!"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:38
-msgid "Booked resources"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:42
+#: /src/schooltool/app/browser/templates/event_booking.pt:45
 msgid "UnBook"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:51
-msgid "Available resources"
+#: /src/schooltool/app/browser/templates/event_booking.pt:54
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:55
+msgid "Available Resources"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:57
+#: /src/schooltool/app/browser/templates/event_booking.pt:60
 msgid "Book"
 msgstr ""
 
@@ -2942,11 +2927,13 @@ msgstr ""
 msgid "Value too long \"${value}\""
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/demographics.py:111
-msgid "Demographics Container"
+#: /src/schooltool/basicperson/browser/demographics.py:108
+#: /src/schooltool/basicperson/browser/flourish.zcml:273
+#: /src/schooltool/basicperson/browser/flourish.zcml:282
+msgid "Demographics and Personal Information"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/demographics.py:151
+#: /src/schooltool/basicperson/browser/demographics.py:148
 msgid "Add new Field"
 msgstr ""
 
@@ -3057,12 +3044,7 @@ msgstr ""
 msgid "Administrator"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:264
-#: /src/schooltool/basicperson/browser/flourish.zcml:273
-msgid "Demographics and Personal Information"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/flourish.zcml:273
+#: /src/schooltool/basicperson/browser/flourish.zcml:282
 #: /src/schooltool/level/browser/flourish.zcml:110
 #: /src/schooltool/resource/browser/flourish.zcml:29
 msgid "Reorder"
@@ -3776,18 +3758,10 @@ msgstr ""
 msgid "Change the resources reserved for this event"
 msgstr ""
 
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:5
-msgid "Event Details"
-msgstr ""
-
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:41
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:27
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:369
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:160
 msgid "Reserved Resources"
-msgstr ""
-
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:69
-msgid "Available Resources"
 msgstr ""
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:4
@@ -4112,21 +4086,15 @@ msgstr ""
 msgid "(View Details)"
 msgstr ""
 
-#: /src/schooltool/contact/contact.py:73
+#: /src/schooltool/contact/contact.py:75
 msgid ""
-"\n"
-"    All SchoolTool users have contact information, that includes home address,\n"
-"    phone number, email address, etc.\n"
-"\n"
-"    \"External contacts\" can be created - people who are not SchoolTool users,\n"
-"    but may need to recieve notifications and information about the student\n"
-"    or the school as a whole.\n"
-"    "
+"All SchoolTool users have contact information, that includes home address, phone number, email address, etc.\n"
+"\"External contacts\" can be created - people who are not SchoolTool users, but may need to recieve notifications and information about the student or the school as a whole."
 msgstr ""
 
-#: /src/schooltool/contact/contact.py:202
-#: /src/schooltool/course/browser/flourish.zcml:293
-#: /src/schooltool/course/browser/section.py:555
+#: /src/schooltool/contact/contact.py:220
+#: /src/schooltool/course/browser/flourish.zcml:424
+#: /src/schooltool/course/browser/section.py:561
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:72
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:66
@@ -4219,11 +4187,11 @@ msgstr ""
 msgid "List/Search"
 msgstr ""
 
-#: /src/schooltool/contact/security.zcml:36
-msgid "Assign / remove contacts of a user,                   define user's relationship with a contact."
+#: /src/schooltool/contact/security.zcml:41
+msgid "Assign / remove contacts of a user, define user's relationship with a contact."
 msgstr ""
 
-#: /src/schooltool/contact/security.zcml:36
+#: /src/schooltool/contact/security.zcml:41
 msgid "Manage user's contacts"
 msgstr ""
 
@@ -4253,7 +4221,9 @@ msgid "The user himself."
 msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:10
-msgid "Add a Course"
+#: /src/schooltool/course/browser/configure.zcml:96
+#: /src/schooltool/course/browser/flourish.zcml:270
+msgid "Add Course"
 msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:25
@@ -4265,13 +4235,10 @@ msgstr ""
 msgid "Import Courses"
 msgstr ""
 
-#: /src/schooltool/course/browser/configure.zcml:96
-msgid "New Course"
-msgstr ""
-
 #: /src/schooltool/course/browser/configure.zcml:183
 #: /src/schooltool/course/browser/configure.zcml:193
-msgid "New Section"
+#: /src/schooltool/course/browser/flourish.zcml:394
+msgid "Add Section"
 msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:203
@@ -4381,16 +4348,8 @@ msgstr ""
 msgid "Section"
 msgstr ""
 
-#: /src/schooltool/course/browser/flourish.zcml:200
-msgid "Add Course"
-msgstr ""
-
-#: /src/schooltool/course/browser/flourish.zcml:269
-msgid "Add Section"
-msgstr ""
-
-#: /src/schooltool/course/browser/flourish.zcml:403
-#: /src/schooltool/course/browser/templates/f_section_view.pt:148
+#: /src/schooltool/course/browser/flourish.zcml:440
+#: /src/schooltool/course/browser/templates/f_section_view.pt:141
 msgid "Locations"
 msgstr ""
 
@@ -4896,10 +4855,6 @@ msgstr ""
 msgid "Change the name or description of this section."
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section.pt:35
-msgid "edit info"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/section.pt:46
 #: /src/schooltool/course/browser/templates/section_edit.pt:60
 msgid "Linked sections"
@@ -5109,21 +5064,12 @@ msgstr ""
 msgid "A section is a set of one or more learners                    who meet during a term."
 msgstr ""
 
-#: /src/schooltool/dashboard/configure.zcml:41
-msgid "My Sections"
-msgstr ""
-
 #: /src/schooltool/dashboard/dashboard.pt:62
 #: /src/schooltool/dashboard/dashboard.pt:66
 msgid "Dashboard"
 msgstr ""
 
-#: /src/schooltool/dashboard/interfaces.py:45
-msgid "Category Title."
-msgstr ""
-
-#: /src/schooltool/dashboard/interfaces.py:49
-#: /src/schooltool/dashboard/interfaces.py:50
+#: /src/schooltool/dashboard/interfaces.py:48
 msgid "Weight"
 msgstr ""
 
@@ -5777,7 +5723,8 @@ msgid "If you are importing your own data, we highly recommend downloading the s
 msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:23
-msgid "Add a Group"
+#: /src/schooltool/group/browser/flourish.zcml:177
+msgid "Add Group"
 msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:36
@@ -5798,14 +5745,7 @@ msgid "Import Groups"
 msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:110
-msgid "Import Groups Members"
-msgstr ""
-
-#: /src/schooltool/group/browser/flourish.zcml:139
-msgid "Add Group"
-msgstr ""
-
-#: /src/schooltool/group/browser/flourish.zcml:270
+#: /src/schooltool/group/browser/flourish.zcml:352
 msgid "Import Members CSV"
 msgstr ""
 
@@ -6056,12 +5996,8 @@ msgstr ""
 msgid "Reorder or Delete Levels"
 msgstr ""
 
-#: /src/schooltool/level/browser/level.py:51
-msgid "Add a level"
-msgstr ""
-
-#: /src/schooltool/level/browser/level.py:226
-#: /src/schooltool/level/browser/level.py:234
+#: /src/schooltool/level/browser/level.py:225
+#: /src/schooltool/level/browser/level.py:233
 msgid "Level information"
 msgstr ""
 
@@ -6091,10 +6027,6 @@ msgstr ""
 
 #: /src/schooltool/level/security.zcml:19
 msgid "Modify/Rename"
-msgstr ""
-
-#: /src/schooltool/note/configure.zcml:68
-msgid "New Note"
 msgstr ""
 
 #: /src/schooltool/note/interfaces.py:43
@@ -6269,15 +6201,7 @@ msgstr ""
 msgid "Photo (in JPEG format)"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:546
-msgid "Passwords do not match!"
-msgstr ""
-
-#: /src/schooltool/person/browser/person.py:549
-msgid "This username is already used!"
-msgstr ""
-
-#: /src/schooltool/person/browser/person.py:600
+#: /src/schooltool/person/browser/person.py:687
 msgid "New photo"
 msgstr ""
 
@@ -6293,20 +6217,8 @@ msgstr ""
 msgid "Check this to clear the photo"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:634
-msgid "Passwords do not match."
-msgstr ""
-
-#: /src/schooltool/person/browser/person.py:638
-msgid "Password was successfully changed!"
-msgstr ""
-
 #: /src/schooltool/person/browser/person_edit.pt:4
 msgid "Edit person"
-msgstr ""
-
-#: /src/schooltool/person/browser/person_edit.pt:20
-msgid "Change info for ${user}"
 msgstr ""
 
 #: /src/schooltool/person/browser/person_preferences.pt:3
@@ -6477,7 +6389,13 @@ msgid "${file_type} Reports"
 msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:96
-msgid "Resource Demographics"
+#: /src/schooltool/resource/browser/flourish.zcml:20
+#: /src/schooltool/resource/browser/flourish.zcml:29
+#: /src/schooltool/resource/browser/flourish.zcml:40
+#: /src/schooltool/resource/browser/flourish.zcml:339
+#: /src/schooltool/resource/browser/flourish.zcml:345
+#: /src/schooltool/resource/browser/resource.py:476
+msgid "Resource Attributes"
 msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:143
@@ -6486,23 +6404,18 @@ msgid "Import Resources"
 msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:286
-msgid "New Resource"
+#: /src/schooltool/resource/browser/flourish.zcml:168
+msgid "Add Resource"
 msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:300
-msgid "New Location"
+#: /src/schooltool/resource/browser/flourish.zcml:177
+msgid "Add Location"
 msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:314
-msgid "New Equipment"
-msgstr ""
-
-#: /src/schooltool/resource/browser/flourish.zcml:20
-#: /src/schooltool/resource/browser/flourish.zcml:29
-#: /src/schooltool/resource/browser/flourish.zcml:39
-#: /src/schooltool/resource/browser/flourish.zcml:309
-#: /src/schooltool/resource/browser/flourish.zcml:315
-msgid "Resource Attributes"
+#: /src/schooltool/resource/browser/flourish.zcml:186
+msgid "Add Equipment"
 msgstr ""
 
 #: /src/schooltool/resource/browser/flourish.zcml:124
@@ -6514,19 +6427,7 @@ msgstr ""
 msgid "Resource"
 msgstr ""
 
-#: /src/schooltool/resource/browser/flourish.zcml:138
-msgid "Add Resource"
-msgstr ""
-
-#: /src/schooltool/resource/browser/flourish.zcml:147
-msgid "Add Location"
-msgstr ""
-
-#: /src/schooltool/resource/browser/flourish.zcml:156
-msgid "Add Equipment"
-msgstr ""
-
-#: /src/schooltool/resource/browser/flourish.zcml:208
+#: /src/schooltool/resource/browser/flourish.zcml:238
 msgid "Reserve"
 msgstr ""
 
@@ -6558,11 +6459,7 @@ msgstr ""
 msgid "Resource index"
 msgstr ""
 
-#: /src/schooltool/resource/browser/resource.py:399
-msgid "Resource Demographics Container"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:406
+#: /src/schooltool/resource/browser/resource.py:483
 msgid "Res."
 msgstr ""
 
@@ -6592,11 +6489,7 @@ msgstr ""
 msgid "Resource identification"
 msgstr ""
 
-#: /src/schooltool/resource/browser/resource.py:687
-msgid "Resource demographics"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:695
+#: /src/schooltool/resource/browser/resource.py:758
 msgid "Add new resource"
 msgstr ""
 
@@ -6608,20 +6501,15 @@ msgstr ""
 msgid "Location identification"
 msgstr ""
 
-#: /src/schooltool/resource/browser/resource.py:725
-msgid "Location demographics"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:734
-msgid "Add new location"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:740
-#: /src/schooltool/resource/browser/resource.py:751
+#: /src/schooltool/resource/browser/resource.py:786
 msgid "Location attributes"
 msgstr ""
 
-#: /src/schooltool/resource/browser/resource.py:745
+#: /src/schooltool/resource/browser/resource.py:795
+msgid "Add new location"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:805
 msgid "Edit location"
 msgstr ""
 
@@ -6629,20 +6517,15 @@ msgstr ""
 msgid "Equipment identification"
 msgstr ""
 
-#: /src/schooltool/resource/browser/resource.py:764
-msgid "Equipment demographics"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:773
-msgid "Add new equipment"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:779
-#: /src/schooltool/resource/browser/resource.py:790
+#: /src/schooltool/resource/browser/resource.py:823
 msgid "Equipment attributes"
 msgstr ""
 
-#: /src/schooltool/resource/browser/resource.py:784
+#: /src/schooltool/resource/browser/resource.py:832
+msgid "Add new equipment"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:842
 msgid "Edit equipment"
 msgstr ""
 
@@ -7317,25 +7200,7 @@ msgstr ""
 msgid "U"
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:152
-#. Default: "Update"
-msgid "update-button"
-msgstr ""
-
-#: /src/schooltool/skin/templates/view_macros.pt:158
-#: /src/schooltool/skin/templates/view_macros.pt:164
-#. Default: "Apply"
-msgid "apply-button"
-msgstr ""
-
-#: /src/schooltool/skin/templates/view_macros.pt:171
-#: /src/schooltool/skin/templates/view_macros.pt:177
-#: /src/schooltool/skin/templates/view_macros.pt:184
-#. Default: "Add"
-msgid "add-button"
-msgstr ""
-
-#: /src/schooltool/skin/templates/view_macros.pt:191
+#: /src/schooltool/skin/templates/view_macros.pt:186
 msgid "D"
 msgstr ""
 

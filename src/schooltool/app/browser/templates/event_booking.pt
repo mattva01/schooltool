@@ -14,28 +14,31 @@
   </h3>
 
   <fieldset>
-    <div>
-      <strong i18n:translate="">Title:</strong>
-      <span tal:replace="context/title">not_doe</span>
-    </div>
-    <div>
-      <strong i18n:translate="">Starts:</strong>
-      <span tal:replace="view/start"/>
-    </div>
-    <div>
-      <strong i18n:translate="">Ends:</strong>
-      <span tal:replace="view/end"/>
-    </div>
-    <div tal:condition="context/recurrence">
-      <strong i18n:translate="">This is a recurring event!</strong>
-    </div>
+    <legend i18n:translate="">Event Details</legend>
+    <table>
+      <tr>
+        <td><strong i18n:translate="">Title</strong></td>
+        <td tal:content="context/title">[event title]</td>
+      </tr>
+      <tr>
+        <td><strong i18n:translate="">Starts</strong></td>
+        <td tal:content="view/start">[start time]</td>
+      </tr>
+      <tr>
+        <td><strong i18n:translate="">Ends</strong></td>
+        <td tal:content="view/end">[end time]</td>
+      </tr>
+      <tr tal:condition="context/recurrence">
+        <td colspan="2"><strong i18n:translate="">This is a recurring event.</strong></td>
+      </tr>
+    </table>
   </fieldset>
 
   <input type="hidden" tal:condition="request/date|nothing"
          name="date" tal:attributes="value request/date" />
 
     <fieldset tal:condition="view/hasBookedItems">
-      <legend i18n:translate="">Booked resources</legend>
+      <legend i18n:translate="">Booked Resources</legend>
 
       <tal:block replace="structure view/renderBookedTable" />
         <div class="controls">
@@ -48,7 +51,7 @@
     </fieldset>
 
     <fieldset>
-      <legend i18n:translate="">Available resources</legend>
+      <legend i18n:translate="">Available Resources</legend>
       <div class="item_list">
         <tal:block replace="structure batch/render" />
         <tal:block replace="structure view/filter_widget/render" />

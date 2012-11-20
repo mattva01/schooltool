@@ -389,7 +389,7 @@ But the Manager can:
 
     >>> manager.open(ariana.url)
     >>> manager.printQuery('//a[@class="modify"]/text()')
-    edit info
+    Edit Info
     edit instructors
     edit individuals
 
