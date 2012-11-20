@@ -53,7 +53,7 @@ a course
 
     >>> manager.getLink('2007').click()
     >>> manager.getLink('Courses').click()
-    >>> manager.getLink('New Course').click()
+    >>> manager.getLink('Add Course').click()
     >>> manager.getControl('Title').value = 'History'
     >>> manager.getControl('Add').click()
 

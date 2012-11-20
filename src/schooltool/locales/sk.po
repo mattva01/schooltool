@@ -3290,7 +3290,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:229
 msgid "This username is already in use"
-msgstr ""
+msgstr "Toto používateľské meno sa už používa"
 
 #: /src/schooltool/basicperson/browser/person.py:366
 msgid "Usernames"

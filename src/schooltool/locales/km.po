@@ -3361,7 +3361,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:229
 msgid "This username is already in use"
-msgstr ""
+msgstr "ឈ្មោះ​អ្នក​ប្រើ​នេះ​ត្រូវ​បាន​ប្រើ​រួច​ហើយ"
 
 #: /src/schooltool/basicperson/browser/person.py:366
 msgid "Usernames"

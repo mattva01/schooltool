@@ -49,7 +49,7 @@ And a resource:
 
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Resources').click()
-    >>> manager.getLink('New Resource').click()
+    >>> manager.getLink('Add Resource').click()
 
     >>> manager.getControl('Title').value = 'Mud'
     >>> manager.getControl('Add').click()
@@ -242,7 +242,7 @@ We will also need a course.
 
     >>> manager.getLink('2005').click()
     >>> manager.getLink('Courses').click()
-    >>> manager.getLink('New Course').click()
+    >>> manager.getLink('Add Course').click()
 
     >>> manager.getControl('Title').value = 'Swimming'
     >>> manager.getControl('Add').click()

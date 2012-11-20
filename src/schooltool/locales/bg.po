@@ -3283,7 +3283,7 @@ msgstr "Потвърждение на паролата"
 #: /src/schooltool/basicperson/browser/person.py:179
 #: /src/schooltool/basicperson/browser/person.py:237
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Паролите не съвпадат"
 
 #: /src/schooltool/basicperson/browser/person.py:190
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:5
@@ -3301,7 +3301,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:229
 msgid "This username is already in use"
-msgstr ""
+msgstr "Това потребителско име вече се използва"
 
 #: /src/schooltool/basicperson/browser/person.py:366
 msgid "Usernames"

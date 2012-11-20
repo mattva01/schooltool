@@ -21,7 +21,7 @@ Now lets create a resources that can be booked:
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Resources').click()
 
-    >>> manager.getLink('New Resource').click()
+    >>> manager.getLink('Add Resource').click()
     >>> manager.getControl('Title').value = 'Classroom'
     >>> manager.getControl('Add').click()
     >>> manager.getLink('Resource', index=2).click()
@@ -119,7 +119,7 @@ Create another Resource.
 
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Resources').click()
-    >>> manager.getLink('New Resource').click()
+    >>> manager.getLink('Add Resource').click()
     >>> manager.getControl('Title').value = 'Lobby'
     >>> manager.getControl('Add').click()
     >>> manager.getLink("Resource", index=2).click()

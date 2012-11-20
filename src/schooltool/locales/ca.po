@@ -3299,7 +3299,7 @@ msgstr "Confirmeu la contrasenya"
 #: /src/schooltool/basicperson/browser/person.py:179
 #: /src/schooltool/basicperson/browser/person.py:237
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Les contrasenyes no coincideixen"
 
 #: /src/schooltool/basicperson/browser/person.py:190
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:5
@@ -3317,7 +3317,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:229
 msgid "This username is already in use"
-msgstr ""
+msgstr "Aquest nom d'usuari ja existeix"
 
 #: /src/schooltool/basicperson/browser/person.py:366
 msgid "Usernames"

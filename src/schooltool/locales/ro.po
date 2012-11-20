@@ -3249,7 +3249,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:229
 msgid "This username is already in use"
-msgstr ""
+msgstr "Acest nume de utilizator este deja folosit"
 
 #: /src/schooltool/basicperson/browser/person.py:366
 msgid "Usernames"

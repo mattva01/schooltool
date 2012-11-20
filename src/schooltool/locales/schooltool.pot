@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2012-11-15 01:56+0200\n"
+"POT-Creation-Date: 2012-11-20 18:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -4221,7 +4221,9 @@ msgid "The user himself."
 msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:10
-msgid "Add a Course"
+#: /src/schooltool/course/browser/configure.zcml:96
+#: /src/schooltool/course/browser/flourish.zcml:270
+msgid "Add Course"
 msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:25
@@ -4233,13 +4235,10 @@ msgstr ""
 msgid "Import Courses"
 msgstr ""
 
-#: /src/schooltool/course/browser/configure.zcml:96
-msgid "New Course"
-msgstr ""
-
 #: /src/schooltool/course/browser/configure.zcml:183
 #: /src/schooltool/course/browser/configure.zcml:193
-msgid "New Section"
+#: /src/schooltool/course/browser/flourish.zcml:394
+msgid "Add Section"
 msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:203
@@ -4349,16 +4348,8 @@ msgstr ""
 msgid "Section"
 msgstr ""
 
-#: /src/schooltool/course/browser/flourish.zcml:200
-msgid "Add Course"
-msgstr ""
-
-#: /src/schooltool/course/browser/flourish.zcml:269
-msgid "Add Section"
-msgstr ""
-
-#: /src/schooltool/course/browser/flourish.zcml:403
-#: /src/schooltool/course/browser/templates/f_section_view.pt:148
+#: /src/schooltool/course/browser/flourish.zcml:440
+#: /src/schooltool/course/browser/templates/f_section_view.pt:141
 msgid "Locations"
 msgstr ""
 
@@ -4864,10 +4855,6 @@ msgstr ""
 msgid "Change the name or description of this section."
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/section.pt:35
-msgid "edit info"
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/section.pt:46
 #: /src/schooltool/course/browser/templates/section_edit.pt:60
 msgid "Linked sections"
@@ -5077,21 +5064,12 @@ msgstr ""
 msgid "A section is a set of one or more learners                    who meet during a term."
 msgstr ""
 
-#: /src/schooltool/dashboard/configure.zcml:41
-msgid "My Sections"
-msgstr ""
-
 #: /src/schooltool/dashboard/dashboard.pt:62
 #: /src/schooltool/dashboard/dashboard.pt:66
 msgid "Dashboard"
 msgstr ""
 
-#: /src/schooltool/dashboard/interfaces.py:45
-msgid "Category Title."
-msgstr ""
-
-#: /src/schooltool/dashboard/interfaces.py:49
-#: /src/schooltool/dashboard/interfaces.py:50
+#: /src/schooltool/dashboard/interfaces.py:48
 msgid "Weight"
 msgstr ""
 
@@ -5745,7 +5723,8 @@ msgid "If you are importing your own data, we highly recommend downloading the s
 msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:23
-msgid "Add a Group"
+#: /src/schooltool/group/browser/flourish.zcml:177
+msgid "Add Group"
 msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:36
@@ -5766,14 +5745,7 @@ msgid "Import Groups"
 msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:110
-msgid "Import Groups Members"
-msgstr ""
-
-#: /src/schooltool/group/browser/flourish.zcml:139
-msgid "Add Group"
-msgstr ""
-
-#: /src/schooltool/group/browser/flourish.zcml:270
+#: /src/schooltool/group/browser/flourish.zcml:352
 msgid "Import Members CSV"
 msgstr ""
 
@@ -6024,12 +5996,8 @@ msgstr ""
 msgid "Reorder or Delete Levels"
 msgstr ""
 
-#: /src/schooltool/level/browser/level.py:51
-msgid "Add a level"
-msgstr ""
-
-#: /src/schooltool/level/browser/level.py:226
-#: /src/schooltool/level/browser/level.py:234
+#: /src/schooltool/level/browser/level.py:225
+#: /src/schooltool/level/browser/level.py:233
 msgid "Level information"
 msgstr ""
 
@@ -6059,10 +6027,6 @@ msgstr ""
 
 #: /src/schooltool/level/security.zcml:19
 msgid "Modify/Rename"
-msgstr ""
-
-#: /src/schooltool/note/configure.zcml:68
-msgid "New Note"
 msgstr ""
 
 #: /src/schooltool/note/interfaces.py:43
@@ -6237,15 +6201,7 @@ msgstr ""
 msgid "Photo (in JPEG format)"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:546
-msgid "Passwords do not match!"
-msgstr ""
-
-#: /src/schooltool/person/browser/person.py:549
-msgid "This username is already used!"
-msgstr ""
-
-#: /src/schooltool/person/browser/person.py:600
+#: /src/schooltool/person/browser/person.py:687
 msgid "New photo"
 msgstr ""
 
@@ -6259,14 +6215,6 @@ msgstr ""
 
 #: /src/schooltool/person/browser/person.py:598
 msgid "Check this to clear the photo"
-msgstr ""
-
-#: /src/schooltool/person/browser/person.py:634
-msgid "Passwords do not match."
-msgstr ""
-
-#: /src/schooltool/person/browser/person.py:638
-msgid "Password was successfully changed!"
 msgstr ""
 
 #: /src/schooltool/person/browser/person_edit.pt:4
@@ -7252,25 +7200,7 @@ msgstr ""
 msgid "U"
 msgstr ""
 
-#: /src/schooltool/skin/templates/view_macros.pt:152
-#. Default: "Update"
-msgid "update-button"
-msgstr ""
-
-#: /src/schooltool/skin/templates/view_macros.pt:158
-#: /src/schooltool/skin/templates/view_macros.pt:164
-#. Default: "Apply"
-msgid "apply-button"
-msgstr ""
-
-#: /src/schooltool/skin/templates/view_macros.pt:171
-#: /src/schooltool/skin/templates/view_macros.pt:177
-#: /src/schooltool/skin/templates/view_macros.pt:184
-#. Default: "Add"
-msgid "add-button"
-msgstr ""
-
-#: /src/schooltool/skin/templates/view_macros.pt:191
+#: /src/schooltool/skin/templates/view_macros.pt:186
 msgid "D"
 msgstr ""
 
