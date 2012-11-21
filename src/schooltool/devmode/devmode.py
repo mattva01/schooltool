@@ -29,8 +29,6 @@ from schooltool.securitypolicy.policy import CachingSecurityPolicy
 
 DevmodeCSSViewlet = viewlet.CSSViewlet('devmode.css')
 
-IntrospectorCSSViewlet = viewlet.CSSViewlet('introspector.css')
-
 
 class DebugUnauthorized(Unauthorized):
     template = ViewPageTemplateFile('unauthorized.pt')

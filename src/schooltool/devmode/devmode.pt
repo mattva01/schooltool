@@ -15,8 +15,6 @@
   <div id="devtools" style="display:none;">
     <div class="body">
       <a href="/++etc++site/default/RootErrorReportingUtility" i18n:translate="">Errors</a>
-      <a href="@@introspector.html" i18n:translate="">Introspector</a>
-      <a href="/++apidoc++/@@index.html" i18n:translate="">API Docs</a>
       <a href="/@@sampledata.html" i18n:translate="">Sample data</a>
     </div>
   </div>

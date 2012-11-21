@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2012-11-20 18:47+0200\n"
+"POT-Creation-Date: 2012-11-21 16:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -5091,14 +5091,6 @@ msgstr ""
 
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
-msgstr ""
-
-#: /src/schooltool/devmode/devmode.pt:18
-msgid "Introspector"
-msgstr ""
-
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
 msgstr ""
 
 #: /src/schooltool/devmode/f_unauthorized.pt:3

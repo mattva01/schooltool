@@ -104,7 +104,7 @@ Location of the database, logs, and a few other options can be changed in a
 configuration file ``instance/schooltool.conf``.
 
 One of the options is developer mode, that allows you to add sample data,
-introspect the database, read API docs, and other useful things. Uncomment a
+introspect the database, and other useful things. Uncomment a
 line that says ``devmode on``. You don't want to leave this on for a production
 server, however.
 
