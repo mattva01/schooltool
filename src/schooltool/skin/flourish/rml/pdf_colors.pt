@@ -4,10 +4,16 @@
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     i18n:domain="schooltool">
 
+  <color id="text" value="#000000" />
+  <color id="background" value="#ffffff" />
+
   <color id="top_bar.background" value="#636466" />
   <color id="top_bar.text" value="#ffffff" />
 
-  <color id="info-hr" value="#636466" />
+  <color id="bottom_bar.background" value="#ffffff" />
+  <color id="bottom_bar.text" value="#000000" />
+
+  <color id="separator" value="#636466" />
 
   <color id="pagesplit-continued" value="#000000" />
 

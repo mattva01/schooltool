@@ -1859,15 +1859,8 @@ class SectionRosterPDFView(flourish.report.PlainPDFPage):
         subtitles = [
             '%s (%s)' % (section.title, section.__name__),
             instructors_message,
-            'XXX: Grade: (level)',
             ]
         return subtitles
-
-    # XXX: inherit from simple view
-    @property
-    def subtitles_right(self):
-        return '''
-        '''
 
     @property
     def title(self):

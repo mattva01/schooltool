@@ -15,17 +15,15 @@
                   frame view/frame;">
     <pageGraphics>
       <!-- Top bar -->
-      <fill
-          tal:attributes="color top_bar/backgroundColor" />
-      <stroke
-          tal:attributes="color top_bar/backgroundColor" />
+      <fill color="top_bar.background" />
+      <stroke color="top_bar.background" />
       <rect
           tal:attributes="x top_bar/x;
                           y top_bar/y;
                           width top_bar/width;
                           height top_bar/height;"
           fill="true" stroke="true" />
-      <fill tal:attributes="color top_bar/color" />
+      <fill color="top_bar.text" />
       <setFont
           name="Ubuntu_Regular"
           tal:attributes="size top_bar/fontSize" />
@@ -48,17 +46,15 @@
           tal:attributes="x top_bar/slots/right/x;
                           y top_bar/slots/right/y;" />
       <!-- Bottom bar -->
-      <fill
-          tal:attributes="color bottom_bar/backgroundColor" />
-      <stroke
-          tal:attributes="color bottom_bar/backgroundColor" />
+      <fill color="bottom_bar.background" />
+      <stroke color="bottom_bar.background" />
       <rect
           tal:attributes="x bottom_bar/x;
                           y bottom_bar/y;
                           width bottom_bar/width;
                           height bottom_bar/height;"
           fill="true" stroke="true" />
-      <fill tal:attributes="color bottom_bar/color" />
+      <fill color="bottom_bar.text" />
       <setFont
           name="Ubuntu_Regular"
           tal:attributes="size bottom_bar/fontSize" />
@@ -78,17 +74,15 @@
         </para>
       </place>
       <!-- Header (title and subtitle) -->
-      <fill
-          tal:attributes="color header/backgroundColor" />
-      <stroke
-          tal:attributes="color header/backgroundColor" />
+      <fill color="background" />
+      <stroke color="background" />
       <rect
           tal:attributes="x header/x;
                           y header/y;
                           width header/width;
                           height header/height;"
           fill="true" stroke="true" />
-      <fill tal:attributes="color header/color" />
+      <fill color="text" />
       <setFont
           name="Ubuntu_Regular"
           tal:attributes="size header/title/fontSize" />
@@ -107,21 +101,30 @@
           tal:attributes="x line/x;
                           y line/y;" />
       </tal:loop>
-      <!-- Horizontal lines -->
-      <stroke
-          tal:attributes="color top_line/color" />
-      <lineMode
-          width="1"
-          tal:attributes="cap top_line/style" />
-      <lines
-          tal:content="top_line/coords" />
-      <stroke
-          tal:attributes="color bottom_line/color" />
-      <lineMode
-          width="1"
-          tal:attributes="cap bottom_line/style" />
-      <lines
-          tal:content="bottom_line/coords" />
+
+      <setFont
+          name="Ubuntu_Regular"
+          tal:attributes="size header/extra_subtitle/fontSize" />
+      <tal:loop repeat="line header/extra_subtitle/lines">
+      <drawRightString
+          tal:content="line/content"
+          tal:attributes="x line/x;
+                          y line/y;" />
+      </tal:loop>
+
+      <image
+          tal:condition="header/logo"
+          tal:attributes="file header/logo/url;
+                          x header/logo/x;
+                          y header/logo/y;
+                          height header/logo/height;
+                          width header/logo/width;"
+           />
+
+
+      <stroke color="separator" />
+      <lineMode width="1" cap="square" />
+      <lines tal:content="bottom_line/coords" />
     </pageGraphics>
     <!-- Content frame -->
     <frame

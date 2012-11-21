@@ -22,6 +22,11 @@ SchoolTool report pages.
 import urllib
 import datetime
 
+try:
+    import Image
+except ImportError:
+    from PIL import Image
+
 from reportlab.lib import units, pagesizes
 
 import zope.component
@@ -30,9 +35,12 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
 from zope.interface import implements, Interface
 from zope.i18n import translate
+from zope.traversing.browser.absoluteurl import absoluteURL
 from z3c.rml import rml2pdf
 
 from schooltool.app import pdf
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common import getResourceURL
 from schooltool.skin.flourish import interfaces
 from schooltool.skin.flourish import page
@@ -252,19 +260,22 @@ class IPlainTemplateSlots(interfaces.ITemplateSlots):
         title=u"Subtitles (left)",
         value_type=zope.schema.TextLine(title=u"subtitle", required=False),
         required=False,
-        max_length=4,
+        max_length=3,
         )
     subtitles_right = zope.schema.Tuple(
         title=u"Subtitles (right)",
         value_type=zope.schema.TextLine(title=u"subtitle", required=False),
         required=False,
-        max_length=6,
+        max_length=5,
         )
 
 
 class PlainPageTemplate(PageTemplate):
 
     slots_interface = IPlainTemplateSlots
+    header_padding_top = 4
+    header_padding_bottom = 8
+    min_header_lines = 5
 
     def lines(self, attr, top, left):
         content = attr['content']
@@ -290,8 +301,6 @@ class PlainPageTemplate(PageTemplate):
         y = self.header['y'] - (self.frame['margin'].top / 2.0)
         return {
             'coords': '%d %d %d %d' % (x1, y, x2, y),
-            'color': '#000000',
-            'style': 'square',
             }
 
     @Lazy
@@ -302,74 +311,153 @@ class PlainPageTemplate(PageTemplate):
         y = self.frame['y'] - (self.frame['margin'].top / 2.0)
         return {
             'coords': '%d %d %d %d' % (x1, y, x2, y),
-            'color': '#000000',
-            'style': 'square',
             }
+
+    @Lazy
+    def header_title(self):
+        title = {
+            'fontSize': 24,
+            'margin': Box(2, 0, 6, 0),
+            'content': self.slots.title,
+            }
+        top = self.top_bar['y'] - self.header_padding_top
+        left = self.manager.margin.left
+        title['height'], title['lines'] = self.lines(title, top, left)
+        return title
+
+    @Lazy
+    def header_subtitles(self):
+        doc_w, doc_h = self.manager.page_size
+        subtitles = {
+            'fontSize': 12,
+            'margin': Box(1, 0, 1, 0),
+            'content': self.slots.subtitles_left,
+            }
+
+        top = self.top_bar['y'] - self.header_padding_top - self.header_title['height']
+        left = self.manager.margin.left
+        subtitles['height'], subtitles['lines'] = self.lines(
+            subtitles, top, left)
+        return subtitles
+
+    @Lazy
+    def header_extra_subtitles(self):
+        extra_subtitles = {
+            'fontSize': 12,
+            'margin': Box(1, 0, 1, 0),
+            'content': self.slots.subtitles_right,
+            }
+
+        if not self.slots.subtitles_right:
+            prefs = IApplicationPreferences(ISchoolToolApplication(None))
+            extra_subtitles['content'] = prefs.title
+
+        doc_w, doc_h = self.manager.page_size
+        top = self.top_bar['y'] - self.header_padding_top
+        right = doc_w - self.manager.margin.right
+        extra_subtitles['height'], extra_subtitles['lines'] = self.lines(
+            extra_subtitles, top, right)
+        return extra_subtitles
+
+    @Lazy
+    def header_school_logo(self):
+        if self.slots.subtitles_right:
+            return None
+
+        prefs = IApplicationPreferences(ISchoolToolApplication(None))
+        if prefs.logo is None:
+            return None
+
+        padding = Box(4, 4, 0, 4)
+
+        # XXX: need a better way to get image size
+        logo_file = prefs.logo.open()
+        image = Image.open(logo_file)
+        logo_file.close()
+
+        doc_w, doc_h = self.manager.page_size
+        top = self.top_bar['y'] - self.header_padding_top
+        right = doc_w - self.manager.margin.right
+
+        extra_subtitles = self.header_extra_subtitles
+        height = max(
+            self.header_title['height'] + self.header_subtitles['height'],
+            (extra_subtitles['fontSize'] +
+             extra_subtitles['margin'].top +
+             extra_subtitles['margin'].bottom) * self.min_header_lines)
+        height += self.header_padding_top + self.header_padding_bottom
+        height -= extra_subtitles['height'] + padding.top + padding.bottom
+        ratio = image.size and image.size[0]/image.size[1] or 1
+        width = height*ratio
+
+        # XXX: hard-coded logo url
+        url = absoluteURL(ISchoolToolApplication(None), self.request)+'/logo'
+
+        logo = {
+            'x': right - width - padding.right,
+            'y': top - extra_subtitles['height'] - height - padding.top,
+            'width': width,
+            'height': height,
+            'url': url,
+            }
+        return logo
 
     @Lazy
     def header(self):
         doc_w, doc_h = self.manager.page_size
-        title = {
-            'fontSize': 24,
-            'margin': Box(0, 0, 8, 0),
-            'content': self.slots.title,
-            }
-        subtitle = {
-            'fontSize': 12,
-            'margin': Box(0, 0, 6, 0),
-            'content': self.slots.subtitles_left,
-            }
-        top = self.top_bar['y']
-        left = self.manager.margin.left
-        title_height, title_lines = self.lines(title, top, left)
-        title['lines'] = title_lines
-        top -= title_height
-        subtitle_height, subtitle_lines = self.lines(subtitle, top, left)
-        subtitle['lines'] = subtitle_lines
-        height = title_height + subtitle_height
+        title = self.header_title
+        subtitles = self.header_subtitles
+        extra_subtitles = self.header_extra_subtitles
+        height = max(
+            title['height'] + subtitles['height'],
+            extra_subtitles['height'],
+            (subtitles['fontSize'] +
+             subtitles['margin'].top +
+             subtitles['margin'].bottom) * self.min_header_lines,
+            (extra_subtitles['fontSize'] +
+             extra_subtitles['margin'].top +
+             extra_subtitles['margin'].bottom) * self.min_header_lines)
+
         width = doc_w - self.manager.margin.left - self.manager.margin.right
         x = self.manager.margin.left
-        y = self.top_bar['y'] - height
-        backgroundColor = '#ffffff'
-        color = '#000000'
-        return {
-            'backgroundColor': backgroundColor,
-            'color': color,
+        height += self.header_padding_top + self.header_padding_bottom
+        y = self.top_bar['y'] - height -1
+        logo = self.header_school_logo
+        header = {
             'title': title,
-            'subtitle': subtitle,
+            'subtitle': subtitles,
+            'extra_subtitle': extra_subtitles,
+            'logo': logo,
             'height': height,
             'width': width,
             'x': x,
             'y': y,
             }
+        return header
 
     @Lazy
     def top_bar(self):
         fontSize = 12
-        padding = Box(8, 10.5)
+        padding = Box(5-fontSize/6, 10.5, 5+fontSize/6, 10.5)
         height = fontSize + padding.top + padding.bottom
         doc_w, doc_h = self.manager.page_size
         width = doc_w - self.manager.margin.left - self.manager.margin.right
         x = self.manager.margin.left
         y = doc_h - self.manager.margin.top - height
-        slot_y = y + padding.bottom
-        backgroundColor = '#636466'
-        color = '#ffffff'
-        return {
-            'backgroundColor': backgroundColor,
-            'color': color,
-            'fontSize': fontSize,
+        slot_y = doc_h - self.manager.margin.top - padding.top - fontSize
+        bar = {
             'height': height,
             'width': width,
             'x': x,
             'y': y,
+            'fontSize': fontSize,
             'slots': {
                 'left': {
                     'x': x + padding.left,
                     'y': slot_y,
                     },
                 'center': {
-                    'x': x + padding.left,
+                    'x': x + width/2,
                     'y': slot_y,
                     },
                 'right': {
@@ -378,6 +466,7 @@ class PlainPageTemplate(PageTemplate):
                     },
                 }
             }
+        return bar
 
     @Lazy
     def bottom_bar(self):
@@ -389,15 +478,11 @@ class PlainPageTemplate(PageTemplate):
         x = self.manager.margin.left
         y = self.manager.margin.bottom
         slot_y = y + padding.bottom
-        backgroundColor = '#ffffff'
-        color = '#000000'
         url = getResourceURL('schooltool.skin.flourish',
                              'logo_bw.png',
                              self.request)
         return {
             'logo_url': url,
-            'backgroundColor': backgroundColor,
-            'color': color,
             'fontSize': fontSize,
             'height': height,
             'width': width,
@@ -449,6 +534,8 @@ class PlainPageTemplateSlots(PageTemplateSlots):
     @property
     def top_left(self):
         return self.view.name
+
+    top_center = None
 
     @property
     def top_right(self):
