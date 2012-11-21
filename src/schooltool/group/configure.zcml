@@ -4,11 +4,6 @@
 
   <include file="security.zcml" />
 
-  <interface
-      interface=".interfaces.IGroupContainerContainer"
-      type="zope.app.content.interfaces.IContentType"
-      />
-
   <class class=".group.GroupContainerContainer">
     <allow interface="zope.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
@@ -17,11 +12,6 @@
              interface="zope.container.interfaces.IWriteContainer" />
   </class>
 
-  <interface
-      interface=".interfaces.IGroupContainer"
-      type="zope.app.content.interfaces.IContentType"
-      />
-
   <class class=".group.GroupContainer">
     <allow interface="zope.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
@@ -29,11 +19,6 @@
     <require permission="schooltool.edit"
              interface="zope.container.interfaces.IWriteContainer" />
   </class>
-
-  <interface
-      interface=".interfaces.IGroup"
-      type="zope.app.content.interfaces.IContentType"
-      />
 
   <class class=".group.Group">
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />

@@ -13,11 +13,6 @@
              attributes="activateNextSchoolYear" />
   </class>
 
-  <interface
-      interface=".interfaces.ISchoolYear"
-      type="zope.app.content.interfaces.IContentType"
-      />
-
   <class class=".schoolyear.SchoolYear">
     <allow interface="schooltool.schoolyear.interfaces.IReadSchoolYear" />
     <require permission="schooltool.edit"

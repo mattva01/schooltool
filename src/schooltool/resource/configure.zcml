@@ -4,11 +4,6 @@
 
   <include file="security.zcml" />
 
-  <interface
-      interface=".interfaces.IResourceContainer"
-      type="zope.app.content.interfaces.IContentType"
-      />
-
   <class class=".resource.ResourceContainer">
     <allow interface="zope.container.interfaces.ISimpleReadContainer" />
     <require permission="schooltool.view"
@@ -16,11 +11,6 @@
     <require permission="schooltool.edit"
              interface="zope.container.interfaces.IWriteContainer" />
   </class>
-
-  <interface
-      interface=".interfaces.IBaseResource"
-      type="zope.app.content.interfaces.IContentType"
-      />
 
   <class class=".resource.Resource">
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
