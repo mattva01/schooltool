@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-08-31 15:58+0300\n"
+"POT-Creation-Date: 2012-11-20 18:47+0200\n"
 "PO-Revision-Date: 2012-08-06 22:23+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Sinhalese <si@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-01 05:32+0000\n"
-"X-Generator: Launchpad (build 15890)\n"
+"X-Launchpad-Export-Date: 2012-11-21 05:07+0000\n"
+"X-Generator: Launchpad (build 16293)\n"
 
 #: /src/schooltool/app/app.py:193
 msgid "Your School"
@@ -233,7 +233,11 @@ msgstr "පාසලේ නම"
 msgid "Name"
 msgstr "නම"
 
-#: /src/schooltool/app/browser/app.py:585
+#: /src/schooltool/app/browser/app.py:923
+msgid "Logo"
+msgstr ""
+
+#: /src/schooltool/app/browser/app.py:951
 #: /src/schooltool/app/security.py:304
 msgid "Leaders"
 msgstr "නායකයෝ"
@@ -1228,7 +1232,12 @@ msgstr "පරිගණක දත්ත ගබඩා ජනිත කරන්�
 msgid "Shown Calendars"
 msgstr "දින දර්ශන පෙන්වන්න"
 
-#: /src/schooltool/app/browser/overlay.py:217
+#: /src/schooltool/app/browser/flourish.zcml:737
+#: /src/schooltool/app/browser/flourish.zcml:747
+msgid "School Logo"
+msgstr ""
+
+#: /src/schooltool/app/browser/overlay.py:220
 msgid "Saved changes."
 msgstr "විපර්යාස සුරකින්න"
 
@@ -1765,36 +1774,21 @@ msgstr "සම්පත් සටහන් කිරීම"
 msgid "Resource Booking for ${title}"
 msgstr "${title} සඳහා සම්පත් කල් තබා වෙන්කර ගැනීම"
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:18
-msgid "Title:"
-msgstr "මාතෘකාව:"
+#: /src/schooltool/app/browser/templates/event_booking.pt:17
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:5
+msgid "Event Details"
+msgstr "සිද්ධියෙහි විස්තර"
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:22
-msgid "Starts:"
-msgstr "ආරම්භ වන්නේ:"
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:26
-msgid "Ends:"
-msgstr "අවසන් වන්නේ:"
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:30
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:34
-msgid "This is a recurring event!"
-msgstr "මෙය ආවර්තීය සිද්ධියකි"
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:38
-msgid "Booked resources"
-msgstr "සටහන් කරන්නලද සම්පත්"
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:42
+#: /src/schooltool/app/browser/templates/event_booking.pt:45
 msgid "UnBook"
 msgstr "සටහන් කල දත්ත අවලංගු කරන්න"
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:51
-msgid "Available resources"
-msgstr "උපයෝජ්‍ය සම්පත්"
+#: /src/schooltool/app/browser/templates/event_booking.pt:54
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:55
+msgid "Available Resources"
+msgstr "පවතින සම්පත්"
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:57
+#: /src/schooltool/app/browser/templates/event_booking.pt:60
 msgid "Book"
 msgstr "සටහන් කරන්න"
 
@@ -2788,7 +2782,11 @@ msgstr ""
 "අඩවිය පුරා පැතිරුණු දිනදර්ශනය මුල් පිටුව ලෙස සංදර්ශනය කරන්න. \n"
 "            අඩවිය"
 
-#: /src/schooltool/app/main.py:314
+#: /src/schooltool/app/interfaces.py:143
+msgid "School logo"
+msgstr ""
+
+#: /src/schooltool/app/main.py:305
 msgid "Going to background, daemon pid %d"
 msgstr "පසුබිමට ගමන් කරයි, ඩීමන් pid %d"
 
@@ -2808,16 +2806,16 @@ msgid ""
 "  -c, --config xxx       use this configuration file instead of the default\n"
 "  -h, --help             show this help message\n"
 "  -d, --daemon           go to background after starting\n"
+"  --pack                 pack the database\n"
 "  -r, --restore-manager password\n"
 "                         restore the manager user with the provided "
 "password\n"
 "                         (read password from the standart input if "
 "'password'\n"
 "                         is '-')\n"
-"  --manage               only do management tasks, don't run the server\n"
 msgstr ""
 
-#: /src/schooltool/app/main.py:536
+#: /src/schooltool/app/main.py:528
 msgid "%s: daemon mode not supported on your operating system."
 msgstr "%s: ඩීමන් ප්‍රකාරය ඔබගේ මෙහෙයුම් පද්ධතිය මත දී සහය නොදෙයි."
 
@@ -3083,11 +3081,13 @@ msgstr "අනුපිටපත් වූ ප්‍රවේශයකි \"${va
 msgid "Value too long \"${value}\""
 msgstr "අගය අතිශය දිගය \"${value}\""
 
-#: /src/schooltool/basicperson/browser/demographics.py:111
-msgid "Demographics Container"
-msgstr "ජනවිකාස භාජනය"
+#: /src/schooltool/basicperson/browser/demographics.py:108
+#: /src/schooltool/basicperson/browser/flourish.zcml:273
+#: /src/schooltool/basicperson/browser/flourish.zcml:282
+msgid "Demographics and Personal Information"
+msgstr "ප්‍රජා විද්‍යාත්මක හා පුද්ගලික තොරතුරු"
 
-#: /src/schooltool/basicperson/browser/demographics.py:151
+#: /src/schooltool/basicperson/browser/demographics.py:148
 msgid "Add new Field"
 msgstr "නව ක්ෂේත්‍රයක් එක් කරන්න"
 
@@ -3202,12 +3202,7 @@ msgstr "සිසුවා"
 msgid "Administrator"
 msgstr "පරිපාලක"
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:264
-#: /src/schooltool/basicperson/browser/flourish.zcml:273
-msgid "Demographics and Personal Information"
-msgstr "ප්‍රජා විද්‍යාත්මක හා පුද්ගලික තොරතුරු"
-
-#: /src/schooltool/basicperson/browser/flourish.zcml:273
+#: /src/schooltool/basicperson/browser/flourish.zcml:282
 #: /src/schooltool/level/browser/flourish.zcml:110
 #: /src/schooltool/resource/browser/flourish.zcml:29
 msgid "Reorder"
@@ -3485,8 +3480,24 @@ msgstr "මේ පුද්ගලයාගෙන් අනුශසනා ලබ
 msgid "The person has no advisees."
 msgstr "කිසිදු අනුශසකනා ලබන්නකු නොමැති පුද්ගලයා"
 
+#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
+#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
+#: /src/schooltool/person/browser/f_person_filter.pt:20
+#: /src/schooltool/person/browser/f_person_table_filter.pt:39
+#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
+#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
+msgid "Filter by..."
+msgstr "පෙරණු ලබනනේ..."
+
+#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
+#: /src/schooltool/person/browser/f_person_filter.pt:26
+#: /src/schooltool/person/browser/f_person_table_filter.pt:45
+#: /src/schooltool/person/browser/person_filter.pt:5
+msgid "All groups"
+msgstr "සියලුම කණ්ඩායම්"
+
 #: /src/schooltool/basicperson/browser/templates/f_csvimport_description.pt:3
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:29
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:24
 msgid ""
 "CSV data <strong>must</strong> contain a user name a first name and a last "
 "name. An optional password <strong>may</strong> be included as well."
@@ -3931,19 +3942,11 @@ msgstr "ප්‍රතිවර්ත කරනලද සම්පත්"
 msgid "Change the resources reserved for this event"
 msgstr "මෙම සිද්ධිය සඳහා වෙන් කර ඇති සම්පත් වෙනස් කිරීම"
 
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:5
-msgid "Event Details"
-msgstr "සිද්ධියෙහි විස්තර"
-
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:41
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:27
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:369
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:160
 msgid "Reserved Resources"
 msgstr "ප්‍රතිවර්ත කරනලද සම්පත්"
-
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:69
-msgid "Available Resources"
-msgstr "පවතින සම්පත්"
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:4
 msgid "Deleting an event on ${day}."
@@ -3980,9 +3983,25 @@ msgstr "තොරතුරු එක් කරන්න"
 msgid "Edit Calendar Overlays"
 msgstr "දිනදර්ශන අතිච්ඡාදන සංස්කරණය"
 
-#: /src/schooltool/contact/browser/basicperson.py:117
-#: /src/schooltool/contact/browser/contact.py:194
-#: /src/schooltool/contact/browser/contact.py:383
+#: /src/schooltool/common/fields.py:38
+msgid "Image size"
+msgstr ""
+
+#: /src/schooltool/common/fields.py:39
+msgid "Size in pixels"
+msgstr ""
+
+#: /src/schooltool/common/fields.py:44
+msgid "Image format"
+msgstr ""
+
+#: /src/schooltool/common/fields.py:48
+msgid "Max file size in bytes"
+msgstr ""
+
+#: /src/schooltool/contact/browser/basicperson.py:123
+#: /src/schooltool/contact/browser/contact.py:195
+#: /src/schooltool/contact/browser/contact.py:392
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:31
 msgid "Address"
 msgstr "ලිපිනය"
@@ -4264,23 +4283,18 @@ msgstr "කතාකරන භාෂා"
 msgid "(View Details)"
 msgstr "විස්තර දර්ශනය කරන්න"
 
-#: /src/schooltool/contact/contact.py:73
+#: /src/schooltool/contact/contact.py:75
 msgid ""
-"\n"
-"    All SchoolTool users have contact information, that includes home "
-"address,\n"
-"    phone number, email address, etc.\n"
-"\n"
-"    \"External contacts\" can be created - people who are not SchoolTool "
-"users,\n"
-"    but may need to recieve notifications and information about the student\n"
-"    or the school as a whole.\n"
-"    "
+"All SchoolTool users have contact information, that includes home address, "
+"phone number, email address, etc.\n"
+"\"External contacts\" can be created - people who are not SchoolTool users, "
+"but may need to recieve notifications and information about the student or "
+"the school as a whole."
 msgstr ""
 
-#: /src/schooltool/contact/contact.py:202
-#: /src/schooltool/course/browser/flourish.zcml:293
-#: /src/schooltool/course/browser/section.py:555
+#: /src/schooltool/contact/contact.py:220
+#: /src/schooltool/course/browser/flourish.zcml:424
+#: /src/schooltool/course/browser/section.py:561
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:72
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:66
@@ -4373,13 +4387,13 @@ msgstr "සහෝදරයා හෝ සහෝදරී"
 msgid "List/Search"
 msgstr "ලැයිස්තුව/සොයන්න"
 
-#: /src/schooltool/contact/security.zcml:36
+#: /src/schooltool/contact/security.zcml:41
 msgid ""
-"Assign / remove contacts of a user,                   define user's "
-"relationship with a contact."
+"Assign / remove contacts of a user, define user's relationship with a "
+"contact."
 msgstr ""
 
-#: /src/schooltool/contact/security.zcml:36
+#: /src/schooltool/contact/security.zcml:41
 msgid "Manage user's contacts"
 msgstr "පරිශ්‍රීලකයන්ගේ සම්බන්ධතා කළමනාකරණය කරන්න"
 
@@ -4409,8 +4423,10 @@ msgid "The user himself."
 msgstr "පරිශ්‍රීලකයා ඔහු/ඇය විසින්ම"
 
 #: /src/schooltool/course/browser/configure.zcml:10
-msgid "Add a Course"
-msgstr "පාඨමාලාවක් එක් කරන්න"
+#: /src/schooltool/course/browser/configure.zcml:96
+#: /src/schooltool/course/browser/flourish.zcml:270
+msgid "Add Course"
+msgstr "පාඨමාලාව එක් කරන්න"
 
 #: /src/schooltool/course/browser/configure.zcml:25
 msgid "Edit Course Information"
@@ -4421,14 +4437,11 @@ msgstr "පාඨමාලා තොරතුරු සංස්කරණය ක
 msgid "Import Courses"
 msgstr "පාඨමාලා ආනයනය කරන්න"
 
-#: /src/schooltool/course/browser/configure.zcml:96
-msgid "New Course"
-msgstr "නව පාඨමාලාව"
-
 #: /src/schooltool/course/browser/configure.zcml:183
 #: /src/schooltool/course/browser/configure.zcml:193
-msgid "New Section"
-msgstr "නව අංශය"
+#: /src/schooltool/course/browser/flourish.zcml:394
+msgid "Add Section"
+msgstr "අංශය එක් කරන්න"
 
 #: /src/schooltool/course/browser/configure.zcml:203
 msgid "Edit Section Information"
@@ -4540,16 +4553,8 @@ msgstr "පාඨමාලාව"
 msgid "Section"
 msgstr "අංශය"
 
-#: /src/schooltool/course/browser/flourish.zcml:200
-msgid "Add Course"
-msgstr "පාඨමාලාව එක් කරන්න"
-
-#: /src/schooltool/course/browser/flourish.zcml:269
-msgid "Add Section"
-msgstr "අංශය එක් කරන්න"
-
-#: /src/schooltool/course/browser/flourish.zcml:403
-#: /src/schooltool/course/browser/templates/f_section_view.pt:148
+#: /src/schooltool/course/browser/flourish.zcml:440
+#: /src/schooltool/course/browser/templates/f_section_view.pt:141
 msgid "Locations"
 msgstr ""
 
@@ -4638,8 +4643,13 @@ msgstr "කාලසීමාව"
 msgid "Section title"
 msgstr "කණ්ඩයේ මාතෘකාව"
 
-#: /src/schooltool/course/browser/section.py:1121
-#: /src/schooltool/course/browser/section.py:1272
+#: /src/schooltool/course/browser/section.py:1287
+msgid ""
+"If no title is specified, one will be created based on the course title."
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1295
+#: /src/schooltool/course/browser/section.py:1517
 msgid "Section Information"
 msgstr "කණ්ඩයේ තොරතුරු"
 
@@ -4651,7 +4661,11 @@ msgstr "ආරම්භක වාරය අවසාන වාරයට වඩ�
 msgid "Select a course"
 msgstr "පාඨමාලාවක් තෝරන්න"
 
-#: /src/schooltool/course/browser/section.py:1309
+#: /src/schooltool/course/browser/section.py:1470
+msgid "Additional locations can be added via the section view."
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1580
 msgid "Current instructors"
 msgstr "වත්මන් උපදේශකයින්"
 
@@ -5018,14 +5032,6 @@ msgid ""
 "section."
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
-msgstr "පෙරණු ලබනනේ..."
-
 #: /src/schooltool/course/browser/templates/f_section_table_filter.pt:41
 msgid "All courses"
 msgstr ""
@@ -5106,10 +5112,6 @@ msgstr "ඒකකයක් / අංශයක් තෝරා ගැනීමට 
 #: /src/schooltool/course/browser/templates/section.pt:35
 msgid "Change the name or description of this section."
 msgstr "මෙම ඒකකයේ / අංශයේ නම හෝ විස්තරය වෙනස් කරන්න."
-
-#: /src/schooltool/course/browser/templates/section.pt:35
-msgid "edit info"
-msgstr "තොරතුරු සංස්කරණය කරන්න"
 
 #: /src/schooltool/course/browser/templates/section.pt:46
 #: /src/schooltool/course/browser/templates/section_edit.pt:60
@@ -5328,21 +5330,12 @@ msgid ""
 "during a term."
 msgstr ""
 
-#: /src/schooltool/dashboard/configure.zcml:41
-msgid "My Sections"
-msgstr ""
-
 #: /src/schooltool/dashboard/dashboard.pt:62
 #: /src/schooltool/dashboard/dashboard.pt:66
 msgid "Dashboard"
 msgstr ""
 
-#: /src/schooltool/dashboard/interfaces.py:45
-msgid "Category Title."
-msgstr ""
-
-#: /src/schooltool/dashboard/interfaces.py:49
-#: /src/schooltool/dashboard/interfaces.py:50
+#: /src/schooltool/dashboard/interfaces.py:48
 msgid "Weight"
 msgstr "භාරය"
 
@@ -5739,8 +5732,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/export/flourish.zcml:49
-msgid "Export as XLS"
-msgstr "XLS ලෙස උඩුගත කරන්න"
+msgid "School Export"
+msgstr ""
 
 #: /src/schooltool/export/importer.py:79
 msgid "is not a valid integer"
@@ -5989,8 +5982,14 @@ msgid ""
 "importing will not cause data to be removed."
 msgstr ""
 
-#: /src/schooltool/export/templates/f_import_related.pt:19
-#: /src/schooltool/export/templates/import.pt:50
+#: /src/schooltool/export/templates/f_import_related.pt:16
+msgid ""
+"You do not have to import all worksheets at the same time. You can import "
+"individual worksheets sequentially."
+msgstr ""
+
+#: /src/schooltool/export/templates/f_import_related.pt:23
+#: /src/schooltool/export/templates/import.pt:45
 msgid ""
 "For people interested in testing and exploring SchoolTool, we provide a set "
 "of sample data: ${link-to-sample-data-file}."
@@ -6009,15 +6008,6 @@ msgstr ""
 "ගත කිරීම සඳහා බොහෝ වේලාවක් ගත විය හැකි අතර මතකය ප්‍රමාණවත් නොවන පද්ධති වල දී "
 "අසමත් විය හැකිය."
 
-#: /src/schooltool/export/templates/f_import_related.pt:33
-#: /src/schooltool/export/templates/import.pt:53
-msgid ""
-"If you are importing your own data, we highly recommend downloading the "
-"sample spreadsheet as a reference."
-msgstr ""
-"ඔබ ඔබගේම දත්ත ආයාත කරන්නේ නම්, ආදර්ශ පැතුරුම්පත ආශ්‍රේය ලෙස බා ගත කිරීම අපි "
-"ඉහළින් නිර්දේශ කර සිටිමු."
-
 #: /src/schooltool/export/templates/import.pt:4
 msgid "Upload SchoolTool as XLS"
 msgstr "ස්කූල් ටූල් XLS ලෙස උඩුගත කරන්න"
@@ -6031,9 +6021,18 @@ msgid ""
 "the import again. We're working on making this process even smoother."
 msgstr ""
 
+#: /src/schooltool/export/templates/import.pt:48
+msgid ""
+"If you are importing your own data, we highly recommend downloading the "
+"sample spreadsheet as a reference."
+msgstr ""
+"ඔබ ඔබගේම දත්ත ආයාත කරන්නේ නම්, ආදර්ශ පැතුරුම්පත ආශ්‍රේය ලෙස බා ගත කිරීම අපි "
+"ඉහළින් නිර්දේශ කර සිටිමු."
+
 #: /src/schooltool/group/browser/configure.zcml:23
-msgid "Add a Group"
-msgstr "කණ්ඩායමක් එක්කරන්න"
+#: /src/schooltool/group/browser/flourish.zcml:177
+msgid "Add Group"
+msgstr "කණ්ඩායම එක් කරන්න"
 
 #: /src/schooltool/group/browser/configure.zcml:36
 msgid "Edit Group Information"
@@ -6053,14 +6052,7 @@ msgid "Import Groups"
 msgstr "කණ්ඩායම් ආනයනය කරන්න"
 
 #: /src/schooltool/group/browser/configure.zcml:110
-msgid "Import Groups Members"
-msgstr "කණ්ඩායම් සාමාජිකයින් අයාත කිරීම"
-
-#: /src/schooltool/group/browser/flourish.zcml:139
-msgid "Add Group"
-msgstr "කණ්ඩායම එක් කරන්න"
-
-#: /src/schooltool/group/browser/flourish.zcml:270
+#: /src/schooltool/group/browser/flourish.zcml:352
 msgid "Import Members CSV"
 msgstr "සාමාජික CSV අයාත කිරීම"
 
@@ -6342,12 +6334,8 @@ msgstr "මට්ටම සංස්කරණය කරන්න"
 msgid "Reorder or Delete Levels"
 msgstr "නැවත අනුපිළිවෙලට සකස් කිරීමේ සහ මකා දැමීමේ මට්ටම්"
 
-#: /src/schooltool/level/browser/level.py:51
-msgid "Add a level"
-msgstr "මට්ටමක් එක් කරන්න"
-
-#: /src/schooltool/level/browser/level.py:226
-#: /src/schooltool/level/browser/level.py:234
+#: /src/schooltool/level/browser/level.py:225
+#: /src/schooltool/level/browser/level.py:233
 msgid "Level information"
 msgstr "මට්ටම පිලිබද තොරතුරු"
 
@@ -6382,10 +6370,6 @@ msgstr "එක් කරන්න/ඉවත් කරන්න"
 #: /src/schooltool/level/security.zcml:19
 msgid "Modify/Rename"
 msgstr "විකරණය/නැවත නම් කිරීම"
-
-#: /src/schooltool/note/configure.zcml:68
-msgid "New Note"
-msgstr "නව සටහන"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
@@ -6450,12 +6434,6 @@ msgstr "මුර පදය සාර්ථකව වෙනස් කෙරු�
 #: /src/schooltool/person/browser/person.py:543
 msgid "First name, last name or username"
 msgstr "මුල් නම, අවසාන නම හෝ පරිශීලක නම"
-
-#: /src/schooltool/person/browser/f_person_filter.pt:26
-#: /src/schooltool/person/browser/f_person_table_filter.pt:45
-#: /src/schooltool/person/browser/person_filter.pt:5
-msgid "All groups"
-msgstr "සියලුම කණ්ඩායම්"
 
 #: /src/schooltool/person/browser/flourish.zcml:7
 msgid "Preferences"
@@ -6573,15 +6551,7 @@ msgstr "මුරපදය තහවුරු කරන්න"
 msgid "Photo (in JPEG format)"
 msgstr "ඡායාරූපය  (JPEG ආකෘතියෙන්)"
 
-#: /src/schooltool/person/browser/person.py:546
-msgid "Passwords do not match!"
-msgstr "මුරපද සමාන නැත!"
-
-#: /src/schooltool/person/browser/person.py:549
-msgid "This username is already used!"
-msgstr "මෙම පරිශීලක නාමය දැනටමත් භාවිතාකර ඇත!"
-
-#: /src/schooltool/person/browser/person.py:600
+#: /src/schooltool/person/browser/person.py:687
 msgid "New photo"
 msgstr "නව ජායාරූපය"
 
@@ -6597,21 +6567,9 @@ msgstr "සේයාව නිරවුල් කරන්න"
 msgid "Check this to clear the photo"
 msgstr "ඡායාරූපය හිස් කිරීමට මෙය පිරික්සන්න"
 
-#: /src/schooltool/person/browser/person.py:634
-msgid "Passwords do not match."
-msgstr "මුරපද නොගැලපේ."
-
-#: /src/schooltool/person/browser/person.py:638
-msgid "Password was successfully changed!"
-msgstr "මුර පදය සාර්ථක ලෙස වෙනස් කරන ලදී!"
-
 #: /src/schooltool/person/browser/person_edit.pt:4
 msgid "Edit person"
 msgstr "පුද්ගලයා සංස්කරණය කරන්න"
-
-#: /src/schooltool/person/browser/person_edit.pt:20
-msgid "Change info for ${user}"
-msgstr "${user} සඳහා තොරතුරු වෙනස් කිරීම"
 
 #: /src/schooltool/person/browser/person_preferences.pt:3
 msgid "Edit person preferences"
@@ -6786,8 +6744,14 @@ msgid "${file_type} Reports"
 msgstr "${file_type} වාර්තා"
 
 #: /src/schooltool/resource/browser/configure.zcml:96
-msgid "Resource Demographics"
-msgstr "සම්පත් ජනවිකාස"
+#: /src/schooltool/resource/browser/flourish.zcml:20
+#: /src/schooltool/resource/browser/flourish.zcml:29
+#: /src/schooltool/resource/browser/flourish.zcml:40
+#: /src/schooltool/resource/browser/flourish.zcml:339
+#: /src/schooltool/resource/browser/flourish.zcml:345
+#: /src/schooltool/resource/browser/resource.py:476
+msgid "Resource Attributes"
+msgstr "සම්පත් උපලක්ෂණ"
 
 #: /src/schooltool/resource/browser/configure.zcml:143
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
@@ -6795,24 +6759,19 @@ msgid "Import Resources"
 msgstr "සම්පත් ආනයනය"
 
 #: /src/schooltool/resource/browser/configure.zcml:286
-msgid "New Resource"
-msgstr "නව සම්පත්"
+#: /src/schooltool/resource/browser/flourish.zcml:168
+msgid "Add Resource"
+msgstr "සම්පත් එක් කරනවා"
 
 #: /src/schooltool/resource/browser/configure.zcml:300
-msgid "New Location"
-msgstr "නව ස්ථානයක්"
+#: /src/schooltool/resource/browser/flourish.zcml:177
+msgid "Add Location"
+msgstr "පිහිටීමක් එකතු කරන්න"
 
 #: /src/schooltool/resource/browser/configure.zcml:314
-msgid "New Equipment"
-msgstr "නව උපකරණය"
-
-#: /src/schooltool/resource/browser/flourish.zcml:20
-#: /src/schooltool/resource/browser/flourish.zcml:29
-#: /src/schooltool/resource/browser/flourish.zcml:39
-#: /src/schooltool/resource/browser/flourish.zcml:309
-#: /src/schooltool/resource/browser/flourish.zcml:315
-msgid "Resource Attributes"
-msgstr "සම්පත් උපලක්ෂණ"
+#: /src/schooltool/resource/browser/flourish.zcml:186
+msgid "Add Equipment"
+msgstr "උපකරණයක් එකතු කරන්න"
 
 #: /src/schooltool/resource/browser/flourish.zcml:124
 #: /src/schooltool/resource/browser/resource.py:415
@@ -6823,19 +6782,7 @@ msgstr "සම්පත් උපලක්ෂණ"
 msgid "Resource"
 msgstr "සම්පත"
 
-#: /src/schooltool/resource/browser/flourish.zcml:138
-msgid "Add Resource"
-msgstr "සම්පත් එක් කරනවා"
-
-#: /src/schooltool/resource/browser/flourish.zcml:147
-msgid "Add Location"
-msgstr "පිහිටීමක් එකතු කරන්න"
-
-#: /src/schooltool/resource/browser/flourish.zcml:156
-msgid "Add Equipment"
-msgstr "උපකරණයක් එකතු කරන්න"
-
-#: /src/schooltool/resource/browser/flourish.zcml:208
+#: /src/schooltool/resource/browser/flourish.zcml:238
 msgid "Reserve"
 msgstr "සංචිත කිරීම"
 
@@ -6885,11 +6832,7 @@ msgstr ""
 msgid "Resource index"
 msgstr "සම්පත් දර්ශකය"
 
-#: /src/schooltool/resource/browser/resource.py:399
-msgid "Resource Demographics Container"
-msgstr "සම්පත් ජනවිකාස බහාලුව"
-
-#: /src/schooltool/resource/browser/resource.py:406
+#: /src/schooltool/resource/browser/resource.py:483
 msgid "Res."
 msgstr "සම්පත."
 
@@ -6923,11 +6866,7 @@ msgstr ""
 msgid "Resource identification"
 msgstr "සම්පත් හැඳුනුම"
 
-#: /src/schooltool/resource/browser/resource.py:687
-msgid "Resource demographics"
-msgstr "සම්පත් ජනවිකාස"
-
-#: /src/schooltool/resource/browser/resource.py:695
+#: /src/schooltool/resource/browser/resource.py:758
 msgid "Add new resource"
 msgstr "නව සම්පත් එක්කරන්න"
 
@@ -6939,20 +6878,15 @@ msgstr "සම්පත් සංස්කරණය කරන්න"
 msgid "Location identification"
 msgstr "පිහිටීම් හැඳුනුම"
 
-#: /src/schooltool/resource/browser/resource.py:725
-msgid "Location demographics"
-msgstr "පිහිටීම් ජනවිකාසයන්"
-
-#: /src/schooltool/resource/browser/resource.py:734
-msgid "Add new location"
-msgstr "නව පිහිටීමක් එකතු කරන්න"
-
-#: /src/schooltool/resource/browser/resource.py:740
-#: /src/schooltool/resource/browser/resource.py:751
+#: /src/schooltool/resource/browser/resource.py:786
 msgid "Location attributes"
 msgstr "පිහිටීම් උපලක්ෂණ"
 
-#: /src/schooltool/resource/browser/resource.py:745
+#: /src/schooltool/resource/browser/resource.py:795
+msgid "Add new location"
+msgstr "නව පිහිටීමක් එකතු කරන්න"
+
+#: /src/schooltool/resource/browser/resource.py:805
 msgid "Edit location"
 msgstr "පිහිටීම් සංස්කරණය කරන්න"
 
@@ -6960,20 +6894,15 @@ msgstr "පිහිටීම් සංස්කරණය කරන්න"
 msgid "Equipment identification"
 msgstr "උපකරණ හැඳුනුම"
 
-#: /src/schooltool/resource/browser/resource.py:764
-msgid "Equipment demographics"
-msgstr "උපකරණ ජනවිකාසයන්"
-
-#: /src/schooltool/resource/browser/resource.py:773
-msgid "Add new equipment"
-msgstr "නව උපකරණක් එකතු කරන්න"
-
-#: /src/schooltool/resource/browser/resource.py:779
-#: /src/schooltool/resource/browser/resource.py:790
+#: /src/schooltool/resource/browser/resource.py:823
 msgid "Equipment attributes"
 msgstr "උපකරණ උපලක්ෂණ"
 
-#: /src/schooltool/resource/browser/resource.py:784
+#: /src/schooltool/resource/browser/resource.py:832
+msgid "Add new equipment"
+msgstr "නව උපකරණක් එකතු කරන්න"
+
+#: /src/schooltool/resource/browser/resource.py:842
 msgid "Edit equipment"
 msgstr "උපකරණ සංස්කරණය කරන්න"
 
@@ -7623,7 +7552,11 @@ msgstr "සේවාදායක දෝෂය"
 msgid "Not Found"
 msgstr "හමුවුනේ නැත"
 
-#: /src/schooltool/skin/flourish/templates/main.pt:82
+#: /src/schooltool/skin/flourish/templates/image_input.pt:11
+msgid "delete this image"
+msgstr ""
+
+#: /src/schooltool/skin/flourish/templates/main.pt:89
 msgid "server running"
 msgstr "සේවාදායකය ධාවනය වේ"
 
@@ -7631,17 +7564,13 @@ msgstr "සේවාදායකය ධාවනය වේ"
 msgid "Supporting exceptional people to change the world."
 msgstr "ලෝකය වෙනස් කිරීමට විශේෂිත ජනයාට උපකාර කිරීම."
 
-#: /src/schooltool/skin/flourish/templates/photo_input.pt:11
-msgid "delete this photo"
-msgstr "මෙම ජායාරූපය මකන්න"
-
-#: /src/schooltool/skin/flourish/widgets.py:240
+#: /src/schooltool/skin/flourish/widgets.py:245
 msgid "The file uploaded is not a JPEG or PNG image"
 msgstr "උඩුගත කල ගොනුව JPEG හෝ PNG රූපයක් නොවේ"
 
-#: /src/schooltool/skin/flourish/widgets.py:243
-msgid "The image uploaded cannot be larger than 10 MB"
-msgstr "උඩුගත කල රූපය 10 MB ට වඩා විශාල නොවිය යුතුය"
+#: /src/schooltool/skin/flourish/widgets.py:248
+msgid "The image uploaded cannot be larger than ${size} MB"
+msgstr ""
 
 #: /src/schooltool/skin/form.py:64
 msgid "No changes"
@@ -7720,25 +7649,7 @@ msgstr "කෙටිමඟ: Alt-U"
 msgid "U"
 msgstr "U"
 
-#. Default: "Update"
-#: /src/schooltool/skin/templates/view_macros.pt:152
-msgid "update-button"
-msgstr "යාවත්කාලීන-බොත්තම"
-
-#. Default: "Apply"
-#: /src/schooltool/skin/templates/view_macros.pt:158
-#: /src/schooltool/skin/templates/view_macros.pt:164
-msgid "apply-button"
-msgstr "ඉල්ලුම් කිරීම-බොත්තම"
-
-#. Default: "Add"
-#: /src/schooltool/skin/templates/view_macros.pt:171
-#: /src/schooltool/skin/templates/view_macros.pt:177
-#: /src/schooltool/skin/templates/view_macros.pt:184
-msgid "add-button"
-msgstr "එකතු කිරීම-බොත්තම"
-
-#: /src/schooltool/skin/templates/view_macros.pt:191
+#: /src/schooltool/skin/templates/view_macros.pt:186
 msgid "D"
 msgstr "D"
 
@@ -8146,7 +8057,15 @@ msgstr "උපලේඛනය සංස්කරණය කරන්න"
 msgid "Schedule Timetable"
 msgstr "කාලසටහන උපලේඛනය කරන්න"
 
-#: /src/schooltool/timetable/browser/flourish.zcml:531
+#: /src/schooltool/timetable/browser/flourish.zcml:549
+msgid "Custom date range"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:563
+msgid "Term(s)"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:587
 msgid "Exception Days"
 msgstr "හැර දැමීම් දින"
 
@@ -8213,6 +8132,12 @@ msgstr "${timetables} සූදානම් කොට නැත."
 msgid "timetables"
 msgstr "කාලසටහන්"
 
+#: /src/schooltool/timetable/browser/templates/f_multi_schedule_periods_edit.pt:58
+#: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:45
+#: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:55
+msgid "Scheduled periods"
+msgstr "උපලේඛිත කාල සීමා"
+
 #: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:3
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:36
 msgid "Nothing scheduled yet."
@@ -8238,11 +8163,6 @@ msgstr "හැර දැමීම් දින සංස්කරණය කර�
 #: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:24
 msgid "Using timetable: ${timetable}"
 msgstr "${timetable} :කාල සටහන භාවිතයෙන්"
-
-#: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:45
-#: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:55
-msgid "Scheduled periods"
-msgstr "උපලේඛිත කාල සීමා"
 
 #: /src/schooltool/timetable/browser/templates/f_specialday_change.pt:7
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:13
@@ -8512,7 +8432,16 @@ msgstr "දක්වා ඉල්ලුම් කිරීම"
 msgid "Schedule a school timetable"
 msgstr "පාසල් කාලසටහනක් උපලේඛනය කරන්න"
 
-#: /src/schooltool/timetable/browser/timetable.py:555
+#: /src/schooltool/timetable/browser/timetable.py:521
+msgid "First term"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/timetable.py:526
+msgid "Last term"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/timetable.py:678
+#: /src/schooltool/timetable/browser/timetable.py:821
 msgid "Save"
 msgstr "සුරකින්න"
 

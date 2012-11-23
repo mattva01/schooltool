@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-08-31 15:58+0300\n"
-"PO-Revision-Date: 2012-08-31 15:36+0000\n"
+"POT-Creation-Date: 2012-11-20 18:47+0200\n"
+"PO-Revision-Date: 2012-10-29 11:38+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-01 05:28+0000\n"
-"X-Generator: Launchpad (build 15890)\n"
+"X-Launchpad-Export-Date: 2012-11-21 05:03+0000\n"
+"X-Generator: Launchpad (build 16293)\n"
 "Language: nl\n"
 
 #: /src/schooltool/app/app.py:193
@@ -234,7 +234,11 @@ msgstr "Schoolnaam"
 msgid "Name"
 msgstr "Naam"
 
-#: /src/schooltool/app/browser/app.py:585
+#: /src/schooltool/app/browser/app.py:923
+msgid "Logo"
+msgstr "Logo"
+
+#: /src/schooltool/app/browser/app.py:951
 #: /src/schooltool/app/security.py:304
 msgid "Leaders"
 msgstr "Leiders"
@@ -617,7 +621,7 @@ msgstr "Ga naar vandaag"
 
 #: /src/schooltool/app/browser/cal.py:1189
 msgid "Go to the previous day"
-msgstr "Ga naar gisteren"
+msgstr "Ga naar vorige dag"
 
 #: /src/schooltool/app/browser/cal.py:1429
 msgid "Add new event starting at ${title}"
@@ -1229,7 +1233,12 @@ msgstr "Databankgeneraties"
 msgid "Shown Calendars"
 msgstr "Agenda's tonen"
 
-#: /src/schooltool/app/browser/overlay.py:217
+#: /src/schooltool/app/browser/flourish.zcml:737
+#: /src/schooltool/app/browser/flourish.zcml:747
+msgid "School Logo"
+msgstr "School-logo"
+
+#: /src/schooltool/app/browser/overlay.py:220
 msgid "Saved changes."
 msgstr "Wijzigingen opgeslagen."
 
@@ -1774,36 +1783,21 @@ msgstr "Reservering"
 msgid "Resource Booking for ${title}"
 msgstr "Voorzieningenreservering voor ${title}"
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:18
-msgid "Title:"
-msgstr "Titel:"
+#: /src/schooltool/app/browser/templates/event_booking.pt:17
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:5
+msgid "Event Details"
+msgstr "Gebeurtenisdetails"
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:22
-msgid "Starts:"
-msgstr "Begint:"
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:26
-msgid "Ends:"
-msgstr "Eindigt:"
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:30
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:34
-msgid "This is a recurring event!"
-msgstr "Dit is een terugkerende gebeurtenis!"
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:38
-msgid "Booked resources"
-msgstr "Gereserveerde voorzieningen"
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:42
+#: /src/schooltool/app/browser/templates/event_booking.pt:45
 msgid "UnBook"
 msgstr "Annuleer"
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:51
-msgid "Available resources"
+#: /src/schooltool/app/browser/templates/event_booking.pt:54
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:55
+msgid "Available Resources"
 msgstr "Beschikbare voorzieningen"
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:57
+#: /src/schooltool/app/browser/templates/event_booking.pt:60
 msgid "Book"
 msgstr "Reserveren"
 
@@ -2869,7 +2863,11 @@ msgstr ""
 "Schoolagenda weergeven als de startpagina van de\n"
 "                  website."
 
-#: /src/schooltool/app/main.py:314
+#: /src/schooltool/app/interfaces.py:143
+msgid "School logo"
+msgstr "School-logo"
+
+#: /src/schooltool/app/main.py:305
 msgid "Going to background, daemon pid %d"
 msgstr "Gaat nu op de achtergrond draaien, daemon pid %d"
 
@@ -2889,29 +2887,30 @@ msgid ""
 "  -c, --config xxx       use this configuration file instead of the default\n"
 "  -h, --help             show this help message\n"
 "  -d, --daemon           go to background after starting\n"
+"  --pack                 pack the database\n"
 "  -r, --restore-manager password\n"
 "                         restore the manager user with the provided "
 "password\n"
 "                         (read password from the standart input if "
 "'password'\n"
 "                         is '-')\n"
-"  --manage               only do management tasks, don't run the server\n"
 msgstr ""
 "\n"
 "Gebruik: %s [opties]\n"
 "Opties:\n"
-"  -c, --config xxx gebruik dit configuratiebestand in plaats van het "
-"standaardbestand\n"
-"  -h, --help toon dit hulpbericht\n"
-"  -d, --daemon proces naar achtergrond na het starten\n"
+"  -c, --config xxx       gebruik dit configuratiebestand in plaats van de "
+"standaard\n"
+"  -h, --help             toon dit helpbericht\n"
+"  -d, --daemon           draai op de achtergrond na het starten\n"
+"  --pack                 pak de database in\n"
 "  -r, --restore-manager wachtwoord\n"
-"                         stel het beheerders-wachtwoord opnieuw in met het "
-"opgegeven wachtwoord\n"
-"                         (lees het wachtwoord van de standaard input als het "
-"'wachtwoord' '-' is)\n"
-"  --manage voer enkel beheerstaken uit, zonder de server te starten\n"
+"                         herstel de manager-gebruiker met het opgegeven "
+"wachtwoord\n"
+"                         (lees wachtwoord van standaard-invoer als "
+"'wachtwoord'\n"
+"                         '-' is)\n"
 
-#: /src/schooltool/app/main.py:536
+#: /src/schooltool/app/main.py:528
 msgid "%s: daemon mode not supported on your operating system."
 msgstr "%s: daemon-modus wordt niet ondersteund door uw besturingssysteem."
 
@@ -3182,11 +3181,13 @@ msgstr "Dubbele invoer \"${value}\""
 msgid "Value too long \"${value}\""
 msgstr "Waarde is te lang \"${value}\""
 
-#: /src/schooltool/basicperson/browser/demographics.py:111
-msgid "Demographics Container"
-msgstr "Houder persoonsgegevens"
+#: /src/schooltool/basicperson/browser/demographics.py:108
+#: /src/schooltool/basicperson/browser/flourish.zcml:273
+#: /src/schooltool/basicperson/browser/flourish.zcml:282
+msgid "Demographics and Personal Information"
+msgstr "Persoonsgegevens en persoonlijke informatie"
 
-#: /src/schooltool/basicperson/browser/demographics.py:151
+#: /src/schooltool/basicperson/browser/demographics.py:148
 msgid "Add new Field"
 msgstr "Voeg nieuw veld toe"
 
@@ -3302,12 +3303,7 @@ msgstr "Leerling"
 msgid "Administrator"
 msgstr "Beheerder"
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:264
-#: /src/schooltool/basicperson/browser/flourish.zcml:273
-msgid "Demographics and Personal Information"
-msgstr "Persoonsgegevens en persoonlijke informatie"
-
-#: /src/schooltool/basicperson/browser/flourish.zcml:273
+#: /src/schooltool/basicperson/browser/flourish.zcml:282
 #: /src/schooltool/level/browser/flourish.zcml:110
 #: /src/schooltool/resource/browser/flourish.zcml:29
 msgid "Reorder"
@@ -3589,8 +3585,24 @@ msgstr "Leerlingen van deze persoon beheren"
 msgid "The person has no advisees."
 msgstr "Deze persoon heeft geen leerlingen."
 
+#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
+#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
+#: /src/schooltool/person/browser/f_person_filter.pt:20
+#: /src/schooltool/person/browser/f_person_table_filter.pt:39
+#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
+#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
+msgid "Filter by..."
+msgstr "Filteren op…"
+
+#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
+#: /src/schooltool/person/browser/f_person_filter.pt:26
+#: /src/schooltool/person/browser/f_person_table_filter.pt:45
+#: /src/schooltool/person/browser/person_filter.pt:5
+msgid "All groups"
+msgstr "Alle groepen"
+
 #: /src/schooltool/basicperson/browser/templates/f_csvimport_description.pt:3
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:29
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:24
 msgid ""
 "CSV data <strong>must</strong> contain a user name a first name and a last "
 "name. An optional password <strong>may</strong> be included as well."
@@ -3881,7 +3893,7 @@ msgstr "(jjjj-mm-dd)"
 
 #: /src/schooltool/basicperson/interfaces.py:133
 msgid "As it should appear on forms and reports."
-msgstr "Zoals het moet verschijnen op formulieren en rapporten."
+msgstr "Zoals deze moet verschijnen op formulieren en rapporten."
 
 #: /src/schooltool/basicperson/interfaces.py:138
 msgid "A unique one word alphanumeric identifier."
@@ -3974,7 +3986,7 @@ msgstr "Morgen"
 
 #: /src/schooltool/calendar/browser/calendar.py:175
 msgid "Yesterday"
-msgstr "Gisteren"
+msgstr "Vorige dag"
 
 #: /src/schooltool/calendar/browser/calendar.py:195
 msgid "This Week"
@@ -4049,19 +4061,11 @@ msgstr "Gereserveerde voorzieningen"
 msgid "Change the resources reserved for this event"
 msgstr "Gereserveerde voorzieningen wijzigen voor deze gebeurtenis"
 
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:5
-msgid "Event Details"
-msgstr "Gebeurtenisdetails"
-
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:41
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:27
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:369
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:160
 msgid "Reserved Resources"
 msgstr "Gereserveerde voorzieningen"
-
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:69
-msgid "Available Resources"
-msgstr "Beschikbare voorzieningen"
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:4
 msgid "Deleting an event on ${day}."
@@ -4098,9 +4102,25 @@ msgstr "Voeg informatie toe."
 msgid "Edit Calendar Overlays"
 msgstr "Agendaoverlappingen bewerken"
 
-#: /src/schooltool/contact/browser/basicperson.py:117
-#: /src/schooltool/contact/browser/contact.py:194
-#: /src/schooltool/contact/browser/contact.py:383
+#: /src/schooltool/common/fields.py:38
+msgid "Image size"
+msgstr "Afbeeldingsgrootte"
+
+#: /src/schooltool/common/fields.py:39
+msgid "Size in pixels"
+msgstr "Grootte in pixels"
+
+#: /src/schooltool/common/fields.py:44
+msgid "Image format"
+msgstr "Afbeeldingsformaat"
+
+#: /src/schooltool/common/fields.py:48
+msgid "Max file size in bytes"
+msgstr "Maximale bestandsgrootte in bytes"
+
+#: /src/schooltool/contact/browser/basicperson.py:123
+#: /src/schooltool/contact/browser/contact.py:195
+#: /src/schooltool/contact/browser/contact.py:392
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:31
 msgid "Address"
 msgstr "Adres"
@@ -4384,34 +4404,23 @@ msgstr "Gesproken talen"
 msgid "(View Details)"
 msgstr "(Details bekijken)"
 
-#: /src/schooltool/contact/contact.py:73
+#: /src/schooltool/contact/contact.py:75
 msgid ""
-"\n"
-"    All SchoolTool users have contact information, that includes home "
-"address,\n"
-"    phone number, email address, etc.\n"
-"\n"
-"    \"External contacts\" can be created - people who are not SchoolTool "
-"users,\n"
-"    but may need to recieve notifications and information about the student\n"
-"    or the school as a whole.\n"
-"    "
+"All SchoolTool users have contact information, that includes home address, "
+"phone number, email address, etc.\n"
+"\"External contacts\" can be created - people who are not SchoolTool users, "
+"but may need to recieve notifications and information about the student or "
+"the school as a whole."
 msgstr ""
-"\n"
-"    Alle SchoolTool-gebruikers hebben contactinformatie, waaronder "
-"huisadres,\n"
-"    telefoonnummer, e-mailadres, enz.\n"
-"\n"
-"    Er kunnen \"Externe contacten\" aangemaakt worden - dit zijn mensen "
-"die,\n"
-"    geen SchoolTool gebruiken maar wel notificaties en informatie dienen te  "
-" \n"
-"    ontvangen over de leerling of over de school zelf.\n"
-"    "
+"Alle SchoolTool-gebruikers hebben contactinformatie, waaronder "
+"huisadres, telefoonnummer, e-mailadres, enz.\n"
+"Er kunnen \"Externe contacten\" aangemaakt worden - dit zijn mensen "
+"die, geen SchoolTool gebruiken maar wel notificaties en informatie dienen te "
+"ontvangen over de leerling of over de school zelf."
 
-#: /src/schooltool/contact/contact.py:202
-#: /src/schooltool/course/browser/flourish.zcml:293
-#: /src/schooltool/course/browser/section.py:555
+#: /src/schooltool/contact/contact.py:220
+#: /src/schooltool/course/browser/flourish.zcml:424
+#: /src/schooltool/course/browser/section.py:561
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:72
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:66
@@ -4504,10 +4513,10 @@ msgstr "Broer of zus"
 msgid "List/Search"
 msgstr "Tonen/zoeken"
 
-#: /src/schooltool/contact/security.zcml:36
+#: /src/schooltool/contact/security.zcml:41
 msgid ""
-"Assign / remove contacts of a user,                   define user's "
-"relationship with a contact."
+"Assign / remove contacts of a user, define user's relationship with a "
+"contact."
 msgstr ""
 "Contacten van een gebruiker aanmaken / verwijderen, bepalen relatie van "
 "gebruiker met een contact."
@@ -4542,26 +4551,25 @@ msgid "The user himself."
 msgstr "De gebruiker zelf."
 
 #: /src/schooltool/course/browser/configure.zcml:10
-msgid "Add a Course"
-msgstr "Voeg een vak toe"
+#: /src/schooltool/course/browser/configure.zcml:96
+#: /src/schooltool/course/browser/flourish.zcml:270
+msgid "Add Course"
+msgstr "Vak toevoegen"
 
 #: /src/schooltool/course/browser/configure.zcml:25
 msgid "Edit Course Information"
-msgstr "Vakinformatie bewerken"
+msgstr "Vak-informatie bewerken"
 
 #: /src/schooltool/course/browser/configure.zcml:85
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:21
 msgid "Import Courses"
 msgstr "Vakken importeren"
 
-#: /src/schooltool/course/browser/configure.zcml:96
-msgid "New Course"
-msgstr "Nieuw vak"
-
 #: /src/schooltool/course/browser/configure.zcml:183
 #: /src/schooltool/course/browser/configure.zcml:193
-msgid "New Section"
-msgstr "Nieuwe sectie"
+#: /src/schooltool/course/browser/flourish.zcml:394
+msgid "Add Section"
+msgstr "Sectie toevoegen"
 
 #: /src/schooltool/course/browser/configure.zcml:203
 msgid "Edit Section Information"
@@ -4589,7 +4597,7 @@ msgstr "Kopiëren vanuit vor. termijn"
 
 #: /src/schooltool/course/browser/course.py:99
 msgid "Course index"
-msgstr "Vakkenindex"
+msgstr "Vak-index"
 
 #: /src/schooltool/course/browser/course.py:368
 msgid "Delete ${course}"
@@ -4612,7 +4620,7 @@ msgstr "Vak-ID"
 #: /src/schooltool/course/browser/course.py:545
 #: /src/schooltool/course/browser/course.py:597
 msgid "Course Information"
-msgstr "Vakinformatie"
+msgstr "Vak-informatie"
 
 #: /src/schooltool/course/browser/course.py:669
 #: /src/schooltool/course/browser/templates/f_course_filter.pt:6
@@ -4676,16 +4684,8 @@ msgstr "Vak"
 msgid "Section"
 msgstr "Sectie"
 
-#: /src/schooltool/course/browser/flourish.zcml:200
-msgid "Add Course"
-msgstr "Vak toevoegen"
-
-#: /src/schooltool/course/browser/flourish.zcml:269
-msgid "Add Section"
-msgstr "Sectie toevoegen"
-
-#: /src/schooltool/course/browser/flourish.zcml:403
-#: /src/schooltool/course/browser/templates/f_section_view.pt:148
+#: /src/schooltool/course/browser/flourish.zcml:440
+#: /src/schooltool/course/browser/templates/f_section_view.pt:141
 msgid "Locations"
 msgstr "Locaties"
 
@@ -4774,8 +4774,15 @@ msgstr "Termijn"
 msgid "Section title"
 msgstr "Sectietitel"
 
-#: /src/schooltool/course/browser/section.py:1121
-#: /src/schooltool/course/browser/section.py:1272
+#: /src/schooltool/course/browser/section.py:1287
+msgid ""
+"If no title is specified, one will be created based on the course title."
+msgstr ""
+"Indien er geen naam wordt aangegeven zal er een naam aangemaakt worden "
+"gebaseerd op de vak-naam."
+
+#: /src/schooltool/course/browser/section.py:1295
+#: /src/schooltool/course/browser/section.py:1517
 msgid "Section Information"
 msgstr "Sectie-informatie"
 
@@ -4787,7 +4794,11 @@ msgstr "Termijn begint later dan hij eindigt"
 msgid "Select a course"
 msgstr "Selecteer een vak"
 
-#: /src/schooltool/course/browser/section.py:1309
+#: /src/schooltool/course/browser/section.py:1470
+msgid "Additional locations can be added via the section view."
+msgstr "Extra locaties kunnen toegevoegd worden via de sectieweergave."
+
+#: /src/schooltool/course/browser/section.py:1580
 msgid "Current instructors"
 msgstr "Huidige leraren"
 
@@ -4999,8 +5010,8 @@ msgid ""
 msgstr ""
 "Het verwijderen van een vak is definitief, kan niet ongedaan worden gemaakt "
 "en vernietigt alle gegevens geassocieerd met dit vak. Het wordt zeer sterk "
-"aanbevolen dat u alleen een vak verwijdert dat foutief aangemaakt is of met "
-"geen gegevens geassocieerd wordt."
+"aanbevolen dat u alleen een vak verwijdert dat foutief aangemaakt is of "
+"waaraan geen gegevens zijn geassocieerd."
 
 #: /src/schooltool/course/browser/templates/f_confirm_delete_section.pt:1
 msgid ""
@@ -5011,7 +5022,7 @@ msgstr ""
 "Het verwijderen van een sectie is definitief, kan niet ongedaan worden "
 "gemaakt en vernietigt alle gegevens geassocieerd met deze sectie. Het wordt "
 "zeer sterk aanbevolen dat u alleen een sectie verwijdert dat foutief "
-"aangemaakt is of met geen gegevens geassocieerd wordt."
+"aangemaakt is of waaraan geen gegevens zijn geassocieerd."
 
 #: /src/schooltool/course/browser/templates/f_course_csvimport_description.pt:3
 msgid ""
@@ -5141,7 +5152,7 @@ msgstr "Koppelen"
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:6
 msgid "Manage courses"
-msgstr "Vakken beheren"
+msgstr "Vak-beheer"
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:17
 msgid "There are ${count} courses defined for ${schoolyear}."
@@ -5210,17 +5221,9 @@ msgstr ""
 "Het voorbeeld hierboven zal gebruikers, 'john_b' en 'peter_j', toevoegen als "
 "leerlingen van deze sectie."
 
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
-msgstr "Filteren op…"
-
 #: /src/schooltool/course/browser/templates/f_section_table_filter.pt:41
 msgid "All courses"
-msgstr "Alle secties"
+msgstr "Alle vakken"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:4
 msgid "Edit this section"
@@ -5299,10 +5302,6 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/section.pt:35
 msgid "Change the name or description of this section."
 msgstr "Wijzig de naam of omschrijving van deze sectie."
-
-#: /src/schooltool/course/browser/templates/section.pt:35
-msgid "edit info"
-msgstr "info bewerken"
 
 #: /src/schooltool/course/browser/templates/section.pt:46
 #: /src/schooltool/course/browser/templates/section_edit.pt:60
@@ -5399,7 +5398,7 @@ msgstr "Een interne identificatie voor dit vak."
 
 #: /src/schooltool/course/interfaces.py:53
 msgid "School identifier of this course."
-msgstr "School-identificatie voor dit vak."
+msgstr "Schoolidentificatie voor dit vak."
 
 #: /src/schooltool/course/interfaces.py:58
 msgid "Alternate ID"
@@ -5407,7 +5406,7 @@ msgstr "Alternatief-ID"
 
 #: /src/schooltool/course/interfaces.py:52
 msgid "Additional identifier for outside tracking or other purposes."
-msgstr "Extra identificatie voor buitentracering of andere doeleinden."
+msgstr "Extra identificatie voor externe tracering of andere doeleinden."
 
 #: /src/schooltool/course/interfaces.py:55
 msgid "Credits"
@@ -5529,21 +5528,12 @@ msgstr ""
 "Een sectie bestaat uit één of meer leerlingen en leraren, die samenkomen "
 "tijdens een termijn."
 
-#: /src/schooltool/dashboard/configure.zcml:41
-msgid "My Sections"
-msgstr "Mijn secties"
-
 #: /src/schooltool/dashboard/dashboard.pt:62
 #: /src/schooltool/dashboard/dashboard.pt:66
 msgid "Dashboard"
 msgstr "Bedieningspaneel"
 
-#: /src/schooltool/dashboard/interfaces.py:45
-msgid "Category Title."
-msgstr "Categorienaam"
-
-#: /src/schooltool/dashboard/interfaces.py:49
-#: /src/schooltool/dashboard/interfaces.py:50
+#: /src/schooltool/dashboard/interfaces.py:48
 msgid "Weight"
 msgstr "Gewicht"
 
@@ -5955,8 +5945,8 @@ msgstr ""
 "gewijzigd worden en opnieuw geïmporteerd."
 
 #: /src/schooltool/export/flourish.zcml:49
-msgid "Export as XLS"
-msgstr "Exporteren als XLS"
+msgid "School Export"
+msgstr "School-export"
 
 #: /src/schooltool/export/importer.py:79
 msgid "is not a valid integer"
@@ -6212,8 +6202,16 @@ msgstr ""
 "Gegevens in het rekenblad zullen worden toegevoegd aan gegevens in het "
 "systeem; bestaande gegevens zullen door de import niet worden verwijderd."
 
-#: /src/schooltool/export/templates/f_import_related.pt:19
-#: /src/schooltool/export/templates/import.pt:50
+#: /src/schooltool/export/templates/f_import_related.pt:16
+msgid ""
+"You do not have to import all worksheets at the same time. You can import "
+"individual worksheets sequentially."
+msgstr ""
+"U hoeft niet alle werkbladen tegelijkertijd te importeren. U kunt deze ook "
+"een voor een importeren."
+
+#: /src/schooltool/export/templates/f_import_related.pt:23
+#: /src/schooltool/export/templates/import.pt:45
 msgid ""
 "For people interested in testing and exploring SchoolTool, we provide a set "
 "of sample data: ${link-to-sample-data-file}."
@@ -6231,15 +6229,6 @@ msgstr ""
 "sample-data-file} -- 1000 leerlingen over meerdere jaren -- voor het testen "
 "van de prestatie. Het importeren van deze set kan een lange tijd duren en "
 "kan op sommige systemen mislukken wegens onvoldoende geheugen."
-
-#: /src/schooltool/export/templates/f_import_related.pt:33
-#: /src/schooltool/export/templates/import.pt:53
-msgid ""
-"If you are importing your own data, we highly recommend downloading the "
-"sample spreadsheet as a reference."
-msgstr ""
-"Wanneer u uw eigen gegevens wilt importeren, dan raden wij u dringend aan om "
-"het rekenbladvoorbeeld te downloaden en die als referentie te gebruiken."
 
 #: /src/schooltool/export/templates/import.pt:4
 msgid "Upload SchoolTool as XLS"
@@ -6260,8 +6249,17 @@ msgstr ""
 "rekenblad en probeer de gegevens dan opnieuw te importeren. Er wordt aan "
 "gewerkt om dit te verbeteren."
 
+#: /src/schooltool/export/templates/import.pt:48
+msgid ""
+"If you are importing your own data, we highly recommend downloading the "
+"sample spreadsheet as a reference."
+msgstr ""
+"Wanneer u uw eigen gegevens wilt importeren, dan raden wij u dringend aan om "
+"het rekenbladvoorbeeld te downloaden en die als referentie te gebruiken."
+
 #: /src/schooltool/group/browser/configure.zcml:23
-msgid "Add a Group"
+#: /src/schooltool/group/browser/flourish.zcml:177
+msgid "Add Group"
 msgstr "Groep toevoegen"
 
 #: /src/schooltool/group/browser/configure.zcml:36
@@ -6282,14 +6280,7 @@ msgid "Import Groups"
 msgstr "Groepen importeren"
 
 #: /src/schooltool/group/browser/configure.zcml:110
-msgid "Import Groups Members"
-msgstr "Groepsleden importeren"
-
-#: /src/schooltool/group/browser/flourish.zcml:139
-msgid "Add Group"
-msgstr "Groep toevoegen"
-
-#: /src/schooltool/group/browser/flourish.zcml:270
+#: /src/schooltool/group/browser/flourish.zcml:352
 msgid "Import Members CSV"
 msgstr "Leden-CSV importeren"
 
@@ -6583,12 +6574,8 @@ msgstr "Niveau bewerken"
 msgid "Reorder or Delete Levels"
 msgstr "Niveaus herschikken of verwijderen"
 
-#: /src/schooltool/level/browser/level.py:51
-msgid "Add a level"
-msgstr "Niveau toevoegen"
-
-#: /src/schooltool/level/browser/level.py:226
-#: /src/schooltool/level/browser/level.py:234
+#: /src/schooltool/level/browser/level.py:225
+#: /src/schooltool/level/browser/level.py:233
 msgid "Level information"
 msgstr "Niveau-informatie"
 
@@ -6623,10 +6610,6 @@ msgstr "Toevoegen/verwijderen"
 #: /src/schooltool/level/security.zcml:19
 msgid "Modify/Rename"
 msgstr "Wijzigen/hernoemen"
-
-#: /src/schooltool/note/configure.zcml:68
-msgid "New Note"
-msgstr "Nieuwe notitie"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
@@ -6691,12 +6674,6 @@ msgstr "Wachtwoord succesvol gewijzigd"
 #: /src/schooltool/person/browser/person.py:543
 msgid "First name, last name or username"
 msgstr "Voornaam, achternaam of gebruikersnaam"
-
-#: /src/schooltool/person/browser/f_person_filter.pt:26
-#: /src/schooltool/person/browser/f_person_table_filter.pt:45
-#: /src/schooltool/person/browser/person_filter.pt:5
-msgid "All groups"
-msgstr "Alle groepen"
 
 #: /src/schooltool/person/browser/flourish.zcml:7
 msgid "Preferences"
@@ -6815,15 +6792,7 @@ msgstr "Wachtwoord controleren"
 msgid "Photo (in JPEG format)"
 msgstr "Foto (in JPEG-formaat)"
 
-#: /src/schooltool/person/browser/person.py:546
-msgid "Passwords do not match!"
-msgstr "Wachtwoorden komen niet overeen!"
-
-#: /src/schooltool/person/browser/person.py:549
-msgid "This username is already used!"
-msgstr "Deze gebruikersnaam is al in gebruik!"
-
-#: /src/schooltool/person/browser/person.py:600
+#: /src/schooltool/person/browser/person.py:687
 msgid "New photo"
 msgstr "Nieuwe foto"
 
@@ -6839,21 +6808,9 @@ msgstr "Foto wissen"
 msgid "Check this to clear the photo"
 msgstr "Vink dit aan om de foto te wissen"
 
-#: /src/schooltool/person/browser/person.py:634
-msgid "Passwords do not match."
-msgstr "Wachtwoorden komen niet overeen."
-
-#: /src/schooltool/person/browser/person.py:638
-msgid "Password was successfully changed!"
-msgstr "Wachtwoord succesvol gewijzigd!"
-
 #: /src/schooltool/person/browser/person_edit.pt:4
 msgid "Edit person"
 msgstr "Bewerk persoon"
-
-#: /src/schooltool/person/browser/person_edit.pt:20
-msgid "Change info for ${user}"
-msgstr "Informatie wijzigen van ${user}"
 
 #: /src/schooltool/person/browser/person_preferences.pt:3
 msgid "Edit person preferences"
@@ -7033,8 +6990,14 @@ msgid "${file_type} Reports"
 msgstr "${file_type}-rapporten"
 
 #: /src/schooltool/resource/browser/configure.zcml:96
-msgid "Resource Demographics"
-msgstr "Voorzieningsgegevens"
+#: /src/schooltool/resource/browser/flourish.zcml:20
+#: /src/schooltool/resource/browser/flourish.zcml:29
+#: /src/schooltool/resource/browser/flourish.zcml:40
+#: /src/schooltool/resource/browser/flourish.zcml:339
+#: /src/schooltool/resource/browser/flourish.zcml:345
+#: /src/schooltool/resource/browser/resource.py:476
+msgid "Resource Attributes"
+msgstr "Voorzieningskenmerk"
 
 #: /src/schooltool/resource/browser/configure.zcml:143
 #: /src/schooltool/resource/browser/resource-csvimport.pt:21
@@ -7042,24 +7005,19 @@ msgid "Import Resources"
 msgstr "Voorzieningen importeren"
 
 #: /src/schooltool/resource/browser/configure.zcml:286
-msgid "New Resource"
-msgstr "Nieuwe voorziening"
+#: /src/schooltool/resource/browser/flourish.zcml:168
+msgid "Add Resource"
+msgstr "Voorziening toevoegen"
 
 #: /src/schooltool/resource/browser/configure.zcml:300
-msgid "New Location"
-msgstr "Nieuwe locatie"
+#: /src/schooltool/resource/browser/flourish.zcml:177
+msgid "Add Location"
+msgstr "Locatie toevoegen"
 
 #: /src/schooltool/resource/browser/configure.zcml:314
-msgid "New Equipment"
-msgstr "Nieuw apparaat"
-
-#: /src/schooltool/resource/browser/flourish.zcml:20
-#: /src/schooltool/resource/browser/flourish.zcml:29
-#: /src/schooltool/resource/browser/flourish.zcml:39
-#: /src/schooltool/resource/browser/flourish.zcml:309
-#: /src/schooltool/resource/browser/flourish.zcml:315
-msgid "Resource Attributes"
-msgstr "Voorzieningsattributen"
+#: /src/schooltool/resource/browser/flourish.zcml:186
+msgid "Add Equipment"
+msgstr "Apparaat toevoegen"
 
 #: /src/schooltool/resource/browser/flourish.zcml:124
 #: /src/schooltool/resource/browser/resource.py:415
@@ -7070,19 +7028,7 @@ msgstr "Voorzieningsattributen"
 msgid "Resource"
 msgstr "Voorziening"
 
-#: /src/schooltool/resource/browser/flourish.zcml:138
-msgid "Add Resource"
-msgstr "Voorziening toevoegen"
-
-#: /src/schooltool/resource/browser/flourish.zcml:147
-msgid "Add Location"
-msgstr "Locatie toevoegen"
-
-#: /src/schooltool/resource/browser/flourish.zcml:156
-msgid "Add Equipment"
-msgstr "Apparaat toevoegen"
-
-#: /src/schooltool/resource/browser/flourish.zcml:208
+#: /src/schooltool/resource/browser/flourish.zcml:238
 msgid "Reserve"
 msgstr "Reserveren"
 
@@ -7133,11 +7079,7 @@ msgstr ""
 msgid "Resource index"
 msgstr "Voorzieningenindex"
 
-#: /src/schooltool/resource/browser/resource.py:399
-msgid "Resource Demographics Container"
-msgstr "Houder voorzieningsgegevens"
-
-#: /src/schooltool/resource/browser/resource.py:406
+#: /src/schooltool/resource/browser/resource.py:483
 msgid "Res."
 msgstr "Res."
 
@@ -7153,7 +7095,7 @@ msgstr "App."
 #: /src/schooltool/resource/browser/resource.py:701
 #: /src/schooltool/resource/browser/resource.py:712
 msgid "Resource attributes"
-msgstr "Voorzieningsattributen"
+msgstr "Voorzieningskenmerk"
 
 #: /src/schooltool/resource/browser/resource.py:424
 msgid "Limit to resource type(s)"
@@ -7172,11 +7114,7 @@ msgstr ""
 msgid "Resource identification"
 msgstr "Identificatie voorziening"
 
-#: /src/schooltool/resource/browser/resource.py:687
-msgid "Resource demographics"
-msgstr "Voorzieningsgegevens"
-
-#: /src/schooltool/resource/browser/resource.py:695
+#: /src/schooltool/resource/browser/resource.py:758
 msgid "Add new resource"
 msgstr "Nieuwe voorziening toevoegen"
 
@@ -7188,20 +7126,15 @@ msgstr "Voorziening bewerken"
 msgid "Location identification"
 msgstr "Identificatie locatie"
 
-#: /src/schooltool/resource/browser/resource.py:725
-msgid "Location demographics"
-msgstr "Locatiegegevens"
+#: /src/schooltool/resource/browser/resource.py:786
+msgid "Location attributes"
+msgstr "Locatiekenmerk"
 
-#: /src/schooltool/resource/browser/resource.py:734
+#: /src/schooltool/resource/browser/resource.py:795
 msgid "Add new location"
 msgstr "Nieuwe locatie toevoegen"
 
-#: /src/schooltool/resource/browser/resource.py:740
-#: /src/schooltool/resource/browser/resource.py:751
-msgid "Location attributes"
-msgstr "Attribuutlocatie"
-
-#: /src/schooltool/resource/browser/resource.py:745
+#: /src/schooltool/resource/browser/resource.py:805
 msgid "Edit location"
 msgstr "Locatie bewerken"
 
@@ -7209,20 +7142,15 @@ msgstr "Locatie bewerken"
 msgid "Equipment identification"
 msgstr "Apparaatidentificatie"
 
-#: /src/schooltool/resource/browser/resource.py:764
-msgid "Equipment demographics"
-msgstr "Apparaatgegevens"
+#: /src/schooltool/resource/browser/resource.py:823
+msgid "Equipment attributes"
+msgstr "Apparaatkenmerk"
 
-#: /src/schooltool/resource/browser/resource.py:773
+#: /src/schooltool/resource/browser/resource.py:832
 msgid "Add new equipment"
 msgstr "Nieuw apparaat toevoegen"
 
-#: /src/schooltool/resource/browser/resource.py:779
-#: /src/schooltool/resource/browser/resource.py:790
-msgid "Equipment attributes"
-msgstr "Apparaatattributen"
-
-#: /src/schooltool/resource/browser/resource.py:784
+#: /src/schooltool/resource/browser/resource.py:842
 msgid "Edit equipment"
 msgstr "Apparaat bewerken"
 
@@ -7271,8 +7199,8 @@ msgid ""
 "SchoolTool can track customized attributes for resources, locations and "
 "equipment, such as serial numbers, seating capacity or date of purchase."
 msgstr ""
-"SchoolTool kan aangepaste attributen traceren voor voorzieningen, locaties "
-"en apparaten zoals serienummers, zitcapaciteit of aankoopdatum."
+"SchoolTool kan aangepaste kenmerken traceren van voorzieningen, locaties en "
+"apparaten zoals serienummers, zitcapaciteit of aankoopdatum."
 
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:7
 msgid "Title or description"
@@ -7622,7 +7550,7 @@ msgstr ""
 "gemaakt en vernietigt alle gegevens geassocieerd met dit schooljaar, "
 "inclusief alle vakken, secties van vakken, roosters en groepen. Het wordt "
 "zeer sterk aanbevolen dat u alleen een schooljaar verwijdert dat foutief "
-"aangemaakt is of met geen gegevens geassocieerd wordt."
+"aangemaakt is of waaraan geen gegevens zijn geassocieerd."
 
 #: /src/schooltool/schoolyear/browser/templates/f_manage_schoolyears_overview.pt:4
 #: /src/schooltool/schoolyear/browser/templates/f_manage_schoolyears_overview.pt:15
@@ -7636,8 +7564,8 @@ msgstr "Er zijn geen schooljaren ingesteld."
 #: /src/schooltool/schoolyear/browser/templates/f_manage_schoolyears_overview.pt:15
 msgid "To continue setting up your school please ${add_schoolyear}."
 msgstr ""
-"Om door te kunnen gaan met het instellen van uw school a.u.b. "
-"${add_schoolyear}."
+"U moet een ${add_schoolyear} om door te kunnen gaan met het instellen van uw "
+"school."
 
 #: /src/schooltool/schoolyear/browser/templates/f_manage_year_overview.pt:5
 msgid "Manage year"
@@ -7881,7 +7809,11 @@ msgstr "Serverfout"
 msgid "Not Found"
 msgstr "Niet gevonden"
 
-#: /src/schooltool/skin/flourish/templates/main.pt:82
+#: /src/schooltool/skin/flourish/templates/image_input.pt:11
+msgid "delete this image"
+msgstr "deze afbeelding verwijderen"
+
+#: /src/schooltool/skin/flourish/templates/main.pt:89
 msgid "server running"
 msgstr "server actief"
 
@@ -7889,17 +7821,13 @@ msgstr "server actief"
 msgid "Supporting exceptional people to change the world."
 msgstr "Ondersteunt uitzonderlijke mensen om de wereld te veranderen."
 
-#: /src/schooltool/skin/flourish/templates/photo_input.pt:11
-msgid "delete this photo"
-msgstr "deze foto verwijderen"
-
-#: /src/schooltool/skin/flourish/widgets.py:240
+#: /src/schooltool/skin/flourish/widgets.py:245
 msgid "The file uploaded is not a JPEG or PNG image"
 msgstr "Het geüploade bestand is geen JPEG- of PNG-bestand"
 
-#: /src/schooltool/skin/flourish/widgets.py:243
-msgid "The image uploaded cannot be larger than 10 MB"
-msgstr "De geüploade afbeelding mag niet groter zijn dan 10 MB"
+#: /src/schooltool/skin/flourish/widgets.py:248
+msgid "The image uploaded cannot be larger than ${size} MB"
+msgstr "De geüploade afbeelding mag niet groter zijn dan ${size} MB"
 
 #: /src/schooltool/skin/form.py:64
 msgid "No changes"
@@ -7978,25 +7906,7 @@ msgstr "Sneltoets: Alt-U"
 msgid "U"
 msgstr "U"
 
-#. Default: "Update"
-#: /src/schooltool/skin/templates/view_macros.pt:152
-msgid "update-button"
-msgstr "Bijwerken"
-
-#. Default: "Apply"
-#: /src/schooltool/skin/templates/view_macros.pt:158
-#: /src/schooltool/skin/templates/view_macros.pt:164
-msgid "apply-button"
-msgstr "Toepassen"
-
-#. Default: "Add"
-#: /src/schooltool/skin/templates/view_macros.pt:171
-#: /src/schooltool/skin/templates/view_macros.pt:177
-#: /src/schooltool/skin/templates/view_macros.pt:184
-msgid "add-button"
-msgstr "Toevoegen"
-
-#: /src/schooltool/skin/templates/view_macros.pt:191
+#: /src/schooltool/skin/templates/view_macros.pt:186
 msgid "D"
 msgstr "D"
 
@@ -8163,8 +8073,8 @@ msgstr ""
 "Het verwijderen van een termijn is definitief, kan niet ongedaan worden "
 "gemaakt en vernietigt alle gegevens geassocieerd met deze termijn, inclusief "
 "alle secties van vakken. Het wordt zeer sterk aanbevolen dat u alleen een "
-"termijn verwijdert dat foutief aangemaakt is of met geen gegevens "
-"geassocieerd wordt."
+"termijn verwijdert dat foutief aangemaakt is of waaraan geen gegevens zijn "
+"geassocieerd."
 
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:5
 msgid "Manage terms"
@@ -8409,7 +8319,15 @@ msgstr "Planning bewerken"
 msgid "Schedule Timetable"
 msgstr "Rooster plannen"
 
-#: /src/schooltool/timetable/browser/flourish.zcml:531
+#: /src/schooltool/timetable/browser/flourish.zcml:549
+msgid "Custom date range"
+msgstr "Aangepast datumbereik"
+
+#: /src/schooltool/timetable/browser/flourish.zcml:563
+msgid "Term(s)"
+msgstr "Termijn(en)"
+
+#: /src/schooltool/timetable/browser/flourish.zcml:587
 msgid "Exception Days"
 msgstr "Uitzonderingsdagen"
 
@@ -8456,7 +8374,7 @@ msgstr ""
 "Het verwijderen van een rooster is definitief, kan niet ongedaan worden "
 "gemaakt en vernietigt alle planningen geassocieerd met dit rooster. Het "
 "wordt zeer sterk aanbevolen dat u alleen een rooster verwijdert dat foutief "
-"aangemaakt is of met geen gegevens geassocieerd wordt."
+"aangemaakt is of waaraan geen gegevens zijn geassocieerd."
 
 #: /src/schooltool/timetable/browser/templates/f_confirm_make_default.pt:1
 msgid ""
@@ -8477,6 +8395,12 @@ msgstr "Er zijn geen ${timetables} ingesteld."
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:25
 msgid "timetables"
 msgstr "roosters"
+
+#: /src/schooltool/timetable/browser/templates/f_multi_schedule_periods_edit.pt:58
+#: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:45
+#: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:55
+msgid "Scheduled periods"
+msgstr "Geplande periodes"
 
 #: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:3
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:36
@@ -8503,11 +8427,6 @@ msgstr "Uitzonderingsdagen bewerken"
 #: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:24
 msgid "Using timetable: ${timetable}"
 msgstr "Gebruik rooster: ${timetable}"
-
-#: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:45
-#: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:55
-msgid "Scheduled periods"
-msgstr "Geplande periodes"
 
 #: /src/schooltool/timetable/browser/templates/f_specialday_change.pt:7
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:13
@@ -8778,7 +8697,16 @@ msgstr "Toepassen tot"
 msgid "Schedule a school timetable"
 msgstr "Schoolrooster plannen"
 
-#: /src/schooltool/timetable/browser/timetable.py:555
+#: /src/schooltool/timetable/browser/timetable.py:521
+msgid "First term"
+msgstr "Eerste termijn"
+
+#: /src/schooltool/timetable/browser/timetable.py:526
+msgid "Last term"
+msgstr "Laatste termijn"
+
+#: /src/schooltool/timetable/browser/timetable.py:678
+#: /src/schooltool/timetable/browser/timetable.py:821
 msgid "Save"
 msgstr "Opslaan"
 

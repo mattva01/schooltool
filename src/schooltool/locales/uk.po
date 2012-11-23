@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-04-05 13:59+0300\n"
-"PO-Revision-Date: 2012-06-19 06:49+0000\n"
-"Last-Translator: ma$terok <Unknown>\n"
+"POT-Creation-Date: 2012-11-20 18:47+0200\n"
+"PO-Revision-Date: 2012-11-22 22:36+0000\n"
+"Last-Translator: Vitali Oleshkevich <mar2008m@rambler.ru>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-06-20 05:07+0000\n"
-"X-Generator: Launchpad (build 15435)\n"
+"X-Launchpad-Export-Date: 2012-11-23 05:21+0000\n"
+"X-Generator: Launchpad (build 16293)\n"
 "Language: uk\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -235,7 +235,11 @@ msgstr "Назва Школи"
 msgid "Name"
 msgstr "Ім’я"
 
-#: /src/schooltool/app/browser/app.py:585
+#: /src/schooltool/app/browser/app.py:923
+msgid "Logo"
+msgstr "Емблема"
+
+#: /src/schooltool/app/browser/app.py:951
 #: /src/schooltool/app/security.py:304
 msgid "Leaders"
 msgstr "Лідери"
@@ -1229,7 +1233,12 @@ msgstr "База даних поколінь"
 msgid "Shown Calendars"
 msgstr "Показані Календарі"
 
-#: /src/schooltool/app/browser/overlay.py:217
+#: /src/schooltool/app/browser/flourish.zcml:737
+#: /src/schooltool/app/browser/flourish.zcml:747
+msgid "School Logo"
+msgstr "Шкільна емблема"
+
+#: /src/schooltool/app/browser/overlay.py:220
 msgid "Saved changes."
 msgstr "Збережені зміни."
 
@@ -1770,36 +1779,21 @@ msgstr "Резервування ресурсів"
 msgid "Resource Booking for ${title}"
 msgstr "Ресурси зарезервовані для ${title}"
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:18
-msgid "Title:"
-msgstr "Назва:"
+#: /src/schooltool/app/browser/templates/event_booking.pt:17
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:5
+msgid "Event Details"
+msgstr "Докладніше про подію"
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:22
-msgid "Starts:"
-msgstr "Починається:"
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:26
-msgid "Ends:"
-msgstr "Закінчується:"
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:30
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:34
-msgid "This is a recurring event!"
-msgstr "Це повторювана подія!"
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:38
-msgid "Booked resources"
-msgstr "Зарезервовані ресурси"
-
-#: /src/schooltool/app/browser/templates/event_booking.pt:42
+#: /src/schooltool/app/browser/templates/event_booking.pt:45
 msgid "UnBook"
 msgstr "Зняти резервування"
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:51
-msgid "Available resources"
+#: /src/schooltool/app/browser/templates/event_booking.pt:54
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:55
+msgid "Available Resources"
 msgstr "Доступні ресурси"
 
-#: /src/schooltool/app/browser/templates/event_booking.pt:57
+#: /src/schooltool/app/browser/templates/event_booking.pt:60
 msgid "Book"
 msgstr "Резервування"
 
@@ -1973,7 +1967,7 @@ msgstr "Показано ${count} з ${total} елементів"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:4
 msgid "Manage error settings"
-msgstr ""
+msgstr "Керування налаштуваннями помилок"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:43
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:14
@@ -1991,7 +1985,7 @@ msgstr "Виключення"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:49
 msgid "No exceptions logged."
-msgstr ""
+msgstr "Немає повідомлень про помилки"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:76
 #: /src/schooltool/term/browser/term.py:219
@@ -2003,16 +1997,16 @@ msgstr "Оновити"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:2
 msgid "Exception traceback"
-msgstr ""
+msgstr "Відстеження помилки"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:3
 #: /src/schooltool/app/browser/templates/f_errors_entry_text.pt:4
 msgid "The specified log entry was not found. It may have expired."
-msgstr ""
+msgstr "Зазначена запис логу не знайдена. Можливо минув строк її дії."
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:18
 msgid "Request URL"
-msgstr ""
+msgstr "Запитати URL"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:22
 msgid "Exception Type"
@@ -2030,7 +2024,7 @@ msgstr "Відстеження"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:40
 msgid "Display traceback as text"
-msgstr ""
+msgstr "Показати шлях викликів як текст"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:45
 msgid "Request"
@@ -2056,10 +2050,12 @@ msgid ""
 "Database generations update the structure of your database to be compatible "
 "with new versions of SchoolTool."
 msgstr ""
+"Database generations оновить структуру Вашої бази даних для сумісності c "
+"новими версіями SchoolTool."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:5
 msgid "Set Tab Visibility"
-msgstr ""
+msgstr "Зробити вкладку видимої"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:10
 msgid "Visible"
@@ -2074,6 +2070,9 @@ msgid ""
 "Schools that are not using all components of SchoolTool can reduce visual "
 "clutter by hiding unnecessary links in the top navigation bar."
 msgstr ""
+"Школи, які не використовують всі компоненти SchoolTool, можуть візуально "
+"розвантажити свою сторінку, сховавши непотрібні посилання вгорі навігаційної "
+"панелі."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:10
 msgid ""
@@ -2081,16 +2080,21 @@ msgid ""
 "links; they don't change the functionality, data, or security settings of "
 "SchoolTool in any way."
 msgstr ""
+"Зверніть увагу, що ці налаштування лише заховають навігаційні посилання; "
+"вони не змінюють функціональність, дані або настройки захисту SchoolTool."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
 msgid "Links can be changed from visible to hidden at any time."
 msgstr ""
+"Зв'язки можуть бути змінені з видимих ​​на приховані в будь-який момент."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:18
 msgid ""
 "When users log in, they will usually be directed to the tab selected in the "
 "default column. The default tab must also be visible."
 msgstr ""
+"Після входу, користувачі зазвичай перенаправляються у вкладку, обрану в "
+"стандартному стовпчику. Стандартна вкладка так само повинна бути видимою."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:12
 #: /src/schooltool/app/browser/templates/login.pt:8
@@ -2158,10 +2162,11 @@ msgstr "L"
 msgid ""
 "The database was updated to generation ${generation} for ${application}."
 msgstr ""
+"База даних була оновлена ​​до покоління ${generation} для ${application}."
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:16
 msgid "The database is up to date for ${application}."
-msgstr ""
+msgstr "База даних оновлена ​​для ${application}."
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:23
 msgid "Application"
@@ -2169,23 +2174,23 @@ msgstr "Застосунок"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:24
 msgid "Minimum Generation"
-msgstr ""
+msgstr "Мінімальне покоління"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:25
 msgid "Maximum Generation"
-msgstr ""
+msgstr "Максимальне покоління"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:26
 msgid "Current Database Generation"
-msgstr ""
+msgstr "Поточна база даних поколінь"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:27
 msgid "Evolve?"
-msgstr ""
+msgstr "Оновити?"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:40
 msgid "No, up to date"
-msgstr ""
+msgstr "Ні, до теперішнього часу"
 
 #: /src/schooltool/app/browser/templates/f_overlay_filter_widget.pt:2
 #: /src/schooltool/contact/browser/templates/f_contact_filter.pt:2
@@ -2217,7 +2222,7 @@ msgstr "Час роботи"
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:19
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:24
 msgid "System platform"
-msgstr ""
+msgstr "Системна платформа"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:23
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:28
@@ -2231,11 +2236,11 @@ msgstr "Командний рядок"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:31
 msgid "Preferred encoding"
-msgstr ""
+msgstr "Бажана кодировка"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:35
 msgid "File system encoding"
-msgstr ""
+msgstr "Кодування файлової системи"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:39
 msgid "Process id"
@@ -2247,7 +2252,7 @@ msgstr "Режим розробника"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:48
 msgid "Python path"
-msgstr ""
+msgstr "Шлях для пошуку модулів Python"
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:3
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
@@ -2263,18 +2268,26 @@ msgid ""
 "The first row of the file must contain two cells terms in this schoolyear. "
 "Sections will be created in terms from first to last."
 msgstr ""
+"Перший ряд файлу повинен містити два осередки з періодами цього шкільного "
+"року. Секції будуть створені у форматі від першого до останнього."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:15
 msgid ""
 "The second row must be empty. After that, several section descriptions may "
 "follow. They are separated by an extra carriage return (i.e., a blank line)."
 msgstr ""
+"Другий ряд повинен бути порожнім. Після цього може слідувати пара секцій з "
+"описами. Вони повинні бути відокремлені один від одного чим-небудь "
+"(наприклад порожнім простором)."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:21
 msgid ""
 "Each section description's first row contains the <strong>course SchoolTool "
 "ID</strong> and the <strong>instructor username</strong> for the new section."
 msgstr ""
+"Кожна секція з описом першого ряду містить <strong>ID номер курсу "
+"SchoolTool</strong> та <strong>ім'я користувача інструктора</strong> для "
+"цієї секції."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:27
 msgid ""
@@ -2286,6 +2299,13 @@ msgid ""
 "\"4\" in the top of csv, you will need to provide 3 section ids, for terms "
 "\"2\", \"3\" and \"4\" respectively."
 msgstr ""
+"Якщо Ви хочете оновити ці секції, то Ви повинні вказати в описі першого "
+"ряду: <strong>ID номер курсу SchoolTool</strong>, <strong>ім'я користувача "
+"інструктора</strong> та потім <strong>ID номер розділу SchoolTool</strong > "
+"у відповідному розділі для кожного періоду. <strong>Зауважте:</strong> якщо "
+"у Вашій школі є, скажімо, 5 безперервних періодів, і Ви встановлюєте періоди "
+"\"2\", \"4\" у верху csv, Вам знадобиться ввести 3 ID номера, для семестрів "
+"\"2\", \"3 \"і\" 4 \"відповідно."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:34
 msgid ""
@@ -2295,12 +2315,19 @@ msgid ""
 "<strong>period title</strong>, follows. Section schedule description is "
 "terminated by three asterisks ('***') in the first column."
 msgstr ""
+"Тоді кількість рядів визначають розділ розкладу <strong>може</strong> бути "
+"таким. Першим буде ряд містить <strong>id номер розкладу</strong>. Потім "
+"слід кілька рядів містять <strong>назву дня</strong> та <strong>назву "
+"періоду</strong>. Розділ опису розкладу віддаляється за допомогою трьох "
+"зірочок ('***') в першій колонці."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:37
 msgid ""
 "After the terminator, any number of <strong>person user names</strong> may "
 "follow, the denoted persons will be added to the section as learners."
 msgstr ""
+"Після термінатора може слідувати необмежена кількість <strong>імен "
+"користувачів</strong>, позначені люди будуть додані в секцію як учні."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:43
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
@@ -2338,6 +2365,22 @@ msgid ""
 "\"johnny\"\n"
 "\"pete\"\n"
 msgstr ""
+"\n"
+"Осінь \",\" Весна \"\n"
+"\"\", \"\", \"\"\n"
+"\"філософія\", \"lorch\"\n"
+"\"тижневий-розклад\"\n"
+"\"Понеділок,\" A \"\n"
+"\"Понеділок\", \"B\"\n"
+"\"Вівторок\", \"B\"\n"
+"\"***\"\n"
+"\"Джонні\"\n"
+"\"Біллі\"\n"
+"\"\"\n"
+"\"Література\", \"Гузман\", \"Література-О\", \"Література-В\"\n"
+"\"***\"\n"
+"\"Джонні\"\n"
+"\"Піт\"\n"
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:70
 msgid ""
@@ -2350,18 +2393,26 @@ msgid ""
 "SchoolTool IDs will be set to literature-f in Fall and literature-s in "
 "Spring."
 msgstr ""
+"Вищеописаний приклад створить секції для лекцій з філософії і літературі. "
+"Секції будуть викладатися з осіннього по весняний семестр. Секції для лекцій "
+"з філософії будуть містити користувачів з іменами \"Джонні\" і \"Біллі\" в "
+"якості учнів. Вони так само будуть заплановані на понеділок (два уроки, в "
+"періоді 'A' і 'B') і у вівторок. Секція літератури буде схожою, але не буде "
+"містити розкладу. ID номери SchoolTool з літератури будуть встановлені в "
+"Літературі-О на осінь і і Література-В на весну."
 
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:3
 msgid "Server Information"
-msgstr ""
+msgstr "Інформація про сервер"
 
 #: /src/schooltool/app/browser/templates/f_settings.pt:5
 msgid "Please wait for confirmation that the database has been packed."
 msgstr ""
+"Будь ласка, дочекайтеся підтвердження того, що база даних була запакована."
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:13
 msgid "Domain ${domain}"
-msgstr ""
+msgstr "Домен ${domain}"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:18
 #: /src/schooltool/contact/interfaces.py:82
@@ -2370,11 +2421,11 @@ msgstr "Мова"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:19
 msgid "Files"
-msgstr ""
+msgstr "Файли"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:31
 msgid "Reload"
-msgstr ""
+msgstr "Перезавантажити"
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
@@ -2653,7 +2704,7 @@ msgstr "CSV дані"
 #: /src/schooltool/resource/browser/flourish.zcml:323
 #: /src/schooltool/resource/browser/flourish.zcml:342
 msgid "Import"
-msgstr ""
+msgstr "Імпорт"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:135
 msgid "Row 2 is not empty"
@@ -2664,6 +2715,9 @@ msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id, an "
 "instructor id and optional SchoolTool section IDs for each of the terms)"
 msgstr ""
+"Невірний заголовок в рядку $ {line_no} (він повинен містити id номер курсу, "
+"id номер інструктора і опціонально ID номери секцій SchoolTool для кожного "
+"періоду)"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:220
 #: /src/schooltool/app/browser/timetablecsvimport.py:231
@@ -2671,12 +2725,16 @@ msgid ""
 "Malformed line ${line_no} (it should contain either a timetable id or day id "
 "and a period id)"
 msgstr ""
+"Неправильно сформований рядок ${line_no} (він повинен містити або розклад "
+"або id номер дня і id номер періоду)"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:239
 msgid ""
 "Timetable id must be specified before day id and a period id at at line "
 "${line_no}"
 msgstr ""
+"Id номер розкладу повинен вказуватися перед id номером дня і id номером "
+"періоду в рядку ${line_no}"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:276
 msgid "Incomplete section description on line ${line}"
@@ -2691,15 +2749,17 @@ msgid ""
 "The first row of the CSV file must contain the term or first and last terms "
 "for sections."
 msgstr ""
+"Перший ряд CSV повинен містити період або розділи першого і останнього "
+"періодів."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:444
 #: /src/schooltool/app/browser/timetablecsvimport.py:454
 msgid "The term ${term} does not exist."
-msgstr ""
+msgstr "Період ${term} не існує."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:460
 msgid "First term ${first} starts after last term ${last}."
-msgstr ""
+msgstr "Перший Період ${first} починається після останнього періоду ${last}."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:497
 msgid "Error in timetable CSV data, line ${line_no}"
@@ -2734,7 +2794,7 @@ msgstr "Неправильні записи: ${args}."
 #: /src/schooltool/course/browser/section.py:1070
 #: /src/schooltool/course/browser/section.py:1124
 msgid "Sections for ${schoolyear}"
-msgstr ""
+msgstr "Секції для ${schoolyear}"
 
 #: /src/schooltool/app/interfaces.py:50
 msgid "Form input is not a file object"
@@ -2789,7 +2849,11 @@ msgstr ""
 "Показати загальносистемний календаря, як титульну сторінку\n"
 "            сайту."
 
-#: /src/schooltool/app/main.py:314
+#: /src/schooltool/app/interfaces.py:143
+msgid "School logo"
+msgstr "Шкільна емблема"
+
+#: /src/schooltool/app/main.py:305
 msgid "Going to background, daemon pid %d"
 msgstr "Перехід до фонової роботи (процес %d)"
 
@@ -2809,30 +2873,16 @@ msgid ""
 "  -c, --config xxx       use this configuration file instead of the default\n"
 "  -h, --help             show this help message\n"
 "  -d, --daemon           go to background after starting\n"
+"  --pack                 pack the database\n"
 "  -r, --restore-manager password\n"
 "                         restore the manager user with the provided "
 "password\n"
 "                         (read password from the standart input if "
 "'password'\n"
 "                         is '-')\n"
-"  --manage               only do management tasks, don't run the server\n"
 msgstr ""
-"\n"
-"Застосування: %s [опції]\n"
-"Опції:\n"
-"  -c, --config xxx, використовувати цей конфігураційний файл замість "
-"стандартного\n"
-"  -h, --help, показувати це повідомлення\n"
-"  -d, --daemon, перейти до фонового виконання після запуску\n"
-"  -r, --restore-manager password\n"
-"                         відновити користувача з керівними повноваженнями з "
-"наданим паролем\n"
-"                         (отримати пароль з зі стандартного вводу, якщо "
-"'password'\n"
-"                         є '-')\n"
-"  --manage               only do management tasks, don't run the server\n"
 
-#: /src/schooltool/app/main.py:536
+#: /src/schooltool/app/main.py:528
 msgid "%s: daemon mode not supported on your operating system."
 msgstr ""
 "%s: фоновий режим роботи не підтримується вашою операційною системою."
@@ -2884,12 +2934,16 @@ msgid ""
 "Warning: font directories '%s' do not exist.\n"
 "PDF support disabled."
 msgstr ""
+"Попередження: Шрифт каталогу '%s' не існує.\n"
+"Підтримка PDF відключена."
 
 #: /src/schooltool/app/main.py:785
 msgid ""
 "Warning: font '%s' does not exist in the font directories '%s'.\n"
 "PDF support disabled."
 msgstr ""
+"Попередження: Шрифт '%s' не існує в папці шрифтів '%s'.\n"
+"Підтримка PDF відключена."
 
 #: /src/schooltool/app/main.py:775
 msgid "Startup time: %.3f sec real, %.3f sec CPU"
@@ -3100,11 +3154,13 @@ msgstr ""
 msgid "Value too long \"${value}\""
 msgstr "Значення занадто довге \"${value}\""
 
-#: /src/schooltool/basicperson/browser/demographics.py:111
-msgid "Demographics Container"
-msgstr "Демографічні показники"
+#: /src/schooltool/basicperson/browser/demographics.py:108
+#: /src/schooltool/basicperson/browser/flourish.zcml:273
+#: /src/schooltool/basicperson/browser/flourish.zcml:282
+msgid "Demographics and Personal Information"
+msgstr ""
 
-#: /src/schooltool/basicperson/browser/demographics.py:151
+#: /src/schooltool/basicperson/browser/demographics.py:148
 msgid "Add new Field"
 msgstr "Імена не можуть починатися з '+' чи '@' або містити '/'"
 
@@ -3217,12 +3273,7 @@ msgstr ""
 msgid "Administrator"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:264
-#: /src/schooltool/basicperson/browser/flourish.zcml:273
-msgid "Demographics and Personal Information"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/flourish.zcml:273
+#: /src/schooltool/basicperson/browser/flourish.zcml:282
 #: /src/schooltool/level/browser/flourish.zcml:110
 #: /src/schooltool/resource/browser/flourish.zcml:29
 msgid "Reorder"
@@ -3493,8 +3544,24 @@ msgstr ""
 msgid "The person has no advisees."
 msgstr ""
 
+#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
+#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
+#: /src/schooltool/person/browser/f_person_filter.pt:20
+#: /src/schooltool/person/browser/f_person_table_filter.pt:39
+#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
+#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
+msgid "Filter by..."
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
+#: /src/schooltool/person/browser/f_person_filter.pt:26
+#: /src/schooltool/person/browser/f_person_table_filter.pt:45
+#: /src/schooltool/person/browser/person_filter.pt:5
+msgid "All groups"
+msgstr "Всі групи"
+
 #: /src/schooltool/basicperson/browser/templates/f_csvimport_description.pt:3
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:29
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:24
 msgid ""
 "CSV data <strong>must</strong> contain a user name a first name and a last "
 "name. An optional password <strong>may</strong> be included as well."
@@ -3947,18 +4014,10 @@ msgstr ""
 msgid "Change the resources reserved for this event"
 msgstr ""
 
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:5
-msgid "Event Details"
-msgstr ""
-
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:41
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:27
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:369
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:160
 msgid "Reserved Resources"
-msgstr ""
-
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:69
-msgid "Available Resources"
 msgstr ""
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:4
@@ -3996,9 +4055,25 @@ msgstr "Додати інформацію"
 msgid "Edit Calendar Overlays"
 msgstr "Редагувати шаблон календаря"
 
-#: /src/schooltool/contact/browser/basicperson.py:117
-#: /src/schooltool/contact/browser/contact.py:194
-#: /src/schooltool/contact/browser/contact.py:383
+#: /src/schooltool/common/fields.py:38
+msgid "Image size"
+msgstr ""
+
+#: /src/schooltool/common/fields.py:39
+msgid "Size in pixels"
+msgstr ""
+
+#: /src/schooltool/common/fields.py:44
+msgid "Image format"
+msgstr ""
+
+#: /src/schooltool/common/fields.py:48
+msgid "Max file size in bytes"
+msgstr ""
+
+#: /src/schooltool/contact/browser/basicperson.py:123
+#: /src/schooltool/contact/browser/contact.py:195
+#: /src/schooltool/contact/browser/contact.py:392
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:31
 msgid "Address"
 msgstr "Адреси"
@@ -4275,34 +4350,23 @@ msgstr "Вживає мови"
 msgid "(View Details)"
 msgstr "(Перегляд подробиць)"
 
-#: /src/schooltool/contact/contact.py:73
+#: /src/schooltool/contact/contact.py:75
 msgid ""
-"\n"
-"    All SchoolTool users have contact information, that includes home "
-"address,\n"
-"    phone number, email address, etc.\n"
-"\n"
-"    \"External contacts\" can be created - people who are not SchoolTool "
-"users,\n"
-"    but may need to recieve notifications and information about the student\n"
-"    or the school as a whole.\n"
-"    "
+"All SchoolTool users have contact information, that includes home address, "
+"phone number, email address, etc.\n"
+"\"External contacts\" can be created - people who are not SchoolTool users, "
+"but may need to recieve notifications and information about the student or "
+"the school as a whole."
 msgstr ""
-"\n"
-"    Всі користувачі SchoolTool мають контактну інформацію, яка включає "
-"домашню адресу,\n"
-"    номер телефону, адресу електронної пошти і т.д.\n"
-"\n"
-"    \"Зовнішні контакти\" може бути створено - люди, які не користувачами "
-"SchoolTool, \n"
-"     але можуть знадобитися для одержання повідомлень та інформації про "
-"студента\n"
-"    чи школи в цілому.\n"
-"    "
+"Всі користувачі SchoolTool мають контактну інформацію, яка включає "
+"домашню адресу, номер телефону, адресу електронної пошти і т.д.\n"
+"\"Зовнішні контакти\" може бути створено - люди, які не користувачами "
+"SchoolTool, але можуть знадобитися для одержання повідомлень та інформації "
+"про студента чи школи в цілому."
 
-#: /src/schooltool/contact/contact.py:202
-#: /src/schooltool/course/browser/flourish.zcml:293
-#: /src/schooltool/course/browser/section.py:555
+#: /src/schooltool/contact/contact.py:220
+#: /src/schooltool/course/browser/flourish.zcml:424
+#: /src/schooltool/course/browser/section.py:561
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:72
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:66
@@ -4395,10 +4459,10 @@ msgstr "Брат чи сестра"
 msgid "List/Search"
 msgstr "Список/Пошук"
 
-#: /src/schooltool/contact/security.zcml:36
+#: /src/schooltool/contact/security.zcml:41
 msgid ""
-"Assign / remove contacts of a user,                   define user's "
-"relationship with a contact."
+"Assign / remove contacts of a user, define user's relationship with a "
+"contact."
 msgstr ""
 "Призначити / видалити контакти користувача, визначити зв'язок користувача з "
 "контактом."
@@ -4433,8 +4497,10 @@ msgid "The user himself."
 msgstr "Користувач власноруч."
 
 #: /src/schooltool/course/browser/configure.zcml:10
-msgid "Add a Course"
-msgstr "Додати предмет"
+#: /src/schooltool/course/browser/configure.zcml:96
+#: /src/schooltool/course/browser/flourish.zcml:270
+msgid "Add Course"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:25
 msgid "Edit Course Information"
@@ -4445,14 +4511,11 @@ msgstr "Редагувати інформацію про предмет"
 msgid "Import Courses"
 msgstr "Імпортувати передмети"
 
-#: /src/schooltool/course/browser/configure.zcml:96
-msgid "New Course"
-msgstr "Новий предмет"
-
 #: /src/schooltool/course/browser/configure.zcml:183
 #: /src/schooltool/course/browser/configure.zcml:193
-msgid "New Section"
-msgstr "Новий розділ"
+#: /src/schooltool/course/browser/flourish.zcml:394
+msgid "Add Section"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:203
 msgid "Edit Section Information"
@@ -4566,16 +4629,8 @@ msgstr "Предмет"
 msgid "Section"
 msgstr "Розділ"
 
-#: /src/schooltool/course/browser/flourish.zcml:200
-msgid "Add Course"
-msgstr ""
-
-#: /src/schooltool/course/browser/flourish.zcml:269
-msgid "Add Section"
-msgstr ""
-
-#: /src/schooltool/course/browser/flourish.zcml:403
-#: /src/schooltool/course/browser/templates/f_section_view.pt:148
+#: /src/schooltool/course/browser/flourish.zcml:440
+#: /src/schooltool/course/browser/templates/f_section_view.pt:141
 msgid "Locations"
 msgstr ""
 
@@ -4659,17 +4714,18 @@ msgstr ""
 msgid "Term"
 msgstr "Семестр"
 
-#: /src/schooltool/course/browser/section.py:998
-msgid "Size"
-msgstr ""
-
-#: /src/schooltool/course/browser/section.py:1024
+#: /src/schooltool/course/browser/section.py:1077
 #: /src/schooltool/course/browser/templates/f_section_filter.pt:6
 msgid "Section title"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:1121
-#: /src/schooltool/course/browser/section.py:1272
+#: /src/schooltool/course/browser/section.py:1287
+msgid ""
+"If no title is specified, one will be created based on the course title."
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1295
+#: /src/schooltool/course/browser/section.py:1517
 msgid "Section Information"
 msgstr ""
 
@@ -4681,7 +4737,11 @@ msgstr ""
 msgid "Select a course"
 msgstr ""
 
-#: /src/schooltool/course/browser/section.py:1309
+#: /src/schooltool/course/browser/section.py:1470
+msgid "Additional locations can be added via the section view."
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1580
 msgid "Current instructors"
 msgstr ""
 
@@ -4919,11 +4979,15 @@ msgstr ""
 msgid "Edit this course"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/f_course_view.pt:76
-msgid "Edit responsible parties for this course"
+#: /src/schooltool/course/browser/templates/f_course_view.pt:78
+msgid "This course has no sections"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:84
+msgid "Edit responsible parties for this course"
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_course_view.pt:92
 msgid "These users can modify the course."
 msgstr ""
 
@@ -4945,21 +5009,7 @@ msgstr ""
 msgid "Sections taught"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:12
-#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:49
-#: /src/schooltool/group/browser/group.py:327
-#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:19
-#: /src/schooltool/schoolyear/browser/flourish.zcml:65
-#: /src/schooltool/schoolyear/browser/flourish.zcml:100
-#: /src/schooltool/schoolyear/browser/flourish.zcml:130
-#: /src/schooltool/schoolyear/browser/flourish.zcml:182
-#: /src/schooltool/schoolyear/browser/schoolyear.py:712
-#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:8
-#: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:15
-msgid "School Year"
-msgstr "Навчальний рік"
-
-#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:43
+#: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:37
 msgid "Sections attended"
 msgstr ""
 
@@ -5050,6 +5100,10 @@ msgstr ""
 msgid "Link an Existing Section"
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/f_section_list_table_filter.pt:25
+msgid "(${count} sections)"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/f_section_member_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:3
 msgid "CSV data should contain a SchoolTool username in each line."
@@ -5067,6 +5121,10 @@ msgstr ""
 msgid ""
 "The above example will add users 'john_b' and 'peter_j' as students of this "
 "section."
+msgstr ""
+
+#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:41
+msgid "All courses"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:4
@@ -5113,12 +5171,6 @@ msgstr ""
 msgid "This section has no equipment"
 msgstr ""
 
-#: /src/schooltool/course/browser/templates/f_sections_related.pt:6
-msgid ""
-"A section is a set of one or more learners and instructors who meet during a "
-"term to achieve the curricular goals of a course."
-msgstr ""
-
 #: /src/schooltool/course/browser/templates/f_unlink_section.pt:22
 #: /src/schooltool/course/browser/templates/unlink_section.pt:23
 msgid ""
@@ -5149,10 +5201,6 @@ msgstr "Відсутні відповідні семестри у розділа
 #: /src/schooltool/course/browser/templates/section.pt:35
 msgid "Change the name or description of this section."
 msgstr "Змінити назву або опис даного розділу."
-
-#: /src/schooltool/course/browser/templates/section.pt:35
-msgid "edit info"
-msgstr "змінити інформацію"
 
 #: /src/schooltool/course/browser/templates/section.pt:46
 #: /src/schooltool/course/browser/templates/section_edit.pt:60
@@ -5376,21 +5424,12 @@ msgstr ""
 "Розділ являє собою набір з одного або кількох учнів, які відповідають "
 "протягом семестру."
 
-#: /src/schooltool/dashboard/configure.zcml:41
-msgid "My Sections"
-msgstr "Мої Розділи"
-
 #: /src/schooltool/dashboard/dashboard.pt:62
 #: /src/schooltool/dashboard/dashboard.pt:66
 msgid "Dashboard"
 msgstr "Панель інструментів"
 
-#: /src/schooltool/dashboard/interfaces.py:45
-msgid "Category Title."
-msgstr "Назва категорії"
-
-#: /src/schooltool/dashboard/interfaces.py:49
-#: /src/schooltool/dashboard/interfaces.py:50
+#: /src/schooltool/dashboard/interfaces.py:48
 msgid "Weight"
 msgstr "Вага"
 
@@ -5789,14 +5828,10 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/export/flourish.zcml:49
-msgid "Export as XLS"
+msgid "School Export"
 msgstr ""
 
-#: /src/schooltool/export/importer.py:76
-msgid "${sheet_name} ${column}${row} ${message}"
-msgstr "${sheet_name} ${column}${row} ${message}"
-
-#: /src/schooltool/export/importer.py:77
+#: /src/schooltool/export/importer.py:79
 msgid "is not a valid integer"
 msgstr ""
 
@@ -5844,15 +5879,15 @@ msgstr ""
 msgid "end date overlaps another term"
 msgstr ""
 
-#: /src/schooltool/export/importer.py:89
-msgid "${title} has no days in A${row}"
-msgstr ""
-
-#: /src/schooltool/export/importer.py:90
-msgid "${title} has no day templates in A${row}"
-msgstr ""
-
 #: /src/schooltool/export/importer.py:91
+msgid "has no days"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:92
+msgid "has no day templates"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:93
 msgid "is not a valid time range"
 msgstr "невідповідний часовий період"
 
@@ -5888,8 +5923,8 @@ msgstr ""
 msgid "is not a valid course in the given school year"
 msgstr ""
 
-#: /src/schooltool/export/importer.py:100
-msgid "${title} has no courses in A${row}"
+#: /src/schooltool/export/importer.py:102
+msgid "has no courses"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:101
@@ -5920,23 +5955,101 @@ msgstr ""
 msgid "is not a valid resource id"
 msgstr ""
 
-#: /src/schooltool/export/importer.py:108
-msgid "Username cannot contain non-ascii characters: ${string}"
-msgstr ""
-
 #: /src/schooltool/export/importer.py:110
-msgid "is not a valid weekday number (0-6)"
+msgid "Username cannot contain non-ascii characters"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:111
 msgid "is not a valid contact relationship"
 msgstr ""
 
-#: /src/schooltool/export/importer.py:112
-msgid "must be either True or False"
+#: /src/schooltool/export/importer.py:113
+msgid ""
+"must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all "
+"valid)"
 msgstr ""
 
-#: /src/schooltool/export/templates/f_import.pt:17
+#: /src/schooltool/export/importer.py:114
+msgid "must have a school year"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:115
+msgid "must have a course"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:116
+msgid "must have a term"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:117
+msgid "the current section is in the first term of the school year"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:118
+msgid "the current section is in the last term of the school year"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:119
+msgid "is not a valid section id in the previous term"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:120
+msgid "is not a valid section id in the next term"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:121
+msgid "no timetable is defined for this section"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:122
+msgid "no day is defined in this row"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:123
+msgid "must have a valid period id"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:124
+msgid "course credits need to be a valid number"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:125
+msgid "gender must be male or female"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:126
+msgid "has an invalid username"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:127
+msgid "has an invalid resource id"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:128
+msgid "has an invalid course id for the given school year"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:129
+msgid "end term cannot be before start term"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:130
+msgid "is not a valid section id in the specified term"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:131
+msgid "school years must be consistent within this table"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:1871
+msgid "${sheet_name} ${column}${row} ${message}"
+msgstr "${sheet_name} ${column}${row} ${message}"
+
+#: /src/schooltool/export/importer.py:1887
+msgid "The following errors occurred while importing:"
+msgstr ""
+
+#: /src/schooltool/export/templates/f_import.pt:19
 msgid "Please wait while the data is being imported."
 msgstr ""
 
@@ -5970,8 +6083,14 @@ msgstr ""
 "Дані, включені в таблицю, буде додано до даних в системі; імпорт не призведе "
 "до їх вилучення даних."
 
-#: /src/schooltool/export/templates/f_import_related.pt:19
-#: /src/schooltool/export/templates/import.pt:50
+#: /src/schooltool/export/templates/f_import_related.pt:16
+msgid ""
+"You do not have to import all worksheets at the same time. You can import "
+"individual worksheets sequentially."
+msgstr ""
+
+#: /src/schooltool/export/templates/f_import_related.pt:23
+#: /src/schooltool/export/templates/import.pt:45
 msgid ""
 "For people interested in testing and exploring SchoolTool, we provide a set "
 "of sample data: ${link-to-sample-data-file}."
@@ -5985,15 +6104,6 @@ msgid ""
 "students over multiple years -- for performance testing. This set can take a "
 "very long time to be imported and may fail on systems with inadequate memory."
 msgstr ""
-
-#: /src/schooltool/export/templates/f_import_related.pt:33
-#: /src/schooltool/export/templates/import.pt:53
-msgid ""
-"If you are importing your own data, we highly recommend downloading the "
-"sample spreadsheet as a reference."
-msgstr ""
-"Якщо ви імпортуєте ваші власні дані, ми дуже настійливо рекомендуємо "
-"завантажити зразок електронної таблиці в якості еталону."
 
 #: /src/schooltool/export/templates/import.pt:4
 msgid "Upload SchoolTool as XLS"
@@ -6013,9 +6123,18 @@ msgstr ""
 "сталося, вилучіть дані, що дублюються з таблиці і запустіть імпорт знову. Ми "
 "працюємо над поліпшенням цього процесу."
 
+#: /src/schooltool/export/templates/import.pt:48
+msgid ""
+"If you are importing your own data, we highly recommend downloading the "
+"sample spreadsheet as a reference."
+msgstr ""
+"Якщо ви імпортуєте ваші власні дані, ми дуже настійливо рекомендуємо "
+"завантажити зразок електронної таблиці в якості еталону."
+
 #: /src/schooltool/group/browser/configure.zcml:23
-msgid "Add a Group"
-msgstr "Додати групу"
+#: /src/schooltool/group/browser/flourish.zcml:177
+msgid "Add Group"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:36
 msgid "Edit Group Information"
@@ -6035,14 +6154,7 @@ msgid "Import Groups"
 msgstr "Імпортувати групи"
 
 #: /src/schooltool/group/browser/configure.zcml:110
-msgid "Import Groups Members"
-msgstr "Імпорт членів груп"
-
-#: /src/schooltool/group/browser/flourish.zcml:139
-msgid "Add Group"
-msgstr ""
-
-#: /src/schooltool/group/browser/flourish.zcml:270
+#: /src/schooltool/group/browser/flourish.zcml:352
 msgid "Import Members CSV"
 msgstr ""
 
@@ -6090,7 +6202,18 @@ msgstr ""
 msgid "Available groups"
 msgstr ""
 
-#: /src/schooltool/group/browser/group.py:448
+#: /src/schooltool/group/browser/group.py:322
+#: /src/schooltool/group/browser/group.py:550
+#: /src/schooltool/schoolyear/browser/flourish.zcml:65
+#: /src/schooltool/schoolyear/browser/flourish.zcml:109
+#: /src/schooltool/schoolyear/browser/flourish.zcml:146
+#: /src/schooltool/schoolyear/browser/flourish.zcml:198
+#: /src/schooltool/schoolyear/browser/schoolyear.py:711
+#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:8
+msgid "School Year"
+msgstr "Навчальний рік"
+
+#: /src/schooltool/group/browser/group.py:443
 msgid "Delete ${group}"
 msgstr ""
 
@@ -6311,12 +6434,8 @@ msgstr ""
 msgid "Reorder or Delete Levels"
 msgstr ""
 
-#: /src/schooltool/level/browser/level.py:51
-msgid "Add a level"
-msgstr ""
-
-#: /src/schooltool/level/browser/level.py:226
-#: /src/schooltool/level/browser/level.py:234
+#: /src/schooltool/level/browser/level.py:225
+#: /src/schooltool/level/browser/level.py:233
 msgid "Level information"
 msgstr ""
 
@@ -6349,10 +6468,6 @@ msgstr "Додати/Вилучити"
 #: /src/schooltool/level/security.zcml:19
 msgid "Modify/Rename"
 msgstr ""
-
-#: /src/schooltool/note/configure.zcml:68
-msgid "New Note"
-msgstr "Нова нотатка"
 
 #: /src/schooltool/note/interfaces.py:43
 msgid "Title of the note."
@@ -6417,18 +6532,6 @@ msgstr ""
 #: /src/schooltool/person/browser/person.py:543
 msgid "First name, last name or username"
 msgstr ""
-
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
-msgstr ""
-
-#: /src/schooltool/person/browser/f_person_filter.pt:26
-#: /src/schooltool/person/browser/person_filter.pt:5
-msgid "All groups"
-msgstr "Всі групи"
 
 #: /src/schooltool/person/browser/flourish.zcml:7
 msgid "Preferences"
@@ -6546,15 +6649,7 @@ msgstr "Повторіть пароль"
 msgid "Photo (in JPEG format)"
 msgstr "Фото (у форматі JPEG)"
 
-#: /src/schooltool/person/browser/person.py:546
-msgid "Passwords do not match!"
-msgstr "Пароль невірний!"
-
-#: /src/schooltool/person/browser/person.py:549
-msgid "This username is already used!"
-msgstr "Це ім'я користувача вже використовується!"
-
-#: /src/schooltool/person/browser/person.py:600
+#: /src/schooltool/person/browser/person.py:687
 msgid "New photo"
 msgstr "Нове фото"
 
@@ -6570,21 +6665,9 @@ msgstr "Вилучити фото"
 msgid "Check this to clear the photo"
 msgstr "Позначте, щоб видалити фото"
 
-#: /src/schooltool/person/browser/person.py:634
-msgid "Passwords do not match."
-msgstr "Паролі не збігаються."
-
-#: /src/schooltool/person/browser/person.py:638
-msgid "Password was successfully changed!"
-msgstr "Пароль був успішно змінений!"
-
 #: /src/schooltool/person/browser/person_edit.pt:4
 msgid "Edit person"
 msgstr "Редагувати особу"
-
-#: /src/schooltool/person/browser/person_edit.pt:20
-msgid "Change info for ${user}"
-msgstr "Змінити дані ${user}"
 
 #: /src/schooltool/person/browser/person_preferences.pt:3
 msgid "Edit person preferences"
@@ -6759,7 +6842,13 @@ msgid "${file_type} Reports"
 msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:96
-msgid "Resource Demographics"
+#: /src/schooltool/resource/browser/flourish.zcml:20
+#: /src/schooltool/resource/browser/flourish.zcml:29
+#: /src/schooltool/resource/browser/flourish.zcml:40
+#: /src/schooltool/resource/browser/flourish.zcml:339
+#: /src/schooltool/resource/browser/flourish.zcml:345
+#: /src/schooltool/resource/browser/resource.py:476
+msgid "Resource Attributes"
 msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:143
@@ -6768,23 +6857,18 @@ msgid "Import Resources"
 msgstr "Імпортувати ресурси"
 
 #: /src/schooltool/resource/browser/configure.zcml:286
-msgid "New Resource"
-msgstr "Новий ресурс"
+#: /src/schooltool/resource/browser/flourish.zcml:168
+msgid "Add Resource"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:300
-msgid "New Location"
-msgstr "Нове розташування"
+#: /src/schooltool/resource/browser/flourish.zcml:177
+msgid "Add Location"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:314
-msgid "New Equipment"
-msgstr "Нове обладнання"
-
-#: /src/schooltool/resource/browser/flourish.zcml:20
-#: /src/schooltool/resource/browser/flourish.zcml:29
-#: /src/schooltool/resource/browser/flourish.zcml:39
-#: /src/schooltool/resource/browser/flourish.zcml:309
-#: /src/schooltool/resource/browser/flourish.zcml:315
-msgid "Resource Attributes"
+#: /src/schooltool/resource/browser/flourish.zcml:186
+msgid "Add Equipment"
 msgstr ""
 
 #: /src/schooltool/resource/browser/flourish.zcml:124
@@ -6796,19 +6880,7 @@ msgstr ""
 msgid "Resource"
 msgstr "Ресурс"
 
-#: /src/schooltool/resource/browser/flourish.zcml:138
-msgid "Add Resource"
-msgstr ""
-
-#: /src/schooltool/resource/browser/flourish.zcml:147
-msgid "Add Location"
-msgstr ""
-
-#: /src/schooltool/resource/browser/flourish.zcml:156
-msgid "Add Equipment"
-msgstr ""
-
-#: /src/schooltool/resource/browser/flourish.zcml:208
+#: /src/schooltool/resource/browser/flourish.zcml:238
 msgid "Reserve"
 msgstr ""
 
@@ -6859,11 +6931,7 @@ msgstr ""
 msgid "Resource index"
 msgstr "Індекс ресурсів"
 
-#: /src/schooltool/resource/browser/resource.py:399
-msgid "Resource Demographics Container"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:406
+#: /src/schooltool/resource/browser/resource.py:483
 msgid "Res."
 msgstr ""
 
@@ -6895,11 +6963,7 @@ msgstr ""
 msgid "Resource identification"
 msgstr ""
 
-#: /src/schooltool/resource/browser/resource.py:687
-msgid "Resource demographics"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:695
+#: /src/schooltool/resource/browser/resource.py:758
 msgid "Add new resource"
 msgstr ""
 
@@ -6911,20 +6975,15 @@ msgstr ""
 msgid "Location identification"
 msgstr ""
 
-#: /src/schooltool/resource/browser/resource.py:725
-msgid "Location demographics"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:734
-msgid "Add new location"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:740
-#: /src/schooltool/resource/browser/resource.py:751
+#: /src/schooltool/resource/browser/resource.py:786
 msgid "Location attributes"
 msgstr ""
 
-#: /src/schooltool/resource/browser/resource.py:745
+#: /src/schooltool/resource/browser/resource.py:795
+msgid "Add new location"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:805
 msgid "Edit location"
 msgstr ""
 
@@ -6932,20 +6991,15 @@ msgstr ""
 msgid "Equipment identification"
 msgstr ""
 
-#: /src/schooltool/resource/browser/resource.py:764
-msgid "Equipment demographics"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:773
-msgid "Add new equipment"
-msgstr ""
-
-#: /src/schooltool/resource/browser/resource.py:779
-#: /src/schooltool/resource/browser/resource.py:790
+#: /src/schooltool/resource/browser/resource.py:823
 msgid "Equipment attributes"
 msgstr ""
 
-#: /src/schooltool/resource/browser/resource.py:784
+#: /src/schooltool/resource/browser/resource.py:832
+msgid "Add new equipment"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:842
 msgid "Edit equipment"
 msgstr ""
 
@@ -7582,24 +7636,24 @@ msgstr "Помилка сервера"
 msgid "Not Found"
 msgstr "Не знайдено"
 
-#: /src/schooltool/skin/flourish/templates/main.pt:82
+#: /src/schooltool/skin/flourish/templates/image_input.pt:11
+msgid "delete this image"
+msgstr ""
+
+#: /src/schooltool/skin/flourish/templates/main.pt:89
 msgid "server running"
 msgstr ""
 
-#: /src/schooltool/skin/flourish/templates/main.pt:91
+#: /src/schooltool/skin/flourish/templates/main.pt:98
 msgid "Supporting exceptional people to change the world."
 msgstr ""
 
-#: /src/schooltool/skin/flourish/templates/photo_input.pt:11
-msgid "delete this photo"
-msgstr ""
-
-#: /src/schooltool/skin/flourish/widgets.py:240
+#: /src/schooltool/skin/flourish/widgets.py:245
 msgid "The file uploaded is not a JPEG or PNG image"
 msgstr ""
 
-#: /src/schooltool/skin/flourish/widgets.py:243
-msgid "The image uploaded cannot be larger than 10 MB"
+#: /src/schooltool/skin/flourish/widgets.py:248
+msgid "The image uploaded cannot be larger than ${size} MB"
 msgstr ""
 
 #: /src/schooltool/skin/form.py:64
@@ -7677,25 +7731,7 @@ msgstr "Гаряча клавіша: Alt-U"
 msgid "U"
 msgstr "U"
 
-#. Default: "Update"
-#: /src/schooltool/skin/templates/view_macros.pt:152
-msgid "update-button"
-msgstr "Оновлення"
-
-#. Default: "Apply"
-#: /src/schooltool/skin/templates/view_macros.pt:158
-#: /src/schooltool/skin/templates/view_macros.pt:164
-msgid "apply-button"
-msgstr "Застосувати"
-
-#. Default: "Add"
-#: /src/schooltool/skin/templates/view_macros.pt:171
-#: /src/schooltool/skin/templates/view_macros.pt:177
-#: /src/schooltool/skin/templates/view_macros.pt:184
-msgid "add-button"
-msgstr "Додати"
-
-#: /src/schooltool/skin/templates/view_macros.pt:191
+#: /src/schooltool/skin/templates/view_macros.pt:186
 msgid "D"
 msgstr "D"
 
@@ -7915,8 +7951,8 @@ msgid ""
 "Click on a day to toggle its state. You can also toggle the days of a week:"
 msgstr ""
 
-#: /src/schooltool/term/browser/templates/f_terms.pt:29
-msgid "This year has no terms defined."
+#: /src/schooltool/term/browser/templates/f_terms.pt:5
+msgid "There are no terms."
 msgstr ""
 
 #: /src/schooltool/term/browser/templates/f_terms_related.pt:6
@@ -8016,6 +8052,10 @@ msgstr ""
 msgid "Add a new term to ${year_title}"
 msgstr ""
 
+#: /src/schooltool/term/interfaces.py:41
+msgid "An internal identifier of this term."
+msgstr ""
+
 #: /src/schooltool/term/term.py:313
 msgid "Term date is not in the school year."
 msgstr "Дата семестра по за навчальним роком."
@@ -8092,7 +8132,15 @@ msgstr ""
 msgid "Schedule Timetable"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/flourish.zcml:531
+#: /src/schooltool/timetable/browser/flourish.zcml:549
+msgid "Custom date range"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:563
+msgid "Term(s)"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/flourish.zcml:587
 msgid "Exception Days"
 msgstr ""
 
@@ -8152,6 +8200,12 @@ msgstr ""
 msgid "timetables"
 msgstr ""
 
+#: /src/schooltool/timetable/browser/templates/f_multi_schedule_periods_edit.pt:58
+#: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:45
+#: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:55
+msgid "Scheduled periods"
+msgstr ""
+
 #: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:3
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:36
 msgid "Nothing scheduled yet."
@@ -8176,11 +8230,6 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:8
 #: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:24
 msgid "Using timetable: ${timetable}"
-msgstr ""
-
-#: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:45
-#: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:55
-msgid "Scheduled periods"
 msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_specialday_change.pt:7
@@ -8441,7 +8490,16 @@ msgstr ""
 msgid "Schedule a school timetable"
 msgstr ""
 
-#: /src/schooltool/timetable/browser/timetable.py:555
+#: /src/schooltool/timetable/browser/timetable.py:521
+msgid "First term"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/timetable.py:526
+msgid "Last term"
+msgstr ""
+
+#: /src/schooltool/timetable/browser/timetable.py:678
+#: /src/schooltool/timetable/browser/timetable.py:821
 msgid "Save"
 msgstr "Зберегти"
 
