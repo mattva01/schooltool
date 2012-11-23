@@ -75,7 +75,7 @@ def addResource(title):
     manager = logInManager()
     manager.getLink('Manage').click()
     manager.getLink('Resources').click()
-    manager.getLink('New Resource').click()
+    manager.getLink('Add Resource').click()
     manager.getControl('Title').value = title
     manager.getControl('Add').click()
     manager.getLink('Resource', index=2).click()
@@ -88,7 +88,7 @@ def addCourse(title, schoolyear, description=""):
     manager.getLink('School Years').click()
     manager.getLink(schoolyear).click()
     manager.getLink('Courses').click()
-    manager.getLink('New Course').click()
+    manager.getLink('Add Course').click()
     manager.getControl('Title').value = title
     manager.getControl('Description').value = description
     manager.getControl('Add').click()
@@ -101,7 +101,7 @@ def addSection(course, schoolyear, term, title=None, instructors=[], members=[])
     manager.getLink(schoolyear).click()
     manager.getLink('Courses').click()
     manager.getLink(course).click()
-    manager.getLink('New Section').click()
+    manager.getLink('Add Section').click()
     manager.getControl('Starts in term').displayValue = [term]
     manager.getControl('Ends in term').displayValue = [term]
     manager.getControl('Add').click()
@@ -113,7 +113,7 @@ def addSection(course, schoolyear, term, title=None, instructors=[], members=[])
     manager.getLink(url=sorted(links)[-1]).click()
 
     if title is not None:
-        manager.getLink('edit info').click()
+        manager.getLink('Edit Info').click()
         manager.getControl('Title').value = title
         manager.getControl('Apply').click()
     manager.getLink('edit instructors').click()
@@ -234,7 +234,7 @@ def setUpTimetabling(username):
     # We will need a course:
 
     manager.open('http://localhost/schoolyears/2005-2006/courses')
-    manager.getLink('New Course').click()
+    manager.getLink('Add Course').click()
 
     addCourse('History 6', '2005-2006', 'History for the sixth class')
 

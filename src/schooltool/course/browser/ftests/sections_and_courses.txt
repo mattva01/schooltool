@@ -57,14 +57,14 @@ And now let's add a couple of courses:
     >>> manager.url
     'http://localhost/schoolyears/2005-2006/courses'
 
-    >>> manager.getLink('New Course').click()
+    >>> manager.getLink('Add Course').click()
     >>> manager.getControl('Title').value = "History"
     >>> manager.getControl('Add').click()
 
     >>> manager.url
     'http://localhost/schoolyears/2005-2006/courses'
 
-    >>> manager.getLink('New Course').click()
+    >>> manager.getLink('Add Course').click()
     >>> manager.getControl('Title').value = "English"
     >>> manager.getControl('Description').value = "English course description"
     >>> manager.getControl('Course ID').value = "english"
@@ -95,7 +95,7 @@ Now let's add some sections for our courses:
       4.5
     </p>
 
-    >>> manager.getLink('New Section').click()
+    >>> manager.getLink('Add Section').click()
     >>> manager.getControl('Starts in term').displayValue = ['Fall']
     >>> manager.getControl('Ends in term').displayValue = ['Fall']
     >>> manager.getControl('Add').click()
@@ -103,7 +103,7 @@ Now let's add some sections for our courses:
     >>> manager.url
     'http://localhost/schoolyears/2005-2006/courses/english'
 
-    >>> manager.getLink('New Section').click()
+    >>> manager.getLink('Add Section').click()
     >>> manager.getControl('Starts in term').displayValue = ['Spring']
     >>> manager.getControl('Ends in term').displayValue = ['Spring']
     >>> manager.getControl('Add').click()
@@ -180,7 +180,7 @@ view.
     >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('Spring').click()
     >>> manager.getLink('Sections').click()
-    >>> manager.getLink('New Section').click()
+    >>> manager.getLink('Add Section').click()
 
 Note that Spring term is pre-selected, but a course is not.
 

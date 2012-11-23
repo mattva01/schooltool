@@ -29,7 +29,7 @@ Now let's add a couple of courses to it:
     >>> manager.getLink('2005-2006').click()
     >>> manager.getLink('Courses').click()
 
-    >>> manager.getLink('New Course').click()
+    >>> manager.getLink('Add Course').click()
     >>> manager.getControl('Title').value = 'History 5'
     >>> manager.getControl('Description').value = 'History course for fifth-graders'
     >>> manager.getControl('Course ID').value = 'history-local'
@@ -37,7 +37,7 @@ Now let's add a couple of courses to it:
     >>> manager.getControl('Credits').value = '5'
     >>> manager.getControl('Add').click()
 
-    >>> manager.getLink('New Course').click()
+    >>> manager.getLink('Add Course').click()
     >>> manager.getControl('Title').value = 'English 6'
     >>> manager.getControl('Description').value = 'English course for sixth-graders'
     >>> manager.getControl('Credits').value = '0.5'

@@ -41,8 +41,7 @@
   <describe_action
      group="schooltool.contact" name="manage_contacts"
      title="Manage user's contacts"
-     description="Assign / remove contacts of a user,
-                  define user's relationship with a contact."
+     description="Assign / remove contacts of a user, define user's relationship with a contact."
      order="20"
      interface="schooltool.person.interfaces.IPerson"
      permission="schooltool.edit"

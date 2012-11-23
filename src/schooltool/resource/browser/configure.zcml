@@ -101,7 +101,7 @@
       class="schooltool.skin.skin.NavigationViewlet"
       permission="schooltool.edit"
       link="resource_demographics"
-      title="Resource Demographics"
+      title="Resource Attributes"
       order="65"
       />
 
@@ -285,7 +285,7 @@
 
   <menuItem
       menu="schooltool_actions"
-      title="New Resource"
+      title="Add Resource"
       for="schooltool.resource.interfaces.IResourceContainer"
       action="addResource.html"
       permission="schooltool.edit"
@@ -299,7 +299,7 @@
       />
   <menuItem
       menu="schooltool_actions"
-      title="New Location"
+      title="Add Location"
       for="schooltool.resource.interfaces.IResourceContainer"
       action="addLocation.html"
       permission="schooltool.edit"
@@ -313,7 +313,7 @@
       />
   <menuItem
       menu="schooltool_actions"
-      title="New Equipment"
+      title="Add Equipment"
       for="schooltool.resource.interfaces.IResourceContainer"
       action="addEquipment.html"
       permission="schooltool.edit"

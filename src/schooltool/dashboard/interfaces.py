@@ -42,12 +42,10 @@ class IDashboardCategory(interfaces.IViewlet):
 
     title = zope.schema.TextLine(
         title=_("Title"),
-        description=_("Category Title."),
         required=True)
 
     weight = zope.schema.Int(
         title=_("Weight"),
-        description=_("Weight"),
         required=True,
         default=100)
 

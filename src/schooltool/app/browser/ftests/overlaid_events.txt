@@ -22,7 +22,7 @@ Now lets create a resource that can be booked:
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Resources').click()
 
-    >>> manager.getLink('New Resource').click()
+    >>> manager.getLink('Add Resource').click()
     >>> manager.getControl('Title').value = 'Mug'
     >>> manager.getControl('Add').click()
 

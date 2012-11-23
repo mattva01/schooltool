@@ -21,7 +21,7 @@
         />
 
     <addform
-        label="Add a Group"
+        label="Add Group"
         name="addSchoolToolGroup.html"
         schema="schooltool.group.interfaces.IGroup"
         fields="title description"
@@ -114,7 +114,7 @@
       template="templates/group-member-csvimport.pt"
       permission="schooltool.edit"
       menu="schooltool_actions"
-      title="Import Groups Members"
+      title="Import Members CSV"
       />
 
   <zope:adapter

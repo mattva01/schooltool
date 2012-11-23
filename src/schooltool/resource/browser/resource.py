@@ -473,7 +473,7 @@ class ResourceDemographicsFieldsAbsoluteURLAdapter(BrowserView):
 
 class ResourceDemographicsView(DemographicsView):
 
-    title = _('Resource Demographics Container')
+    title = _('Resource Attributes')
 
 
 class FlourishResourceDemographicsView(FlourishDemographicsView):
@@ -752,7 +752,7 @@ class BaseResourceForm(object):
     base_id = 'base-data'
     base_legend = _('Resource identification')
     demo_id = 'demo-data'
-    demo_legend = _('Resource demographics')
+    demo_legend = _('Resource attributes')
 
     def getBaseFields(self):
         return field.Fields(IResource).omit('type', 'notes')
@@ -765,8 +765,7 @@ class ResourceAddView(BaseResourceForm, BaseResourceAddView):
 
 
 class FlourishResourceAddView(BaseFlourishResourceAddForm, ResourceAddView):
-
-    demo_legend = _('Resource attributes')
+    pass
 
 
 class ResourceEditView(BaseResourceForm, BaseResourceEditView):
@@ -777,7 +776,6 @@ class ResourceEditView(BaseResourceForm, BaseResourceEditView):
 class FlourishResourceEditView(flourish.page.Page, ResourceEditView):
 
     label = None
-    demo_legend = _('Resource attributes')
 
     def update(self):
         ResourceEditView.update(self)
@@ -790,7 +788,7 @@ class BaseLocationForm(object):
     base_id = 'base-data'
     base_legend = _('Location identification')
     demo_id = 'demo-data'
-    demo_legend = _('Location demographics')
+    demo_legend = _('Location attributes')
 
     def getBaseFields(self):
         fields = field.Fields(ILocation).select('title', 'description')
@@ -804,8 +802,7 @@ class LocationAddView(BaseLocationForm, BaseResourceAddView):
 
 
 class FlourishLocationAddView(BaseFlourishResourceAddForm, LocationAddView):
-
-    demo_legend = _('Location attributes')
+    pass
 
 
 class LocationEditView(BaseLocationForm, BaseResourceEditView):
@@ -816,7 +813,6 @@ class LocationEditView(BaseLocationForm, BaseResourceEditView):
 class FlourishLocationEditView(flourish.page.Page, LocationEditView):
 
     label = None
-    demo_legend = _('Location attributes')
 
     def update(self):
         LocationEditView.update(self)
@@ -829,7 +825,7 @@ class BaseEquipmentForm(object):
     base_id = 'base-data'
     base_legend = _('Equipment identification')
     demo_id = 'demo-data'
-    demo_legend = _('Equipment demographics')
+    demo_legend = _('Equipment attributes')
 
     def getBaseFields(self):
         fields = field.Fields(IEquipment).select('title', 'description')
@@ -843,8 +839,7 @@ class EquipmentAddView(BaseEquipmentForm, BaseResourceAddView):
 
 
 class FlourishEquipmentAddView(BaseFlourishResourceAddForm, EquipmentAddView):
-
-    demo_legend = _('Equipment attributes')
+    pass
 
 
 class EquipmentEditView(BaseEquipmentForm, BaseResourceEditView):
@@ -855,7 +850,6 @@ class EquipmentEditView(BaseEquipmentForm, BaseResourceEditView):
 class FlourishEquipmentEditView(flourish.page.Page, EquipmentEditView):
 
     label = None
-    demo_legend = _('Equipment attributes')
 
     def update(self):
         EquipmentEditView.update(self)

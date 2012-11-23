@@ -167,7 +167,7 @@ def doctest_PersonEditView():
 
         >>> view.update()
         >>> view.message
-        u'Password was successfully changed!'
+        u'Password changed successfully'
         >>> person.checkPassword('bar')
         True
 
@@ -182,7 +182,7 @@ def doctest_PersonEditView():
 
         >>> view.update()
         >>> view.error
-        u'Passwords do not match.'
+        u'Passwords do not match'
 
     If the form contains errors, it is redisplayed
 
@@ -298,7 +298,7 @@ def doctest_PersonAddView():
         >>> view.update()
         u'An error occurred.'
         >>> view.error
-        u'This username is already used!'
+        u'This username is already in use'
 
     Let's try to add user with different password and verify_password fields:
 
@@ -312,7 +312,7 @@ def doctest_PersonAddView():
         >>> view.update()
         u'An error occurred.'
         >>> view.error
-        u'Passwords do not match!'
+        u'Passwords do not match'
         >>> 'coo' in pc
         False
 
