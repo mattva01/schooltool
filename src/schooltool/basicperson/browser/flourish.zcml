@@ -652,6 +652,17 @@
       link="request_person_id_card_pdf.html"
       />
 
+  <report:reportLink
+      name="student_profile_pdf"
+      for="schooltool.person.interfaces.IPerson"
+      permission="schooltool.view"
+      group="Person"
+      description="Person profile, contacts, groups, etc."
+      title="Profile"
+      file_type="pdf"
+      link="request_student_profile_pdf.html"
+      />
+
   <flourish:page
       name="person_export.xml"
       for="schooltool.person.interfaces.IPerson"
@@ -673,10 +684,33 @@
       permission="schooltool.edit"
       />
 
+  <flourish:pdf
+      name="student_profile.pdf"
+      for="schooltool.person.interfaces.IPerson"
+      class=".person.StudentProfilePDF"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="general_info"
+      for="schooltool.person.interfaces.IPerson"
+      manager="schooltool.skin.flourish.report.PDFStory"
+      view=".person.StudentProfilePDF"
+      class=".person.ProfileGeneralPart"
+      permission="schooltool.view"
+      />
+
   <flourish:page
       name="request_person_id_card_pdf.html"
       for="schooltool.person.interfaces.IPerson"
       class=".person.FlourishRequestPersonIDCardView"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="request_student_profile_pdf.html"
+      for="schooltool.person.interfaces.IPerson"
+      class=".person.FlourishRequestStudentProfileView"
       permission="schooltool.edit"
       />
 
