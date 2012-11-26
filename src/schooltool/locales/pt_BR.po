@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-11-20 18:47+0200\n"
-"PO-Revision-Date: 2012-11-21 13:23+0000\n"
-"Last-Translator: Rafael Neri <Unknown>\n"
+"PO-Revision-Date: 2012-11-24 23:52+0000\n"
+"Last-Translator: Adriano Steffler <Unknown>\n"
 "Language-Team: Portuguese (Brazil) <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-22 05:23+0000\n"
+"X-Launchpad-Export-Date: 2012-11-25 06:48+0000\n"
 "X-Generator: Launchpad (build 16293)\n"
 "Language: \n"
 "X-Rosetta-Version: 0.1\n"
@@ -1238,9 +1238,9 @@ msgstr "Calendários mostrados"
 #: /src/schooltool/app/browser/flourish.zcml:737
 #: /src/schooltool/app/browser/flourish.zcml:747
 msgid "School Logo"
-msgstr ""
+msgstr "Logotipo da escola"
 
-#: /src/schooltool/app/browser/overlay.py:220
+#: /src/schooltool/app/browser/overlay.py:217
 msgid "Saved changes."
 msgstr "Modificações salvas."
 
@@ -2862,9 +2862,9 @@ msgstr ""
 
 #: /src/schooltool/app/interfaces.py:143
 msgid "School logo"
-msgstr ""
+msgstr "Logotipo da escola"
 
-#: /src/schooltool/app/main.py:305
+#: /src/schooltool/app/main.py:314
 msgid "Going to background, daemon pid %d"
 msgstr "Indo para background, o número de processo do daemon é %d"
 
@@ -2892,8 +2892,21 @@ msgid ""
 "'password'\n"
 "                         is '-')\n"
 msgstr ""
+"\n"
+"Utilização: %s [opções]\n"
+"Opções:\n"
+"  -c, --config xxx utiliza este arquivo de configuração no lugar do arquivo "
+"padrão\n"
+"  -h, --help exibe esta mensagem de ajuda\n"
+"  -d, --daemon coloca em plano de fundo depois de iniciar\n"
+"  --pack empacota o banco de dados\n"
+"  -r, --restore-manager senha\n"
+"                         restaura o usuário do gerente com a senha "
+"fornecida\n"
+"                         (lê a senha da entrada padrão se a \"senha\" for \"-"
+"\")\n"
 
-#: /src/schooltool/app/main.py:528
+#: /src/schooltool/app/main.py:536
 msgid "%s: daemon mode not supported on your operating system."
 msgstr "%s: modo daemon não suportado pelo seu sistema operacional"
 
@@ -4388,13 +4401,13 @@ msgid ""
 msgstr ""
 "Todos os usuários do SchoolTool tem informações de contato, o que inclue "
 "endereço residencial, número de telefone, endereço de e-mail, etc.\n"
-"\"Contatos Externos\" podem ser criados - pessoas que não são usuários "
-"do sistema SchoolTool, mas que podem necessitar de receber avisos e "
-"informações sobre o aluno ou sobre a escola como um todo."
+"\"Contatos Externos\" podem ser criados - pessoas que não são usuários do "
+"sistema SchoolTool, mas que podem necessitar de receber avisos e informações "
+"sobre o aluno ou sobre a escola como um todo."
 
-#: /src/schooltool/contact/contact.py:220
-#: /src/schooltool/course/browser/flourish.zcml:424
-#: /src/schooltool/course/browser/section.py:561
+#: /src/schooltool/contact/contact.py:202
+#: /src/schooltool/course/browser/flourish.zcml:293
+#: /src/schooltool/course/browser/section.py:555
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:72
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:66
@@ -4753,9 +4766,11 @@ msgstr "Título da turma"
 msgid ""
 "If no title is specified, one will be created based on the course title."
 msgstr ""
+"Se nenhum título for especificado, será criado um com base no título do "
+"curso."
 
-#: /src/schooltool/course/browser/section.py:1295
-#: /src/schooltool/course/browser/section.py:1517
+#: /src/schooltool/course/browser/section.py:1121
+#: /src/schooltool/course/browser/section.py:1272
 msgid "Section Information"
 msgstr "Informação da turma"
 
@@ -4770,8 +4785,10 @@ msgstr "Selecione um curso"
 #: /src/schooltool/course/browser/section.py:1470
 msgid "Additional locations can be added via the section view."
 msgstr ""
+"Localizações adicionais podem ser acrescentadas por meio da visualização de "
+"turmas"
 
-#: /src/schooltool/course/browser/section.py:1580
+#: /src/schooltool/course/browser/section.py:1309
 msgid "Current instructors"
 msgstr "Instrutores atuais"
 
@@ -5919,9 +5936,9 @@ msgstr ""
 
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School Export"
-msgstr ""
+msgstr "Exportação da escola"
 
-#: /src/schooltool/export/importer.py:79
+#: /src/schooltool/export/importer.py:77
 msgid "is not a valid integer"
 msgstr "não é um inteiro válido"
 
@@ -6180,9 +6197,11 @@ msgid ""
 "You do not have to import all worksheets at the same time. You can import "
 "individual worksheets sequentially."
 msgstr ""
+"Você não precisa importar todas as planilhas eletrônicas ao mesmo tempo. "
+"Você pode importar planilhas eletrônicas individuais sequencialmente."
 
-#: /src/schooltool/export/templates/f_import_related.pt:23
-#: /src/schooltool/export/templates/import.pt:45
+#: /src/schooltool/export/templates/f_import_related.pt:19
+#: /src/schooltool/export/templates/import.pt:50
 msgid ""
 "For people interested in testing and exploring SchoolTool, we provide a set "
 "of sample data: ${link-to-sample-data-file}."
@@ -7773,9 +7792,9 @@ msgstr "Não Encontrado"
 
 #: /src/schooltool/skin/flourish/templates/image_input.pt:11
 msgid "delete this image"
-msgstr ""
+msgstr "excluir esta imagem"
 
-#: /src/schooltool/skin/flourish/templates/main.pt:89
+#: /src/schooltool/skin/flourish/templates/main.pt:82
 msgid "server running"
 msgstr "servidor em funcionamento"
 
@@ -7789,7 +7808,7 @@ msgstr "O arquivo enviado não é uma imagem JPEG ou PNG"
 
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
-msgstr ""
+msgstr "A imagem a ser upada não pode ser maior do que ${size} MB"
 
 #: /src/schooltool/skin/form.py:64
 msgid "No changes"
@@ -8282,13 +8301,13 @@ msgstr "Modelo de cronograma"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:549
 msgid "Custom date range"
-msgstr ""
+msgstr "Intervalo de dados personalizado"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:563
 msgid "Term(s)"
-msgstr ""
+msgstr "Trimestre(s)"
 
-#: /src/schooltool/timetable/browser/flourish.zcml:587
+#: /src/schooltool/timetable/browser/flourish.zcml:531
 msgid "Exception Days"
 msgstr "Dias de exceção"
 
@@ -8661,11 +8680,11 @@ msgstr "Agendar uma grade de horários da escola"
 
 #: /src/schooltool/timetable/browser/timetable.py:521
 msgid "First term"
-msgstr ""
+msgstr "Primeiro trimestre"
 
 #: /src/schooltool/timetable/browser/timetable.py:526
 msgid "Last term"
-msgstr ""
+msgstr "Último trimestre"
 
 #: /src/schooltool/timetable/browser/timetable.py:678
 #: /src/schooltool/timetable/browser/timetable.py:821

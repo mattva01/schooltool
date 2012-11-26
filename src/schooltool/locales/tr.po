@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-11-20 18:47+0200\n"
-"PO-Revision-Date: 2012-10-22 08:04+0000\n"
-"Last-Translator: Kaya Zeren <Unknown>\n"
+"PO-Revision-Date: 2012-11-23 16:37+0000\n"
+"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-21 05:08+0000\n"
+"X-Launchpad-Export-Date: 2012-11-24 07:32+0000\n"
 "X-Generator: Launchpad (build 16293)\n"
 "Language: tr\n"
 "X-Rosetta-Version: 0.1\n"
@@ -4382,14 +4382,14 @@ msgid ""
 "but may need to recieve notifications and information about the student or "
 "the school as a whole."
 msgstr ""
-"Tüm SchoolTool kullanıcılarının ev adresi, telefon numarası, e-posta "
-"adresi vb iletişim bilgileri bulunur.\n"
-"\"Dışarıdan kişiler\" SchoolTool kullanıcısı olmadığı halde, öğrenci ya "
-"da okul hakkındaki bilgi ve uyarıları alması gerekebilen kişilerdir."
+"Tüm SchoolTool kullanıcılarının ev adresi, telefon numarası, e-posta adresi "
+"vb iletişim bilgileri bulunur.\n"
+"\"Dışarıdan kişiler\" SchoolTool kullanıcısı olmadığı halde, öğrenci ya da "
+"okul hakkındaki bilgi ve uyarıları alması gerekebilen kişilerdir."
 
-#: /src/schooltool/contact/contact.py:220
-#: /src/schooltool/course/browser/flourish.zcml:424
-#: /src/schooltool/course/browser/section.py:561
+#: /src/schooltool/contact/contact.py:202
+#: /src/schooltool/course/browser/flourish.zcml:293
+#: /src/schooltool/course/browser/section.py:555
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:72
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:66
