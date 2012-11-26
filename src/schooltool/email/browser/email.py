@@ -250,7 +250,7 @@ class PasswordsMatchValidator(validator.SimpleFieldValidator):
             raise PasswordsDontMatch(value)
 
 
-class FlourishPasswordsMatchValidator(validator.SimpleFieldValidator):
+class FlourishPasswordsMatchValidator(PasswordsMatchValidator):
     pass
 
 
