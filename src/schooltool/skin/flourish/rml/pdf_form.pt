@@ -4,7 +4,7 @@
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     i18n:domain="schooltool">
 
-  <blockTable style="table.form" colWidths="50% 50%" alignment="left">
+  <blockTable style="table.form" colWidths="25% 75%" alignment="left">
     <tal:block repeat="widget view/widgets/values"
                content="structure widget/schooltool:content/row" />
   </blockTable>

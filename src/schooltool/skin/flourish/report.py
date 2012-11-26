@@ -704,10 +704,10 @@ class PDFPage2RML(BrowserView):
 class Image2RML(BrowserView):
 
     template = templates.Inline('''
-      <tal:block tal:xmlns="http://xml.zope.org/namespaces/tal"
+      <tal:block xmlns:tal="http://xml.zope.org/namespaces/tal"
         ><imageAndFlowables tal:attributes="imageName context/@@data_uri"
-        ></imageAndFlowables>
-      </tal:block>
+        ></imageAndFlowables
+      ></tal:block>
     ''', content_type="text/xml")
 
     def __call__(self, *args, **kw):
