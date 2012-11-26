@@ -97,9 +97,9 @@ class IndexedFilterWidget(FilterWidget):
 
     search_index = 'title'
 
-    @property
+    @Lazy
     def catalog(self):
-        return self.manager.catalog
+        return ICatalog(self.source)
 
     def filter(self, items):
         index = self.catalog[self.search_index]
