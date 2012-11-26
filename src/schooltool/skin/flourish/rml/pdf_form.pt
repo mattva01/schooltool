@@ -1,0 +1,12 @@
+<tal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+
+  <blockTable style="table.form" colWidths="50% 50%" alignment="left">
+    <tal:block repeat="widget view/widgets/values"
+               content="structure widget/schooltool:content/row" />
+  </blockTable>
+
+</tal:block>

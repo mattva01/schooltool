@@ -19,8 +19,10 @@
 """
 SchoolTool report pages.
 """
-import urllib
+import cgi
 import datetime
+import re
+import urllib
 
 try:
     import Image
@@ -31,10 +33,12 @@ from reportlab.lib import units, pagesizes
 
 import zope.component
 import zope.location
+import z3c.form.browser
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
 from zope.interface import implements, Interface
 from zope.i18n import translate
+from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
 from z3c.rml import rml2pdf
 
@@ -42,7 +46,9 @@ from schooltool.app import pdf
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common import getResourceURL
+from schooltool.skin.flourish import content
 from schooltool.skin.flourish import interfaces
+from schooltool.skin.flourish import form
 from schooltool.skin.flourish import page
 from schooltool.skin.flourish import viewlet
 from schooltool.skin.flourish import templates
@@ -156,7 +162,6 @@ class PDFPage(page.PageBase):
         data = self.renderPDF(rml)
 
         return data
-
 
 
 class IPlainPDFPage(interfaces.IPDFPage):
@@ -567,7 +572,143 @@ class PlainPageTemplateSlots(PageTemplateSlots):
 
 
 class PDFPart(viewlet.Viewlet):
+    implements(interfaces.IPDFPart)
 
     @property
     def templates(self):
         return self.view.providers.get('template')
+
+
+class RMLWidgetRows(content.ContentProvider):
+    implements(interfaces.IRMLTemplated)
+
+    @property
+    def hidden(self):
+        return self.context.mode == 'hidden' or not self.context.value
+
+    def rows(self):
+        return [self.context]
+
+
+class RMLMultiWidgetRows(RMLWidgetRows):
+
+    def rows(self):
+        result = []
+        for widget in self.context.widgets:
+            row = content.queryContentProvider(
+                widget, self.request, self.view, self.__name__)
+            if row is not None:
+                result.extend(row.rows())
+        return result
+
+
+class PDFForm(PDFPart, form.DisplayForm):
+    template = templates.XMLFile('rml/pdf_form.pt')
+
+    def update(self):
+        form.DisplayForm.update(self)
+        PDFPart.update(self)
+
+    def render(self, *args, **kw):
+        return form.DisplayForm.render(self, *args, **kw)
+
+
+def text2rml(snippet):
+    if not snippet:
+        return snippet
+    rml = unicode(snippet)
+    paragraphs = filter(None, [p.strip() for p in snippet.splitlines()])
+    if len(paragraphs) > 1:
+        rml = '<para>'+'</para>\n<para>'.join(paragraphs)+'</para>'
+    else:
+        rml = ''.join(paragraphs)
+    return rml
+
+
+html_tags_valid_in_rml_re = re.compile(
+    r'&lt;(/?((strong)|(b)|(em)|(i)))&gt;')
+
+html_p_tag_re = re.compile(r'</?p[^>]*>')
+html_br_tag_re = re.compile(r'</?br[^>]*>')
+
+def html2rml(snippet):
+    if not snippet:
+        return snippet
+    snippet = unicode(snippet)
+    paragraphs = []
+    tokens = []
+    for token in html_p_tag_re.split(snippet):
+        if not token or token.isspace():
+            continue
+        tokens.extend(html_br_tag_re.split(token))
+    for token in tokens:
+        if not token or token.isspace():
+            continue
+        # Reportlab is very sensitive to unknown tags and escaped symbols.
+        # In case of invalid HTML, try to provide correct escaping.
+        fixed_escaping = cgi.escape(token)
+        # Unescape some of the tags which are also valid in Reportlab
+        valid_text = html_tags_valid_in_rml_re.sub(u'<\g<1>>', fixed_escaping)
+        paragraphs.append(valid_text)
+    paragraphs = filter(None, [p.strip() for p in paragraphs])
+    if len(paragraphs) > 1:
+        rml = '<para>'+'</para>\n<para>'.join(paragraphs)+'</para>'
+    else:
+        rml = ''.join(paragraphs)
+    return rml
+
+
+class Text2RML(BrowserView):
+    """Formats the date using the 'full' format"""
+
+    def __call__(self):
+        text = self.context
+        if not text:
+            return text
+        snippet = translate(text, context=self.request)
+        rml = text2rml(snippet)
+        return rml
+
+
+class HTML2RML(BrowserView):
+    """Formats the date using the 'full' format"""
+
+    def unescape_FCKEditor_HTML(self, text):
+        text = text.replace(u'&amp;', u'&')
+        text = text.replace(u'&lt;', u'<')
+        text = text.replace(u'&gt;', u'>')
+        text = text.replace(u'&quot;', u'"')
+        text = text.replace(u'&#39;', u"'")
+        text = text.replace(u'&rsquo;', u"'")
+        text = text.replace(u'&nbsp;', u' ')
+        return text
+
+    def __call__(self):
+        text = self.context
+        if not text:
+            return text
+        snippet = translate(text, context=self.request)
+        unfcked = self.unescape_FCKEditor_HTML(snippet)
+        rml = html2rml(unfcked)
+        return rml
+
+
+class PDFPage2RML(BrowserView):
+
+    def __call__(self):
+        self.context.update()
+        rml = self.context.render()
+        return rml
+
+
+class Image2RML(BrowserView):
+
+    template = templates.Inline('''
+      <tal:block tal:xmlns="http://xml.zope.org/namespaces/tal"
+        ><imageAndFlowables tal:attributes="imageName context/@@data_uri"
+        ></imageAndFlowables>
+      </tal:block>
+    ''', content_type="text/xml")
+
+    def __call__(self, *args, **kw):
+        return self.template()

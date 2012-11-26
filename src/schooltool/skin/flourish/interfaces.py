@@ -129,10 +129,22 @@ class IPage(IPageBase):
     content_template = Attribute(
         u"Template that renders the main content.")
 
+
 IPage.setTaggedValue('flourish.template_content_type', 'html')
 
 
-class IPDFPage(IPageBase):
+class IRMLTemplated(Interface):
+
+    template = Attribute("""The template, renders RML""")
+
+    def render(*args, **kw):
+        """Render the RML."""
+
+
+IRMLTemplated.setTaggedValue('flourish.template_content_type', 'xml')
+
+
+class IPDFPage(IRMLTemplated, IPageBase):
 
     title = zope.schema.TextLine(
         title=u"PDF title", required=False)
@@ -160,7 +172,15 @@ class IPDFPage(IPageBase):
     content_template = Attribute(
         u"Template that renders the main content.")
 
+
 IPDFPage.setTaggedValue('flourish.template_content_type', 'xml')
+
+
+class IPDFPart(IRMLTemplated, IViewlet):
+    """A viewlet for RML."""
+
+
+IPDFPart.setTaggedValue('flourish.template_content_type', 'xml')
 
 
 class ITemplateSlots(ILocation):

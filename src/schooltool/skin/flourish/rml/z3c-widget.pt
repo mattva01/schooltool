@@ -1,0 +1,4 @@
+<tal:block xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:tal="http://xml.zope.org/namespaces/tal"
+><tal:block condition="view/value" content="structure view/value/@@rml"
+/></tal:block>
