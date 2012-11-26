@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-11-20 18:47+0200\n"
-"PO-Revision-Date: 2012-06-28 21:27+0000\n"
+"PO-Revision-Date: 2012-11-23 16:30+0000\n"
 "Last-Translator: Aleksi Kinnunen <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-21 05:03+0000\n"
+"X-Launchpad-Export-Date: 2012-11-24 07:28+0000\n"
 "X-Generator: Launchpad (build 16293)\n"
 "Language: fi\n"
 "X-Rosetta-Version: 0.1\n"
@@ -2698,7 +2698,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:460
 msgid "First term ${first} starts after last term ${last}."
-msgstr ""
+msgstr "Ensimmäinen jakso ${first} alkaa ennen viimeistä jaksoa ${last}."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:497
 msgid "Error in timetable CSV data, line ${line_no}"
@@ -6126,7 +6126,7 @@ msgstr ""
 #: /src/schooltool/group/browser/group.py:555
 #: /src/schooltool/group/browser/group.py:649
 msgid "Groups for ${schoolyear}"
-msgstr ""
+msgstr "${schoolyear}: Ryhmät"
 
 #: /src/schooltool/group/browser/group.py:531
 #: /src/schooltool/group/browser/templates/f_group_filter.pt:6
@@ -7405,7 +7405,7 @@ msgstr "Kirjautumishallinnointi"
 
 #: /src/schooltool/securitypolicy/browser/control.py:106
 msgid "School administration"
-msgstr "Hallintohenkilöstö"
+msgstr "Koulun ylläpitäjät"
 
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:31
@@ -7615,6 +7615,8 @@ msgid ""
 "&copy; The <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworth "
 "Foundation</a> 2003 - 2011: Supporting Social Innovation."
 msgstr ""
+"&copy; <a href=\"http://www.shuttleworthfoundation.org\">Shuttleworthin "
+"säätiö</a> 2003 - 2012: Tukemassa sosiaalisia innovaatioita."
 
 #: /src/schooltool/skin/templates/view_macros.pt:129
 msgid ""

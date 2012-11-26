@@ -3,13 +3,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: schooltool-developers@lists.launchpad.net\n"
 "POT-Creation-Date: 2012-11-20 18:47+0200\n"
-"PO-Revision-Date: 2012-11-20 22:29+0000\n"
+"PO-Revision-Date: 2012-11-23 22:13+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Traditional Chinese <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-21 05:09+0000\n"
+"X-Launchpad-Export-Date: 2012-11-24 07:33+0000\n"
 "X-Generator: Launchpad (build 16293)\n"
 "Language: zh\n"
 
@@ -4222,14 +4222,12 @@ msgid ""
 "but may need to recieve notifications and information about the student or "
 "the school as a whole."
 msgstr ""
-"所有SchoolTool的用戶都有其聯絡訊息，包括住宅地址、"
-"電話、電郵等等。\n"
-"您也可以建立所謂的\"外部聯絡人\"─他們不是SchoolTool用戶，"
-"但也可能要收到關於學生或整所學校的通知和訊息。"
+"所有SchoolTool的用戶都有其聯絡訊息，包括住宅地址、電話、電郵等等。\n"
+"您也可以建立所謂的\"外部聯絡人\"─他們不是SchoolTool用戶，但也可能要收到關於學生或整所學校的通知和訊息。"
 
-#: /src/schooltool/contact/contact.py:220
-#: /src/schooltool/course/browser/flourish.zcml:424
-#: /src/schooltool/course/browser/section.py:561
+#: /src/schooltool/contact/contact.py:202
+#: /src/schooltool/course/browser/flourish.zcml:293
+#: /src/schooltool/course/browser/section.py:555
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:72
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:66

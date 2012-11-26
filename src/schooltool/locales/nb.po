@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-11-20 18:47+0200\n"
-"PO-Revision-Date: 2012-11-20 22:31+0000\n"
-"Last-Translator: Daniel Landsverk <daniel@landsverk.info>\n"
+"PO-Revision-Date: 2012-11-23 16:26+0000\n"
+"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Norwegian Bokmål <nb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-21 05:06+0000\n"
+"X-Launchpad-Export-Date: 2012-11-24 07:30+0000\n"
 "X-Generator: Launchpad (build 16293)\n"
 "Language: \n"
 "X-Rosetta-Version: 0.1\n"
@@ -1204,7 +1204,7 @@ msgstr "Tilpass"
 #: /src/schooltool/group/browser/templates/f_group_view.pt:90
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:75
 msgid "Responsible parties"
-msgstr ""
+msgstr "Ansvarlige parter"
 
 #: /src/schooltool/app/browser/flourish.zcml:492
 msgid "Information"
@@ -4369,11 +4369,9 @@ msgstr ""
 #: /src/schooltool/contact/security.zcml:86
 #: /src/schooltool/person/security.zcml:147
 msgid "The user himself."
-msgstr ""
+msgstr "Brukeren selv."
 
-#: /src/schooltool/course/browser/configure.zcml:10
-#: /src/schooltool/course/browser/configure.zcml:96
-#: /src/schooltool/course/browser/flourish.zcml:270
+#: /src/schooltool/course/browser/flourish.zcml:200
 msgid "Add Course"
 msgstr ""
 

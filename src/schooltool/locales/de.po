@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-11-20 18:47+0200\n"
-"PO-Revision-Date: 2012-11-19 15:04+0000\n"
+"PO-Revision-Date: 2012-11-24 08:08+0000\n"
 "Last-Translator: baeus <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-21 05:04+0000\n"
+"X-Launchpad-Export-Date: 2012-11-25 06:47+0000\n"
 "X-Generator: Launchpad (build 16293)\n"
 "Language: de\n"
 "X-Rosetta-Version: 0.1\n"
@@ -8571,11 +8571,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/timetable.py:521
 msgid "First term"
-msgstr ""
+msgstr "Erste Periode"
 
 #: /src/schooltool/timetable/browser/timetable.py:526
 msgid "Last term"
-msgstr ""
+msgstr "Letzte Periode"
 
 #: /src/schooltool/timetable/browser/timetable.py:678
 #: /src/schooltool/timetable/browser/timetable.py:821
