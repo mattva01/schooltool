@@ -106,6 +106,19 @@ class RMLTable(flourish.content.ContentProvider):
         for item in items:
             yield item
 
+    def getRMLId(self, prefix=''):
+        parent = self.__parent__
+        parents = []
+        while (parent is not None and
+               flourish.interfaces.IPDFPage.providedBy(parent)):
+            name = getattr(parent, '__name__', None)
+            parents.append(str(name))
+            parent = parent.__parent__
+        name_list = ([str(self.__name__)] +
+                     parents[:-1] +
+                     [prefix])
+        return flourish.page.sanitize_id('-'.join(reversed(name_list)))
+
     def render(self):
         columns = self.getColumns()
         rml_columns = self.getRMLColumns(columns)
@@ -130,10 +143,11 @@ class RMLTable(flourish.content.ContentProvider):
         styles = [
             dict([('start', pos[0]), ('stop', pos[1])] + val.items())
             for pos, val in sorted(self.styles.items())]
+        table_style_id = self.getRMLId('Table-style')
         rml = self.template(
             table=rows, styles=styles,
             col_widths = widths_string,
-            table_style_id="XXX: unique")
+            table_style_id=table_style_id)
         return rml
 
 
