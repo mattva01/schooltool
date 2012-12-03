@@ -1100,16 +1100,10 @@ class BasicPersonTableFormatter(PersonTableFormatter):
             subsort=True)
         return cols + [username]
 
-    def render(self):
-        columns = [IIndexedColumn(c) for c in self._columns]
-        formatter = self._table_formatter(
-            self.context, self.request, self._items,
-            columns=columns,
-            batch_start=self.batch.start, batch_size=self.batch.size,
-            sort_on=self._sort_on,
-            prefix=self.prefix)
+    def makeFormatter(self):
+        formatter = PersonTableFormatter.makeFormatter(self)
         formatter.cssClasses['table'] = 'data persons-table'
-        return formatter()
+        return formatter
 
 
 class FlourishManagePeopleOverview(flourish.page.Content):

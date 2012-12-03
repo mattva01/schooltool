@@ -157,6 +157,11 @@ class NullTableFormatter(object):
     def setUp(self, **kwargs):
         pass
 
+    def makeFormatter(self):
+        formatter = zc.table.table.Formatter(
+            self.context, self.request, (), columns=())
+        return formatter
+
     def render(self):
         return ""
 
@@ -264,7 +269,9 @@ class SchoolToolTableFormatter(object):
                 extra_url += "&%s:tokens=%s" % (key, " ".join(values))
         return extra_url
 
-    def render(self):
+    def makeFormatter(self):
+        if self._table_formatter is None:
+            return None
         formatter = self._table_formatter(
             self.source, self.request, self._items,
             columns=self._columns,
@@ -272,7 +279,11 @@ class SchoolToolTableFormatter(object):
             sort_on=self._sort_on,
             prefix=self.prefix)
         formatter.cssClasses.update(self.css_classes)
-        return formatter()
+        return formatter
+
+    def render(self):
+        formatter = self.makeFormatter()
+        return formatter() if formatter is not None else ''
 
 
 class TableContent(flourish.content.ContentProvider, SchoolToolTableFormatter):
@@ -299,7 +310,9 @@ class TableContent(flourish.content.ContentProvider, SchoolToolTableFormatter):
         if self._table_formatter is None:
             self.setUp()
 
-    def render(self, *args, **kw):
+    def makeFormatter(self):
+        if self._table_formatter is None:
+            return None
         formatter = self._table_formatter(
             self.source, self.request, self._items,
             columns=self._columns,
@@ -307,7 +320,10 @@ class TableContent(flourish.content.ContentProvider, SchoolToolTableFormatter):
             sort_on=self._sort_on,
             prefix=self.prefix)
         formatter.cssClasses.update(self.css_classes)
-        return formatter()
+        return formatter
+
+    render = SchoolToolTableFormatter.render
+
 
 
 class TableContainerView(flourish.page.Page):

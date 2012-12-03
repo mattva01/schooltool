@@ -271,15 +271,10 @@ class FlourishGroupTableFormatter(table.table.SchoolToolTableFormatter):
         directlyProvides(title, ISortableColumn)
         return [title]
 
-    def render(self):
-        formatter = self._table_formatter(
-            self.context, self.request, self._items,
-            columns=self._columns,
-            batch_start=self.batch.start, batch_size=self.batch.size,
-            sort_on=self._sort_on,
-            prefix=self.prefix)
+    def makeFormatter(self):
+        formatter = table.table.SchoolToolTableFormatter.makeFormatter(self)
         formatter.cssClasses['table'] = 'groups-table relationships-table'
-        return formatter()
+        return formatter
 
 
 class FlourishGroupListView(EditRelationships):

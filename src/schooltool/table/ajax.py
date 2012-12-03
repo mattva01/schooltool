@@ -108,9 +108,9 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
         TableContent.update(self)
         flourish.ajax.CompositeAJAXPart.update(self)
 
-    def renderTable(self):
+    def makeFormatter(self):
         if self._table_formatter is None:
-            return ''
+            return None
         formatter = self._table_formatter(
             self.source, self.request, self._items,
             columns=self._columns,
@@ -121,7 +121,11 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
             )
         formatter.html_id = self.html_id
         formatter.cssClasses.update(self.css_classes)
-        return formatter()
+        return formatter
+
+    def renderTable(self):
+        formatter = self.makeFormatter()
+        return formatter() if formatter is not None else ''
 
     def render(self, *args, **kw):
         content = ''
@@ -275,7 +279,7 @@ class IndexedTable(IndexedTableFormatter, Table):
     def filter_widget(self):
         return self.get('filter')
 
-    def renderTable(self):
+    def makeFormatter(self):
         if self._table_formatter is None:
             return ''
         columns = [IIndexedColumn(c) for c in self._columns]
@@ -287,7 +291,9 @@ class IndexedTable(IndexedTableFormatter, Table):
             prefix=self.prefix)
         formatter.html_id = self.html_id
         formatter.cssClasses.update(self.css_classes)
-        return formatter()
+        return formatter
+
+    renderTable = Table.renderTable
 
     def render(self, *args, **kw):
         return Table.render(self, *args, **kw)
