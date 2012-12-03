@@ -248,7 +248,8 @@ class PageTemplateSlots(object):
     __name__ = 'template_slots'
 
     def __init__(self, context, request, view, template):
-        self.__parent__ = self.context = context
+        self.__parent__ = template
+        self.context = context
         self.request = request
         self.view = view
         self.template = template
