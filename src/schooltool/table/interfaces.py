@@ -93,3 +93,16 @@ class IIndexedColumn(Interface):
 class ICheckboxColumn(IColumn):
     """A column with a checkbox."""
 
+
+class IRMLTable(IContentProvider):
+    """Content provider that can render a table as RML."""
+
+    table = Attribute("zc.table.interfaces.IFormatter to render")
+
+
+class IRMLColumn(IColumn):
+
+    column = Attribute("zc.table.column.Column")
+
+    visible = zope.schema.Bool(
+        title=u"Is column visible", required=False)

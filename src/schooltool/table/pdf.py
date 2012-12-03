@@ -52,6 +52,19 @@ class RMLTable(flourish.content.ContentProvider):
         flourish.content.ContentProvider.__init__(
             self, context, request, schooltool_formatter)
         self.table = table
+        self.styles = {
+            ('0,0', '-1,0'): {
+                'background': 'table.header.background',
+                'text': 'table.header.text',
+                # 'font': 'Ubuntu_Bold',
+                },
+            }
+
+    @property
+    def visible_column_names(self):
+        if self.formatter is None:
+            return ()
+        return self.formatter.visible_columns
 
     def makeFormatter(self):
         if self.table._table_formatter is None:
@@ -64,7 +77,7 @@ class RMLTable(flourish.content.ContentProvider):
         self.formatter = self.makeFormatter()
 
     def getColumns(self):
-        visible_names = [c.name for c in self.formatter.visible_columns]
+        visible_names = [c.name for c in self.visible_column_names]
         # XXX: also add columns we want, remove columns we want to hide
         columns = [self.formatter.columns_by_name[name]
                    for name in visible_names]
@@ -107,10 +120,6 @@ class RMLTable(flourish.content.ContentProvider):
         widths_string = ' '.join(
             ['%d%%' % col_width] * (n_cols-1) +
             ['%d%%' % max(100-col_width*(n_cols-1), 1)])
-        styles = [{'start': '0,0', 'stop': '-1,0',
-                   'background': 'table.header.background',
-                   'text': 'table.header.text'}]
-
         rows = [[column.renderHeader(self.formatter)
                  for column in rml_columns]]
         rows.extend(
@@ -118,6 +127,9 @@ class RMLTable(flourish.content.ContentProvider):
               for column in rml_columns]
              for item in items])
 
+        styles = [
+            dict([('start', pos[0]), ('stop', pos[1])] + val.items())
+            for pos, val in sorted(self.styles.items())]
         rml = self.template(
             table=rows, styles=styles,
             col_widths = widths_string,

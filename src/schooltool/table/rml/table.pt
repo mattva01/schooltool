@@ -1,0 +1,31 @@
+<tal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+
+  <blockTable style="table"
+              tal:attributes="colWidths options/col_widths" alignment="left">
+    <blockTableStyle tal:attributes="id options/table_style_id">
+      <tal:loop repeat="style options/styles">
+        <blockFont tal:attributes="start style/start;
+                                   stop style/stop;
+                                   name style/font"
+                   tal:condition="style/font|nothing" />
+        <blockBackground tal:attributes="start style/start;
+                                         stop style/stop;
+                                         colorName style/background"
+                         tal:condition="style/background|nothing" />
+        <blockTextColor tal:attributes="start style/start;
+                                        stop style/stop;
+                                        colorName style/text"
+                        tal:condition="style/text|nothing" />
+      </tal:loop>
+    </blockTableStyle>
+
+    <tr tal:repeat="row options/table">
+      <td tal:repeat="cell row" tal:content="structure cell" />
+    </tr>
+  </blockTable>
+
+</tal:block>
