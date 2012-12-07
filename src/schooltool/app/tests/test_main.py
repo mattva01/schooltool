@@ -68,34 +68,17 @@ def doctest_main():
         >>> def setup_stub(opts):
         ...     print "Performing setup..."
         ...     assert opts is options
-        >>> def run_stub():
-        ...     print "Running..."
-        >>> def before_run_stub(options, db):
-        ...     print "before Running..."
-        >>> def after_run_stub(options):
-        ...     print "after Running..."
-        >>> from schooltool.app import main
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
-        >>> old_run = main.run
         >>> server.load_options = load_options_stub
         >>> server.setup = setup_stub
-        >>> server.beforeRun = before_run_stub
-        >>> server.afterRun = after_run_stub
-        >>> main.run = run_stub
 
     Now we will run main().
 
-        >>> server.main(['sb.py', '-d'])
+        >>> server.main(['sb.py'])
         Performing setup...
-        before Running...
-        Startup time: ... sec real, ... sec CPU
-        Running...
-        after Running...
 
-    Clean up
 
-        >>> main.run = old_run
     """
 
 
@@ -131,7 +114,7 @@ def doctest_load_options():
 
         >>> o.config_file
         '...sample.conf'
-        >>> o.daemon
+        >>> o.pack
         False
 
     Some come from the config file
@@ -156,7 +139,6 @@ def doctest_load_options():
         Options:
           -c, --config xxx       use this configuration file instead of the default
           -h, --help             show this help message
-          -d, --daemon           go to background after starting
           --pack                 pack the database
           -r, --restore-manager password
                                  restore the manager user with the provided password
@@ -440,48 +422,6 @@ def doctest_setup():
 
     """
 
-
-def doctest_before_afterRun():
-    """Tests for beforeRun(options, db) and afterRun(options)
-
-        >>> from zope.app.testing import setup
-        >>> setup.placelessSetUp()
-
-    beforeRun(options, db) starts tcp server
-
-        >>> from schooltool.app.main import Options, StandaloneServer
-        >>> from ZODB.MappingStorage import MappingStorage
-        >>> from ZODB.DB import DB
-        >>> options = Options()
-        >>> class DatabaseConfigStub:
-        ...     def open(self):
-        ...         return DB(MappingStorage())
-        >>> class ConfigStub:
-        ...     web = []
-        ...     listen = []
-        ...     thread_pool_size = 1
-        ...     database = DatabaseConfigStub()
-        ...     pid_file = ''
-        ...     path = []
-        ...     error_log_file = ['STDERR']
-        ...     web_access_log_file = ['STDOUT']
-        ...     attendance_log_file = ['STDOUT']
-        ...     lang = 'lt'
-        ...     reportlab_fontdir = ''
-        ...     devmode = False
-        ...     site_definition = ftesting_zcml
-        >>> options.config = ConfigStub()
-        >>> db = object()
-
-    And go!
-
-        >>> server = StandaloneServer()
-        >>> server.beforeRun(options, db)
-        >>> server.afterRun(options)
-
-        >>> setup.placelessTearDown()
-
-    """
 
 
 class ConfigStub(object):
