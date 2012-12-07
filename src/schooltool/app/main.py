@@ -95,14 +95,7 @@ class Options(object):
     pack = False
     restore_manager = False
     manager_password = MANAGER_PASSWORD
-
-    def __init__(self):
-        dirname = os.path.dirname(__file__)
-        dirname = os.path.normpath(os.path.join(dirname, '..', '..', '..'))
-        self.config_file = os.path.join(dirname, self.config_filename)
-        if not os.path.exists(self.config_file):
-            self.config_file = os.path.join(dirname,
-                                            self.config_filename + '.in')
+    config_file = ''
 
 
 class CookieLanguageSelector(object):
@@ -482,7 +475,7 @@ class SchoolToolServer(object):
                 print _("\n"
                         "Usage: %s [options]\n"
                         "Options:\n"
-                        "  -c, --config xxx       use this configuration file instead of the default\n"
+                        "  -c, --config xxx       use this configuration file\n"
                         "  -h, --help             show this help message\n"
                         "  --pack                 pack the database\n"
                         "  -r, --restore-manager password\n"
@@ -510,6 +503,10 @@ class SchoolToolServer(object):
                    for (configuration, handler) in plugin_configurations]
         schema_string = schema_string % {'plugins': "\n".join(plugins)}
         schema_file = StringIO(schema_string)
+
+        if not options.config_file:
+            print >> sys.stderr, "No config file specified"
+            sys.exit(1)
 
         schema = ZConfig.loadSchemaFile(schema_file, self.ZCONFIG_SCHEMA)
 
@@ -711,9 +708,9 @@ class SchoolToolServer(object):
 
         pdf.setUpFonts(existing_directories)
 
-        
+
 class StandaloneServer(SchoolToolServer):
-    
+
     def main(self, argv=sys.argv):
         options = self.load_options(argv)
         db = self.setup(options)

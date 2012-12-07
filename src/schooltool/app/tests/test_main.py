@@ -34,20 +34,6 @@ here = os.path.dirname(__file__)
 ftesting_zcml = os.path.join(here, '..', 'ftesting.zcml')
 
 
-def doctest_Options():
-    """Tests for Options.
-
-    The only interesting thing Options does is find the default configuration
-    file.
-
-        >>> from schooltool.app.main import Options
-        >>> options = Options()
-        >>> options.config_file
-        '...schooltool.conf...'
-
-    """
-
-
 def doctest_main():
     """Tests for main().
 
@@ -137,7 +123,7 @@ def doctest_load_options():
         ...     print '[exited with status %s]' % e
         Usage: st.py [options]
         Options:
-          -c, --config xxx       use this configuration file instead of the default
+          -c, --config xxx       use this configuration file
           -h, --help             show this help message
           --pack                 pack the database
           -r, --restore-manager password
