@@ -54,6 +54,7 @@ from schooltool.skin.flourish import viewlet
 from schooltool.skin.flourish import templates
 
 from schooltool.common import SchoolToolMessage as _
+from schooltool.common import format_message
 
 
 class Box(object):
@@ -575,6 +576,19 @@ class PlainPageTemplateSlots(PageTemplateSlots):
 class PDFPart(viewlet.Viewlet):
     implements(interfaces.IPDFPart)
 
+    title = None
+
+    @property
+    def title_continued(self):
+        if not self.title:
+            return None
+        text = translate(
+            format_message(
+                _("${title} (continued)"),
+                mapping={'title': self.title}),
+            context=self.request)
+        return text
+
     @property
     def templates(self):
         return self.view.providers.get('template')
@@ -604,6 +618,7 @@ class RMLMultiWidgetRows(RMLWidgetRows):
 
 
 class PDFForm(PDFPart, form.DisplayForm):
+
     template = templates.XMLFile('rml/pdf_form.pt')
 
     def update(self):

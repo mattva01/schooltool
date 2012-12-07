@@ -60,7 +60,7 @@
   <zope:adapter
       for="*
            schooltool.skin.flourish.IFlourishLayer
-           schooltool.skin.flourish.interfaces.IPage
+           schooltool.skin.flourish.interfaces.IPageBase
            zc.table.interfaces.IColumn"
       provides=".interfaces.IRMLColumn"
       factory=".pdf.HiddenRMLColumn"
@@ -69,7 +69,7 @@
   <zope:adapter
       for="*
            schooltool.skin.flourish.IFlourishLayer
-           schooltool.skin.flourish.interfaces.IPage
+           schooltool.skin.flourish.interfaces.IPageBase
            zc.table.column.GetterColumn"
       provides=".interfaces.IRMLColumn"
       factory=".pdf.RMLGetterColumn"
@@ -78,7 +78,7 @@
   <zope:adapter
       for="*
            schooltool.skin.flourish.IFlourishLayer
-           schooltool.skin.flourish.interfaces.IPage
+           schooltool.skin.flourish.interfaces.IPageBase
            .column.DateColumn"
       provides=".interfaces.IRMLColumn"
       factory=".pdf.RMLDateColumn"
@@ -87,7 +87,7 @@
   <zope:adapter
       for="*
            schooltool.skin.flourish.IFlourishLayer
-           schooltool.skin.flourish.interfaces.IPage
+           schooltool.skin.flourish.interfaces.IPageBase
            .column.IndexedGetterColumn"
       provides=".interfaces.IRMLColumn"
       factory=".pdf.RMLIndexedColumn"

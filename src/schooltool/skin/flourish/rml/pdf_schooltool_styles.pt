@@ -13,7 +13,36 @@
                      colorName="table.header.text" />
     <blockBackground start="0,1" stop="-1,-1"
                      colorsByRow="table.row.background,table.row-alt.background" />
+    <blockTextColor  start="0,1" stop="-1,-1"
+                     colorName="table.text" />
+  </blockTableStyle>
+
+  <blockTableStyle id="multi-table.header">
+    <blockFont start="0,0" stop="-1,-1"
+               name="Ubuntu_Bold" />
+    <blockBackground start="0,0" stop="-1,-1"
+                     colorName="table.header.background" />
+    <blockTextColor  start="0,0" stop="-1,-1"
+                     colorName="table.header.text" />
+  </blockTableStyle>
+
+  <blockTableStyle id="multi-table.subtable">
+    <blockFont start="0,0" stop="0,-1"
+               name="Ubuntu_Bold" />
+    <blockBackground start="0,0" stop="-1,0"
+                     colorName="table.subheader.background" />
     <blockTextColor  start="0,0" stop="-1,0"
+                     colorName="table.subheader.text" />
+    <blockBackground start="0,1" stop="-1,-1"
+                     colorsByRow="table.row.background,table.row-alt.background" />
+    <blockTextColor  start="0,1" stop="-1,-1"
+                     colorName="table.text" />
+  </blockTableStyle>
+
+  <blockTableStyle id="multi-table.content-only">
+    <blockBackground start="0,0" stop="-1,-1"
+                     colorsByRow="table.row-alt.background,table.row.background" />
+    <blockTextColor  start="0,0" stop="-1,-1"
                      colorName="table.text" />
   </blockTableStyle>
 

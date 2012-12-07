@@ -22,6 +22,7 @@ RML tables.
 
 import zope.component
 from zope.interface import implements, Interface
+from zope.cachedescriptors.property import Lazy
 
 from schooltool.skin import flourish
 from schooltool.table import interfaces
@@ -35,11 +36,11 @@ def getRMLTable(formatter, request):
     return table
 
 
-class RMLTable(flourish.content.ContentProvider):
+class FlatRMLTable(flourish.content.ContentProvider):
     implements(interfaces.IRMLTable)
     zope.component.adapts(Interface,
                           flourish.interfaces.IFlourishLayer,
-                          flourish.interfaces.IPage,
+                          flourish.interfaces.IPageBase,
                           interfaces.ITableFormatter)
 
     __name__ = '@@rml'
@@ -52,13 +53,6 @@ class RMLTable(flourish.content.ContentProvider):
         flourish.content.ContentProvider.__init__(
             self, context, request, schooltool_formatter)
         self.table = table
-        self.styles = {
-            ('0,0', '-1,0'): {
-                'background': 'table.header.background',
-                'text': 'table.header.text',
-                # 'font': 'Ubuntu_Bold',
-                },
-            }
 
     @property
     def visible_column_names(self):
@@ -133,28 +127,81 @@ class RMLTable(flourish.content.ContentProvider):
         widths_string = ' '.join(
             ['%d%%' % col_width] * (n_cols-1) +
             ['%d%%' % max(100-col_width*(n_cols-1), 1)])
-        rows = [[column.renderHeader(self.formatter)
-                 for column in rml_columns]]
-        rows.extend(
-            [[column.renderCell(item, self.formatter)
-              for column in rml_columns]
-             for item in items])
+        headers = [[column.renderHeader(self.formatter)
+                    for column in rml_columns]]
+        tables = [
+            {'rows': [[column.renderCell(item, self.formatter)
+                       for column in rml_columns]
+                      for item in items]
+             }]
 
-        styles = [
-            dict([('start', pos[0]), ('stop', pos[1])] + val.items())
-            for pos, val in sorted(self.styles.items())]
-        table_style_id = self.getRMLId('Table-style')
         rml = self.template(
-            table=rows, styles=styles,
-            col_widths = widths_string,
-            table_style_id=table_style_id)
+            headers=headers, content=tables,
+            col_widths=widths_string)
+        return rml
+
+
+class RMLTable(FlatRMLTable):
+
+    def getColumns(self):
+        columns = super(RMLTable, self).getColumns()
+        group_by_column = self.formatter.group_by_column
+        if group_by_column:
+            columns = [column
+                       for column in columns
+                       if column.name != group_by_column]
+        return columns
+
+    def render(self):
+        columns = self.getColumns()
+        rml_columns = self.getRMLColumns(columns)
+
+        if not rml_columns:
+            return ''
+
+        items = self.getItems()
+
+        n_cols = len(rml_columns)
+        col_width = max(int(100./n_cols), 1)
+        widths_string = ' '.join(
+            ['%d%%' % col_width] * (n_cols-1) +
+            ['%d%%' % max(100-col_width*(n_cols-1), 1)])
+
+        headers = [[column.renderHeader(self.formatter)
+                 for column in rml_columns]]
+
+        tables = []
+        rows = []
+        current_group = None
+        for item in items:
+            group = self.formatter.getSubGroup(item)
+            if group != current_group:
+                if rows:
+                    tables.append({
+                        'headers': current_group and [[current_group]] or [],
+                        'rows': rows,
+                        })
+                current_group = group
+                rows = []
+            rows.append([column.renderCell(item, self.formatter)
+                         for column in rml_columns])
+
+        if rows:
+            tables.append({
+                    'headers': current_group and [[current_group]] or [],
+                    'rows': rows,
+                    })
+
+        rml = self.template(
+            headers=headers, content=tables,
+            col_widths=widths_string)
         return rml
 
 
 class IndexedRMLTable(RMLTable):
     zope.component.adapts(Interface,
                           flourish.interfaces.IFlourishLayer,
-                          flourish.interfaces.IPage,
+                          flourish.interfaces.IPageBase,
                           interfaces.IIndexedTableFormatter)
 
     def getColumns(self):
@@ -162,6 +209,33 @@ class IndexedRMLTable(RMLTable):
         # Make sure columns can handle indexed objects
         indexed_columns = [interfaces.IIndexedColumn(c) for c in columns]
         return indexed_columns
+
+
+class RMLTablePart(flourish.report.PDFPart, RMLTable):
+
+    template = flourish.templates.XMLFile('rml/table_part.pt')
+
+    title = None
+    table_name = 'table'
+
+    update = RMLTable.update
+    render = RMLTable.render
+
+    def __init__(self, context, request, view, manager):
+        flourish.report.PDFPart.__init__(self, context, request, view, manager)
+
+    @Lazy
+    def table(self):
+        table = self.view.providers[self.table_name]
+        return table
+
+    def getColumns(self):
+        table = self.table
+        columns = RMLTable.getColumns(self)
+        if interfaces.IIndexedTableFormatter.providedBy(table):
+            indexed_columns = [interfaces.IIndexedColumn(c) for c in columns]
+            return indexed_columns
+        return columns
 
 
 class RMLColumn(object):

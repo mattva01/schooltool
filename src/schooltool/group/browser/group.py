@@ -852,3 +852,37 @@ class GroupAwarePersonTableFilter(PersonTableFilter):
 
     template = ViewPageTemplateFile('templates/f_group_aware_person_table_filter.pt')
 
+
+class PersonGroupsTable(table.table.TableContent):
+
+    group_by_column = 'schoolyear'
+
+    @Lazy
+    def source(self):
+        int_ids = getUtility(IIntIds)
+        source = dict([
+                ('%s-%d' % (group.__name__, int_ids.getId(group)), group)
+                for group in self.context.groups
+                ])
+        return source
+
+    def columns(self):
+        default = table.table.TableContent.columns(self)
+        description = zc.table.column.GetterColumn(
+            name='description',
+            title=_('Description'),
+            getter=lambda i, f: i.description or '',
+            )
+        schoolyear = SchoolYearColumn(
+            name='schoolyear',
+            title=_(u'School Year'),
+            subsort=True)
+        directlyProvides(schoolyear, ISortableColumn)
+        return default + [description, schoolyear]
+
+
+class PersonProfileGroupsPart(table.pdf.RMLTablePart):
+
+    table_name = "groups_table"
+    title = _("Group membership")
+

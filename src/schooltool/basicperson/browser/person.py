@@ -1153,10 +1153,10 @@ class FlourishRequestPersonIDCardView(RequestReportDownloadDialog):
         return absoluteURL(self.context, self.request) + '/person_id_card.pdf'
 
 
-class FlourishRequestStudentProfileView(RequestReportDownloadDialog):
+class FlourishRequestPersonProfileView(RequestReportDownloadDialog):
 
     def nextURL(self):
-        return absoluteURL(self.context, self.request) + '/student_profile.pdf'
+        return absoluteURL(self.context, self.request) + '/person_profile.pdf'
 
 
 class IDCardsPageTemplate(DefaultPageTemplate):
@@ -1375,9 +1375,9 @@ class PersonContainerViewTableFilter(PersonTableFilter):
     template = ViewPageTemplateFile('templates/f_container_table_filter.pt')
 
 
-class StudentProfilePDF(flourish.report.PlainPDFPage):
+class PersonProfilePDF(flourish.report.PlainPDFPage):
 
-    name = _("STUDENT PROFILE")
+    name = _("PROFILE")
 
     def formatDate(self, date, format='mediumDate'):
         if date is None:
@@ -1393,7 +1393,7 @@ class StudentProfilePDF(flourish.report.PlainPDFPage):
 
     @property
     def subtitles_left(self):
-        student_id = _('Student ID: ${id}',
+        student_id = _('User ID: ${id}',
                        mapping={'id': self.context.username})
         subtitles = [
             student_id,
@@ -1411,6 +1411,8 @@ class StudentProfilePDF(flourish.report.PlainPDFPage):
 
 
 class ProfileGeneralPart(flourish.report.PDFForm):
+
+    title = _("General info")
 
     def getFields(self):
         field_descriptions = IDemographicsFields(ISchoolToolApplication(None))

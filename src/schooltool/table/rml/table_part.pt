@@ -6,6 +6,9 @@
 
   <pto>
     <pto_header>
+      <hr width="100%" thickness="1" cap="square" color="separator"
+          spaceAfter="4" spaceBefore="8" align="center" />
+      <para style="section-title" tal:content="view/title_continued"></para>
       <blockTable style="multi-table.header"
                   tal:attributes="colWidths options/col_widths" alignment="left">
         <tr tal:repeat="row options/headers">
@@ -15,6 +18,9 @@
       <!-- table with header row only -->
     </pto_header>
 
+    <hr width="100%" thickness="1" cap="square" color="separator"
+        spaceAfter="4" spaceBefore="8" align="center" />
+    <para style="section-title" tal:content="view/title"></para>
     <blockTable style="multi-table.header"
                 tal:attributes="colWidths options/col_widths" alignment="left">
       <tr tal:repeat="row options/headers">

@@ -87,7 +87,129 @@ class SortUIHeaderMixin(object):
         return template % options
 
 
-class FormFullFormatter(SortUIHeaderMixin, zc.table.table.FormFullFormatter):
+class HeaderFormatterMixin(object):
+
+    group_by_column = None
+    row = 0
+
+    def __init__(self, context, request, *args, **kw):
+        self.context = context
+        self.request = request
+        self.group_by_column = kw.pop('group_by_column', None)
+        kw = self.updateSortParameters(context, request, *args, **kw)
+        super(HeaderFormatterMixin, self).__init__(
+            context, request, *args, **kw)
+
+    def updateSortParameters(self, *args, **kw):
+        fixed_sort_on = self.fixed_sort_on
+        if fixed_sort_on:
+            if kw.get('ignore_request'):
+                kw['sort_on'] = self.getFixedSortOrder(
+                    fixed_sort_on, kw.get('sort_on'))
+            else:
+                kw['sort_on'] = self.getRequestSortOn(
+                    fixed_sort_on or (),
+                    kw.get('sort_on') or (),
+                    prefix=kw.get('prefix'))
+                kw['ignore_request'] = True
+        return kw
+
+    @property
+    def fixed_sort_on(self):
+        """Always presort items with this fixed part."""
+        if not self.group_by_column:
+            return None
+        return ((self.group_by_column, False), )
+
+    def getFixedSortOrder(self, fixed_sort_on, sort_on):
+        fixed_sort_on = tuple(fixed_sort_on or ())
+        fixed = set([so[0] for so in fixed_sort_on])
+        also_sort_on = tuple([
+            so for so in (sort_on or ())
+            if so[0] not in fixed
+            ])
+        return fixed_sort_on + also_sort_on
+
+    def getRequestSortOn(self, fixed_sort_on, default_sort_on, prefix=None):
+        sort_on_name = zc.table.table.getSortOnName(prefix)
+        request_sort_on = zc.table.table.getRequestSortOn(
+            self.request, sort_on_name) or default_sort_on
+        sort_on = self.getFixedSortOrder(fixed_sort_on, request_sort_on)
+        return sort_on
+
+    def hasSubGroups(self):
+        return (self.group_by_column is not None and
+                self.group_by_column in self.columns_by_name)
+
+    def getSubGroup(self, item):
+        if not self.hasSubGroups():
+            return None
+        column = self.columns_by_name[self.group_by_column]
+        return column.renderCell(item, self)
+
+    def makeCSSClass(self, cls, column_name):
+        cls = cls and cls.strip() or ''
+        col_cls = column_name and column_name.replace('_', '-').strip() or ''
+        if cls and col_cls:
+            cls += ' '
+        return cls + col_cls
+
+    def renderHeaders(self):
+        result = []
+        old_css_class = self.cssClasses.get('th')
+        for col in self.visible_columns:
+            if self.group_by_column == col.name:
+                continue
+            self.cssClasses['th'] = self.makeCSSClass(old_css_class, col.name)
+            result.append(self.renderHeader(col))
+        self.cssClasses['th'] = old_css_class
+        return ''.join(result)
+
+    def renderRows(self):
+        self.row = 0 # Hack to behave like AlternatingRowFormatterMixin
+
+        if not self.hasSubGroups():
+            return ''.join([self.renderRow(item) for item in self.getItems()])
+
+        current_group = None
+        result = []
+        for item in self.getItems():
+            group = self.getSubGroup(item)
+            if group != current_group:
+                result.append(self.renderSubHeader(item))
+                current_group = group
+            result.append(self.renderRow(item))
+        return ''.join(result)
+
+    def renderCells(self, item):
+        return ''.join(
+            [self.renderCell(item, col)
+             for col in self.visible_columns
+             if col.name != self.group_by_column])
+
+    def renderSubHeader(self, item):
+        column = self.columns_by_name[self.group_by_column]
+        content = column.renderCell(item, self)
+        css_class = self.makeCSSClass(self.cssClasses.get('th', ''), column.name)
+        cell = '<tr><th class="%s" colspan="%d">%s</th></tr>' % (
+            css_class,
+            len(self.visible_columns),
+            content)
+        return cell
+
+
+class StandaloneHeaderFormatterMixin(HeaderFormatterMixin):
+
+    def getRequestSortOn(self, fixed_sort_on, default_sort_on, prefix=None):
+        fixed_sort_on = self.getFixedSortOrder(fixed_sort_on, default_sort_on)
+        result = super(StandaloneHeaderFormatterMixin, self).getRequestSortOn(
+            fixed_sort_on, (), prefix=prefix)
+        return result
+
+
+class FormFullFormatter(HeaderFormatterMixin,
+                        SortUIHeaderMixin,
+                        zc.table.table.FormFullFormatter):
     pass
 
 
@@ -166,6 +288,9 @@ class NullTableFormatter(object):
         return ""
 
 
+_undefined = object()
+
+
 class SchoolToolTableFormatter(object):
     implements(ITableFormatter)
 
@@ -176,6 +301,7 @@ class SchoolToolTableFormatter(object):
 
     css_classes = None
     _table_formatter = None
+    group_by_column = None
 
     def __init__(self, context, request):
         self.context, self.request = context, request
@@ -225,7 +351,8 @@ class SchoolToolTableFormatter(object):
     def setUp(self, items=None, ommit=[], filter=None, columns=None,
               columns_before=[], columns_after=[], sort_on=None, prefix="",
               formatters=[], table_formatter=FormFullFormatter,
-              batch_size=25, css_classes=None):
+              batch_size=25, css_classes=None,
+              group_by_column=_undefined):
 
         self.prefix = prefix
 
@@ -252,7 +379,10 @@ class SchoolToolTableFormatter(object):
             batch_size = len(list(self._items))
 
         self.batch_size = batch_size
-        self._sort_on = sort_on or self.sortOn()
+        self._sort_on = sort_on or self.sortOn() or ()
+
+        if (group_by_column is not _undefined):
+            self.group_by_column = group_by_column
 
         if css_classes:
             self.css_classes = css_classes
@@ -277,7 +407,8 @@ class SchoolToolTableFormatter(object):
             columns=self._columns,
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
-            prefix=self.prefix)
+            prefix=self.prefix,
+            group_by_column=self.group_by_column)
         formatter.cssClasses.update(self.css_classes)
         return formatter
 
@@ -318,7 +449,8 @@ class TableContent(flourish.content.ContentProvider, SchoolToolTableFormatter):
             columns=self._columns,
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
-            prefix=self.prefix)
+            prefix=self.prefix,
+            group_by_column=self.group_by_column)
         formatter.cssClasses.update(self.css_classes)
         return formatter
 

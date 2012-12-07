@@ -35,6 +35,8 @@ from schooltool.table.batch import TokenBatch
 from schooltool.table.table import TableContent, FilterWidget
 from schooltool.table.table import url_cell_formatter
 from schooltool.table.table import SortUIHeaderMixin
+from schooltool.table.table import HeaderFormatterMixin
+from schooltool.table.table import StandaloneHeaderFormatterMixin
 from schooltool.table.catalog import IndexedTableFormatter
 from schooltool.table.catalog import IndexedFilterWidget
 from schooltool.common import SchoolToolMessage as _
@@ -56,12 +58,14 @@ class AJAXSortHeaderMixin(SortUIHeaderMixin):
         return template % options
 
 
-class AJAXFormSortFormatter(AJAXSortHeaderMixin,
+class AJAXFormSortFormatter(HeaderFormatterMixin,
+                            AJAXSortHeaderMixin,
                             table.FormSortFormatter):
     script_name = 'ST.table.on_form_sort'
 
 
-class AJAXStandaloneSortFormatter(AJAXSortHeaderMixin,
+class AJAXStandaloneSortFormatter(StandaloneHeaderFormatterMixin,
+                                  AJAXSortHeaderMixin,
                                   table.StandaloneSortFormatter):
     script_name = 'ST.table.on_standalone_sort'
 
@@ -118,6 +122,7 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
             sort_on=self._sort_on,
             prefix=self.prefix,
             ignore_request=self.ignoreRequest,
+            group_by_column=self.group_by_column,
             )
         formatter.html_id = self.html_id
         formatter.cssClasses.update(self.css_classes)
@@ -288,7 +293,8 @@ class IndexedTable(IndexedTableFormatter, Table):
             columns=columns,
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
-            prefix=self.prefix)
+            prefix=self.prefix,
+            group_by_column=self.group_by_column)
         formatter.html_id = self.html_id
         formatter.cssClasses.update(self.css_classes)
         return formatter

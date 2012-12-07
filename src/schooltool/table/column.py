@@ -332,7 +332,7 @@ def makeIndexedColumn(mixins, column, *args, **kw):
     new_class = type(
         '_indexed_%s' % class_.__name__,
         tuple(mixins) + (class_,),
-        {})
+        {'_non_indexed_column': column})
     classImplements(new_class, IIndexedColumn)
     new_column = super(class_, new_class).__new__(new_class, *args, **kw)
     new_column.__dict__.update(dict(column.__dict__))
