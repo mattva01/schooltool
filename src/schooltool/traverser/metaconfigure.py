@@ -35,7 +35,7 @@ def traverser(_context, for_, type, factory,
               provides=IPublishTraverse,
               permission=None):
     view(_context, [factory], type, '', [for_],
-         layer=None, permission=permission,
+         permission=permission,
          allowed_interface=None, allowed_attributes=None,
          provides=provides)
 
@@ -45,7 +45,7 @@ def pluggableTraverser(_context, for_, type,
                        provides=IPublishTraverse,
                        permission=None):
     view(_context, [factory], type, '', [for_],
-         layer=None, permission=permission,
+         permission=permission,
          allowed_interface=None, allowed_attributes=None,
          provides=provides)
 
