@@ -5,7 +5,10 @@ CHANGES
 2.3.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+Development tools
++++++++++++++++++
+
+- Removed API Docs and Introspector
 
 
 2.3.1 (2012-11-27)

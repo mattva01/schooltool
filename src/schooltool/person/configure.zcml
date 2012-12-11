@@ -5,11 +5,6 @@
 
   <include file="security.zcml" />
 
-  <interface
-      interface=".interfaces.IPersonContainer"
-      type="zope.app.content.interfaces.IContentType"
-      />
-
   <class class=".person.PersonContainer">
     <allow
         interface="zope.container.interfaces.ISimpleReadContainer" />
@@ -20,11 +15,6 @@
         permission="schooltool.edit"
         interface="zope.container.interfaces.IWriteContainer" />
   </class>
-
-  <interface
-      interface=".interfaces.IPerson"
-      type="zope.app.content.interfaces.IContentType"
-      />
 
   <class class=".person.PersonPasswordWriter">
     <require

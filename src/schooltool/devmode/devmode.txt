@@ -3,12 +3,32 @@ Developer Mode User Interface
 =============================
 
 The developer mode of the user interface is intended to help SchoolTool
-developers and people using SchoolTool as a development platform to debug
-their code and find documentation as quickly as possible.
+developers and people using SchoolTool as a development platform.
 
 To start, open the SchoolTool site in your browser::
 
     >>> browser = Browser('manager', 'schooltool')
+
+There are some additional items in the Manage tab:
+
+    >>> def print_navigation_links(contents):
+    ...     print
+    ...     for item in analyze.queryHTML('//a[@class="navigation_header"]', contents):
+    ...         print item
+    >>> browser.getLink('Manage').click()
+    >>> print_navigation_links(browser.contents)
+    <BLANKLINE>
+    ...
+    <a class="navigation_header" href="http://localhost/++etc++site/default/RootErrorReportingUtility">Errors</a>
+    <a class="navigation_header" href="http://localhost/@@sampledata.html">Sample data</a>
+    ...
+
+Note that we only see the developer tools here, because these tests are run
+with the developer mode turned on. Commonly, the developer mode can be
+controlled using ``schooltool.conf``'s ``devmode`` switch. Simply add
+``devmode on`` to your ``schooltool.conf`` file to turn on the developer's
+mode.
+
 
 Error Reporting
 ---------------

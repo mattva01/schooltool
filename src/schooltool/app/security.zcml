@@ -37,15 +37,6 @@
       crowds="administration"
       permission="zope.ManageSite" />
 
-  <zope:configure
-      xmlns:zcml="http://namespaces.zope.org/zcml"
-      zcml:condition="have apidoc">
-    <allow
-       interface="schooltool.app.interfaces.ISchoolToolApplication"
-       crowds="administration"
-       permission="zope.app.apidoc.UseAPIDoc" />
-  </zope:configure>
-
   <!-- Security declarations for calendaring -->
 
   <crowd

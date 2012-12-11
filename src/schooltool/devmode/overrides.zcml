@@ -8,24 +8,6 @@
       for="zope.traversing.interfaces.IBeforeTraverseEvent"
       />
 
-  <!-- apidoc overriding -->
-
-  <configure xmlns:zcml="http://namespaces.zope.org/zcml"
-             zcml:condition="have apidoc">
-
-  <view
-      name="apidoc" type="*"
-      provides="zope.traversing.interfaces.ITraversable" for="*"
-      factory=".apidoc.schooltoolApidocNamespace"
-      />
-  <adapter
-      name="apidoc"
-      provides="zope.traversing.interfaces.ITraversable" for="*"
-      factory=".apidoc.schooltoolApidocNamespace"
-      />
-
-  </configure>
-
   <browser:page
       for="zope.security.interfaces.IUnauthorized"
       name="index.html"

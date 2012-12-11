@@ -21,7 +21,6 @@
   <include package="zope.component" />
   <include package="zope.annotation" />
   <include package="zope.app.dependable" />
-  <include package="zope.app.content" />
   <include package="zope.publisher" />
 
   <include file="menus.zcml" />
