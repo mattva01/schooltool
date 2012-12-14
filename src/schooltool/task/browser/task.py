@@ -18,7 +18,6 @@
 #
 
 from zope.cachedescriptors.property import Lazy
-from zope.component import adapts
 from zope.interface import directlyProvides
 from zope.traversing.browser.absoluteurl import absoluteURL
 
@@ -26,21 +25,20 @@ from zc.table.interfaces import ISortableColumn
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin import flourish
-from schooltool.task.interfaces import IRemoteTask
 from schooltool.task.tasks import TaskReadStatus
 from schooltool import table
 
 from schooltool.common import SchoolToolMessage as _
 
 
-class TaskContainer(flourish.page.Page):
+class TaskContainerView(flourish.page.Page):
 
     @property
     def tasks(self):
         return sorted(self.context.values(), key=lambda t: (str(t.scheduled), t.task_id))
 
 
-class TaskStatus(flourish.page.Page):
+class TaskStatusView(flourish.page.Page):
 
     @Lazy
     def status(self):

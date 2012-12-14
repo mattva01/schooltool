@@ -4,7 +4,7 @@
     i18n_domain="schooltool"
     >
 
-  <include package="zope.app.component" file="meta.zcml" />
+  <include package="zope.component" file="meta.zcml" />
 
   <adapter
     factory="zope.publisher.browser.BrowserLanguages"

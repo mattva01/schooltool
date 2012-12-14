@@ -10,7 +10,7 @@
   <flourish:page
       name="index.html"
       for="schooltool.task.interfaces.ITaskContainer"
-      class=".task.TaskContainer"
+      class=".task.TaskContainerView"
       content_template="templates/task_container.pt"
       permission="schooltool.edit"
       />
@@ -18,7 +18,7 @@
    <flourish:page
       name="index.html"
       for="schooltool.task.interfaces.IRemoteTask"
-      class=".task.TaskStatus"
+      class=".task.TaskStatusView"
       content_template="templates/task_status.pt"
       permission="schooltool.view"
       />
@@ -34,13 +34,13 @@
   <flourish:activeViewlet
       name="manage_site"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
-      view=".task.TaskContainer"
+      view=".task.TaskContainerView"
       />
 
   <flourish:activeViewlet
       name="manage_site"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
-      view=".task.TaskStatus"
+      view=".task.TaskStatusView"
       />
 
   <configure zcml:condition="not-have devmode">
