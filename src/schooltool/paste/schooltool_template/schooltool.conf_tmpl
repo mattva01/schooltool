@@ -30,6 +30,8 @@ site-definition ${config_dir}/site.zcml
 
   <zeoclient>
     server ${data_dir}/zeo.sock
+    blob-dir ${data_dir}/blobs
+    shared-blob-dir yes
   </zeoclient>
 
   # cache-size n

@@ -71,7 +71,7 @@ killasgroup=false
 [program:celery]
 priority=110
 directory=${data_dir}
-command=${bin_dir}/celeryd --loglevel=INFO
+command=${bin_dir}/celeryd -B --loglevel=INFO
 environment=PYTHONPATH=${config_dir}
 numprocs=1
 autostart=true
