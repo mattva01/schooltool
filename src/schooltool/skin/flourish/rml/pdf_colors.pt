@@ -25,4 +25,6 @@
   <color id="table.row-alt.background" value="#f5f4f5" />
   <color id="table.text" value="#000000" />
 
+  <color id="grade.table.grades-line" value="#000000" />
+
 </metal:block>

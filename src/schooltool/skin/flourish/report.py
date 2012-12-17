@@ -573,8 +573,7 @@ class PlainPageTemplateSlots(PageTemplateSlots):
         return subtitles
 
 
-class PDFPart(viewlet.Viewlet):
-    implements(interfaces.IPDFPart)
+class PDFContentBlock(content.ContentProvider):
 
     title = None
 
@@ -592,6 +591,10 @@ class PDFPart(viewlet.Viewlet):
     @property
     def templates(self):
         return self.view.providers.get('template')
+
+
+class PDFPart(viewlet.Viewlet, PDFContentBlock):
+    implements(interfaces.IPDFPart)
 
 
 class RMLWidgetRows(content.ContentProvider):

@@ -19,14 +19,21 @@
 """
 RML tables.
 """
+import math
+import os
 
 import zope.component
 from zope.interface import implements, Interface
 from zope.cachedescriptors.property import Lazy
 
+from reportlab.lib import units
+from reportlab.pdfbase import pdfmetrics
+
 from schooltool.skin import flourish
 from schooltool.table import interfaces
 from schooltool.table.column import unindex
+
+from schooltool.common import SchoolToolMessage as _
 
 
 def getRMLTable(formatter, request):
@@ -218,7 +225,6 @@ class RMLTablePart(flourish.report.PDFPart, RMLTable):
     title = None
     table_name = 'table'
 
-    update = RMLTable.update
     render = RMLTable.render
 
     def __init__(self, context, request, view, manager):
@@ -228,6 +234,10 @@ class RMLTablePart(flourish.report.PDFPart, RMLTable):
     def table(self):
         table = self.view.providers[self.table_name]
         return table
+
+    def update(self):
+        flourish.report.PDFPart.update(self)
+        RMLTable.update(self)
 
     def getColumns(self):
         table = self.table
@@ -300,3 +310,449 @@ class RMLIndexedColumn(RMLGetterColumn):
         item = unindex(indexed_item)
         cell = super(RMLIndexedColumn, self).renderCell(item, formatter)
         return cell
+
+
+class GridCell(object):
+
+    def __init__(self, text, item=None, name=None, no_data=False, **kw):
+        self.__name__ = name if name is not None else text
+        self.item = item
+        self.text = text
+        self.no_data = no_data
+        self.style = dict(kw)
+
+    def __call__(self):
+        return self.text
+
+
+class GridColumn(GridCell):
+
+    def __cmp__(self, other):
+        return cmp((self.__name__, self.item), (other.__name__, other.item))
+
+
+class GridRow(GridCell):
+
+    def __cmp__(self, other):
+        return cmp((self.__name__, self.item), (other.__name__, other.item))
+
+
+def random_id(numbers=4):
+    return 'id-'+os.urandom(numbers).encode('hex')
+
+
+class Grid(object):
+
+    table_style_name = "grade.table.grades"
+    title_column_width = 4 * units.cm
+
+    header_font = 'Ubuntu_Regular'
+    header_font_size = 12
+
+    column_padding = 4
+
+    rows = None
+    columns = None
+    getter = None
+
+    template = flourish.templates.XMLFile('rml/grid.pt')
+
+    def __init__(self, rows, columns, data_getter, table_width, style_id=None):
+        if style_id is None:
+            self.style_id = self.random_id()
+        else:
+            self.style_id = style_id
+        self.rows = rows
+        self.columns = columns
+        self.table_width = table_width
+        if hasattr(data_getter, 'get'):
+            self._getter_data = data_getter
+            self.getter = lambda row, column: data_getter.get((row, column))
+        else:
+            self.getter = data_getter
+
+    random_id = lambda self: random_id()
+
+    def getCell(self, row, column):
+        cell = self.getter(row, column)
+        if cell is None:
+            return GridCell(u'', item=None)
+        if isinstance(cell, GridCell):
+            return cell
+        return GridCell(unicode(cell), item=cell)
+
+    def getMaxTextSize(self, columns, default_font, default_font_size):
+        max_text_length = max([
+            pdfmetrics.stringWidth(
+                    unicode(column.text),
+                    column.style.get('font_name', default_font),
+                    column.style.get('font_size', default_font_size),
+                    )
+            for column in columns
+            ])
+        max_text_width = max([column.style.get('font_size', default_font_size)
+                              for column in columns])
+        return max_text_length, max_text_width
+
+    def getDataColumnWidth(self, width, columns):
+        n_cols = len(columns)
+        if n_cols <= 1:
+            return width
+
+        ang = math.cos(45./180*math.pi)
+
+        max_column_text_length, _unused = self.getMaxTextSize(
+            columns, self.header_font, self.header_font_size)
+
+        last_font_size = columns[-1].style.get('font_size', self.header_font_size)
+
+        slanted_header_horiz_w = (max_column_text_length + last_font_size) * ang
+        slanted_header_vert_w = last_font_size * ang
+        slanted_header_w = slanted_header_horiz_w - slanted_header_vert_w/2
+
+        data_col_w = min(
+            (width - slanted_header_w) / (n_cols - 0.5),
+            width / n_cols)
+        return data_col_w
+
+    def getColumnStrings(self, columns, col_width):
+        result = []
+        ang = math.cos(45./180*math.pi)
+        x = ang*self.title_column_width
+        padding = self.column_padding + (col_width + self.header_font_size*ang) / 2
+        padding = col_width / 2 + self.header_font_size * ang / 2
+        font_name = None
+        font_size = None
+        for n, column in enumerate(self.columns):
+            pos = x + (n * col_width + padding) * ang
+            col_font = column.style.get('font_name', self.header_font)
+            col_font_size = column.style.get('font_size', self.header_font_size)
+            changed = (col_font != font_name or col_font_size != font_size)
+            result.append({
+                    'font_changed': changed,
+                    'font_name': col_font,
+                    'font_size': col_font_size,
+                    'x': pos,
+                    'y': -pos,
+                    'text': column.text,
+                    })
+            font_name = col_font
+            font_size = col_font_size
+        return result
+
+    def updateColumns(self, columns, table_width):
+        data_width = table_width - self.title_column_width
+        self.data_column_width = self.getDataColumnWidth(
+            data_width, columns)
+        self.column_strings = self.getColumnStrings(
+            columns, self.data_column_width)
+
+        n_cols = len(self.columns)
+        spacing = max(0, self.table_width
+                         - self.title_column_width
+                         - self.data_column_width*n_cols)
+        widths = ([self.title_column_width] +
+                  [self.data_column_width] * n_cols +
+                  [spacing])
+        self.column_widths = ' '.join([str(width) for width in widths])
+
+    def updateHeaderGraphics(self):
+        self.header_width = self.table_width
+
+        max_text_length, max_text_width = self.getMaxTextSize(
+            self.columns, self.header_font, self.header_font_size)
+
+        ang = math.cos(45./180*math.pi)
+        line_len = max_text_length + max_text_width
+        self.header_height = line_len * ang
+
+        left = self.title_column_width * ang
+        self.header_lines = []
+        for n in range(len(self.columns)):
+            pos = left + n*self.data_column_width*ang
+            self.header_lines.append(
+                '%d %d %d %d' % (pos, -pos, pos+line_len, -pos))
+
+    def updateData(self):
+        self.data = [
+            [row] + [self.getCell(row, column)
+                     for column in self.columns]
+            for row in self.rows
+            ]
+
+    def getStyleDirectives(self, cell, x, y):
+        directives = {}
+        font = dict(
+             filter(lambda v: v[1], [
+                    ('name', cell.style.get('font_name')),
+                    ('size', cell.style.get('font_size')),
+                    ('leading', cell.style.get('font_leading')),
+                    ]))
+        if font:
+            directives['blockFont'] = sorted(font.items())
+
+        color = cell.style.get('color')
+        if color:
+            directives['blockTextColor'] = [('colorName', color)]
+
+        bg_color = cell.style.get('background_color')
+        if bg_color:
+            directives['blockBackground'] = [('colorName', bg_color)]
+
+        align = cell.style.get('align')
+        if align:
+            directives['blockAlignment'] = [('value', align)]
+
+        valign = cell.style.get('valign')
+        if valign:
+            directives['blockValign'] = [('value', valign)]
+
+        span_rows = cell.style.get('span_rows')
+        span_cols = cell.style.get('span_cols')
+        if span_rows or span_cols:
+            span_rows = int(span_rows or 1)
+            span_cols = int(span_cols or 1)
+            directives['blockSpan'] = [
+                ('start', '%d %d' % (x, y)),
+                ('stop', '%d %d' % (x+span_cols-1, y+span_rows-1)),
+                ]
+        padding = cell.style.get('padding')
+        if padding is not None:
+            if isinstance(padding, (tuple, list)):
+                if len(padding) == 2:
+                    left, top = padding
+                    right = left
+                    bottom = top
+                else:
+                    left, top, right, bottom = padding
+            else:
+                left = top = bottom = right = float(padding)
+            directives['blockLeftPadding'] = [('length', left)]
+            directives['blockTopPadding'] = [('length', top)]
+            directives['blockRightPadding'] = [('length', right)]
+            directives['blockBottomPadding'] = [('length', bottom)]
+        return directives
+
+    def updateStyles(self):
+        style_map = {}
+        for y, row in enumerate(self.data):
+            for x, cell in enumerate(row):
+                directives = self.getStyleDirectives(cell, x, y)
+                for directive, signature in directives.items():
+                    if directive not in style_map:
+                        style_map[directive] = {}
+                    if signature not in style_map[directive]:
+                        style_map[directive][signature] = [(x, y)]
+                    else:
+                        style_map[directive][signature].append((x, y))
+        self.styles = {}
+        for directive, signatures in sorted(style_map.items()):
+            if directive not in self.styles:
+                self.styles[directive] = []
+            for signature, coordinates in sorted(signatures.items()):
+                blocks = makeCoordinateBlocks(coordinates)
+                for starts, ends in blocks:
+                    style = {'start': '%d %d' % starts,
+                             'stop': '%d %d' % ends}
+                    style.update(dict(list(signature)))
+                    self.styles[directive].append(style)
+
+    def update(self):
+        self.updateColumns(self.columns, self.table_width)
+        self.updateHeaderGraphics()
+        self.updateData()
+        self.updateStyles()
+
+    def renderStyles(self):
+        result = []
+        for directive in self.styles:
+            for entries in self.styles[directive]:
+                for entry in entries:
+                    result.append('<%s %s />' % (
+                        directive,
+                        ' '.join(['%s="%s"' % (k, v)
+                                  for k, v in sorted(entry.items())])
+                        ))
+        return '\n'.join(result)
+
+    def render(self):
+        return self.template()
+
+
+class AutoFitGrid(Grid):
+
+    header_min_font_size = 8
+    min_column_width = None
+    continued_font = Grid.header_font
+    continued_text = _('Continued ...')
+
+    remaining_columns = None
+
+    def columnsFit(self, columns, table_width, font_size):
+        ang = math.cos(45./180*math.pi)
+        _unused, max_text_height = self.getMaxTextSize(
+            columns, self.header_font, font_size)
+        # Min width so that headers would fit
+        min_headers_column_width = (max_text_height * ang
+                                    + max_text_height * ang
+                                    + self.column_padding * 2)
+        data_column_width = self.getDataColumnWidth(table_width, columns)
+        if self.min_column_width is None:
+            return data_column_width >= min_headers_column_width
+        # Column must fit headers and honour desired min_column_width
+        min_column_width = max(min_headers_column_width,
+                               self.min_column_width)
+        return data_column_width >= min_column_width
+
+    def fitColumns(self, columns, table_width):
+        if not columns:
+            return
+
+        # Try fitting all columns, reducing the font if necessary
+        orig_font_size = self.header_font_size
+        font_size = self.header_font_size
+        while font_size >= self.header_min_font_size:
+            if self.columnsFit(columns, table_width, font_size):
+                self.columns = columns
+                self.header_font_size = font_size
+                return
+            font_size -= 1
+        self.header_font_size = orig_font_size
+
+        # Fit as many columns as we can
+        continued = [GridColumn(self.continued_text,
+                                font_name=self.continued_font,
+                                no_data=True)]
+        n = 1
+        while n < len(columns):
+            if not self.columnsFit(
+                columns[:n] + continued, table_width, self.header_font_size):
+                break
+            n += 1
+        self.columns = columns[:n] + continued
+        self.remaining_columns = columns[n:]
+
+    def updateColumns(self, columns, table_width):
+        self.all_columns = columns
+        self.remaining_columns = []
+        self.fitColumns(columns, table_width)
+        super(AutoFitGrid, self).updateColumns(self.columns, table_width)
+
+
+class GridContent(flourish.content.ContentProvider):
+
+    tables = None
+
+    def getTableWidth(self):
+        return self.view.page_size[0] - self.view.margin.left - self.view.margin.right
+
+    def getRMLId(self, prefix=''):
+        parent = self.__parent__
+        parents = []
+        while (parent is not None and
+               flourish.interfaces.IPDFPage.providedBy(parent)):
+            name = getattr(parent, '__name__', None)
+            parents.append(str(name))
+            parent = parent.__parent__
+        name_list = ([str(self.__name__)] +
+                     parents[:-1] +
+                     [prefix])
+        return flourish.page.sanitize_id('-'.join(reversed(name_list)))
+
+    def updateTables(self):
+        id_base = self.getRMLId()
+        table_width = self.getTableWidth()
+        table = AutoFitGrid(
+            self.rows, self.columns, self.grid, table_width,
+            style_id=id_base+'-style')
+        table.update()
+        self.tables = [table]
+        while table.remaining_columns:
+            other = AutoFitGrid(
+                self.rows, table.remaining_columns, self.grid, table_width,
+                style_id=id_base+'-style%d' % len(self.tables))
+            # maintain same default font sizes for split tables
+            other.header_font_size = table.header_font_size
+            other.header_min_font_size = table.header_font_size
+            other.update()
+            self.tables.append(other)
+            table = other
+
+    def update(self):
+        super(GridContent, self).update()
+        self.updateGrid()
+        self.updateTables()
+
+    def render(self):
+        return '\n'.join([table.render() for table in self.tables])
+
+    def updateGrid(self):
+        # List of GridColumn
+        self.columns = []
+        # List of GridRow
+        self.rows = []
+        # data[GridRow, GridColumn] = GridCell / number / string
+        self.grid = {}
+
+
+class GridContentBlock(flourish.report.PDFContentBlock, GridContent):
+
+    template = flourish.templates.XMLFile('rml/grid_part.pt')
+    render = template
+
+    update = GridContent.update
+
+
+class GridPart(flourish.report.PDFPart, GridContentBlock):
+
+    template = flourish.templates.XMLFile('rml/grid_part.pt')
+    render = template
+
+    def update(self):
+        flourish.report.PDFPart.update(self)
+        GridContentBlock.update(self)
+
+    def __init__(self, context, request, view, manager):
+        GridContent.__init__(self, context, request, view)
+        flourish.report.PDFPart.__init__(self, context, request, view, manager)
+
+
+def makeCoordinateBlocks(coords):
+    if not coords:
+        return []
+    if len(coords) == 1:
+        return [(coords[0], coords[0])]
+    coords = sorted(coords, key=lambda c: (c[1], c[0]))
+    slices = []
+
+    sx, sy = coords[0]
+    ex = sx
+    for x, y in coords[1:]:
+        if y == sy and x == ex+1:
+            ex = x
+        else:
+            slices.append(((sx, sy), (ex, sy)))
+            sx = ex = x
+            sy = y
+    if coords[-1] != slices[-1][-1]:
+        slices.append(((sx, sy), (ex, sy)))
+
+    blocks = []
+    while slices:
+        slice = slices.pop(0)
+        (sx, sy), (ex, ey) = slice
+        for other in list(slices):
+            if (other[0][0] == sx and
+                other[1][0] == ex and
+                other[0][1] == ey+1):
+                ey = ey + 1
+                slices.remove(other)
+            elif (ex > sx and
+                  other[0][0] == sx and
+                  other[1][0] > ex and
+                  other[0][1] == ey+1):
+                ey = ey + 1
+                slices[slices.index(other)] = ((ex+1, other[0][1]),
+                                               (other[1][0], other[1][1]))
+        blocks.append(((sx, sy), (ex, ey)))
+    return blocks

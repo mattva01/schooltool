@@ -78,4 +78,22 @@
   <paraStyle name="pagesplit-continued" fontName="Ubuntu_Regular" fontSize="8.5"
              rightIndent="8.5" alignment="RIGHT" />
 
+
+  <blockTableStyle id="grade.table.grades">
+    <lineStyle kind="LINEABOVE" colorName="grade.table.grades-line"
+               start="0,0" stop="-1,0"/>
+    <lineStyle kind="LINEBEFORE" colorName="grade.table.grades-line"
+               start="1,0" stop="-2,-1"/>
+
+    <blockFont start="0,0" stop="0,-1"
+               name="Ubuntu_Bold" />
+    <blockBackground start="0,0" stop="-1,-1"
+                     colorsByRow="table.row-alt.background,table.row.background" />
+    <blockTextColor  start="0,0" stop="-1,-1"
+                     colorName="table.text" />
+
+    <blockAlignment start="1,0" stop="-1,-1" value="center" />
+    <blockAlignment start="0,0" stop="0,-1" value="left" />
+  </blockTableStyle>
+
 </metal:block>
