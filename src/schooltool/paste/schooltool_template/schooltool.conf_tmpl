@@ -1,7 +1,7 @@
 # Sample SchoolTool server configuration file
 
 # Site definition file:
-site-definition ${abspath}/site.zcml
+site-definition ${config_dir}/site.zcml
 
 # Where should the server store all data?
 <zodb>
@@ -13,10 +13,6 @@ site-definition ${abspath}/site.zcml
   #   quota size		default: no quota
   #   blob-dir directory        directory to hold blob data
   # </filestorage>
-  <filestorage>
-    path ${abspath}/var/Data.fs
-    blob-dir ${abspath}/var/blobs
-  </filestorage>
 
   # <zeoclient>
   #   server address		one or more; required
@@ -31,6 +27,10 @@ site-definition ${abspath}/site.zcml
   #   read-only-fallback yes|no	default: no
   #   realm name		authentication realm
   # </zeoclient>
+
+  <zeoclient>
+    server ${data_dir}/zeo.sock
+  </zeoclient>
 
   # cache-size n
   #
@@ -69,7 +69,7 @@ site-definition ${abspath}/site.zcml
 #
 # Default: no pidfile
 #
-pid-file ${abspath}/var/schooltool.pid
+pid-file ${data_dir}/schooltool.pid
 
 #
 # lang
@@ -120,7 +120,7 @@ reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation:/usr/share/fonts/true
 #    error-log-file /var/log/schooltool/error.log
 #    error-log-file STDERR
 #
-error-log-file ${abspath}/log/schooltool.log
+error-log-file ${log_dir}/schooltool.log
 error-log-file STDERR
 
 #
@@ -140,7 +140,7 @@ error-log-file STDERR
 #    web-access-log-file /var/log/schooltool/access.log
 #    web-access-log-file STDOUT
 #
-web-access-log-file ${abspath}/log/web-access.log
+web-access-log-file ${log_dir}/web-access.log
 
 # devmode
 #
