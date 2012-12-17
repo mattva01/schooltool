@@ -285,8 +285,8 @@ class RemoteTask(Persistent, Contained):
         current_transaction.join(resource)
         app = ISchoolToolApplication(None)
         tasks = ITaskContainer(app)
-        tasks[self.task_id] = self
         self.scheduled = self.utcnow
+        tasks[self.task_id] = self
         return self
 
     @property
