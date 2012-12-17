@@ -1,0 +1,24 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE document SYSTEM "rml_1_0.dtd">
+<metal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+  <document tal:attributes="filename view/filename;
+                            compression view/use_compresion|nothing;
+                            debug view/render_debug;
+                            invariant view/render_invariant;">
+    <tal:block content="structure view/providers/init|nothing" />
+    <tal:block content="structure view/providers/stylesheet|nothing" />
+    <tal:block content="structure view/providers/template|nothing" />
+    <tal:block content="structure view/providers/page_info|nothing" />
+    <tal:block define="content_template nocall:view/content_template|nothing">
+      <story>
+        <tal:block condition="nocall:content_template"
+                   content="structure content_template" />
+        <tal:block content="structure view/providers/story" />
+      </story>
+    </tal:block>
+  </document>
+</metal:block>

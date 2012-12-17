@@ -89,14 +89,6 @@
       />
 
   <page
-      name="rml_macros"
-      for="*"
-      permission="zope.View"
-      template="templates/rml_macros.pt"
-      layer="schooltool.skin.flourish.IFlourishLayer"
-      />
-
-  <page
       name="generic_macros"
       for="*"
       permission="zope.View"
@@ -120,6 +112,13 @@
         for="*"
         permission="zope.View"
         template="templates/f_formlib_macros.pt"
+        layer="schooltool.skin.flourish.IFlourishLayer"
+        />
+    <page
+        name="rml_macros"
+        for="*"
+        permission="zope.View"
+        template="templates/rml_macros.pt"
         layer="schooltool.skin.flourish.IFlourishLayer"
         />
   </configure>

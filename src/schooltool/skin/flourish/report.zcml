@@ -1,0 +1,285 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:meta="http://namespaces.zope.org/meta"
+           xmlns:flourish="http://schooltool.org/flourish"
+           xmlns:zcml="http://namespaces.zope.org/zcml"
+           i18n_domain="schooltool">
+
+  <flourish:content
+      name="init"
+      class=".report.PDFInitSection"
+      view=".report.PDFPage"
+      template="rml/pdf_init.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:content
+      name="page_info"
+      class=".report.PDFPageInfoSection"
+      view=".report.PDFPage"
+      template="rml/pdf_pageinfo.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:content
+      name="aliases"
+      class=".report.PDFStylesheetInitSection"
+      view=".report.PDFStylesheetSection"
+      permission="zope.Public"
+      />
+
+  <flourish:content
+      name="stylesheet"
+      class=".report.PDFStylesheetSection"
+      view=".report.PDFPage"
+      template="rml/pdf_stylesheet.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:content
+      name="template"
+      class=".report.PDFTemplateSection"
+      view=".report.PDFPage"
+      template="rml/pdf_template.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:content
+      name="story"
+      class=".report.PDFStory"
+      view=".report.PDFPage"
+      permission="zope.Public"
+      />
+
+  <zope:adapter factory=".report.PageTemplateSlots"
+                provides=".interfaces.ITemplateSlots"/>
+
+  <!-- Standard report style -->
+
+  <flourish:viewlet
+      name="colors"
+      manager=".report.PDFInitSection"
+      view=".report.PDFPage"
+      class=".report.PDFPart"
+      template="rml/pdf_colors.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="schooltool"
+      manager=".report.PDFStylesheetSection"
+      view=".report.PDFPage"
+      class=".report.PDFPart"
+      template="rml/pdf_schooltool_styles.pt"
+      permission="zope.Public"
+      />
+
+  <!-- Standard page template -->
+
+  <flourish:viewlet
+      name="default"
+      manager=".report.PDFStylesheetSection"
+      view=".report.PlainPDFPage"
+      class=".report.PDFPart"
+      template="rml/pdf_plain_styles.pt"
+      permission="zope.Public"
+      />
+
+  <flourish:viewlet
+      name="default"
+      manager=".report.PDFTemplateSection"
+      view=".report.PlainPDFPage"
+      class=".report.PlainPageTemplate"
+      render="template"
+      template="rml/pdf_plain_page_template.pt"
+      permission="zope.Public"
+      />
+
+  <zope:adapter factory=".report.PlainPageTemplateSlots"
+                provides=".report.IPlainTemplateSlots"/>
+
+
+  <!-- Form widgets -->
+
+  <z3c:widgetTemplate
+      mode="display"
+      widget="z3c.form.interfaces.ICheckBoxWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      view="schooltool.skin.flourish.interfaces.IRMLTemplated"
+      template="rml/z3c-widget-sequence.pt"
+      contentType="text/xml"
+      />
+
+  <z3c:widgetTemplate
+      mode="display"
+      widget="z3c.form.interfaces.IFileWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      view="schooltool.skin.flourish.interfaces.IRMLTemplated"
+      template="rml/z3c-widget-file.pt"
+      contentType="text/xml"
+      />
+
+  <z3c:widgetTemplate
+      mode="display"
+      widget="z3c.form.interfaces.IFileWidget"
+      field="schooltool.skin.flourish.fields.Image"
+      layer="z3c.form.interfaces.IFormLayer"
+      view="schooltool.skin.flourish.interfaces.IRMLTemplated"
+      template="rml/z3c-widget.pt"
+      contentType="text/xml"
+      />
+
+  <z3c:widgetTemplate
+      mode="display"
+      widget="z3c.form.interfaces.IImageWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      view="schooltool.skin.flourish.interfaces.IRMLTemplated"
+      template="rml/z3c-widget-image.pt"
+      contentType="text/xml"
+      />
+
+  <z3c:widgetTemplate
+      mode="display"
+      widget="z3c.form.interfaces.IOrderedSelectWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      view="schooltool.skin.flourish.interfaces.IRMLTemplated"
+      template="rml/z3c-widget-sequence.pt"
+      contentType="text/xml"
+      />
+
+  <z3c:widgetTemplate
+      mode="display"
+      widget="z3c.form.interfaces.IPasswordWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      view="schooltool.skin.flourish.interfaces.IRMLTemplated"
+      template="rml/z3c-widget.pt"
+      contentType="text/xml"
+      />
+
+  <z3c:widgetTemplate
+      mode="display"
+      widget="z3c.form.interfaces.IRadioWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      view="schooltool.skin.flourish.interfaces.IRMLTemplated"
+      template="rml/z3c-widget-sequence.pt"
+      contentType="text/xml"
+      />
+
+  <z3c:widgetTemplate
+      mode="display"
+      widget="z3c.form.interfaces.ISelectWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      view="schooltool.skin.flourish.interfaces.IRMLTemplated"
+      template="rml/z3c-widget-sequence.pt"
+      contentType="text/xml"
+      />
+
+  <z3c:widgetTemplate
+      mode="display"
+      widget="z3c.form.interfaces.ITextAreaWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      view="schooltool.skin.flourish.interfaces.IRMLTemplated"
+      template="rml/z3c-widget.pt"
+      contentType="text/xml"
+      />
+
+
+  <z3c:widgetTemplate
+      mode="display"
+      widget="z3c.form.interfaces.ITextLinesWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      view="schooltool.skin.flourish.interfaces.IRMLTemplated"
+      template="rml/z3c-widget.pt"
+      contentType="text/xml"
+      />
+
+  <z3c:widgetTemplate
+      mode="display"
+      widget="z3c.form.interfaces.ITextWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      view="schooltool.skin.flourish.interfaces.IRMLTemplated"
+      template="rml/z3c-widget.pt"
+      contentType="text/xml"
+      />
+
+  <z3c:widgetTemplate
+      mode="display"
+      widget="schooltool.skin.flourish.widgets.FlourishFckeditorZ3CFormWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      view="schooltool.skin.flourish.interfaces.IRMLTemplated"
+      template="rml/z3c-html-widget.pt"
+      contentType="text/xml"
+      />
+
+  <flourish:content
+      name="row"
+      for="z3c.form.interfaces.IWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      view=".report.PDFForm"
+      template="rml/z3c-widget-table-row.pt"
+      class=".report.RMLWidgetRows"
+      permission="zope.Public"
+      />
+
+  <flourish:content
+      name="row"
+      for="z3c.form.interfaces.IMultiWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      view=".report.PDFForm"
+      template="rml/z3c-widget-table-row.pt"
+      class=".report.RMLMultiWidgetRows"
+      permission="zope.Public"
+      />
+
+  <zope:view
+      name="rml"
+      for="str"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".report.Text2RML"
+      permission="zope.Public"
+      />
+
+  <zope:view
+      name="rml"
+      for="unicode"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".report.Text2RML"
+      permission="zope.Public"
+      />
+
+  <zope:view
+      name="html2rml"
+      for="str"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".report.HTML2RML"
+      permission="zope.Public"
+      />
+
+  <zope:view
+      name="html2rml"
+      for="unicode"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".report.HTML2RML"
+      permission="zope.Public"
+      />
+
+  <zope:view
+      name="rml"
+      for="schooltool.skin.flourish.fields.ImageFile"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".report.Image2RML"
+      permission="zope.Public"
+      />
+
+  <configure zcml:condition="have devmode">
+    <flourish:page
+        name="rml"
+        for=".report.PDFPage"
+        class=".report.PDFPage2RML"
+        permission="zope.Public"
+      />
+  </configure>
+
+</configure>

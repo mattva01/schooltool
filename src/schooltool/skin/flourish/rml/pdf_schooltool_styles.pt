@@ -1,0 +1,99 @@
+<metal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+
+  <blockTableStyle id="table">
+    <blockFont start="0,0" stop="-1,0"
+               name="Ubuntu_Bold" />
+    <blockBackground start="0,0" stop="-1,0"
+                     colorName="table.header.background" />
+    <blockTextColor  start="0,0" stop="-1,0"
+                     colorName="table.header.text" />
+    <blockBackground start="0,1" stop="-1,-1"
+                     colorsByRow="table.row.background,table.row-alt.background" />
+    <blockTextColor  start="0,1" stop="-1,-1"
+                     colorName="table.text" />
+  </blockTableStyle>
+
+  <blockTableStyle id="multi-table.header">
+    <blockFont start="0,0" stop="-1,-1"
+               name="Ubuntu_Bold" />
+    <blockBackground start="0,0" stop="-1,-1"
+                     colorName="table.header.background" />
+    <blockTextColor  start="0,0" stop="-1,-1"
+                     colorName="table.header.text" />
+  </blockTableStyle>
+
+  <blockTableStyle id="multi-table.subtable">
+    <blockFont start="0,0" stop="0,-1"
+               name="Ubuntu_Bold" />
+    <blockBackground start="0,0" stop="-1,0"
+                     colorName="table.subheader.background" />
+    <blockTextColor  start="0,0" stop="-1,0"
+                     colorName="table.subheader.text" />
+    <blockBackground start="0,1" stop="-1,-1"
+                     colorsByRow="table.row.background,table.row-alt.background" />
+    <blockTextColor  start="0,1" stop="-1,-1"
+                     colorName="table.text" />
+  </blockTableStyle>
+
+  <blockTableStyle id="multi-table.content-only">
+    <blockBackground start="0,0" stop="-1,-1"
+                     colorsByRow="table.row-alt.background,table.row.background" />
+    <blockTextColor  start="0,0" stop="-1,-1"
+                     colorName="table.text" />
+  </blockTableStyle>
+
+  <blockTableStyle id="list">
+    <blockFont start="0,0" stop="0,-1"
+               name="Ubuntu_Bold" />
+    <blockBackground start="0,0" stop="-1,-1"
+                     colorsByRow="table.row.background,table.row-alt.background" />
+    <blockTextColor  start="0,0" stop="-1,-1"
+                     colorName="table.text" />
+  </blockTableStyle>
+
+  <blockTableStyle id="table.form">
+    <blockFont start="0,0" stop="0,-1"
+               name="Ubuntu_Bold" />
+    <blockFont start="1,0" stop="-1,-1"
+               name="Ubuntu_Regular" />
+    <blockBackground start="0,0" stop="-1,-1"
+                     colorsByRow="table.row.background,table.row-alt.background" />
+    <blockTextColor  start="0,0" stop="-1,-1"
+                     colorName="table.text" />
+  </blockTableStyle>
+
+  <paraStyle name="h1" fontName="Ubuntu_Regular" fontSize="24" />
+  <paraStyle name="h2" fontName="Ubuntu_Regular" fontSize="18" />
+  <paraStyle name="h3" fontName="Ubuntu_Regular" fontSize="12" />
+
+  <paraStyle name="section-title" fontName="Ubuntu_Regular" fontSize="18"
+             spaceAfter="18" />
+  <paraStyle name="info-title" fontName="Ubuntu_Regular" fontSize="14"
+             spaceAfter="4" />
+
+  <paraStyle name="pagesplit-continued" fontName="Ubuntu_Regular" fontSize="8.5"
+             rightIndent="8.5" alignment="RIGHT" />
+
+
+  <blockTableStyle id="grade.table.grades">
+    <lineStyle kind="LINEABOVE" colorName="grade.table.grades-line"
+               start="0,0" stop="-1,0"/>
+    <lineStyle kind="LINEBEFORE" colorName="grade.table.grades-line"
+               start="1,0" stop="-2,-1"/>
+
+    <blockFont start="0,0" stop="0,-1"
+               name="Ubuntu_Bold" />
+    <blockBackground start="0,0" stop="-1,-1"
+                     colorsByRow="table.row-alt.background,table.row.background" />
+    <blockTextColor  start="0,0" stop="-1,-1"
+                     colorName="table.text" />
+
+    <blockAlignment start="1,0" stop="-1,-1" value="center" />
+    <blockAlignment start="0,0" stop="0,-1" value="left" />
+  </blockTableStyle>
+
+</metal:block>

@@ -1,0 +1,48 @@
+<tal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+
+  <pto>
+    <pto_header>
+      <hr width="100%" thickness="1" cap="square" color="separator"
+          spaceAfter="4" spaceBefore="8" align="center" />
+      <para style="section-title" tal:content="view/title_continued"></para>
+      <blockTable style="multi-table.header"
+                  tal:attributes="colWidths options/col_widths" alignment="left">
+        <tr tal:repeat="row options/headers">
+          <td tal:repeat="cell row" tal:content="structure cell" />
+        </tr>
+      </blockTable>
+      <!-- table with header row only -->
+    </pto_header>
+
+    <hr width="100%" thickness="1" cap="square" color="separator"
+        spaceAfter="4" spaceBefore="8" align="center" />
+    <para style="section-title" tal:content="view/title"></para>
+    <blockTable style="multi-table.header"
+                tal:attributes="colWidths options/col_widths" alignment="left">
+      <tr tal:repeat="row options/headers">
+        <td tal:repeat="cell row" tal:content="structure cell" />
+      </tr>
+    </blockTable>
+    <tal:block repeat="table options/content">
+      <blockTable
+          tal:attributes="colWidths options/col_widths;
+                          style python:(table.get('headers') and
+                                        'multi-table.subtable' or
+                                        'multi-table.content-only');
+                          repeatRows python: len(table.get('headers', ()))"
+                  alignment="left">
+        <tr tal:repeat="row table/headers|nothing">
+          <td tal:repeat="cell row" tal:content="structure cell" />
+        </tr>
+        <tr tal:repeat="row table/rows">
+          <td tal:repeat="cell row" tal:content="structure cell" />
+        </tr>
+      </blockTable>
+    </tal:block>
+  </pto>
+
+</tal:block>
