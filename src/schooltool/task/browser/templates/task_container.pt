@@ -1,0 +1,30 @@
+<tal:block i18n:domain="schooltool">
+  <table class="form-fields">
+    <thead>
+      <tr>
+        <th i18n:translate="" class="label">Task</th>
+        <th i18n:translate="" class="label">Status</th>
+        <th i18n:translate="" class="label">Scheduled</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr tal:repeat="task view/tasks">
+        <td>
+          <a tal:attributes="href task/@@absolute_url"
+             tal:content="task/task_id" />
+          <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/schooltool.task_results/${task/task_id}"
+             tal:content="task/task_id" />
+        </td>
+        <td>
+          <span tal:content="task/internal_state" />
+        </td>
+        <td>
+          <tal:block condition="task/scheduled">
+            <span tal:content="task/scheduled/@@fullDate" /> -
+            <span tal:content="task/scheduled/time" />
+          </tal:block>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</tal:block>

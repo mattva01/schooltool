@@ -20,10 +20,18 @@
 SchoolTool simple import views.
 """
 import xlrd
-import transaction
 import datetime
+import urllib
+import transaction
 from decimal import Decimal, InvalidOperation
 
+import celery.task
+import celery.states
+import zope.file.upload
+import zope.file.file
+from zope.interface import implements
+from zope.component import adapts
+from zope.cachedescriptors.property import Lazy
 from zope.container.contained import containedEvent
 from zope.container.interfaces import INameChooser
 from zope.event import notify
@@ -31,8 +39,8 @@ from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
+from schooltool.task.interfaces import IRemoteTask
 
-import schooltool.skin.flourish.page
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.demographics import DateFieldDescription
@@ -41,6 +49,7 @@ from schooltool.basicperson.person import BasicPerson
 from schooltool.contact.contact import Contact, ContactPersonInfo
 from schooltool.contact.interfaces import IContact, IContactContainer
 from schooltool.contact.interfaces import IContactPersonInfo, IContactable
+from schooltool.export.interfaces import IImporterTask
 from schooltool.resource.resource import Resource
 from schooltool.resource.resource import Location
 from schooltool.resource.resource import Equipment
@@ -61,6 +70,8 @@ from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.common import DateRange
 from schooltool.common import parse_time_range
+from schooltool.task.tasks import RemoteTask, db_task
+from schooltool.task.tasks import TaskReadStatus, TaskWriteStatus
 from schooltool.timetable.daytemplates import CalendarDayTemplates
 from schooltool.timetable.daytemplates import WeekDayTemplates
 from schooltool.timetable.daytemplates import SchoolDayTemplates
@@ -134,11 +145,31 @@ no_date = object()
 no_data = object()
 
 
+def normalized_progress(*args):
+    pmin = 0.0
+    pmax = 1.0
+    n = len(args)
+    while n > 0:
+        pmin = pmin + pmax * args[n-2]
+        pmax = pmax * args[n-1]
+        n -= 2
+    return min(float(pmin) / float(pmax), 1.0)
+
+
 class ImporterBase(object):
 
-    def __init__(self, context, request):
+    title = _("Import")
+
+    def __init__(self, context, request,
+                 progress_callback=None):
         self.context, self.request = context, request
         self.errors = []
+        self.progress_callback = progress_callback
+
+    def progress(self, *args):
+        progress = normalized_progress(*args)
+        if self.progress_callback is not None:
+            self.progress_callback(progress)
 
     def isEmptyRow(self, sheet, row, num_cols=30):
         # We'll pick 30 as an arbitrary number of columns to test so that we
@@ -349,6 +380,8 @@ class ImporterBase(object):
 
 class SchoolYearImporter(ImporterBase):
 
+    title = _("School Years")
+
     sheet_name = 'School Years'
 
     def createSchoolYear(self, data):
@@ -381,7 +414,8 @@ class SchoolYearImporter(ImporterBase):
 
     def process(self):
         sh = self.sheet
-        for row in range(1, sh.nrows):
+        nrows = sh.nrows
+        for row in range(1, nrows):
             num_errors = len(self.errors)
             data = {}
             data['__name__'] = self.getRequiredIdFromCell(sh, row, 0)
@@ -397,9 +431,12 @@ class SchoolYearImporter(ImporterBase):
             if num_errors == len(self.errors):
                 sy = self.createSchoolYear(data)
                 self.addSchoolYear(sy, data)
+            self.progress(row, nrows)
 
 
 class TermImporter(ImporterBase):
+
+    title = _("Terms")
 
     sheet_name = 'Terms'
 
@@ -442,8 +479,8 @@ class TermImporter(ImporterBase):
 
     def process(self):
         sh = self.sheet
-
-        for row in range(1, sh.nrows):
+        nrows = sh.nrows
+        for row in range(1, nrows):
             if self.isEmptyRow(sh, row):
                 break
 
@@ -478,9 +515,11 @@ class TermImporter(ImporterBase):
                 term = self.createTerm(data)
                 self.addTerm(term, data)
 
+            self.progress(row, nrows)
+
         row += 1
         if self.getCellValue(sh, row, 0, '') == 'Holidays':
-            for row in range(row + 1, sh.nrows):
+            for row in range(row + 1, nrows):
                 if self.isEmptyRow(sh, row):
                     break
                 start = self.getDateFromCell(sh, row, 0)
@@ -497,6 +536,7 @@ class TermImporter(ImporterBase):
                         for term in sy.values():
                             if day in term:
                                 term.remove(day)
+                self.progress(row, nrows)
 
         row += 1
         if self.getCellValue(sh, row, 0, '') == 'Weekends':
@@ -510,9 +550,12 @@ class TermImporter(ImporterBase):
                     for sy in ISchoolYearContainer(self.context).values():
                         for term in sy.values():
                             term.removeWeekdays(col)
+            self.progress(row, nrows)
 
 
 class SchoolTimetableImporter(ImporterBase):
+
+    title = _("School Timetables")
 
     sheet_name = 'School Timetables'
 
@@ -693,6 +736,8 @@ class SchoolTimetableImporter(ImporterBase):
 
 class ResourceImporter(ImporterBase):
 
+    title = _("Resources")
+
     sheet_name = 'Resources'
 
     def createResource(self, data):
@@ -740,6 +785,8 @@ class ResourceImporter(ImporterBase):
 
 class PersonImporter(ImporterBase):
 
+    title = _("Persons")
+
     sheet_name = 'Persons'
     group_name = None
 
@@ -772,6 +819,7 @@ class PersonImporter(ImporterBase):
 
     def process(self):
         sh = self.sheet
+        nrows = sh.nrows
 
         fields = IDemographicsFields(ISchoolToolApplication(None))
         if self.group_name:
@@ -795,7 +843,7 @@ class PersonImporter(ImporterBase):
             first_row = 1
             fields = list(fields.values())
 
-        for row in range(first_row, sh.nrows):
+        for row in range(first_row, nrows):
             if self.isEmptyRow(sh, row):
                 continue
 
@@ -853,9 +901,12 @@ class PersonImporter(ImporterBase):
                 self.addPerson(person, data)
                 if group and person not in group.members:
                     group.members.add(person)
+            self.progress(row, nrows)
 
 
 class TeacherImporter(PersonImporter):
+
+    title = _("Teachers")
 
     sheet_name = 'Teachers'
     group_name = 'teachers'
@@ -863,11 +914,15 @@ class TeacherImporter(PersonImporter):
 
 class StudentImporter(PersonImporter):
 
+    title = _("Students")
+
     sheet_name = 'Students'
     group_name = 'students'
 
 
 class ContactPersonImporter(ImporterBase):
+
+    title = _("Contact Persons")
 
     sheet_name = 'Contact Persons'
 
@@ -910,7 +965,8 @@ class ContactPersonImporter(ImporterBase):
     def process(self):
         sh = self.sheet
         persons = ISchoolToolApplication(None)['persons']
-        for row in range(1, sh.nrows):
+        nrows = sh.nrows
+        for row in range(1, nrows):
             if self.isEmptyRow(sh, row):
                 continue
 
@@ -948,9 +1004,12 @@ class ContactPersonImporter(ImporterBase):
 
             if num_errors == len(self.errors):
                 self.establishContact(data)
+            self.progress(row, nrows)
 
 
 class ContactRelationshipImporter(ImporterBase):
+
+    title = _("Contact Relationships")
 
     sheet_name = 'Contact Relationships'
 
@@ -960,7 +1019,8 @@ class ContactRelationshipImporter(ImporterBase):
         persons = app['persons']
         contacts = IContactContainer(app)
         vocab = IContactPersonInfo['relationship'].vocabulary
-        for row in range(1, sh.nrows):
+        nrows = sh.nrows
+        for row in range(1, nrows):
             if self.isEmptyRow(sh, row):
                 continue
 
@@ -1000,9 +1060,12 @@ class ContactRelationshipImporter(ImporterBase):
                     info.relationship = relationship
                 if contact not in IContactable(person).contacts:
                     IContactable(person).contacts.add(contact, info)
+            self.progress(row, nrows)
 
 
 class CourseImporter(ImporterBase):
+
+    title = _("Courses")
 
     sheet_name = 'Courses'
 
@@ -1033,7 +1096,8 @@ class CourseImporter(ImporterBase):
 
     def process(self):
         sh = self.sheet
-        for row in range(1, sh.nrows):
+        nrows = sh.nrows
+        for row in range(1, nrows):
             if self.isEmptyRow(sh, row):
                 continue
             num_errors = len(self.errors)
@@ -1057,9 +1121,12 @@ class CourseImporter(ImporterBase):
                 continue
             course = self.createCourse(data)
             self.addCourse(course, data)
+            self.progress(row, nrows)
 
 
 class SectionImporter(ImporterBase):
+
+    title = _("Sections")
 
     def createSection(self, data, year, term):
         sc = ISectionContainer(term)
@@ -1249,7 +1316,9 @@ class SectionImporter(ImporterBase):
     def process(self):
         app = ISchoolToolApplication(None)
         schoolyears = ISchoolYearContainer(app)
-        for self.sheet_name in self.sheet_names:
+        sheet_names = self.sheet_names
+        nsheets = len(sheet_names)
+        for (n, self.sheet_name) in enumerate(sheet_names):
             sheet = self.wb.sheet_by_name(self.sheet_name)
 
             num_errors = len(self.errors)
@@ -1268,9 +1337,11 @@ class SectionImporter(ImporterBase):
                 continue
             term = year[term_id]
 
-            for row in range(2, sheet.nrows):
+            nrows = sheet.nrows
+            for row in range(2, nrows):
                 if sheet.cell_value(rowx=row, colx=0) == 'Section Title':
                     self.import_section(sheet, row, year, term)
+                self.progress(n, nsheets, row, nrows)
 
     def import_data(self, wb):
         self.wb = wb
@@ -1284,6 +1355,8 @@ class SectionImporter(ImporterBase):
 
 
 class SectionsImporter(ImporterBase):
+
+    title = _("Sections")
 
     sheet_name = 'Sections'
 
@@ -1319,7 +1392,8 @@ class SectionsImporter(ImporterBase):
         resources = self.context['resources']
         prev_links, next_links = {}, {}
 
-        for row in range(1, sh.nrows):
+        nrows = sh.nrows
+        for row in range(1, nrows):
             if self.isEmptyRow(sh, row):
                 continue
 
@@ -1392,6 +1466,8 @@ class SectionsImporter(ImporterBase):
                 if resource not in section.resources:
                     section.resources.add(removeSecurityProxy(resource))
 
+            self.progress(row, nrows)
+
         self.import_section_links(prev_links, next_links)
 
 
@@ -1402,7 +1478,8 @@ class SectionMixin(object):
 
         sections = []
         current_year_id = None
-        for row in range(row + 1, sh.nrows):
+        nrows = sh.nrows
+        for row in range(row + 1, nrows):
             if self.isEmptyRow(sh, row):
                 break
 
@@ -1433,10 +1510,14 @@ class SectionMixin(object):
                 continue
             sections.append(section_container[section_id])
 
+            self.progress(row, nrows)
+
         return sections
 
 
 class SectionEnrollmentImporter(ImporterBase, SectionMixin):
+
+    title = _("Section Enrollment")
 
     sheet_name = 'SectionEnrollment'
 
@@ -1449,7 +1530,8 @@ class SectionEnrollmentImporter(ImporterBase, SectionMixin):
             return []
 
         students = []
-        for row in range(row + 1, sh.nrows):
+        nrows = sh.nrows
+        for row in range(row + 1, nrows):
             if self.isEmptyRow(sh, row):
                 break
 
@@ -1462,12 +1544,14 @@ class SectionEnrollmentImporter(ImporterBase, SectionMixin):
             else:
                 students.append(persons[student_id])
 
+            self.progress(row, nrows)
+
         return students
 
     def process(self):
         sh = self.sheet
-
-        for row in range(0, sh.nrows):
+        nrows = sh.nrows
+        for row in range(0, nrows):
             if sh.cell_value(rowx=row, colx=0) != 'School Year':
                 continue
 
@@ -1489,8 +1573,12 @@ class SectionEnrollmentImporter(ImporterBase, SectionMixin):
                     if student not in students_group.members:
                         students_group.members.add(removeSecurityProxy(student))
 
+            self.progress(row, nrows)
+
 
 class SectionTimetablesImporter(ImporterBase, SectionMixin):
+
+    title = _("Section Timetables")
 
     sheet_name = 'SectionTimetables'
 
@@ -1530,7 +1618,8 @@ class SectionTimetablesImporter(ImporterBase, SectionMixin):
             schedule.consecutive_periods_as_one = bool(consecutive)
             schedules.append(schedule)
 
-        for row in range(row + 1, sh.nrows):
+        nrows = sh.nrows
+        for row in range(row + 1, nrows):
             if self.isEmptyRow(sh, row):
                 break
 
@@ -1558,6 +1647,8 @@ class SectionTimetablesImporter(ImporterBase, SectionMixin):
             for schedule in schedules:
                 schedule.addPeriod(period)
 
+            self.progress(row, nrows)
+
         for index, section in enumerate(sections):
             term = ITerm(section)
             schedule_container = IScheduleContainer(section)
@@ -1568,8 +1659,8 @@ class SectionTimetablesImporter(ImporterBase, SectionMixin):
 
     def process(self):
         sh = self.sheet
-
-        for row in range(0, sh.nrows):
+        nrows = sh.nrows
+        for row in range(0, nrows):
             if sh.cell_value(rowx=row, colx=0) != 'School Year':
                 continue
 
@@ -1580,8 +1671,12 @@ class SectionTimetablesImporter(ImporterBase, SectionMixin):
 
             self.import_timetable(sh, row, sections)
 
+            self.progress(row, nrows)
+
 
 class LinkedSectionImporter(ImporterBase):
+
+    title = _("Linked sections")
 
     sheet_name = 'LinkedSectionImport'
 
@@ -1624,7 +1719,8 @@ class LinkedSectionImporter(ImporterBase):
         persons = self.context['persons']
         resources = self.context['resources']
 
-        for row in range(1, sh.nrows):
+        nrows = sh.nrows
+        for row in range(1, nrows):
             if self.isEmptyRow(sh, row):
                 continue
 
@@ -1689,8 +1785,12 @@ class LinkedSectionImporter(ImporterBase):
                     if resource not in section.resources:
                         section.resources.add(removeSecurityProxy(resource))
 
+            self.progress(row, nrows)
+
 
 class GroupImporter(ImporterBase):
+
+    title = _("Groups")
 
     sheet_name = 'Groups'
 
@@ -1730,12 +1830,14 @@ class GroupImporter(ImporterBase):
 
         group = self.createGroup(data)
         self.addGroup(group, data)
+        self.progress(row, sh.nrows)
 
         row += 5
         pc = self.context['persons']
         if self.getCellValue(sh, row, 0, '') == 'Members':
             row += 1
-            for row in range(row, sh.nrows):
+            nrows = sh.nrows
+            for row in range(row, nrows):
                 if self.isEmptyRow(sh, row):
                     break
                 num_errors = len(self.errors)
@@ -1748,6 +1850,7 @@ class GroupImporter(ImporterBase):
                 member = pc[username]
                 if member not in group.members:
                     group.members.add(removeSecurityProxy(member))
+                self.progress(row, nrows)
 
     def process(self):
         sh = self.sheet
@@ -1891,3 +1994,272 @@ class FlourishMegaImporter(flourish.page.Page, MegaImporter):
             self.request.response.redirect(self.nextURL())
             return
         return MegaImporter.update(self)
+
+
+def createFile(file_upload):
+    file = zope.file.file.File()
+    zope.file.upload.updateBlob(file, file_upload)
+    file.__name__ = file_upload.filename
+    return file
+
+
+class FlourishRemoteMegaImporter(flourish.page.Page):
+
+    task = None
+
+    def __init__(self, context, request):
+        flourish.page.Page.__init__(self, context, request)
+        self.errors = []
+        self.success = []
+
+    def nextURL(self):
+        url = absoluteURL(self.context, self.request)
+        return '%s/manage' % url
+
+    def update(self):
+        if "UPDATE_CANCEL" in self.request:
+            self.request.response.redirect(self.nextURL())
+            return
+
+        if "UPDATE_SUBMIT" not in self.request:
+            return
+
+        xls_upload = self.request.get('xlsfile', '')
+        if not xls_upload:
+            self.errors.append(_('No data provided'))
+            return
+        if not self.errors:
+            xlsfile = createFile(xls_upload)
+            self.task = ImporterTask(xlsfile)
+            self.task.schedule()
+            #self.request.response.redirect(self.nextURL())
+
+
+class Timer(object):
+
+    update_interval = datetime.timedelta(seconds=1)
+    last_updated = None
+
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        self.last_updated = None
+
+    @property
+    def now(self):
+        return datetime.datetime.utcnow()
+
+    @property
+    def delta(self):
+        last_updated = self.last_updated
+        if last_updated is None:
+            return None
+        return self.now - last_updated
+
+    def tick(self, *args, **kw):
+        raise NotImplemented()
+
+    def tock(self, *args, **kw):
+        raise NotImplemented()
+
+    def force(self, *args, **kw):
+        self.tick(*args, **kw)
+        self.tock(*args, **kw)
+        self.last_updated = self.now
+
+    def __call__(self, *args, **kw):
+        self.tick(*args, **kw)
+        if (self.last_updated is None or
+            self.delta >= self.update_interval):
+            self.tock(*args, **kw)
+            self.last_updated = self.now
+
+
+class ImportProgress(Timer):
+
+    importers = None
+    value = None
+    task_status = None
+
+    def __init__(self, importers, task_id):
+        self.importers = importers
+        self.task_status = TaskWriteStatus(task_id)
+        Timer.__init__(self)
+
+    def reset(self):
+        Timer.reset(self)
+        self.value = {}
+        for n, importer in enumerate(self.importers):
+            self.value[n] = {
+                'title': importer.title,
+                'errors': [],
+                'progress': 0.0,
+                }
+        self.value['overall'] = {
+                'title': _('Overall'),
+                'errors': [],
+                'progress': 0.0,
+                }
+        self.tock()
+
+    def finish(self):
+        for status in self.value.values():
+            status['progress'] = 1.0
+        self.task_status.set_progress(self.value)
+        self.last_updated = self.now
+
+    def tick(self, importer_n, value):
+        self.value[importer_n]['progress'] = value
+        self.value['overall']['progress'] = normalized_progress(
+            importer_n, len(self.importers), value, 1.0)
+
+    def tock(self, *args, **kw):
+        self.task_status.set_progress(self.value)
+
+
+
+class RemoteMegaImporter(MegaImporter):
+
+    def update(self):
+        remote_task = self.request.remote_task
+
+        importers = self.importers
+        status = dict([
+                (n, {'title': importer.title, 'progress': 0.0})
+                for n, importer in enumerate(importers)])
+
+        status['overall'] = {'title': _('Overall'), 'progress': 0.0, 'active': True}
+
+        progress = ImportProgress(self.importers, self.request.request.id)
+
+        xls = remote_task.xls_file.open()
+        wb = xlrd.open_workbook(file_contents=xls.read())
+        xls.close()
+
+        if wb is None:
+            progress.finish()
+            return progress.value
+
+        savepoint = transaction.savepoint(optimistic=True)
+        for importer_n, importer in enumerate(importers):
+            for record in progress.value.values():
+                record['active'] = False
+            progress.value['overall']['active'] = True
+            progress.value[importer_n]['active'] = True
+
+            imp = importer(self.context, self.request,
+                           progress_callback=lambda v: progress(importer_n, v))
+            imp.import_data(wb)
+
+            progress.value[importer_n]['errors'].extend(imp.errors)
+            progress.value['overall']['errors'].extend(imp.errors)
+            progress.force(importer_n, 1.0)
+
+        if progress.value['overall']['errors']:
+            savepoint.rollback()
+
+        progress.finish()
+        return progress.value
+
+    def __call__(self):
+        return self.update()
+
+
+@db_task
+def import_xls():
+    remote = import_xls.remote_task
+    if remote is None: # SchoolTool counterpart not committed yet
+        self = import_xls
+        max_retries = getattr(self, 'max_db_conflict_retries',
+                              self.app.conf.SCHOOLTOOL_RETRY_DB_CONFLICTS)
+        raise self.retry(exc=None, retries=max_retries)
+
+    app = ISchoolToolApplication(None)
+    importer = RemoteMegaImporter(app, import_xls)
+    result = importer()
+    return result
+
+
+class ImporterTask(RemoteTask):
+    implements(IImporterTask)
+
+    handler = import_xls
+    xls_file = None
+
+    def __init__(self, xls_file):
+        RemoteTask.__init__(self)
+        self.xls_file = xls_file
+
+
+class ImportProgressContent(flourish.page.Content):
+
+    @Lazy
+    def status(self):
+        return TaskReadStatus(self.task_id)
+
+    @property
+    def progress_id(self):
+        return flourish.page.sanitize_id('progress-%s' % self.context.task_id)
+
+    @property
+    def importers(self):
+        if self.status.progress is None:
+            return []
+        result = []
+        for k, progress in self.status.progress.items():
+            if k == 'overall':
+                continue
+            result.append(progress)
+        return result
+
+    @property
+    def overall(self):
+        if self.status.progress is None:
+            return None
+        return self.status.progress['overall']
+
+    @property
+    def task_id(self):
+        return self.context.task_id
+
+
+class DownloadFile(BrowserView):
+
+    attribute = None
+    inline = False
+
+    @property
+    def file_object(self):
+        return getattr(self.context, self.attribute, None)
+
+    def setUpResponse(self, data, filename):
+        stored_file = self.file_object
+        response = self.request.response
+        if stored_file.mimeType:
+            response.setHeader('Content-Type', stored_file.mimeType)
+        response.setHeader('Content-Length', len(data))
+        disposition = self.inline and 'inline' or 'attachment'
+        if filename:
+            disposition += '; filename="%s"' % filename
+        response.setHeader('Content-Disposition', disposition)
+
+    def __call__(self):
+        stored_file = self.file_object
+        if stored_file is None:
+            return None
+        filename = getattr(stored_file, '__name__', '')
+        filename = urllib.quote(filename.encode('UTF-8'))
+        f = stored_file.open()
+        data = f.read()
+        f.close()
+
+        self.setUpResponse(data, filename)
+
+        return data
+
+
+class DownloadImportXLS(DownloadFile):
+
+    attribute = "xls_file"
+    inline = False

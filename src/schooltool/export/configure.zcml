@@ -53,4 +53,11 @@
       layer="zope.publisher.interfaces.browser.IBrowserRequest"
       />
 
+  <zope:class class=".importer.ImporterTask">
+    <require permission="schooltool.view"
+             interface="schooltool.task.interfaces.IRemoteTask" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.task.interfaces.IRemoteTask" />
+  </zope:class>
+
 </configure>

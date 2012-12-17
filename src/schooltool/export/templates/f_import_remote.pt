@@ -1,0 +1,49 @@
+<div i18n:domain="schooltool">
+  <form method="POST" enctype="multipart/form-data" class="standalone"
+        tal:attributes="action request/URL"
+        tal:condition="not:nocall:view/task">
+    <div class="status"
+         tal:condition="view/errors"
+         tal:repeat="error view/displayErrors">
+      <div class="summary ui-state-error ui-corner-all">
+        <span class="ui-icon ui-icon-alert">icon</span>
+        <tal:block content="error">
+          [error message]
+        </tal:block>
+      </div>
+    </div>
+    <div class="status"
+         tal:condition="view/success">
+      <div class="summary ui-state-highlight ui-corner-all">
+        <span class="ui-icon ui-icon-info">icon</span>
+        <span tal:repeat="msg view/success" tal:content="msg" />
+      </div>
+    </div>
+
+    <fieldset>
+      <legend><span i18n:translate="">Upload XLS File</span></legend>
+      <div class="row">
+        <div class="label">
+          <label for="xlsfile">
+            <span i18n:translate="">XLS File</span>
+          </label>
+        </div>
+        <div class="widget">
+          <input id="xlsfile" type="file" name="xlsfile"/>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="buttons">
+      <input name="UPDATE_SUBMIT" class="button-ok" type="submit"
+             value="Submit" i18n:attributes="value submit-button" />
+      <input name="UPDATE_CANCEL" class="button-cancel" type="submit"
+             value="Cancel" i18n:attributes="value cancel-button" />
+    </div>
+  </form>
+
+  <div tal:condition="nocall:view/task">
+    <tal:block content="structure view/task/schooltool:content/progress" />
+  </div>
+
+</div>
