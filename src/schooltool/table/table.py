@@ -18,6 +18,7 @@
 #
 """Base code for table rendering and filtering.
 """
+import pytz
 import urllib
 
 import zope.security
@@ -34,6 +35,8 @@ from zc.table.interfaces import IColumnSortedItems
 from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
 
+from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import stupid_form_key
 from schooltool.skin import flourish
 from schooltool.table.batch import Batch
@@ -143,6 +146,18 @@ def label_cell_formatter_factory(prefix="", id_getter=None):
 def url_cell_formatter(value, item, formatter):
     url = absoluteURL(item, formatter.request)
     return '<a href="%s">%s</a>' % (url, value)
+
+
+def datetime_formatter(value, item, formatter):
+    if value is None:
+        return ''
+    app = ISchoolToolApplication(None)
+    preferences = IApplicationPreferences(app)
+    preferred_datetime_format = '%s %s' % (preferences.dateformat,
+                                           preferences.timeformat)
+    app_timezone = pytz.timezone(preferences.timezone)
+    local_dt = value.astimezone(app_timezone)
+    return local_dt.strftime(preferred_datetime_format)
 
 
 class NullTableFormatter(object):

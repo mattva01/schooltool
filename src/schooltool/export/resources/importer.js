@@ -87,6 +87,20 @@ ST.export = $.extend(ST.export, {importer: function() {
         parts.inprogress.hide('slow');
         parts.committing.hide();
         parts.failed.hide();
+
+        if (progress.info.overall.errors.length) {
+            var status = parts.succeeded.find('div[class="status"]');
+            var error_templ = parts.succeeded.find('div[name="error-template"]');
+            for (n in progress.info.overall.errors) {
+                var error = progress.info.overall.errors[n];
+                var new_error = $(error_templ.html());
+                new_error.find('div[name="error"]').html(error);
+                parts.succeeded.find('div[class="status"]:last').append(new_error);
+                new_error.show();
+            }
+            status.show();
+        }
+
         parts.succeeded.show();
 
         /* TODO: list xls errors on succesful import failure :) */

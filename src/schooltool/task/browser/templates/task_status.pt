@@ -38,11 +38,11 @@
     </tbody>
   </table>
 
+  <tal:block content="structure context/schooltool:content/progress|nothing" />
+
   <h3>
     <a tal:attributes="href context/__parent__/@@absolute_url"
        i18n:translate="">Done</a>
   </h3>
-
-  <tal:block content="structure context/schooltool:content/progress|nothing" />
 
 </tal:block>

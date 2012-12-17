@@ -182,5 +182,8 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     standard = schooltool.standard
     schooltool = schooltool.skin.flourish.instance
 
+    [schooltool.tasks]
+    schooltool.export.importer = schooltool.export.importer
+
     """,
     )

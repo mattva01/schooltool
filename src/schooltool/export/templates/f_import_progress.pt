@@ -21,16 +21,32 @@
       </tbody>
     </table>
   </div>
-  <div tal:attributes="id string:${progress_id}-committing">
+  <div style="display: none;" tal:attributes="id string:${progress_id}-committing">
     <h3 i18n:translate="">Committing to database.
       <img i18n:name="spinner"
            tal:attributes="src context/++resource++schooltool.skin.flourish/spinner.gif" />
     </h3>
   </div>
   <div style="display: none;" tal:attributes="id string:${progress_id}-succeeded">
-    <h3 i18n:translate="">Import finished.</h3>
-    show errors if any
-    show done link here
+    <h3 i18n:translate="">Finished importing.</h3>
+
+    <div style="display:none" class="status">
+      <p i18n:translate="">Data not saved due to these errors:</p>
+      <div style="display:none" name="error-template">
+        <div class="summary ui-state-error ui-corner-all">
+          <span class="ui-icon ui-icon-alert">icon</span>
+          <div name="error"></div>
+        </div>
+      </div>
+    </div>
+
+    <p>
+      <a tal:attributes="href string:${context/@@absolute_url}/import.xls"
+         i18n:translate="">
+        Download <tal:block i18n:name="filename" content="context/xls_file/__name__" />
+      </a>
+    </p>
+
   </div>
   <div style="display: none;" tal:attributes="id string:${progress_id}-failed">
     <h3 i18n:translate="">Server error</h3>

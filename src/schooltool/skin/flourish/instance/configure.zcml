@@ -57,5 +57,6 @@
 
   <includePluginsOverrides package="schooltool" />
   <includePlugins package="schooltool" file="plugin.zcml" />
+  <includePlugins package="schooltool" file="i18n.zcml" />
 
 </configure>

@@ -10,10 +10,8 @@ BROKER_URL = "redis://%s:%s/%d" % (
     CELERY_REDIS_HOST, CELERY_REDIS_PORT, _BROKER_REDIS_DB)
 
 CELERY_ENABLE_UTC = True
-CELERY_TIMEZONE = "UTC"
 
-CELERY_IMPORTS = ("schooltool.task.tasks",
-                  "schooltool.export.importer", )
+CELERY_IMPORTS = ("schooltool.task.tasks", )
 
 CELERYBEAT_OPTS="--schedule=${data_dir}/celerybeat-schedule"
 CELERYBEAT_SCHEDULE = {}

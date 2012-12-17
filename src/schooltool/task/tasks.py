@@ -20,6 +20,7 @@ from __future__ import absolute_import
 
 import sys
 import datetime
+import pkg_resources
 import pytz
 
 import celery.task
@@ -31,6 +32,7 @@ import transaction.interfaces
 from celery.task import task, periodic_task
 from persistent import Persistent
 from zope.interface import implements, implementer
+from zope.catalog.text import TextIndex
 from zope.component import adapter
 from zope.container.btree import BTreeContainer
 from zope.container.contained import Contained
@@ -40,6 +42,7 @@ from zope.component.hooks import getSite, setSite
 from zope.app.publication.zopepublication import ZopePublication
 
 from schooltool.app.app import StartUpBase
+from schooltool.app.catalog import AttributeCatalog
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.task.celery import open_schooltool_db
 from schooltool.task.interfaces import IRemoteTask, ITaskContainer
@@ -48,17 +51,38 @@ from schooltool.task.interfaces import IRemoteTask, ITaskContainer
 IN_PROGRESS = 'IN_PROGRESS'
 COMMITTING = 'COMMITTING_ZODB'
 
+
 class NoDatabaseException(Exception):
-    pass
+    """SchoolTool database is not available."""
+
+
+class TPCNotReady(Exception):
+    """
+    Task is either being committed or was aborted on SchoolTool side.
+    """
+
+
+TPC_RETRY_SECONDS = (1, 10, 1*60, 5*60, 20*60)
 
 
 class DBTaskMixin(object):
+
+    max_tpc_retries = len(TPC_RETRY_SECONDS)
 
     db_connection = None
     schooltool_app = None
     track_started = True
 
-    def __call__(self, *args, **kwargs):
+    @property
+    def remote_task(self):
+        app = self.schooltool_app
+        if app is None:
+            raise AttributeError(
+                'remote_task: SchoolTool app only available within ZODB transaction')
+        tasks = ITaskContainer(app)
+        return tasks.get(self.request.id)
+
+    def beginTransaction(self):
         db = open_schooltool_db(self.app)
         if db is None:
             raise NoDatabaseException()
@@ -66,43 +90,67 @@ class DBTaskMixin(object):
         root = self.db_connection.root()
         self.schooltool_app = root[ZopePublication.root_name]
         transaction.begin()
-        site = getSite()
+        if self.remote_task is None:
+            raise TPCNotReady()
+
+    def abortTransaction(self):
+        transaction.abort()
+        self.closeTransaction()
+
+    def commitTransaction(self):
+        status = TaskWriteStatus(self.request.id)
+        status.set_committing()
+        try:
+            transaction.commit()
+        finally:
+            self.closeTransaction()
+
+    def closeTransaction(self):
+        try:
+            self.schooltool_app = None
+            if self.db_connection is not None:
+                self.db_connection.close()
+                self.db_connection = None
+        finally:
+            setSite(None)
+
+    def runWithinTransaction(self, *args, **kwargs):
+        self.beginTransaction()
         setSite(self.schooltool_app)
-        fatal_exc = None
-        recoverable_exc = None
         try:
             result = self.run(*args, **kwargs)
         except Exception, fatal_exc:
-            transaction.abort()
-
-        if fatal_exc is None:
-            try:
-                status = TaskWriteStatus(self.request.id)
-                status.set_committing()
-                transaction.commit()
-            except ConflictError, recoverable_exc:
-                pass
-        self.schooltool_app = None
-        setSite(site)
-        self.db_connection.close()
-        self.db_connection = None
-        if fatal_exc is not None:
+            self.abortTransaction()
             raise fatal_exc
-        if recoverable_exc is not None:
-            max_retries = getattr(self, 'max_db_conflict_retries',
-                                  self.app.conf.SCHOOLTOOL_RETRY_DB_CONFLICTS)
-            raise self.retry(exc=recoverable_exc, retries=max_retries)
+        self.commitTransaction()
+        return result
+
+    def __call__(self, *args, **kwargs):
+        max_db_retries = getattr(self.app.conf, 'SCHOOLTOOL_RETRY_DB_CONFLICTS', 3)
+        max_db_retries = getattr(self, 'max_db_conflict_retries', max_db_retries)
+
+        result = None
+        for n_try in range(min(1, max_db_retries+1)):
+            try:
+                result = self.runWithinTransaction(*args, **kwargs)
+            except ConflictError, conflict_exception:
+                # Transaction conflict, let's repeat
+                pass
+            except (NoDatabaseException, TPCNotReady), exc:
+                n_retry = getattr(self.request, 'retries', 0)
+                countdown = TPC_RETRY_SECONDS[min(n_retry, len(TPC_RETRY_SECONDS)-1)]
+                raise self.retry(exc=exc, countdown=countdown,
+                                 max_retries=self.max_tpc_retries)
+            else:
+                return result # success
+        if conflict_exception is not None:
+            # Reraise last db conflict error
+            raise conflict_exception
         return result
 
 
 class DBTask(DBTaskMixin, celery.task.Task):
     abstract = True
-
-    @property
-    def remote_task(self):
-        app = ISchoolToolApplication(None)
-        tasks = ITaskContainer(app)
-        return tasks.get(self.request.id)
 
 
 def db_task(*args, **kw):
@@ -151,8 +199,8 @@ class TaskTransactionManager(object):
         pass
 
     def tpc_vote(self, transaction):
-        # XXX: actual commit should happen in tpc_finish.  Now, if other manager(s)
-        #      fail the vote, there's no guarantee that the task can be aborted.
+        # Actual commit should happen in tpc_finish.  Now, if other manager(s)
+        # fail the vote, it's up to the task to figure out it's aborted.
         self.tpc_result = self.task.apply_async(
             task_id=self.tracker.task_id, **self.options)
 
@@ -226,6 +274,11 @@ class RemoteTask(Persistent, Contained):
         if kwargs is None:
             kwargs = {}
         current_transaction = transaction.get()
+
+        if (options.get('eta') is None and
+            options.get('countdown') is None):
+            options['countdown'] = 1
+
         resource = TaskTransactionManager(
                 self, task=handler, args=args, kwargs=kwargs, **options
                 )
@@ -239,6 +292,10 @@ class RemoteTask(Persistent, Contained):
     @property
     def utcnow(self):
         return pytz.UTC.localize(datetime.datetime.utcnow())
+
+    @property
+    def signature(self):
+        return '%s:%s' % (self.__class__.__module__, self.__class__.__name__)
 
 
 class TaskContainer(BTreeContainer):
@@ -348,3 +405,24 @@ class TaskWriteStatus(TaskReadStatus):
             raise NotInProgress(result.state, self._progress_states)
         result.backend.store_result(result.task_id, self.info, COMMITTING)
         self.reload()
+
+
+class RemoteTaskCatalog(AttributeCatalog):
+    version = '1 - initial'
+    interface = IRemoteTask
+    attributes = ('task_id', 'internal_state', 'scheduled')
+
+    def setIndexes(self, catalog):
+        super(RemoteTaskCatalog, self).setIndexes(catalog)
+        catalog['signature'] = TextIndex('signature')
+
+
+getRemoteTaskCatalog = RemoteTaskCatalog.get
+
+
+def load_plugin_tasks():
+    task_entries = list(pkg_resources.iter_entry_points('schooltool.tasks'))
+    for entry in task_entries:
+        entry.load()
+
+load_plugin_tasks()

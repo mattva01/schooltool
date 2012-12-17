@@ -18,6 +18,8 @@
   <include package="z3c.template" file="meta.zcml" />
   <include package="schooltool.traverser" file="meta.zcml" />
 
+  <include file="i18n.zcml" />
+
   <include package="zope.session" />
   <include package="zope.app.server" />
   <include package="zope.contentprovider" />
@@ -33,14 +35,6 @@
   <include package="z3c.macro"/>
 
   <include package="zope.location" />
-
-  <!-- set up an adapter from zope.i18n locale to a zope.ucol collator -->
-
-  <adapter
-      for="zope.i18n.interfaces.locales.ILocale"
-      provides="zope.i18n.interfaces.locales.ICollator "
-      factory="zope.ucol.localeadapter.LocaleCollator"
-      />
 
   <!-- pull in some configuration needed by schooltool. -->
   <include package="zc.resourcelibrary" file="configure.zcml" />
@@ -67,10 +61,6 @@
 
     <include package="schooltool.sampledata" />
   </configure>
-
-  <!-- Translations -->
-
-  <i18n:registerTranslations directory="../locales" />
 
   <!-- Permissions -->
 
