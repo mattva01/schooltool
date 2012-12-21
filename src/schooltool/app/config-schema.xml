@@ -189,17 +189,6 @@
     </example>
   </key>
 
-  <key name="school-type" default="">
-    <description>
-      The school type to be used when initializing the database.
-
-      This option is obsolete.
-    </description>
-    <example>
-      school-type lyceum
-    </example>
-  </key>
-
   %(plugins)s
 
 </schema>
