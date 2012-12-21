@@ -312,16 +312,54 @@ class RMLIndexedColumn(RMLGetterColumn):
         return cell
 
 
+class Config(dict):
+
+    def __init__(self, default=None, **kw):
+        dict.__init__(self)
+        if default is not None:
+            self.update(default)
+        self.update(kw)
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        if not hasattr(instance, '_schooltool_table_pdf_Config'):
+            setattr(instance, '_schooltool_table_pdf_Config', Config())
+            instance._schooltool_table_pdf_Config.update(self)
+        return instance._schooltool_table_pdf_Config
+
+    def __getattr__(self, name):
+        if name in self:
+            return self[name]
+        raise AttributeError(name)
+
+    def __setattr__(self, name, value):
+        self[name] = value
+
+    def __delattr__(self, name):
+        del self[name]
+
+    def __repr__(self):
+        return '<%s (%s)>' % (self.__class__.__name__, dict.__repr__(self))
+
+
 class GridCell(object):
+
+    style = Config(
+        para_class=None,
+        )
 
     def __init__(self, text, item=None, name=None, no_data=False, **kw):
         self.__name__ = name if name is not None else text
         self.item = item
         self.text = text
         self.no_data = no_data
-        self.style = dict(kw)
+        self.style.update(kw)
 
     def __call__(self):
+        if self.style.para_class:
+            return '<para style="%s">%s</para>' % (
+                self.style.para_class, self.text)
         return self.text
 
 
@@ -333,6 +371,11 @@ class GridColumn(GridCell):
 
 class GridRow(GridCell):
 
+    style = Config(
+        GridCell.style,
+        para_class='grade.table.row-title',
+        )
+
     def __cmp__(self, other):
         return cmp((self.__name__, self.item), (other.__name__, other.item))
 
@@ -343,13 +386,13 @@ def random_id(numbers=4):
 
 class Grid(object):
 
-    table_style_name = "grade.table.grades"
-    title_column_width = 4 * units.cm
-
-    header_font = 'Ubuntu_Regular'
-    header_font_size = 12
-
-    column_padding = 4
+    config = Config(
+        table_style_name = "grade.table.grades",
+        title_column_width = 4 * units.cm,
+        header_font = 'Ubuntu_Regular',
+        header_font_size = 12,
+        column_padding = 4,
+        )
 
     rows = None
     columns = None
@@ -357,7 +400,12 @@ class Grid(object):
 
     template = flourish.templates.XMLFile('rml/grid.pt')
 
-    def __init__(self, rows, columns, data_getter, table_width, style_id=None):
+    def __init__(self, rows, columns, data_getter, table_width, style_id=None,
+                 config=None, **kw):
+        if config is not None:
+            self.config.update(config)
+        self.config.update(kw)
+
         if style_id is None:
             self.style_id = self.random_id()
         else:
@@ -394,7 +442,7 @@ class Grid(object):
                               for column in columns])
         return max_text_length, max_text_width
 
-    def getDataColumnWidth(self, width, columns):
+    def getDataColumnWidth(self, width, columns, font_size):
         n_cols = len(columns)
         if n_cols <= 1:
             return width
@@ -402,9 +450,9 @@ class Grid(object):
         ang = math.cos(45./180*math.pi)
 
         max_column_text_length, _unused = self.getMaxTextSize(
-            columns, self.header_font, self.header_font_size)
+            columns, self.config.header_font, font_size)
 
-        last_font_size = columns[-1].style.get('font_size', self.header_font_size)
+        last_font_size = columns[-1].style.get('font_size', font_size)
 
         slanted_header_horiz_w = (max_column_text_length + last_font_size) * ang
         slanted_header_vert_w = last_font_size * ang
@@ -418,15 +466,14 @@ class Grid(object):
     def getColumnStrings(self, columns, col_width):
         result = []
         ang = math.cos(45./180*math.pi)
-        x = ang*self.title_column_width
-        padding = self.column_padding + (col_width + self.header_font_size*ang) / 2
-        padding = col_width / 2 + self.header_font_size * ang / 2
+        x = ang*self.config.title_column_width
+        padding = col_width / 2 + self.config.header_font_size * ang / 2
         font_name = None
         font_size = None
         for n, column in enumerate(self.columns):
             pos = x + (n * col_width + padding) * ang
-            col_font = column.style.get('font_name', self.header_font)
-            col_font_size = column.style.get('font_size', self.header_font_size)
+            col_font = column.style.get('font_name', self.config.header_font)
+            col_font_size = column.style.get('font_size', self.config.header_font_size)
             changed = (col_font != font_name or col_font_size != font_size)
             result.append({
                     'font_changed': changed,
@@ -441,17 +488,17 @@ class Grid(object):
         return result
 
     def updateColumns(self, columns, table_width):
-        data_width = table_width - self.title_column_width
+        data_width = table_width - self.config.title_column_width
         self.data_column_width = self.getDataColumnWidth(
-            data_width, columns)
+            data_width, columns, self.config.header_font_size)
         self.column_strings = self.getColumnStrings(
             columns, self.data_column_width)
 
         n_cols = len(self.columns)
         spacing = max(0, self.table_width
-                         - self.title_column_width
+                         - self.config.title_column_width
                          - self.data_column_width*n_cols)
-        widths = ([self.title_column_width] +
+        widths = ([self.config.title_column_width] +
                   [self.data_column_width] * n_cols +
                   [spacing])
         self.column_widths = ' '.join([str(width) for width in widths])
@@ -460,13 +507,13 @@ class Grid(object):
         self.header_width = self.table_width
 
         max_text_length, max_text_width = self.getMaxTextSize(
-            self.columns, self.header_font, self.header_font_size)
+            self.columns, self.config.header_font, self.config.header_font_size)
 
         ang = math.cos(45./180*math.pi)
         line_len = max_text_length + max_text_width
         self.header_height = line_len * ang
 
-        left = self.title_column_width * ang
+        left = self.config.title_column_width * ang
         self.header_lines = []
         for n in range(len(self.columns)):
             pos = left + n*self.data_column_width*ang
@@ -581,27 +628,44 @@ class Grid(object):
 
 class AutoFitGrid(Grid):
 
-    header_min_font_size = 8
-    min_column_width = None
-    continued_font = Grid.header_font
-    continued_text = _('Continued ...')
+    config = Config(
+        Grid.config,
+        header_min_font_size = 8,
+        min_column_width = None,
+        max_column_width = None,
+        continued_font = Grid.config.header_font,
+        continued_text = _('Continued ...'),
+        )
 
     remaining_columns = None
 
-    def columnsFit(self, columns, table_width, font_size):
+    def getDataColumnWidth(self, width, columns, font_size):
+        data_column_width = Grid.getDataColumnWidth(self, width, columns, font_size)
+        if self.config.max_column_width is None:
+            return data_column_width
+        min_headers_column_width = self.getMinHeadersWidth(columns, font_size)
+        return max(min_headers_column_width,
+                   min(data_column_width, self.config.max_column_width)
+                )
+
+    def getMinHeadersWidth(self, columns, font_size):
         ang = math.cos(45./180*math.pi)
         _unused, max_text_height = self.getMaxTextSize(
-            columns, self.header_font, font_size)
+            columns, self.config.header_font, font_size)
         # Min width so that headers would fit
         min_headers_column_width = (max_text_height * ang
                                     + max_text_height * ang
-                                    + self.column_padding * 2)
-        data_column_width = self.getDataColumnWidth(table_width, columns)
-        if self.min_column_width is None:
+                                    + self.config.column_padding * 2)
+        return min_headers_column_width
+
+    def columnsFit(self, columns, table_width, font_size):
+        min_headers_column_width = self.getMinHeadersWidth(columns, font_size)
+        data_column_width = self.getDataColumnWidth(table_width, columns, font_size)
+        if self.config.min_column_width is None:
             return data_column_width >= min_headers_column_width
         # Column must fit headers and honour desired min_column_width
         min_column_width = max(min_headers_column_width,
-                               self.min_column_width)
+                               self.config.min_column_width)
         return data_column_width >= min_column_width
 
     def fitColumns(self, columns, table_width):
@@ -609,24 +673,25 @@ class AutoFitGrid(Grid):
             return
 
         # Try fitting all columns, reducing the font if necessary
-        orig_font_size = self.header_font_size
-        font_size = self.header_font_size
-        while font_size >= self.header_min_font_size:
+        orig_font_size = self.config.header_font_size
+        font_size = self.config.header_font_size
+        while font_size >= self.config.header_min_font_size:
             if self.columnsFit(columns, table_width, font_size):
                 self.columns = columns
-                self.header_font_size = font_size
+                self.remaining_columns = []
+                self.config.header_font_size = font_size
                 return
             font_size -= 1
-        self.header_font_size = orig_font_size
+        self.config.header_font_size = orig_font_size
 
         # Fit as many columns as we can
-        continued = [GridColumn(self.continued_text,
-                                font_name=self.continued_font,
+        continued = [GridColumn(self.config.continued_text,
+                                font_name=self.config.continued_font,
                                 no_data=True)]
         n = 1
         while n < len(columns):
             if not self.columnsFit(
-                columns[:n] + continued, table_width, self.header_font_size):
+                columns[:n] + continued, table_width, self.config.header_font_size):
                 break
             n += 1
         self.columns = columns[:n] + continued
@@ -670,10 +735,8 @@ class GridContent(flourish.content.ContentProvider):
         while table.remaining_columns:
             other = AutoFitGrid(
                 self.rows, table.remaining_columns, self.grid, table_width,
-                style_id=id_base+'-style%d' % len(self.tables))
-            # maintain same default font sizes for split tables
-            other.header_font_size = table.header_font_size
-            other.header_min_font_size = table.header_font_size
+                style_id=id_base+'-style%d' % len(self.tables),
+                config=table.config)
             other.update()
             self.tables.append(other)
             table = other

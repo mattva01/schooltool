@@ -96,4 +96,6 @@
     <blockAlignment start="0,0" stop="0,-1" value="left" />
   </blockTableStyle>
 
+  <paraStyle name="grade.table.row-title" fontName="Ubuntu_Regular" fontSize="12" />
+
 </metal:block>

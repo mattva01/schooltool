@@ -60,7 +60,7 @@
 
       <blockTable
           tal:attributes="colWidths table/column_widths;
-                          style table/table_style_name"
+                          style table/config/table_style_name"
           alignment="left">
         <blockTableStyle tal:condition="table/styles"
                          tal:attributes="id table/id">
