@@ -50,33 +50,6 @@ result-server-definition ${config_dir}/result-server.zcml
 </zodb>
 
 #
-# thread-pool-size n
-#
-#   Specifies the suggested size for request thread pool
-#
-# Default:
-#   thread-pool-size 10
-#
-
-#
-# event-logging on|off
-#
-#   Enables or disables global event logging
-#
-# Default:
-#   event-logging off
-#
-
-#
-# pid-file
-#
-#   Specifies the path of a pid file.
-#
-# Default: no pidfile
-#
-pid-file ${data_dir}/schooltool.pid
-
-#
 # lang
 #
 #   Specifies the locale of the messages to be used on the server.

@@ -1,9 +1,6 @@
 <schema>
   <description>
-    SchoolTool configuration schema.
-
-    This schema describes the configuration options available for SchoolTool
-    HTTP server.
+    SchoolTool configuration file schema.
   </description>
 
   <import package="ZODB" />
@@ -21,23 +18,13 @@
     </example>
   </section>
 
-  <multikey name="listen" datatype="inet-address">
-    <description>
-      Network interface and port number the HTTP server should listen on.
-
-      Network interface can be omitted and just the port number specified.
-    </description>
-    <example>
-      listen 8080
-      listen 127.0.0.1:80
-    </example>
-  </multikey>
-
   <multikey name="web" datatype="inet-address">
     <description>
       Network interface and port number the web server should listen on.
 
       Network interface can be omitted and just the port number specified.
+
+      This option is obsolete.
     </description>
     <example>
       web 80
@@ -45,39 +32,11 @@
     </example>
   </multikey>
 
-  <multikey name="listen_ssl" datatype="inet-address">
-    <description>
-      Network interface and port number the HTTPS server should listen on.
-
-      Network interface can be omitted and just the port number specified.
-    </description>
-    <example>
-      listen_ssl 8080
-      listen_ssl 127.0.0.1:80
-    </example>
-  </multikey>
-
-  <multikey name="web_ssl" datatype="inet-address">
-    <description>
-      Network interface and port number the ssl web server should listen on.
-
-      Network interface can be omitted and just the port number specified.
-    </description>
-    <example>
-      web_ssl 8080
-      web_ssl 127.0.0.1:80
-    </example>
-  </multikey>
-
-  <key name="ssl_certificate" datatype="string">
-    <description>
-      PEM Certificate
-    </description>
-  </key>
-
   <key name="thread-pool-size" datatype="integer" default="10">
     <description>
       Suggested thread pool size.
+
+      This option is obsolete.
     </description>
     <example>
       thread-pool-size 20
@@ -87,6 +46,8 @@
   <key name="event-logging" datatype="boolean" default="off">
     <description>
       Enables or disables global event logging to /utils/eventlog.
+
+      This option is obsolete.
     </description>
     <example>
       event-logging on
@@ -96,6 +57,8 @@
   <key name="pid-file" datatype="string">
     <description>
       Specifies the path of a pid file.
+
+      This option is obsolete.
     </description>
     <example>
       pid-file /var/run/schooltool.pid
@@ -196,17 +159,6 @@
     </description>
     <example>
       result-server-definition result-server.zcml
-    </example>
-  </key>
-
-  <key name="school-type" default="">
-    <description>
-      The school type to be used when initializing the database.
-
-      This option is obsolete.
-    </description>
-    <example>
-      school-type lyceum
     </example>
   </key>
 

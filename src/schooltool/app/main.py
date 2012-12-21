@@ -582,7 +582,7 @@ class SchoolToolServer(SchoolToolMachinery):
 
         return options
 
-    def bootstrapSchoolTool(self, db, school_type=""):
+    def bootstrapSchoolTool(self, db):
         """Bootstrap SchoolTool database."""
         connection = db.open()
         root = connection.root()
@@ -592,7 +592,7 @@ class SchoolToolServer(SchoolToolMachinery):
 
             # Run school specific initialization code
             initializationUtility = getUtility(
-                ISchoolToolInitializationUtility, name=school_type)
+                ISchoolToolInitializationUtility)
             initializationUtility.initializeApplication(app)
 
             directlyProvides(app, directlyProvidedBy(app) + IContainmentRoot)
@@ -699,7 +699,7 @@ class SchoolToolServer(SchoolToolMachinery):
                                        " is using it?") % self.system_name
             sys.exit(1)
 
-        self.bootstrapSchoolTool(db, options.config.school_type)
+        self.bootstrapSchoolTool(db)
         notify(DatabaseOpened(db))
 
         if options.restore_manager:

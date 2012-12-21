@@ -64,7 +64,6 @@ def doctest_main():
         >>> server.main(['sb.py'])
         Performing setup...
 
-
     """
 
 
@@ -105,14 +104,12 @@ def doctest_load_options():
 
     Some come from the config file
 
-        >>> o.config.web in ([('', 48080)],          # Unix
-        ...                  [('localhost', 48080)]) # Windows
-        True
-        >>> o.config.listen
-        [('...', 123), ('10.20.30.40', 9999)]
-
-    Note that "listen 123" in config.py produces ('localhost', 123) on
-    Windows, but ('', 123) on other platforms.
+        >>> o.config.error_log_file
+        ['/var/log/schooltool/schooltool.log', 'STDERR']
+        >>> o.config.web_access_log_file
+        ['/var/log/schooltool/web-access.log']
+        >>> o.config.reportlab_fontdir
+        '/fonts/liberation:/fonts/ubuntu'
 
     `load_options` can also give you a nice help message and exit with status
     code 0.
@@ -323,19 +320,15 @@ def doctest_setup():
         ...     def open(self):
         ...         return DB(MappingStorage())
         >>> class ConfigStub:
-        ...     web = []
-        ...     listen = []
         ...     thread_pool_size = 1
         ...     database = DatabaseConfigStub()
         ...     pid_file = ''
-        ...     path = []
         ...     error_log_file = ['STDERR']
         ...     web_access_log_file = ['STDOUT']
         ...     attendance_log_file = ['STDOUT']
         ...     lang = 'lt'
         ...     reportlab_fontdir = ''
         ...     devmode = False
-        ...     school_type = ''
         ...     site_definition = ftesting_zcml
         >>> options.config = ConfigStub()
 
