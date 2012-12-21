@@ -24,7 +24,6 @@ import pkg_resources
 import pytz
 
 import celery.task
-import celery.result
 import celery.utils
 import celery.states
 import transaction
@@ -36,9 +35,8 @@ from zope.catalog.text import TextIndex
 from zope.component import adapter
 from zope.container.btree import BTreeContainer
 from zope.container.contained import Contained
-from zope.interface import implements
 from ZODB.POSException import ConflictError
-from zope.component.hooks import getSite, setSite
+from zope.component.hooks import setSite
 from zope.app.publication.zopepublication import ZopePublication
 
 from schooltool.app.app import StartUpBase

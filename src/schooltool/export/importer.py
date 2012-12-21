@@ -25,12 +25,9 @@ import urllib
 import transaction
 from decimal import Decimal, InvalidOperation
 
-import celery.task
-import celery.states
 import zope.file.upload
 import zope.file.file
 from zope.interface import implements
-from zope.component import adapts
 from zope.cachedescriptors.property import Lazy
 from zope.container.contained import containedEvent
 from zope.container.interfaces import INameChooser
@@ -39,7 +36,6 @@ from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
-from schooltool.task.interfaces import IRemoteTask
 
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IDemographics
