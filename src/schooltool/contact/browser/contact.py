@@ -528,16 +528,10 @@ class ContactTableFormatter(table.catalog.IndexedTableFormatter):
 
 class FlourishContactTableFormatter(ContactTableFormatter):
 
-    def render(self):
-        columns = [IIndexedColumn(c) for c in self._columns]
-        formatter = self._table_formatter(
-            self.context, self.request, self._items,
-            columns=columns,
-            batch_start=self.batch.start, batch_size=self.batch.size,
-            sort_on=self._sort_on,
-            prefix=self.prefix)
+    def makeFormatter(self):
+        formatter = ContactTableFormatter.makeFormatter(self)
         formatter.cssClasses['table'] = 'contacts-table relationships-table'
-        return formatter()
+        return formatter
 
     def sortOn(self):
         return (('last_name', False), ("first_name", False),)

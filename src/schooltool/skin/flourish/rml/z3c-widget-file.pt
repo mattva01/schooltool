@@ -1,0 +1,10 @@
+<tal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+  ><tal:block condition="view/filename" content="structure view/filename/@@rml"
+  ></tal:block
+  ><tal:block condition="not:view/filename"
+    ><tal:block condition="view/value" content="structure view/value/@@rml"
+  /></tal:block
+></tal:block>

@@ -398,4 +398,20 @@
       permission="schooltool.edit"
       />
 
+  <flourish:content
+      name="groups_table"
+      class=".group.PersonGroupsTable"
+      for="schooltool.person.interfaces.IPerson"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="groups"
+      for="schooltool.person.interfaces.IPerson"
+      manager="schooltool.skin.flourish.report.PDFStory"
+      view="schooltool.basicperson.browser.person.PersonProfilePDF"
+      class=".group.PersonProfileGroupsPart"
+      permission="schooltool.view"
+      />
+
 </configure>

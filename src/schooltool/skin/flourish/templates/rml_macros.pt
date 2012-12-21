@@ -1,0 +1,32 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE document SYSTEM "rml_1_0.dtd">
+<metal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    metal:define-macro="report" i18n:domain="schooltool">
+  <document>
+    <template
+        tal:attributes="pagesize view/pageSize;
+                        leftMargin view/margin/left;
+                        rightMargin view/margin/right;
+                        topMargin view/margin/top;
+                        bottomMargin view/margin/bottom;
+                        rotation view/rotation;
+                        title view/title"
+        author="SchoolTool">
+      <metal:block metal:define-slot="page_templates" />
+    </template>
+    <stylesheet>
+      <initialize>
+        <alias id="style.normal" value="style.Normal"/>
+        <metal:block metal:define-slot="extra_initialize" />
+      </initialize>
+      <tal:block repeat="template view/page_templates">
+        <tal:block content="structure python:template[1].stylesheet()" />
+      </tal:block>
+      <metal:block metal:define-slot="stylesheet" />
+    </stylesheet>
+    <story metal:define-slot="story" />
+  </document>
+</metal:block>

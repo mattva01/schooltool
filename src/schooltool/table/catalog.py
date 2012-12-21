@@ -174,7 +174,9 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
         super(IndexedTableFormatter, self).setUp(
             items=items, **kwargs)
 
-    def render(self):
+    def makeFormatter(self):
+        if self._table_formatter is None:
+            return None
         columns = [IIndexedColumn(c) for c in self._columns]
         formatter = self._table_formatter(
             self.source, self.request, self._items,
@@ -183,5 +185,5 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
             sort_on=self._sort_on,
             prefix=self.prefix)
         formatter.cssClasses['table'] = 'data'
-        return formatter()
+        return formatter
 

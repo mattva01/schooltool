@@ -1,0 +1,33 @@
+<tal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+
+  <illustration tal:attributes="width view/header_width;
+                                height view/header_height">
+    <rotate degrees="45"/>
+    <lines>
+      <tal:block repeat="line table/header_lines" content="line"/>
+    </lines>
+    <drawString tal:repeat="column view/draw_columns"
+                tal:attributes="x column/x;
+                                y column/y"
+                tal:content="column/text" />
+  </illustration>
+
+  <blockTable
+      tal:attributes="colWidths view/column_widths;
+                      style view/config/table_style_name"
+      alignment="left">
+    <blockTableStyle tal:condition="view/styles"
+                     tal:attributes="id view/id">
+      <tal:block content="structure view/renderStyles" />
+    </blockTableStyle>
+    <tr tal:repeat="row view/data">
+      <td tal:repeat="cell row" tal:content="structure cell" />
+      <td />
+    </tr>
+  </blockTable>
+
+</tal:block>
