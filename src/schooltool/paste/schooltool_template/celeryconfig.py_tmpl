@@ -1,3 +1,4 @@
+CELERY_LOADER = "schooltool.task.celery:ZopeLoader"
 
 CELERY_RESULT_BACKEND = "redis"
 CELERY_REDIS_HOST = "localhost"
