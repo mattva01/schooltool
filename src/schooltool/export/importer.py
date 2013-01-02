@@ -276,7 +276,7 @@ class ImporterBase(object):
         value, found, valid = self.getTextFoundValid(sheet, row, col)
         if not value:
             return []
-        return [p.strip() for p in str(value).split(',') if p.strip()]
+        return [p.strip() for p in value.split(',') if p.strip()]
 
     def getRequiredIdsFromCell(self, sheet, row, col):
         value, found = self.getCellAndFound(sheet, row, col)

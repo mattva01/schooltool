@@ -28,6 +28,12 @@
      class=".importer.FlourishMegaImporter"
      permission="schooltool.edit" />
 
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      view=".importer.FlourishMegaImporter"
+      />
+
   <flourish:page
       name="request_export_xls.html"
       for="schooltool.app.interfaces.ISchoolToolApplication"
