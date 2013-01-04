@@ -1,5 +1,5 @@
 <zeo>
-  address ${data_dir}/zeo.sock
+  address ${run_dir}/zeo.sock
 </zeo>
 <eventlog>
   <logfile>

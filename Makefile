@@ -37,28 +37,28 @@ instance: | build
 	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
 
-instance/var/supervisord.pid:
+instance/run/supervisord.pid:
 	bin/supervisord
 
 .PHONY: run
-run: build instance instance/var/supervisord.pid
+run: build instance instance/run/supervisord.pid
 	@bin/supervisorctl start "services:*"
 	@bin/supervisorctl status schooltool | grep RUNNING && bin/supervisorctl stop schooltool || exit 0
 	@bin/supervisorctl status
 	bin/start-schooltool-instance instance
 
 .PHONY: start
-start: build instance instance/var/supervisord.pid
+start: build instance instance/run/supervisord.pid
 	bin/supervisorctl start all
 	@bin/supervisorctl status
 
 .PHONY: start-services
-start-services: build instance instance/var/supervisord.pid
+start-services: build instance instance/run/supervisord.pid
 	@bin/supervisorctl status | grep services[:] | grep -v RUNNING && bin/supervisorctl start "services:*" || exit 0
 	@bin/supervisorctl status | grep services[:]
 
 .PHONY: restart
-restart: build instance instance/var/supervisord.pid
+restart: build instance instance/run/supervisord.pid
 	bin/supervisorctl restart "services:celery"
 	@bin/supervisorctl start "services:*"
 	bin/supervisorctl restart schooltool
@@ -66,15 +66,15 @@ restart: build instance instance/var/supervisord.pid
 
 .PHONY: stop
 stop:
-	@test -S instance/var/supervisord.sock && bin/supervisorctl status | grep -v STOPPED && bin/supervisorctl stop all || exit 0
-	@test -S instance/var/supervisord.sock && bin/supervisorctl shutdown || echo Nothing to stop
-	@rm -f instance/var/zeo.sock
-	@rm -f instance/var/supervisord.sock
-	@rm -f instance/var/supervisord.pid
+	@test -S instance/run/supervisord.sock && bin/supervisorctl status | grep -v STOPPED && bin/supervisorctl stop all || exit 0
+	@test -S instance/run/supervisord.sock && bin/supervisorctl shutdown || echo Nothing to stop
+	@rm -f instance/run/zeo.sock
+	@rm -f instance/run/supervisord.sock
+	@rm -f instance/run/supervisord.pid
 
 .PHONY: status
 status:
-	@test -f instance/var/supervisord.pid && bin/supervisorctl status || echo All services shut down
+	@test -f instance/run/supervisord.pid && bin/supervisorctl status || echo All services shut down
 
 .PHONY: tags
 tags: build
@@ -90,9 +90,9 @@ clean: stop
 	rm -rf docs
 	rm -rf instance/var/celerybeat-schedule
 	rm -rf instance/var/redis-dump.rdb
-	rm -rf instance/var/zeo.sock
-	rm -rf instance/var/supervisord.sock
-	rm -rf instance/var/supervisord.pid
+	rm -rf instance/run/zeo.sock
+	rm -rf instance/run/supervisord.sock
+	rm -rf instance/run/supervisord.pid
 	rm -rf instance/var/Data.fs.lock
 	find . -name '*.py[co]' -delete
 	find . -name '*.mo' -delete

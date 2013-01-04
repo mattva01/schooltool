@@ -32,7 +32,7 @@ result-server-definition ${config_dir}/result-server.zcml
   # </zeoclient>
 
   <zeoclient>
-    server ${data_dir}/zeo.sock
+    server ${run_dir}/zeo.sock
     blob-dir ${data_dir}/blobs
     shared-blob-dir yes
   </zeoclient>

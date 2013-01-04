@@ -1,13 +1,13 @@
 ; Sample supervisor config file.
 
 [unix_http_server]
-file=${data_dir}/supervisord.sock
+file=${run_dir}/supervisord.sock
 
 [supervisord]
 logfile=${log_dir}/supervisord.log
 logfile_maxbytes=50MB
 loglevel=info
-pidfile=${data_dir}/supervisord.pid
+pidfile=${run_dir}/supervisord.pid
 nodaemon=false
 
 ; the below section must remain in the config file for RPC
@@ -17,7 +17,7 @@ nodaemon=false
 supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 
 [supervisorctl]
-serverurl=unix://${data_dir}/supervisord.sock
+serverurl=unix://${run_dir}/supervisord.sock
 
 ; The below sample program section shows all possible program subsection values,
 ; create one or more 'real' program: sections to be able to control them under
