@@ -315,6 +315,19 @@ function preloadFilldown(form) {
     });
 }
 
+function preloadCommentCell(form) {
+    var url = buildURL(form.attr('action'), 'comment_cell');
+    $.ajax({
+        url: url,
+        dataType: 'html',
+        type: 'get',
+        context: form,
+        success: function(data) {
+            this.before(data);
+        }
+    });
+}
+
 function hidePopup(form) {
     form.find('.popup_active').hide().removeClass('popup_active');
 }
@@ -363,6 +376,8 @@ $(document).ready(function() {
     $('.gradebook-part').find('tbody').find('tr:odd').addClass('odd');
     // fill down
     preloadFilldown(form);
+    // comment cell
+    preloadCommentCell(form);
     // popup menus
     preloadPopups(form);
     var gradebook = form.find('#gradebook');
@@ -527,6 +542,46 @@ $(document).ready(function() {
             });
         }
         container.find('#filldown_value').val('');
+        container.dialog('close');
+        return false;
+    });
+    // comment-cell
+    form.on('click', '.comment-cell', function() {
+        hidePopup(form);
+        var container = $('#comment-cell-dialog-container');
+        var cell = $(this).closest('tr');
+        var student_idx = cell.parent().children().index(cell);
+        var student = $('#students-part tbody tr')[student_idx];
+        var student_title = $(student).find('li')[0].innerHTML;
+        var student_id = $(student).find('td').attr('id');
+        var activity_idx = $(this).parent().children().index(this);
+        var activity = $('#grades-part th')[activity_idx];
+        var activity_id = $(activity).attr('id');
+        var popup_link = $(activity).find('.popup_link');
+        var description = $(activity).find('.activity-description');
+        var value = $(this).attr('hidden_value');
+        var dialog_title = container.find('#comment-cell-dialog-title').attr('dialog_title')
+        container.find('#comment-cell-dialog-title').text(student_title);
+        container.find('#comment-student-id').val(student_id);
+        container.find('#comment-activity-id').val(activity_id);
+        container.find('#form-widgets-value').val(value);
+        FCKeditorAPI.Instances['form-widgets-value'].SetHTML(value)
+        container.find('span').html(popup_link.attr('title'));
+        container.find('p').html(description.html());
+        container.dialog({
+            'title': dialog_title,
+            'resizable': false,
+            'width': 306,
+            'minHeight': 105,
+            'dialogClass': 'narrow-dialog'
+        });
+        // XXX - this should have worked but doesn't
+        //FCKeditorAPI.Instances['form-widgets-value'].EditorDocument.body.focus()
+        return false;
+    });
+    $('body').on('click', '.comment-cell-cancel', function() {
+        var container = $('#comment-cell-dialog-container');
+        container.find('#form-widgets-value').val('');
         container.dialog('close');
         return false;
     });
