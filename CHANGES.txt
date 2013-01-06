@@ -5,6 +5,8 @@ CHANGES
 2.3.2 (unreleased)
 ------------------
 
+- added javascript for putting case-converted scores into validated gradebook cells
+
 Development tools
 +++++++++++++++++
 

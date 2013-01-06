@@ -433,6 +433,9 @@ $(document).ready(function() {
                     dataType: 'json',
                     type: 'get',
                     success: function(data) {
+                        if (data.hasOwnProperty('score')) {
+                            input.val(data.score);
+                        }
                         input.removeClass();
                         var css_class = 'valid';
                         if (!data.is_valid) {
