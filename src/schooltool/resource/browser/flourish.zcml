@@ -3,6 +3,7 @@
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
            xmlns:flourish="http://schooltool.org/flourish"
+           xmlns:report="http://namespaces.schooltool.org/report"
            i18n_domain="schooltool">
 
   <!-- ResourceDemographicsFields pages -->
@@ -446,6 +447,33 @@
       class="schooltool.table.table.DoNotFilter"
       manager=".resource.EquipmentListTable"
       permission="schooltool.view"
+      />
+
+  <report:reportLink
+      name="resource_report"
+      for="schooltool.resource.interfaces.IResourceContainer"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      permission="schooltool.view"
+      group="Resource"
+      description="XXX Description XXX"
+      title="Resources"
+      file_type="pdf"
+      link="request_resource_report.html"
+      />
+
+  <flourish:page
+      name="request_resource_report.html"
+      for="schooltool.resource.interfaces.IResourceContainer"
+      class=".resource.FlourishRequestResourceReportView"
+      permission="schooltool.edit"
+      />
+
+  <flourish:pdf
+      name="resource_report.pdf"
+      for="schooltool.resource.interfaces.IResourceContainer"
+      class=".resource.ResourceReportPDFView"
+      content_template="rml/resource_report.pt"
+      permission="schooltool.edit"
       />
 
 </configure>

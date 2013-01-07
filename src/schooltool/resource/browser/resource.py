@@ -19,6 +19,7 @@
 """Resource views
 """
 from collections import defaultdict
+from datetime import datetime
 
 import z3c.form
 import z3c.form.browser.text
@@ -39,6 +40,7 @@ from zope.container.interfaces import INameChooser
 from zope.event import notify
 from zope.formlib import form as oldform
 from zope.i18n import translate
+from zope.i18n.interfaces.locales import ICollator
 from zope.interface import implementer, implements, implementsOnly
 from zope.lifecycleevent import ObjectCreatedEvent
 from zope.publisher.browser import BrowserView
@@ -49,6 +51,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
 
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.browser.app import EditRelationships
 from schooltool.app.browser.app import RelationshipAddTableMixin
 from schooltool.app.browser.app import RelationshipRemoveTableMixin
@@ -63,6 +66,7 @@ from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import (
              IResourceContainer, IResourceTypeInformation, IResourceSubTypes,
              IResource, IEquipment, ILocation, IResourceDemographicsFields)
+from schooltool.report.browser.report import RequestReportDownloadDialog
 from schooltool.resource.resource import Resource, Location, Equipment
 from schooltool.person.browser.person import PersonFilterWidget
 from schooltool.resource.interfaces import IResourceFactoryUtility
@@ -961,3 +965,51 @@ class FlourishManageResourcesOverview(flourish.page.Content):
                 types[info.id]['id'] = info.id
             types[info.id]['amount'] += 1
         return types
+
+
+class FlourishRequestResourceReportView(RequestReportDownloadDialog):
+
+    def nextURL(self):
+        return '%s/resource_report.pdf' % absoluteURL(self.context,
+                                                      self.request)
+
+
+class ResourceReportPDFView(flourish.report.PlainPDFPage):
+
+    name = _("RESOURCE REPORT")
+
+    @property
+    def title(self):
+        preferences = IApplicationPreferences(ISchoolToolApplication(None))
+        return preferences.title
+
+    def makeFileName(self, basename):
+        timestamp = datetime.now().strftime('%y%m%d%H%M')
+        return '%s_%s.pdf' % (basename, timestamp)
+
+    @property
+    def filename(self):
+        return self.makeFileName('resource_report')
+
+    def ptos(self):
+        collator = ICollator(self.request.locale)
+        ptos_dict = {}
+        for resource in sorted(self.context.values(),
+                               key=lambda x:collator.key(x.title)):
+            if ILocation(resource, None) is not None:
+                resource_type = _('Location')
+            elif IEquipment(resource, None) is not None:
+                resource_type = _('Equipment')
+            else:
+                resource_type = _('Resource')
+            pto = ptos_dict.setdefault(resource_type, {
+                'type': resource_type,
+                'rows': [],
+                })
+            pto['rows'].append({
+                'title': resource.title,
+                'description': resource.description,
+                })
+        return [ptos_dict[k] for k in sorted(ptos_dict.keys(),
+                                             key=lambda x:collator.key(x))]
+
