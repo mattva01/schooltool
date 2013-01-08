@@ -82,6 +82,16 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="section-reports-links"
+      after="section-import-links"
+      manager="schooltool.skin.flourish.page.IPageRefineManager"
+      class="schooltool.report.browser.report.ReportsLinks"
+      title="Reports"
+      view="schooltool.resource.browser.resource.FlourishResourcesView"
+      permission="schooltool.edit"
+      />
+
   <flourish:page
      name="report_reference.html"
      for="schooltool.app.interfaces.ISchoolToolApplication"
