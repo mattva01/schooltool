@@ -2,10 +2,12 @@
 CHANGES
 =======
 
-2.3.1 (unreleased)
+2.3.1 (2012-11-27)
 ------------------
 
-- Nothing changed yet.
+- Indexed table improvements for cando.
+- Automatically include plugin overrides.zcml
+- Updated translations.
 
 
 2.3.0 (2012-10-19)

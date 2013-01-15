@@ -7,13 +7,12 @@
   <include package="zc.resourcelibrary" file="meta.zcml" />
   <include package="schooltool.skin.flourish" file="meta.zcml" />
 
+  <include package="z3c.autoinclude" file="meta.zcml" />
+  <includePlugins package="schooltool" file="meta.zcml" />
+
   <include package="schooltool.common" />
   <include package="zc.resourcelibrary" />
   <include package="schooltool.skin.flourish" />
-
-  <include package="z3c.autoinclude" file="meta.zcml" />
-  <includePlugins package="schooltool" file="meta.zcml" />
-  <includePlugins package="schooltool" file="plugin.zcml" />
 
   <include package="schooltool.timetable" />
   <include package="schooltool.basicperson" />
@@ -54,5 +53,8 @@
   <include package="schooltool.term.browser" file="flourish.zcml" />
   <include package="schooltool.level.browser" file="flourish.zcml" />
   <include package="schooltool.export" file="flourish.zcml" />
+
+  <includePlugins package="schooltool" file="plugin.zcml" />
+  <includePluginsOverrides package="schooltool" />
 
 </configure>

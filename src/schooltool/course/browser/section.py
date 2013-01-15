@@ -1556,7 +1556,7 @@ class FlourishSectionDeleteView(DialogForm, form.EditForm):
     def handleDelete(self, action):
         url = '%s/delete.html?delete.%s&CONFIRM' % (
             absoluteURL(self.context.__parent__, self.request),
-            self.context.__name__)
+            self.context.__name__.encode('utf-8'))
         self.request.response.redirect(url)
         # We never have errors, so just close the dialog.
         self.ajax_settings['dialog'] = 'close'
