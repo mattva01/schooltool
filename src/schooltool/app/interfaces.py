@@ -117,9 +117,10 @@ class ISchoolToolApplication(IReadContainer):
     title = zope.schema.TextLine(
         title=_("Title"),
         required=True,
-        description=_("""The name for the school or organization running
-            this server.  This will be displayed on the public calendar, the
-            bottom of all pages and in the page title."""))
+        description=_(
+            "The name for the school or organization running "
+            "this server.  This will be displayed on the public calendar, the "
+            "bottom of all pages and in the page title."))
 
 
 class IApplicationPreferences(ICalendarDisplayPreferences):
@@ -128,14 +129,15 @@ class IApplicationPreferences(ICalendarDisplayPreferences):
     title = zope.schema.TextLine(
         title=_("Title"),
         required=True,
-        description=_("""The name for the school or organization running
-            this server.  This will be displayed on the public calendar, the
-            bottom of all pages and in the page title."""))
+        description=_(
+            "The name for the school or organization running "
+            "this server.  This will be displayed on the public calendar, the "
+            "bottom of all pages and in the page title."))
 
     frontPageCalendar = zope.schema.Bool(
         title=_("Front Page Calendar"),
-        description=_("""Display site-wide calendar as the front page of the
-            site."""),
+        description=_(
+            "Display site-wide calendar as the front page of the site."),
         required=False,
         default=True)
 

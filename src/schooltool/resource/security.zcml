@@ -52,9 +52,7 @@
 
   <describe_group name="schooltool.resource"
       title="Reservations"
-      description="Resources are locations or objects within a school.
-                   SchoolTool's calendar can function as a reservation
-                   and tracking system for resources."
+      description="Resources are locations or objects within a school. SchoolTool's calendar can function as a reservation and tracking system for resources."
   />
 
   <describe_action
