@@ -73,8 +73,7 @@
 
   <describe_group name="schooltool.course-courses"
       title="Courses"
-      description="A course in SchoolTool describes a set curriculum
-                   taught in a section."
+      description="A course in SchoolTool describes a set curriculum taught in a section."
   />
 
   <describe_action
@@ -107,8 +106,7 @@
 
   <describe_group name="schooltool.course-sections"
       title="Sections"
-      description="A section is a set of one or more learners
-                   who meet during a term."
+      description="A section is a set of one or more learners who meet during a term."
   />
 
   <describe_action

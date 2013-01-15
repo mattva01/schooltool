@@ -57,7 +57,8 @@ class ICourse(Interface):
     government_id = zope.schema.TextLine(
         title=_("Alternate ID"),
         required=False,
-        description=_("Additional identifier for outside tracking or other purposes."))
+        description=_(
+            "Additional identifier for outside tracking or other purposes."))
 
     credits = zope.schema.Decimal(
         title=_("Credits"),
@@ -89,8 +90,8 @@ class ISectionBase(IGroup):
         title=_("Label"),
         required=False,
         description=_(
-            """An identifier for a section, made up of instructor
-            names, courses, and meeting time."""))
+            "An identifier for a section, made up of instructor "
+            "names, courses, and meeting time."))
 
     title = zope.schema.TextLine(
         title=_("Title"),

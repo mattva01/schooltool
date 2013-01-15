@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2012-11-21 16:10+0200\n"
+"POT-Creation-Date: 2013-01-15 15:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -2621,25 +2621,20 @@ msgstr ""
 msgid "Invalid datetime data"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:119
-#: /src/schooltool/app/interfaces.py:130
-msgid ""
-"The name for the school or organization running\n"
-"            this server.  This will be displayed on the public calendar, the\n"
-"            bottom of all pages and in the page title."
+#: /src/schooltool/app/interfaces.py:120
+#: /src/schooltool/app/interfaces.py:132
+msgid "The name for the school or organization running this server.  This will be displayed on the public calendar, the bottom of all pages and in the page title."
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:135
+#: /src/schooltool/app/interfaces.py:138
 msgid "Front Page Calendar"
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:136
-msgid ""
-"Display site-wide calendar as the front page of the\n"
-"            site."
+#: /src/schooltool/app/interfaces.py:139
+msgid "Display site-wide calendar as the front page of the site."
 msgstr ""
 
-#: /src/schooltool/app/interfaces.py:143
+#: /src/schooltool/app/interfaces.py:145
 msgid "School logo"
 msgstr ""
 
@@ -4968,10 +4963,8 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
-#: /src/schooltool/course/interfaces.py:84
-msgid ""
-"An identifier for a section, made up of instructor\n"
-"            names, courses, and meeting time."
+#: /src/schooltool/course/interfaces.py:92
+msgid "An identifier for a section, made up of instructor names, courses, and meeting time."
 msgstr ""
 
 #: /src/schooltool/course/interfaces.py:130
@@ -5027,11 +5020,11 @@ msgid "Basic information about sections, including rosters, is visible to the ge
 msgstr ""
 
 #: /src/schooltool/course/security.zcml:74
-msgid "A course in SchoolTool describes a set curriculum                    taught in a section."
+msgid "A course in SchoolTool describes a set curriculum taught in a section."
 msgstr ""
 
-#: /src/schooltool/course/security.zcml:80
-#: /src/schooltool/course/security.zcml:114
+#: /src/schooltool/course/security.zcml:79
+#: /src/schooltool/course/security.zcml:112
 #: /src/schooltool/group/security.zcml:62
 #: /src/schooltool/schoolyear/security.zcml:9
 #: /src/schooltool/term/security.zcml:21
@@ -5060,8 +5053,8 @@ msgstr ""
 msgid "Modify"
 msgstr ""
 
-#: /src/schooltool/course/security.zcml:108
-msgid "A section is a set of one or more learners                    who meet during a term."
+#: /src/schooltool/course/security.zcml:107
+msgid "A section is a set of one or more learners who meet during a term."
 msgstr ""
 
 #: /src/schooltool/dashboard/dashboard.pt:62
@@ -6662,22 +6655,18 @@ msgstr ""
 msgid "Id of the resource type."
 msgstr ""
 
-#: /src/schooltool/resource/interfaces.py:126
-msgid ""
-"Used for lookup of named utilities that have resource\n"
-"        type specific information."
+#: /src/schooltool/resource/interfaces.py:124
+msgid "Used for lookup of named utilities that have resource type specific information."
 msgstr ""
 
-#: /src/schooltool/resource/interfaces.py:130
+#: /src/schooltool/resource/interfaces.py:129
 #: /src/schooltool/resource/interfaces.py:138
 msgid "The title of a resource type."
 msgstr ""
 
-#: /src/schooltool/resource/interfaces.py:131
+#: /src/schooltool/resource/interfaces.py:130
 #: /src/schooltool/resource/interfaces.py:139
-msgid ""
-"A string that will be displayed to users in tables or\n"
-"        resource type selection widgets."
+msgid "A string that will be displayed to users in tables or resource type selection widgets."
 msgstr ""
 
 #: /src/schooltool/resource/security.zcml:7
@@ -6709,10 +6698,10 @@ msgid "Reservations"
 msgstr ""
 
 #: /src/schooltool/resource/security.zcml:53
-msgid "Resources are locations or objects within a school.                    SchoolTool's calendar can function as a reservation                    and tracking system for resources."
+msgid "Resources are locations or objects within a school. SchoolTool's calendar can function as a reservation and tracking system for resources."
 msgstr ""
 
-#: /src/schooltool/resource/security.zcml:60
+#: /src/schooltool/resource/security.zcml:58
 msgid "List/Search resources"
 msgstr ""
 
