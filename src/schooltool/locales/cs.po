@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-11-20 18:47+0200\n"
-"PO-Revision-Date: 2012-10-29 11:11+0000\n"
+"POT-Creation-Date: 2012-11-21 16:10+0200\n"
+"PO-Revision-Date: 2013-01-09 22:46+0000\n"
 "Last-Translator: Konki <pavel.konkol@seznam.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-21 05:03+0000\n"
-"X-Generator: Launchpad (build 16293)\n"
+"X-Launchpad-Export-Date: 2013-01-10 05:05+0000\n"
+"X-Generator: Launchpad (build 16412)\n"
 "Language: cs\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -1994,7 +1994,7 @@ msgstr "Obnovit"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:2
 msgid "Exception traceback"
-msgstr ""
+msgstr "Vyjímka traceback"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:3
 #: /src/schooltool/app/browser/templates/f_errors_entry_text.pt:4
@@ -2021,7 +2021,7 @@ msgstr "Vysledovat zpětně"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:40
 msgid "Display traceback as text"
-msgstr ""
+msgstr "Zobrazit traceback jako text"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:45
 msgid "Request"
@@ -2176,7 +2176,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:40
 msgid "No, up to date"
-msgstr ""
+msgstr "Ne, aktuální"
 
 #: /src/schooltool/app/browser/templates/f_overlay_filter_widget.pt:2
 #: /src/schooltool/contact/browser/templates/f_contact_filter.pt:2
@@ -2661,7 +2661,7 @@ msgstr ""
 #: /src/schooltool/app/browser/timetablecsvimport.py:444
 #: /src/schooltool/app/browser/timetablecsvimport.py:454
 msgid "The term ${term} does not exist."
-msgstr ""
+msgstr "Pojem ${term} neexistuje."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:460
 msgid "First term ${first} starts after last term ${last}."
@@ -2755,7 +2755,7 @@ msgstr "Na hlavní stránce zobrazí kalendář."
 
 #: /src/schooltool/app/interfaces.py:143
 msgid "School logo"
-msgstr ""
+msgstr "Logo školy"
 
 #: /src/schooltool/app/main.py:305
 msgid "Going to background, daemon pid %d"
@@ -5316,14 +5316,6 @@ msgstr "Vzorová data"
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
 msgstr "Vývojové nástroje"
-
-#: /src/schooltool/devmode/devmode.pt:18
-msgid "Introspector"
-msgstr ""
-
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr "Dokumenty API"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:3
 #: /src/schooltool/skin/templates/f_unauthorized.pt:3

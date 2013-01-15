@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-11-20 18:47+0200\n"
-"PO-Revision-Date: 2012-11-23 22:04+0000\n"
+"POT-Creation-Date: 2012-11-21 16:10+0200\n"
+"PO-Revision-Date: 2013-01-02 18:44+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-24 07:27+0000\n"
-"X-Generator: Launchpad (build 16293)\n"
+"X-Launchpad-Export-Date: 2013-01-03 05:19+0000\n"
+"X-Generator: Launchpad (build 16393)\n"
 "Language: nl\n"
 
 #: /src/schooltool/app/app.py:193
@@ -4558,7 +4558,7 @@ msgstr "Vak toevoegen"
 
 #: /src/schooltool/course/browser/configure.zcml:25
 msgid "Edit Course Information"
-msgstr "Vak-informatie bewerken"
+msgstr "Vakinformatie bewerken"
 
 #: /src/schooltool/course/browser/configure.zcml:85
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:21
@@ -4597,7 +4597,7 @@ msgstr "Kopiëren vanuit vor. termijn"
 
 #: /src/schooltool/course/browser/course.py:99
 msgid "Course index"
-msgstr "Vak-index"
+msgstr "Vakindex"
 
 #: /src/schooltool/course/browser/course.py:368
 msgid "Delete ${course}"
@@ -4620,7 +4620,7 @@ msgstr "Vak-ID"
 #: /src/schooltool/course/browser/course.py:545
 #: /src/schooltool/course/browser/course.py:597
 msgid "Course Information"
-msgstr "Vak-informatie"
+msgstr "Vakinformatie"
 
 #: /src/schooltool/course/browser/course.py:669
 #: /src/schooltool/course/browser/templates/f_course_filter.pt:6
@@ -4779,7 +4779,7 @@ msgid ""
 "If no title is specified, one will be created based on the course title."
 msgstr ""
 "Indien er geen naam wordt aangegeven zal er een naam aangemaakt worden "
-"gebaseerd op de vak-naam."
+"gebaseerd op de vaknaam."
 
 #: /src/schooltool/course/browser/section.py:1295
 #: /src/schooltool/course/browser/section.py:1517
@@ -4899,8 +4899,8 @@ msgid ""
 "optional course id, <strong>may</strong> include an optional government id "
 "and <strong>may</strong> include an optional credits value."
 msgstr ""
-"CVS-gegevens <strong>moeten</strong> een vak-naam bevatten, "
-"<strong>mogen</strong> een vak-omschrijving bevatten. <strong>mogen</strong> "
+"CVS-gegevens <strong>moeten</strong> een vaknaam bevatten, "
+"<strong>mogen</strong> een vakomschrijving bevatten. <strong>mogen</strong> "
 "een vak-ID bevatten, <strong>mogen</strong> een overheids-ID bevatten en "
 "<strong>mogen</strong> een kredietwaarde bevatten."
 
@@ -5009,9 +5009,9 @@ msgid ""
 "a course that has been created in error or has no data associated with it."
 msgstr ""
 "Het verwijderen van een vak is definitief, kan niet ongedaan worden gemaakt "
-"en vernietigt alle gegevens geassocieerd met dit vak. Het wordt zeer sterk "
-"aanbevolen dat u alleen een vak verwijdert dat foutief aangemaakt is of "
-"waaraan geen gegevens zijn geassocieerd."
+"en vernietigt alle gegevens die geassocieerd zijn met dit vak. Het wordt "
+"zeer sterk aanbevolen dat u alleen een vak verwijdert dat foutief aangemaakt "
+"is of waarmee geen gegevens zijn geassocieerd."
 
 #: /src/schooltool/course/browser/templates/f_confirm_delete_section.pt:1
 msgid ""
@@ -5020,9 +5020,9 @@ msgid ""
 "a section that has been created in error or has no data associated with it."
 msgstr ""
 "Het verwijderen van een sectie is definitief, kan niet ongedaan worden "
-"gemaakt en vernietigt alle gegevens geassocieerd met deze sectie. Het wordt "
-"zeer sterk aanbevolen dat u alleen een sectie verwijdert dat foutief "
-"aangemaakt is of waaraan geen gegevens zijn geassocieerd."
+"gemaakt en vernietigt alle gegevens die geassocieerd zijn met deze sectie. "
+"Het wordt zeer sterk aanbevolen dat u alleen een sectie verwijdert dat "
+"foutief aangemaakt is of waarmee geen gegevens zijn geassocieerd."
 
 #: /src/schooltool/course/browser/templates/f_course_csvimport_description.pt:3
 msgid ""
@@ -5031,8 +5031,8 @@ msgid ""
 "optional course SchoolTool ID, <strong>may</strong> include an optional "
 "Alternate ID and <strong>may</strong> include an optional credits value."
 msgstr ""
-"CVS-gegevens <strong>moeten</strong> een vak-naam bevatten, "
-"<strong>mogen</strong> een vak-omschrijving bevatten, <strong>mogen</strong> "
+"CVS-gegevens <strong>moeten</strong> een vaknaam bevatten, "
+"<strong>mogen</strong> een vakomschrijving bevatten, <strong>mogen</strong> "
 "een Schooltool vak-ID bevatten, <strong>mogen</strong> een alternatief-ID "
 "bevatten en <strong>mogen</strong> een kredietwaarde bevatten."
 
@@ -5152,7 +5152,7 @@ msgstr "Koppelen"
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:6
 msgid "Manage courses"
-msgstr "Vak-beheer"
+msgstr "Vakbeheer"
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:17
 msgid "There are ${count} courses defined for ${schoolyear}."
@@ -5556,14 +5556,6 @@ msgstr "Voorbeeldbestanden"
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
 msgstr "Hulpprogramma's voor ontwikkelaars"
-
-#: /src/schooltool/devmode/devmode.pt:18
-msgid "Introspector"
-msgstr "Introspector"
-
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr "API-documentatie"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:3
 #: /src/schooltool/skin/templates/f_unauthorized.pt:3
@@ -6131,7 +6123,7 @@ msgstr "moet een geldig periode-ID hebben"
 
 #: /src/schooltool/export/importer.py:124
 msgid "course credits need to be a valid number"
-msgstr "vak-kredietwaarde moet een geldig getal zijn"
+msgstr "vakkredietwaarde moet een geldig getal zijn"
 
 #: /src/schooltool/export/importer.py:125
 msgid "gender must be male or female"
@@ -7547,10 +7539,10 @@ msgid ""
 "school year that has been created in error or has no data associated with it."
 msgstr ""
 "Het verwijderen van een schooljaar is definitief, kan niet ongedaan worden "
-"gemaakt en vernietigt alle gegevens geassocieerd met dit schooljaar, "
-"inclusief alle vakken, secties van vakken, roosters en groepen. Het wordt "
-"zeer sterk aanbevolen dat u alleen een schooljaar verwijdert dat foutief "
-"aangemaakt is of waaraan geen gegevens zijn geassocieerd."
+"gemaakt en vernietigt alle gegevens die geassocieerd zijn met dit "
+"schooljaar. Het wordt zeer sterk aanbevolen dat u alleen een schooljaar "
+"verwijdert dat foutief aangemaakt is of waarmee geen gegevens zijn "
+"geassocieerd."
 
 #: /src/schooltool/schoolyear/browser/templates/f_manage_schoolyears_overview.pt:4
 #: /src/schooltool/schoolyear/browser/templates/f_manage_schoolyears_overview.pt:15
@@ -7928,7 +7920,7 @@ msgstr "Breedte"
 
 #: /src/schooltool/skin/widgets.py:100
 msgid "Editor frame width"
-msgstr "Framebreedte editor"
+msgstr "Framebreedte bewerken"
 
 #: /src/schooltool/skin/widgets.py:103
 msgid "Height"
@@ -7936,7 +7928,7 @@ msgstr "Hoogte"
 
 #: /src/schooltool/skin/widgets.py:104
 msgid "Editor frame height"
-msgstr "Framehoogte editor"
+msgstr "Framehoogte bewerken"
 
 #: /src/schooltool/skin/widgets.py:107
 msgid "Toolbar configuration"
@@ -8071,10 +8063,9 @@ msgid ""
 "associated with it."
 msgstr ""
 "Het verwijderen van een termijn is definitief, kan niet ongedaan worden "
-"gemaakt en vernietigt alle gegevens geassocieerd met deze termijn, inclusief "
-"alle secties van vakken. Het wordt zeer sterk aanbevolen dat u alleen een "
-"termijn verwijdert dat foutief aangemaakt is of waaraan geen gegevens zijn "
-"geassocieerd."
+"gemaakt en vernietigt alle gegevens die geassocieerd zijn met deze termijn. "
+"Het wordt zeer sterk aanbevolen dat u alleen een termijn verwijdert dat "
+"foutief aangemaakt is of waarmee geen gegevens zijn geassocieerd."
 
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:5
 msgid "Manage terms"
@@ -8372,9 +8363,9 @@ msgid ""
 "with it."
 msgstr ""
 "Het verwijderen van een rooster is definitief, kan niet ongedaan worden "
-"gemaakt en vernietigt alle planningen geassocieerd met dit rooster. Het "
-"wordt zeer sterk aanbevolen dat u alleen een rooster verwijdert dat foutief "
-"aangemaakt is of waaraan geen gegevens zijn geassocieerd."
+"gemaakt en vernietigt alle gegevens die geassocieerd zijn met dit rooster. "
+"Het wordt zeer sterk aanbevolen dat u alleen een rooster verwijdert dat "
+"foutief aangemaakt is of waarmee geen gegevens zijn geassocieerd."
 
 #: /src/schooltool/timetable/browser/templates/f_confirm_make_default.pt:1
 msgid ""

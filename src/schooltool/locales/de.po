@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-11-20 18:47+0200\n"
+"POT-Creation-Date: 2012-11-21 16:10+0200\n"
 "PO-Revision-Date: 2012-11-24 08:08+0000\n"
 "Last-Translator: baeus <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-25 06:47+0000\n"
-"X-Generator: Launchpad (build 16293)\n"
+"X-Launchpad-Export-Date: 2012-12-12 05:01+0000\n"
+"X-Generator: Launchpad (build 16361)\n"
 "Language: de\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -5481,14 +5481,6 @@ msgstr "Beispiel-Daten"
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
 msgstr "Entwicklungs-Werkzeuge"
-
-#: /src/schooltool/devmode/devmode.pt:18
-msgid "Introspector"
-msgstr "Introspector"
-
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr "API-Dokumente"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:3
 #: /src/schooltool/skin/templates/f_unauthorized.pt:3

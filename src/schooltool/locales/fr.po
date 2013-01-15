@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-11-20 18:47+0200\n"
-"PO-Revision-Date: 2012-11-23 22:07+0000\n"
-"Last-Translator: Étienne Beaulé <betienne@bellaliant.net>\n"
+"POT-Creation-Date: 2012-11-21 16:10+0200\n"
+"PO-Revision-Date: 2013-01-12 10:21+0000\n"
+"Last-Translator: Hélion du Mas des Bourboux <helion331990@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-24 07:28+0000\n"
-"X-Generator: Launchpad (build 16293)\n"
+"X-Launchpad-Export-Date: 2013-01-13 04:49+0000\n"
+"X-Generator: Launchpad (build 16420)\n"
 "Language: fr\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -271,7 +271,7 @@ msgstr "Nom"
 
 #: /src/schooltool/app/browser/app.py:923
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 #: /src/schooltool/app/browser/app.py:951
 #: /src/schooltool/app/security.py:304
@@ -1273,7 +1273,7 @@ msgstr "Calendriers Visibles"
 #: /src/schooltool/app/browser/flourish.zcml:737
 #: /src/schooltool/app/browser/flourish.zcml:747
 msgid "School Logo"
-msgstr ""
+msgstr "Logo de l'école"
 
 #: /src/schooltool/app/browser/overlay.py:220
 msgid "Saved changes."
@@ -2866,7 +2866,7 @@ msgstr "Afficher le calendrier complet sur la page de garde."
 
 #: /src/schooltool/app/interfaces.py:143
 msgid "School logo"
-msgstr ""
+msgstr "Logo de l'école"
 
 #: /src/schooltool/app/main.py:305
 msgid "Going to background, daemon pid %d"
@@ -4088,15 +4088,15 @@ msgstr "Éditer la couverture du calendrier"
 
 #: /src/schooltool/common/fields.py:38
 msgid "Image size"
-msgstr ""
+msgstr "Taille de l'image"
 
 #: /src/schooltool/common/fields.py:39
 msgid "Size in pixels"
-msgstr ""
+msgstr "Taille en pixels"
 
 #: /src/schooltool/common/fields.py:44
 msgid "Image format"
-msgstr ""
+msgstr "Format de l’image"
 
 #: /src/schooltool/common/fields.py:48
 msgid "Max file size in bytes"
@@ -4764,6 +4764,7 @@ msgstr "Titre de section"
 msgid ""
 "If no title is specified, one will be created based on the course title."
 msgstr ""
+"Si aucun titre n'est spécifié, un serra créé sur la base du nom du cour."
 
 #: /src/schooltool/course/browser/section.py:1295
 #: /src/schooltool/course/browser/section.py:1517
@@ -5187,7 +5188,7 @@ msgstr "Lier une Section Existante"
 
 #: /src/schooltool/course/browser/templates/f_section_list_table_filter.pt:25
 msgid "(${count} sections)"
-msgstr ""
+msgstr "(${count} sections)"
 
 #: /src/schooltool/course/browser/templates/f_section_member_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:3
@@ -5552,14 +5553,6 @@ msgstr "Donnée simple"
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
 msgstr "Outils pour développeur"
-
-#: /src/schooltool/devmode/devmode.pt:18
-msgid "Introspector"
-msgstr "Introspecteur"
-
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr "Docs API"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:3
 #: /src/schooltool/skin/templates/f_unauthorized.pt:3
@@ -6133,11 +6126,11 @@ msgstr ""
 
 #: /src/schooltool/export/importer.py:125
 msgid "gender must be male or female"
-msgstr ""
+msgstr "le sexe doit être mâle ou femelle"
 
 #: /src/schooltool/export/importer.py:126
 msgid "has an invalid username"
-msgstr ""
+msgstr "a un nom d'utilisateur invalide"
 
 #: /src/schooltool/export/importer.py:127
 msgid "has an invalid resource id"
@@ -6165,7 +6158,7 @@ msgstr "${sheet_name} ${column} ${row} ${message}"
 
 #: /src/schooltool/export/importer.py:1887
 msgid "The following errors occurred while importing:"
-msgstr ""
+msgstr "Les erreurs suivantes sont apparues pendant l'importation :"
 
 #: /src/schooltool/export/templates/f_import.pt:19
 msgid "Please wait while the data is being imported."
@@ -6682,7 +6675,7 @@ msgstr "Préférences"
 #: /src/schooltool/person/browser/home.pt:24
 #: /src/schooltool/person/browser/person.pt:15
 msgid "Username:"
-msgstr "Nom d'Utilisateur :"
+msgstr "Nom d'utilisateur :"
 
 #: /src/schooltool/person/browser/home.pt:27
 #: /src/schooltool/person/browser/person.pt:18
@@ -7816,7 +7809,7 @@ msgstr "Introuvable"
 
 #: /src/schooltool/skin/flourish/templates/image_input.pt:11
 msgid "delete this image"
-msgstr ""
+msgstr "Supprimer cette image"
 
 #: /src/schooltool/skin/flourish/templates/main.pt:89
 msgid "server running"
@@ -7833,6 +7826,7 @@ msgstr "Le fichier chargé n'est ni une image JPEG ni un PNG"
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
 msgstr ""
+"L'image téléchargée ne peut pas avoir une taille de plus de ${size} MB"
 
 #: /src/schooltool/skin/form.py:64
 msgid "No changes"

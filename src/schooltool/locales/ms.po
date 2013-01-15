@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-11-20 18:47+0200\n"
-"PO-Revision-Date: 2012-11-23 22:12+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"POT-Creation-Date: 2012-11-21 16:10+0200\n"
+"PO-Revision-Date: 2012-12-03 16:29+0000\n"
+"Last-Translator: abuyop <Unknown>\n"
 "Language-Team: Malay <ms@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-24 07:30+0000\n"
-"X-Generator: Launchpad (build 16293)\n"
+"X-Launchpad-Export-Date: 2012-12-12 05:03+0000\n"
+"X-Generator: Launchpad (build 16361)\n"
 "Language: ms\n"
 
 #: /src/schooltool/app/app.py:193
@@ -115,7 +115,7 @@ msgstr "Buang"
 #: /src/schooltool/app/browser/app.py:408
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:58
 msgid "Add all displayed"
-msgstr ""
+msgstr "Tambah semua dipaparkan"
 
 #: /src/schooltool/app/browser/app.py:677
 msgid "Username or password is incorrect"
@@ -131,11 +131,11 @@ msgstr "Log masuk"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
-msgstr ""
+msgstr "Daftar keluar"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
-msgstr ""
+msgstr "Tetapan kalendar"
 
 #: /src/schooltool/app/browser/app.py:528
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
@@ -228,7 +228,7 @@ msgstr "Batal"
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/flourish.zcml:580
 msgid "School Name"
-msgstr ""
+msgstr "Nama Sekolah"
 
 #: /src/schooltool/app/browser/app.py:557
 msgid "Name"
@@ -236,7 +236,7 @@ msgstr "Nama"
 
 #: /src/schooltool/app/browser/app.py:923
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 #: /src/schooltool/app/browser/app.py:951
 #: /src/schooltool/app/security.py:304
@@ -280,7 +280,7 @@ msgstr "sekolah"
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 msgid "Server"
-msgstr ""
+msgstr "Pelayan"
 
 #: /src/schooltool/app/browser/app.py:1177
 #: /src/schooltool/app/browser/flourish.zcml:611
@@ -293,7 +293,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/app.py:1200
 msgid "There were errors while packing the database: ${error}"
-msgstr ""
+msgstr "Terdapat ralat semasa mempek pangkalan data: ${error}"
 
 #: /src/schooltool/app/browser/app.py:1226
 #: /src/schooltool/skin/flourish/form.py:46
@@ -309,27 +309,27 @@ msgstr "Tidak"
 
 #: /src/schooltool/app/browser/app.py:1242
 msgid "${type} Error"
-msgstr ""
+msgstr "Ralat ${type}"
 
 #: /src/schooltool/app/browser/app.py:962
 #: /src/schooltool/app/browser/templates/f_errors.pt:15
 msgid "Number of exceptions to show"
-msgstr ""
+msgstr "Bilangan pengecualian untuk dipaparkan"
 
 #: /src/schooltool/app/browser/app.py:965
 #: /src/schooltool/app/browser/templates/f_errors.pt:21
 msgid "Copy exceptions to the event log"
-msgstr ""
+msgstr "Salin pengecualian ke log peristiwa"
 
 #: /src/schooltool/app/browser/app.py:969
 #: /src/schooltool/app/browser/templates/f_errors.pt:27
 msgid "Ignored exception types"
-msgstr ""
+msgstr "Jenis pengecualian diabaikan"
 
 #: /src/schooltool/app/browser/app.py:998
 #: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
-msgstr ""
+msgstr "Tetapan Ralat"
 
 #: /src/schooltool/app/browser/app.py:1005
 #: /src/schooltool/basicperson/browser/demographics.py:413
@@ -344,7 +344,7 @@ msgstr ""
 #: /src/schooltool/term/browser/term.py:291
 #: /src/schooltool/term/browser/term.py:404
 msgid "Submit"
-msgstr ""
+msgstr "Serah"
 
 #: /src/schooltool/app/browser/app.py:1025
 #: /src/schooltool/app/browser/configure.zcml:670
@@ -358,7 +358,7 @@ msgstr "Ralat"
 #: /src/schooltool/app/browser/flourish.zcml:292
 #: /src/schooltool/app/browser/flourish.zcml:301
 msgid "Tabs"
-msgstr ""
+msgstr "Tab"
 
 #: /src/schooltool/app/browser/cal.py:118
 msgid "January"
@@ -1114,7 +1114,7 @@ msgstr "Tetapan"
 
 #: /src/schooltool/app/browser/flourish.zcml:218
 msgid "Calendar Settings"
-msgstr ""
+msgstr "Tetapan Kalendar"
 
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/templates/f_errors.pt:7
@@ -1203,16 +1203,16 @@ msgstr "Senarai e-mel"
 
 #: /src/schooltool/app/browser/flourish.zcml:351
 msgid "IRC channel"
-msgstr ""
+msgstr "Saluran IRC"
 
 #: /src/schooltool/app/browser/flourish.zcml:393
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School"
-msgstr ""
+msgstr "Sekolah"
 
 #: /src/schooltool/app/browser/flourish.zcml:410
 msgid "Customize"
-msgstr ""
+msgstr "Suaikan"
 
 #: /src/schooltool/app/browser/flourish.zcml:449
 #: /src/schooltool/course/browser/templates/f_course_view.pt:75
@@ -1223,20 +1223,20 @@ msgstr ""
 
 #: /src/schooltool/app/browser/flourish.zcml:492
 msgid "Information"
-msgstr ""
+msgstr "Maklumat"
 
 #: /src/schooltool/app/browser/flourish.zcml:510
 msgid "Database generations"
-msgstr ""
+msgstr "Generasi pangkalan data"
 
 #: /src/schooltool/app/browser/flourish.zcml:607
 msgid "Shown Calendars"
-msgstr ""
+msgstr "Kalendar Dipaparkan"
 
 #: /src/schooltool/app/browser/flourish.zcml:737
 #: /src/schooltool/app/browser/flourish.zcml:747
 msgid "School Logo"
-msgstr ""
+msgstr "Logo Sekolah"
 
 #: /src/schooltool/app/browser/overlay.py:220
 msgid "Saved changes."
@@ -1244,15 +1244,15 @@ msgstr "Simpan pengubahan"
 
 #: /src/schooltool/app/browser/overlay.py:286
 msgid "Selected calendars"
-msgstr ""
+msgstr "Kalendar terpilih"
 
 #: /src/schooltool/app/browser/overlay.py:287
 msgid "Available calendars"
-msgstr ""
+msgstr "Kalendar tersedia"
 
 #: /src/schooltool/app/browser/overlay.py:326
 msgid "School Calendar"
-msgstr ""
+msgstr "Kalendar Sekolah"
 
 #: /src/schooltool/app/browser/pdfcal.py:52
 msgid "Daily calendar for %s"
@@ -1354,7 +1354,7 @@ msgstr "Ketua Pembinaan:"
 #: /src/schooltool/app/browser/templates/about.pt:44
 #: /src/schooltool/app/browser/templates/f_about.pt:33
 msgid "Core Developers:"
-msgstr ""
+msgstr "Pembangun Teras:"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 #: /src/schooltool/app/browser/templates/f_about.pt:37
@@ -1782,11 +1782,16 @@ msgstr "Sumber Tempahan untuk ${title}"
 #: /src/schooltool/app/browser/templates/event_booking.pt:17
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:5
 msgid "Event Details"
-msgstr ""
+msgstr "Perincian Peristiwa"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:45
 msgid "UnBook"
 msgstr "Batal tempahan"
+
+#: /src/schooltool/app/browser/templates/event_booking.pt:54
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:55
+msgid "Available Resources"
+msgstr "Sumber Tersedia"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:60
 msgid "Book"
@@ -1798,25 +1803,25 @@ msgstr "Lokasi: ${location}"
 
 #: /src/schooltool/app/browser/templates/f_about_related.pt:2
 msgid "Contributors"
-msgstr ""
+msgstr "Penyumbang"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:7
 msgid "Change calendar settings"
-msgstr ""
+msgstr "Ubah tetapan kalendar"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:10
 msgid "Import source"
-msgstr ""
+msgstr "Import sumber"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:20
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:64
 msgid "Upload CSV file"
-msgstr ""
+msgstr "Muat naik fail CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:29
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:104
 msgid "Enter CSV text"
-msgstr ""
+msgstr "Masukkan teks CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:60
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:100
@@ -1826,11 +1831,11 @@ msgstr ""
 #: /src/schooltool/group/browser/flourish.zcml:236
 #: /src/schooltool/resource/browser/flourish.zcml:333
 msgid "Import CSV"
-msgstr ""
+msgstr "Import CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:75
 msgid "Charset"
-msgstr ""
+msgstr "Set aksara"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:80
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:103
@@ -1894,7 +1899,7 @@ msgstr "lain-lain (sila perincikan)"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:91
 msgid "Other charset"
-msgstr ""
+msgstr "Set aksara lain"
 
 #. Default: "Submit"
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:112
@@ -1962,7 +1967,7 @@ msgstr "Memaparkan ${count} dari ${total} butiran"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:4
 msgid "Manage error settings"
-msgstr ""
+msgstr "Urus tetapan ralat"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:43
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:14
@@ -1980,7 +1985,7 @@ msgstr "Pengecualian"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:49
 msgid "No exceptions logged."
-msgstr ""
+msgstr "Tiada pengecualian dilog."
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:76
 #: /src/schooltool/term/browser/term.py:219
@@ -1992,7 +1997,7 @@ msgstr "Muat semula"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:2
 msgid "Exception traceback"
-msgstr ""
+msgstr "Surih kembali pengecualian"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:3
 #: /src/schooltool/app/browser/templates/f_errors_entry_text.pt:4
@@ -2001,15 +2006,15 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:18
 msgid "Request URL"
-msgstr ""
+msgstr "Pinta URL"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:22
 msgid "Exception Type"
-msgstr ""
+msgstr "Jenis Pengecualian"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:26
 msgid "Exception Value"
-msgstr ""
+msgstr "Nilai Pengecualian"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:31
 #: /src/schooltool/skin/templates/error.pt:20
@@ -2019,11 +2024,11 @@ msgstr "Kesan Kembali"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:40
 msgid "Display traceback as text"
-msgstr ""
+msgstr "Papar surih kembali sebagai teks"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:45
 msgid "Request"
-msgstr ""
+msgstr "Permintaan"
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:2
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
@@ -2038,7 +2043,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/f_specialday_related.pt:2
 #: /src/schooltool/timetable/browser/templates/f_timetable_container_related.pt:2
 msgid "What is This?"
-msgstr ""
+msgstr "Apakah Ini?"
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:6
 msgid ""
@@ -2048,15 +2053,15 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:5
 msgid "Set Tab Visibility"
-msgstr ""
+msgstr "Tetapkan Ketampakan Tab"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:10
 msgid "Visible"
-msgstr ""
+msgstr "Kelihatan"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:25
 msgid "Default"
-msgstr ""
+msgstr "Lalai"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
 msgid ""
@@ -2074,6 +2079,7 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
 msgid "Links can be changed from visible to hidden at any time."
 msgstr ""
+"Pautan boleh diubah daripada kelihatan kepada sembunyi pada bila-bila masa."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:18
 msgid ""
@@ -2191,7 +2197,7 @@ msgstr "Cari"
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
 msgid "Database"
-msgstr ""
+msgstr "Pangkalan Data"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:11
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:16
@@ -2201,42 +2207,42 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:15
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:20
 msgid "Uptime"
-msgstr ""
+msgstr "Masa Hidup"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:19
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:24
 msgid "System platform"
-msgstr ""
+msgstr "Platform  sistem"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:23
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:28
 msgid "Python version"
-msgstr ""
+msgstr "Versi Python"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:27
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:32
 msgid "Command line"
-msgstr ""
+msgstr "Baris perintah"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:31
 msgid "Preferred encoding"
-msgstr ""
+msgstr "Pengekodan digemari"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:35
 msgid "File system encoding"
-msgstr ""
+msgstr "Pengekodan sistem fail"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:39
 msgid "Process id"
-msgstr ""
+msgstr "Id proses"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:43
 msgid "Developer mode"
-msgstr ""
+msgstr "Mod pembangun"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:48
 msgid "Python path"
-msgstr ""
+msgstr "Laluan Python"
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:3
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
@@ -2342,7 +2348,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:3
 msgid "Server Information"
-msgstr ""
+msgstr "Maklumat Pelayan"
 
 #: /src/schooltool/app/browser/templates/f_settings.pt:5
 msgid "Please wait for confirmation that the database has been packed."
@@ -2350,7 +2356,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:13
 msgid "Domain ${domain}"
-msgstr ""
+msgstr "Domain ${domain}"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:18
 #: /src/schooltool/contact/interfaces.py:82
@@ -2359,11 +2365,11 @@ msgstr "Bahasa"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:19
 msgid "Files"
-msgstr ""
+msgstr "Fail"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:31
 msgid "Reload"
-msgstr ""
+msgstr "Muat Semula"
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
@@ -2381,7 +2387,7 @@ msgstr "Selamat datang ke SchoolTool"
 #: /src/schooltool/course/security.zcml:74
 #: /src/schooltool/dashboard/term.pt:4
 msgid "Courses"
-msgstr "Kursus-kursus"
+msgstr "Kursus"
 
 #: /src/schooltool/app/browser/templates/index.pt:13
 #: /src/schooltool/group/browser/configure.zcml:61
@@ -2645,7 +2651,7 @@ msgstr "Data CSV"
 #: /src/schooltool/resource/browser/flourish.zcml:323
 #: /src/schooltool/resource/browser/flourish.zcml:342
 msgid "Import"
-msgstr ""
+msgstr "Import"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:135
 msgid "Row 2 is not empty"
@@ -2785,7 +2791,7 @@ msgstr ""
 
 #: /src/schooltool/app/interfaces.py:143
 msgid "School logo"
-msgstr ""
+msgstr "Logo sekolah"
 
 #: /src/schooltool/app/main.py:305
 msgid "Going to background, daemon pid %d"
@@ -3112,7 +3118,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:310
 msgid "Selection"
-msgstr ""
+msgstr "Pemilihan"
 
 #: /src/schooltool/basicperson/browser/demographics.py:312
 msgid "Text"
@@ -3120,11 +3126,11 @@ msgstr "Teks"
 
 #: /src/schooltool/basicperson/browser/demographics.py:313
 msgid "Yes/No"
-msgstr ""
+msgstr "Ya/Tidak"
 
 #: /src/schooltool/basicperson/browser/demographics.py:343
 msgid "Integer"
-msgstr ""
+msgstr "Integer"
 
 #: /src/schooltool/basicperson/browser/demographics.py:422
 #: /src/schooltool/basicperson/interfaces.py:144
@@ -3155,7 +3161,7 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/flourish.zcml:16
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
 msgid "People"
-msgstr ""
+msgstr "Orang"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
@@ -3187,58 +3193,58 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:173
 msgid "Teacher"
-msgstr ""
+msgstr "Guru"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:181
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Student"
-msgstr ""
+msgstr "Pelajar"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:189
 msgid "Administrator"
-msgstr ""
+msgstr "Pentadbir"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:282
 #: /src/schooltool/level/browser/flourish.zcml:110
 #: /src/schooltool/resource/browser/flourish.zcml:29
 msgid "Reorder"
-msgstr ""
+msgstr "Tertib Semula"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:305
 msgid "Text Field"
-msgstr ""
+msgstr "Medan Teks"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:313
 msgid "Description Field"
-msgstr ""
+msgstr "Medan Keterangan"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:322
 msgid "Date Field"
-msgstr ""
+msgstr "Medan Tarikh"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:331
 msgid "Yes/No Field"
-msgstr ""
+msgstr "Medan Ya/Tidak"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:340
 msgid "Selection List Field"
-msgstr ""
+msgstr "Medan Senarai Pemilihan"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:349
 msgid "Integer Field"
-msgstr ""
+msgstr "Medan Integer"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:359
 msgid "Reorder or Delete Fields"
-msgstr ""
+msgstr "Tertib semula atau Padam Medan"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:365
 msgid "New Description Field"
-msgstr ""
+msgstr "Medan Keterangan Baru"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:412
 msgid "New Integer Field"
-msgstr ""
+msgstr "Medan Integer Baru"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:590
 msgid "Contains an XML representation of the person."
@@ -3246,11 +3252,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Export as XML"
-msgstr ""
+msgstr "Eksport sebagai XML"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:627
 msgid "ID Card"
-msgstr ""
+msgstr "Kad ID"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:627
 msgid ""
@@ -3293,7 +3299,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:169
 msgid "Users cannot log in until a password is assigned."
-msgstr ""
+msgstr "Pengguna tidak dapat daftar masuk sehingga kata laluan diumpukkan."
 
 #: /src/schooltool/basicperson/browser/person.py:173
 #: /src/schooltool/widget/password.py:39
@@ -3341,7 +3347,7 @@ msgstr "Tukar maklumat untuk ${fullname}"
 #: /src/schooltool/contact/browser/contact.py:190
 #: /src/schooltool/contact/browser/contact.py:379
 msgid "Full Name"
-msgstr ""
+msgstr "Nama Penuh"
 
 #: /src/schooltool/basicperson/browser/person.py:639
 msgid "Current Advisors"
@@ -3357,11 +3363,11 @@ msgstr "Guru Penasihat ${person}"
 
 #: /src/schooltool/basicperson/browser/person.py:660
 msgid "Current advisors"
-msgstr ""
+msgstr "Penasihat semasa"
 
 #: /src/schooltool/basicperson/browser/person.py:661
 msgid "Available advisors"
-msgstr ""
+msgstr "Penasihat yang ada"
 
 #: /src/schooltool/basicperson/browser/person.py:678
 msgid "Current Advisees"
@@ -3418,7 +3424,7 @@ msgstr "Demografik pentadbir"
 #: /src/schooltool/basicperson/browser/person.py:1155
 #: /src/schooltool/group/browser/flourish.zcml:358
 msgid "ID Cards"
-msgstr ""
+msgstr "Kad ID"
 
 #: /src/schooltool/basicperson/browser/person.py:1327
 msgid "ID Card: ${person}"
@@ -3522,7 +3528,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:8
 msgid "Order"
-msgstr ""
+msgstr "Tertib"
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:10
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:6
@@ -3573,11 +3579,11 @@ msgstr "Diperlukan"
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:9
 msgid "Limited"
-msgstr ""
+msgstr "Terhad"
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
 msgid "General Information"
-msgstr ""
+msgstr "Maklumat Am"
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:25
@@ -3617,19 +3623,19 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:90
 msgid "ID:"
-msgstr ""
+msgstr "ID:"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:95
 msgid "Birth date:"
-msgstr ""
+msgstr "Tarikh lahir:"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:99
 msgid "Contact"
-msgstr ""
+msgstr "Kenalan"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:111
 msgid "Contact's Phone"
-msgstr ""
+msgstr "Telefon Kenalan"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
 #: /src/schooltool/person/browser/person-csvimport.pt:4
@@ -3859,27 +3865,27 @@ msgstr "Pentadbir"
 
 #: /src/schooltool/calendar/browser/calendar.py:173
 msgid "Tomorrow"
-msgstr ""
+msgstr "Esok"
 
 #: /src/schooltool/calendar/browser/calendar.py:175
 msgid "Yesterday"
-msgstr ""
+msgstr "Semalam"
 
 #: /src/schooltool/calendar/browser/calendar.py:195
 msgid "This Week"
-msgstr ""
+msgstr "Minggu Ini"
 
 #: /src/schooltool/calendar/browser/calendar.py:197
 msgid "Last Week"
-msgstr ""
+msgstr "Minggu Lepas"
 
 #: /src/schooltool/calendar/browser/calendar.py:199
 msgid "Next Week"
-msgstr ""
+msgstr "Minggu Depan"
 
 #: /src/schooltool/calendar/browser/calendar.py:236
 msgid "Jump To"
-msgstr ""
+msgstr "Lompat Ke"
 
 #: /src/schooltool/calendar/browser/event.py:129
 #: /src/schooltool/calendar/browser/event.py:156
@@ -3912,7 +3918,7 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/flourish.zcml:81
 msgid "Event"
-msgstr ""
+msgstr "Peristiwa"
 
 #: /src/schooltool/calendar/browser/flourish.zcml:166
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:392
@@ -3922,11 +3928,11 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/overlay.py:33
 msgid "Show"
-msgstr ""
+msgstr "Papar"
 
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:35
 msgid "Select"
-msgstr ""
+msgstr "Pilih"
 
 #: /src/schooltool/calendar/browser/templates/event.pt:52
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:53
@@ -3981,19 +3987,19 @@ msgstr "Ubah Susunan Kalendar"
 
 #: /src/schooltool/common/fields.py:38
 msgid "Image size"
-msgstr ""
+msgstr "Saiz imej"
 
 #: /src/schooltool/common/fields.py:39
 msgid "Size in pixels"
-msgstr ""
+msgstr "Saiz dalam piksel"
 
 #: /src/schooltool/common/fields.py:44
 msgid "Image format"
-msgstr ""
+msgstr "Format imej"
 
 #: /src/schooltool/common/fields.py:48
 msgid "Max file size in bytes"
-msgstr ""
+msgstr "Saiz fail maksimum dalam bait"
 
 #: /src/schooltool/contact/browser/basicperson.py:123
 #: /src/schooltool/contact/browser/contact.py:195
@@ -4007,7 +4013,7 @@ msgstr "Alamat"
 #: /src/schooltool/contact/browser/contact.py:387
 #: /src/schooltool/contact/browser/flourish.zcml:155
 msgid "Contact Information"
-msgstr ""
+msgstr "Maklumat Kenalan"
 
 #: /src/schooltool/contact/browser/configure.zcml:41
 msgid "View Person"
@@ -4067,7 +4073,7 @@ msgstr "Indek Ibubapa/Penjaga"
 #: /src/schooltool/contact/browser/contact.py:618
 #: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
 msgid "First name and/or last name"
-msgstr ""
+msgstr "Nama pertama dan/atau nama akhir"
 
 #: /src/schooltool/contact/browser/contact.py:654
 #: /src/schooltool/email/browser/email.py:301
@@ -4122,7 +4128,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/flourish.zcml:206
 msgid "Edit Contact Information"
-msgstr ""
+msgstr "Sunting Maklumat Kenalan"
 
 #: /src/schooltool/contact/browser/relationship.py:78
 #: /src/schooltool/contact/browser/templates/contactperson_subform.pt:8
@@ -4144,7 +4150,7 @@ msgstr "Menguruskan ibubapa/penjaga ${person}"
 
 #: /src/schooltool/contact/browser/relationship.py:186
 msgid "Current contacts"
-msgstr ""
+msgstr "Kenalan semasa"
 
 #: /src/schooltool/contact/browser/relationship.py:187
 msgid "Available contacts"
@@ -4430,7 +4436,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:25
 msgid "Edit Course Information"
-msgstr "Ubah Maklumat Kursus"
+msgstr "Sunting Maklumat Kursus"
 
 #: /src/schooltool/course/browser/configure.zcml:85
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:21
@@ -4469,7 +4475,7 @@ msgstr "Salin dari istilah sebelumnya"
 
 #: /src/schooltool/course/browser/course.py:99
 msgid "Course index"
-msgstr "Indeks Kursus"
+msgstr "Indeks kursus"
 
 #: /src/schooltool/course/browser/course.py:368
 msgid "Delete ${course}"
@@ -4843,7 +4849,7 @@ msgstr "Ada ${num_errors} kesalahan input."
 
 #: /src/schooltool/course/browser/templates/coursesviewlet.pt:7
 msgid "Sections Taught"
-msgstr "Seksyen diajar"
+msgstr "Bahagian Diajar"
 
 #: /src/schooltool/course/browser/templates/coursesviewlet.pt:37
 msgid "Sections Attended"
@@ -5389,14 +5395,6 @@ msgstr "data contoh"
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
 msgstr "Alatan Pembangun Perisian"
-
-#: /src/schooltool/devmode/devmode.pt:18
-msgid "Introspector"
-msgstr "Penilai Kendiri"
-
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr "Dokumen API"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:3
 #: /src/schooltool/skin/templates/f_unauthorized.pt:3

@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-11-20 18:47+0200\n"
-"PO-Revision-Date: 2012-11-23 16:37+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"POT-Creation-Date: 2012-11-21 16:10+0200\n"
+"PO-Revision-Date: 2013-01-02 10:33+0000\n"
+"Last-Translator: Kaya Zeren <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-24 07:32+0000\n"
-"X-Generator: Launchpad (build 16293)\n"
+"X-Launchpad-Export-Date: 2013-01-03 05:20+0000\n"
+"X-Generator: Launchpad (build 16393)\n"
 "Language: tr\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -541,7 +541,7 @@ msgstr "Geçen haftaya git"
 
 #: /src/schooltool/app/browser/cal.py:890
 msgid "${month}, ${year} (week ${week})"
-msgstr "${ay}, ${yıl} (hafta ${hafta})"
+msgstr "${month}, ${year} (hafta ${week})"
 
 #: /src/schooltool/app/browser/cal.py:1059
 msgid "Next month"
@@ -569,7 +569,7 @@ msgstr "Geçen aya git"
 
 #: /src/schooltool/app/browser/cal.py:1132
 msgid "${month}, ${year}"
-msgstr "${ay}, ${yıl}"
+msgstr "${month}, ${year}"
 
 #: /src/schooltool/app/browser/cal.py:1154
 msgid "Week ${week_no}"
@@ -5525,14 +5525,6 @@ msgstr "Örnek veri"
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
 msgstr "Geliştirici Araçları"
-
-#: /src/schooltool/devmode/devmode.pt:18
-msgid "Introspector"
-msgstr "İç gözlemci"
-
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr "API Belgeleri"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:3
 #: /src/schooltool/skin/templates/f_unauthorized.pt:3

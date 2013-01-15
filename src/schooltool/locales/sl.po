@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-11-20 18:47+0200\n"
-"PO-Revision-Date: 2012-08-06 22:33+0000\n"
-"Last-Translator: Rok Fajfar <snewix.dev@gmail.com>\n"
+"POT-Creation-Date: 2012-11-21 16:10+0200\n"
+"PO-Revision-Date: 2012-11-26 22:28+0000\n"
+"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-21 05:07+0000\n"
-"X-Generator: Launchpad (build 16293)\n"
+"X-Launchpad-Export-Date: 2012-12-12 05:05+0000\n"
+"X-Generator: Launchpad (build 16361)\n"
 "Language: sl\n"
 
 #: /src/schooltool/app/app.py:193
@@ -1537,7 +1537,7 @@ msgstr "Ni nobenih za dodati."
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 msgid "ok-button"
-msgstr "ok-gumb"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event.pt:15
 #: /src/schooltool/calendar/browser/templates/event.pt:19
@@ -5251,14 +5251,6 @@ msgstr ""
 
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
-msgstr ""
-
-#: /src/schooltool/devmode/devmode.pt:18
-msgid "Introspector"
-msgstr ""
-
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
 msgstr ""
 
 #: /src/schooltool/devmode/f_unauthorized.pt:3

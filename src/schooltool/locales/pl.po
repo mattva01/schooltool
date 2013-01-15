@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-11-20 18:47+0200\n"
-"PO-Revision-Date: 2012-11-23 22:07+0000\n"
-"Last-Translator: Arek Kozuch <arek@hddrecovery.pl>\n"
+"POT-Creation-Date: 2012-11-21 16:10+0200\n"
+"PO-Revision-Date: 2013-01-05 20:08+0000\n"
+"Last-Translator: Grzegorz K <svengaker@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-24 07:31+0000\n"
-"X-Generator: Launchpad (build 16293)\n"
+"X-Launchpad-Export-Date: 2013-01-06 05:05+0000\n"
+"X-Generator: Launchpad (build 16393)\n"
 "Language: pl\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -2281,6 +2281,8 @@ msgid ""
 "Each section description's first row contains the <strong>course SchoolTool "
 "ID</strong> and the <strong>instructor username</strong> for the new section."
 msgstr ""
+"Pierwszy wiersz opisu każdej sekcji zawiera <strong>identyfikator kursu "
+"SchoolTool</strong> oraz <strong>nazwę użytkownika prowadzącego</strong>."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:27
 msgid ""
@@ -2292,6 +2294,13 @@ msgid ""
 "\"4\" in the top of csv, you will need to provide 3 section ids, for terms "
 "\"2\", \"3\" and \"4\" respectively."
 msgstr ""
+"Jeśli chcesz zaktualizować sekcję w pierwszym wierszu opisu powinieneś "
+"określić: <strong>identyfikator kursu SchoolTool</strong>, <strong>nazwę "
+"użytkownika prowadzącego</strong> oraz <strong>identyfikator sekcji "
+"SchoolTool</strong> dla odpowiednich sekcji w każdym semestrze. "
+"<strong>Uwaga:</strong> jeśli twoja szkoła zawiera, na przykład 5 kolejnych "
+"semestrów i w pliku csv określisz 2 i 4, będziesz musiał podać 3 "
+"identyfikatory sekcji dla semestrów odpowiednio: 2, 3 i 4."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:34
 msgid ""
@@ -2680,6 +2689,8 @@ msgid ""
 "Timetable id must be specified before day id and a period id at at line "
 "${line_no}"
 msgstr ""
+"Plan zajęć musi być określony przed identyfikatorem dnia i identyfikatorem "
+"okresu w linii ${line_no}"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:276
 msgid "Incomplete section description on line ${line}"
@@ -2705,6 +2716,7 @@ msgstr "Semestr ${term} nie istnieje."
 #: /src/schooltool/app/browser/timetablecsvimport.py:460
 msgid "First term ${first} starts after last term ${last}."
 msgstr ""
+"Pierwszy semestr ${first} rozpoczyna się po ostatnim semestrze ${last}."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:497
 msgid "Error in timetable CSV data, line ${line_no}"
@@ -4238,7 +4250,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/templates/f_manage_contacts_overview.pt:12
 msgid "The school has ${total} contact persons."
-msgstr ""
+msgstr "Szkoła ma łącznie ${total} osób kontaktowych."
 
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/person/browser/person_filter.pt:11
@@ -4539,6 +4551,7 @@ msgid ""
 "Course \"${course_title}\" credits \"${invalid_credits}\" value must be a "
 "number."
 msgstr ""
+"Oceny \"${invalid_credits} \" kursu \"${course_title}\" muszą być liczbami."
 
 #: /src/schooltool/course/browser/csvimport.py:103
 msgid ""
@@ -4679,6 +4692,7 @@ msgstr "Tytuł sekcji"
 msgid ""
 "If no title is specified, one will be created based on the course title."
 msgstr ""
+"Jeśli nie określono tytułu, zastosowany będzie tytuł odpowiadającego kursu."
 
 #: /src/schooltool/course/browser/section.py:1295
 #: /src/schooltool/course/browser/section.py:1517
@@ -4891,6 +4905,9 @@ msgid ""
 "containing the students and instructors from section \"${section_title}\" in "
 "term \"${to_term_title}\"."
 msgstr ""
+"Kliknij \"Rozszerz\" by stworzyć powiązaną sekcję w semestrze "
+"\"${from_term_title}\" zawierającą studentów i prowadzących z sekcji "
+"\"${section_title}\" z semestru \"${to_term_title}\"."
 
 #: /src/schooltool/course/browser/templates/extend_term.pt:27
 msgid "Extend"
@@ -5299,6 +5316,9 @@ msgid ""
 "An identifier for a section, made up of instructor\n"
 "            names, courses, and meeting time."
 msgstr ""
+"Identyfikator sekcji utworzony dla prowadzących\n"
+"                                                        nazwiska, kursy oraz "
+"terminy zajęć."
 
 #: /src/schooltool/course/interfaces.py:130
 msgid "An internal identifier of this section."
@@ -5432,14 +5452,6 @@ msgstr "Dane próbki"
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
 msgstr "Narzędzia programisty"
-
-#: /src/schooltool/devmode/devmode.pt:18
-msgid "Introspector"
-msgstr "Introspektor"
-
-#: /src/schooltool/devmode/devmode.pt:19
-msgid "API Docs"
-msgstr "API Docs"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:3
 #: /src/schooltool/skin/templates/f_unauthorized.pt:3
@@ -5872,11 +5884,11 @@ msgstr ""
 
 #: /src/schooltool/export/importer.py:91
 msgid "has no days"
-msgstr ""
+msgstr "nie ma dni"
 
 #: /src/schooltool/export/importer.py:92
 msgid "has no day templates"
-msgstr ""
+msgstr "nie ma szablonów dni"
 
 #: /src/schooltool/export/importer.py:93
 msgid "is not a valid time range"
@@ -5916,7 +5928,7 @@ msgstr "nie jest ważny kurs w danym roku szkolnym"
 
 #: /src/schooltool/export/importer.py:102
 msgid "has no courses"
-msgstr ""
+msgstr "nie ma kursów"
 
 #: /src/schooltool/export/importer.py:101
 msgid "is not a valid username"
@@ -5959,38 +5971,39 @@ msgid ""
 "must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all "
 "valid)"
 msgstr ""
+"musi zawierać PRAWDA, FAŁSZ, TAK lub NIE (wielkość znaków nie ma znaczenia)"
 
 #: /src/schooltool/export/importer.py:114
 msgid "must have a school year"
-msgstr ""
+msgstr "musi zawierać rok szkolny"
 
 #: /src/schooltool/export/importer.py:115
 msgid "must have a course"
-msgstr ""
+msgstr "musi zawierać kursy"
 
 #: /src/schooltool/export/importer.py:116
 msgid "must have a term"
-msgstr ""
+msgstr "musi zawierać semestr"
 
 #: /src/schooltool/export/importer.py:117
 msgid "the current section is in the first term of the school year"
-msgstr ""
+msgstr "bieżąca sekcja znajduje się w pierwszym semestrze rok szkolnego"
 
 #: /src/schooltool/export/importer.py:118
 msgid "the current section is in the last term of the school year"
-msgstr ""
+msgstr "bieżąca sekcja znajduje się w ostatnim semestrze rok szkolnego"
 
 #: /src/schooltool/export/importer.py:119
 msgid "is not a valid section id in the previous term"
-msgstr ""
+msgstr "nie jest poprawnym identyfikatorem sekcji poprzedniego semestru"
 
 #: /src/schooltool/export/importer.py:120
 msgid "is not a valid section id in the next term"
-msgstr ""
+msgstr "nie jest poprawnym identyfikatorem sekcji następnego semestru"
 
 #: /src/schooltool/export/importer.py:121
 msgid "no timetable is defined for this section"
-msgstr ""
+msgstr "nie okreslono planu zajęć dla tej sekcji"
 
 #: /src/schooltool/export/importer.py:122
 msgid "no day is defined in this row"
@@ -5998,11 +6011,11 @@ msgstr ""
 
 #: /src/schooltool/export/importer.py:123
 msgid "must have a valid period id"
-msgstr ""
+msgstr "musi zawierać poprawny identyfikator okresu"
 
 #: /src/schooltool/export/importer.py:124
 msgid "course credits need to be a valid number"
-msgstr ""
+msgstr "oceny z kursu muszą być liczbami"
 
 #: /src/schooltool/export/importer.py:125
 msgid "gender must be male or female"
@@ -6010,23 +6023,23 @@ msgstr "Wybierz płeć!"
 
 #: /src/schooltool/export/importer.py:126
 msgid "has an invalid username"
-msgstr ""
+msgstr "zawiera niepoprawną nazwę użytkownika"
 
 #: /src/schooltool/export/importer.py:127
 msgid "has an invalid resource id"
-msgstr ""
+msgstr "zawiera niepoprawny identyfikator zasobu"
 
 #: /src/schooltool/export/importer.py:128
 msgid "has an invalid course id for the given school year"
-msgstr ""
+msgstr "zawiera niepoprawny identyfikator dla danego roku szkolnego"
 
 #: /src/schooltool/export/importer.py:129
 msgid "end term cannot be before start term"
-msgstr ""
+msgstr "semestr kończący nie może być przed semesterm rozpoczynającym"
 
 #: /src/schooltool/export/importer.py:130
 msgid "is not a valid section id in the specified term"
-msgstr ""
+msgstr "nie jest poprawnym identyfikatorem sekcji dla określonego semestru"
 
 #: /src/schooltool/export/importer.py:131
 msgid "school years must be consistent within this table"
@@ -6038,7 +6051,7 @@ msgstr ""
 
 #: /src/schooltool/export/importer.py:1887
 msgid "The following errors occurred while importing:"
-msgstr ""
+msgstr "Podczas importowania wstąpiły następujące błędy"
 
 #: /src/schooltool/export/templates/f_import.pt:19
 msgid "Please wait while the data is being imported."
@@ -6354,15 +6367,15 @@ msgstr "edytuj grupy"
 
 #: /src/schooltool/group/group.py:63
 msgid "Site Managers"
-msgstr ""
+msgstr "Administratorzy strony"
 
 #: /src/schooltool/group/group.py:66
 msgid "Clerks"
-msgstr ""
+msgstr "Pracownicy biurowi"
 
 #: /src/schooltool/group/group.py:67
 msgid "School Administrators"
-msgstr ""
+msgstr "Administratorzy szkoły"
 
 #: /src/schooltool/group/security.zcml:5
 msgid "Only school administration can view the list of groups."
@@ -6426,6 +6439,10 @@ msgstr "Grupy są zasadniczo zestawy użytkowników."
 #: /src/schooltool/level/browser/templates/levels.pt:6
 msgid "Grade Levels"
 msgstr "Stopień Poziomy"
+
+#: /src/schooltool/level/browser/flourish.zcml:62
+msgid "Level"
+msgstr "Poziom"
 
 #: /src/schooltool/level/browser/flourish.zcml:82
 msgid "Add new level"
@@ -6957,7 +6974,7 @@ msgstr "Atrybuty zasobów"
 
 #: /src/schooltool/resource/browser/resource.py:424
 msgid "Limit to resource type(s)"
-msgstr ""
+msgstr "Ogranicz do typu(ów) zasobów"
 
 #: /src/schooltool/resource/browser/resource.py:430
 msgid ""
@@ -7253,7 +7270,7 @@ msgstr "Harmonogram rezerwacji przez kalendarza"
 #: /src/schooltool/sampledata/sampledata.pt:3
 #: /src/schooltool/sampledata/sampledata.pt:9
 msgid "Sample Data Generation"
-msgstr ""
+msgstr "Generowanie przykładowych danych"
 
 #: /src/schooltool/sampledata/sampledata.pt:14
 msgid ""
@@ -7661,7 +7678,7 @@ msgstr "Nie znaleziono"
 
 #: /src/schooltool/skin/flourish/templates/image_input.pt:11
 msgid "delete this image"
-msgstr ""
+msgstr "usuń ten obraz"
 
 #: /src/schooltool/skin/flourish/templates/main.pt:89
 msgid "server running"
@@ -7677,7 +7694,7 @@ msgstr "Przesłany plik nie JPEG lub PNG jest"
 
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
-msgstr ""
+msgstr "Wczytywany plik obrazu nie może przekraczać ${size} MB"
 
 #: /src/schooltool/skin/form.py:64
 msgid "No changes"
@@ -7767,7 +7784,7 @@ msgstr "Datetime ciąg nie pasuje do wzorca rrrr-mm-dd"
 
 #: /src/schooltool/skin/widgets.py:103
 msgid "Year has to be equal or greater than 1900"
-msgstr ""
+msgstr "Rok musi być większy lub równy 1900"
 
 #: /src/schooltool/skin/widgets.py:111
 msgid "Width"
@@ -7979,7 +7996,7 @@ msgstr ""
 
 #: /src/schooltool/term/browser/templates/f_terms.pt:5
 msgid "There are no terms."
-msgstr ""
+msgstr "Nie określono semestrów."
 
 #: /src/schooltool/term/browser/templates/f_terms_related.pt:6
 msgid ""
@@ -8083,7 +8100,7 @@ msgstr "Dodaj nowy termin do $ {year_title}"
 
 #: /src/schooltool/term/interfaces.py:41
 msgid "An internal identifier of this term."
-msgstr ""
+msgstr "Wewnętrzny idektyfikator tego semestru."
 
 #: /src/schooltool/term/term.py:313
 msgid "Term date is not in the school year."
@@ -8167,7 +8184,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/flourish.zcml:563
 msgid "Term(s)"
-msgstr ""
+msgstr "Semestr(y)"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:587
 msgid "Exception Days"
@@ -8540,11 +8557,11 @@ msgstr "Zaplanuj kalendarz szkolny"
 
 #: /src/schooltool/timetable/browser/timetable.py:521
 msgid "First term"
-msgstr ""
+msgstr "Pierwszy semestr"
 
 #: /src/schooltool/timetable/browser/timetable.py:526
 msgid "Last term"
-msgstr ""
+msgstr "Ostatni semestr"
 
 #: /src/schooltool/timetable/browser/timetable.py:678
 #: /src/schooltool/timetable/browser/timetable.py:821
@@ -8709,7 +8726,7 @@ msgstr "Proszę umieścić okresów w porządku, za każdy dzień:"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:768
 msgid "$period on day $day"
-msgstr ""
+msgstr "$period w dniu $day"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:790
 msgid ""
