@@ -54,7 +54,7 @@
   <include package="schooltool.level.browser" file="flourish.zcml" />
   <include package="schooltool.export" file="flourish.zcml" />
 
-  <includePlugins package="schooltool" file="plugin.zcml" />
   <includePluginsOverrides package="schooltool" />
+  <includePlugins package="schooltool" file="plugin.zcml" />
 
 </configure>

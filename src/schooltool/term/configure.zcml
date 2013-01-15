@@ -12,11 +12,6 @@
       factory="schooltool.app.app.SimpleNameChooser"
       provides="zope.container.interfaces.INameChooser" />
 
-  <interface
-      interface=".interfaces.ITermContainer"
-      type="zope.app.content.interfaces.IContentType"
-      />
-
   <adapter
       for="*"
       factory="schooltool.term.term.getTermContainer" />
@@ -33,11 +28,6 @@
   <adapter
       name="term_overflow_validation"
       factory=".term.TermOverflowValidationSubscriber" />
-
-  <interface
-      interface=".interfaces.ITerm"
-      type="zope.app.content.interfaces.IContentType"
-      />
 
   <class class=".term.Term">
     <allow interface=".interfaces.ITerm"
