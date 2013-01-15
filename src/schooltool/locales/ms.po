@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-11-21 16:10+0200\n"
+"POT-Creation-Date: 2013-01-15 15:41+0200\n"
 "PO-Revision-Date: 2012-12-03 16:29+0000\n"
 "Last-Translator: abuyop <Unknown>\n"
 "Language-Team: Malay <ms@li.org>\n"
@@ -2763,33 +2763,27 @@ msgstr "data perpuluhan tidak sah"
 msgid "Invalid datetime data"
 msgstr "data tarikhmasa tidak sah"
 
-#: /src/schooltool/app/interfaces.py:119
-#: /src/schooltool/app/interfaces.py:130
+#: /src/schooltool/app/interfaces.py:120
+#: /src/schooltool/app/interfaces.py:132
 msgid ""
-"The name for the school or organization running\n"
-"            this server.  This will be displayed on the public calendar, "
-"the\n"
-"            bottom of all pages and in the page title."
+"The name for the school or organization running this server.  This will be "
+"displayed on the public calendar, the bottom of all pages and in the page "
+"title."
 msgstr ""
-"Nama sekolah atau organisasi yang menjalankan \n"
-"                        pelayan ini. Ini akan dipaparkan di kalendar awam,  "
-"\n"
-"                        di bahagian bawah semua laman muka dan di dalam "
+"Nama sekolah atau organisasi yang menjalankan pelayan ini. Ini akan "
+"dipaparkan di kalendar awam, di bahagian bawah semua laman muka dan di dalam "
 "tajuk laman muka."
 
-#: /src/schooltool/app/interfaces.py:135
+#: /src/schooltool/app/interfaces.py:138
 msgid "Front Page Calendar"
 msgstr "Kalendar Muka Depan"
 
-#: /src/schooltool/app/interfaces.py:136
-msgid ""
-"Display site-wide calendar as the front page of the\n"
-"            site."
+#: /src/schooltool/app/interfaces.py:139
+msgid "Display site-wide calendar as the front page of the site."
 msgstr ""
-"Memaparkan kalendar seluruh tapak laman sebagai muka hadapan\n"
-"                        tapak laman."
+"Memaparkan kalendar seluruh tapak laman sebagai muka hadapan tapak laman."
 
-#: /src/schooltool/app/interfaces.py:143
+#: /src/schooltool/app/interfaces.py:145
 msgid "School logo"
 msgstr "Logo sekolah"
 
@@ -5255,13 +5249,12 @@ msgstr "Kredit"
 msgid "Label"
 msgstr "Label"
 
-#: /src/schooltool/course/interfaces.py:84
+#: /src/schooltool/course/interfaces.py:92
 msgid ""
-"An identifier for a section, made up of instructor\n"
-"            names, courses, and meeting time."
+"An identifier for a section, made up of instructor names, courses, and "
+"meeting time."
 msgstr ""
-"ID seksyen, diwakili oleh tenaga pengajar\n"
-"            nama, kursus dan masa mesyuarat."
+"ID seksyen, diwakili oleh tenaga pengajar nama, kursus dan masa mesyuarat."
 
 #: /src/schooltool/course/interfaces.py:130
 msgid "An internal identifier of this section."
@@ -5322,15 +5315,13 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/course/security.zcml:74
-msgid ""
-"A course in SchoolTool describes a set curriculum                    taught "
-"in a section."
+msgid "A course in SchoolTool describes a set curriculum taught in a section."
 msgstr ""
 "Kursus dalam SchoolTool adalah satu kumpulan kurikulum yang diajar dalam "
 "satu seksyen."
 
-#: /src/schooltool/course/security.zcml:80
-#: /src/schooltool/course/security.zcml:114
+#: /src/schooltool/course/security.zcml:79
+#: /src/schooltool/course/security.zcml:112
 #: /src/schooltool/group/security.zcml:62
 #: /src/schooltool/schoolyear/security.zcml:9
 #: /src/schooltool/term/security.zcml:21
@@ -5359,10 +5350,8 @@ msgstr "Cipta/Padam"
 msgid "Modify"
 msgstr "Ubahsuai"
 
-#: /src/schooltool/course/security.zcml:108
-msgid ""
-"A section is a set of one or more learners                    who meet "
-"during a term."
+#: /src/schooltool/course/security.zcml:107
+msgid "A section is a set of one or more learners who meet during a term."
 msgstr ""
 "Seksyen adalah satu kumpulan atau lebih pelajar-pelajar yang bertemu semasa "
 "penggal persekolahan."
@@ -7088,27 +7077,27 @@ msgstr "Tarikh Beli Perkakasan"
 msgid "Id of the resource type."
 msgstr "Id jenis-jenis sumber."
 
-#: /src/schooltool/resource/interfaces.py:126
+#: /src/schooltool/resource/interfaces.py:124
 msgid ""
-"Used for lookup of named utilities that have resource\n"
-"        type specific information."
+"Used for lookup of named utilities that have resource type specific "
+"information."
 msgstr ""
-"Digunakan untuk mencari utiliti yang mempunyai sumber\n"
-"        jenis maklumat terperinci."
+"Digunakan untuk mencari utiliti yang mempunyai sumber jenis maklumat "
+"terperinci."
 
-#: /src/schooltool/resource/interfaces.py:130
+#: /src/schooltool/resource/interfaces.py:129
 #: /src/schooltool/resource/interfaces.py:138
 msgid "The title of a resource type."
 msgstr "Nama jenis sumber."
 
-#: /src/schooltool/resource/interfaces.py:131
+#: /src/schooltool/resource/interfaces.py:130
 #: /src/schooltool/resource/interfaces.py:139
 msgid ""
-"A string that will be displayed to users in tables or\n"
-"        resource type selection widgets."
+"A string that will be displayed to users in tables or resource type "
+"selection widgets."
 msgstr ""
-"Ayat yang akan dipaparkan kepada pengguna di dalam jadual atau\n"
-"         jenis sumber dalam widget pemilihan."
+"Ayat yang akan dipaparkan kepada pengguna di dalam jadual atau jenis sumber "
+"dalam widget pemilihan."
 
 #: /src/schooltool/resource/security.zcml:7
 msgid "Only school administration can view the list of resources."
@@ -7144,15 +7133,14 @@ msgstr "Tempahan"
 
 #: /src/schooltool/resource/security.zcml:53
 msgid ""
-"Resources are locations or objects within a school.                    "
-"SchoolTool's calendar can function as a reservation                    and "
-"tracking system for resources."
+"Resources are locations or objects within a school. SchoolTool's calendar "
+"can function as a reservation and tracking system for resources."
 msgstr ""
 "Sumber-Sumber bermaksud lokasi-lokasi atau objek-objek di dalam sesebuah "
 "sekolah. Kalendar SchoolTool boleh berfungsi sebagai sistem pemantauan dan "
 "penempahan untuk sumber-sumber."
 
-#: /src/schooltool/resource/security.zcml:60
+#: /src/schooltool/resource/security.zcml:58
 msgid "List/Search resources"
 msgstr "Senarai/Carik sumber-sumber"
 

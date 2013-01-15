@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-11-21 16:10+0200\n"
+"POT-Creation-Date: 2013-01-15 15:41+0200\n"
 "PO-Revision-Date: 2012-12-07 13:03+0000\n"
 "Last-Translator: Vitali Oleshkevich <mar2008m@rambler.ru>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -2825,31 +2825,25 @@ msgstr "Помилкові данні (числа з плаваючою комо
 msgid "Invalid datetime data"
 msgstr "Помилкові данні (дата/час)"
 
-#: /src/schooltool/app/interfaces.py:119
-#: /src/schooltool/app/interfaces.py:130
+#: /src/schooltool/app/interfaces.py:120
+#: /src/schooltool/app/interfaces.py:132
 msgid ""
-"The name for the school or organization running\n"
-"            this server.  This will be displayed on the public calendar, "
-"the\n"
-"            bottom of all pages and in the page title."
+"The name for the school or organization running this server.  This will be "
+"displayed on the public calendar, the bottom of all pages and in the page "
+"title."
 msgstr ""
-"Назва школи або установи для\n"
-"            цього сервера.  Її буде показано у загальнодоступному календарі\n"
-"            знизу сторінок та у назві сторінки."
+"Назва школи або установи для цього сервера.  Її буде показано у "
+"загальнодоступному календарі знизу сторінок та у назві сторінки."
 
-#: /src/schooltool/app/interfaces.py:135
+#: /src/schooltool/app/interfaces.py:138
 msgid "Front Page Calendar"
 msgstr "Головна сторінка календаря"
 
-#: /src/schooltool/app/interfaces.py:136
-msgid ""
-"Display site-wide calendar as the front page of the\n"
-"            site."
-msgstr ""
-"Показати загальносистемний календаря, як титульну сторінку\n"
-"            сайту."
+#: /src/schooltool/app/interfaces.py:139
+msgid "Display site-wide calendar as the front page of the site."
+msgstr "Показати загальносистемний календаря, як титульну сторінку сайту."
 
-#: /src/schooltool/app/interfaces.py:143
+#: /src/schooltool/app/interfaces.py:145
 msgid "School logo"
 msgstr "Шкільна емблема"
 
@@ -5321,13 +5315,13 @@ msgstr "Подяки"
 msgid "Label"
 msgstr "Ярлик"
 
-#: /src/schooltool/course/interfaces.py:84
+#: /src/schooltool/course/interfaces.py:92
 msgid ""
-"An identifier for a section, made up of instructor\n"
-"            names, courses, and meeting time."
+"An identifier for a section, made up of instructor names, courses, and "
+"meeting time."
 msgstr ""
-"Ідентифікатор розділу заповнюється інструктором\n"
-"            імена, предмети та час занять."
+"Ідентифікатор розділу заповнюється інструктором імена, предмети та час "
+"занять."
 
 #: /src/schooltool/course/interfaces.py:130
 msgid "An internal identifier of this section."
@@ -5386,14 +5380,12 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/course/security.zcml:74
-msgid ""
-"A course in SchoolTool describes a set curriculum                    taught "
-"in a section."
+msgid "A course in SchoolTool describes a set curriculum taught in a section."
 msgstr ""
 "Курс SchoolTool описує набір навчальних програм, що викладаються у розділі."
 
-#: /src/schooltool/course/security.zcml:80
-#: /src/schooltool/course/security.zcml:114
+#: /src/schooltool/course/security.zcml:79
+#: /src/schooltool/course/security.zcml:112
 #: /src/schooltool/group/security.zcml:62
 #: /src/schooltool/schoolyear/security.zcml:9
 #: /src/schooltool/term/security.zcml:21
@@ -5422,10 +5414,8 @@ msgstr "Створити/Видалити"
 msgid "Modify"
 msgstr "Змінити"
 
-#: /src/schooltool/course/security.zcml:108
-msgid ""
-"A section is a set of one or more learners                    who meet "
-"during a term."
+#: /src/schooltool/course/security.zcml:107
+msgid "A section is a set of one or more learners who meet during a term."
 msgstr ""
 "Розділ являє собою набір з одного або кількох учнів, які відповідають "
 "протягом семестру."
@@ -7146,27 +7136,27 @@ msgstr "Дата придбання обладнання"
 msgid "Id of the resource type."
 msgstr "Ідентифікатор типу ресурсу."
 
-#: /src/schooltool/resource/interfaces.py:126
+#: /src/schooltool/resource/interfaces.py:124
 msgid ""
-"Used for lookup of named utilities that have resource\n"
-"        type specific information."
+"Used for lookup of named utilities that have resource type specific "
+"information."
 msgstr ""
-"Використовується для пошуку названих утиліт, які мають\n"
-"         інформацію про ресурс певного типу."
+"Використовується для пошуку названих утиліт, які мають інформацію про ресурс "
+"певного типу."
 
-#: /src/schooltool/resource/interfaces.py:130
+#: /src/schooltool/resource/interfaces.py:129
 #: /src/schooltool/resource/interfaces.py:138
 msgid "The title of a resource type."
 msgstr "Назва типу ресурсу."
 
-#: /src/schooltool/resource/interfaces.py:131
+#: /src/schooltool/resource/interfaces.py:130
 #: /src/schooltool/resource/interfaces.py:139
 msgid ""
-"A string that will be displayed to users in tables or\n"
-"        resource type selection widgets."
+"A string that will be displayed to users in tables or resource type "
+"selection widgets."
 msgstr ""
-"Рядок, який буде показуватись користувачам у таблицях або\n"
-"        формах для вибору ресурсів."
+"Рядок, який буде показуватись користувачам у таблицях або формах для вибору "
+"ресурсів."
 
 #: /src/schooltool/resource/security.zcml:7
 msgid "Only school administration can view the list of resources."
@@ -7202,14 +7192,13 @@ msgstr "Бронювання"
 
 #: /src/schooltool/resource/security.zcml:53
 msgid ""
-"Resources are locations or objects within a school.                    "
-"SchoolTool's calendar can function as a reservation                    and "
-"tracking system for resources."
+"Resources are locations or objects within a school. SchoolTool's calendar "
+"can function as a reservation and tracking system for resources."
 msgstr ""
 "Ресурси це місця або об'єкти в школі. Календар SchoolTool може функціонувати "
 "як резервування і система контролю за ресурсами."
 
-#: /src/schooltool/resource/security.zcml:60
+#: /src/schooltool/resource/security.zcml:58
 msgid "List/Search resources"
 msgstr "Список/Пошук ресурсів"
 
