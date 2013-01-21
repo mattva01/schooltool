@@ -65,7 +65,7 @@ class FlatRMLTable(flourish.content.ContentProvider):
     def visible_column_names(self):
         if self.formatter is None:
             return ()
-        return self.formatter.visible_columns
+        return [c.name for c in self.formatter.visible_columns]
 
     def makeFormatter(self):
         if self.table._table_formatter is None:
@@ -78,7 +78,7 @@ class FlatRMLTable(flourish.content.ContentProvider):
         self.formatter = self.makeFormatter()
 
     def getColumns(self):
-        visible_names = [c.name for c in self.visible_column_names]
+        visible_names = list(self.visible_column_names)
         # XXX: also add columns we want, remove columns we want to hide
         columns = [self.formatter.columns_by_name[name]
                    for name in visible_names]

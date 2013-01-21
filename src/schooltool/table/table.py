@@ -301,6 +301,7 @@ class SchoolToolTableFormatter(object):
 
     css_classes = None
     _table_formatter = None
+    visible_column_names = ()
     group_by_column = None
 
     def __init__(self, context, request):
@@ -404,6 +405,7 @@ class SchoolToolTableFormatter(object):
             return None
         formatter = self._table_formatter(
             self.source, self.request, self._items,
+            visible_column_names=self.visible_column_names,
             columns=self._columns,
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
@@ -446,6 +448,7 @@ class TableContent(flourish.content.ContentProvider, SchoolToolTableFormatter):
             return None
         formatter = self._table_formatter(
             self.source, self.request, self._items,
+            visible_column_names=self.visible_column_names,
             columns=self._columns,
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
