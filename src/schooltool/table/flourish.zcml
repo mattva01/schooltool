@@ -113,13 +113,4 @@
       permission="zope.Public"
       />
 
-  <flourish:viewlet
-      name="grid"
-      for="schooltool.person.interfaces.IPerson"
-      manager="schooltool.skin.flourish.report.PDFStory"
-      view="schooltool.basicperson.browser.person.PersonProfilePDF"
-      class=".pdf.GridPart"
-      permission="schooltool.view"
-      />
-
 </configure>
