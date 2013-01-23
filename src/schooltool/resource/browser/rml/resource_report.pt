@@ -15,7 +15,7 @@
               spaceAfter="14" spaceBefore="8" align="center" />
         </pto_header>
         <pto_trailer>
-          <para style="pagesplit-continued">Continued on next page &gt;</para>
+          <para style="pagesplit-continued" i18n:translate="">Continued on next page &gt;</para>
         </pto_trailer>
 
         <para style="info-title" tal:condition="repeat/pto/start"

@@ -884,5 +884,5 @@ class PersonGroupsTable(table.table.TableContent):
 class PersonProfileGroupsPart(table.pdf.RMLTablePart):
 
     table_name = "groups_table"
-    title = _("Group membership")
+    title = _("Group memberships")
 

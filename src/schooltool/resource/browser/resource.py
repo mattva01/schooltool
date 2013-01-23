@@ -964,7 +964,7 @@ class FlourishRequestResourceReportView(RequestReportDownloadDialog):
 
 class ResourceReportPDFView(flourish.report.PlainPDFPage):
 
-    name = _("RESOURCE REPORT")
+    name = _("Resource Report")
 
     @property
     def title(self):

@@ -20,7 +20,6 @@
 SchoolTool section views
 """
 
-from datetime import datetime
 from collections import defaultdict
 from urllib import urlencode
 
@@ -42,7 +41,6 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.cachedescriptors.property import Lazy
 from zope.schema import Choice
 from zope.schema import ValidationError
-from zope.security.checker import canAccess
 from zope.security.proxy import removeSecurityProxy
 from zope.proxy import sameProxiedObjects
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -58,7 +56,6 @@ from zc.table.interfaces import ISortableColumn
 
 from schooltool.app.browser.app import BaseEditView
 from schooltool.app.browser.app import RelationshipViewBase
-from schooltool.app.browser.report import FlourishReportPDFView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary_titled
 from schooltool.basicperson.browser.person import EditPersonRelationships
@@ -90,7 +87,6 @@ from schooltool.skin.flourish.page import LinkViewlet
 from schooltool.skin.flourish.page import ModalFormLinkViewlet
 from schooltool.skin.flourish.page import Page
 from schooltool.skin.flourish.page import RefineLinksViewlet
-from schooltool.skin.flourish.breadcrumbs import PageBreadcrumbs
 from schooltool.skin.flourish.page import TertiaryNavigationManager
 from schooltool import table
 from schooltool.term.interfaces import IDateManager
@@ -1834,7 +1830,7 @@ class FlourishRequestSectionRosterView(RequestReportDownloadDialog):
 
 class SectionRosterPDFView(flourish.report.PlainPDFPage):
 
-    name = _("SECTION ROSTER")
+    name = _("Section Roster")
 
     def formatDate(self, date, format='mediumDate'):
         if date is None:

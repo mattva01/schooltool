@@ -39,7 +39,7 @@
         </illustration>
       </pto_header>
       <pto_trailer>
-        <para style="pagesplit-continued">Continued on next page &gt;</para>
+        <para style="pagesplit-continued" i18n:translate="">Continued on next page &gt;</para>
       </pto_trailer>
 
       <illustration tal:attributes="width table/header_width;

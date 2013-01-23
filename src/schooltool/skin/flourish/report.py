@@ -31,10 +31,8 @@ except ImportError:
 
 from reportlab.lib import units, pagesizes
 
-import zope.component
-import zope.location
-import z3c.form.browser
-from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+import zope.schema
+from zope.component import adapts, queryMultiAdapter
 from zope.cachedescriptors.property import Lazy
 from zope.interface import implements, Interface
 from zope.i18n import translate
@@ -236,15 +234,15 @@ class PageTemplate(viewlet.Viewlet):
         interface = self.slots_interface
         if interface is None:
             return None
-        slots = zope.component.queryMultiAdapter(
+        slots = queryMultiAdapter(
             (self.context, self.request, self.view, self), interface)
         return slots
 
 
 class PageTemplateSlots(object):
     implements(interfaces.ITemplateSlots)
-    zope.component.adapts(Interface, interfaces.IFlourishLayer,
-                          interfaces.IPDFPage, interfaces.IPageTemplate)
+    adapts(Interface, interfaces.IFlourishLayer,
+           interfaces.IPDFPage, interfaces.IPageTemplate)
 
     __name__ = 'template_slots'
 
@@ -534,13 +532,13 @@ class PlainPageTemplate(PageTemplate):
 
 
 class PlainPageTemplateSlots(PageTemplateSlots):
-    zope.component.adapts(Interface, interfaces.IFlourishLayer, interfaces.IPDFPage,
-                          PlainPageTemplate)
+    adapts(Interface, interfaces.IFlourishLayer,
+           interfaces.IPDFPage, PlainPageTemplate)
     implements(IPlainTemplateSlots)
 
     @property
     def top_left(self):
-        return self.view.name
+        return self.view.name.upper()
 
     top_center = None
 

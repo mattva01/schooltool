@@ -11,7 +11,7 @@
         <para style="section-title" i18n:translate="">Students (continued)</para>
       </pto_header>
       <pto_trailer>
-        <para style="pagesplit-continued">Continued on next page &gt;</para>
+        <para style="pagesplit-continued" i18n:translate="">Continued on next page &gt;</para>
       </pto_trailer>
 
       <hr width="100%" thickness="1" cap="square" color="separator"

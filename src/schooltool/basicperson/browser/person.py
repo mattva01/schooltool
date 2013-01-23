@@ -19,8 +19,6 @@
 """
 Basic person browser views.
 """
-from time import mktime
-from datetime import datetime
 
 from zope.interface import Interface, implements
 from zope.container.interfaces import INameChooser
@@ -29,26 +27,19 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
 from zope.component import adapts
 from zope.component import getUtility, queryMultiAdapter, getMultiAdapter
-from zope.datetime import time, rfc1123_date
-from zope.dublincore.interfaces import IZopeDublinCore
 from zope.i18n import translate
-from z3c.form import form, field, button, widget, validator
+from z3c.form import form, field, button, validator
 from z3c.form.interfaces import DISPLAY_MODE
 from zope.interface import invariant, Invalid
-from zope.publisher.interfaces import NotFound
-from zope.publisher.browser import BrowserPage
-from zope.schema import Password, TextLine, Choice, List, Object
+from zope.schema import Password, TextLine, Choice, List
 from zope.schema import ValidationError
-from zope.schema.interfaces import ITitledTokenizedTerm, IField
+from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.traversing.browser.absoluteurl import absoluteURL
-from zope.viewlet.viewlet import ViewletBase
 from zope.security.checker import canAccess
 
-from reportlab.lib import pagesizes
 from reportlab.lib import units
 import z3c.form.interfaces
 from z3c.form.validator import SimpleFieldValidator
-import zc.table.table
 
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import EditRelationships
@@ -68,7 +59,7 @@ from schooltool.group.interfaces import IGroupContainer
 from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.browser.person import PersonTable, PersonTableFormatter
 from schooltool.person.browser.person import PersonTableFilter
-from schooltool.schoolyear.interfaces import ISchoolYearContainer, ISchoolYear
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
 from schooltool.skin.flourish.interfaces import IViewletManager
@@ -76,9 +67,7 @@ from schooltool.skin.flourish.form import FormViewlet
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.content import ContentProvider
 from schooltool.table import table
-from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
-from schooltool.table.interfaces import IIndexedColumn
 from schooltool.term.interfaces import IDateManager
 from schooltool.report.browser.report import RequestReportDownloadDialog
 
@@ -1377,7 +1366,7 @@ class PersonContainerViewTableFilter(PersonTableFilter):
 
 class PersonProfilePDF(flourish.report.PlainPDFPage):
 
-    name = _("PROFILE")
+    name = _("Profile")
 
     def formatDate(self, date, format='mediumDate'):
         if date is None:
@@ -1393,8 +1382,8 @@ class PersonProfilePDF(flourish.report.PlainPDFPage):
 
     @property
     def subtitles_left(self):
-        student_id = _('User ID: ${id}',
-                       mapping={'id': self.context.username})
+        student_id = _('Username: ${username}',
+                       mapping={'username': self.context.username})
         subtitles = [
             student_id,
             ]
@@ -1412,7 +1401,7 @@ class PersonProfilePDF(flourish.report.PlainPDFPage):
 
 class ProfileGeneralPart(flourish.report.PDFForm):
 
-    title = _("General info")
+    title = _("General Information")
 
     def getFields(self):
         field_descriptions = IDemographicsFields(ISchoolToolApplication(None))
