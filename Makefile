@@ -42,7 +42,7 @@ run: build instance
 
 .PHONY: tags
 tags: build
-	bin/tags
+	bin/ctags
 
 .PHONY: clean
 clean:
