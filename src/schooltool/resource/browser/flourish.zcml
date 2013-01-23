@@ -455,7 +455,7 @@
       layer="schooltool.skin.flourish.IFlourishLayer"
       permission="schooltool.view"
       group="Resource"
-      description="XXX Description XXX"
+      description="List all resources"
       title="Resources"
       file_type="pdf"
       link="request_resource_report.html"

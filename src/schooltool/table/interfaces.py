@@ -65,7 +65,7 @@ class ITableFormatter(Interface):
         """
 
     def makeFormatter():
-        """Build the zc.table fromatter that can render this table."""
+        """Build the zc.table formatter that can render this table."""
 
     def render():
         """Render the table for display in a view."""

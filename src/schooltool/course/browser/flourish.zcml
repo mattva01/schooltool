@@ -647,7 +647,7 @@
       layer="schooltool.skin.flourish.IFlourishLayer"
       permission="schooltool.view"
       group="Section"
-      description="XXX Description XXX"
+      description="Students and instructors of a section"
       title="Roster"
       file_type="pdf"
       link="request_section_roster.html"
