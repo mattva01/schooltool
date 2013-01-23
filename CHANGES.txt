@@ -2,12 +2,19 @@
 CHANGES
 =======
 
-2.3.2 (unreleased)
+2.4a1 (2013-01-23)
 ------------------
 
-- added javascript for putting case-converted scores into validated gradebook cells
-- gradebook javascript for commment cell modal
-- created resources report, requested from resources view
+- Javascript for entering comments in gradebook cells.
+- Support table grouping by column.
+- Updated translations.
+
+Reports
++++++++
+
+- New PDF page design and implementation.
+- Render forms, tables, and grids to RML (PDF).
+- Add section roster, person profile, and resources reports.
 
 Development tools
 +++++++++++++++++
