@@ -120,6 +120,14 @@ class FlatRMLTable(flourish.content.ContentProvider):
                      [prefix])
         return flourish.page.sanitize_id('-'.join(reversed(name_list)))
 
+    def getColumnWidths(self, rml_columns):
+        n_cols = len(rml_columns)
+        col_width = max(int(100./n_cols), 1)
+        result = ' '.join(
+            ['%d%%' % col_width] * (n_cols-1) +
+            ['%d%%' % max(100-col_width*(n_cols-1), 1)])
+        return result
+        
     def render(self):
         columns = self.getColumns()
         rml_columns = self.getRMLColumns(columns)
@@ -129,11 +137,7 @@ class FlatRMLTable(flourish.content.ContentProvider):
 
         items = self.getItems()
 
-        n_cols = len(rml_columns)
-        col_width = max(int(100./n_cols), 1)
-        widths_string = ' '.join(
-            ['%d%%' % col_width] * (n_cols-1) +
-            ['%d%%' % max(100-col_width*(n_cols-1), 1)])
+        widths_string = self.getColumnWidths(rml_columns)
         headers = [[column.renderHeader(self.formatter)
                     for column in rml_columns]]
         tables = [
@@ -168,11 +172,7 @@ class RMLTable(FlatRMLTable):
 
         items = self.getItems()
 
-        n_cols = len(rml_columns)
-        col_width = max(int(100./n_cols), 1)
-        widths_string = ' '.join(
-            ['%d%%' % col_width] * (n_cols-1) +
-            ['%d%%' % max(100-col_width*(n_cols-1), 1)])
+        widths_string = self.getColumnWidths(rml_columns)
 
         headers = [[column.renderHeader(self.formatter)
                  for column in rml_columns]]

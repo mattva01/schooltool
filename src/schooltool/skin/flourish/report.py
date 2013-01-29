@@ -321,7 +321,7 @@ class PlainPageTemplate(PageTemplate):
     @Lazy
     def header_title(self):
         title = {
-            'fontSize': 24,
+            'fontSize': 20,
             'margin': Box(2, 0, 6, 0),
             'content': self.slots.title,
             }

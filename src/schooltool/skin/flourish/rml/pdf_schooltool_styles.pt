@@ -5,7 +5,8 @@
     i18n:domain="schooltool">
 
   <blockTableStyle id="table">
-    <blockFont start="0,0" stop="-1,0"
+    <blockValign value="TOP" start="0,0" stop="-1,-1"/>
+    <blockFont start="0,0" stop="-1,0" size="8"
                name="Ubuntu_Bold" />
     <blockBackground start="0,0" stop="-1,0"
                      colorName="table.header.background" />
@@ -18,7 +19,8 @@
   </blockTableStyle>
 
   <blockTableStyle id="multi-table.header">
-    <blockFont start="0,0" stop="-1,-1"
+    <blockValign value="TOP" start="0,0" stop="-1,-1"/>
+    <blockFont start="0,0" stop="-1,-1" size="8"
                name="Ubuntu_Bold" />
     <blockBackground start="0,0" stop="-1,-1"
                      colorName="table.header.background" />
@@ -27,8 +29,11 @@
   </blockTableStyle>
 
   <blockTableStyle id="multi-table.subtable">
-    <blockFont start="0,0" stop="0,-1"
+    <blockValign value="TOP" start="0,0" stop="-1,-1"/>
+    <blockFont start="0,0" stop="-1,0" size="8"
                name="Ubuntu_Bold" />
+    <blockFont start="0,1" stop="-1,-1" size="8"
+               name="Ubuntu_Regular" />
     <blockBackground start="0,0" stop="-1,0"
                      colorName="table.subheader.background" />
     <blockTextColor  start="0,0" stop="-1,0"
@@ -40,6 +45,9 @@
   </blockTableStyle>
 
   <blockTableStyle id="multi-table.content-only">
+    <blockValign value="TOP" start="0,0" stop="-1,-1"/>
+    <blockFont start="0,0" stop="-1,-1"
+               name="Ubuntu_Regular" />
     <blockBackground start="0,0" stop="-1,-1"
                      colorsByRow="table.row-alt.background,table.row.background" />
     <blockTextColor  start="0,0" stop="-1,-1"
