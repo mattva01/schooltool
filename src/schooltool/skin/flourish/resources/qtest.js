@@ -75,11 +75,10 @@ test('hidePopup', function() {
     $('#main').empty();
 });
 
-test('appendSpinner', function() {
-    var td = $('<td><ul></ul><a href="#">link</a></td>');
+test('insertPopupMenu', function() {
+    var td = $('<td><a href="#">link</a></td>');
     var link = td.find('a');
-    equal(td.find('ul').children().length, 0);
-    appendSpinner(link);
+    insertPopupMenu(link);
     equal(td.find('ul').children().length, 1);
     var img = td.find('ul').find('li').find('img');
     equal(img.attr('src'), 'spinner.gif');
