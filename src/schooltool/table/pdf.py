@@ -127,7 +127,12 @@ class FlatRMLTable(flourish.content.ContentProvider):
             ['%d%%' % col_width] * (n_cols-1) +
             ['%d%%' % max(100-col_width*(n_cols-1), 1)])
         return result
-        
+
+    def getHeaders(self, rml_columns):
+        result = [[column.renderHeader(self.formatter)
+                   for column in rml_columns]]
+        return result
+
     def render(self):
         columns = self.getColumns()
         rml_columns = self.getRMLColumns(columns)
@@ -138,8 +143,7 @@ class FlatRMLTable(flourish.content.ContentProvider):
         items = self.getItems()
 
         widths_string = self.getColumnWidths(rml_columns)
-        headers = [[column.renderHeader(self.formatter)
-                    for column in rml_columns]]
+        headers = self.getHeaders(rml_columns)
         tables = [
             {'rows': [[column.renderCell(item, self.formatter)
                        for column in rml_columns]
@@ -173,10 +177,7 @@ class RMLTable(FlatRMLTable):
         items = self.getItems()
 
         widths_string = self.getColumnWidths(rml_columns)
-
-        headers = [[column.renderHeader(self.formatter)
-                 for column in rml_columns]]
-
+        headers = self.getHeaders(rml_columns)
         tables = []
         rows = []
         current_group = None
