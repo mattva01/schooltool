@@ -949,14 +949,14 @@ class FlourishPersonAddView(PersonAddViewBase):
                 _('Full Name'),
                 ['prefix', 'first_name', 'middle_name', 'last_name',
                  'suffix', 'preferred_name']),
+            'user': (
+                _('User'), ['username', 'password', 'confirm']),
             'details': (
                 _('Details'), ['gender', 'birth_date', 'photo']),
             'demographics': (
                 _('Demographics'), list(self.getDemoFields())),
             'relationships': (
                 _('Relationships'), relationship_fields),
-            'user': (
-                _('User'), ['username', 'password', 'confirm']),
             }
         self.fieldset_order = (
             'full_name', 'details', 'demographics',
