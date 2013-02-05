@@ -209,22 +209,6 @@
             file="resources/private-note-body-l.gif"
             layer="schooltool.skin.ISchoolToolLayer" />
 
-  <!-- Breadcrumbs -->
-
-  <page
-      for="*"
-      name="breadcrumbs"
-      class=".breadcrumbs.Breadcrumbs"
-      permission="zope.Public"
-      allowed_interface=".interfaces.IBreadcrumbs"
-      />
-
-  <zope:adapter
-      factory=".breadcrumbs.GenericBreadcrumbInfo"
-      trusted="true"
-      permission="zope.Public"
-      />
-
   <!-- Error messages -->
 
   <page
