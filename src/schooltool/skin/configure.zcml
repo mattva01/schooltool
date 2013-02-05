@@ -13,13 +13,6 @@
       type="zope.contentprovider.interfaces.ITALNamespaceData" />
 
   <viewletManager
-      name="schooltool.Actions"
-      permission="zope.Public"
-      class=".skin.ActionMenuViewletManager"
-      template="templates/actions.pt"
-      />
-
-  <viewletManager
       name="schooltool.CSS"
       permission="zope.Public"
       provides=".skin.ICSSManager"
