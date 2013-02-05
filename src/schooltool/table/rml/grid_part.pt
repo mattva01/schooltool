@@ -1,0 +1,80 @@
+<tal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+
+  <hr width="100%" thickness="1" cap="square" color="separator"
+      spaceAfter="4" spaceBefore="8" align="center" />
+  <para style="section-title" tal:content="view/title"></para>
+
+  <tal:block repeat="table view/tables">
+
+    <spacer length="8"
+            tal:condition="not:repeat/table/start "/>
+
+    <pto>
+      <pto_header>
+        <hr width="100%" thickness="1" cap="square" color="separator"
+            spaceAfter="4" spaceBefore="8" align="center" />
+        <para style="section-title" tal:content="view/title_continued"></para>
+
+        <illustration tal:attributes="width table/header_width;
+                                      height table/header_height">
+          <lines>
+            0 0 <tal:block content="table/header_width" /> 0
+          </lines>
+          <rotate degrees="45"/>
+          <lines>
+            <tal:block repeat="line table/header_lines" content="line"/>
+          </lines>
+          <tal:block tal:repeat="column table/column_strings">
+            <setFont tal:condition="column/font_changed"
+                     tal:attributes="name column/font_name;
+                                     size column/font_size" />
+            <drawString tal:attributes="x column/x;
+                                        y column/y"
+                        tal:content="column/text" />
+          </tal:block>
+        </illustration>
+      </pto_header>
+      <pto_trailer>
+        <para style="pagesplit-continued">Continued on next page &gt;</para>
+      </pto_trailer>
+
+      <illustration tal:attributes="width table/header_width;
+                                    height table/header_height">
+        <rotate degrees="45"/>
+        <lines>
+          <tal:block repeat="line table/header_lines" content="line"/>
+        </lines>
+        <tal:block tal:repeat="column table/column_strings">
+          <setFont tal:condition="column/font_changed"
+                   tal:attributes="name column/font_name;
+                                   size column/font_size" />
+          <drawString tal:attributes="x column/x;
+                                      y column/y"
+                      tal:content="column/text" />
+        </tal:block>
+      </illustration>
+
+      <blockTable
+          tal:attributes="colWidths table/column_widths;
+                          style table/config/table_style_name"
+          alignment="left">
+        <blockTableStyle tal:condition="table/styles"
+                         tal:attributes="id table/id">
+          <tal:block content="structure table/renderStyles" />
+        </blockTableStyle>
+        <tr tal:repeat="row table/data">
+          <td tal:repeat="cell row" tal:content="structure cell" />
+          <td />
+        </tr>
+      </blockTable>
+    </pto>
+
+    <spacer length="4" />
+
+  </tal:block>
+
+</tal:block>

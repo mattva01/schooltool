@@ -25,6 +25,7 @@ import calendar
 import itertools
 
 from zope.interface import implements
+from zope.publisher.interfaces.browser import IBrowserPage
 from zope.component import adapts, queryMultiAdapter
 from zope.container.interfaces import IWriteContainer
 from zope.size.interfaces import ISized
@@ -41,7 +42,7 @@ from pytz import timezone
 
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.skin.flourish.interfaces import IContentProviders
+from schooltool.skin.flourish.interfaces import IContentProviders, IPageBase
 from schooltool.person.interfaces import IPerson
 
 from schooltool.common import SchoolToolMessage as _
@@ -102,6 +103,40 @@ class SchoolToolAPI(object):
         view = vars.get('view', None)
         providers = queryMultiAdapter(
             (context, request, view),
+            IContentProviders)
+        if ITALESFunctionNamespace.providedBy(providers):
+            providers.setEngine(self.engine)
+        return providers
+
+    @property
+    def page_content(self):
+        """Get traversable content providers for the context.
+
+        Say, we have a viewlet manager named ExtraInfo, registered for persons.
+        As viewlet managers implement IContentProvider, we can do:
+
+        <div tal:repeat="person view/persons">
+          <p tal:content="person/title"></p>
+          <div tal:replace="structure person/schooltool:page_content/ExtraInfo"></div>
+        </div>
+
+        """
+        if self.engine is None:
+            return None
+        vars = self.engine.vars
+        context = self.context
+        request = vars.get('request', None)
+        page = view = vars.get('view', None)
+        while (page is not None and
+               not IPageBase.providedBy(page)):
+            page = getattr(page, '__parent__', None)
+        if page is None:
+            page = view
+            while (page is not None and
+                   not IBrowserPage.providedBy(page)):
+                page = getattr(page, '__parent__', None)
+        providers = queryMultiAdapter(
+            (context, request, page),
             IContentProviders)
         if ITALESFunctionNamespace.providedBy(providers):
             providers.setEngine(self.engine)

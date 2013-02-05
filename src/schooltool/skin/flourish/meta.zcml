@@ -63,6 +63,12 @@
         />
 
     <directive
+        name="pdf"
+        schema=".zcml_report.IPDFPageDirective"
+        handler=".zcml_report.pdf"
+        />
+
+    <directive
         name="breadcrumb"
         schema=".zcml_breadcrumb.IBreadcrumbDirective"
         handler=".zcml_breadcrumb.breadcrumbDirective"

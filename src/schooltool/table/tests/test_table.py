@@ -330,7 +330,7 @@ def doctest_SchoolToolTableFormatter():
         <table class="data">
           <thead>
             <tr>
-              <th>
+              <th class="title">
         <BLANKLINE>
                     <span class="zc-table-sortable zc-table-sort-asc-primary"
                           onclick="javascript: onSortClickForm(
@@ -625,7 +625,7 @@ def doctest_SchoolToolTableFormatter():
         <table class="data">
           <thead>
             <tr>
-              <th>
+              <th class="title">
         <BLANKLINE>
                     <span class="zc-table-sortable zc-table-sort-asc-primary" ...>
                         Title</span>

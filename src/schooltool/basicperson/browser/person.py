@@ -32,7 +32,7 @@ from zope.component import getUtility, queryMultiAdapter, getMultiAdapter
 from zope.datetime import time, rfc1123_date
 from zope.dublincore.interfaces import IZopeDublinCore
 from zope.i18n import translate
-from z3c.form import form, field, button, validator
+from z3c.form import form, field, button, widget, validator
 from z3c.form.interfaces import DISPLAY_MODE
 from zope.interface import invariant, Invalid
 from zope.publisher.interfaces import NotFound
@@ -79,6 +79,7 @@ from schooltool.table import table
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 from schooltool.table.interfaces import IIndexedColumn
+from schooltool.term.interfaces import IDateManager
 from schooltool.report.browser.report import RequestReportDownloadDialog
 
 from schooltool.common import SchoolToolMessage as _
@@ -1099,16 +1100,10 @@ class BasicPersonTableFormatter(PersonTableFormatter):
             subsort=True)
         return cols + [username]
 
-    def render(self):
-        columns = [IIndexedColumn(c) for c in self._columns]
-        formatter = self._table_formatter(
-            self.context, self.request, self._items,
-            columns=columns,
-            batch_start=self.batch.start, batch_size=self.batch.size,
-            sort_on=self._sort_on,
-            prefix=self.prefix)
+    def makeFormatter(self):
+        formatter = PersonTableFormatter.makeFormatter(self)
         formatter.cssClasses['table'] = 'data persons-table'
-        return formatter()
+        return formatter
 
 
 class FlourishManagePeopleOverview(flourish.page.Content):
@@ -1156,6 +1151,12 @@ class FlourishRequestPersonIDCardView(RequestReportDownloadDialog):
 
     def nextURL(self):
         return absoluteURL(self.context, self.request) + '/person_id_card.pdf'
+
+
+class FlourishRequestPersonProfileView(RequestReportDownloadDialog):
+
+    def nextURL(self):
+        return absoluteURL(self.context, self.request) + '/person_profile.pdf'
 
 
 class IDCardsPageTemplate(DefaultPageTemplate):
@@ -1372,3 +1373,57 @@ class PhotoView(flourish.widgets.ImageView):
 class PersonContainerViewTableFilter(PersonTableFilter):
 
     template = ViewPageTemplateFile('templates/f_container_table_filter.pt')
+
+
+class PersonProfilePDF(flourish.report.PlainPDFPage):
+
+    name = _("PROFILE")
+
+    def formatDate(self, date, format='mediumDate'):
+        if date is None:
+            return ''
+        formatter = getMultiAdapter((date, self.request), name=format)
+        return formatter()
+
+    @property
+    def scope(self):
+        dtm = getUtility(IDateManager)
+        today = dtm.today
+        return self.formatDate(today)
+
+    @property
+    def subtitles_left(self):
+        student_id = _('User ID: ${id}',
+                       mapping={'id': self.context.username})
+        subtitles = [
+            student_id,
+            ]
+        return subtitles
+
+    @property
+    def title(self):
+        return self.context.title
+
+    @property
+    def base_filename(self):
+        return '%s_%s_%s' % (
+            self.context.last_name,  self.context.first_name, self.context.username)
+
+
+class ProfileGeneralPart(flourish.report.PDFForm):
+
+    title = _("General info")
+
+    def getFields(self):
+        field_descriptions = IDemographicsFields(ISchoolToolApplication(None))
+        fields = field.Fields()
+        for field_desc in field_descriptions.values():
+            fields += field_desc.makeField()
+        return fields
+
+    def update(self):
+        self.fields = field.Fields(IBasicPerson)
+        self.fields += field.Fields(IPhotoField)
+        self.fields += field.Fields(IPerson).select('username')
+        self.fields += self.getFields()
+        super(ProfileGeneralPart, self).update()
