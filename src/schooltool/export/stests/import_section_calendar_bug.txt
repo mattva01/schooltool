@@ -26,7 +26,7 @@ We'll visit the teacher's calendar for the first day of the schoolyear and find
 the section events we expect to find.
 
     >>> teacher.open(teacher.url+'/2011-09-05')
-    >>> print teacher.query_all.css('.event a').text
+    >>> print teacher.query_all.css('.event h6 a').text
     Art A Fall
     (08:00 - 08:55)
     English A Fall
@@ -45,7 +45,7 @@ We'll visit the student's calendar for the first day of the schoolyear and find
 the section events we expect to find.
 
     >>> student.open(student.url+'/2011-09-05')
-    >>> print student.query_all.css('.event a').text
+    >>> print student.query_all.css('.event h6 a').text
     Art A Fall
     (08:00 - 08:55)
     English A Fall

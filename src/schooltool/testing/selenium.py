@@ -873,6 +873,10 @@ class Downloads(object):
         tstamp = os.path.getctime(os.path.join(self.path, fname))
         return tstamp
 
+    def _size(self, fname):
+        size = os.path.getsize(os.path.join(self.path, fname))
+        return size
+
     def _wrap(self, fname):
         url = None
         if getattr(self.layer.config, 'downloads_url', None):
@@ -886,6 +890,12 @@ class Downloads(object):
         if self.path is None:
             return
         for name in os.listdir(self.path):
+            # unfinished download
+            if name.endswith('.crdownload') or name.endswith('.part'):
+                continue
+            # empty file
+            if not self._size(name):
+                continue
             timestamp = self._created(name)
             if (name not in self.files):
                 # file is new:
