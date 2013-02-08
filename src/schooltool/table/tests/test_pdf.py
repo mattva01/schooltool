@@ -119,7 +119,7 @@ def doctest_Grid_getStyleDirectives():
         >>> cell = GridCell('Hello',
         ...     font_name='Font',
         ...     font_size=816,
-        ...     font_leading=7.77,
+        ...     font_leading=7,
         ...     color='very_black',
         ...     background_color='very_white',
         ...     align='left',
@@ -131,7 +131,7 @@ def doctest_Grid_getStyleDirectives():
         >>> pprint(directives)
         {'blockAlignment': [('value', 'left')],
          'blockBackground': [('colorName', 'very_white')],
-         'blockFont': [('leading', 7.77), ('name', 'Font'), ('size', 816)],
+         'blockFont': [('leading', 7), ('name', 'Font'), ('size', 816)],
          'blockTextColor': [('colorName', 'very_black')],
          'blockValign': [('value', 'bottom')]}
 
