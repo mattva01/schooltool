@@ -78,8 +78,8 @@
   <paraStyle name="h2" fontName="Ubuntu_Regular" fontSize="18" />
   <paraStyle name="h3" fontName="Ubuntu_Regular" fontSize="12" />
 
-  <paraStyle name="section-title" fontName="Ubuntu_Regular" fontSize="18"
-             spaceAfter="18" />
+  <paraStyle name="section-title" fontName="Ubuntu_Regular" fontSize="16"
+             leading="20" spaceAfter="16" />
   <paraStyle name="info-title" fontName="Ubuntu_Regular" fontSize="14"
              spaceAfter="4" />
 
