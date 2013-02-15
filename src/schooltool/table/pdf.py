@@ -389,7 +389,7 @@ class Grid(object):
 
     config = Config(
         table_style_name = "grade.table.grades",
-        title_column_width = 4 * units.cm,
+        title_column_width = 7 * units.cm,
         header_font = 'Ubuntu_Regular',
         header_font_size = 12,
         column_padding = 4,
