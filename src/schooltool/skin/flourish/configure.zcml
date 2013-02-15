@@ -279,6 +279,14 @@
   <zope:view
       for="datetime.date"
       type="schooltool.skin.flourish.IFlourishLayer"
+      name="longDate"
+      factory=".dateformatter.DateFormatterLongView"
+      permission="zope.Public"
+      />
+
+  <zope:view
+      for="datetime.date"
+      type="schooltool.skin.flourish.IFlourishLayer"
       name="mediumDate"
       factory=".dateformatter.DateFormatterMediumView"
       permission="zope.Public"

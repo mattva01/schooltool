@@ -277,6 +277,14 @@
   <zope:view
       for="datetime.date"
       type="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="longDate"
+      factory=".dateformatter.DateFormatterLongView"
+      permission="zope.Public"
+      />
+
+  <zope:view
+      for="datetime.date"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
       name="mediumDate"
       factory=".dateformatter.DateFormatterMediumView"
       permission="zope.Public"
