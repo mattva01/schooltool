@@ -20,6 +20,7 @@
 SchoolTool flourish skin interfaces.
 """
 
+import zope.interface.interfaces
 import zope.schema
 import zope.schema.interfaces
 import zope.viewlet.interfaces
@@ -103,17 +104,24 @@ class IActiveViewletName(Interface):
     """Interface for adapter that returns the active viewlet name."""
 
 
-class IPage(IBrowserPage, ILocation):
+class IPageBase(IBrowserPage, ILocation):
+
+    template = Attribute(
+        """Main page template, often used to render the page""")
+
+    def update(self):
+        pass
+
+    def render(*args, **kw):
+        pass
+
+
+class IPage(IPageBase):
     title = zope.schema.TextLine(
         title=u"Page title", required=False)
 
     subtitle = zope.schema.TextLine(
         title=u"Page subtitle", required=False)
-
-    template = Attribute(
-        """Main page template, renders the whole browser page,
-        including header and footer.
-        """)
 
     page_template = Attribute(
         u"Template that renders all contents between header and footer.")
@@ -121,11 +129,79 @@ class IPage(IBrowserPage, ILocation):
     content_template = Attribute(
         u"Template that renders the main content.")
 
-    def update(self):
-        pass
+
+IPage.setTaggedValue('flourish.template_content_type', 'html')
+
+
+class IRMLTemplated(Interface):
+
+    template = Attribute("""The template, renders RML""")
 
     def render(*args, **kw):
-        pass
+        """Render the RML."""
+
+
+IRMLTemplated.setTaggedValue('flourish.template_content_type', 'xml')
+
+
+class IPDFPage(IRMLTemplated, IPageBase):
+
+    title = zope.schema.TextLine(
+        title=u"PDF title", required=False)
+
+    author = zope.schema.TextLine(
+        title=u"PDF author", required=False)
+
+    filename = zope.schema.TextLine(
+        title=u"PDF file name", required=False)
+
+    inline = zope.schema.Bool(
+        title=u"Render inline", required=False)
+
+    page_size = zope.schema.Tuple(
+        title=u"Page size",
+        value_type = zope.schema.Float(title=u"Size in pt (1/72 inch)"),
+        required=False
+        )
+
+    rotation = zope.schema.Float(
+        title=u"Page rotation",
+        required=False
+        )
+
+    content_template = Attribute(
+        u"Template that renders the main content.")
+
+
+IPDFPage.setTaggedValue('flourish.template_content_type', 'xml')
+
+
+class IPDFPart(IRMLTemplated, IViewlet):
+    """A viewlet for RML."""
+
+
+IPDFPart.setTaggedValue('flourish.template_content_type', 'xml')
+
+
+class ITemplateSlots(ILocation):
+
+    context = Attribute("The context object the view renders")
+    request = Attribute("The request object driving the view")
+    view = Attribute("The view")
+    template = Attribute("A viewlet that renders a PDF <template>")
+
+
+class IPageTemplate(IViewlet):
+
+    slots = zope.schema.Object(
+        title=u"Slot data",
+        schema=ITemplateSlots,
+        required=True)
+
+    slots_interface = zope.schema.Object(
+        title=u"Slot inteface",
+        schema=zope.interface.interfaces.ISpecification,
+        required=False)
 
 
 class IFromPublication(IPublishTraverse):
@@ -152,5 +228,3 @@ class IAJAXPart(IViewlet, IFromPublication):
                      'was not obtained via publication).',
         default=True,
         required=False)
-
-

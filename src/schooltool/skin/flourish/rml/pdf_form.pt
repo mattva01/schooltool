@@ -1,0 +1,33 @@
+<tal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+
+    <pto tal:condition="view/title">
+      <pto_header>
+        <hr width="100%" thickness="1" cap="square" color="separator"
+            spaceAfter="4" spaceBefore="8" align="center" />
+        <para style="section-title" tal:content="view/title_continued"></para>
+      </pto_header>
+      <pto_trailer>
+        <para style="pagesplit-continued" i18n:translate="">Continued on next page &gt;</para>
+      </pto_trailer>
+
+      <hr width="100%" thickness="1" cap="square" color="separator"
+          spaceAfter="4" spaceBefore="8" align="center" />
+      <para style="section-title" tal:content="view/title"></para>
+
+      <blockTable style="table.form" colWidths="25% 75%" alignment="left">
+        <tal:block repeat="widget view/widgets/values"
+                   content="structure widget/schooltool:content/row" />
+      </blockTable>
+    </pto>
+    <tal:block condition="not:view/title">
+      <blockTable style="table.form" colWidths="25% 75%" alignment="left">
+        <tal:block repeat="widget view/widgets/values"
+                   content="structure widget/schooltool:content/row" />
+      </blockTable>
+    </tal:block>
+
+</tal:block>

@@ -1,0 +1,44 @@
+<tal:block
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="schooltool">
+
+    <tal:block repeat="pto view/ptos">
+      <pto>
+        <pto_header>
+          <para style="info-title" i18n:translate="">Resource Report (continued)</para>
+          <hr width="100%" thickness="2" color="separator"
+              spaceAfter="4" spaceBefore="8" align="center" />
+          <para style="info-title" tal:content="pto/type" />
+          <hr width="100%" thickness="2" color="separator"
+              spaceAfter="14" spaceBefore="8" align="center" />
+        </pto_header>
+        <pto_trailer>
+          <para style="pagesplit-continued" i18n:translate="">Continued on next page &gt;</para>
+        </pto_trailer>
+
+        <para style="info-title" tal:condition="repeat/pto/start"
+              i18n:translate="">Resource Report</para>
+        <para style="info-title" tal:condition="not: repeat/pto/start"
+              i18n:translate="">Resource Report (continued)</para>
+        <hr width="100%" thickness="2" color="separator"
+            spaceAfter="4" spaceBefore="8" align="center" />
+        <para style="info-title" tal:content="pto/type" />
+        <hr width="100%" thickness="2" color="separator"
+            spaceAfter="14" spaceBefore="8" align="center" />
+        <blockTable style="table" colWidths="50% 50%" repeatRows="1" alignment="left">
+          <tr>
+            <td i18n:translate="">Title</td>
+            <td i18n:translate="">Description</td>
+          </tr>
+          <tr tal:repeat="resource pto/rows">
+            <td tal:content="resource/title" />
+            <td tal:content="resource/description" />
+          </tr>
+        </blockTable>
+      </pto>
+      <condPageBreak height="88cm"/>
+    </tal:block>
+</tal:block>
+

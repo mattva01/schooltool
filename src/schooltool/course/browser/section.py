@@ -41,7 +41,6 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.cachedescriptors.property import Lazy
 from zope.schema import Choice
 from zope.schema import ValidationError
-from zope.security.checker import canAccess
 from zope.security.proxy import removeSecurityProxy
 from zope.proxy import sameProxiedObjects
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -60,6 +59,7 @@ from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary_titled
 from schooltool.basicperson.browser.person import EditPersonRelationships
+from schooltool.basicperson.interfaces import IDemographics
 from schooltool.common import SchoolToolMessage as _
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -69,6 +69,7 @@ from schooltool.course.section import Section
 from schooltool.course.section import copySection
 from schooltool.course.browser.course import CoursesActiveTabMixin as SectionsActiveTabMixin
 from schooltool.person.interfaces import IPerson
+from schooltool.report.browser.report import RequestReportDownloadDialog
 from schooltool.resource.browser.resource import EditLocationRelationships
 from schooltool.resource.browser.resource import EditEquipmentRelationships
 from schooltool.resource.interfaces import ILocation, IEquipment
@@ -86,7 +87,6 @@ from schooltool.skin.flourish.page import LinkViewlet
 from schooltool.skin.flourish.page import ModalFormLinkViewlet
 from schooltool.skin.flourish.page import Page
 from schooltool.skin.flourish.page import RefineLinksViewlet
-from schooltool.skin.flourish.breadcrumbs import PageBreadcrumbs
 from schooltool.skin.flourish.page import TertiaryNavigationManager
 from schooltool import table
 from schooltool.term.interfaces import IDateManager
@@ -1819,3 +1819,73 @@ class SectionsYearNavBreadcrumbs(SchoolyearNavBreadcrumbs):
 
     traversal_name = u'sections'
     title = _('Sections')
+
+
+class FlourishRequestSectionRosterView(RequestReportDownloadDialog):
+
+    def nextURL(self):
+        return '%s/section_roster.pdf' % absoluteURL(self.context,
+                                                     self.request)
+
+
+class SectionRosterPDFView(flourish.report.PlainPDFPage):
+
+    name = _("Section Roster")
+
+    def formatDate(self, date, format='mediumDate'):
+        if date is None:
+            return ''
+        formatter = getMultiAdapter((date, self.request), name=format)
+        return formatter()
+
+    @property
+    def scope(self):
+        term = ITerm(self.context)
+        first = self.formatDate(term.first)
+        last = self.formatDate(term.last)
+        return '%s | %s - %s' % (term.title, first, last)
+
+    @property
+    def subtitles_left(self):
+        section = removeSecurityProxy(self.context)
+        instructors = '; '.join([person.title
+                                 for person in section.instructors])
+        instructors_message = _('Instructors: ${instructors}',
+                                mapping={'instructors': instructors})
+        subtitles = [
+            '%s (%s)' % (section.title, section.__name__),
+            instructors_message,
+            ]
+        return subtitles
+
+    @property
+    def title(self):
+        return ', '.join([course.title for course in self.context.courses])
+
+    @property
+    def base_filename(self):
+        courses = [c.__name__ for c in self.context.courses]
+        return 'section_roster_%s' % '_'.join(courses)
+
+    @property
+    def term(self):
+        return ITerm(self.context)
+
+    def rows(self):
+        result = []
+        collator = ICollator(self.request.locale)
+        for student in sorted(self.context.members,
+                              key=lambda x:collator.key(x.title)):
+            demographics = IDemographics(student)
+
+            result.append({
+                    'full_name': self.full_name(student),
+                    'ID': demographics.get('ID', '')
+                    })
+        return result
+
+    def full_name(self, person):
+        # XXX: should be a content adapter somewhere
+        return '%s, %s %s' % (person.last_name,
+                              person.first_name,
+                              person.middle_name or '')

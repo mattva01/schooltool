@@ -55,6 +55,15 @@ class DateFormatterFullView( BrowserView, LocaleLookupMixin):
         return formatter.format(self.context)
 
 
+class DateFormatterLongView( BrowserView, LocaleLookupMixin):
+    """Formats the date using the 'long' format"""
+
+    def __call__(self):
+        locale = self.getLocale()
+        formatter = locale.dates.getFormatter('date','long')
+        return formatter.format(self.context)
+
+
 class DateFormatterMediumView( BrowserView, LocaleLookupMixin):
     """Formats the date using the 'medium' format"""
 

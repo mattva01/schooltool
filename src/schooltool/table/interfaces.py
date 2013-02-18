@@ -21,9 +21,11 @@ Interfaces for SchoolTool calendar browser views.
 
 $Id$
 """
-from zope.schema import Object
-from zope.interface import Interface
+import zope.schema
+from zope.interface import Interface, Attribute
 from zc.table.interfaces import IColumn
+
+from schooltool.skin.flourish.interfaces import IContentProvider
 
 
 class IBatch(Interface):
@@ -49,9 +51,9 @@ class IFilterWidget(Interface):
 
 class ITableFormatter(Interface):
 
-    batch = Object(schema=IBatch)
+    batch = zope.schema.Object(schema=IBatch)
 
-    filter_widget = Object(schema=IFilterWidget)
+    filter_widget = zope.schema.Object(schema=IFilterWidget)
 
     def setUp(items=None, ommit=None, filter=None, columns=None, columns_before=None,
               columns_after=None, sort_on=None, prefix="", formatters=None,
@@ -61,6 +63,9 @@ class ITableFormatter(Interface):
         After calling this method you have batch and filter_widget set
         up as well, so you can render them in the view as well.
         """
+
+    def makeFormatter():
+        """Build the zc.table formatter that can render this table."""
 
     def render():
         """Render the table for display in a view."""
@@ -88,3 +93,16 @@ class IIndexedColumn(Interface):
 class ICheckboxColumn(IColumn):
     """A column with a checkbox."""
 
+
+class IRMLTable(IContentProvider):
+    """Content provider that can render a table as RML."""
+
+    table = Attribute("zc.table.interfaces.IFormatter to render")
+
+
+class IRMLColumn(IColumn):
+
+    column = Attribute("zc.table.column.Column")
+
+    visible = zope.schema.Bool(
+        title=u"Is column visible", required=False)

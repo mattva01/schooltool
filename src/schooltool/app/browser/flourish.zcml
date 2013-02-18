@@ -265,7 +265,7 @@
   <flourish:activeViewlet
       name="manage_site"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
-      view="schooltool.app.browser.app.ApplicationPreferencesView"
+      view="schooltool.app.browser.app.FlourishApplicationPreferencesView"
       />
 
   <flourish:viewlet
@@ -352,6 +352,12 @@
       permission="schooltool.edit"
       />
 
+  <flourish:activeViewlet
+      name="manage_site"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      view=".app.FlourishErrorEntryView"
+      />
+
   <configure package="schooltool.skin.flourish">
 
     <flourish:page
@@ -364,6 +370,12 @@
         />
 
   </configure>
+
+  <flourish:activeViewlet
+      name="manage_site"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      view=".app.FlourishErrorsConfigureView"
+      />
 
   <flourish:page
       name="about.html"
@@ -560,6 +572,12 @@
       title="Server"
       name="title" />
 
+  <flourish:activeViewlet
+      name="manage_site"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="zope.app.applicationcontrol.interfaces.IApplicationControl"
+      />
+
   <flourish:viewlet
       name="application_control_links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
@@ -754,5 +772,13 @@
       permission="schooltool.view"
       />
 
+  <zope:adapter
+      for="*
+           schooltool.skin.flourish.IFlourishLayer
+           .report.FlourishReportPDFView"
+      provides="schooltool.app.browser.interfaces.IReportPageTemplate"
+      name="default"
+      factory=".report.FlourishDefaultPageTemplate"
+      />
 
 </configure>

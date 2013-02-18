@@ -55,4 +55,62 @@
         />
   </zope:resourceLibrary>
 
+  <!-- PDF -->
+
+  <zope:adapter
+      for="*
+           schooltool.skin.flourish.IFlourishLayer
+           schooltool.skin.flourish.interfaces.IPageBase
+           zc.table.interfaces.IColumn"
+      provides=".interfaces.IRMLColumn"
+      factory=".pdf.HiddenRMLColumn"
+      />
+
+  <zope:adapter
+      for="*
+           schooltool.skin.flourish.IFlourishLayer
+           schooltool.skin.flourish.interfaces.IPageBase
+           zc.table.column.GetterColumn"
+      provides=".interfaces.IRMLColumn"
+      factory=".pdf.RMLGetterColumn"
+      />
+
+  <zope:adapter
+      for="*
+           schooltool.skin.flourish.IFlourishLayer
+           schooltool.skin.flourish.interfaces.IPageBase
+           .column.DateColumn"
+      provides=".interfaces.IRMLColumn"
+      factory=".pdf.RMLDateColumn"
+      />
+
+  <zope:adapter
+      for="*
+           schooltool.skin.flourish.IFlourishLayer
+           schooltool.skin.flourish.interfaces.IPageBase
+           .column.IndexedGetterColumn"
+      provides=".interfaces.IRMLColumn"
+      factory=".pdf.RMLIndexedColumn"
+      />
+
+  <zope:view
+      name="rml"
+      for="schooltool.table.interfaces.ITableFormatter"
+      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      factory=".pdf.getRMLTable"
+      permission="zope.Public"
+      />
+
+  <zope:adapter
+      factory=".pdf.RMLTable"
+      provides="schooltool.table.interfaces.IRMLTable"
+      permission="zope.Public"
+      />
+
+  <zope:adapter
+      factory=".pdf.IndexedRMLTable"
+      provides="schooltool.table.interfaces.IRMLTable"
+      permission="zope.Public"
+      />
+
 </configure>

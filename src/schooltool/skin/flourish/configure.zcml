@@ -265,6 +265,7 @@
   <include file="tal.zcml" />
   <include file="containers.zcml" />
   <include file="widgets.zcml" />
+  <include file="report.zcml" />
 
   <configure package="schooltool.skin">
   <zope:view
@@ -272,6 +273,14 @@
       type="schooltool.skin.flourish.IFlourishLayer"
       name="fullDate"
       factory=".dateformatter.DateFormatterFullView"
+      permission="zope.Public"
+      />
+
+  <zope:view
+      for="datetime.date"
+      type="schooltool.skin.flourish.IFlourishLayer"
+      name="longDate"
+      factory=".dateformatter.DateFormatterLongView"
       permission="zope.Public"
       />
 
