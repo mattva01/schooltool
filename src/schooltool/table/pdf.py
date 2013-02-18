@@ -431,6 +431,8 @@ class Grid(object):
         return GridCell(unicode(cell), item=cell)
 
     def getMaxTextSize(self, columns, default_font, default_font_size):
+        if not columns:
+            return 0, 0
         max_text_length = max([
             pdfmetrics.stringWidth(
                     unicode(column.text),
