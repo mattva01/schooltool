@@ -6,6 +6,8 @@ CHANGES
 ------------------
 
 - Move User fieldset up in Add person page (https://launchpad.net/bugs/896848)
+- Removed unsupported translations: af, bn, fo, et, hu, te.
+- Updated translations.
 
 
 2.4a1 (2013-01-23)
