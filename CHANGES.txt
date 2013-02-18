@@ -2,6 +2,10 @@
 CHANGES
 =======
 
+- Removed unsupported translations: af, bn, fo, et, hu, te.
+- Updated translations.
+
+
 2.3.2 (unreleased)
 ------------------
 

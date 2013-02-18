@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-01-15 15:41+0200\n"
-"PO-Revision-Date: 2012-08-06 22:22+0000\n"
-"Last-Translator: Haris Baljic <haris.baljic@edu.fit.ba>\n"
+"POT-Creation-Date: 2013-01-23 19:08+0200\n"
+"PO-Revision-Date: 2013-02-12 08:46+0000\n"
+"Last-Translator: Eldina Turajlić <eldina.turajlic@edu.fit.ba>\n"
 "Language-Team: Croatian <hr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-12 05:04+0000\n"
-"X-Generator: Launchpad (build 16361)\n"
+"X-Launchpad-Export-Date: 2013-02-13 04:59+0000\n"
+"X-Generator: Launchpad (build 16491)\n"
 
 #: /src/schooltool/app/app.py:193
 msgid "Your School"
@@ -114,7 +114,7 @@ msgstr "Ukloni"
 #: /src/schooltool/app/browser/app.py:408
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:58
 msgid "Add all displayed"
-msgstr ""
+msgstr "Dodaj sve prikazano"
 
 #: /src/schooltool/app/browser/app.py:677
 msgid "Username or password is incorrect"
@@ -235,7 +235,7 @@ msgstr "Naziv"
 
 #: /src/schooltool/app/browser/app.py:923
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 #: /src/schooltool/app/browser/app.py:951
 #: /src/schooltool/app/security.py:304
@@ -288,11 +288,11 @@ msgstr "Paket podataka"
 
 #: /src/schooltool/app/browser/app.py:1198
 msgid "Database successfully packed."
-msgstr ""
+msgstr "Baza podataka uspješno upakovana."
 
 #: /src/schooltool/app/browser/app.py:1200
 msgid "There were errors while packing the database: ${error}"
-msgstr ""
+msgstr "Pojavile su se greške pri učitavanju baze podataka: ${greška}"
 
 #: /src/schooltool/app/browser/app.py:1226
 #: /src/schooltool/skin/flourish/form.py:46
@@ -308,12 +308,12 @@ msgstr "Ne"
 
 #: /src/schooltool/app/browser/app.py:1242
 msgid "${type} Error"
-msgstr ""
+msgstr "${type} Greška"
 
 #: /src/schooltool/app/browser/app.py:962
 #: /src/schooltool/app/browser/templates/f_errors.pt:15
 msgid "Number of exceptions to show"
-msgstr ""
+msgstr "Broj izuzetaka za prikaz"
 
 #: /src/schooltool/app/browser/app.py:965
 #: /src/schooltool/app/browser/templates/f_errors.pt:21
@@ -1029,7 +1029,7 @@ msgstr "Lista greški"
 #: /src/schooltool/app/browser/timetablecsvimport.py:129
 #: /src/schooltool/export/importer.py:1262
 msgid "No data provided"
-msgstr ""
+msgstr "Nema uslovljenih podataka"
 
 #: /src/schooltool/app/browser/csvimport.py:99
 msgid "Could not convert data to Unicode (incorrect charset?)."
@@ -1066,7 +1066,7 @@ msgstr "Greška u CSV datoteci, linija ${line_no}"
 #: /src/schooltool/app/browser/csvimport.py:213
 #: /src/schooltool/app/browser/timetablecsvimport.py:502
 msgid "Conversion to unicode failed in line ${line_no}"
-msgstr ""
+msgstr "Konverzija u unicode nije uspjela u liniji ${line_no}"
 
 #: /src/schooltool/app/browser/flourish.zcml:10
 #: /src/schooltool/app/browser/flourish.zcml:303
@@ -1197,7 +1197,7 @@ msgstr "Launchpad projekt stranica"
 #: /src/schooltool/app/browser/flourish.zcml:341
 #: /src/schooltool/app/browser/templates/about.pt:29
 msgid "Mailing list"
-msgstr ""
+msgstr "Dopisna lista"
 
 #: /src/schooltool/app/browser/flourish.zcml:351
 msgid "IRC channel"
@@ -1297,6 +1297,11 @@ msgid ""
 "well as a framework for building customized applications and configurations "
 "for individual schools or states."
 msgstr ""
+"SchoolTool je slobodni administrativni softver za sve škole širom svijeta. "
+"Ciljevi projekta su stvaranje jednostavanog sastavnog  ključa, za studente "
+"informacijskog menadžmenta ili informacijskog sistema za osnovne i srednje "
+"škole, kao i okvir za izgradnju prilagođenih aplikacija i konfiguracije za "
+"pojedine škole ili države."
 
 #: /src/schooltool/app/browser/templates/about.pt:16
 #: /src/schooltool/app/browser/templates/f_about.pt:10
@@ -3189,7 +3194,16 @@ msgstr ""
 "Podrazumjeva ime studenta, broj osobne iskaznice, datum rođenja, ime "
 "kontakta i broj kontakta."
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:733
+#: /src/schooltool/basicperson/browser/flourish.zcml:655
+msgid "Person profile, contacts, groups, etc."
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:655
+#: /src/schooltool/basicperson/browser/person.py:1369
+msgid "Profile"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:784
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
 msgstr "Početna"
@@ -3355,6 +3369,15 @@ msgstr "Osobne iskaznice"
 msgid "ID Card: ${person}"
 msgstr ""
 
+#: /src/schooltool/basicperson/browser/person.py:1385
+msgid "Username: ${username}"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:1404
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
+msgid "General Information"
+msgstr "Opće informacije"
+
 #: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
@@ -3495,12 +3518,8 @@ msgstr "Obavezno"
 msgid "Limited"
 msgstr "Ograničeno"
 
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
-msgid "General Information"
-msgstr "Opće informacije"
-
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:25
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:10
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:29
 msgid "Edit this person's information"
 msgstr ""
 
@@ -4498,6 +4517,33 @@ msgstr ""
 msgid "Import Students"
 msgstr ""
 
+#: /src/schooltool/course/browser/flourish.zcml:644
+msgid "Roster"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:644
+msgid "Students and instructors of a section"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:11
+msgid "Students (continued)"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:14
+#: /src/schooltool/resource/browser/rml/resource_report.pt:18
+#: /src/schooltool/skin/flourish/rml/pdf_form.pt:14
+#: /src/schooltool/table/rml/grid_part.pt:42
+msgid "Continued on next page &gt;"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:23
+#: /src/schooltool/course/browser/templates/f_section_roster_rml.pt:15
+#: /src/schooltool/person/browser/person.py:594
+#: /src/schooltool/person/browser/person.py:683
+#: /src/schooltool/person/interfaces.py:52
+msgid "Full name"
+msgstr ""
+
 #: /src/schooltool/course/browser/section-member-csvimport.pt:4
 msgid "Upload SchoolTool section members as CSV"
 msgstr ""
@@ -4620,6 +4666,14 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1435
 msgid "Link ${section} to Section in Other Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1833
+msgid "Section Roster"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1853
+msgid "Instructors: ${instructors}"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
@@ -5197,7 +5251,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/course/security.zcml:74
-msgid "A course in SchoolTool describes a set curriculum taught in a section."
+msgid ""
+"A course in SchoolTool describes a set curriculum taught in a section."
 msgstr ""
 
 #: /src/schooltool/course/security.zcml:79
@@ -6024,6 +6079,11 @@ msgstr ""
 msgid "ID Cards for Group: ${group}"
 msgstr ""
 
+#: /src/schooltool/group/browser/group.py:887
+#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:5
+msgid "Group memberships"
+msgstr ""
+
 #: /src/schooltool/group/browser/templates/f_group_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/group-csvimport.pt:24
 msgid ""
@@ -6079,10 +6139,6 @@ msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_group_view.pt:102
 msgid "This group has no responsible parties"
-msgstr ""
-
-#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:5
-msgid "Group memberships"
 msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:6
@@ -6397,15 +6453,9 @@ msgstr ""
 msgid "Wrong password supplied"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:507
-#: /src/schooltool/person/browser/person.py:596
-#: /src/schooltool/person/interfaces.py:51
-msgid "Full name"
-msgstr ""
-
-#: /src/schooltool/person/browser/person.py:508
-#: /src/schooltool/person/browser/person.py:597
-#: /src/schooltool/person/interfaces.py:52
+#: /src/schooltool/person/browser/person.py:595
+#: /src/schooltool/person/browser/person.py:684
+#: /src/schooltool/person/interfaces.py:53
 msgid "Name that should be displayed"
 msgstr ""
 
@@ -6652,6 +6702,10 @@ msgstr ""
 msgid "Reserve"
 msgstr ""
 
+#: /src/schooltool/resource/browser/flourish.zcml:452
+msgid "List all resources"
+msgstr ""
+
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
 msgstr ""
@@ -6762,6 +6816,16 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:854
 msgid "Delete ${resource_title}"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:967
+#: /src/schooltool/resource/browser/rml/resource_report.pt:21
+msgid "Resource Report"
+msgstr ""
+
+#: /src/schooltool/resource/browser/rml/resource_report.pt:10
+#: /src/schooltool/resource/browser/rml/resource_report.pt:23
+msgid "Resource Report (continued)"
 msgstr ""
 
 #: /src/schooltool/resource/browser/subtype_widget.pt:8
@@ -7376,6 +7440,10 @@ msgstr ""
 msgid "Not Found"
 msgstr ""
 
+#: /src/schooltool/skin/flourish/report.py:584
+msgid "${title} (continued)"
+msgstr ""
+
 #: /src/schooltool/skin/flourish/templates/image_input.pt:11
 msgid "delete this image"
 msgstr ""
@@ -7521,8 +7589,14 @@ msgstr ""
 msgid "FCK editor configuration."
 msgstr ""
 
+#: /src/schooltool/table/pdf.py:637
+msgid "Continued ..."
+msgstr ""
+
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7
+#: /src/schooltool/table/templates/f_batch.pt:8
+#: /src/schooltool/table/templates/f_batch.pt:10
 msgid "&laquo; Previous"
 msgstr ""
 
