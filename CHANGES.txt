@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-2.4a2 (unreleased)
+2.4a2 (2013-02-18)
 ------------------
 
 - Move User fieldset up in Add person page (https://launchpad.net/bugs/896848)
