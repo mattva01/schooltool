@@ -5,6 +5,11 @@ CHANGES
 2.2.0 (unreleased)
 ------------------
 
+Build
++++++
+
+- Local buildout.cfg.  Your changes to buildout.cfg will not be committed.
+
 XLS
 +++
 

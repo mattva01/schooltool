@@ -21,12 +21,20 @@ python:
 	virtualenv --no-site-packages -p $(PYTHON) python
 
 .PHONY: bootstrap
-bootstrap bin/buildout: python
+bootstrap bin/buildout: | buildout.cfg python
 	python/bin/python bootstrap.py
 
+buildout.cfg:
+	cp deploy.cfg buildout.cfg
+
 .PHONY: buildout
-buildout .installed.cfg: python bin/buildout buildout.cfg base.cfg setup.py
+buildout .installed.cfg: python bin/buildout buildout.cfg base.cfg deploy.cfg setup.py
 	bin/buildout $(BUILDOUT_FLAGS)
+
+.PHONY: develop
+develop bin/coverage bin/docs: buildout.cfg develop.cfg
+	sed -e 's/base.cfg/develop.cfg/' -i buildout.cfg
+	$(MAKE) buildout
 
 .PHONY: update
 update:
@@ -58,6 +66,7 @@ clean:
 
 .PHONY: realclean
 realclean:
+	rm -f buildout.cfg
 	rm -rf eggs
 	rm -rf dist
 	rm -rf instance
@@ -85,7 +94,7 @@ coverage: build
 	bin/test --at-level 2 -u --coverage=$(CURDIR)/coverage
 
 .PHONY: coverage-reports-html
-coverage-reports-html coverage/reports: build
+coverage-reports-html coverage/reports: bin/coverage build
 	test -d coverage || $(MAKE) coverage
 	rm -rf coverage/reports
 	mkdir coverage/reports
@@ -98,7 +107,7 @@ ftest-coverage: build
 	bin/test --at-level 2 -f --coverage=$(CURDIR)/ftest-coverage
 
 .PHONY: ftest-coverage-reports-html
-ftest-coverage-reports-html ftest-coverage/reports: build
+ftest-coverage-reports-html ftest-coverage/reports: bin/coverage build
 	test -d ftest-coverage || $(MAKE) ftest-coverage
 	rm -rf ftest-coverage/reports
 	mkdir ftest-coverage/reports
@@ -130,16 +139,19 @@ update-translations:
 
 # Docs
 
-docs: build
+docs: bin/docs build
 	bin/docs
 
 # Release
 
 .PHONY: release
 release: compile-translations
+	-cp buildout.cfg buildout.cfg~dev~
+	cp deploy.cfg buildout.cfg
 	grep -qv 'dev' version.txt.in || echo -n `cat version.txt.in`-r`bzr revno` > version.txt
 	$(PYTHON) setup.py sdist
 	rm -f version.txt
+	-mv buildout.cfg~dev~ buildout.cfg
 
 .PHONY: move-release
 move-release: upload
