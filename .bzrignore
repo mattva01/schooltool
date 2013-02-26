@@ -19,3 +19,4 @@
 ./coverage
 ./ftest-coverage
 ./docs
+./buildout.cfg

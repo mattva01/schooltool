@@ -5,7 +5,10 @@ CHANGES
 2.4a3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+Build
++++++
+
+- Local buildout.cfg.  Your changes to buildout.cfg will not be committed.
 
 
 2.4a2 (2013-02-18)
