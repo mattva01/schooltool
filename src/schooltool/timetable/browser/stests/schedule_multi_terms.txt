@@ -1,0 +1,82 @@
+Test for scheduling a timetable for multi-term sections
+=======================================================
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+Add a school year with 4 quater terms:
+
+    >>> manager.ui.schoolyear.add('2013', '2013-01-01', '2013-12-31')
+    >>> manager.ui.term.add('2013', 'Q1', '2013-01-01', '2013-03-30')
+    >>> manager.ui.term.add('2013', 'Q2', '2013-04-01', '2013-06-30')
+    >>> manager.ui.term.add('2013', 'Q3', '2013-07-01', '2013-09-30')
+    >>> manager.ui.term.add('2013', 'Q4', '2013-10-01', '2013-12-31')
+
+Add a timetable:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Timetables').click()
+    >>> manager.query.link('Timetable').click()
+    >>> manager.query.id('field.title').clear()
+    >>> manager.query.id('field.title').ui.set_value('2013 timetable')
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('Days of the week').click()
+    >>> manager.query.button('Same time each day').click()
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('Have names').click()
+    >>> manager.query.id('field.periods').ui.set_value('A\nB\n')
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('Same').click()
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('No').click()
+
+Add a course:
+
+    >>> manager.ui.course.add('2013', 'Math')
+
+Add a multi-term section from Q2 to Q3:
+
+    >>> manager.ui.section.add('2013', 'Q2', 'Math', ends='Q3')
+
+Set a schedule for the section for both terms:
+
+    >>> manager.ui.section.go('2013', 'Q2', 'Math (1)')
+    >>> manager.query.link('Schedule').click()
+    >>> sel = '//div[contains(@class, "sidebar")]//a[text()="Schedule"]'
+    >>> manager.query.xpath(sel).click()
+    >>> manager.query.id('form-widgets-first').ui.set_value('Q2')
+    >>> manager.query.id('form-widgets-last').ui.set_value('Q3')
+    >>> manager.query.button('Submit').click()
+
+    >>> manager.query.xpath('//input[@name="period.0-.Period-"]').click()
+    >>> manager.query.xpath('//input[@name="period.1-.Period-"]').click()
+    >>> manager.query.xpath('//input[@name="period.2-.Period-"]').click()
+    >>> manager.query.xpath('//input[@name="period.3-.Period-"]').click()
+    >>> manager.query.xpath('//input[@name="period.4-.Period-"]').click()
+    >>> manager.query.button('Save').click()
+
+Check that the schedules were created for both terms:
+
+    >>> manager.ui.section.go('2013', 'Q2', 'Math (1)')
+    >>> manager.query.link('Schedule').click()
+    >>> print_schedules(manager)
+    Timetable 2013 timetable (scheduled Apr 1, 2013 - Jun 30, 2013)
+    +------------+------------+------------+------------+------------+----------+--------+
+    | Monday     | Tuesday    | Wednesday  | Thursday   | Friday     | Saturday | Sunday |
+    +------------+------------+------------+------------+------------+----------+--------+
+    | A Math (1) | A Math (1) | A Math (1) | A Math (1) | A Math (1) | A        | A      |
+    | B          | B          | B          | B          | B          | B        | B      |
+    +------------+------------+------------+------------+------------+----------+--------+
+
+    >>> manager.ui.section.go('2013', 'Q3', 'Math (1)')
+    >>> manager.query.link('Schedule').click()
+    >>> print_schedules(manager)
+    Timetable 2013 timetable (scheduled Jul 1, 2013 - Sep 30, 2013)
+    +------------+------------+------------+------------+------------+----------+--------+
+    | Monday     | Tuesday    | Wednesday  | Thursday   | Friday     | Saturday | Sunday |
+    +------------+------------+------------+------------+------------+----------+--------+
+    | A Math (1) | A Math (1) | A Math (1) | A Math (1) | A Math (1) | A        | A      |
+    | B          | B          | B          | B          | B          | B        | B      |
+    +------------+------------+------------+------------+------------+----------+--------+
