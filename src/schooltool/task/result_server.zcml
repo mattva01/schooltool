@@ -5,6 +5,7 @@
     >
 
   <include package="zope.component" file="meta.zcml" />
+  <include package="schooltool.securitypolicy" file="meta.zcml" />
 
   <adapter
     factory="zope.publisher.browser.BrowserLanguages"

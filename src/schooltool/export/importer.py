@@ -2027,7 +2027,7 @@ class FlourishRemoteMegaImporter(flourish.page.Page):
         if not self.errors:
             xlsfile = createFile(xls_upload)
             self.task = ImporterTask(xlsfile)
-            self.task.schedule()
+            self.task.schedule(self.request)
             #self.request.response.redirect(self.nextURL())
 
 
@@ -2180,12 +2180,19 @@ def import_xls():
 class ImporterTask(RemoteTask):
     implements(IImporterTask)
 
-    handler = import_xls
+    routing_key = "zodb.import"
+
     xls_file = None
 
     def __init__(self, xls_file):
         RemoteTask.__init__(self)
         self.xls_file = xls_file
+
+    def execute(self, request):
+        app = ISchoolToolApplication(None)
+        importer = RemoteMegaImporter(app, request)
+        result = importer()
+        return result
 
 
 class ImportProgressContent(flourish.page.Content):

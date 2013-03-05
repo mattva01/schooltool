@@ -22,12 +22,14 @@ import celery.app.abstract
 import celery.app.defaults
 import celery.loaders.default
 
+import zope.configuration.config
+import zope.configuration.xmlconfig
 from zope.app.publication.zopepublication import ZopePublication
 from zope.component import provideUtility
 from ZODB.interfaces import IDatabase
 from ZODB.ActivityMonitor import ActivityMonitor
 
-from schooltool.app.main import SchoolToolMachinery
+from schooltool.app.main import SchoolToolMachinery, setLanguage
 from schooltool.app.interfaces import ISchoolToolApplication
 
 
@@ -43,31 +45,14 @@ celery.app.defaults.DEFAULTS.update(
          for key, value in celery.app.defaults.flatten(SCHOOLTOOL_CONFIG_NAMESPACES)))
 
 
-SCHOOLTOOL_MACHINERY = None
-
-
-class ZopeLoader(celery.loaders.default.Loader):
-
-    def on_worker_init(self, *args, **kw):
-        super(ZopeLoader, self).on_worker_init(*args, **kw)
-
-    def on_worker_process_init(self,*args, **kw):
-        super(ZopeLoader, self).on_worker_process_init(*args, **kw)
-        open_schooltool_db(self.app)
-
-    def on_task_init(self, *args, **kw):
-        super(ZopeLoader, self).on_task_init(*args, **kw)
-        #db = open_schooltool_db(self.app)
-
-    def on_process_cleanup(self,*args, **kw):
-        super(ZopeLoader, self).on_process_cleanup(*args, **kw)
-        #close_schooltool_db(self.app)
+ACTIVE_MACHINERY = None
 
 
 class ConfiguratedSchoolToolMachinery(celery.app.abstract.configurated,
                                       SchoolToolMachinery):
 
     config = celery.app.abstract.from_config()
+    _configured = False
     celery_app = None
     db = None
     options = None
@@ -103,10 +88,14 @@ class ConfiguratedSchoolToolMachinery(celery.app.abstract.configurated,
         return self.db
 
     def start(self):
-        # XXX: this goes to WARNING, should go to INFO
-        print 'Configuring SchoolTool machinery.'
-        self.options = self.loadOptions()
-        self.configure(self.options)
+        if self.db is not None:
+            return # already running
+        if not self._configured:
+            # XXX: this goes to WARNING, should go to INFO
+            print 'Configuring SchoolTool machinery.'
+            self.options = self.loadOptions()
+            self.configure(self.options)
+            self._configured = True
         self.db = self.openDB(self.options)
 
     def stop(self):
@@ -115,28 +104,71 @@ class ConfiguratedSchoolToolMachinery(celery.app.abstract.configurated,
             self.db = None
 
 
-def open_schooltool_db(celery_app=None):
-    global SCHOOLTOOL_MACHINERY
-    if SCHOOLTOOL_MACHINERY is None:
-        if celery_app is None:
-            return None
-        SCHOOLTOOL_MACHINERY = ConfiguratedSchoolToolMachinery(celery_app)
-        SCHOOLTOOL_MACHINERY.start()
-    db = SCHOOLTOOL_MACHINERY.openDB(SCHOOLTOOL_MACHINERY.options)
-    return db
+class SchoolToolReportMachinery(ConfiguratedSchoolToolMachinery):
+
+    def configure(self, options):
+        self.options = options
+        self.configureComponents(
+            options,
+            site_zcml=options.config.report_server_definition)
+        setLanguage(options.config.lang)
+        self.configureReportlab(options.config.reportlab_fontdir)
 
 
-def close_schooltool_db(celery_app):
-    global SCHOOLTOOL_MACHINERY
-    if SCHOOLTOOL_MACHINERY is None:
+class GlobalMachinery(object):
+
+    def init_machinery(self):
+        global ACTIVE_MACHINERY
+        if ACTIVE_MACHINERY:
+            ACTIVE_MACHINERY.stop()
+        ACTIVE_MACHINERY = self.machinery_factory(self.app)
+
+    @property
+    def machinery(self):
+        global ACTIVE_MACHINERY
+        if not ACTIVE_MACHINERY:
+            self.init_machinery()
+        return ACTIVE_MACHINERY
+
+
+class ZopeLoader(celery.loaders.default.Loader,
+                 GlobalMachinery):
+
+    machinery_factory = ConfiguratedSchoolToolMachinery
+
+    def on_worker_init(self, *args, **kw):
+        super(ZopeLoader, self).on_worker_init(*args, **kw)
+
+    def on_worker_process_init(self, *args, **kw):
+        super(ZopeLoader, self).on_worker_process_init(*args, **kw)
+        self.init_machinery()
+        self.machinery.start()
+
+    def on_task_init(self, *args, **kw):
+        super(ZopeLoader, self).on_task_init(*args, **kw)
+
+    def on_process_cleanup(self, *args, **kw):
+        super(ZopeLoader, self).on_process_cleanup(*args, **kw)
+
+    def on_worker_shutdown(self):
+        super(ZopeLoader, self).on_worker_shutdown()
+        self.machinery.stop()
+
+
+class ReportLoader(ZopeLoader):
+    machinery_factory = SchoolToolReportMachinery
+
+
+def open_schooltool_db():
+    global ACTIVE_MACHINERY
+    if ACTIVE_MACHINERY is None:
+        return None
+    ACTIVE_MACHINERY.start()
+    return ACTIVE_MACHINERY.db
+
+
+def close_schooltool_db():
+    global ACTIVE_MACHINERY
+    if ACTIVE_MACHINERY is None:
         return
-    SCHOOLTOOL_MACHINERY.stop()
-
-
-#class SchoolToolWorkerComponent(celery.abstract.StartStopComponent):
-#    name = "worker.schooltool"
-#
-#    def create(self, parent):
-#        return StratableStoppableSchooltoolWorkControllerComponent(parent)
-
-
+    ACTIVE_MACHINERY.stop()

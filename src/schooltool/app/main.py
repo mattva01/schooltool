@@ -443,7 +443,7 @@ class SchoolToolMachinery(object):
         config, handler = ZConfig.loadConfig(schema, filename)
         return config, handler
 
-    def configureComponents(self, options):
+    def configureComponents(self, options, site_zcml=None):
         """Configure Zope 3 components."""
         # Hook up custom component architecture calls
         setHooks()
@@ -457,9 +457,11 @@ class SchoolToolMachinery(object):
             context.provideFeature('devmode')
 
         zope.configuration.xmlconfig.registerCommonDirectives(context)
-        site_config_filename = options.config.site_definition
+
+        if site_zcml is None:
+            site_zcml = options.config.site_definition
         context = zope.configuration.xmlconfig.file(
-            site_config_filename, context=context)
+            site_zcml, context=context)
 
         # Store the configuration context
         from zope.app.appsetup import appsetup
@@ -509,7 +511,9 @@ class SchoolToolMachinery(object):
 
     def configure(self, options):
         self.options = options
-        self.configureComponents(options)
+        self.configureComponents(
+            options,
+            site_zcml=options.config.site_definition)
         setLanguage(options.config.lang)
         self.configureReportlab(options.config.reportlab_fontdir)
 

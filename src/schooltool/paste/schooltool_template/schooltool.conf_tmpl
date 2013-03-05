@@ -3,8 +3,9 @@
 # Site definition file:
 site-definition ${config_dir}/site.zcml
 
-# Task server definition file:
+# Task server definition files:
 result-server-definition ${config_dir}/result-server.zcml
+report-server-definition ${config_dir}/report-server.zcml
 
 # Where should the server store all data?
 <zodb>
