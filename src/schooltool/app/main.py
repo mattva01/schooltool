@@ -26,7 +26,6 @@ $Id$
 """
 import os
 import sys
-import time
 import getopt
 import locale
 import gettext
@@ -46,12 +45,9 @@ from zope.interface import directlyProvides, implements
 from zope.component import provideUtility
 from zope.component import provideAdapter, adapts
 from zope.event import notify
-from zope.server.taskthreads import ThreadedTaskDispatcher
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.i18n.interfaces import IUserPreferredLanguages
-from zope.app.server.main import run
-from zope.app.server.wsgi import http
-from zope.app.appsetup import DatabaseOpened, ProcessStarting
+from zope.app.appsetup import DatabaseOpened
 from zope.app.publication.zopepublication import ZopePublication
 from zope.traversing.interfaces import IContainmentRoot
 from zope.lifecycleevent import ObjectAddedEvent
@@ -93,21 +89,12 @@ _._domain = 'schooltool'
 
 class Options(object):
     config_filename = 'schooltool.conf'
-    daemon = False
     quiet = False
     config = None
     pack = False
     restore_manager = False
     manager_password = MANAGER_PASSWORD
-    manage = False
-
-    def __init__(self):
-        dirname = os.path.dirname(__file__)
-        dirname = os.path.normpath(os.path.join(dirname, '..', '..', '..'))
-        self.config_file = os.path.join(dirname, self.config_filename)
-        if not os.path.exists(self.config_file):
-            self.config_file = os.path.join(dirname,
-                                            self.config_filename + '.in')
+    config_file = ''
 
 
 class CookieLanguageSelector(object):
@@ -292,27 +279,6 @@ def setUpLogger(name, filenames, format=None):
         logger.addHandler(handler)
 
 
-def daemonize():
-    """Daemonize with a double fork and close the standard IO."""
-    pid = os.fork()
-    if pid:
-        sys.exit(0)
-    os.setsid()
-    os.umask(077)
-
-    pid = os.fork()
-    if pid:
-        print _("Going to background, daemon pid %d") % pid
-        sys.exit(0)
-
-    os.close(0)
-    os.close(1)
-    os.close(2)
-    os.open('/dev/null', os.O_RDWR)
-    os.dup(0)
-    os.dup(0)
-
-
 class PluginDependency(object):
 
     def __init__(self, plugin, name,
@@ -457,16 +423,27 @@ def get_schooltool_plugin_configurations():
 plugin_configurations = get_schooltool_plugin_configurations()
 
 
-class SchoolToolServer(object):
+class SchoolToolMachinery(object):
 
     ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__),
                                   'config-schema.xml')
 
-    system_name = "SchoolTool"
-
     Options = Options
 
-    def configure(self, options):
+    def readConfig(self, filename):
+        # Read configuration file
+        schema_string = open(self.ZCONFIG_SCHEMA).read()
+        plugins = [configuration
+                   for (configuration, handler) in plugin_configurations]
+        schema_string = schema_string % {'plugins': "\n".join(plugins)}
+        schema_file = StringIO(schema_string)
+
+        schema = ZConfig.loadSchemaFile(schema_file, self.ZCONFIG_SCHEMA)
+
+        config, handler = ZConfig.loadConfig(schema, filename)
+        return config, handler
+
+    def configureComponents(self, options, site_zcml=None):
         """Configure Zope 3 components."""
         # Hook up custom component architecture calls
         setHooks()
@@ -480,12 +457,70 @@ class SchoolToolServer(object):
             context.provideFeature('devmode')
 
         zope.configuration.xmlconfig.registerCommonDirectives(context)
+
+        if site_zcml is None:
+            site_zcml = options.config.site_definition
         context = zope.configuration.xmlconfig.file(
-            self.siteConfigFile, context=context)
+            site_zcml, context=context)
 
         # Store the configuration context
         from zope.app.appsetup import appsetup
         appsetup.__dict__['__config_context'] = context
+
+    def configureReportlab(self, fontdirs):
+        """Configure reportlab given a path to TrueType fonts.
+
+        Disables PDF support in SchoolTool if fontdir is empty.
+        Outputs a warning to stderr in case of errors.
+        """
+        if not fontdirs:
+            return
+
+        try:
+            import reportlab
+        except ImportError:
+            print >> sys.stderr, _("Warning: could not find the reportlab"
+                                   " library.\nPDF support disabled.")
+            return
+
+        existing_directories = []
+        for fontdir in fontdirs.split(':'):
+            if os.path.isdir(fontdir):
+                existing_directories.append(fontdir)
+
+        if not existing_directories:
+            print >> sys.stderr, (_("Warning: font directories '%s' do"
+                                    " not exist.\nPDF support disabled.")
+                                  % fontdirs)
+            return
+
+        for font_file in pdf.font_map.values():
+            font_exists = False
+            for fontdir in existing_directories:
+                font_path = os.path.join(fontdir, font_file)
+                if os.path.exists(font_path):
+                    font_exists = True
+            if not font_exists:
+                print >> sys.stderr, _("Warning: font '%s' does not exist"
+                                       " in the font directories '%s'.\n"
+                                       "PDF support disabled.") % (font_file,
+                                                                   fontdirs)
+                return
+
+        pdf.setUpFonts(existing_directories)
+
+    def configure(self, options):
+        self.options = options
+        self.configureComponents(
+            options,
+            site_zcml=options.config.site_definition)
+        setLanguage(options.config.lang)
+        self.configureReportlab(options.config.reportlab_fontdir)
+
+
+class SchoolToolServer(SchoolToolMachinery):
+
+    system_name = "SchoolTool"
 
     def load_options(self, argv):
         """Parse the command line and read the configuration file."""
@@ -496,7 +531,7 @@ class SchoolToolServer(object):
         try:
             opts, args = getopt.gnu_getopt(argv[1:], 'c:hdr:',
                                            ['config=', 'pack',
-                                            'help', 'daemon',
+                                            'help',
                                             'restore-manager=',
                                             'manage'])
         except getopt.error, e:
@@ -508,9 +543,8 @@ class SchoolToolServer(object):
                 print _("\n"
                         "Usage: %s [options]\n"
                         "Options:\n"
-                        "  -c, --config xxx       use this configuration file instead of the default\n"
+                        "  -c, --config xxx       use this configuration file\n"
                         "  -h, --help             show this help message\n"
-                        "  -d, --daemon           go to background after starting\n"
                         "  --pack                 pack the database\n"
                         "  -r, --restore-manager password\n"
                         "                         restore the manager user with the provided password\n"
@@ -522,14 +556,6 @@ class SchoolToolServer(object):
                 options.config_file = v
             if k in ('-p', '--pack'):
                 options.pack = True
-                options.manage = True
-            if k in ('-d', '--daemon'):
-                if not hasattr(os, 'fork'):
-                    print >> sys.stderr, _("%s: daemon mode not supported on "
-                                           "your operating system.") % progname
-                    sys.exit(1)
-                else:
-                    options.daemon = True
             if k in ('-r', '--restore-manager'):
                 options.restore_manager = True
                 if v != '-':
@@ -538,23 +564,14 @@ class SchoolToolServer(object):
                     print 'Manager password: ',
                     password = sys.stdin.readline().strip('\r\n')
                     options.manager_password = password
-                options.manage = True
-            if k in ('--manage'):
-                options.manage = True
 
-        # Read configuration file
-        schema_string = open(self.ZCONFIG_SCHEMA).read()
-        plugins = [configuration
-                   for (configuration, handler) in plugin_configurations]
-        schema_string = schema_string % {'plugins': "\n".join(plugins)}
-        schema_file = StringIO(schema_string)
-
-        schema = ZConfig.loadSchemaFile(schema_file, self.ZCONFIG_SCHEMA)
+        if not options.config_file:
+            print >> sys.stderr, "No config file specified"
+            sys.exit(1)
 
         print _("Reading configuration from %s") % options.config_file
         try:
-            options.config, handler = ZConfig.loadConfig(schema,
-                                                         options.config_file)
+            options.config, handler = self.readConfig(options.config_file)
         except ZConfig.ConfigurationError, e:
             print >> sys.stderr, "%s: %s" % (progname, e)
             sys.exit(1)
@@ -569,7 +586,7 @@ class SchoolToolServer(object):
 
         return options
 
-    def bootstrapSchoolTool(self, db, school_type=""):
+    def bootstrapSchoolTool(self, db):
         """Bootstrap SchoolTool database."""
         connection = db.open()
         root = connection.root()
@@ -579,7 +596,7 @@ class SchoolToolServer(object):
 
             # Run school specific initialization code
             initializationUtility = getUtility(
-                ISchoolToolInitializationUtility, name=school_type)
+                ISchoolToolInitializationUtility)
             initializationUtility.initializeApplication(app)
 
             directlyProvides(app, directlyProvidedBy(app) + IContainmentRoot)
@@ -635,7 +652,6 @@ class SchoolToolServer(object):
         transaction.commit()
         connection.close()
 
-
     def restoreManagerUser(self, app, password):
         """Ensure there is a manager user
 
@@ -666,16 +682,14 @@ class SchoolToolServer(object):
         # to lock the database file, and we don't want that.
         logging.getLogger('ZODB.lock_file').disabled = True
 
-        # Process ZCML
-        self.siteConfigFile = options.config.site_definition
         self.configure(options)
 
-        # Set language specified in the configuration
-        setLanguage(options.config.lang)
+        # Connect to the database
+        db = self.openDB(options)
 
-        # Configure reportlab.
-        self.configureReportlab(options.config.reportlab_fontdir)
+        return db
 
+    def openDB(self, options):
         # Open the database
         db_configuration = options.config.database
         try:
@@ -689,7 +703,7 @@ class SchoolToolServer(object):
                                        " is using it?") % self.system_name
             sys.exit(1)
 
-        self.bootstrapSchoolTool(db, options.config.school_type)
+        self.bootstrapSchoolTool(db)
         notify(DatabaseOpened(db))
 
         if options.restore_manager:
@@ -707,84 +721,12 @@ class SchoolToolServer(object):
 
         return db
 
-    def configureReportlab(self, fontdirs):
-        """Configure reportlab given a path to TrueType fonts.
 
-        Disables PDF support in SchoolTool if fontdir is empty.
-        Outputs a warning to stderr in case of errors.
-        """
-        if not fontdirs:
-            return
-
-        try:
-            import reportlab
-        except ImportError:
-            print >> sys.stderr, _("Warning: could not find the reportlab"
-                                   " library.\nPDF support disabled.")
-            return
-
-        existing_directories = []
-        for fontdir in fontdirs.split(':'):
-            if os.path.isdir(fontdir):
-                existing_directories.append(fontdir)
-
-        if not existing_directories:
-            print >> sys.stderr, (_("Warning: font directories '%s' do"
-                                    " not exist.\nPDF support disabled.")
-                                  % fontdirs)
-            return
-
-        for font_file in pdf.font_map.values():
-            font_exists = False
-            for fontdir in existing_directories:
-                font_path = os.path.join(fontdir, font_file)
-                if os.path.exists(font_path):
-                    font_exists = True
-            if not font_exists:
-                print >> sys.stderr, _("Warning: font '%s' does not exist"
-                                       " in the font directories '%s'.\n"
-                                       "PDF support disabled.") % (font_file,
-                                                                   fontdirs)
-                return
-
-        pdf.setUpFonts(existing_directories)
-
-        
 class StandaloneServer(SchoolToolServer):
-    
-    def beforeRun(self, options, db):
-        if options.daemon:
-            daemonize()
-
-        task_dispatcher = ThreadedTaskDispatcher()
-        task_dispatcher.setThreadCount(options.config.thread_pool_size)
-
-        for ip, port in options.config.web:
-            server = http.create('HTTP', task_dispatcher, db, port=port, ip=ip)
-
-        notify(ProcessStarting())
-
-        if options.config.pid_file:
-            pidfile = file(options.config.pid_file, "w")
-            print >> pidfile, os.getpid()
-            pidfile.close()
 
     def main(self, argv=sys.argv):
-        """Start the SchoolTool server."""
-        t0, c0 = time.time(), time.clock()
         options = self.load_options(argv)
         db = self.setup(options)
-        if not options.manage:
-            self.beforeRun(options, db)
-            t1, c1 = time.time(), time.clock()
-            print _("Startup time: %.3f sec real, %.3f sec CPU") % (t1 - t0,
-                                                                    c1 - c0)
-            run()
-            self.afterRun(options)
-
-    def afterRun(self, options):
-        if options.config.pid_file:
-            os.unlink(options.config.pid_file)
 
 
 def main():

@@ -63,7 +63,9 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     package_dir={'': 'src'},
     packages=find_packages('src'),
     namespace_packages=["schooltool"],
-    install_requires=['hurry.query',
+    install_requires=['celery',
+                      'bottle',
+                      'hurry.query',
                       'PasteDeploy',
                       'PasteScript',
                       'Pillow',
@@ -103,7 +105,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.app.publication',
                       'zope.app.schema',
                       'zope.app.security',
-                      'zope.app.server',
                       'zope.app.wsgi',
                       'zope.browser',
                       'zope.browsermenu',
@@ -166,6 +167,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     entry_points = """
     [paste.app_factory]
     main = schooltool.paste.main:schooltool_app_factory
+    task_results = schooltool.paste.main:task_result_app_factory
 
     [console_scripts]
     start-schooltool-instance = schooltool.paste.run:main
@@ -179,6 +181,9 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     flourish = schooltool.skin.flourish.instance
     standard = schooltool.standard
     schooltool = schooltool.skin.flourish.instance
+
+    [schooltool.tasks]
+    schooltool.export.importer = schooltool.export.importer
 
     """,
     )

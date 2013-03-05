@@ -72,6 +72,8 @@ class AJAXStandaloneSortFormatter(StandaloneHeaderFormatterMixin,
 
 class Table(flourish.ajax.CompositeAJAXPart, TableContent):
 
+    no_default_url_cell_formatter = False
+
     container_wrapper = ViewPageTemplateFile('templates/f_ajax_table.pt')
 
     form_wrapper = InlineViewPageTemplate("""
@@ -101,7 +103,11 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
     def updateFormatter(self):
         if self._table_formatter is not None:
             return
-        self.setUp(formatters=[url_cell_formatter],
+        if self.no_default_url_cell_formatter:
+            formatters = []
+        else:
+            formatters = [url_cell_formatter]
+        self.setUp(formatters=formatters,
                    table_formatter=self.table_formatter,
                    batch_size=self.batch_size,
                    prefix=self.__name__,

@@ -34,20 +34,6 @@ here = os.path.dirname(__file__)
 ftesting_zcml = os.path.join(here, '..', 'ftesting.zcml')
 
 
-def doctest_Options():
-    """Tests for Options.
-
-    The only interesting thing Options does is find the default configuration
-    file.
-
-        >>> from schooltool.app.main import Options
-        >>> options = Options()
-        >>> options.config_file
-        '...schooltool.conf...'
-
-    """
-
-
 def doctest_main():
     """Tests for main().
 
@@ -68,34 +54,16 @@ def doctest_main():
         >>> def setup_stub(opts):
         ...     print "Performing setup..."
         ...     assert opts is options
-        >>> def run_stub():
-        ...     print "Running..."
-        >>> def before_run_stub(options, db):
-        ...     print "before Running..."
-        >>> def after_run_stub(options):
-        ...     print "after Running..."
-        >>> from schooltool.app import main
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
-        >>> old_run = main.run
         >>> server.load_options = load_options_stub
         >>> server.setup = setup_stub
-        >>> server.beforeRun = before_run_stub
-        >>> server.afterRun = after_run_stub
-        >>> main.run = run_stub
 
     Now we will run main().
 
-        >>> server.main(['sb.py', '-d'])
+        >>> server.main(['sb.py'])
         Performing setup...
-        before Running...
-        Startup time: ... sec real, ... sec CPU
-        Running...
-        after Running...
 
-    Clean up
-
-        >>> main.run = old_run
     """
 
 
@@ -131,19 +99,17 @@ def doctest_load_options():
 
         >>> o.config_file
         '...sample.conf'
-        >>> o.daemon
+        >>> o.pack
         False
 
     Some come from the config file
 
-        >>> o.config.web in ([('', 48080)],          # Unix
-        ...                  [('localhost', 48080)]) # Windows
-        True
-        >>> o.config.listen
-        [('...', 123), ('10.20.30.40', 9999)]
-
-    Note that "listen 123" in config.py produces ('localhost', 123) on
-    Windows, but ('', 123) on other platforms.
+        >>> o.config.error_log_file
+        ['/var/log/schooltool/schooltool.log', 'STDERR']
+        >>> o.config.web_access_log_file
+        ['/var/log/schooltool/web-access.log']
+        >>> o.config.reportlab_fontdir
+        '/fonts/liberation:/fonts/ubuntu'
 
     `load_options` can also give you a nice help message and exit with status
     code 0.
@@ -154,9 +120,8 @@ def doctest_load_options():
         ...     print '[exited with status %s]' % e
         Usage: st.py [options]
         Options:
-          -c, --config xxx       use this configuration file instead of the default
+          -c, --config xxx       use this configuration file
           -h, --help             show this help message
-          -d, --daemon           go to background after starting
           --pack                 pack the database
           -r, --restore-manager password
                                  restore the manager user with the provided password
@@ -355,19 +320,15 @@ def doctest_setup():
         ...     def open(self):
         ...         return DB(MappingStorage())
         >>> class ConfigStub:
-        ...     web = []
-        ...     listen = []
         ...     thread_pool_size = 1
         ...     database = DatabaseConfigStub()
         ...     pid_file = ''
-        ...     path = []
         ...     error_log_file = ['STDERR']
         ...     web_access_log_file = ['STDOUT']
         ...     attendance_log_file = ['STDOUT']
         ...     lang = 'lt'
         ...     reportlab_fontdir = ''
         ...     devmode = False
-        ...     school_type = ''
         ...     site_definition = ftesting_zcml
         >>> options.config = ConfigStub()
 
@@ -441,52 +402,11 @@ def doctest_setup():
     """
 
 
-def doctest_before_afterRun():
-    """Tests for beforeRun(options, db) and afterRun(options)
-
-        >>> from zope.app.testing import setup
-        >>> setup.placelessSetUp()
-
-    beforeRun(options, db) starts tcp server
-
-        >>> from schooltool.app.main import Options, StandaloneServer
-        >>> from ZODB.MappingStorage import MappingStorage
-        >>> from ZODB.DB import DB
-        >>> options = Options()
-        >>> class DatabaseConfigStub:
-        ...     def open(self):
-        ...         return DB(MappingStorage())
-        >>> class ConfigStub:
-        ...     web = []
-        ...     listen = []
-        ...     thread_pool_size = 1
-        ...     database = DatabaseConfigStub()
-        ...     pid_file = ''
-        ...     path = []
-        ...     error_log_file = ['STDERR']
-        ...     web_access_log_file = ['STDOUT']
-        ...     attendance_log_file = ['STDOUT']
-        ...     lang = 'lt'
-        ...     reportlab_fontdir = ''
-        ...     devmode = False
-        ...     site_definition = ftesting_zcml
-        >>> options.config = ConfigStub()
-        >>> db = object()
-
-    And go!
-
-        >>> server = StandaloneServer()
-        >>> server.beforeRun(options, db)
-        >>> server.afterRun(options)
-
-        >>> setup.placelessTearDown()
-
-    """
-
 
 class ConfigStub(object):
 
     devmode = False
+    site_definition = None
 
 
 class OptionsStub(object):
@@ -503,8 +423,9 @@ def doctest_bootstrapSchoolTool():
 
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
-        >>> server.siteConfigFile = ftesting_zcml
-        >>> server.configure(OptionsStub())
+        >>> options = OptionsStub()
+        >>> options.config.site_definition = ftesting_zcml
+        >>> server.configureComponents(options)
 
     When we start with an empty database, bootstrapSchoolTool creates a
     SchoolTool application in it.
@@ -580,8 +501,9 @@ def doctest_restoreManagerUser():
 
         >>> from schooltool.app.main import StandaloneServer
         >>> server = StandaloneServer()
-        >>> server.siteConfigFile = ftesting_zcml
-        >>> server.configure(OptionsStub())
+        >>> options = OptionsStub()
+        >>> options.config.site_definition = ftesting_zcml
+        >>> server.configureComponents(options)
 
     We also need an application (we are doing the full set up in here
     because else person factory local utility is not being

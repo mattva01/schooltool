@@ -1,5 +1,14 @@
-[app:main]
+[composite:main]
+use = egg:Paste#urlmap
+/ = schooltool
+/schooltool.task_results = task_results
+
+[app:schooltool]
 use = egg:schooltool#main
+config_file=schooltool.conf
+
+[app:task_results]
+use = egg:schooltool#task_results
 config_file=schooltool.conf
 
 [server:main]

@@ -1,7 +1,11 @@
 # Sample SchoolTool server configuration file
 
 # Site definition file:
-site-definition ${abspath}/site.zcml
+site-definition ${config_dir}/site.zcml
+
+# Task server definition files:
+result-server-definition ${config_dir}/result-server.zcml
+report-server-definition ${config_dir}/report-server.zcml
 
 # Where should the server store all data?
 <zodb>
@@ -13,10 +17,6 @@ site-definition ${abspath}/site.zcml
   #   quota size		default: no quota
   #   blob-dir directory        directory to hold blob data
   # </filestorage>
-  <filestorage>
-    path ${abspath}/var/Data.fs
-    blob-dir ${abspath}/var/blobs
-  </filestorage>
 
   # <zeoclient>
   #   server address		one or more; required
@@ -32,6 +32,12 @@ site-definition ${abspath}/site.zcml
   #   realm name		authentication realm
   # </zeoclient>
 
+  <zeoclient>
+    server ${run_dir}/zeo.sock
+    blob-dir ${data_dir}/blobs
+    shared-blob-dir yes
+  </zeoclient>
+
   # cache-size n
   #
   # Default:
@@ -43,33 +49,6 @@ site-definition ${abspath}/site.zcml
   #   pool-size 7
 
 </zodb>
-
-#
-# thread-pool-size n
-#
-#   Specifies the suggested size for request thread pool
-#
-# Default:
-#   thread-pool-size 10
-#
-
-#
-# event-logging on|off
-#
-#   Enables or disables global event logging
-#
-# Default:
-#   event-logging off
-#
-
-#
-# pid-file
-#
-#   Specifies the path of a pid file.
-#
-# Default: no pidfile
-#
-pid-file ${abspath}/var/schooltool.pid
 
 #
 # lang
@@ -120,7 +99,7 @@ reportlab_fontdir /usr/share/fonts/truetype/ttf-liberation:/usr/share/fonts/true
 #    error-log-file /var/log/schooltool/error.log
 #    error-log-file STDERR
 #
-error-log-file ${abspath}/log/schooltool.log
+error-log-file ${log_dir}/schooltool.log
 error-log-file STDERR
 
 #
@@ -140,7 +119,7 @@ error-log-file STDERR
 #    web-access-log-file /var/log/schooltool/access.log
 #    web-access-log-file STDOUT
 #
-web-access-log-file ${abspath}/log/web-access.log
+web-access-log-file ${log_dir}/web-access.log
 
 # devmode
 #

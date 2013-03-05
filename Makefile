@@ -44,28 +44,70 @@ update:
 instance: | build
 	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
+
+instance/run/supervisord.pid:
+	bin/supervisord
+
 .PHONY: run
-run: build instance
+run: build instance instance/run/supervisord.pid
+	@bin/supervisorctl start "services:*"
+	@bin/supervisorctl status schooltool | grep RUNNING && bin/supervisorctl stop schooltool || exit 0
+	@bin/supervisorctl status
 	bin/start-schooltool-instance instance
+
+.PHONY: start
+start: build instance instance/run/supervisord.pid
+	bin/supervisorctl start all
+	@bin/supervisorctl status
+
+.PHONY: start-services
+start-services: build instance instance/run/supervisord.pid
+	@bin/supervisorctl status | grep services[:] | grep -v RUNNING && bin/supervisorctl start "services:*" || exit 0
+	@bin/supervisorctl status | grep services[:]
+
+.PHONY: restart
+restart: build instance instance/run/supervisord.pid
+	bin/supervisorctl restart "services:celery"
+	@bin/supervisorctl start "services:*"
+	bin/supervisorctl restart schooltool
+	@bin/supervisorctl status
+
+.PHONY: stop
+stop:
+	@test -S instance/run/supervisord.sock && bin/supervisorctl status | grep -v STOPPED && bin/supervisorctl stop all || exit 0
+	@test -S instance/run/supervisord.sock && bin/supervisorctl shutdown || echo Nothing to stop
+	@rm -f instance/run/zeo.sock
+	@rm -f instance/run/supervisord.sock
+	@rm -f instance/run/supervisord.pid
+
+.PHONY: status
+status:
+	@test -f instance/run/supervisord.pid && bin/supervisorctl status || echo All services shut down
 
 .PHONY: tags
 tags: build
 	bin/ctags
 
 .PHONY: clean
-clean:
+clean: stop
 	rm -rf python
 	rm -rf bin develop-eggs parts .installed.cfg
 	rm -rf build
 	rm -f ID TAGS tags
 	rm -rf coverage ftest-coverage
 	rm -rf docs
+	rm -rf instance/var/celerybeat-schedule
+	rm -rf instance/var/redis-dump.rdb
+	rm -rf instance/run/zeo.sock
+	rm -rf instance/run/supervisord.sock
+	rm -rf instance/run/supervisord.pid
+	rm -rf instance/var/Data.fs.lock
 	find . -name '*.py[co]' -delete
 	find . -name '*.mo' -delete
 	find . -name 'LC_MESSAGES' -exec rmdir -p --ignore-fail-on-non-empty {} +
 
 .PHONY: realclean
-realclean:
+realclean: stop
 	rm -f buildout.cfg
 	rm -rf eggs
 	rm -rf dist
@@ -177,5 +219,6 @@ upload:
 ubuntu-environment:
 	sudo apt-get install bzr build-essential gettext enscript ttf-liberation \
 	    python-all-dev python-virtualenv ttf-ubuntu-font-family \
-	    libicu-dev libxslt1-dev libfreetype6-dev libjpeg62-dev
+	    libicu-dev libxslt1-dev libfreetype6-dev libjpeg62-dev \
+	    redis-server
 
