@@ -69,8 +69,7 @@ Let's check the data. We have 2 students that have contacts:
       <p>english</p>
     </div>
     >>> browser.printQuery("//div[@class='person-info']/fieldset")
-    <fieldset>
-      <div class="person-info">
+    <fieldset><div class="person-info">
         <h2> Parent, Parent One </h2>
         <a href="http://localhost/contacts/student000_parent1">(View Details)</a>
         <div class="info-block">
@@ -89,8 +88,7 @@ Let's check the data. We have 2 students that have contacts:
         </div>
     </div>
     </fieldset>
-    <fieldset>
-      <div class="person-info">
+    <fieldset><div class="person-info">
         <h2> Parent, Parent Two </h2>
         <a href="http://localhost/contacts/student000_parent2">(View Details)</a>
         <div class="info-block">
@@ -103,8 +101,7 @@ Let's check the data. We have 2 students that have contacts:
         </div>
     </div>
     </fieldset>
-    <fieldset>
-      <div class="person-info">
+    <fieldset><div class="person-info">
         <h2> Sibling, Sibling One </h2>
         <a href="http://localhost/contacts/student000_sibling">(View Details)</a>
         <div class="info-block">
@@ -134,19 +131,18 @@ Let's check the data. We have 2 students that have contacts:
       </p>
     </div>
     >>> browser.printQuery("//div[@class='person-info']/fieldset")
-    <fieldset>
-      <div class="person-info">
-        <h2> Guardian, Guardian One </h2>
-        <a href="http://localhost/contacts/student001_guardian">(View Details)</a>
-        <div class="info-block">
-          <h4>Address</h4>
-          <p>2 Second Street</p>
-          <h4>Phones</h4>
-          <p>
-            <span>666-6666 (Mobile phone)</span>
-          </p>
-        </div>
+    <fieldset><div class="person-info">
+      <h2> Guardian, Guardian One </h2>
+      <a href="http://localhost/contacts/student001_guardian">(View Details)</a>
+      <div class="info-block">
+        <h4>Address</h4>
+        <p>2 Second Street</p>
+        <h4>Phones</h4>
+        <p>
+          <span>666-6666 (Mobile phone)</span>
+        </p>
       </div>
+    </div>
     </fieldset>
 
 Let's confirm the demo imports worked.  We just have one date for the manager
@@ -234,8 +230,7 @@ Some sections:
     >>> browser.getLink('Sections').click()
     >>> browser.printQuery("id('content-body')//table/tr[2]/td")
     <td>
-      <input type="checkbox" name="delete.art_a_2006-fall_teacher010_000" />
-    </td>
+      <input type="checkbox" name="delete.art_a_2006-fall_teacher010_000" /></td>
     <td>
       <a href="http://localhost/schoolyears/2006-2008/courses/art_a">Art A</a>
     </td>
@@ -338,8 +333,7 @@ Let's check the data again. We have 2 students that have contacts:
       <p>english</p>
     </div>
     >>> browser.printQuery("//div[@class='person-info']/fieldset")
-    <fieldset>
-      <div class="person-info">
+    <fieldset><div class="person-info">
         <h2> Parent, Parent One </h2>
         <a href="http://localhost/contacts/student000_parent1">(View Details)</a>
         <div class="info-block">
@@ -358,8 +352,7 @@ Let's check the data again. We have 2 students that have contacts:
         </div>
     </div>
     </fieldset>
-    <fieldset>
-      <div class="person-info">
+    <fieldset><div class="person-info">
         <h2> Parent, Parent Two </h2>
         <a href="http://localhost/contacts/student000_parent2">(View Details)</a>
         <div class="info-block">
@@ -372,8 +365,7 @@ Let's check the data again. We have 2 students that have contacts:
         </div>
     </div>
     </fieldset>
-    <fieldset>
-      <div class="person-info">
+    <fieldset><div class="person-info">
         <h2> Sibling, Sibling One </h2>
         <a href="http://localhost/contacts/student000_sibling">(View Details)</a>
         <div class="info-block">
@@ -403,19 +395,18 @@ Let's check the data again. We have 2 students that have contacts:
       </p>
     </div>
     >>> browser.printQuery("//div[@class='person-info']/fieldset")
-    <fieldset>
-      <div class="person-info">
-        <h2> Guardian, Guardian One </h2>
-        <a href="http://localhost/contacts/student001_guardian">(View Details)</a>
-        <div class="info-block">
-          <h4>Address</h4>
-          <p>2 Second Street</p>
-          <h4>Phones</h4>
-          <p>
-            <span>666-6666 (Mobile phone)</span>
-          </p>
-        </div>
+    <fieldset><div class="person-info">
+      <h2> Guardian, Guardian One </h2>
+      <a href="http://localhost/contacts/student001_guardian">(View Details)</a>
+      <div class="info-block">
+        <h4>Address</h4>
+        <p>2 Second Street</p>
+        <h4>Phones</h4>
+        <p>
+          <span>666-6666 (Mobile phone)</span>
+        </p>
       </div>
+    </div>
     </fieldset>
 
 Let's confirm the demo re-imports worked.
@@ -499,8 +490,7 @@ Some sections:
     >>> browser.getLink('Sections').click()
     >>> browser.printQuery("id('content-body')//table/tr[2]/td")
     <td>
-      <input type="checkbox" name="delete.art_a_2006-fall_teacher010_000" />
-    </td>
+      <input type="checkbox" name="delete.art_a_2006-fall_teacher010_000" /></td>
     <td>
       <a href="http://localhost/schoolyears/2006-2008/courses/art_a">Art A</a>
     </td>

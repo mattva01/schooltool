@@ -33,7 +33,10 @@ def to_string(node):
 
 def queryHTML(xpath, response):
     """Helper function to perform an xpath query on an html response"""
-    doc = etree.HTML(response)
+    # Emulate the (annoying) behaviour of libxml2 < 2.9.0
+    # https://bugzilla.gnome.org/show_bug.cgi?id=681822
+    parser = etree.HTMLParser(remove_blank_text=True)
+    doc = etree.HTML(response, parser)
     result = [to_string(node) for node in doc.xpath(xpath)]
     return result
 
