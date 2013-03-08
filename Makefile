@@ -159,7 +159,8 @@ move-release: upload
 
 .PHONY: upload
 upload:
-	@VERSION=`cat version.txt.in` ;\
+	set -e ;\
+	VERSION=`cat version.txt.in` ;\
 	DIST=$(DIST) ;\
 	grep -qv 'dev' version.txt.in || VERSION=`cat version.txt.in`-r`bzr revno` ;\
 	grep -qv 'dev' version.txt.in || DIST=$(DIST)/dev ;\
@@ -175,7 +176,8 @@ upload:
 
 .PHONY: ubuntu-environment
 ubuntu-environment:
-	sudo apt-get install bzr build-essential gettext enscript ttf-liberation \
-	    python-all-dev python-virtualenv ttf-ubuntu-font-family \
-	    libicu-dev libxslt1-dev libfreetype6-dev libjpeg62-dev
+	sudo apt-get install build-essential gettext enscript \
+	    python-dev python-virtualenv \
+	    ttf-ubuntu-font-family ttf-liberation \
+	    libicu-dev libxslt1-dev libfreetype6-dev libjpeg-dev
 
