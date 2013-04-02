@@ -46,7 +46,6 @@
   <include package="zc.resourcelibrary" file="configure.zcml" />
   <include package="zc.table" file="configure.zcml" />
   <include package="zc.catalog" file="configure.zcml" />
-  <include package="hurry.query" file="configure.zcml" />
   <include package="zc.datetimewidget" file="configure.zcml" />
   <includeOverrides package="zc.datetimewidget" file="overrides.zcml" />
 
