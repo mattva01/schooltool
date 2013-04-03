@@ -6,14 +6,6 @@
   <exclude package="schooltool.gradebook" />
   -->
 
-  <!-- Instance type. One of
-
-  <include package="schooltool.standard" />
-
-       or, for the new skin,
-
-  <include package="schooltool.skin.flourish.instance" />
-  -->
   <include package="${instance_package}" />
 
   <include files="plugins/*.zcml" />
