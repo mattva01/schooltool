@@ -25,7 +25,7 @@
       </tr>
       <tr tal:condition="status/failed">
         <td i18n:translate="">Traceback</td>
-        <td tal:content="status/traceback"></td>
+        <td tal:content="structure status/traceback"></td>
       </tr>
       <tr tal:condition="status/succeeded">
         <td i18n:translate="">Succeeded</td>

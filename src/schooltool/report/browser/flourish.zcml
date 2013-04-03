@@ -167,4 +167,42 @@
       provides="schooltool.report.interfaces.IReportLinksURL"
       />
 
+  <flourish:content
+      name="short"
+      for="schooltool.report.interfaces.IReportMessage"
+      view="zope.interface.Interface"
+      template="templates/f_short_report_message.pt"
+      permission="schooltool.view"
+      />
+
+  <zope:adapter
+      factory=".report.ReportAbsoluteURLAdapter"
+      provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <zope:adapter
+      factory=".report.ReportAbsoluteURLAdapter"
+      provides="zope.interface.Interface"
+      name="absolute_url"/>
+
+  <zope:traverserPlugin
+      for="schooltool.report.interfaces.IReportMessage"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="download"
+      plugin=".report.ReportMessageDownloadsPlugin"
+      permission="schooltool.view"
+      />
+
+  <zope:class class=".report.ReportMessageDownloads">
+    <require permission="zope.Public"
+             interface="zope.publisher.interfaces.IPublishTraverse" />
+  </zope:class>
+
+  <page
+      name="dialog"
+      for="schooltool.report.interfaces.IReportMessage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".report.DownloadReportDialog"
+      permission="schooltool.view"
+      />
+
 </configure>

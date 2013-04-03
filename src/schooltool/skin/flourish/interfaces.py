@@ -34,7 +34,11 @@ from zope.traversing.interfaces import ITraversable
 from z3c.form.interfaces import IFormLayer
 
 
-class IFlourishLayer(IDefaultBrowserLayer, IFormLayer):
+class IFlourishLayer(IFormLayer):
+    """SchoolTool flourish skin."""
+
+
+class IFlourishBrowserLayer(IFlourishLayer, IDefaultBrowserLayer):
     """SchoolTool flourish skin."""
 
 

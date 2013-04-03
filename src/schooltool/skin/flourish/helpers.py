@@ -19,6 +19,8 @@
 """
 SchoolTool flourish skin common helpers.
 """
+import urllib
+
 import zope.security
 import zope.container.interfaces
 
@@ -77,3 +79,13 @@ def canDelete(context):
 
 def hasPermission(context, permission):
     return zope.security.checkPermission(permission, context)
+
+
+def quoteFilename(filename):
+    if not filename:
+        return filename
+    if type(filename) is unicode:
+        encoded = filename.encode('UTF-8')
+    else:
+        encoded = str(filename)
+    return urllib.quote(encoded)

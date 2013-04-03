@@ -100,4 +100,6 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory="schooltool.table.table.NullTableFormatter " />
 
+  <adapter factory="schooltool.common.CommonResourceURL" />
+
 </configure>

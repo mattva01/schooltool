@@ -1,0 +1,24 @@
+<div i18n:domain="schooltool">
+  <p>
+    <tal:block content="context/title" />
+  </p>
+  <form method="post" class="standalone" action=""
+        tal:attributes="action view/@@absolute_url;
+                        id view/form_id">
+    <div class="buttons">
+      <input class="button-ok" name="REFRESH" onclick="return ST.dialogs.submit(this, this);" value="Refresh" type="submit" i18n:attributes="value">
+
+      <input class="button-cancel" name="CANCEL" onclick="return ST.dialogs.close(this);" value="Close" type="submit" i18n:attributes="value">
+    </div>
+  </form>
+
+  <script>ST.state.push()</script>
+  <tal:script
+      tal:replace="structure scriptlocal:delay view/refresh_delay;
+                                         form_id view/form_id" />
+  <script>
+    var form = $(ST.dialogs.jquery_id(ST.local.form_id));
+    setTimeout(function(){ST.dialogs.submit(form);}, ST.local.delay);
+  </script>
+  <script>ST.state.pop()</script>
+</div>

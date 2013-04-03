@@ -582,7 +582,6 @@ class EmailContainerView(TableContainerView):
 
 
 class FlourishEmailContainerView(flourish.page.Page):
-
     pass
 
 

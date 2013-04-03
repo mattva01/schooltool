@@ -1,0 +1,12 @@
+<div i18n:domain="schooltool">
+  <tal:block condition="nocall:context/report">
+    <tal:block i18n:translate="">
+      Generated
+    </tal:block>
+    <a tal:attributes="href context/report/@@absolute_url"
+       tal:content="context/filename"/>
+  </tal:block>
+  <tal:block condition="not:nocall:context/report">
+    <tal:block content="context/title" />
+  </tal:block>
+</div>

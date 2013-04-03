@@ -42,17 +42,20 @@ from ZODB.POSException import ConflictError
 from zope.app.publication.zopepublication import ZopePublication
 from zope.component.hooks import getSite, setSite
 from zope.container.interfaces import INameChooser
+from zope.proxy import sameProxiedObjects
 from zc.catalog.catalogindex import SetIndex
 
 from schooltool.app.app import StartUpBase
 from schooltool.app.catalog import AttributeCatalog
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.common.traceback import format_html_exception
 from schooltool.person.interfaces import IPerson
 from schooltool.task.celery import open_schooltool_db
 from schooltool.task.interfaces import IRemoteTask, ITaskContainer
 from schooltool.task.interfaces import IMessage, IMessageContainer
-from schooltool.task.interfaces import ITaskCompletedMessage
-from schooltool.task.interfaces import ITaskFailedMessage
+from schooltool.task.interfaces import ITaskScheduledNotification
+from schooltool.task.interfaces import ITaskCompletedNotification
+from schooltool.task.interfaces import ITaskFailedNotification
 
 
 IN_PROGRESS = 'IN_PROGRESS'
@@ -70,6 +73,41 @@ class TPCNotReady(Exception):
 
 
 TPC_RETRY_SECONDS = (1, 10, 1*60, 5*60, 20*60)
+
+
+class ReraisedException(Exception):
+    pass
+
+
+class FormattedTraceback(Exception):
+
+    exception_type = None
+    exception = None
+    traceback = None
+    message = ''
+
+    def __init__(self):
+        self.exception_type, self.exception, self.traceback = sys.exc_info()
+        if isinstance(self.exception, FormattedTraceback):
+            self.append(self.exception)
+            self.exception = ReraisedException(repr(self.exception))
+        self.append(self.format(self.exception))
+
+    def format(self, exception):
+        message = format_html_exception(
+            self.exception_type, self.exception, self.traceback)
+        return message
+
+    def append(self, another):
+        if self.message:
+            self.message += '\n\n'
+        self.message += str(another)
+
+    def __str__(self):
+        return str(self.message)
+
+    def __repr__(self):
+        return '<ExceptionWithTraceback (%r)>' % self.exception
 
 
 class DBTaskMixin(object):
@@ -139,12 +177,16 @@ class DBTaskMixin(object):
                         status.set_committing()
                     except Exception:
                         pass # don't care really
-            except ConflictError, conflict_exception:
+            except ConflictError, conflict:
                 # Transaction conflict, let's repeat
-                pass
-            except Exception, other:
-                self.abortTransaction()
-                raise other
+                conflict_exception = conflict
+            except Exception:
+                failure = FormattedTraceback()
+                try:
+                    self.abortTransaction()
+                except Exception:
+                    failure.append(FormattedTraceback())
+                raise failure
         if conflict_exception is not None:
             self.abortTransaction()
             raise conflict_exception
@@ -161,12 +203,13 @@ class DBTaskMixin(object):
             countdown = TPC_RETRY_SECONDS[min(n_retry, len(TPC_RETRY_SECONDS)-1)]
             raise self.retry(exc=exc, countdown=countdown,
                              max_retries=self.max_tpc_retries)
-        except Exception, exception:
+        except Exception:
+            failure = FormattedTraceback()
             try:
-                self.runTransaction('fail', False, self, result, exception)
+                self.runTransaction('fail', False, self, result, failure)
             except Exception:
-                pass
-            raise exception
+                failure.append(FormattedTraceback())
+            raise failure
         finally:
             self.closeTransaction()
         return result
@@ -251,8 +294,8 @@ class RemoteTask(Persistent, Contained):
     creator_username = None
     routing_key = None
 
-    _traceback = None
-    _result = None
+    permanent_traceback = None
+    premanent_result = None
 
     def __init__(self):
         Persistent.__init__(self)
@@ -298,6 +341,7 @@ class RemoteTask(Persistent, Contained):
         tasks = ITaskContainer(app)
         self.scheduled = self.utcnow
         tasks[self.task_id] = self
+        self.notifyScheduled(request)
         return self
 
     def execute(self, request):
@@ -311,22 +355,30 @@ class RemoteTask(Persistent, Contained):
             del tasks[self.task_id]
 
     def fail(self, request, result, traceback):
-        self.result = result
-        self.traceback = str(traceback) or 'N/A'
+        self.permanent_result = result
+        self.permanent_traceback = str(traceback) or ''
+
+    def notifyScheduled(self, request):
+        subscribers = getAdapters((self, request), ITaskScheduledNotification)
+        for name, subscriber in subscribers:
+            try:
+                subscriber(name=name)
+            except Exception, exception:
+                self.notifyFailed(request, None, exception)
 
     def notifyComplete(self, request, result):
-        subscribers = getAdapters((self, request, result), ITaskCompletedMessage)
+        subscribers = getAdapters((self, request, result), ITaskCompletedNotification)
         for name, subscriber in subscribers:
             try:
-                subscriber()
+                subscriber(name=name)
             except Exception, exception:
-                self.notifyFailed(self, request, result, exception)
+                self.notifyFailed(request, result, exception)
 
     def notifyFailed(self, request, result, traceback):
-        subscribers = getAdapters((self, request, result, traceback), ITaskFailedMessage)
+        subscribers = getAdapters((self, request, result, traceback), ITaskFailedNotification)
         for name, subscriber in subscribers:
             try:
-                subscriber()
+                subscriber(name=name)
             except:
                 pass # not much more we can do
 
@@ -345,8 +397,8 @@ class RemoteTask(Persistent, Contained):
 
     @property
     def finished(self):
-        if (self._result is not None or
-            self._traceback is not None):
+        if (self.premanent_result is not None or
+            self.permanent_traceback is not None):
             return True
         # Note: non-existing tasks will be permanently pending on
         #       at least some celery backends
@@ -354,21 +406,21 @@ class RemoteTask(Persistent, Contained):
 
     @property
     def succeeded(self):
-        if (self._result is not None and
-            self._traceback is None):
+        if (self.premanent_result is not None and
+            self.permanent_traceback is None):
             return True
         return self.async_result.successful()
 
     @property
     def failed(self):
-        if self._traceback is not None:
+        if self.permanent_traceback is not None:
             return True
         return self.async_result.failed()
 
     @property
     def result(self):
-        if self._result is not None:
-            return self._result
+        if self.permanent_result is not None:
+            return self.permanent_result
         return self.async_result.result
 
     @property
@@ -541,23 +593,47 @@ class MessagesStartUp(StartUpBase):
 class Message(Persistent, Contained):
     implements(IMessage)
 
+    created_on = None
+    updated_on = None
     expires_on = None
     sender_id = None
     recipient_ids = None
+    # XXX: read status should be tracked per-recipient
+    #is_read = False
     title = u''
     group = u''
 
-    def __init__(self, title, sender=None, recipients=None):
+    def __init__(self, title=u'', sender=None, recipients=None):
         self.title = title
         if recipients is not None:
             self.recipients = recipients
+        self.sender = sender
+        self.created_on = self.utcnow
+        self.updated_on = self.created_on
 
-    def send(self, *args):
+    @property
+    def utcnow(self):
+        return pytz.UTC.localize(datetime.datetime.utcnow())
+
+    def send(self):
+        self.updated_on = self.utcnow
         app = ISchoolToolApplication(None)
         messages = IMessageContainer(app)
-        name_chooser = INameChooser(messages)
-        name = name_chooser.chooseName('', self)
-        messages[name] = self
+        if self.__name__:
+            if (self.__name__ in messages):
+                if (sameProxiedObjects(messages[self.__name__], self)):
+                    return # already sent
+                del messages[self.__name__]
+            messages[self.__name__] = self
+        else:
+            name_chooser = INameChooser(messages)
+            name = name_chooser.chooseName('', self)
+            messages[name] = self
+
+    def replace(self, other):
+        """Replace the other message with this one."""
+        self.__name__ = other.__name__
+        self.send()
 
     @property
     def sender(self):
@@ -569,10 +645,10 @@ class Message(Persistent, Contained):
     @sender.setter
     def sender(self, value):
         if value is None:
-            self.sender = None
+            self.sender_id = None
         else:
             int_ids = getUtility(IIntIds)
-            self.sender = int_ids.queryId(value)
+            self.sender_id = int_ids.queryId(value)
 
     @property
     def recipients(self):
@@ -596,45 +672,89 @@ class Message(Persistent, Contained):
             self.recipient_ids = ids
 
 
-class TaskCompletedMessage(Message):
+class TaskNotification(object):
 
-    def __init__(self, remote_task, request, result):
-        Message.__init__(self.title)
-        self(remote_task, request, result)
+    name = None
+    task = None
+    request = None
 
-    def update(self, remote_task, request, result):
+    def __init__(self, task, request):
+        self.task = task
+        self.request = request
+
+    def send(self):
         pass
 
-    def __call__(self, remote_task, request, result):
-        self.update(remote_task, request, result)
-        self.send()
+    def __call__(self, *args, **kw):
+        self.name = kw.pop('name', None)
+        self.send(*args, **kw)
 
 
-class TaskFailedMessage(Message):
+class TaskScheduledNotification(TaskNotification):
+    implements(ITaskScheduledNotification)
 
-    def __init__(self, remote_task, request, result, traceback):
-        Message.__init__(self.title)
-        self(remote_task, request, result, traceback)
+    http_request = None
 
-    def update(self, remote_task, request, result, traceback):
-        pass
+    def __init__(self, task, http_request):
+        super(TaskScheduledNotification, self).__init__(
+            task, None)
+        self.http_request = http_request
 
-    def __call__(self, remote_task, request, result, traceback):
-        self.update(remote_task, request, result, traceback)
-        self.send()
+
+class TaskCompletedNotification(TaskNotification):
+    implements(ITaskCompletedNotification)
+
+    result = None
+
+    def __init__(self, task, request, result):
+        super(TaskCompletedNotification, self).__init__(task, request)
+        self.result = result
+
+
+class TaskFailedNotification(TaskNotification):
+    implements(ITaskFailedNotification)
+
+    result = None
+    traceback = None
+
+    def __init__(self, task, request, result, traceback):
+        super(TaskFailedNotification, self).__init__(task, request)
+        self.result = result
+        self.traceback = traceback
 
 
 class MessageCatalog(AttributeCatalog):
     version = '1 - initial'
     interface = IMessage
-    attributes = ('sender_id', 'title', 'group')
+    attributes = ('sender_id', 'title', 'group', 'created_on', 'updated_on')
 
     def setIndexes(self, catalog):
         super(MessageCatalog, self).setIndexes(catalog)
-        catalog['recipient_ids'] = SetIndex('recipients')
+        catalog['recipient_ids'] = SetIndex('recipient_ids')
 
 
 getMessageCatalog = MessageCatalog.get
+
+
+def query_messages(sender):
+    int_ids = getUtility(IIntIds)
+    sender_id = int_ids.queryId(sender, None)
+    if sender_id is None:
+        return ()
+    catalog = MessageCatalog.get()
+    result = catalog['sender_id'].values_to_documents.get(sender_id, None)
+    if result is None:
+        return ()
+    result = [int_ids.queryObject(intid, None)
+              for intid in result]
+    return tuple([obj for obj in result if obj is not None])
+
+
+def query_message(sender):
+    result = query_messages(sender)
+    if not result:
+        return None
+    return result[0]
 
 
 def load_plugin_tasks():

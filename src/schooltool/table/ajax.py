@@ -132,6 +132,7 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
             group_by_column=self.group_by_column,
             )
         formatter.html_id = self.html_id
+        formatter.view = self
         formatter.cssClasses.update(self.css_classes)
         return formatter
 
@@ -303,6 +304,7 @@ class IndexedTable(IndexedTableFormatter, Table):
             prefix=self.prefix,
             group_by_column=self.group_by_column)
         formatter.html_id = self.html_id
+        formatter.view = self
         formatter.cssClasses.update(self.css_classes)
         return formatter
 

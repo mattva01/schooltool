@@ -118,7 +118,8 @@ class Dialog(page.Page):
     def __call__(self, *args, **kw):
         result = super(Dialog, self).__call__(*args, **kw)
 
-        self.ajax_settings['html'] = result
+        if not self.ajax_settings.get('html'):
+            self.ajax_settings['html'] = result
 
         response = self.request.response
         if (self.reload_parent and

@@ -22,7 +22,6 @@ SchoolTool report pages.
 import cgi
 import datetime
 import re
-import urllib
 
 try:
     import Image
@@ -44,6 +43,7 @@ from schooltool.app import pdf
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common import getResourceURL
+from schooltool.skin.flourish.helpers import quoteFilename
 from schooltool.skin.flourish import content
 from schooltool.skin.flourish import interfaces
 from schooltool.skin.flourish import form
@@ -76,16 +76,6 @@ class Box(object):
             self.bottom = bottom
 
 
-def quoteFilename(filename):
-    if not filename:
-        return filename
-    if type(filename) is unicode:
-        encoded = filename.encode('UTF-8')
-    else:
-        encoded = str(filename)
-    return urllib.quote(encoded)
-
-
 class PDFPage(page.PageBase):
     implements(interfaces.IPDFPage)
 
@@ -104,6 +94,11 @@ class PDFPage(page.PageBase):
 
     pdf_disabled_text = _("PDF support is disabled."
                           "  It can be enabled by your administrator.")
+
+    # TODO: Should return True when running tests
+    render_invariant = False
+    # TODO: Should return True when devmode enabled
+    render_debug = False
 
     def renderPDF(self, xml):
         filename = self.filename
@@ -138,16 +133,6 @@ class PDFPage(page.PageBase):
     @property
     def filename(self):
         return self.makeFileName(self.base_filename)
-
-    @property
-    def render_debug(self):
-        # TODO: Should return True when devmode enabled
-        return False
-
-    @property
-    def render_invariant(self):
-        # TODO: Should return True when running tests
-        return False
 
     def __call__(self):
         if not pdf.isEnabled():

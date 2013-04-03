@@ -94,24 +94,57 @@ class IMessageBase(Interface):
         value_type=zope.schema.Int(title=u"Recipient"),
         required=False)
 
+    created_on = zope.schema.Datetime(
+       title=_("Created on"),
+       required=False)
+
+    updated_on = zope.schema.Datetime(
+       title=_("Updated on"),
+       required=False)
+
     expires_on = zope.schema.Datetime(title=_("Expires on"))
 
     title = zope.schema.TextLine(title=u"Title")
 
     group = zope.schema.TextLine(title=u"Message group")
 
+    #is_read = zope.schema.Bool(
+    #    title=u"Read",
+    #    description=u"Message has been read",
+    #    )
+
 
 class IMessage(IMessageBase, IContained):
     pass
 
 
-class ITaskCompletedMessage(IMessage):
-    pass
-
-
-class ITaskFailedMessage(IMessage):
-    pass
-
-
 class IMessageContainer(IContainer):
     contains(IMessage)
+
+
+class ITaskNotification(Interface):
+
+    task = zope.schema.Object(
+        title=u"Remote task",
+        schema=IRemoteTask,
+        required=False)
+
+    request = Attribute('Request')
+
+    def send(*args, **kw):
+        """Send out the messages."""
+
+
+class ITaskScheduledNotification(ITaskNotification):
+    pass
+
+
+class ITaskFailedNotification(ITaskNotification):
+
+    traceback = Attribute('Task traceback')
+    result = Attribute('Task result')
+
+
+class ITaskCompletedNotification(ITaskNotification):
+
+    result = Attribute('Task result')

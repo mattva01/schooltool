@@ -19,7 +19,7 @@
   <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
 
   <interface
-      interface="schooltool.skin.flourish.interfaces.IFlourishLayer"
+      interface="schooltool.skin.flourish.interfaces.IFlourishBrowserLayer"
       type="zope.publisher.interfaces.browser.IBrowserSkinType"
       name="SchoolToolFlourish"
       />

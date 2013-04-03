@@ -70,6 +70,7 @@ from schooltool.course.section import copySection
 from schooltool.course.browser.course import CoursesActiveTabMixin as SectionsActiveTabMixin
 from schooltool.person.interfaces import IPerson
 from schooltool.report.browser.report import RequestReportDownloadDialog
+from schooltool.report.browser.report import RequestRemoteReportDialog
 from schooltool.resource.browser.resource import EditLocationRelationships
 from schooltool.resource.browser.resource import EditEquipmentRelationships
 from schooltool.resource.interfaces import ILocation, IEquipment
@@ -1821,16 +1822,11 @@ class SectionsYearNavBreadcrumbs(SchoolyearNavBreadcrumbs):
     title = _('Sections')
 
 
-class FlourishRequestSectionRosterView(RequestReportDownloadDialog):
-
-    def nextURL(self):
-        return '%s/section_roster.pdf' % absoluteURL(self.context,
-                                                     self.request)
-
-
 class SectionRosterPDFView(flourish.report.PlainPDFPage):
 
     name = _("Section Roster")
+
+    content_template = flourish.templates.XMLFile('rml/section_roster.pt')
 
     def formatDate(self, date, format='mediumDate'):
         if date is None:
@@ -1889,3 +1885,8 @@ class SectionRosterPDFView(flourish.report.PlainPDFPage):
         return '%s, %s %s' % (person.last_name,
                               person.first_name,
                               person.middle_name or '')
+
+
+class FlourishRequestSectionRosterView(RequestRemoteReportDialog):
+
+    report_builder = SectionRosterPDFView
