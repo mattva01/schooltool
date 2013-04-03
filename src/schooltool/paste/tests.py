@@ -38,7 +38,7 @@ class TestRun(unittest.TestCase):
             f.write('[app:main]\n')
             f.write('config_file=schooltool.conf\n')
         with open(join(d, 'school.zcml'), 'w') as f:
-            f.write('<include package="schooltool.stapp2007" />\n')
+            f.write('<include package="schooltool.standard" />\n')
         with open(join(d, 'schooltool.conf'), 'w') as f:
             f.write(dedent("""
                 site-definition %(instance)s/school.zcml
