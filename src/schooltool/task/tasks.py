@@ -724,7 +724,7 @@ class TaskFailedNotification(TaskNotification):
 
 
 class MessageCatalog(AttributeCatalog):
-    version = '1 - initial'
+    version = '1.1 - catalog recipient ids'
     interface = IMessage
     attributes = ('sender_id', 'title', 'group', 'created_on', 'updated_on')
 
