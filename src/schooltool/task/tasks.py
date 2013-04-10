@@ -57,6 +57,9 @@ from schooltool.task.interfaces import ITaskScheduledNotification
 from schooltool.task.interfaces import ITaskCompletedNotification
 from schooltool.task.interfaces import ITaskFailedNotification
 
+from schooltool.common import format_message
+from schooltool.common import SchoolToolMessage as _
+
 
 IN_PROGRESS = 'IN_PROGRESS'
 COMMITTING = 'COMMITTING_ZODB'
@@ -363,18 +366,22 @@ class RemoteTask(Persistent, Contained):
         for name, subscriber in subscribers:
             try:
                 subscriber(name=name)
-            except Exception, exception:
-                self.notifyFailed(request, None, exception)
+            except Exception:
+                failure = FormattedTraceback()
+                self.notifyFailed(request, None, failure)
 
     def notifyComplete(self, request, result):
         subscribers = getAdapters((self, request, result), ITaskCompletedNotification)
         for name, subscriber in subscribers:
             try:
                 subscriber(name=name)
-            except Exception, exception:
-                self.notifyFailed(request, result, exception)
+            except Exception:
+                failure = FormattedTraceback()
+                self.notifyFailed(request, result, failure)
 
     def notifyFailed(self, request, result, traceback):
+        print >> sys.stderr, '%s.notifyFailed\n%s' % (
+            self.__class__.__name__, str(traceback))
         subscribers = getAdapters((self, request, result, traceback), ITaskFailedNotification)
         for name, subscriber in subscribers:
             try:
@@ -590,6 +597,9 @@ class MessagesStartUp(StartUpBase):
             self.app['schooltool.task.messages'] = MessageContainer()
 
 
+UNCHANGED = object()
+
+
 class Message(Persistent, Contained):
     implements(IMessage)
 
@@ -603,11 +613,9 @@ class Message(Persistent, Contained):
     title = u''
     group = u''
 
-    def __init__(self, title=u'', sender=None, recipients=None):
-        self.title = title
-        if recipients is not None:
-            self.recipients = recipients
-        self.sender = sender
+    def __init__(self, title=None):
+        if title is not None:
+            self.title = title
         self.created_on = self.utcnow
         self.updated_on = self.created_on
 
@@ -615,7 +623,10 @@ class Message(Persistent, Contained):
     def utcnow(self):
         return pytz.UTC.localize(datetime.datetime.utcnow())
 
-    def send(self):
+    def send(self, sender=None, recipients=None):
+        self.sender = sender
+        if recipients is not None:
+            self.recipients = recipients
         self.updated_on = self.utcnow
         app = ISchoolToolApplication(None)
         messages = IMessageContainer(app)
@@ -630,10 +641,14 @@ class Message(Persistent, Contained):
             name = name_chooser.chooseName('', self)
             messages[name] = self
 
-    def replace(self, other):
+    def replace(self, other, sender=UNCHANGED, recipients=UNCHANGED):
         """Replace the other message with this one."""
+        if sender is UNCHANGED:
+            sender = self.sender
+        if recipients is UNCHANGED:
+            recipients = self.recipients
         self.__name__ = other.__name__
-        self.send()
+        self.send(sender=sender, recipients=recipients)
 
     @property
     def sender(self):
@@ -721,6 +736,35 @@ class TaskFailedNotification(TaskNotification):
         super(TaskFailedNotification, self).__init__(task, request)
         self.result = result
         self.traceback = traceback
+
+
+class TaskFailedMessage(Message):
+
+    task_id = None
+    title = _("Internal server error, ticket ${ticket}")
+
+    def __init__(self, task):
+        Message.__init__(self)
+        self.task_id = task.__name__
+
+    def send(self, sender=None, recipients=None):
+        self.title = format_message(
+            self.title,
+            mapping={'ticket': self.task_id})
+        Message.send(
+            self, sender=sender, recipients=recipients)
+
+
+class OnTaskFailed(TaskFailedNotification):
+
+    def send(self):
+        msg = TaskFailedMessage(self.task)
+        msg.send(
+            sender=self.task,
+            recipients=[self.task.creator],
+            )
+        # XXX: also should send a message to sys admin!
+        # XXX: failure to notify about failure should also be handled.
 
 
 class MessageCatalog(AttributeCatalog):

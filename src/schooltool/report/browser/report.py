@@ -37,6 +37,7 @@ from zope.cachedescriptors.property import Lazy
 from z3c.form import button
 
 import schooltool.traverser.traverser
+from schooltool.person.interfaces import IPerson
 from schooltool.report.interfaces import IReportLinksURL
 from schooltool.report.interfaces import IReportFile
 from schooltool.report.report import IFlourishReportLinkViewletManager
@@ -346,3 +347,16 @@ class DownloadReportDialog(MessageDialog):
     @property
     def report_generated(self):
         return bool(self.report)
+
+    @property
+    def main_recipient(self):
+        person = IPerson(self.request, None)
+        if self.context.recipients is None:
+            return None
+        recipients = sorted(self.context.recipients, key=lambda r: r.__name__)
+        if person in recipients:
+            return person
+        for recipient in recipients:
+            if flourish.canView(recipient):
+                return recipient
+        return None

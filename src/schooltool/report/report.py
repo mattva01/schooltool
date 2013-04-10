@@ -62,6 +62,8 @@ from schooltool.task.tasks import Message
 from schooltool.task.interfaces import ITaskScheduledNotification
 from schooltool.task.tasks import TaskCompletedNotification
 from schooltool.task.tasks import TaskScheduledNotification
+from schooltool.task.tasks import TaskFailedMessage
+from schooltool.task.tasks import OnTaskFailed
 from schooltool.term.interfaces import IDateManager
 
 from schooltool.common import format_message
@@ -449,10 +451,9 @@ class ReportMessage(Message):
     group = _("Reports")
     filename = None
 
-    def __init__(self, title=u'', sender=None, recipients=None,
+    def __init__(self, title=None,
                  requested_on=None, filename=None):
-        super(ReportMessage, self).__init__(
-            title=title, sender=sender, recipients=recipients)
+        Message.__init__(self, title=title)
         self.requested_on = requested_on
         self.filename = filename
 
@@ -466,6 +467,25 @@ class OnReportScheduled(TaskScheduledNotification):
             ITaskScheduledNotification)
         for name, subscriber in subscribers:
             subscriber(name=name)
+
+
+class ReportFailedMessage(ReportMessage, TaskFailedMessage):
+
+    def __init__(self, task, requested_on=None, filename=None):
+        ReportMessage.__init__(self, requested_on=requested_on, filename=filename)
+        TaskFailedMessage.__init__(self, task)
+
+
+class OnReportFailed(OnTaskFailed):
+
+    def send(self):
+        msg = ReportFailedMessage(self.task)
+        msg.send(
+            self.task,
+            sender=self.task.creator,
+            recipients=[self.task.creator],
+            )
+        # XXX: also could send a message to sys admin
 
 
 class OnPDFReportScheduled(TaskScheduledNotification):
@@ -485,12 +505,10 @@ class OnPDFReportScheduled(TaskScheduledNotification):
             mapping={'filename': view.filename})
         msg = ReportMessage(
             title=title,
-            sender=task,
-            recipients=[self.task.creator],
             requested_on=task.scheduled,
             filename=view.filename,
             )
-        msg.send()
+        msg.send(sender=task, recipients=[self.task.creator])
 
 
 class GeneratedReportMessage(ReportMessage):
@@ -520,12 +538,13 @@ class OnReportGenerated(TaskCompletedNotification):
         messages = self.messages
         for message in messages:
             generated_msg = GeneratedReportMessage(
-                sender=self.task.creator,
-                recipients=message.recipients,
                 requested_on=message.requested_on,
                 filename=message.filename,
                 report = self.task.report)
             generated_msg.updated_on = self.task.utcnow
-            generated_msg.replace(message)
+            generated_msg.replace(
+                message,
+                sender=self.task.creator,
+                recipients=message.recipients)
             # XXX: set message expiration date
             # message.expires_on =

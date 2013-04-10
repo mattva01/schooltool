@@ -15,6 +15,13 @@
           </tal:block>
         </td>
       </tr>
+      <tr tal:condition="view/main_recipient">
+        <td i18n:translate="">
+          You can download this report at a later time from
+          <a tal:attributes="href view/main_recipient/@@absolute_url"
+             i18n:name="home-link" i18n:translate="">home page</a>.
+        </td>
+      </tr>
     </tbody>
   </table>
   <form method="post" class="standalone" action=""
