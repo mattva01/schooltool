@@ -315,9 +315,15 @@ class ReportTask(RemoteTask):
     routing_key = "zodb.report"
     report = None
 
-    def __init__(self, report_factory, context, remote_request=None):
+    view_name = None
+    factory_name = None
+
+    def __init__(self, report_builder, context, remote_request=None):
         RemoteTask.__init__(self)
-        self.factory = report_factory
+        if isinstance(report_builder, str):
+            self.view_name = report_builder
+        else:
+            self.factory = report_builder
         self.context = context
         if remote_request is None:
             self.request_params = RemoteRequestParams()
@@ -386,12 +392,15 @@ class ReportTask(RemoteTask):
         context = self.context
         if context is None:
             return None
-        factory = self.factory
-        if factory is None:
-            return None
         if request is None:
             request = self.getCurrentRequest()
-        renderer = factory(context, request)
+        renderer = None
+        factory = self.factory
+        if factory is not None:
+            renderer = factory(context, request)
+        else:
+            renderer = zope.component.queryMultiAdapter(
+                (context, request), name=self.view_name)
         return renderer
 
     def renderToFile(self, renderer, *args, **kwargs):

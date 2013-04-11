@@ -66,6 +66,12 @@ class IReportLinksURL(Interface):
 class IReportTask(IRemoteTask):
 
    factory = Attribute('Report factory class or callable')
+   factory_name = zope.schema.TextLine(
+      title=u'Report callable signature',
+      required=False)
+   view_name = zope.schema.TextLine(
+      title=u'Report view name',
+      required=False)
    context = Attribute('Context object')
 
 

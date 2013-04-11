@@ -1482,5 +1482,5 @@ class MessageTable(table.ajax.IndexedTable):
 from schooltool.report.browser.report import RequestRemoteReportDialog
 class FlourishRequestPersonProfileView(RequestRemoteReportDialog):
 
-    report_builder = PersonProfilePDF
+    report_builder = 'person_profile.pdf'
 

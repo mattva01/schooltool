@@ -246,7 +246,8 @@ class RequestRemoteReportDialog(RequestReportDownloadDialog):
     dialog_close_actions = ('cancel',)
     label = None
 
-    report_builder = None # report generating class
+    report_builder = None # report generating class or view name
+
     task_factory = ReportTask
 
     report_task = None
