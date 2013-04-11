@@ -21,12 +21,8 @@
 SchoolTool setup script.
 """
 
-import os, sys
+import os
 from setuptools import setup, find_packages
-
-other_requires = []
-if sys.version_info[:2] <= (2, 5):
-    other_requires = ['simplejson']
 
 if os.path.exists("version.txt"):
     version = open("version.txt").read().strip()
@@ -145,8 +141,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.app.testing',   # XXX to get zope.testbrowser.testing.Browser
                       'zope.traversing>=3.13',
                       'zope.ucol',
-                      'zope.viewlet']
-                      + other_requires,
+                      'zope.viewlet'],
     extras_require={'test': ['lxml',
                              'zope.app.testing',
                              'zope.copypastemove',

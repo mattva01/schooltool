@@ -73,7 +73,6 @@ except ImportError:
 
 
 try:
-    # selenium on python2.5 throws a SyntaxError
     from selenium.webdriver.remote.webelement import WebElement \
             as SimpleWebElement
 
@@ -84,10 +83,6 @@ try:
             return selenium.webdriver.firefox.webdriver.WebDriver()
         selenium_enabled = True
 
-except (ImportError, SyntaxError):
-    SimpleWebElement = object
-
-try:
     from selenium.common.exceptions import NoSuchElementException
     from selenium.common.exceptions import TimeoutException
 except ImportError:
