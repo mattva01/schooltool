@@ -25,7 +25,6 @@ an IRelationshipLinks adapter.  There is a default adapter registered for
 all IAnnotatable objects that uses Zope 3 annotations.
 """
 
-import rwproperty
 from BTrees.OOBTree import OOBTree
 from persistent import Persistent
 from persistent.list import PersistentList
@@ -486,11 +485,11 @@ class RelationshipInfo(object):
     def target(self):
         return self._link.target
 
-    @rwproperty.getproperty
+    @property
     def extra_info(self):
         return self._link.extra_info
 
-    @rwproperty.setproperty
+    @extra_info.setter
     def extra_info(self, value):
         this_link = self._link
 

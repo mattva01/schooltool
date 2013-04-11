@@ -20,7 +20,6 @@
 Section implementation
 """
 from persistent import Persistent
-import rwproperty
 
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.intid.interfaces import IIntIds
@@ -112,11 +111,11 @@ class Section(Persistent, Contained):
             section._next = None
         linked[idx_last]._previous = None
 
-    @rwproperty.getproperty
+    @property
     def previous(self):
         return self._previous
 
-    @rwproperty.setproperty
+    @previous.setter
     def previous(self, new):
         new = removeSecurityProxy(new)
         if new is self._previous:
@@ -139,11 +138,11 @@ class Section(Persistent, Contained):
         if new is not None:
             new.next = self
 
-    @rwproperty.getproperty
+    @property
     def next(self):
         return self._next
 
-    @rwproperty.setproperty
+    @next.setter
     def next(self, new):
         new = removeSecurityProxy(new)
         if new is self._next:
