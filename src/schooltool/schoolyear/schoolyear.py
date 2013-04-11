@@ -19,7 +19,6 @@
 """
 School year implementation
 """
-import rwproperty
 import datetime
 
 from zope.proxy import sameProxiedObjects
@@ -163,11 +162,11 @@ class SchoolYear(BTreeContainer):
                              (last, first))
         BTreeContainer.__init__(self)
 
-    @rwproperty.getproperty
+    @property
     def first(self):
         return self._first
 
-    @rwproperty.setproperty
+    @first.setter
     def first(self, new_first_date):
         old_dates = (self._first, self._last)
         new_dates = (new_first_date, self._last)
@@ -180,11 +179,11 @@ class SchoolYear(BTreeContainer):
         self._first = new_first_date
         notify(SchoolYearAfterChangeEvent(self, old_dates, new_dates))
 
-    @rwproperty.getproperty
+    @property
     def last(self):
         return self._last
 
-    @rwproperty.setproperty
+    @last.setter
     def last(self, new_last_date):
         old_dates = (self._first, self._last)
         new_dates = (self._first, new_last_date)
@@ -222,21 +221,21 @@ class SchoolYearDateRangeAdapter(DateRange):
     def __init__(self, context):
         self.context = context
 
-    @rwproperty.setproperty
-    def first(self, new_first_date):
-        self.context.first = new_first_date
-
-    @rwproperty.getproperty
+    @property
     def first(self):
         return self.context.first
 
-    @rwproperty.setproperty
-    def last(self, new_last_date):
-        self.context.first = new_last_date
+    @first.setter
+    def first(self, new_first_date):
+        self.context.first = new_first_date
 
-    @rwproperty.getproperty
+    @property
     def last(self):
         return self.context.last
+
+    @last.setter
+    def last(self, new_last_date):
+        self.context.first = new_last_date
 
 
 @adapter(ISchoolToolApplication)

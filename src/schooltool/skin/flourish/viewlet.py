@@ -19,8 +19,6 @@
 """
 SchoolTool flourish viewlets and viewlet managers.
 """
-import rwproperty
-
 import zope.contentprovider.interfaces
 import zope.event
 import zope.security
@@ -54,11 +52,11 @@ class Viewlet(BrowserPage):
             self.manager = manager
         self.view = view
 
-    @rwproperty.getproperty
+    @property
     def manager(self):
         return self.__parent__
 
-    @rwproperty.setproperty
+    @manager.setter
     def manager(self, value):
         self.__parent__ = value
 
@@ -91,21 +89,21 @@ class ViewletProxy(SpecificationDecoratorBase):
         self._updated = False
         super(ViewletProxy, self).__init__(*args, **kw)
 
-    @rwproperty.getproperty
+    @property
     def view(self):
         unproxied = zope.proxy.getProxiedObject(self)
         return unproxied.__parent__
 
-    @rwproperty.setproperty
+    @view.setter
     def view(self, value):
         unproxied = zope.proxy.getProxiedObject(self)
         unproxied.__parent__ = value
 
-    @rwproperty.getproperty
+    @property
     def __parent__(self):
         return self.manager
 
-    @rwproperty.setproperty
+    @__parent__.setter
     def __parent__(self, value):
         self.manager = value
 
