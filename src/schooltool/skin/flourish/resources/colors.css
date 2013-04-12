@@ -165,6 +165,10 @@ h3.done-link a:active {
     color: #ffffff;
 }
 
+.header ul.second-nav > li a.new-messages {
+    color: #ff0000;
+}
+
 .header ul.second-nav > li.active a,
 .header ul.second-nav > li a:hover {
     background: none;

@@ -31,6 +31,7 @@ import transaction
 import transaction.interfaces
 from celery.task import task, periodic_task
 from persistent import Persistent
+from zope.annotation.interfaces import IAnnotations
 from zope.interface import implements, implementer
 from zope.intid.interfaces import IIntIds
 from zope.catalog.text import TextIndex
@@ -43,6 +44,7 @@ from zope.app.publication.zopepublication import ZopePublication
 from zope.component.hooks import getSite, setSite
 from zope.container.interfaces import INameChooser
 from zope.proxy import sameProxiedObjects
+from zope.security.proxy import removeSecurityProxy
 from zc.catalog.catalogindex import SetIndex
 
 from schooltool.app.app import StartUpBase
@@ -63,6 +65,7 @@ from schooltool.common import SchoolToolMessage as _
 
 IN_PROGRESS = 'IN_PROGRESS'
 COMMITTING = 'COMMITTING_ZODB'
+LAST_READ_MESSAGES_TIME_KEY = 'schooltool.task.tasks:last_read_messages'
 
 
 class NoDatabaseException(Exception):
@@ -778,6 +781,21 @@ class MessageCatalog(AttributeCatalog):
 
 
 getMessageCatalog = MessageCatalog.get
+
+
+def markMessagesRead(target, dt=None):
+    target = removeSecurityProxy(target)
+    ann = IAnnotations(target)
+    if dt is None:
+        dt = pytz.UTC.localize(datetime.datetime.utcnow())
+    ann[LAST_READ_MESSAGES_TIME_KEY] = dt
+
+
+def getLastMessagesReadTime(target):
+    target = removeSecurityProxy(target)
+    ann = IAnnotations(target)
+    result = ann.get(LAST_READ_MESSAGES_TIME_KEY, None)
+    return result
 
 
 def query_messages(sender):

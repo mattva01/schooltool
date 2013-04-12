@@ -760,7 +760,6 @@ class LoginNavigationViewlet(flourish.page.LinkViewlet):
             return _("Log in")
         return _("Log out")
 
-
     @property
     def login_url(self):
         app_url = absoluteURL(ISchoolToolApplication(None), self.request)

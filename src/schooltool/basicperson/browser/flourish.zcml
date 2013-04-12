@@ -876,4 +876,14 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="new_messages"
+      after="logged-in-name"
+      before="login language_selector"
+      for="*"
+      manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
+      permission="schooltool.view"
+      class=".person.NewMessageIndicatorViewlet"
+      />
+
 </configure>

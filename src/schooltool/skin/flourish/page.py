@@ -396,7 +396,8 @@ class LinkViewlet(Viewlet):
     template = templates.Inline('''
     <tal:block define="url view/url">
       <a tal:condition="url"
-         tal:attributes="href view/url"
+         tal:attributes="href view/url;
+                         class view/css_class"
          tal:content="view/title"></a>
       <span tal:condition="not:url"
             tal:content="view/title"></span>
@@ -404,6 +405,7 @@ class LinkViewlet(Viewlet):
     ''')
 
     title = None
+    css_class = None
 
     @property
     def enabled(self):

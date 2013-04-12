@@ -1,7 +1,7 @@
 <div class="person-info">
   <tal:block tal:replace="structure context/schooltool:content/schooltool.person.FlourishInfo"/>
 </div>
-<div class="person-info">
+<div class="person-info" id="messages">
   <h3 i18n:translate="">Messages</h3>
   <tal:block content="structure view/view/providers/ajax/messages_table" />
 </div>
