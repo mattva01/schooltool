@@ -10,7 +10,7 @@
         </tal:block>
       </div>
       <textarea rows="8" cols="72"
-                tal:condition="view/data_provided"
+                tal:condition="python:view.data_provided and view.is_xls"
                 tal:content="view/textareaErrors" />
     </div>
     <div class="status spinner">
