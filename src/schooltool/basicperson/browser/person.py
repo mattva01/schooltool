@@ -1416,3 +1416,14 @@ class ProfileGeneralPart(flourish.report.PDFForm):
         self.fields += field.Fields(IPerson).select('username')
         self.fields += self.getFields()
         super(ProfileGeneralPart, self).update()
+
+
+class UserLinkViewlet(flourish.page.LinkViewlet):
+
+    @property
+    def url(self):
+        user = IPerson(self.request.principal, None)
+        link = self.link
+        if not link or user is None:
+            return None
+        return "%s/%s" % (absoluteURL(user, self.request), self.link)

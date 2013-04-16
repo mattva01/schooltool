@@ -1,0 +1,59 @@
+Calendar tab
+============
+
+We're going to test that the Calendar tab url is correctly calculated
+no matter what person index view the user is looking at.
+
+This is the same issue as https://launchpad.net/bugs/1166926
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+Set up persons:
+
+    >>> manager.ui.person.add('Jeffrey', 'Elkner', 'jeffrey', 'pwd')
+    >>> manager.ui.person.add('Camila', 'Cerna', 'camila', 'pwd')
+    >>> manager.ui.person.add('Mario', 'Tejada', 'mario', 'pwd')
+    >>> manager.ui.person.add('Nestor', 'Guzman', 'nestor', 'pwd')
+
+Set up a section:
+
+    >>> manager.ui.schoolyear.add('2013', '2013-01-01', '2013-12-31')
+    >>> manager.ui.term.add('2013', 'Year', '2013-01-01', '2013-12-31')
+
+    >>> manager.ui.course.add('2013', 'Math')
+    >>> manager.ui.section.add('2013', 'Year', 'Math')
+
+    >>> manager.ui.section.instructors.add('2013', 'Year', 'Math (1)',
+    ...                                    ['jeffrey'])
+    >>> manager.ui.section.students.add('2013', 'Year', 'Math (1)',
+    ...                                 ['camila', 'mario', 'nestor'])
+
+Log in as teacher:
+
+    >>> teacher = browsers.teacher
+    >>> teacher.ui.login('jeffrey', 'pwd')
+
+Teacher clicks Calendar tab:
+
+    >>> sel = '//ul[@class="navigation"]//a[text()="Calendar"]'
+    >>> teacher.query.xpath(sel).click()
+    >>> print teacher.url
+    http://localhost/persons/jeffrey/calendar
+
+Teacher visits his section, clicks on a student and is taken to the
+student's home page:
+
+    >>> teacher.ui.section.go('2013', 'Year', 'Math (1)')
+    >>> teacher.query.link('Camila').click()
+    >>> print teacher.url
+    http://localhost/persons/camila
+
+Teacher clicks Calendar tab again and is taken to his calendar view:
+
+    >>> sel = '//ul[@class="navigation"]//a[text()="Calendar"]'
+    >>> teacher.query.xpath(sel).click()
+    >>> print teacher.url
+    http://localhost/persons/jeffrey/calendar
