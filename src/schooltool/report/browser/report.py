@@ -49,6 +49,7 @@ from schooltool.skin.flourish.page import RefineLinksViewlet
 from schooltool.skin.flourish import IFlourishLayer
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.task.tasks import query_message
+from schooltool.task.interfaces import IRemoteTask
 from schooltool.task.browser.task import MessageDialog
 
 from schooltool.common import SchoolToolMessage as _
@@ -360,4 +361,23 @@ class DownloadReportDialog(MessageDialog):
         for recipient in recipients:
             if flourish.canView(recipient):
                 return recipient
+        return None
+
+    @Lazy
+    def failure_ticket_id(self):
+        sender = self.context.sender
+        if (IRemoteTask.providedBy(sender) and
+            sender.failed):
+            return sender.__name__
+        return None
+
+
+class ShortReportMessage(flourish.content.ContentProvider):
+
+    @Lazy
+    def failure_ticket_id(self):
+        sender = self.context.sender
+        if (IRemoteTask.providedBy(sender) and
+            sender.failed):
+            return sender.__name__
         return None

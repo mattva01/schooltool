@@ -172,6 +172,7 @@
       for="schooltool.report.interfaces.IReportMessage"
       view="zope.interface.Interface"
       template="templates/f_short_report_message.pt"
+      class=".report.ShortReportMessage"
       permission="schooltool.view"
       />
 

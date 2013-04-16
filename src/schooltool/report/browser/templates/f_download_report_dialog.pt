@@ -15,13 +15,28 @@
           </tal:block>
         </td>
       </tr>
-      <tr tal:condition="view/main_recipient">
-        <td i18n:translate="">
-          You can download this report at a later time from
-          <a tal:attributes="href view/main_recipient/@@absolute_url"
-             i18n:name="home-link" i18n:translate="">home page</a>.
-        </td>
-      </tr>
+      <tal:block condition="not:view/failure_ticket_id">
+        <tr tal:condition="view/main_recipient">
+          <td i18n:translate="">
+            You can download this report at a later time from
+            <a tal:attributes="href view/main_recipient/@@absolute_url"
+               i18n:name="home-link" i18n:translate="">home page</a>.
+          </td>
+        </tr>
+      </tal:block>
+      <tal:block condition="view/failure_ticket_id">
+        <tr>
+          <td>
+            <p i18n:translate="">
+              <span class="error">Sytem failure.</span>  Ticket nr.
+              <span i18n:name="ticket_id" tal:content="view/failure_ticket_id" />.
+            </p>
+            <p i18n:translate="">
+              Please contact your administrator.
+            </p>
+          </td>
+        </tr>
+      </tal:block>
     </tbody>
   </table>
   <form method="post" class="standalone" action=""

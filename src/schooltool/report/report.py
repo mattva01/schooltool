@@ -63,7 +63,6 @@ from schooltool.task.interfaces import ITaskScheduledNotification
 from schooltool.task.tasks import TaskCompletedNotification
 from schooltool.task.tasks import TaskScheduledNotification
 from schooltool.task.tasks import TaskFailedMessage
-from schooltool.task.tasks import OnTaskFailed
 from schooltool.term.interfaces import IDateManager
 
 from schooltool.common import format_message
@@ -353,6 +352,7 @@ class ReportTask(RemoteTask):
         principal = Principal(self.creator.__name__, 'XXX:title',
                               person=ProxyFactory(self.creator))
         request.principal = principal
+        zope.security.management.endInteraction()
         zope.security.management.newInteraction(request)
 
     def endRequest(self, request=None):
@@ -483,18 +483,6 @@ class ReportFailedMessage(ReportMessage, TaskFailedMessage):
     def __init__(self, task, requested_on=None, filename=None):
         ReportMessage.__init__(self, requested_on=requested_on, filename=filename)
         TaskFailedMessage.__init__(self, task)
-
-
-class OnReportFailed(OnTaskFailed):
-
-    def send(self):
-        msg = ReportFailedMessage(self.task)
-        msg.send(
-            self.task,
-            sender=self.task.creator,
-            recipients=[self.task.creator],
-            )
-        # XXX: also could send a message to sys admin
 
 
 class OnPDFReportScheduled(TaskScheduledNotification):

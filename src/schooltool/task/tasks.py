@@ -51,6 +51,7 @@ from schooltool.app.app import StartUpBase
 from schooltool.app.catalog import AttributeCatalog
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.traceback import format_html_exception
+from schooltool.common import HTMLToText
 from schooltool.person.interfaces import IPerson
 from schooltool.task.celery import open_schooltool_db
 from schooltool.task.interfaces import IRemoteTask, ITaskContainer
@@ -108,6 +109,14 @@ class FormattedTraceback(Exception):
         if self.message:
             self.message += '\n\n'
         self.message += str(another)
+
+    def plaintext(self, strip_empty_lines=True):
+        parser = HTMLToText()
+        parser.feed(unicode(self))
+        text = parser.get_data()
+        if not strip_empty_lines:
+            text = '\n'.join(filter(None, text.splitlines()))
+        return text
 
     def __str__(self):
         return str(self.message)
@@ -215,6 +224,13 @@ class DBTaskMixin(object):
                 self.runTransaction('fail', False, self, result, failure)
             except Exception:
                 failure.append(FormattedTraceback())
+            try:
+                print >> sys.stderr, failure.plaintext(strip_empty_lines=True)
+            except:
+                try:
+                    print >> sys.stderr, str(failure)
+                except:
+                    pass
             raise failure
         finally:
             self.closeTransaction()
@@ -363,6 +379,7 @@ class RemoteTask(Persistent, Contained):
     def fail(self, request, result, traceback):
         self.permanent_result = result
         self.permanent_traceback = str(traceback) or ''
+        self.notifyFailed(request, result, traceback)
 
     def notifyScheduled(self, request):
         subscribers = getAdapters((self, request), ITaskScheduledNotification)
@@ -383,8 +400,6 @@ class RemoteTask(Persistent, Contained):
                 self.notifyFailed(request, result, failure)
 
     def notifyFailed(self, request, result, traceback):
-        print >> sys.stderr, '%s.notifyFailed\n%s' % (
-            self.__class__.__name__, str(traceback))
         subscribers = getAdapters((self, request, result, traceback), ITaskFailedNotification)
         for name, subscriber in subscribers:
             try:
@@ -761,13 +776,14 @@ class TaskFailedMessage(Message):
 class OnTaskFailed(TaskFailedNotification):
 
     def send(self):
-        msg = TaskFailedMessage(self.task)
-        msg.send(
-            sender=self.task,
-            recipients=[self.task.creator],
-            )
-        # XXX: also should send a message to sys admin!
+        pass
+        # XXX: we should send a message to sys admin!
         # XXX: failure to notify about failure should also be handled.
+        #msg = TaskFailedMessage(self.task)
+        #msg.send(
+        #    sender=self.task,
+        #    recipients=[sysadmin],
+        #    )
 
 
 class MessageCatalog(AttributeCatalog):
@@ -812,11 +828,20 @@ def query_messages(sender):
     return tuple([obj for obj in result if obj is not None])
 
 
-def query_message(sender):
+def query_message(sender, recipient=None):
     result = query_messages(sender)
     if not result:
         return None
-    return result[0]
+    if recipient is None:
+        return result[0]
+    int_ids = getUtility(IIntIds)
+    recipient_id = int_ids.queryId(recipient, None)
+    if recipient_id is None:
+        return None
+    for message in result:
+        if recipient_id in message.recipient_ids:
+            return message
+    return None
 
 
 def load_plugin_tasks():
