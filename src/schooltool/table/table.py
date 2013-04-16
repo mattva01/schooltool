@@ -433,7 +433,7 @@ class SchoolToolTableFormatter(object):
             sort_on=self._sort_on,
             prefix=self.prefix,
             group_by_column=self.group_by_column)
-        formatter.cssClasses.update(self.css_classes)
+        formatter.cssClasses.update(dict(self.css_classes))
         formatter.view = self
         return formatter
 
@@ -477,7 +477,7 @@ class TableContent(flourish.content.ContentProvider, SchoolToolTableFormatter):
             sort_on=self._sort_on,
             prefix=self.prefix,
             group_by_column=self.group_by_column)
-        formatter.cssClasses.update(self.css_classes)
+        formatter.cssClasses.update(dict(self.css_classes))
         formatter.view = self
         return formatter
 

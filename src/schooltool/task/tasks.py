@@ -301,7 +301,7 @@ class RemoteTask(Persistent, Contained):
     routing_key = None
 
     permanent_traceback = None
-    premanent_result = None
+    permanent_result = None
 
     def __init__(self):
         Persistent.__init__(self)
@@ -407,7 +407,7 @@ class RemoteTask(Persistent, Contained):
 
     @property
     def finished(self):
-        if (self.premanent_result is not None or
+        if (self.permanent_result is not None or
             self.permanent_traceback is not None):
             return True
         # Note: non-existing tasks will be permanently pending on
@@ -416,7 +416,7 @@ class RemoteTask(Persistent, Contained):
 
     @property
     def succeeded(self):
-        if (self.premanent_result is not None and
+        if (self.permanent_result is not None and
             self.permanent_traceback is None):
             return True
         return self.async_result.successful()

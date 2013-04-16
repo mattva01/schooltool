@@ -52,7 +52,7 @@ h3.done-link a:hover {
     background-color: #026b6e;
     border-color: #026b6e;
 }
- 
+
 h3.done-link a:active {
     background-color: #056163;
     border-color: #056163;
@@ -419,6 +419,18 @@ table.schooldaymodel tbody td.schoolday {
 
 table.schoolday-legend td.schoolday {
     background: #efefef;
+}
+
+table.schooltool-tasks-status td .error {
+    color: #ff0000;
+}
+
+table.schooltool-tasks-status td .info {
+    color: #ff8800;
+}
+
+table.schooltool-tasks-status td .success {
+    color: #0000ff;
 }
 
 /*

@@ -184,6 +184,6 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
             batch_start=self.batch.start, batch_size=self.batch.size,
             sort_on=self._sort_on,
             prefix=self.prefix)
-        formatter.cssClasses['table'] = 'data'
+        formatter.cssClasses.update(dict(self.css_classes))
         return formatter
 

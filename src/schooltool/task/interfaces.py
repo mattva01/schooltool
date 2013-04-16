@@ -42,6 +42,17 @@ class ITask(Interface):
     failed = zope.schema.Bool(title=_("Failed"))
     internal_state = zope.schema.TextLine(title=_("Internal state"))
 
+    permanent_traceback = zope.schema.TextLine(
+        title=_("Persisted traceback"),
+        required=False)
+
+    permanent_result = Attribute(_("Persisted result"))
+
+    routing_key = zope.schema.TextLine(title=_("Celery routing key"),
+                                       required=False)
+    routing_key = zope.schema.TextLine(title=_("Celery routing key"),
+                                       required=False)
+
     scheduled = zope.schema.Datetime(title=_("Time Scheduled"))
 
     creator_username = zope.schema.TextLine(

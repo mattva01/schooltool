@@ -51,6 +51,24 @@ class TaskStatusView(flourish.page.Page):
         return TaskReadStatus(self.task_id)
 
     @property
+    def persistent_failed(self):
+        task = self.persistent_task
+        if task is None:
+            return False
+        return task.permanent_traceback is not None
+
+    @property
+    def persistent_finished(self):
+        task = self.persistent_task
+        if task is None:
+            return False
+        return task.permanent_result is not None
+
+    @property
+    def persistent_task(self):
+        return self.context
+
+    @property
     def task_id(self):
         return self.context.task_id
 
@@ -63,12 +81,26 @@ class TaskContainerLinkViewlet(flourish.page.LinkViewlet):
         return '%s/%s' % (base_url, 'schooltool.tasks')
 
 
-def task_state_formatter(value, item, formatter):
+def task_state_formatter(task, item, formatter):
+    result = []
+
     cls = ""
-    if value.strip() == 'FAILURE':
+    if task.failed:
         cls = "error"
-    return '<p%s>%s</p>' % (
-        (' class="%s"') % cls if cls else '', value)
+    elif task.succeeded or task.working:
+        cls = "success"
+    else:
+        cls = "info"
+    internal_state = task.internal_state or ''
+    if internal_state:
+        result.append(
+            '<p%s>%s</p>' % (
+                (' class="%s"') % cls if cls else '', internal_state))
+    if task.permanent_traceback is not None:
+        result.append('<p class="error">TRACEBACK</p>')
+    if task.permanent_result is not None:
+        result.append('<p class="success">PERSISTED RESULT</p>')
+    return '\n'.join(result)
 
 
 def task_id_cell_formatter(value, item, formatter):
@@ -117,7 +149,7 @@ class TaskTable(table.ajax.IndexedTable):
             index='internal_state',
             name='internal_state',
             title=_(u'Status'),
-            getter=lambda i, f: i.internal_state,
+            getter=lambda i, f: i,
             cell_formatter=task_state_formatter,
             subsort=True)
         directlyProvides(internal_state, ISortableColumn)
@@ -130,6 +162,10 @@ class TaskTable(table.ajax.IndexedTable):
             subsort=True)
         directlyProvides(scheduled, ISortableColumn)
         return [task_id, signature, internal_state, scheduled]
+
+    def setUp(self, *args, **kw):
+        super(TaskTable, self).setUp(*args, **kw)
+        self.css_classes['table'] = 'data schooltool-tasks-status'
 
 
 class TaskTableDevmode(TaskTable):
