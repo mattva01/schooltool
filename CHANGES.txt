@@ -10,6 +10,12 @@ Build
 
 - Local buildout.cfg.  Your changes to buildout.cfg will not be committed.
 
+Translations
+++++++++++++
+
+- Updated translations, added Thai. Special thanks to Vitali Oleshkevich, who
+  has completed both Russian and Ukrainian translations!
+
 
 2.4a2 (2013-02-18)
 ------------------

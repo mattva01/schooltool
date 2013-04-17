@@ -8,15 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-15 15:41+0200\n"
-"PO-Revision-Date: 2012-08-06 22:23+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"POT-Creation-Date: 2013-01-23 19:08+0200\n"
+"PO-Revision-Date: 2013-03-08 01:19+0000\n"
+"Last-Translator: Li Jin <lijin@lijinit.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-12 05:07+0000\n"
-"X-Generator: Launchpad (build 16361)\n"
+"X-Launchpad-Export-Date: 2013-03-09 05:25+0000\n"
+"X-Generator: Launchpad (build 16523)\n"
 "Language: \n"
 
 #: /src/schooltool/app/app.py:193
@@ -1709,7 +1709,7 @@ msgstr "永远重复"
 #: /src/schooltool/app/browser/templates/event_add.pt:348
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:148
 msgid "Booked Resources"
-msgstr "已出书的资料"
+msgstr "已登记资产"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:369
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:169
@@ -2736,9 +2736,7 @@ msgid ""
 "The name for the school or organization running this server.  This will be "
 "displayed on the public calendar, the bottom of all pages and in the page "
 "title."
-msgstr ""
-"正在运行的学校或组织名称 此服务器。这将会显示在公共日历上 在所有页面的标题和"
-"最上方处。"
+msgstr "正在运行的学校或组织名称 此服务器。这将会显示在公共日历上 在所有页面的标题和最上方处。"
 
 #: /src/schooltool/app/interfaces.py:138
 msgid "Front Page Calendar"
@@ -3069,15 +3067,15 @@ msgstr "为 ${field_title} 更改信息"
 
 #: /src/schooltool/basicperson/browser/demographics.py:305
 msgid "Stud."
-msgstr ""
+msgstr "学习"
 
 #: /src/schooltool/basicperson/browser/demographics.py:306
 msgid "Teach."
-msgstr ""
+msgstr "教育"
 
 #: /src/schooltool/basicperson/browser/demographics.py:307
 msgid "Admin."
-msgstr ""
+msgstr "管理"
 
 #: /src/schooltool/basicperson/browser/demographics.py:310
 msgid "Selection"
@@ -3110,7 +3108,7 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/demographics.py:406
 #: /src/schooltool/basicperson/browser/demographics.py:462
 msgid "Field Details"
-msgstr ""
+msgstr "详细信息"
 
 #: /src/schooltool/basicperson/browser/demographics.py:584
 msgid "Please enter a valid ID"
@@ -3122,7 +3120,7 @@ msgstr "该 ID 不唯一。"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
-msgstr ""
+msgstr "添加新用户"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:112
 #: /src/schooltool/basicperson/browser/person.py:346
@@ -3225,7 +3223,16 @@ msgid ""
 "number."
 msgstr "包括学生姓名、ID 序号、出生日期、联系人名称和联系人电话号码。"
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:733
+#: /src/schooltool/basicperson/browser/flourish.zcml:655
+msgid "Person profile, contacts, groups, etc."
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:655
+#: /src/schooltool/basicperson/browser/person.py:1369
+msgid "Profile"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:784
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
 msgstr "首页"
@@ -3324,7 +3331,7 @@ msgstr "${person} 的指导教师"
 
 #: /src/schooltool/basicperson/browser/person.py:660
 msgid "Current advisors"
-msgstr ""
+msgstr "当前顾问"
 
 #: /src/schooltool/basicperson/browser/person.py:661
 msgid "Available advisors"
@@ -3390,6 +3397,15 @@ msgstr "ID 卡"
 #: /src/schooltool/basicperson/browser/person.py:1327
 msgid "ID Card: ${person}"
 msgstr "ID卡：${person}"
+
+#: /src/schooltool/basicperson/browser/person.py:1385
+msgid "Username: ${username}"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:1404
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
+msgid "General Information"
+msgstr "常规信息"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
@@ -3537,12 +3553,8 @@ msgstr "必需的"
 msgid "Limited"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
-msgid "General Information"
-msgstr "常规信息"
-
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:25
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:10
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:29
 msgid "Edit this person's information"
 msgstr "编辑该人的信息"
 
@@ -4536,6 +4548,33 @@ msgstr "导入学生 CSV"
 msgid "Import Students"
 msgstr "导入学生"
 
+#: /src/schooltool/course/browser/flourish.zcml:644
+msgid "Roster"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:644
+msgid "Students and instructors of a section"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:11
+msgid "Students (continued)"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:14
+#: /src/schooltool/resource/browser/rml/resource_report.pt:18
+#: /src/schooltool/skin/flourish/rml/pdf_form.pt:14
+#: /src/schooltool/table/rml/grid_part.pt:42
+msgid "Continued on next page &gt;"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:23
+#: /src/schooltool/course/browser/templates/f_section_roster_rml.pt:15
+#: /src/schooltool/person/browser/person.py:594
+#: /src/schooltool/person/browser/person.py:683
+#: /src/schooltool/person/interfaces.py:52
+msgid "Full name"
+msgstr "全名"
+
 #: /src/schooltool/course/browser/section-member-csvimport.pt:4
 msgid "Upload SchoolTool section members as CSV"
 msgstr "以 CSV 格式上传 SchoolTool 课时成员"
@@ -4660,6 +4699,14 @@ msgstr "移除 ${section} 链接"
 msgid "Link ${section} to Section in Other Term"
 msgstr ""
 
+#: /src/schooltool/course/browser/section.py:1833
+msgid "Section Roster"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1853
+msgid "Instructors: ${instructors}"
+msgstr ""
+
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
 #: /src/schooltool/course/browser/templates/link_section.pt:9
 msgid "Copy sections to ${term} of ${schoolyear}"
@@ -4749,7 +4796,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/course.pt:9
 #: /src/schooltool/course/browser/templates/section_linkage.pt:17
 msgid "${course} course for ${schoolyear}"
-msgstr ""
+msgstr "${schoolyear} 的 ${course} 课"
 
 #: /src/schooltool/course/browser/templates/course.pt:52
 #: /src/schooltool/person/browser/home.pt:20
@@ -5240,7 +5287,8 @@ msgid ""
 msgstr "小组的基本信息，包括名册，对公众开放。"
 
 #: /src/schooltool/course/security.zcml:74
-msgid "A course in SchoolTool describes a set curriculum taught in a section."
+msgid ""
+"A course in SchoolTool describes a set curriculum taught in a section."
 msgstr ""
 
 #: /src/schooltool/course/security.zcml:79
@@ -6067,6 +6115,11 @@ msgstr ""
 msgid "ID Cards for Group: ${group}"
 msgstr ""
 
+#: /src/schooltool/group/browser/group.py:887
+#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:5
+msgid "Group memberships"
+msgstr ""
+
 #: /src/schooltool/group/browser/templates/f_group_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/group-csvimport.pt:24
 msgid ""
@@ -6132,10 +6185,6 @@ msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_group_view.pt:102
 msgid "This group has no responsible parties"
-msgstr ""
-
-#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:5
-msgid "Group memberships"
 msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:6
@@ -6456,15 +6505,9 @@ msgstr "更改密码"
 msgid "Wrong password supplied"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:507
-#: /src/schooltool/person/browser/person.py:596
-#: /src/schooltool/person/interfaces.py:51
-msgid "Full name"
-msgstr "全名"
-
-#: /src/schooltool/person/browser/person.py:508
-#: /src/schooltool/person/browser/person.py:597
-#: /src/schooltool/person/interfaces.py:52
+#: /src/schooltool/person/browser/person.py:595
+#: /src/schooltool/person/browser/person.py:684
+#: /src/schooltool/person/interfaces.py:53
 msgid "Name that should be displayed"
 msgstr "显示名称"
 
@@ -6711,6 +6754,10 @@ msgstr "资源"
 msgid "Reserve"
 msgstr ""
 
+#: /src/schooltool/resource/browser/flourish.zcml:452
+msgid "List all resources"
+msgstr ""
+
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
 msgstr "以 CSV 形式上传 schooltool 资源"
@@ -6823,6 +6870,16 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:854
 msgid "Delete ${resource_title}"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:967
+#: /src/schooltool/resource/browser/rml/resource_report.pt:21
+msgid "Resource Report"
+msgstr ""
+
+#: /src/schooltool/resource/browser/rml/resource_report.pt:10
+#: /src/schooltool/resource/browser/rml/resource_report.pt:23
+msgid "Resource Report (continued)"
 msgstr ""
 
 #: /src/schooltool/resource/browser/subtype_widget.pt:8
@@ -7437,6 +7494,10 @@ msgstr "服务器错误"
 msgid "Not Found"
 msgstr "未找到"
 
+#: /src/schooltool/skin/flourish/report.py:584
+msgid "${title} (continued)"
+msgstr ""
+
 #: /src/schooltool/skin/flourish/templates/image_input.pt:11
 msgid "delete this image"
 msgstr ""
@@ -7584,8 +7645,14 @@ msgstr "配置"
 msgid "FCK editor configuration."
 msgstr "FCK 编辑器配置。"
 
+#: /src/schooltool/table/pdf.py:637
+msgid "Continued ..."
+msgstr ""
+
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7
+#: /src/schooltool/table/templates/f_batch.pt:8
+#: /src/schooltool/table/templates/f_batch.pt:10
 msgid "&laquo; Previous"
 msgstr "&laquo; 往前"
 

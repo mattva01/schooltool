@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-01-23 19:08+0200\n"
-"PO-Revision-Date: 2013-02-01 11:25+0000\n"
+"PO-Revision-Date: 2013-03-09 14:37+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-02 05:36+0000\n"
-"X-Generator: Launchpad (build 16462)\n"
+"X-Launchpad-Export-Date: 2013-03-10 05:01+0000\n"
+"X-Generator: Launchpad (build 16523)\n"
 "Language: nl\n"
 
 #: /src/schooltool/app/app.py:193
@@ -2295,7 +2295,7 @@ msgid ""
 "ID</strong> and the <strong>instructor username</strong> for the new section."
 msgstr ""
 "De eerste rij van elke sectieomschrijving bevat het <strong>Schooltool vak-"
-"ID</strong> en de <strong>gebruikersnaam van de leraar</strong> voor de "
+"ID</strong> en de <strong>gebruikersnaam van de instructeur</strong> voor de "
 "nieuwe sectie."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:27
@@ -2310,12 +2310,12 @@ msgid ""
 msgstr ""
 "Wanneer u in plaats daarvan de secties wilt bijwerken, dient u in de eerste "
 "regel van de sectieomschrijving aan te geven: het <strong>SchoolTool vak-"
-"ID</strong>, de <strong>gebruikersnaam van de leraar</strong> en daarna het "
-"<strong>SchoolTool sectie-ID</strong> voor overeenkomende secties in elke "
-"termijn. <strong>NB:</strong> laten we zeggen dat uw school 5 opeenvolgende "
-"termijnen heeft en u geeft de termijnen \"2\", \"4\" bovenin de CSV aan, dan "
-"dient u respectievelijk 3 sectie-ID's aan te geven voor de termijnen \"2\", "
-"\"3\" en \"4\"."
+"ID</strong>, de <strong>gebruikersnaam van de instructeur</strong> en daarna "
+"het <strong>SchoolTool sectie-ID</strong> voor overeenkomende secties in "
+"elke termijn. <strong>NB:</strong> laten we zeggen dat uw school 5 "
+"opeenvolgende termijnen heeft en u geeft de termijnen \"2\", \"4\" bovenin "
+"de CSV aan, dan dient u respectievelijk 3 sectie-ID's aan te geven voor de "
+"termijnen \"2\", \"3\" en \"4\"."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:34
 msgid ""
@@ -2561,7 +2561,7 @@ msgid ""
 "the section as learners."
 msgstr ""
 "De eerste rij van elke sectieomschrijving bevat het <strong>vak-ID</strong> "
-"en het <strong>leraar-ID</strong> voor de nieuwe sectie. Dan volgt een "
+"en het <strong>instructeur-ID</strong> voor de nieuwe sectie. Dan volgt een "
 "aantal rijen, die elk een <strong>dag-ID</strong> en een <strong>periode-"
 "ID<strong/> bevatten. De lijst van periodeomschrijvingen wordt beëindigd met "
 "drie asterisken (***) in de eerste kolom. Na deze beëindigingscode kunnen er "
@@ -2730,8 +2730,8 @@ msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id, an "
 "instructor id and optional SchoolTool section IDs for each of the terms)"
 msgstr ""
-"Fout sectiehoofd op regel ${line_no} (deze zou een vak-ID, een leraar-ID en "
-"optioneel SchoolTool sectie-ID's moeten bevatten voor elke termijn)"
+"Fout sectiehoofd op regel ${line_no} (deze zou een vak-ID, een instructeur-"
+"ID en optioneel SchoolTool sectie-ID's moeten bevatten voor elke termijn)"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:220
 #: /src/schooltool/app/browser/timetablecsvimport.py:231
@@ -3361,7 +3361,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 msgid "Person profile, contacts, groups, etc."
-msgstr ""
+msgstr "Personenprofiel, contacten, groepen, etc."
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 #: /src/schooltool/basicperson/browser/person.py:1369
@@ -4441,11 +4441,11 @@ msgstr ""
 #: /src/schooltool/course/section.py:275
 #: /src/schooltool/course/section.py:286
 msgid "Instructors"
-msgstr "Leraren"
+msgstr "Instructeurs"
 
 #: /src/schooltool/contact/contact.py:203
 msgid "Instructors of student(s) related to this contact."
-msgstr "Leraren van leerling(en) gerelateerd aan dit contact."
+msgstr "Instructeurs van leerling(en) gerelateerd aan dit contact."
 
 #: /src/schooltool/contact/interfaces.py:53
 msgid "Address line 1"
@@ -4730,7 +4730,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/flourish.zcml:644
 msgid "Students and instructors of a section"
-msgstr ""
+msgstr "Leerlingen en instructeurs van een sectie"
 
 #: /src/schooltool/course/browser/rml/section_roster.pt:11
 msgid "Students (continued)"
@@ -4773,11 +4773,11 @@ msgstr "Termijn begint ($starts_in) later dan hij eindigt ($ends_in)"
 
 #: /src/schooltool/course/browser/section.py:556
 msgid "Current Instructors"
-msgstr "Huidige leraren"
+msgstr "Huidige instructeurs"
 
 #: /src/schooltool/course/browser/section.py:557
 msgid "Available Instructors"
-msgstr "Beschikbare leraren"
+msgstr "Beschikbare instructeurs"
 
 #: /src/schooltool/course/browser/section.py:572
 msgid "Current Students"
@@ -4835,11 +4835,11 @@ msgstr "Extra locaties kunnen toegevoegd worden via de sectieweergave."
 
 #: /src/schooltool/course/browser/section.py:1580
 msgid "Current instructors"
-msgstr "Huidige leraren"
+msgstr "Huidige instructeurs"
 
 #: /src/schooltool/course/browser/section.py:1310
 msgid "Add instructors"
-msgstr "Leraren toevoegen"
+msgstr "Instructeurs toevoegen"
 
 #: /src/schooltool/course/browser/section.py:1329
 msgid "Current students"
@@ -4883,7 +4883,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1853
 msgid "Instructors: ${instructors}"
-msgstr ""
+msgstr "Instructeurs: ${instructors}"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
 #: /src/schooltool/course/browser/templates/link_section.pt:9
@@ -5038,7 +5038,7 @@ msgid ""
 "term \"${to_term_title}\"."
 msgstr ""
 "Klik op \"Uitbreiden\" om een gekoppelde sectie aan te maken in de termijn "
-"\"${from_term_title}\", die de leerlingen en leraren bevat uit sectie "
+"\"${from_term_title}\", die de leerlingen en instructeurs bevat uit sectie "
 "\"${section_title}\" in termijn \"${to_term_title}\"."
 
 #: /src/schooltool/course/browser/templates/extend_term.pt:27
@@ -5164,7 +5164,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:33
 msgid "Instructor"
-msgstr "Leraar"
+msgstr "Instructeur"
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:37
 #: /src/schooltool/course/browser/templates/link_existing.pt:30
@@ -5172,9 +5172,9 @@ msgid ""
 "You may provide part of an instructor's name or username and click 'Filter' "
 "to limit the list of sections to those taught by a matching instructor."
 msgstr ""
-"U kunt een deel van de naam van een leraar of gebruikersnaam invoeren en dan "
-"op 'Filter' klikken om de lijst met secties te beperken tot diegene die "
-"onderwezen zijn door een overeenkomende leraar."
+"U kunt een deel van de naam van een instructeur of gebruikersnaam invoeren "
+"en dan op 'Filter' klikken om de lijst met secties te beperken tot diegene "
+"die onderwezen zijn door een overeenkomende instructeur."
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:51
 #: /src/schooltool/course/browser/templates/link_existing.pt:46
@@ -5282,11 +5282,11 @@ msgstr "Termijnen voor deze sectie bewerken"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:115
 msgid "Edit instructors for this section"
-msgstr "Leraren voor deze sectie bewerken"
+msgstr "Instructeurs voor deze sectie bewerken"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:125
 msgid "This section has no instructors"
-msgstr "Deze sectie heeft geen leraren"
+msgstr "Deze sectie heeft geen instructeurs"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:130
 msgid "Edit students for this section"
@@ -5359,11 +5359,11 @@ msgstr "${section_title} voor ${term}"
 
 #: /src/schooltool/course/browser/templates/section.pt:65
 msgid "Change the instructors for this section."
-msgstr "Leraren voor deze sectie wijzigen."
+msgstr "Instructeurs voor deze sectie wijzigen."
 
 #: /src/schooltool/course/browser/templates/section.pt:65
 msgid "edit instructors"
-msgstr "leraren bewerken"
+msgstr "instructeurs bewerken"
 
 #: /src/schooltool/course/browser/templates/section.pt:80
 msgid "Change the students in this section individually"
@@ -5464,8 +5464,8 @@ msgid ""
 "An identifier for a section, made up of instructor names, courses, and "
 "meeting time."
 msgstr ""
-"Een identificatie voor een sectie, bestaande uit een leraar namen, vakken en "
-"de tijd van bijeenkomst."
+"Een identificatie voor een sectie, bestaande uit een instructeursnaam, "
+"vakken en de tijd van bijeenkomst."
 
 #: /src/schooltool/course/interfaces.py:130
 msgid "An internal identifier of this section."
@@ -5485,11 +5485,11 @@ msgstr "Kan deze sectie niet als volgende aan zichzelf toewijzen"
 
 #: /src/schooltool/course/section.py:276
 msgid "Instructors of the section."
-msgstr "Leraren van de sectie."
+msgstr "Instructeurs van de sectie."
 
 #: /src/schooltool/course/section.py:287
 msgid "Instructors of a person in any of his sections."
-msgstr "Leraren van een persoon in één van zijn secties."
+msgstr "Instructeurs van een persoon in één van zijn secties."
 
 #: /src/schooltool/course/section.py:310
 msgid "Learners"
@@ -5516,7 +5516,7 @@ msgid ""
 "Basic information about sections is only visible to instructors and students "
 "in that section, and school administration."
 msgstr ""
-"Basisinformatie over de secties alleen zichtbaar maken voor leraren en "
+"Basisinformatie over de secties alleen zichtbaar maken voor instructeurs en "
 "leerlingen in die sectie en de schooladministratie."
 
 #: /src/schooltool/course/security.zcml:42
@@ -7061,7 +7061,7 @@ msgstr "Reserveren"
 
 #: /src/schooltool/resource/browser/flourish.zcml:452
 msgid "List all resources"
-msgstr ""
+msgstr "Alle voorzieningen tonen"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"

@@ -7,15 +7,19 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-01-23 19:08+0200\n"
-"PO-Revision-Date: 2013-01-25 23:44+0000\n"
+"PO-Revision-Date: 2013-04-03 14:17+0000\n"
 "Last-Translator: Sebastian Tabares <sytabaresa@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-27 04:45+0000\n"
-"X-Generator: Launchpad (build 16451)\n"
+"X-Launchpad-Export-Date: 2013-04-04 05:38+0000\n"
+"X-Generator: Launchpad (build 16546)\n"
 "Language: es\n"
+
+#: /src/schooltool/app/browser/__init__.py:311
+msgid "1 person"
+msgstr "1 Persona"
 
 #: /src/schooltool/app/app.py:193
 msgid "Your School"
@@ -27,15 +31,18 @@ msgstr "Tu Escuela"
 msgid "Persons"
 msgstr "Personas"
 
-#: /src/schooltool/app/browser/__init__.py:311
-msgid "1 person"
-msgstr "Una persona"
-
-#: /src/schooltool/app/browser/__init__.py:280
+#: /src/schooltool/app/browser/__init__.py:313
 msgid "${number} persons"
-msgstr "${number} de persona(s)"
+msgstr "${number} persona(s)"
 
+#: /src/schooltool/app/browser/app.py:262
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:37
+#: /src/schooltool/app/browser/templates/f_edit_relationships.pt:13
+#: /src/schooltool/basicperson/browser/templates/container.pt:43
+#: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:44
+#: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:31
+#: /src/schooltool/calendar/browser/templates/event.pt:72
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:43
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:38
 #: /src/schooltool/course/browser/templates/copy_sections.pt:62
 #: /src/schooltool/course/browser/templates/course_container.pt:20
@@ -55,7 +62,7 @@ msgstr "${number} de persona(s)"
 #: /src/schooltool/timetable/browser/templates/f_timetable_container.pt:5
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:16
 msgid "There are none."
-msgstr "No hay ninguno"
+msgstr "No hay nada"
 
 #: /src/schooltool/app/browser/app.py:352
 #: /src/schooltool/app/browser/app.py:531
@@ -4589,6 +4596,8 @@ msgid ""
 "Course \"${course_title}\" credits \"${invalid_credits}\" value must be a "
 "number."
 msgstr ""
+"Los créditos \"${invalid_credits}\" del curso \"${course_title} necesitan un "
+"valor numérico."
 
 #: /src/schooltool/course/browser/csvimport.py:103
 msgid ""
@@ -4668,22 +4677,22 @@ msgstr "Importar estudiantes"
 
 #: /src/schooltool/course/browser/flourish.zcml:644
 msgid "Roster"
-msgstr ""
+msgstr "Lista de contactos"
 
 #: /src/schooltool/course/browser/flourish.zcml:644
 msgid "Students and instructors of a section"
-msgstr ""
+msgstr "Estudiantes e instructores para una sección"
 
 #: /src/schooltool/course/browser/rml/section_roster.pt:11
 msgid "Students (continued)"
-msgstr ""
+msgstr "Estudiantes (continuación)"
 
 #: /src/schooltool/course/browser/rml/section_roster.pt:14
 #: /src/schooltool/resource/browser/rml/resource_report.pt:18
 #: /src/schooltool/skin/flourish/rml/pdf_form.pt:14
 #: /src/schooltool/table/rml/grid_part.pt:42
 msgid "Continued on next page &gt;"
-msgstr ""
+msgstr "Continua en la siguiente página &gt;"
 
 #: /src/schooltool/course/browser/rml/section_roster.pt:23
 #: /src/schooltool/course/browser/templates/f_section_roster_rml.pt:15
@@ -4756,6 +4765,8 @@ msgstr "Título de la sección"
 msgid ""
 "If no title is specified, one will be created based on the course title."
 msgstr ""
+"Si un título no es especificado, uno será creado basado en el título del "
+"curso."
 
 #: /src/schooltool/course/browser/section.py:1295
 #: /src/schooltool/course/browser/section.py:1517
@@ -4772,7 +4783,7 @@ msgstr "Seleccione un curso"
 
 #: /src/schooltool/course/browser/section.py:1470
 msgid "Additional locations can be added via the section view."
-msgstr ""
+msgstr "Ubicaciones adicionales pueden ser agregadas en la vista de sección"
 
 #: /src/schooltool/course/browser/section.py:1580
 msgid "Current instructors"
@@ -4800,11 +4811,11 @@ msgstr "Añadir ubicaciones"
 
 #: /src/schooltool/course/browser/section.py:1404
 msgid "Current equipment"
-msgstr ""
+msgstr "Equipo actual"
 
 #: /src/schooltool/course/browser/section.py:1405
 msgid "Add equipment"
-msgstr ""
+msgstr "Agregar equipo"
 
 #: /src/schooltool/course/browser/section.py:1469
 msgid "Extend ${section} to ${term}"

@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-01-23 19:08+0200\n"
-"PO-Revision-Date: 2013-01-23 21:57+0000\n"
-"Last-Translator: Kaya Zeren <Unknown>\n"
+"PO-Revision-Date: 2013-03-19 22:59+0000\n"
+"Last-Translator: Uğur ADIYAMAN <uguradiyaman@gmx.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-24 05:03+0000\n"
-"X-Generator: Launchpad (build 16445)\n"
+"X-Launchpad-Export-Date: 2013-03-21 04:49+0000\n"
+"X-Generator: Launchpad (build 16532)\n"
 "Language: tr\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -7149,12 +7149,12 @@ msgstr "${resource_title} sil"
 #: /src/schooltool/resource/browser/resource.py:967
 #: /src/schooltool/resource/browser/rml/resource_report.pt:21
 msgid "Resource Report"
-msgstr ""
+msgstr "Kaynak Raporu"
 
 #: /src/schooltool/resource/browser/rml/resource_report.pt:10
 #: /src/schooltool/resource/browser/rml/resource_report.pt:23
 msgid "Resource Report (continued)"
-msgstr ""
+msgstr "Kaynak Raporu (Devameden)"
 
 #: /src/schooltool/resource/browser/subtype_widget.pt:8
 msgid "Choose One"
@@ -7797,7 +7797,7 @@ msgstr "Bulunamadı"
 
 #: /src/schooltool/skin/flourish/report.py:584
 msgid "${title} (continued)"
-msgstr ""
+msgstr "${title} (Devameden)"
 
 #: /src/schooltool/skin/flourish/templates/image_input.pt:11
 msgid "delete this image"
@@ -7954,7 +7954,7 @@ msgstr "FCK düzenleyici yapılandırması."
 
 #: /src/schooltool/table/pdf.py:637
 msgid "Continued ..."
-msgstr ""
+msgstr "Devamediyor ..."
 
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7
