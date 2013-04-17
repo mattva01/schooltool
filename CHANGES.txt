@@ -2,13 +2,15 @@
 CHANGES
 =======
 
-2.4a3 (unreleased)
+2.4b1 (2013-04-17)
 ------------------
 
-Build
-+++++
+Bugfixes
+++++++++
 
-- Local buildout.cfg.  Your changes to buildout.cfg will not be committed.
+- Fixed setting up section schedules for multiple terms
+- Home and Calendar tabs work incorrectly when looking at other persons (https://launchpad.net/bugs/1166925)
+- Prevented XLS importer from crashing with non-xls files (https://launchpad.net/bugs/904968)
 
 Translations
 ++++++++++++
