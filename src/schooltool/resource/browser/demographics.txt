@@ -23,7 +23,7 @@ We'll create some demographics fields.
 
     >>> manager.getControl('Title').value = "Room Number"
     >>> manager.getControl('ID').value = "room"
-    >>> manager.getControl(name='form.widgets.required:list').value = ['true']
+    >>> manager.getControl(name='form.widgets.required').value = ['true']
     >>> manager.getControl(name='form.widgets.limit_keys:list').value = ['location']
     >>> manager.getControl('Add').click()
 
@@ -36,7 +36,7 @@ We'll create some demographics fields.
     >>> manager.getLink('New Yes/No Field').click()
     >>> manager.getControl('Title').value = "Certified"
     >>> manager.getControl('ID').value = "certified"
-    >>> manager.getControl(name='form.widgets.required:list').value = ['true']
+    >>> manager.getControl(name='form.widgets.required').value = ['true']
     >>> manager.getControl('Add').click()
 
 Now we see them in the container view.

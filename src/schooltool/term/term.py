@@ -20,7 +20,6 @@
 Term implementation
 """
 import persistent
-import rwproperty
 import pytz
 from datetime import datetime
 
@@ -85,11 +84,11 @@ class Term(DateRange, contained.Contained, persistent.Persistent):
             raise ValueError("Last date %r less than first date %r" %
                              (last, first))
 
-    @rwproperty.getproperty
+    @property
     def first(self):
         return self._first
 
-    @rwproperty.setproperty
+    @first.setter
     def first(self, new_first_date):
         old_dates = (self._first, self._last)
         new_dates = (new_first_date, self._last)
@@ -102,11 +101,11 @@ class Term(DateRange, contained.Contained, persistent.Persistent):
         self._first = new_first_date
         notify(TermAfterChangeEvent(self, old_dates, new_dates))
 
-    @rwproperty.getproperty
+    @property
     def last(self):
         return self._last
 
-    @rwproperty.setproperty
+    @last.setter
     def last(self, new_last_date):
         old_dates = (self._first, self._last)
         new_dates = (self._first, new_last_date)

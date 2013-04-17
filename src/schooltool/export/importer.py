@@ -76,6 +76,7 @@ from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
 
 
+ERROR_NOT_XLS = _('SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?')
 ERROR_NOT_INT = _('is not a valid integer')
 ERROR_NOT_UNICODE_OR_ASCII = _('not unicode or ascii string')
 ERROR_MISSING_REQUIRED_TEXT = _('missing required text')
@@ -1758,6 +1759,8 @@ class GroupImporter(ImporterBase):
 
 class MegaImporter(BrowserView):
 
+    is_xls = True
+
     def __init__(self, context, request):
         BrowserView.__init__(self, context, request)
         self.data_provided = False
@@ -1793,7 +1796,11 @@ class MegaImporter(BrowserView):
             return
         self.data_provided = True
 
-        wb = xlrd.open_workbook(file_contents=xlsfile.read())
+        try:
+            wb = xlrd.open_workbook(file_contents=xlsfile.read())
+        except (xlrd.XLRDError,):
+            self.is_xls = False
+            wb = None
 
         if wb is None:
             return
@@ -1819,11 +1826,13 @@ class MegaImporter(BrowserView):
     def hasErrors(self):
         if "UPDATE_SUBMIT" not in self.request:
             return False
-        return not self.data_provided or self.errors
+        return not self.data_provided or self.errors or not self.is_xls
 
     def displayErrors(self):
         if not self.data_provided:
             return [self.errorSummary()]
+        if not self.is_xls:
+            return [ERROR_NOT_XLS]
         ERROR_FMT = _('${sheet_name} ${column}${row} ${message}')
         errors = []
         for sheet_name, row, col, message in self.errors[:25]:
@@ -1840,6 +1849,8 @@ class MegaImporter(BrowserView):
     def errorSummary(self):
         if not self.data_provided:
             return _('No data provided')
+        if not self.is_xls:
+            return ERROR_NOT_XLS
         return _('The following errors occurred while importing:')
 
     def textareaErrors(self):

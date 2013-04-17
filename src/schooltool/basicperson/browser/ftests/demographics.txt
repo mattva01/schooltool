@@ -278,7 +278,7 @@ the values in the display view:
     >>> manager.getLink('New Yes/No Field').click()
     >>> manager.getControl('Title').value = "Certified"
     >>> manager.getControl('ID').value = "certified"
-    >>> manager.getControl(name='form.widgets.required:list').value = ['true']
+    >>> manager.getControl(name='form.widgets.required').value = ['true']
     >>> manager.getControl('Add').click()
 
     >>> manager.printQuery('//span[@id="form-widgets-title"]')

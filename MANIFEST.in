@@ -25,4 +25,6 @@ include GPL.txt
 include Makefile
 include base.cfg
 include buildout.cfg
+include deploy.cfg
+include develop.cfg
 include bootstrap.py

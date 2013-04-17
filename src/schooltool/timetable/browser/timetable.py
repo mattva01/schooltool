@@ -607,6 +607,11 @@ class FlourishSelectedPeriodsAddTermsView(FlourishSelectedPeriodsAddView):
         return absoluteURL(self.context, self.request)
 
 
+SelectedPeriodsAddTermsSubmitLabel = button.StaticButtonActionAttribute(
+    _(u'Submit'),
+    button=FlourishSelectedPeriodsAddTermsView.buttons['add'])
+
+
 TimetableAdd_default_first = widget.ComputedWidgetAttribute(
     lambda adapter: adapter.view.term.first,
     view=SelectedPeriodsAddView,
@@ -739,9 +744,6 @@ class FlourishSelectedPeriodsMultiScheduleEditView(flourish.page.WideContainerPa
         'consecutive_periods_as_one')
     fields['consecutive_periods_as_one'].widgetFactory = SingleCheckBoxFieldWidget
 
-    buttons = button.Buttons(
-        button.Button('cancel', title=_('Cancel')))
-
     def applyChangesToSchedule(self, schedule, data):
         changes = form.applyChanges(self, schedule, data)
         # ``changes`` is a dictionary; if empty, there were no changes
@@ -754,10 +756,8 @@ class FlourishSelectedPeriodsMultiScheduleEditView(flourish.page.WideContainerPa
             # Send out a detailed object-modified event
             zope.event.notify(
                 zope.lifecycleevent.ObjectModifiedEvent(schedule, *descriptions))
-        if not changes:
-            return False
 
-        schedule_changed = False
+        schedule_changed = bool(changes)
         timetable = schedule.timetable
         for day in timetable.periods.templates.values():
             for period in day.values():
@@ -835,6 +835,10 @@ class FlourishSelectedPeriodsMultiScheduleEditView(flourish.page.WideContainerPa
 
         self.status = self.successMessage
 
+        self.redirectToParent()
+
+    @button.buttonAndHandler(_("Cancel"), name='cancel')
+    def handle_cancel_action(self, action):
         self.redirectToParent()
 
 

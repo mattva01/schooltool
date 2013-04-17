@@ -538,6 +538,11 @@
         />
   </configure>
 
+  <zope:adapter
+      factory=".timetable.SelectedPeriodsAddTermsSubmitLabel"
+      name="title"
+      />
+
   <flourish:viewletManager
       name="tertiary_navigation"
       provides="schooltool.skin.flourish.page.ITertiaryNavigationManager"

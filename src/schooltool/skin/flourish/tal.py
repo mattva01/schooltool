@@ -17,14 +17,11 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 """
-SchoolTool flourish tal expressoins.
+SchoolTool flourish tal expressions.
 """
 import re
 import types
-try:
-    import json
-except ImportError:
-    import simplejson as json
+import json
 
 import zc.resourcelibrary
 import zope.tal.taldefs

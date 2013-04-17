@@ -19,8 +19,6 @@
 """
 Schooltool content providers.
 """
-import rwproperty
-
 from zope.component import adapts, adapter, queryMultiAdapter, getAdapter
 from zope.interface import implements, implementer
 import zope.contentprovider.interfaces
@@ -44,11 +42,11 @@ class ContentProvider(ContentProviderBase, BrowserPage):
 
     implements(interfaces.IContentProvider)
 
-    @rwproperty.getproperty
+    @property
     def view(self):
         return self.__parent__
 
-    @rwproperty.setproperty
+    @view.setter
     def view(self, value):
         self.__parent__ = value
 

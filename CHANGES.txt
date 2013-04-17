@@ -2,8 +2,24 @@
 CHANGES
 =======
 
-2.4a3 (unreleased)
+2.4.0 (unreleased)
 ------------------
+
+- Nothing changed yet.
+
+
+2.4b1 (2013-04-17)
+------------------
+
+Bugfixes
+++++++++
+
+- Fixed setting up section schedules for multiple terms
+- Home and Calendar tabs work incorrectly when looking at other persons (https://launchpad.net/bugs/1166926)
+- Prevented XLS importer from crashing with non-xls files (https://launchpad.net/bugs/904968)
+
+Translations
+++++++++++++
 
 - Updated translations, added Thai. Special thanks to Vitali Oleshkevich, who
   has completed both Russian and Ukrainian translations!

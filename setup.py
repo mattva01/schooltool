@@ -21,12 +21,8 @@
 SchoolTool setup script.
 """
 
-import os, sys
+import os
 from setuptools import setup, find_packages
-
-other_requires = []
-if sys.version_info[:2] <= (2, 5):
-    other_requires = ['simplejson']
 
 if os.path.exists("version.txt"):
     version = open("version.txt").read().strip()
@@ -55,21 +51,20 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     "License :: OSI Approved :: GNU General Public License (GPL)",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
+    "Programming Language :: Python :: 2",
     "Programming Language :: Python :: 2.6",
     "Programming Language :: Python :: 2.7",
     "Programming Language :: Zope",
-    "Topic :: Education",
-    "Topic :: Office/Business :: Scheduling"],
+    "Topic :: Education"],
     package_dir={'': 'src'},
     packages=find_packages('src'),
     namespace_packages=["schooltool"],
-    install_requires=['hurry.query',
-                      'PasteDeploy',
+    install_requires=['PasteDeploy',
                       'PasteScript',
                       'Pillow',
                       'pytz',
                       'reportlab',
-                      'rwproperty',
+                      'rwproperty', # BBB plugins <= 2.4b1 need it
                       'setuptools',
                       'xlrd',
                       'xlwt',
@@ -146,14 +141,14 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'zope.app.testing',   # XXX to get zope.testbrowser.testing.Browser
                       'zope.traversing>=3.13',
                       'zope.ucol',
-                      'zope.viewlet']
-                      + other_requires,
+                      'zope.viewlet'],
     extras_require={'test': ['lxml',
                              'zope.app.testing',
                              'zope.copypastemove',
                              'zope.exceptions',
                              'zope.principalregistry',
                              'zope.testbrowser',
+                             'z3c.form>=2.6',
                              'schooltool.devtools>=0.7.1',
                              'selenium'],
                     'docs': ['Sphinx',
