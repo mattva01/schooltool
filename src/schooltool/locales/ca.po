@@ -22,14 +22,14 @@ msgstr ""
 "Project-Id-Version: SchoolTool Version 0.11.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-01-23 19:08+0200\n"
-"PO-Revision-Date: 2013-01-29 22:29+0000\n"
-"Last-Translator: Dídac Sabatés <sabatesduran@gmail.com>\n"
+"PO-Revision-Date: 2013-04-16 00:06+0000\n"
+"Last-Translator: Ruth <ruth.moreno@gmail.com>\n"
 "Language-Team: atorrell@gmail.com <atorrell@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-01-30 04:50+0000\n"
-"X-Generator: Launchpad (build 16455)\n"
+"X-Launchpad-Export-Date: 2013-04-17 05:34+0000\n"
+"X-Generator: Launchpad (build 16567)\n"
 "Language: \n"
 "Generated-By: setup.py\n"
 
@@ -80,52 +80,25 @@ msgstr "${number} persones"
 msgid "There are none."
 msgstr "No s'ha trobat cap coincidència."
 
-#: /src/schooltool/app/browser/app.py:352
-#: /src/schooltool/app/browser/app.py:531
-#: /src/schooltool/app/browser/cal.py:2069
-#: /src/schooltool/app/browser/flourish.zcml:460
+#: /src/schooltool/app/browser/cal.py:2077
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
-#: /src/schooltool/basicperson/browser/flourish.zcml:39
-#: /src/schooltool/basicperson/browser/flourish.zcml:274
-#: /src/schooltool/basicperson/browser/person.py:340
-#: /src/schooltool/basicperson/browser/person.py:385
-#: /src/schooltool/basicperson/browser/person.py:877
-#: /src/schooltool/calendar/browser/flourish.zcml:88
-#: /src/schooltool/contact/browser/contact.py:117
-#: /src/schooltool/contact/browser/flourish.zcml:106
-#: /src/schooltool/contact/browser/flourish.zcml:236
-#: /src/schooltool/course/browser/flourish.zcml:79
-#: /src/schooltool/course/browser/flourish.zcml:88
-#: /src/schooltool/course/browser/flourish.zcml:107
-#: /src/schooltool/course/browser/flourish.zcml:124
-#: /src/schooltool/course/browser/section.py:362
+#: /src/schooltool/basicperson/browser/person.py:162
+#: /src/schooltool/contact/browser/contact.py:92
+#: /src/schooltool/course/browser/section.py:331
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:67
-#: /src/schooltool/group/browser/flourish.zcml:32
-#: /src/schooltool/group/browser/flourish.zcml:49
-#: /src/schooltool/group/browser/group.py:649
-#: /src/schooltool/level/browser/flourish.zcml:43
-#: /src/schooltool/level/browser/level.py:59
-#: /src/schooltool/resource/browser/flourish.zcml:98
-#: /src/schooltool/resource/browser/resource.py:595
-#: /src/schooltool/schoolyear/browser/flourish.zcml:34
-#: /src/schooltool/schoolyear/browser/schoolyear.py:447
-#: /src/schooltool/skin/flourish/form.py:77
-#: /src/schooltool/term/browser/flourish.zcml:61
-#: /src/schooltool/timetable/browser/calendar.py:163
-#: /src/schooltool/timetable/browser/flourish.zcml:48
-#: /src/schooltool/timetable/browser/flourish.zcml:372
-#: /src/schooltool/timetable/browser/flourish.zcml:503
-#: /src/schooltool/timetable/browser/timetable.py:342
+#: /src/schooltool/level/browser.py:55
+#: /src/schooltool/schoolyear/browser/schoolyear.py:308
+#: /src/schooltool/timetable/browser/__init__.py:704
+#: /src/schooltool/timetable/browser/templates/timetable-add.pt:25
 msgid "Add"
-msgstr "Afegir"
+msgstr "Afegix"
 
-#: /src/schooltool/app/browser/app.py:276
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
-#: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:56
+#: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:103
 msgid "Remove"
-msgstr "Elimina"
+msgstr "Esborra"
 
 #: /src/schooltool/app/browser/app.py:408
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:58
@@ -136,13 +109,9 @@ msgstr "Agrega tots els mostrats"
 msgid "Username or password is incorrect"
 msgstr "El nom d'usuari o la contrasenya són incorrectes"
 
-#: /src/schooltool/app/browser/app.py:434
-#: /src/schooltool/app/browser/flourish.zcml:54
-#: /src/schooltool/app/browser/flourish.zcml:63
-#: /src/schooltool/app/browser/templates/f_login.pt:72
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "Log in"
-msgstr "Entrar"
+msgstr "Inicieu sessió"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
@@ -2898,41 +2867,41 @@ msgstr ""
 msgid "Assigned leaders."
 msgstr ""
 
-#: /src/schooltool/app/security.py:349
+#: /src/schooltool/app/security.py:348
 msgid "\"$group\" group."
-msgstr ""
+msgstr "\"$group\" grup."
 
-#: /src/schooltool/app/security.py:364
+#: /src/schooltool/app/security.py:363
 msgid "\"$group\" group and the super user."
-msgstr ""
+msgstr "\"$group\" grup i el super usuari."
 
 #: /src/schooltool/app/security.zcml:71
 msgid "SchoolTool application"
-msgstr ""
+msgstr "Aplicació Schooltool"
 
-#: /src/schooltool/app/security.zcml:74
+#: /src/schooltool/app/security.zcml:80
 msgid "Access"
-msgstr ""
+msgstr "Accés"
 
-#: /src/schooltool/app/security.zcml:81
+#: /src/schooltool/app/security.zcml:87
 msgid "Manage school settings and configuration"
-msgstr ""
+msgstr "Administrar la configuració de l'escola"
 
-#: /src/schooltool/app/security.zcml:89
-#: /src/schooltool/course/security.zcml:142
-#: /src/schooltool/group/security.zcml:90
-#: /src/schooltool/person/security.zcml:122
+#: /src/schooltool/app/security.zcml:95
+#: /src/schooltool/course/security.zcml:141
+#: /src/schooltool/group/security.zcml:86
+#: /src/schooltool/person/security.zcml:128
 msgid "View calendar"
-msgstr ""
+msgstr "Visualitzar el calendari"
 
-#: /src/schooltool/app/security.zcml:97
-#: /src/schooltool/course/security.zcml:150
-#: /src/schooltool/group/security.zcml:98
-#: /src/schooltool/person/security.zcml:130
+#: /src/schooltool/app/security.zcml:103
+#: /src/schooltool/course/security.zcml:149
+#: /src/schooltool/group/security.zcml:94
+#: /src/schooltool/person/security.zcml:136
 msgid "Change calendar"
-msgstr ""
+msgstr "Canviar el calendari"
 
-#: /src/schooltool/app/timetable-integration.zcml:28
+#: /src/schooltool/timetable/security.zcml:46
 msgid "Assign timetables"
 msgstr "Assignar horaris"
 
@@ -2970,83 +2939,68 @@ msgstr "Visualitza"
 msgid "Export Persons as XML"
 msgstr "Exportar Persones com XML"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:42
+#: /src/schooltool/basicperson/browser/configure.zcml:33
 msgid "Export"
-msgstr ""
+msgstr "Exportar"
+
+#: /src/schooltool/basicperson/browser/configure.zcml:42
+#: /src/schooltool/basicperson/security.py:65
+msgid "Advisors"
+msgstr "Assessors"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:51
-#: /src/schooltool/basicperson/browser/flourish.zcml:585
-#: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:6
-#: /src/schooltool/basicperson/security.py:32
-msgid "Advisors"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/configure.zcml:60
-#: /src/schooltool/basicperson/browser/flourish.zcml:593
-#: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:25
 msgid "Advisees"
-msgstr ""
+msgstr "Assessorats"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:101
-#: /src/schooltool/person/browser/configure.zcml:172
-#: /src/schooltool/person/browser/configure.zcml:181
+#: /src/schooltool/basicperson/browser/configure.zcml:92
+#: /src/schooltool/person/browser/configure.zcml:169
 msgid "New Person"
-msgstr ""
+msgstr "Nova persona"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:109
+#: /src/schooltool/basicperson/browser/configure.zcml:107
 msgid "Add Multiple Persons"
-msgstr ""
+msgstr "Afegeix més d'una persona"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:131
-#: /src/schooltool/basicperson/browser/demographics.py:384
-#: /src/schooltool/basicperson/browser/flourish.zcml:24
-#: /src/schooltool/basicperson/browser/flourish.zcml:401
-#: /src/schooltool/basicperson/browser/flourish.zcml:413
-#: /src/schooltool/basicperson/browser/person.py:551
-#: /src/schooltool/basicperson/browser/person.py:933
+#: /src/schooltool/basicperson/browser/configure.zcml:129
 #: /src/schooltool/basicperson/security.zcml:22
 msgid "Demographics"
-msgstr ""
+msgstr "Demografia"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:161
-#: /src/schooltool/basicperson/browser/flourish.zcml:356
+#: /src/schooltool/basicperson/browser/configure.zcml:143
 msgid "New Text Field"
-msgstr ""
+msgstr "Nou camp de text"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:168
-#: /src/schooltool/basicperson/browser/flourish.zcml:374
+#: /src/schooltool/basicperson/browser/configure.zcml:150
 msgid "New Date Field"
-msgstr ""
+msgstr "Nou camp de data"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:175
-#: /src/schooltool/basicperson/browser/flourish.zcml:383
+#: /src/schooltool/basicperson/browser/configure.zcml:174
 msgid "New Yes/No Field"
-msgstr ""
+msgstr "Nou camp de Si/No"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:182
-#: /src/schooltool/basicperson/browser/flourish.zcml:392
+#: /src/schooltool/basicperson/browser/configure.zcml:181
 msgid "New Selection List Field"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/configure.zcml:292
+#: /src/schooltool/basicperson/browser/configure.zcml:291
 msgid "Add Teacher"
-msgstr ""
+msgstr "Afegeix un professor"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:302
+#: /src/schooltool/basicperson/browser/configure.zcml:301
 msgid "Add Student"
-msgstr ""
+msgstr "Afegeix un alumne"
 
-#: /src/schooltool/basicperson/browser/configure.zcml:312
+#: /src/schooltool/basicperson/browser/configure.zcml:311
 msgid "Add Administrator"
-msgstr ""
+msgstr "Afegeix un administrador"
 
-#: /src/schooltool/basicperson/browser/csvimport.py:47
-#: /src/schooltool/course/browser/csvimport.py:54
-#: /src/schooltool/course/browser/csvimport.py:167
-#: /src/schooltool/group/browser/csvimport.py:50
-#: /src/schooltool/group/browser/csvimport.py:107
+#: /src/schooltool/basicperson/browser/csvimport.py:44
+#: /src/schooltool/course/browser/csvimport.py:45
+#: /src/schooltool/course/browser/csvimport.py:126
+#: /src/schooltool/group/browser/csvimport.py:41
+#: /src/schooltool/group/browser/csvimport.py:72
 #: /src/schooltool/person/browser/csvimport.py:43
-#: /src/schooltool/resource/browser/csvimport.py:50
+#: /src/schooltool/resource/browser/csvimport.py:46
 msgid "Insufficient data provided."
 msgstr "No heu intoduït les dades necessàries."
 
@@ -3055,15 +3009,15 @@ msgstr "No heu intoduït les dades necessàries."
 msgid "username may not be empty"
 msgstr "El nom d'usuari és obligatori"
 
-#: /src/schooltool/basicperson/browser/csvimport.py:55
+#: /src/schooltool/basicperson/browser/csvimport.py:52
 msgid "first name may not be empty"
-msgstr ""
+msgstr "el nom no pot estar buit"
 
-#: /src/schooltool/basicperson/browser/csvimport.py:59
+#: /src/schooltool/basicperson/browser/csvimport.py:56
 msgid "last name may not be empty"
-msgstr ""
+msgstr "el cognom no pot estar buit"
 
-#: /src/schooltool/basicperson/browser/csvimport.py:71
+#: /src/schooltool/basicperson/browser/csvimport.py:68
 #: /src/schooltool/person/browser/csvimport.py:62
 msgid "Duplicate username: ${username}"
 msgstr "El nom d'usuari ja existeix: ${username}"
@@ -3074,33 +3028,32 @@ msgstr "El nom d'usuari ja existeix: ${username}"
 msgid "Names cannot begin with '+' or '@' or contain '/'"
 msgstr "Cap nom pot començar amb '+' o '@', o contenir '/'"
 
-#: /src/schooltool/basicperson/browser/csvimport.py:88
-#: /src/schooltool/basicperson/browser/person.py:210
+#: /src/schooltool/basicperson/browser/csvimport.py:85
+#: /src/schooltool/basicperson/browser/person.py:114
 msgid "Usernames cannot contain non-ascii characters"
-msgstr ""
+msgstr "Els noms d'usuari no poden contendre caràcters no ASCII"
 
-#: /src/schooltool/basicperson/browser/demographics.py:83
+#: /src/schooltool/basicperson/browser/demographics.py:85
 msgid "Duplicate entry \"${value}\""
-msgstr ""
+msgstr "Duplica l'entrada \"${value}\""
 
-#: /src/schooltool/basicperson/browser/demographics.py:88
+#: /src/schooltool/basicperson/browser/demographics.py:90
 msgid "Value too long \"${value}\""
-msgstr ""
+msgstr "Valor massa llarg \"${value}\""
 
 #: /src/schooltool/basicperson/browser/demographics.py:108
 #: /src/schooltool/basicperson/browser/flourish.zcml:273
 #: /src/schooltool/basicperson/browser/flourish.zcml:282
 msgid "Demographics and Personal Information"
-msgstr ""
+msgstr "Demografia i dades personals"
 
-#: /src/schooltool/basicperson/browser/demographics.py:148
+#: /src/schooltool/basicperson/browser/demographics.py:140
 msgid "Add new Field"
-msgstr ""
+msgstr "Afegeix un nou camp"
 
-#: /src/schooltool/basicperson/browser/demographics.py:269
-#: /src/schooltool/basicperson/browser/demographics.py:507
+#: /src/schooltool/basicperson/browser/demographics.py:230
 msgid "Change information for ${field_title}"
-msgstr ""
+msgstr "Canvia la informació de ${field_title}"
 
 #: /src/schooltool/basicperson/browser/demographics.py:305
 msgid "Stud."
@@ -3108,27 +3061,27 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:306
 msgid "Teach."
-msgstr ""
+msgstr "Ensenyar"
 
 #: /src/schooltool/basicperson/browser/demographics.py:307
 msgid "Admin."
-msgstr ""
+msgstr "Admin."
 
 #: /src/schooltool/basicperson/browser/demographics.py:310
 msgid "Selection"
-msgstr ""
+msgstr "Selecció"
 
 #: /src/schooltool/basicperson/browser/demographics.py:312
 msgid "Text"
-msgstr ""
+msgstr "Text"
 
 #: /src/schooltool/basicperson/browser/demographics.py:313
 msgid "Yes/No"
-msgstr ""
+msgstr "Sí/No"
 
 #: /src/schooltool/basicperson/browser/demographics.py:343
 msgid "Integer"
-msgstr ""
+msgstr "Enter"
 
 #: /src/schooltool/basicperson/browser/demographics.py:422
 #: /src/schooltool/basicperson/interfaces.py:144
@@ -3149,104 +3102,100 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:584
 msgid "Please enter a valid ID"
-msgstr ""
+msgstr "Si us plau entra un ID valid"
 
 #: /src/schooltool/basicperson/browser/demographics.py:588
 msgid "This ID is not unique."
-msgstr ""
+msgstr "Aquest ID no és únic."
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:11
 #: /src/schooltool/basicperson/browser/flourish.zcml:16
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
 msgid "People"
-msgstr ""
+msgstr "Persones"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
-msgstr ""
+msgstr "Afegeix noves persones"
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:112
-#: /src/schooltool/basicperson/browser/person.py:346
+#: /src/schooltool/basicperson/browser/person.py:149
 msgid "Add new person"
 msgstr "Afegir una nova persona"
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:121
-#: /src/schooltool/basicperson/browser/person.py:979
+#: /src/schooltool/basicperson/browser/person.py:582
 msgid "Add new teacher"
-msgstr ""
+msgstr "Afegeix un nou professor"
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:131
-#: /src/schooltool/basicperson/browser/person.py:989
+#: /src/schooltool/basicperson/browser/person.py:592
 msgid "Add new student"
-msgstr ""
+msgstr "Afegeix un nou alumne"
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:141
-#: /src/schooltool/basicperson/browser/person.py:999
+#: /src/schooltool/basicperson/browser/person.py:602
 msgid "Add new administrator"
-msgstr ""
+msgstr "Afegeix un nou administrador"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:153
 msgid "Person"
-msgstr ""
+msgstr "Persona"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:161
 msgid "Add Person"
-msgstr ""
+msgstr "Afegeix una persona"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:173
 msgid "Teacher"
-msgstr ""
+msgstr "Professor"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:181
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Student"
-msgstr ""
+msgstr "Alumne"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:189
 msgid "Administrator"
-msgstr ""
+msgstr "Administrador/a"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:282
 #: /src/schooltool/level/browser/flourish.zcml:110
 #: /src/schooltool/resource/browser/flourish.zcml:29
 msgid "Reorder"
-msgstr ""
+msgstr "Torna a ordenar"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:305
 msgid "Text Field"
-msgstr ""
+msgstr "Camp de text"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:313
 msgid "Description Field"
-msgstr ""
+msgstr "Camp de descripció"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:322
 msgid "Date Field"
-msgstr ""
+msgstr "Camp de data"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:331
 msgid "Yes/No Field"
-msgstr ""
+msgstr "Camp de Sí/No"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:340
 msgid "Selection List Field"
-msgstr ""
+msgstr "Camp de llista de selecció"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:349
 msgid "Integer Field"
-msgstr ""
+msgstr "Camp de numero sencer"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:359
 msgid "Reorder or Delete Fields"
-msgstr ""
+msgstr "Reordena o borra els camps"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:365
 msgid "New Description Field"
-msgstr ""
+msgstr "Nou camp de descripció"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:412
 msgid "New Integer Field"
-msgstr ""
+msgstr "Nou camp de numero sencer"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:590
 msgid "Contains an XML representation of the person."
@@ -3254,11 +3203,11 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Export as XML"
-msgstr ""
+msgstr "Exporta com a XML"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:627
 msgid "ID Card"
-msgstr ""
+msgstr "Targeta ID"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:627
 msgid ""
@@ -3273,9 +3222,8 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 #: /src/schooltool/basicperson/browser/person.py:1369
 msgid "Profile"
-msgstr ""
+msgstr "Perfil"
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:784
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
 msgstr "Inici"

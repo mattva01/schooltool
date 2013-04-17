@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-01-23 19:08+0200\n"
-"PO-Revision-Date: 2013-02-17 21:15+0000\n"
+"PO-Revision-Date: 2013-03-07 21:01+0000\n"
 "Last-Translator: lann <lann@worldonline.fr>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-18 05:05+0000\n"
-"X-Generator: Launchpad (build 16491)\n"
+"X-Launchpad-Export-Date: 2013-03-08 05:10+0000\n"
+"X-Generator: Launchpad (build 16523)\n"
 "Language: fr\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -3348,6 +3348,8 @@ msgid ""
 "Includes student name, ID number, birth date, contact name and contact phone "
 "number."
 msgstr ""
+"Inclus le nom de l'étudiant, son numéro d'identifiant, sa date "
+"d’anniversaire, le nom et le téléphone de son responsable."
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 msgid "Person profile, contacts, groups, etc."
@@ -4111,7 +4113,7 @@ msgstr "Format de l’image"
 
 #: /src/schooltool/common/fields.py:48
 msgid "Max file size in bytes"
-msgstr ""
+msgstr "Taille maximale de l'image en octets"
 
 #: /src/schooltool/contact/browser/basicperson.py:123
 #: /src/schooltool/contact/browser/contact.py:195
@@ -4820,6 +4822,7 @@ msgstr "Sélectionner un cours"
 #: /src/schooltool/course/browser/section.py:1470
 msgid "Additional locations can be added via the section view."
 msgstr ""
+"Des emplacements additionnels peuvent être ajoutés par la section vue."
 
 #: /src/schooltool/course/browser/section.py:1580
 msgid "Current instructors"
@@ -6110,7 +6113,7 @@ msgstr "N'est pas un id de ressource valide"
 
 #: /src/schooltool/export/importer.py:110
 msgid "Username cannot contain non-ascii characters"
-msgstr ""
+msgstr "Le nom d'utilisateur ne peut pas avoir des caractères non-ascii"
 
 #: /src/schooltool/export/importer.py:111
 msgid "is not a valid contact relationship"
@@ -6121,6 +6124,8 @@ msgid ""
 "must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all "
 "valid)"
 msgstr ""
+"doit être VRAI, FAUX, OUI, ou NON (lettres majuscules, minuscules ou mixtes "
+"sont toutes valides)"
 
 #: /src/schooltool/export/importer.py:114
 msgid "must have a school year"
@@ -6136,23 +6141,24 @@ msgstr "doit avoir un trimestre ou sémestre"
 
 #: /src/schooltool/export/importer.py:117
 msgid "the current section is in the first term of the school year"
-msgstr ""
+msgstr "La section courante est dans la première période de l'année scolaire"
 
 #: /src/schooltool/export/importer.py:118
 msgid "the current section is in the last term of the school year"
-msgstr ""
+msgstr "la section courante est pour le dernier semestre de l'année scolaire"
 
 #: /src/schooltool/export/importer.py:119
 msgid "is not a valid section id in the previous term"
 msgstr ""
+"n'est pas un identifiant de section valide dans la période précédente"
 
 #: /src/schooltool/export/importer.py:120
 msgid "is not a valid section id in the next term"
-msgstr ""
+msgstr "n'est pas un identifiant de section valide dans la prochaine période"
 
 #: /src/schooltool/export/importer.py:121
 msgid "no timetable is defined for this section"
-msgstr ""
+msgstr "aucun emploi du temps n'est défini pour cette section"
 
 #: /src/schooltool/export/importer.py:122
 msgid "no day is defined in this row"
@@ -6184,11 +6190,12 @@ msgstr "a une course id invalide pour l'année d'école donnée"
 
 #: /src/schooltool/export/importer.py:129
 msgid "end term cannot be before start term"
-msgstr ""
+msgstr "la fin d'une ne peut être antérieure a son début"
 
 #: /src/schooltool/export/importer.py:130
 msgid "is not a valid section id in the specified term"
 msgstr ""
+"n'est pas un identifiant de section valide dans la période sélectionnée"
 
 #: /src/schooltool/export/importer.py:131
 msgid "school years must be consistent within this table"
@@ -8195,7 +8202,7 @@ msgstr ""
 
 #: /src/schooltool/term/browser/templates/f_terms.pt:5
 msgid "There are no terms."
-msgstr ""
+msgstr "Il n'y a aucune période"
 
 #: /src/schooltool/term/browser/templates/f_terms_related.pt:6
 msgid ""
@@ -8300,7 +8307,7 @@ msgstr "Ajouter une nouvelle période à ${year_title}"
 
 #: /src/schooltool/term/interfaces.py:41
 msgid "An internal identifier of this term."
-msgstr ""
+msgstr "Un identifiant interne pour cette période"
 
 #: /src/schooltool/term/term.py:313
 msgid "Term date is not in the school year."
@@ -8384,7 +8391,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/flourish.zcml:563
 msgid "Term(s)"
-msgstr ""
+msgstr "Période(s)"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:587
 msgid "Exception Days"
