@@ -101,6 +101,13 @@
      permission="schooltool.edit"
      />
 
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      view=".report.FlourishReportReferenceView"
+      />
+
   <!--- XXX: not needed anymore? -->
 
   <flourish:page
@@ -136,6 +143,14 @@
       />
   <zope:view
       for="*"
+      name="Person"
+      factory="schooltool.report.report.FlourishPersonReportLinksURL"
+      type="schooltool.skin.flourish.IFlourishLayer"
+      permission="zope.Public"
+      provides="schooltool.report.interfaces.IReportLinksURL"
+      />
+  <zope:view
+      for="*"
       name="Group"
       factory="schooltool.report.report.FlourishGroupReportLinksURL"
       type="schooltool.skin.flourish.IFlourishLayer"
@@ -162,6 +177,14 @@
       for="*"
       name="Section"
       factory="schooltool.report.report.FlourishSectionReportLinksURL"
+      type="schooltool.skin.flourish.IFlourishLayer"
+      permission="zope.Public"
+      provides="schooltool.report.interfaces.IReportLinksURL"
+      />
+  <zope:view
+      for="*"
+      name="Resource"
+      factory="schooltool.report.report.FlourishResourceReportLinksURL"
       type="schooltool.skin.flourish.IFlourishLayer"
       permission="zope.Public"
       provides="schooltool.report.interfaces.IReportLinksURL"
