@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2013-01-23 19:08+0200\n"
+"POT-Creation-Date: 2013-04-18 18:31+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -5492,6 +5492,10 @@ msgid "School Export"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:79
+msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
 msgstr ""
 
@@ -7257,46 +7261,6 @@ msgstr ""
 
 #: /src/schooltool/skin/widgets.py:103
 msgid "Year has to be equal or greater than 1900"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Width"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:100
-msgid "Editor frame width"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:103
-msgid "Height"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:104
-msgid "Editor frame height"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:107
-msgid "Toolbar configuration"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:108
-msgid "The name of the toolbar configuration to use."
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Relative configuration path"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:112
-msgid "Path to the FCKconfiguration javascript file."
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:137
-msgid "Configuration"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:138
-msgid "FCK editor configuration."
 msgstr ""
 
 #: /src/schooltool/table/pdf.py:637
