@@ -19,6 +19,7 @@
 """
 Schooltool PDF support.
 """
+from reportlab.pdfbase import pdfmetrics
 
 
 def isEnabled():
@@ -36,7 +37,6 @@ def registerTTFont(fontname, filename):
     Clears up the incorrect straight-through mappings that ReportLab 1.19
     unhelpfully gives us.
     """
-    from reportlab.pdfbase import pdfmetrics
     from reportlab.pdfbase.ttfonts import TTFont
     import reportlab.lib.fonts
 
@@ -71,15 +71,24 @@ font_map = {
     'Ubuntu_Bold_Italic': 'Ubuntu-BI.ttf',
     }
 
+font_directories = ()
 
-def setUpFonts(directories):
+
+def setUpFonts(directories=()):
     """Set up ReportGen to use Liberation and Ubuntu Fonts."""
     import reportlab.rl_config
     from reportlab.lib.fonts import addMapping
 
+    global font_directories
+    if not directories:
+        directories = font_directories
+    else:
+        font_directories = directories
+
     ttfpath = reportlab.rl_config.TTFSearchPath
     for fontdir in directories:
-        ttfpath.append(fontdir)
+        if fontdir not in ttfpath:
+            ttfpath.append(fontdir)
 
     reportlab.rl_config.warnOnMissingFontGlyphs = 0
 
@@ -96,6 +105,7 @@ def setUpFonts(directories):
     addMapping('Times_New_Roman', 1, 0, 'Times_New_Roman_Bold')
     addMapping('Times_New_Roman', 1, 1, 'Times_New_Roman_Bold_Italic')
 
+    # XXX: Rename to Ubuntu
     addMapping('Ubuntu_Regular', 0, 0, 'Ubuntu_Regular')
     addMapping('Ubuntu_Regular', 0, 1, 'Ubuntu_Italic')
     addMapping('Ubuntu_Regular', 1, 0, 'Ubuntu_Bold')
@@ -103,3 +113,10 @@ def setUpFonts(directories):
 
     from schooltool.app.browser import pdfcal
     pdfcal.disabled = False
+
+
+# z3c.rml >= 1.1.0 calls _reset when processing each document
+# We need to register our fonts again
+from reportlab.rl_config import register_reset
+register_reset(setUpFonts)
+del register_reset
