@@ -46,12 +46,9 @@ from zope.interface import directlyProvides, implements
 from zope.component import provideUtility
 from zope.component import provideAdapter, adapts
 from zope.event import notify
-from zope.server.taskthreads import ThreadedTaskDispatcher
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.i18n.interfaces import IUserPreferredLanguages
-from zope.app.server.main import run
-from zope.app.server.wsgi import http
-from zope.app.appsetup import DatabaseOpened, ProcessStarting
+from zope.app.appsetup import DatabaseOpened
 from zope.app.publication.zopepublication import ZopePublication
 from zope.traversing.interfaces import IContainmentRoot
 from zope.lifecycleevent import ObjectAddedEvent
@@ -93,21 +90,12 @@ _._domain = 'schooltool'
 
 class Options(object):
     config_filename = 'schooltool.conf'
-    daemon = False
     quiet = False
     config = None
     pack = False
     restore_manager = False
     manager_password = MANAGER_PASSWORD
-    manage = False
-
-    def __init__(self):
-        dirname = os.path.dirname(__file__)
-        dirname = os.path.normpath(os.path.join(dirname, '..', '..', '..'))
-        self.config_file = os.path.join(dirname, self.config_filename)
-        if not os.path.exists(self.config_file):
-            self.config_file = os.path.join(dirname,
-                                            self.config_filename + '.in')
+    config_file = ''
 
 
 class CookieLanguageSelector(object):
@@ -290,27 +278,6 @@ def setUpLogger(name, filenames, format=None):
             handler = UnicodeFileHandler(filename)
         handler.setFormatter(formatter)
         logger.addHandler(handler)
-
-
-def daemonize():
-    """Daemonize with a double fork and close the standard IO."""
-    pid = os.fork()
-    if pid:
-        sys.exit(0)
-    os.setsid()
-    os.umask(077)
-
-    pid = os.fork()
-    if pid:
-        print _("Going to background, daemon pid %d") % pid
-        sys.exit(0)
-
-    os.close(0)
-    os.close(1)
-    os.close(2)
-    os.open('/dev/null', os.O_RDWR)
-    os.dup(0)
-    os.dup(0)
 
 
 class PluginDependency(object):
@@ -496,7 +463,7 @@ class SchoolToolServer(object):
         try:
             opts, args = getopt.gnu_getopt(argv[1:], 'c:hdr:',
                                            ['config=', 'pack',
-                                            'help', 'daemon',
+                                            'help',
                                             'restore-manager=',
                                             'manage'])
         except getopt.error, e:
@@ -508,9 +475,8 @@ class SchoolToolServer(object):
                 print _("\n"
                         "Usage: %s [options]\n"
                         "Options:\n"
-                        "  -c, --config xxx       use this configuration file instead of the default\n"
+                        "  -c, --config xxx       use this configuration file\n"
                         "  -h, --help             show this help message\n"
-                        "  -d, --daemon           go to background after starting\n"
                         "  --pack                 pack the database\n"
                         "  -r, --restore-manager password\n"
                         "                         restore the manager user with the provided password\n"
@@ -522,14 +488,6 @@ class SchoolToolServer(object):
                 options.config_file = v
             if k in ('-p', '--pack'):
                 options.pack = True
-                options.manage = True
-            if k in ('-d', '--daemon'):
-                if not hasattr(os, 'fork'):
-                    print >> sys.stderr, _("%s: daemon mode not supported on "
-                                           "your operating system.") % progname
-                    sys.exit(1)
-                else:
-                    options.daemon = True
             if k in ('-r', '--restore-manager'):
                 options.restore_manager = True
                 if v != '-':
@@ -538,9 +496,6 @@ class SchoolToolServer(object):
                     print 'Manager password: ',
                     password = sys.stdin.readline().strip('\r\n')
                     options.manager_password = password
-                options.manage = True
-            if k in ('--manage'):
-                options.manage = True
 
         # Read configuration file
         schema_string = open(self.ZCONFIG_SCHEMA).read()
@@ -548,6 +503,10 @@ class SchoolToolServer(object):
                    for (configuration, handler) in plugin_configurations]
         schema_string = schema_string % {'plugins': "\n".join(plugins)}
         schema_file = StringIO(schema_string)
+
+        if not options.config_file:
+            print >> sys.stderr, "No config file specified"
+            sys.exit(1)
 
         schema = ZConfig.loadSchemaFile(schema_file, self.ZCONFIG_SCHEMA)
 
@@ -749,42 +708,12 @@ class SchoolToolServer(object):
 
         pdf.setUpFonts(existing_directories)
 
-        
+
 class StandaloneServer(SchoolToolServer):
-    
-    def beforeRun(self, options, db):
-        if options.daemon:
-            daemonize()
-
-        task_dispatcher = ThreadedTaskDispatcher()
-        task_dispatcher.setThreadCount(options.config.thread_pool_size)
-
-        for ip, port in options.config.web:
-            server = http.create('HTTP', task_dispatcher, db, port=port, ip=ip)
-
-        notify(ProcessStarting())
-
-        if options.config.pid_file:
-            pidfile = file(options.config.pid_file, "w")
-            print >> pidfile, os.getpid()
-            pidfile.close()
 
     def main(self, argv=sys.argv):
-        """Start the SchoolTool server."""
-        t0, c0 = time.time(), time.clock()
         options = self.load_options(argv)
         db = self.setup(options)
-        if not options.manage:
-            self.beforeRun(options, db)
-            t1, c1 = time.time(), time.clock()
-            print _("Startup time: %.3f sec real, %.3f sec CPU") % (t1 - t0,
-                                                                    c1 - c0)
-            run()
-            self.afterRun(options)
-
-    def afterRun(self, options):
-        if options.config.pid_file:
-            os.unlink(options.config.pid_file)
 
 
 def main():

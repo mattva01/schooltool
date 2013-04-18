@@ -19,7 +19,6 @@
   <include package="schooltool.traverser" file="meta.zcml" />
 
   <include package="zope.session" />
-  <include package="zope.app.server" />
   <include package="zope.contentprovider" />
   <include package="zope.viewlet" />
   <include package="zope.formlib" />

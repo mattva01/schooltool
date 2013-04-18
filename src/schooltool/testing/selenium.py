@@ -42,7 +42,6 @@ import lxml.doctestcompare
 import lxml.etree
 
 from zope.app.wsgi import WSGIPublisherApplication
-from zope.app.server.wsgi import ServerType
 from zope.server.taskthreads import ThreadedTaskDispatcher
 from zope.server.http.commonaccesslogger import CommonAccessLogger
 from zope.server.http.wsgihttpserver import WSGIHTTPServer
@@ -1015,11 +1014,6 @@ class FTestWSGIHTTPServer(WSGIHTTPServer):
             self.port = port
 
 
-HTTPServerFactory = ServerType(FTestWSGIHTTPServer,
-                               WSGIPublisherApplication,
-                               CommonAccessLogger,
-                               0, True)
-
 DOCTEST_EXAMPLE_FILENAME_RE = re.compile(r'<doctest (?P<name>.+)\[(?P<examplenum>\d+)\]>$')
 
 
@@ -1164,7 +1158,6 @@ def make_testrunner_postmortem_patch(test):
 
 class SeleniumLayer(ZCMLLayer):
 
-    server_factory = HTTPServerFactory
     thread_count = 1
     ip = "127.0.0.1"
     port = 0
@@ -1193,9 +1186,13 @@ class SeleniumLayer(ZCMLLayer):
         self.setUpBrowserConfig()
         dispatcher = ThreadedTaskDispatcher()
         dispatcher.setThreadCount(self.thread_count)
-        self.server = self.server_factory.create(
-            'WSGI-HTTP', dispatcher, self.setup.db,
-            ip=self.ip, port=self.port)
+        application = WSGIPublisherApplication(self.setup.db)
+        self.server = FTestWSGIHTTPServer(application,
+                                          'WSGI-HTTP',
+                                          self.ip, self.port,
+                                          task_dispatcher=dispatcher,
+                                          verbose=True,
+                                          hit_log=CommonAccessLogger())
         self.thread = threading.Thread(target=self.poll_server)
         self.thread.setDaemon(True)
         self.thread.start()
