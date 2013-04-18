@@ -51,7 +51,6 @@ def find_ftesting_zcml():
 class ZCMLLayer(_ZCMLLayer):
 
     def __init__(self, *args, **kwargs):
-        self.school_type = kwargs.pop("school_type", "")
         kwargs['allow_teardown'] = True
         _ZCMLLayer.__init__(self, *args, **kwargs)
 
@@ -72,12 +71,12 @@ class ZCMLLayer(_ZCMLLayer):
             """Remove schooltool_db_setup from zope.event.subscribers."""
             zope.event.subscribers.remove(schooltool_db_setup)
 
-        def schooltool_db_setup(event, school_type=""):
+        def schooltool_db_setup(event):
             """IDatabaseOpenedEvent handler that bootstraps SchoolTool."""
             if IDatabaseOpenedEvent.providedBy(event):
                 import schooltool.app.main
-                server = schooltool.app.main.StandaloneServer()
-                server.bootstrapSchoolTool(event.database, self.school_type)
+                server = schooltool.app.main.SchoolToolServer()
+                server.bootstrapSchoolTool(event.database)
                 server.startApplication(event.database)
 
         install_db_bootstrap_hook()
