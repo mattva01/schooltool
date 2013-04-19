@@ -21,9 +21,7 @@ Widgets.
 """
 import zope.schema
 import zope.app.form
-from zope.component import getMultiAdapter
 from zope.traversing.browser.absoluteurl import absoluteURL
-from zope.interface import Attribute
 from zope.schema.interfaces import IField, IDate
 from zope.schema.fieldproperty import FieldProperty
 from zope.component import adapts, adapter
@@ -44,7 +42,6 @@ from z3c.form.converter import FormatterValidationError
 from z3c.form.browser.text import TextWidget
 from z3c.form.browser.textarea import TextAreaWidget
 
-from schooltool.skin.skin import ISchoolToolLayer
 from schooltool.common import parse_date
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -108,20 +105,20 @@ class CustomDateDataConverter(BaseDataConverter):
 class IFCKConfig(Interface):
 
     width = zope.schema.Int(
-        title=_(u"Width"),
-        description=_(u"Editor frame width"))
+        title=u"Width",
+        description=u"Editor frame width")
 
     height = zope.schema.Int(
-        title=_(u"Height"),
-        description=_(u"Editor frame height"))
+        title=u"Height",
+        description=u"Editor frame height")
 
     toolbar = zope.schema.TextLine(
-        title=_(u"Toolbar configuration"),
-        description=_(u"The name of the toolbar configuration to use."))
+        title=u"Toolbar configuration",
+        description=u"The name of the toolbar configuration to use.")
 
     path = zope.schema.TextLine(
-        title=_(u"Relative configuration path"),
-        description=_(u"Path to the FCKconfiguration javascript file."))
+        title=u"Relative configuration path",
+        description=u"Path to the FCKconfiguration javascript file.")
 
 
 class FCKConfig(object):
@@ -146,8 +143,8 @@ class FCKConfig(object):
 class IFckeditorWidget(z3c.form.interfaces.IWidget):
 
     config = zope.schema.Object(
-        title=_(u"Configuration"),
-        description=_(u"FCK editor configuration."),
+        title=u"Configuration",
+        description=u"FCK editor configuration.",
         schema=IFCKConfig)
 
 

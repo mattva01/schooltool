@@ -2767,17 +2767,24 @@ msgid ""
 "\n"
 "Usage: %s [options]\n"
 "Options:\n"
-"  -c, --config xxx       use this configuration file instead of the default\n"
+"  -c, --config xxx       use this configuration file\n"
 "  -h, --help             show this help message\n"
-"  -d, --daemon           go to background after starting\n"
 "  --pack                 pack the database\n"
 "  -r, --restore-manager password\n"
-"                         restore the manager user with the provided "
-"password\n"
-"                         (read password from the standart input if "
-"'password'\n"
+"                         restore the manager user with the provided password\n"
+"                         (read password from the standart input if 'password'\n"
 "                         is '-')\n"
 msgstr ""
+"\n"
+"用法： %s [选项]\n"
+"可用选项：\n"
+"  -c, --config xxx       用 xxx 配置文件代替默认配置文件\n"
+"  -h, --help             显示帮助\n"
+"  --pack                 包数据库\n"
+"  -r, --restore-manager password\n"
+"                         用指定密码恢复管理员账户\n"
+"                         (从标准输入中读取密码如果参数 'password'\n"
+"                         是 '-')\n"
 
 #: /src/schooltool/app/main.py:528
 msgid "%s: daemon mode not supported on your operating system."
@@ -2788,18 +2795,8 @@ msgid "Reading configuration from %s"
 msgstr "从 %s 读入配置"
 
 #: /src/schooltool/app/main.py:574
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
-"\n"
-"配置文件中未定义储存。\n"
-"\n"
-"如果您正在使用默认配置文件，清现在编辑它\n"
-"并选择 ZODB 储存选项。\n"
+msgid "No storage defined in the configuration file."
+msgstr "配置文件中未定义储存。"
 
 #: /src/schooltool/app/main.py:672
 msgid ""
@@ -7625,25 +7622,9 @@ msgstr "编辑器框架高度"
 msgid "Toolbar configuration"
 msgstr "工具栏配置"
 
-#: /src/schooltool/skin/widgets.py:108
-msgid "The name of the toolbar configuration to use."
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Relative configuration path"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:112
-msgid "Path to the FCKconfiguration javascript file."
-msgstr ""
-
 #: /src/schooltool/skin/widgets.py:137
 msgid "Configuration"
 msgstr "配置"
-
-#: /src/schooltool/skin/widgets.py:138
-msgid "FCK editor configuration."
-msgstr "FCK 编辑器配置。"
 
 #: /src/schooltool/table/pdf.py:637
 msgid "Continued ..."

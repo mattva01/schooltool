@@ -464,7 +464,7 @@ class SchoolToolServer(object):
             sys.exit(1)
         for k, v in opts:
             if k in ('-h', '--help'):
-                print _("\n"
+                print (_("\n"
                         "Usage: %s [options]\n"
                         "Options:\n"
                         "  -c, --config xxx       use this configuration file\n"
@@ -474,7 +474,7 @@ class SchoolToolServer(object):
                         "                         restore the manager user with the provided password\n"
                         "                         (read password from the standart input if 'password'\n"
                         "                         is '-')\n"
-                        % progname).strip()
+                        ) % progname).strip()
                 sys.exit(0)
             if k in ('-c', '--config'):
                 options.config_file = v

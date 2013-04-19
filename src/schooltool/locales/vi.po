@@ -2794,23 +2794,6 @@ msgstr "Không thể giải quyết được vấn đề theo yêu cầu\n"
 msgid "Run %s -h for help."
 msgstr "Gõ %s -h để được trợ giúp"
 
-#: /src/schooltool/app/main.py:517
-msgid ""
-"\n"
-"Usage: %s [options]\n"
-"Options:\n"
-"  -c, --config xxx       use this configuration file instead of the default\n"
-"  -h, --help             show this help message\n"
-"  -d, --daemon           go to background after starting\n"
-"  --pack                 pack the database\n"
-"  -r, --restore-manager password\n"
-"                         restore the manager user with the provided "
-"password\n"
-"                         (read password from the standart input if "
-"'password'\n"
-"                         is '-')\n"
-msgstr ""
-
 #: /src/schooltool/app/main.py:528
 msgid "%s: daemon mode not supported on your operating system."
 msgstr "%s: Chế độ daemon không được hệ thống trợ giúp"
@@ -2820,17 +2803,8 @@ msgid "Reading configuration from %s"
 msgstr "Đọc cấu hình từ %s"
 
 #: /src/schooltool/app/main.py:574
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
-"\n"
-"Không có lưu trữ nào được xác định trong file cấu hình. Nếu bạn sử dụng file "
-"cấu hình mặc định, hãy chỉnh sửa nó bây giờ và không ghi chú vào phần lưu "
-"trữ của ZODB\n"
+msgid "No storage defined in the configuration file."
+msgstr "Không có lưu trữ nào được xác định trong file cấu hình"
 
 #: /src/schooltool/app/main.py:672
 msgid ""

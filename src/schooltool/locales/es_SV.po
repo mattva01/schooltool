@@ -2842,39 +2842,34 @@ msgid ""
 "\n"
 "Usage: %s [options]\n"
 "Options:\n"
-"  -c, --config xxx       use this configuration file instead of the default\n"
+"  -c, --config xxx       use this configuration file\n"
 "  -h, --help             show this help message\n"
-"  -d, --daemon           go to background after starting\n"
 "  --pack                 pack the database\n"
 "  -r, --restore-manager password\n"
-"                         restore the manager user with the provided "
-"password\n"
-"                         (read password from the standart input if "
-"'password'\n"
+"                         restore the manager user with the provided password\n"
+"                         (read password from the standart input if 'password'\n"
 "                         is '-')\n"
 msgstr ""
-
-#: /src/schooltool/app/main.py:528
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s: el modo demonio no esta soportado en su sistema operativo"
+"\n"
+"Uso: %s [opciones]\n"
+"Opciones:\n"
+"  -c, --config xxx       usar este archivo de configuración\n"
+"  -h, --help             muestra este mensaje de ayuda\n"
+"  --pack                 empacar base de datos\n"
+"  -r, --restore-manager contraseña\n"
+"                         restaurar el usuario gerente con la contraseña "
+"provista\n"
+"                         (leer la contraseña de la entrada estándar si "
+"\"contraseña\"\n"
+"                         es \"-\")\n"
 
 #: /src/schooltool/app/main.py:566
 msgid "Reading configuration from %s"
 msgstr "Leyendo configuración de %s"
 
 #: /src/schooltool/app/main.py:574
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
-"\n"
-"No se definió un almacenamiento en el archivo de configuración.\n"
-"\n"
-"Si esta usando el archivo de configuración por defecto, por favor edítelo\n"
-"ahora y descomente una de las secciones ZODB de almacenamiento.\n"
+msgid "No storage defined in the configuration file."
+msgstr "No se definió un almacenamiento en el archivo de configuración."
 
 #: /src/schooltool/app/main.py:672
 msgid ""
@@ -7817,46 +7812,6 @@ msgstr "La cadena fecha-hora no corresponde al patrón aaaa-mm-dd"
 #: /src/schooltool/skin/widgets.py:103
 msgid "Year has to be equal or greater than 1900"
 msgstr ""
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Width"
-msgstr "Anchura"
-
-#: /src/schooltool/skin/widgets.py:100
-msgid "Editor frame width"
-msgstr "Anchura del Editor de marco"
-
-#: /src/schooltool/skin/widgets.py:103
-msgid "Height"
-msgstr "Altura"
-
-#: /src/schooltool/skin/widgets.py:104
-msgid "Editor frame height"
-msgstr "Altura del editor de marco"
-
-#: /src/schooltool/skin/widgets.py:107
-msgid "Toolbar configuration"
-msgstr "Configuración de barra de herramientas."
-
-#: /src/schooltool/skin/widgets.py:108
-msgid "The name of the toolbar configuration to use."
-msgstr "El nombre de la configuración de barra de herramientas a usar."
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Relative configuration path"
-msgstr "Ruta relativa de configuración"
-
-#: /src/schooltool/skin/widgets.py:112
-msgid "Path to the FCKconfiguration javascript file."
-msgstr "Ruta al archivo de configuración javascript FCK,"
-
-#: /src/schooltool/skin/widgets.py:137
-msgid "Configuration"
-msgstr "Configuración"
-
-#: /src/schooltool/skin/widgets.py:138
-msgid "FCK editor configuration."
-msgstr "Configuración de editor FCK."
 
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7

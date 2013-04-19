@@ -2821,10 +2821,6 @@ msgstr "Muestra el calendario en la página principal del sitio."
 msgid "School logo"
 msgstr ""
 
-#: /src/schooltool/app/main.py:305
-msgid "Going to background, daemon pid %d"
-msgstr "Enviado al fondo, PID del demonio: %d"
-
 #: /src/schooltool/app/main.py:361
 msgid "Cannot resolve plugin action order:\n"
 msgstr "No se puede llevar a cabo la acción del plugin:\n"
@@ -2838,9 +2834,8 @@ msgid ""
 "\n"
 "Usage: %s [options]\n"
 "Options:\n"
-"  -c, --config xxx       use this configuration file instead of the default\n"
+"  -c, --config xxx       use this configuration file\n"
 "  -h, --help             show this help message\n"
-"  -d, --daemon           go to background after starting\n"
 "  --pack                 pack the database\n"
 "  -r, --restore-manager password\n"
 "                         restore the manager user with the provided "
@@ -2852,38 +2847,23 @@ msgstr ""
 "\n"
 "Uso: %s [opciones]\n"
 "Opciones:\n"
-"  -c, --config xxx use este archivo de configuración en vez de que está por "
-"defecto\n"
-"  -h --help muestra este mensaje de ayuda\n"
-"  -d --daemon ejecuta el programa como demonio después de iniciar\n"
-"  --pack empaca la base de datos\n"
-"                        restaura el usuario administrador con la contraseña "
+"  -c, --config xxx       use este archivo de configuración\n"
+"  -h --help              muestra este mensaje de ayuda\n"
+"  --pack                 empaca la base de datos\n"
+"  -r, --restore-manager contraseña\n"
+"                         restaura el usuario administrador con la contraseña "
 "propuesta\n"
-"                        (lee la contraseña desde la entrada estándar si "
+"                         (lee la contraseña desde la entrada estándar si "
 "'contraseña')\n"
-"                        es '-')\n"
-
-#: /src/schooltool/app/main.py:528
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s: el modo demonio no esta soportado en su sistema operativo"
+"                         es '-')\n"
 
 #: /src/schooltool/app/main.py:566
 msgid "Reading configuration from %s"
 msgstr "Leyendo configuración de %s"
 
 #: /src/schooltool/app/main.py:574
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
-"\n"
-"No se definió un almacenamiento en el archivo de configuración.\n"
-"\n"
-"Si esta usando el archivo de configuración por defecto, por favor edítelo\n"
-"ahora y descomente una de las secciones ZODB de almacenamiento.\n"
+msgid "No storage defined in the configuration file."
+msgstr "No se definió un almacenamiento en el archivo de configuración."
 
 #: /src/schooltool/app/main.py:672
 msgid ""
@@ -2901,14 +2881,6 @@ msgstr ""
 "\n"
 "¿Quizás otra instancia %s está utilizándolo?"
 
-#: /src/schooltool/app/main.py:767
-msgid ""
-"Warning: could not find the reportlab library.\n"
-"PDF support disabled."
-msgstr ""
-"Precaución: no se encontró la biblioteca reportlab.\n"
-"El soporte de PDF será deshabilitado."
-
 #: /src/schooltool/app/main.py:773
 msgid ""
 "Warning: font directories '%s' do not exist.\n"
@@ -2924,10 +2896,6 @@ msgid ""
 msgstr ""
 "Atención: la fuente '%s' no existe en el directorio de fuentes '%s'.\n"
 "Soporte de archivos PDF desactivados."
-
-#: /src/schooltool/app/main.py:775
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "Tiempo de arranque: %.3f seg reales, %.3f seg de CPU"
 
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
@@ -7832,46 +7800,6 @@ msgstr "La cadena fecha-hora no corresponde al patrón aaaa-mm-dd"
 #: /src/schooltool/skin/widgets.py:103
 msgid "Year has to be equal or greater than 1900"
 msgstr ""
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Width"
-msgstr "Anchura"
-
-#: /src/schooltool/skin/widgets.py:100
-msgid "Editor frame width"
-msgstr "Anchura del Editor de marco"
-
-#: /src/schooltool/skin/widgets.py:103
-msgid "Height"
-msgstr "Altura"
-
-#: /src/schooltool/skin/widgets.py:104
-msgid "Editor frame height"
-msgstr "Altura del editor de marco"
-
-#: /src/schooltool/skin/widgets.py:107
-msgid "Toolbar configuration"
-msgstr "Configuración de barra de herramientas."
-
-#: /src/schooltool/skin/widgets.py:108
-msgid "The name of the toolbar configuration to use."
-msgstr "El nombre de la configuración de barra de herramientas a usar."
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Relative configuration path"
-msgstr "Ubicación (camino relativo) de la configuración"
-
-#: /src/schooltool/skin/widgets.py:112
-msgid "Path to the FCKconfiguration javascript file."
-msgstr "Ruta al archivo de configuración javascript FCK,"
-
-#: /src/schooltool/skin/widgets.py:137
-msgid "Configuration"
-msgstr "Configuración"
-
-#: /src/schooltool/skin/widgets.py:138
-msgid "FCK editor configuration."
-msgstr "Configuración de editor FCK."
 
 #: /src/schooltool/table/pdf.py:637
 msgid "Continued ..."

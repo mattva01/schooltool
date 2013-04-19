@@ -2862,17 +2862,23 @@ msgid ""
 "\n"
 "Usage: %s [options]\n"
 "Options:\n"
-"  -c, --config xxx       use this configuration file instead of the default\n"
+"  -c, --config xxx       use this configuration file\n"
 "  -h, --help             show this help message\n"
-"  -d, --daemon           go to background after starting\n"
 "  --pack                 pack the database\n"
 "  -r, --restore-manager password\n"
-"                         restore the manager user with the provided "
-"password\n"
-"                         (read password from the standart input if "
-"'password'\n"
+"                         restore the manager user with the provided password\n"
+"                         (read password from the standart input if 'password'\n"
 "                         is '-')\n"
 msgstr ""
+"\n"
+"Utilização: %s [opções]\n"
+"Opções:\n"
+"  -c, --config xxx     utilizar este ficheiro de configuração\n"
+"  -h, --help           mostra esta mensagem de ajuda\n"
+"  --pack               empacotar base de dados\n"
+"  -r, --restore-manager senha\n"
+"                       restaurar o utilizador 'manager' com a senha designada\n"
+"                       (lê a senha do standard input se a 'senha' fôr '-')\n"
 
 #: /src/schooltool/app/main.py:528
 msgid "%s: daemon mode not supported on your operating system."
@@ -2883,18 +2889,8 @@ msgid "Reading configuration from %s"
 msgstr "Ler a configuração de %s"
 
 #: /src/schooltool/app/main.py:574
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
-"\n"
-"Storage indefinida no ficheiro de configuração.\n"
-"\n"
-"Se está a utilizar a configuração por omissão, por favor edite e\n"
-"descomente uma das secções de ZODB storage.\n"
+msgid "No storage defined in the configuration file."
+msgstr "Storage indefinida no ficheiro de configuração."
 
 #: /src/schooltool/app/main.py:672
 msgid ""
@@ -7733,46 +7729,6 @@ msgstr ""
 
 #: /src/schooltool/skin/widgets.py:103
 msgid "Year has to be equal or greater than 1900"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Width"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:100
-msgid "Editor frame width"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:103
-msgid "Height"
-msgstr "Altura"
-
-#: /src/schooltool/skin/widgets.py:104
-msgid "Editor frame height"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:107
-msgid "Toolbar configuration"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:108
-msgid "The name of the toolbar configuration to use."
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Relative configuration path"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:112
-msgid "Path to the FCKconfiguration javascript file."
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:137
-msgid "Configuration"
-msgstr "Configuração"
-
-#: /src/schooltool/skin/widgets.py:138
-msgid "FCK editor configuration."
 msgstr ""
 
 #: /src/schooltool/table/pdf.py:637
