@@ -183,6 +183,13 @@ class FlourishSchoolReportLinksURL(ReportLinksURL):
         return absoluteURL(app, self.request) + '/manage'
 
 
+class FlourishPersonReportLinksURL(ReportLinksURL):
+
+    def __str__(self):
+        app = ISchoolToolApplication(None)
+        return absoluteURL(app, self.request) + '/persons'
+
+
 class FlourishGroupReportLinksURL(GroupReportLinksURL):
 
     def __str__(self):
@@ -209,3 +216,10 @@ class FlourishSectionReportLinksURL(SectionReportLinksURL):
     def __str__(self):
         app = ISchoolToolApplication(None)
         return absoluteURL(app, self.request) + '/sections'
+
+
+class FlourishResourceReportLinksURL(ReportLinksURL):
+
+    def __str__(self):
+        app = ISchoolToolApplication(None)
+        return absoluteURL(app, self.request) + '/resources'

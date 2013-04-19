@@ -5,7 +5,7 @@ CHANGES
 2.4.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix PDF reports crashing with newer z3c.rml (https://launchpad.net/bugs/1169723)
 
 
 2.4b1 (2013-04-17)

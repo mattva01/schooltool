@@ -634,7 +634,7 @@
        name="person_export_xml"
        for="schooltool.person.interfaces.IPerson"
        permission="schooltool.edit"
-       group="Student"
+       group="Person"
        description="Contains an XML representation of the person."
        title="Export as XML"
        file_type="xml"
