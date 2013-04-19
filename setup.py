@@ -64,7 +64,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                       'Pillow',
                       'pytz',
                       'reportlab',
-                      'rwproperty', # BBB plugins <= 2.4b1 need it
                       'setuptools',
                       'xlrd',
                       'xlwt',

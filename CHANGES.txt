@@ -2,10 +2,20 @@
 CHANGES
 =======
 
-2.4.0 (unreleased)
+2.4.1 (unreleased)
 ------------------
 
+- Nothing changed yet.
+
+
+2.4.0 (2013-04-19)
+------------------
+
+- Fix crash on startup in 2.4b1 release
 - Fix PDF reports crashing with newer z3c.rml (https://launchpad.net/bugs/1169723)
+- Remove dependency on ``zope.app.server``
+- Remove or deprecate unused schooltool.conf options
+- Do not echo password being entered using schooltool-server --restore-manager -
 
 
 2.4b1 (2013-04-17)
