@@ -18,15 +18,9 @@
 #
 """
 Main SchoolTool script.
-
-This module is not necessary if you use SchoolTool as a Zope 3 content object.
-It is only used by the standalone SchoolTool executable.
-
-$Id$
 """
 import os
 import sys
-import time
 import getopt
 import locale
 import gettext
@@ -708,16 +702,13 @@ class SchoolToolServer(object):
 
         pdf.setUpFonts(existing_directories)
 
-
-class StandaloneServer(SchoolToolServer):
-
     def main(self, argv=sys.argv):
         options = self.load_options(argv)
         db = self.setup(options)
 
 
 def main():
-    StandaloneServer().main()
+    SchoolToolServer().main()
 
 if __name__ == '__main__':
     main()
