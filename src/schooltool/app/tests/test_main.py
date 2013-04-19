@@ -182,39 +182,13 @@ def doctest_configureReportlab():
         >>> realSetup = pdf.setUpFonts
         >>> pdf.setUpFonts = setupStub
 
+        >>> old_stderr = sys.stderr
+        >>> sys.stderr = sys.stdout
+
     First, if a null path is given, nothing happens (PDF support is
     left disabled):
 
         >>> server.configureReportlab(None)
-
-    Now, let's imitate a situation where a font path is given, but reportlab
-    can not be imported.
-
-        >>> old_stderr = sys.stderr
-        >>> sys.stderr = sys.stdout
-
-        >>> try:
-        ...     import reportlab
-        ... except ImportError:
-        ...     pass
-
-        >>> real_reportlab = sys.modules.get('reportlab')
-        >>> sys.modules['reportlab'] = None
-
-    reportlab can not be imported, see?
-
-        >>> import reportlab
-        Traceback (most recent call last):
-          ...
-        ImportError: No module named reportlab
-
-    Good.  Now configureReportLab should print a warning.
-
-        >>> server.configureReportlab('.')
-        Warning: could not find the reportlab library.
-        PDF support disabled.
-
-        >>> sys.modules['reportlab'] = object()
 
     Now test the check that the font path is a directory:
 
@@ -242,8 +216,6 @@ def doctest_configureReportlab():
 
         >>> pdf.font_map = real_font_map
         >>> sys.stderr = old_stderr
-        >>> if real_reportlab:
-        ...     sys.modules['reportlab'] = real_reportlab
         >>> pdf.setUpFonts = realSetup
 
     """

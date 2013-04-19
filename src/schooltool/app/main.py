@@ -663,13 +663,6 @@ class SchoolToolServer(object):
         if not fontdirs:
             return
 
-        try:
-            import reportlab
-        except ImportError:
-            print >> sys.stderr, _("Warning: could not find the reportlab"
-                                   " library.\nPDF support disabled.")
-            return
-
         existing_directories = []
         for fontdir in fontdirs.split(':'):
             if os.path.isdir(fontdir):
