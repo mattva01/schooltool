@@ -18,15 +18,9 @@
 #
 """
 Main SchoolTool script.
-
-This module is not necessary if you use SchoolTool as a Zope 3 content object.
-It is only used by the standalone SchoolTool executable.
-
-$Id$
 """
 import os
 import sys
-import time
 import getopt
 import locale
 import gettext
@@ -89,8 +83,6 @@ _._domain = 'schooltool'
 
 
 class Options(object):
-    config_filename = 'schooltool.conf'
-    quiet = False
     config = None
     pack = False
     restore_manager = False
@@ -493,8 +485,8 @@ class SchoolToolServer(object):
                 if v != '-':
                     options.manager_password = v
                 else:
-                    print 'Manager password: ',
-                    password = sys.stdin.readline().strip('\r\n')
+                    from getpass import getpass
+                    password = getpass(_("Manager password: "))
                     options.manager_password = password
 
         # Read configuration file
@@ -505,7 +497,7 @@ class SchoolToolServer(object):
         schema_file = StringIO(schema_string)
 
         if not options.config_file:
-            print >> sys.stderr, "No config file specified"
+            print >> sys.stderr, _("No configuration file given")
             sys.exit(1)
 
         schema = ZConfig.loadSchemaFile(schema_file, self.ZCONFIG_SCHEMA)
@@ -518,11 +510,8 @@ class SchoolToolServer(object):
             print >> sys.stderr, "%s: %s" % (progname, e)
             sys.exit(1)
         if options.config.database.config.storage is None:
-            print >> sys.stderr, "%s: %s" % (progname, _("\n"
-                "No storage defined in the configuration file.\n"
-                "\n"
-                "If you're using the default configuration file, please edit it now and\n"
-                "uncomment one of the ZODB storage sections.\n").strip())
+            print >> sys.stderr, "%s: %s" % (progname, _(
+                "No storage defined in the configuration file."))
 
             sys.exit(1)
 
@@ -594,7 +583,6 @@ class SchoolToolServer(object):
         transaction.commit()
         connection.close()
 
-
     def restoreManagerUser(self, app, password):
         """Ensure there is a manager user
 
@@ -659,6 +647,9 @@ class SchoolToolServer(object):
             transaction.commit()
             connection.close()
 
+        if options.pack or options.restore_manager:
+            return db
+
         self.startApplication(db)
 
         provideUtility(db, IDatabase)
@@ -673,13 +664,6 @@ class SchoolToolServer(object):
         Outputs a warning to stderr in case of errors.
         """
         if not fontdirs:
-            return
-
-        try:
-            import reportlab
-        except ImportError:
-            print >> sys.stderr, _("Warning: could not find the reportlab"
-                                   " library.\nPDF support disabled.")
             return
 
         existing_directories = []
@@ -708,16 +692,13 @@ class SchoolToolServer(object):
 
         pdf.setUpFonts(existing_directories)
 
-
-class StandaloneServer(SchoolToolServer):
-
     def main(self, argv=sys.argv):
         options = self.load_options(argv)
         db = self.setup(options)
 
 
 def main():
-    StandaloneServer().main()
+    SchoolToolServer().main()
 
 if __name__ == '__main__':
     main()

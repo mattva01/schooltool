@@ -46,7 +46,7 @@ def doctest_main():
         >>> from schooltool.app.main import Options
         >>> options = Options()
         >>> class ConfigStub:
-        ...     pid_file = ''
+        ...     pass
         >>> options.config = ConfigStub()
 
         >>> def load_options_stub(argv):
@@ -54,8 +54,8 @@ def doctest_main():
         >>> def setup_stub(opts):
         ...     print "Performing setup..."
         ...     assert opts is options
-        >>> from schooltool.app.main import StandaloneServer
-        >>> server = StandaloneServer()
+        >>> from schooltool.app.main import SchoolToolServer
+        >>> server = SchoolToolServer()
         >>> server.load_options = load_options_stub
         >>> server.setup = setup_stub
 
@@ -90,8 +90,8 @@ def doctest_load_options():
 
     Load options parses command line arguments and the configuration file.
 
-        >>> from schooltool.app.main import StandaloneServer
-        >>> server = StandaloneServer()
+        >>> from schooltool.app.main import SchoolToolServer
+        >>> server = SchoolToolServer()
         >>> o = server.load_options(['st.py', '-c', sample_config_file])
         Reading configuration from ...sample.conf
 
@@ -158,9 +158,6 @@ def doctest_load_options():
         ...     print '[exited with status %s]' % e
         Reading configuration from ...empty.conf
         st.py: No storage defined in the configuration file.
-        <BLANKLINE>
-        If you're using the default configuration file, please edit it now and
-        uncomment one of the ZODB storage sections.
         [exited with status 1]
 
     Cleaning up.
@@ -176,48 +173,22 @@ def doctest_configureReportlab():
     """Tests for configureReportlab.
 
         >>> from schooltool.app import pdf
-        >>> from schooltool.app.main import StandaloneServer
+        >>> from schooltool.app.main import SchoolToolServer
 
-        >>> server = StandaloneServer()
+        >>> server = SchoolToolServer()
 
         >>> def setupStub(fontdir):
         ...     print 'reportlab set up: %s' % fontdir
         >>> realSetup = pdf.setUpFonts
         >>> pdf.setUpFonts = setupStub
 
+        >>> old_stderr = sys.stderr
+        >>> sys.stderr = sys.stdout
+
     First, if a null path is given, nothing happens (PDF support is
     left disabled):
 
         >>> server.configureReportlab(None)
-
-    Now, let's imitate a situation where a font path is given, but reportlab
-    can not be imported.
-
-        >>> old_stderr = sys.stderr
-        >>> sys.stderr = sys.stdout
-
-        >>> try:
-        ...     import reportlab
-        ... except ImportError:
-        ...     pass
-
-        >>> real_reportlab = sys.modules.get('reportlab')
-        >>> sys.modules['reportlab'] = None
-
-    reportlab can not be imported, see?
-
-        >>> import reportlab
-        Traceback (most recent call last):
-          ...
-        ImportError: No module named reportlab
-
-    Good.  Now configureReportLab should print a warning.
-
-        >>> server.configureReportlab('.')
-        Warning: could not find the reportlab library.
-        PDF support disabled.
-
-        >>> sys.modules['reportlab'] = object()
 
     Now test the check that the font path is a directory:
 
@@ -245,8 +216,6 @@ def doctest_configureReportlab():
 
         >>> pdf.font_map = real_font_map
         >>> sys.stderr = old_stderr
-        >>> if real_reportlab:
-        ...     sys.modules['reportlab'] = real_reportlab
         >>> pdf.setUpFonts = realSetup
 
     """
@@ -312,7 +281,7 @@ def doctest_setup():
 
     It is difficult to unit test, but we'll try.
 
-        >>> from schooltool.app.main import Options, StandaloneServer
+        >>> from schooltool.app.main import Options, SchoolToolServer
         >>> from ZODB.MappingStorage import MappingStorage
         >>> from ZODB.DB import DB
         >>> options = Options()
@@ -339,7 +308,7 @@ def doctest_setup():
 
     And go!
 
-        >>> server = StandaloneServer()
+        >>> server = SchoolToolServer()
         >>> db = server.setup(options)
         >>> print db
         <ZODB.DB.DB object at ...>
@@ -420,8 +389,8 @@ def doctest_bootstrapSchoolTool():
 
     Normally, bootstrapSchoolTool is called when Zope 3 is fully configured
 
-        >>> from schooltool.app.main import StandaloneServer
-        >>> server = StandaloneServer()
+        >>> from schooltool.app.main import SchoolToolServer
+        >>> server = SchoolToolServer()
         >>> server.siteConfigFile = ftesting_zcml
         >>> server.configure(OptionsStub())
 
@@ -491,14 +460,14 @@ def doctest_bootstrapSchoolTool():
 
 
 def doctest_restoreManagerUser():
-    r"""Unit test for StandaloneServer.restoreManagerUser
+    r"""Unit test for SchoolToolServer.restoreManagerUser
 
         >>> cleanup.setUp()
 
     We need a configured server:
 
-        >>> from schooltool.app.main import StandaloneServer
-        >>> server = StandaloneServer()
+        >>> from schooltool.app.main import SchoolToolServer
+        >>> server = SchoolToolServer()
         >>> server.siteConfigFile = ftesting_zcml
         >>> server.configure(OptionsStub())
 
