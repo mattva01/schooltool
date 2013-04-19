@@ -485,8 +485,8 @@ class SchoolToolServer(object):
                 if v != '-':
                     options.manager_password = v
                 else:
-                    print 'Manager password: ',
-                    password = sys.stdin.readline().strip('\r\n')
+                    from getpass import getpass
+                    password = getpass(_("Manager password: "))
                     options.manager_password = password
 
         # Read configuration file
