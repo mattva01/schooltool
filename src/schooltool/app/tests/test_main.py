@@ -158,9 +158,6 @@ def doctest_load_options():
         ...     print '[exited with status %s]' % e
         Reading configuration from ...empty.conf
         st.py: No storage defined in the configuration file.
-        <BLANKLINE>
-        If you're using the default configuration file, please edit it now and
-        uncomment one of the ZODB storage sections.
         [exited with status 1]
 
     Cleaning up.

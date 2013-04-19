@@ -83,8 +83,6 @@ _._domain = 'schooltool'
 
 
 class Options(object):
-    config_filename = 'schooltool.conf'
-    quiet = False
     config = None
     pack = False
     restore_manager = False
@@ -499,7 +497,7 @@ class SchoolToolServer(object):
         schema_file = StringIO(schema_string)
 
         if not options.config_file:
-            print >> sys.stderr, "No config file specified"
+            print >> sys.stderr, _("No configuration file given")
             sys.exit(1)
 
         schema = ZConfig.loadSchemaFile(schema_file, self.ZCONFIG_SCHEMA)
@@ -512,11 +510,8 @@ class SchoolToolServer(object):
             print >> sys.stderr, "%s: %s" % (progname, e)
             sys.exit(1)
         if options.config.database.config.storage is None:
-            print >> sys.stderr, "%s: %s" % (progname, _("\n"
-                "No storage defined in the configuration file.\n"
-                "\n"
-                "If you're using the default configuration file, please edit it now and\n"
-                "uncomment one of the ZODB storage sections.\n").strip())
+            print >> sys.stderr, "%s: %s" % (progname, _(
+                "No storage defined in the configuration file."))
 
             sys.exit(1)
 
@@ -587,7 +582,6 @@ class SchoolToolServer(object):
         setSite(last_site)
         transaction.commit()
         connection.close()
-
 
     def restoreManagerUser(self, app, password):
         """Ensure there is a manager user
