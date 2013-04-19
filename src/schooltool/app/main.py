@@ -647,6 +647,9 @@ class SchoolToolServer(object):
             transaction.commit()
             connection.close()
 
+        if options.pack or options.restore_manager:
+            return db
+
         self.startApplication(db)
 
         provideUtility(db, IDatabase)
