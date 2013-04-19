@@ -2784,44 +2784,13 @@ msgstr "Tidak dapat menyelesaikan tindakan plugin order:\n"
 msgid "Run %s -h for help."
 msgstr "Jalankan %s -h untuk pertolongan"
 
-#: /src/schooltool/app/main.py:517
-msgid ""
-"\n"
-"Usage: %s [options]\n"
-"Options:\n"
-"  -c, --config xxx       use this configuration file instead of the default\n"
-"  -h, --help             show this help message\n"
-"  -d, --daemon           go to background after starting\n"
-"  --pack                 pack the database\n"
-"  -r, --restore-manager password\n"
-"                         restore the manager user with the provided "
-"password\n"
-"                         (read password from the standart input if "
-"'password'\n"
-"                         is '-')\n"
-msgstr ""
-
-#: /src/schooltool/app/main.py:528
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s: modus daemon tidak didukung di sistem operasi Anda."
-
 #: /src/schooltool/app/main.py:566
 msgid "Reading configuration from %s"
 msgstr "Pembacaan Konfigurasi dari %s"
 
 #: /src/schooltool/app/main.py:574
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
-"\n"
-"Tidak dijelaskan media penyimpan dalam berkas konfigurasi ini.\n"
-"\n"
-"Jika anda menggunakan konfigurasi awal, silakan rubah sekarang dan\n"
-"tidak ada komentar pada seksi peyimpanan ZODB.\n"
+msgid "No storage defined in the configuration file."
+msgstr "Tidak dijelaskan media penyimpan dalam berkas konfigurasi ini."
 
 #: /src/schooltool/app/main.py:672
 msgid ""
@@ -7644,46 +7613,6 @@ msgstr ""
 
 #: /src/schooltool/skin/widgets.py:103
 msgid "Year has to be equal or greater than 1900"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Width"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:100
-msgid "Editor frame width"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:103
-msgid "Height"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:104
-msgid "Editor frame height"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:107
-msgid "Toolbar configuration"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:108
-msgid "The name of the toolbar configuration to use."
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Relative configuration path"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:112
-msgid "Path to the FCKconfiguration javascript file."
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:137
-msgid "Configuration"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:138
-msgid "FCK editor configuration."
 msgstr ""
 
 #: /src/schooltool/table/pdf.py:637

@@ -2793,23 +2793,6 @@ msgstr "Δεν μπορείτε να λύσετε το πρόσθετο ώστε
 msgid "Run %s -h for help."
 msgstr "Εκτελέστε %s -h για βοήθεια."
 
-#: /src/schooltool/app/main.py:517
-msgid ""
-"\n"
-"Usage: %s [options]\n"
-"Options:\n"
-"  -c, --config xxx       use this configuration file instead of the default\n"
-"  -h, --help             show this help message\n"
-"  -d, --daemon           go to background after starting\n"
-"  --pack                 pack the database\n"
-"  -r, --restore-manager password\n"
-"                         restore the manager user with the provided "
-"password\n"
-"                         (read password from the standart input if "
-"'password'\n"
-"                         is '-')\n"
-msgstr ""
-
 #: /src/schooltool/app/main.py:528
 msgid "%s: daemon mode not supported on your operating system."
 msgstr ""
@@ -2820,19 +2803,8 @@ msgid "Reading configuration from %s"
 msgstr "Ανάγνωση διαμόρφωσης από %s"
 
 #: /src/schooltool/app/main.py:574
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
-"\n"
-"Δεν ορίζεται η αποθήκευση στο αρχείο ρυθμίσεων.\n"
-"\n"
-"Εάν χρησιμοποιείτε το αρχείο προ επιλεγμένης ρύθμισης, παρακαλούμε να το "
-"επεξεργαστείτε τώρα και\n"
-"μην σχολιάσετε ένα από τα ZODB τμήματα αποθήκευσης\n"
+msgid "No storage defined in the configuration file."
+msgstr "Δεν ορίζεται η αποθήκευση στο αρχείο ρυθμίσεων."
 
 #: /src/schooltool/app/main.py:672
 msgid ""

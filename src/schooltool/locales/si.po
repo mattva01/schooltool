@@ -2792,23 +2792,6 @@ msgstr "ප්ලගිනයේ ක්‍රියා අනුපිළිව�
 msgid "Run %s -h for help."
 msgstr "උපකාර සදහා %s -h ධාවනය කරන්න"
 
-#: /src/schooltool/app/main.py:517
-msgid ""
-"\n"
-"Usage: %s [options]\n"
-"Options:\n"
-"  -c, --config xxx       use this configuration file instead of the default\n"
-"  -h, --help             show this help message\n"
-"  -d, --daemon           go to background after starting\n"
-"  --pack                 pack the database\n"
-"  -r, --restore-manager password\n"
-"                         restore the manager user with the provided "
-"password\n"
-"                         (read password from the standart input if "
-"'password'\n"
-"                         is '-')\n"
-msgstr ""
-
 #: /src/schooltool/app/main.py:528
 msgid "%s: daemon mode not supported on your operating system."
 msgstr "%s: ඩීමන් ප්‍රකාරය ඔබගේ මෙහෙයුම් පද්ධතිය මත දී සහය නොදෙයි."
@@ -2816,15 +2799,6 @@ msgstr "%s: ඩීමන් ප්‍රකාරය ඔබගේ මෙහෙ�
 #: /src/schooltool/app/main.py:566
 msgid "Reading configuration from %s"
 msgstr "%sන් වින්‍යාසය කියවයි"
-
-#: /src/schooltool/app/main.py:574
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
 
 #: /src/schooltool/app/main.py:672
 msgid ""
@@ -7641,46 +7615,6 @@ msgstr "datetime අනුලකුණු වැල yyyy-mm-dd රටාව ස�
 #: /src/schooltool/skin/widgets.py:103
 msgid "Year has to be equal or greater than 1900"
 msgstr "වර්ෂය 1900ට වඩා විශාල හෝ සමාන විය යුතුය."
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Width"
-msgstr "පළල"
-
-#: /src/schooltool/skin/widgets.py:100
-msgid "Editor frame width"
-msgstr "සංස්කාරක රාමු පළල"
-
-#: /src/schooltool/skin/widgets.py:103
-msgid "Height"
-msgstr "උස"
-
-#: /src/schooltool/skin/widgets.py:104
-msgid "Editor frame height"
-msgstr "සංස්කාරක රාමු උස"
-
-#: /src/schooltool/skin/widgets.py:107
-msgid "Toolbar configuration"
-msgstr "මෙවලම් තීරු වින්‍යාසය"
-
-#: /src/schooltool/skin/widgets.py:108
-msgid "The name of the toolbar configuration to use."
-msgstr "පාවිච්චියට ඇති මෙවලම් තීරු වින්‍යාසයේ නම."
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Relative configuration path"
-msgstr "සාපේක්ෂ වින්‍යාස මඟ"
-
-#: /src/schooltool/skin/widgets.py:112
-msgid "Path to the FCKconfiguration javascript file."
-msgstr "FCKconfiguration javascript ගොනුවට මඟ"
-
-#: /src/schooltool/skin/widgets.py:137
-msgid "Configuration"
-msgstr "වින්‍යාසය"
-
-#: /src/schooltool/skin/widgets.py:138
-msgid "FCK editor configuration."
-msgstr "FCK editor වින්‍යාසය"
 
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7

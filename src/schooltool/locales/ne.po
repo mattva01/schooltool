@@ -2738,23 +2738,6 @@ msgstr "प्लगइन एक्सन अर्डरलाई समाध
 msgid "Run %s -h for help."
 msgstr "मद्दतका लागि %s -h चलाउनुहोस्।"
 
-#: /src/schooltool/app/main.py:517
-msgid ""
-"\n"
-"Usage: %s [options]\n"
-"Options:\n"
-"  -c, --config xxx       use this configuration file instead of the default\n"
-"  -h, --help             show this help message\n"
-"  -d, --daemon           go to background after starting\n"
-"  --pack                 pack the database\n"
-"  -r, --restore-manager password\n"
-"                         restore the manager user with the provided "
-"password\n"
-"                         (read password from the standart input if "
-"'password'\n"
-"                         is '-')\n"
-msgstr ""
-
 #: /src/schooltool/app/main.py:528
 msgid "%s: daemon mode not supported on your operating system."
 msgstr "तपाईंको सञ्चालन प्रणालीमा %s: डेमन मोड समर्थन गर्दैन।"
@@ -2764,20 +2747,8 @@ msgid "Reading configuration from %s"
 msgstr "%s बाट कन्फिगरेसन पढ्दै"
 
 #: /src/schooltool/app/main.py:574
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
-"\n"
-"\"\\n\"\n"
-"\"कन्फिगरेसन फाइलमा कुनै भण्डारण परिभाषित गरिएको छैन।\\n\"\n"
-"\"\\n\"\n"
-"\"यदि तपाईं पूर्वनिर्धारित कन्फिगरेसन फाइल प्रयोग गर्दै हुनुहुन्छ भने, कृपया "
-"यसलाई अहिले सम्पादन गर्नुहोस् र\\n\"\n"
-"\"ZODB भण्डारण सेक्सनहरूको एउटा चिनो हटाउनुहोस्।\\n\"\n"
+msgid "No storage defined in the configuration file."
+msgstr "कन्फिगरेसन फाइलमा कुनै भण्डारण परिभाषित गरिएको छैन।"
 
 #: /src/schooltool/app/main.py:672
 msgid ""
@@ -7517,46 +7488,6 @@ msgstr "मिति समय स्ट्रीङ साल-महिना-�
 #: /src/schooltool/skin/widgets.py:103
 msgid "Year has to be equal or greater than 1900"
 msgstr ""
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Width"
-msgstr "चौडाई"
-
-#: /src/schooltool/skin/widgets.py:100
-msgid "Editor frame width"
-msgstr "रचना चौडाई सम्पादक"
-
-#: /src/schooltool/skin/widgets.py:103
-msgid "Height"
-msgstr "उचाई"
-
-#: /src/schooltool/skin/widgets.py:104
-msgid "Editor frame height"
-msgstr "रचना उचाई सम्पादक"
-
-#: /src/schooltool/skin/widgets.py:107
-msgid "Toolbar configuration"
-msgstr "उपकरणपट्टी प्रारुप"
-
-#: /src/schooltool/skin/widgets.py:108
-msgid "The name of the toolbar configuration to use."
-msgstr "प्रयोग गर्नको लागि उपकरणपट्टी प्रारुपको नाम"
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Relative configuration path"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:112
-msgid "Path to the FCKconfiguration javascript file."
-msgstr "FCK उपकरणपट्टी जाभास्कृप्ट फाईलको पथ"
-
-#: /src/schooltool/skin/widgets.py:137
-msgid "Configuration"
-msgstr "उपकरणपट्टी"
-
-#: /src/schooltool/skin/widgets.py:138
-msgid "FCK editor configuration."
-msgstr "FCK सम्पादक उपकरणपट्टी"
 
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7

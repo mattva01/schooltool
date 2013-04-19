@@ -2780,23 +2780,6 @@ msgstr "プラグインアクションの順序を解決することはできま
 msgid "Run %s -h for help."
 msgstr ""
 
-#: /src/schooltool/app/main.py:517
-msgid ""
-"\n"
-"Usage: %s [options]\n"
-"Options:\n"
-"  -c, --config xxx       use this configuration file instead of the default\n"
-"  -h, --help             show this help message\n"
-"  -d, --daemon           go to background after starting\n"
-"  --pack                 pack the database\n"
-"  -r, --restore-manager password\n"
-"                         restore the manager user with the provided "
-"password\n"
-"                         (read password from the standart input if "
-"'password'\n"
-"                         is '-')\n"
-msgstr ""
-
 #: /src/schooltool/app/main.py:528
 msgid "%s: daemon mode not supported on your operating system."
 msgstr "%s: お使いのオペレーティングシステムでサポートされていないデーモンモードです。"
@@ -2804,15 +2787,6 @@ msgstr "%s: お使いのオペレーティングシステムでサポートさ�
 #: /src/schooltool/app/main.py:566
 msgid "Reading configuration from %s"
 msgstr "%sから設定を読み込む"
-
-#: /src/schooltool/app/main.py:574
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
 
 #: /src/schooltool/app/main.py:672
 msgid ""

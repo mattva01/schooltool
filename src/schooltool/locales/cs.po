@@ -2756,10 +2756,6 @@ msgstr "Zobrazit kalendář přes celou stránku jako hlavní stránku."
 msgid "School logo"
 msgstr "Logo školy"
 
-#: /src/schooltool/app/main.py:305
-msgid "Going to background, daemon pid %d"
-msgstr "Přecházím na pozadí, daemon pid %d"
-
 #: /src/schooltool/app/main.py:361
 msgid "Cannot resolve plugin action order:\n"
 msgstr "Nelze vyřešit pořadí fungování pluginů:\n"
@@ -2768,44 +2764,13 @@ msgstr "Nelze vyřešit pořadí fungování pluginů:\n"
 msgid "Run %s -h for help."
 msgstr "Pro nápovědu spusťte %s -h."
 
-#: /src/schooltool/app/main.py:517
-msgid ""
-"\n"
-"Usage: %s [options]\n"
-"Options:\n"
-"  -c, --config xxx       use this configuration file instead of the default\n"
-"  -h, --help             show this help message\n"
-"  -d, --daemon           go to background after starting\n"
-"  --pack                 pack the database\n"
-"  -r, --restore-manager password\n"
-"                         restore the manager user with the provided "
-"password\n"
-"                         (read password from the standart input if "
-"'password'\n"
-"                         is '-')\n"
-msgstr ""
-
-#: /src/schooltool/app/main.py:528
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s: na vašem operačním systému není režim daemon podporován."
-
 #: /src/schooltool/app/main.py:566
 msgid "Reading configuration from %s"
 msgstr "Načítám nastavení z %s"
 
-#: /src/schooltool/app/main.py:574
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
-"\n"
-"V konfiguračním souboru nebylo definováno žádné úložiště.\n"
-"\n"
-"Používáte-li výchozí konfigurační soubor, pokud možno jej ihned \n"
-"upravte a odpokentujte některou sekci se ZODB úložišti.\n"
+#: /src/schooltool/app/main.py:513
+msgid "No storage defined in the configuration file."
+msgstr "V konfiguračním souboru nebylo definováno žádné úložiště."
 
 #: /src/schooltool/app/main.py:672
 msgid ""
@@ -2823,14 +2788,6 @@ msgstr ""
 "\n"
 "Možná jej používá jiná instance %s?"
 
-#: /src/schooltool/app/main.py:767
-msgid ""
-"Warning: could not find the reportlab library.\n"
-"PDF support disabled."
-msgstr ""
-"Varování: nemohu najít knihovnu reportlab.\n"
-"Vypínám podporu PDF."
-
 #: /src/schooltool/app/main.py:773
 msgid ""
 "Warning: font directories '%s' do not exist.\n"
@@ -2842,10 +2799,6 @@ msgid ""
 "Warning: font '%s' does not exist in the font directories '%s'.\n"
 "PDF support disabled."
 msgstr ""
-
-#: /src/schooltool/app/main.py:775
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "Doba spouštění: %.3f s. skutečných, %.3f s. CPU"
 
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20

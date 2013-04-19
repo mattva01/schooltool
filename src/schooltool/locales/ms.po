@@ -2804,17 +2804,24 @@ msgid ""
 "\n"
 "Usage: %s [options]\n"
 "Options:\n"
-"  -c, --config xxx       use this configuration file instead of the default\n"
+"  -c, --config xxx       use this configuration file\n"
 "  -h, --help             show this help message\n"
-"  -d, --daemon           go to background after starting\n"
 "  --pack                 pack the database\n"
 "  -r, --restore-manager password\n"
-"                         restore the manager user with the provided "
-"password\n"
-"                         (read password from the standart input if "
-"'password'\n"
+"                         restore the manager user with the provided password\n"
+"                         (read password from the standart input if 'password'\n"
 "                         is '-')\n"
 msgstr ""
+"\n"
+"Pengunaan: %s [pilihan-pilihan]\n"
+"Pilihan-pilihan:\n"
+"  -c, --config xxx       guna fail konfigurasi\n"
+"  -h, --help             paparkan mesej bantuan ini\n"
+"  --pack                 pek pangkalan data\n"
+"  -r, --restore-manager kata laluan\n"
+"                         mengembalikan pengguna pengurus dengan kata laluan\n"
+"                         yang diberi (baca kata laluan dari input biasa jika\n"
+"                         'kata laluan' adalah '-')\n"
 
 #: /src/schooltool/app/main.py:528
 msgid "%s: daemon mode not supported on your operating system."
@@ -2825,18 +2832,8 @@ msgid "Reading configuration from %s"
 msgstr "Membaca Konfigurasi dari %s"
 
 #: /src/schooltool/app/main.py:574
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
-msgstr ""
-"\n"
-"TIada penyimpanan didefinasikan di dalam fail konfigurasi.\n"
-"\n"
-"Jika anda menggunakan fail konfigurasi asal, tolong sunting ia sekarang dan\n"
-"buang komen satu dari seksyen penyimpanan ZODB.\n"
+msgid "No storage defined in the configuration file."
+msgstr "TIada penyimpanan didefinasikan di dalam fail konfigurasi."
 
 #: /src/schooltool/app/main.py:672
 msgid ""
@@ -7737,46 +7734,6 @@ msgstr "Tarikh & masa  tidak sepadan dengan contoh yyyy-mm-dd"
 #: /src/schooltool/skin/widgets.py:103
 msgid "Year has to be equal or greater than 1900"
 msgstr ""
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Width"
-msgstr "keluasan"
-
-#: /src/schooltool/skin/widgets.py:100
-msgid "Editor frame width"
-msgstr "Editor keluasan tetingkap"
-
-#: /src/schooltool/skin/widgets.py:103
-msgid "Height"
-msgstr "Ketinggian"
-
-#: /src/schooltool/skin/widgets.py:104
-msgid "Editor frame height"
-msgstr "Editor ketinggian tetingkap"
-
-#: /src/schooltool/skin/widgets.py:107
-msgid "Toolbar configuration"
-msgstr "konfigurasi panel alatan"
-
-#: /src/schooltool/skin/widgets.py:108
-msgid "The name of the toolbar configuration to use."
-msgstr "Nama panel alatan yang hendak digunakan."
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Relative configuration path"
-msgstr "Laluan konfigurasi relatif"
-
-#: /src/schooltool/skin/widgets.py:112
-msgid "Path to the FCKconfiguration javascript file."
-msgstr "Arah jalan ke fail FCKkonfigurasi javascript."
-
-#: /src/schooltool/skin/widgets.py:137
-msgid "Configuration"
-msgstr "Konfigurasi"
-
-#: /src/schooltool/skin/widgets.py:138
-msgid "FCK editor configuration."
-msgstr "Editor konfigurasi FCK"
 
 #: /src/schooltool/table/pdf.py:637
 msgid "Continued ..."

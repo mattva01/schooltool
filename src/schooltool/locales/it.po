@@ -2851,19 +2851,10 @@ msgid "Reading configuration from %s"
 msgstr "La configurazione viene letta da %s"
 
 #: /src/schooltool/app/main.py:574
-msgid ""
-"\n"
-"No storage defined in the configuration file.\n"
-"\n"
-"If you're using the default configuration file, please edit it now and\n"
-"uncomment one of the ZODB storage sections.\n"
+msgid "No storage defined in the configuration file."
 msgstr ""
-"\n"
-"Nel file di configurazione non è stato trovato alcun indirizzo di \"\n"
-"\"archiviazione (storage).\"\n"
-"\n"
-"\"Se si sta usando il file di default modificarlo ora scommentando una \"\n"
-"\"delle sezioni di archiviazione del database ZODB\n"
+"Nel file di configurazione non è stato trovato alcun indirizzo di "
+"\"archiviazione\""
 
 #: /src/schooltool/app/main.py:672
 msgid ""
