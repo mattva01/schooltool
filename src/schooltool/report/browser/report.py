@@ -188,7 +188,7 @@ class ReportsLinks(RefineLinksViewlet):
                 querystring = urlencode({
                         'file_type': file_type.encode('utf-8').upper(),
                         'description': description.encode('utf-8')})
-                url = '%s?%s' % (viewlet.link, querystring)
+                url = '%s?%s' % (viewlet.report_link, querystring)
             result.append({
                     'class': item['class'],
                     'viewlet': viewlet,
