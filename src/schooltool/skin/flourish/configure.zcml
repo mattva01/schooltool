@@ -116,6 +116,18 @@
       />
   </zope:resourceLibrary>
 
+  <zope:resourceLibrary
+      name="schooltool.skin.flourish-report"
+      require="schooltool.skin.flourish"
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+      source="resources"
+      include="d3.min.js
+               report.js
+               report.css"
+      />
+  </zope:resourceLibrary>
+
   <!-- Content provider machinery -->
 
   <zope:adapter
