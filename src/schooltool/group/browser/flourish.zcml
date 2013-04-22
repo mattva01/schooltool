@@ -374,7 +374,8 @@
       />
 
   <report:reportLink
-      name="group_a_id_cards_pdf"
+      name="group_id_cards_pdf"
+      before="group_detail_report group_report_card"
       for="schooltool.group.interfaces.IGroup"
       permission="schooltool.edit"
       group="Group"

@@ -34,11 +34,13 @@ from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.interface import implements
 from zope.cachedescriptors.property import Lazy
+from zope.proxy import getProxiedObject
 from z3c.form import button
 
 import schooltool.traverser.traverser
 from schooltool.person.interfaces import IPerson
 from schooltool.report.interfaces import IReportLinksURL
+from schooltool.report.interfaces import IReportLinkViewlet
 from schooltool.report.interfaces import IReportFile
 from schooltool.report.report import IFlourishReportLinkViewletManager
 from schooltool.report.report import getReportRegistrationUtility
@@ -200,6 +202,20 @@ class ReportsLinks(RefineLinksViewlet):
                     'url': url,
                     })
         return result
+
+
+class ReportLinkViewletProxy(flourish.viewlet.ViewletProxy):
+
+    adapts(IReportLinkViewlet)
+
+    def __init__(self, *args, **kw):
+        super(ReportLinkViewletProxy, self).__init__(*args, **kw)
+        self.restoreSortingAttrs()
+
+    def restoreSortingAttrs(self):
+        unproxied = getProxiedObject(self)
+        self.before = getattr(unproxied, 'before', ())
+        self.after = getattr(unproxied, 'after', ())
 
 
 class RequestReportDownloadDialog(DialogForm):
