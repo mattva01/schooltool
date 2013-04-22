@@ -15,7 +15,7 @@
     <span class="error">Sytem failure.</span>  Ticket nr.
     <span i18n:name="ticket_id" tal:content="view/failure_ticket_id" />.
   </p>
-  <p i18n:translate="">
+  <p tal:condition="view/failure_ticket_id" i18n:translate="">
     Please contact your administrator.
   </p>
 </div>

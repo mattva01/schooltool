@@ -378,7 +378,11 @@ class RemoteTask(Persistent, Contained):
 
     def fail(self, request, result, traceback):
         self.permanent_result = result
-        self.permanent_traceback = str(traceback) or ''
+        traceback_text = str(traceback) or ''
+        if isinstance(self.permanent_traceback, FormattedTraceback):
+            self.permanent_traceback.append(traceback_text)
+        else:
+            self.permanent_traceback = traceback_text
         self.notifyFailed(request, result, traceback)
 
     def notifyScheduled(self, request):

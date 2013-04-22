@@ -307,6 +307,12 @@ class RemoteReportRequest(object):
     def __getitem__(self, name):
         return self.form[name]
 
+    def getVirtualHostRoot(self):
+        return None
+
+    def getApplicationURL(self, depth=0, path_only=False):
+        return ''
+
 
 class ReportTask(RemoteTask):
     implements(IReportTask)
