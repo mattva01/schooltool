@@ -1,43 +1,3 @@
-/* This is the Javascript to be included when rendering the gradebook overview. */
-function setNotEdited()
-{
-    edited = false;
-}
-
-function setEdited()
-{
-    edited = true;
-}
-
-function checkChanges()
-{
-    if (!edited)
-        return;
-    saveFlag = window.confirm(warningText);
-    if (saveFlag == true)
-        {
-        button = document.getElementsByName('UPDATE_SUBMIT')[0];
-        button.click();
-        }
-    else
-        return true;
-}
-
-function onLoadHandler()
-{
-    // highlight error values
-    for (a = 0; a < numactivities; a++)
-    {
-        activity = activities[a];
-        for (s = 0; s < numstudents; s++)
-        {
-            name = activity + '_' + students[s];
-            value = document.getElementById(name).value;
-            setBackgroundColor(name, activity, value, true);
-        }
-    }
-}
-
 // Changes made for flourish
 
 function makeGradeCellVisible(element) {
@@ -696,4 +656,14 @@ $(document).ready(function() {
         }
         e.preventDefault();
     });
+    // ignore warning dialog when clicking save button
+    form.on('click', 'input[type="submit"]', function() {
+        window.onbeforeunload = null;
+    });
 });
+// warning dialog for unsaved changes
+window.onbeforeunload = function() {
+    if ($('#grid-form input[type="text"]').length > 0) {
+        return $('#unsaved-changes-warning').text();
+    }
+};

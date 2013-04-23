@@ -294,3 +294,7 @@
 .worksheets-list li.active {
     background-color: #6C7B7C;
 }
+
+.unsaved-changes-warning {
+    display: none;
+}
