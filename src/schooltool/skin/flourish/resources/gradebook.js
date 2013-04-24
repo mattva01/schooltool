@@ -327,6 +327,10 @@ function createWorksheetsList() {
     return ul;
 }
 
+function removeSavingWarning() {
+    window.onbeforeunload = null;
+}
+
 $(document).ready(function() {
     var form = $('#grid-form');
     form.data('base-font-size', parseInt(form.css('fontSize')));
@@ -533,7 +537,8 @@ $(document).ready(function() {
             'resizable': false,
             'width': 306,
             'minHeight': 105,
-            'dialogClass': 'narrow-dialog'
+            'dialogClass': 'narrow-dialog',
+            'modal': true
         });
         // XXX - this should have worked but doesn't
         //FCKeditorAPI.Instances['form-widgets-value'].EditorDocument.body.focus()
@@ -543,6 +548,18 @@ $(document).ready(function() {
         var container = $('#comment-cell-dialog-container');
         container.find('#form-widgets-value').val('');
         container.dialog('close');
+        return false;
+    });
+    $('body').on('click', '.comment-cell-submit', function() {
+        var student_id = $('#comment-student-id').val();
+        var activity_id = $('#comment-activity-id').val();
+        var form = $('#grid-form');
+        form.append($('<input type="hidden"/>').attr({
+            'name': activity_id + '_' + student_id,
+            'value': FCKeditorAPI.Instances['form-widgets-value'].GetHTML()
+        }));
+        removeSavingWarning();
+        form.submit();
         return false;
     });
     // Zoom buttons
@@ -658,7 +675,7 @@ $(document).ready(function() {
     });
     // ignore warning dialog when clicking save button
     form.on('click', 'input[type="submit"]', function() {
-        window.onbeforeunload = null;
+        removeSavingWarning();
     });
 });
 // warning dialog for unsaved changes
