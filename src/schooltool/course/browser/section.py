@@ -1828,6 +1828,11 @@ class SectionRosterPDFView(flourish.report.PlainPDFPage):
 
     content_template = flourish.templates.XMLFile('rml/section_roster.pt')
 
+    @property
+    def message_title(self):
+        return _("section ${title} roster",
+                 mapping={'title': self.context.title})
+
     def formatDate(self, date, format='mediumDate'):
         if date is None:
             return ''

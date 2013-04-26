@@ -927,4 +927,8 @@ td.cal_yearly_day a.cal-day-today {
     color: #005c61;
 }
 
+table.report-dialog-message span.error {
+    color: #ff0000;
+}
+
 }

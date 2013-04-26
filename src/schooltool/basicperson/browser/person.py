@@ -1384,6 +1384,7 @@ class PersonContainerViewTableFilter(PersonTableFilter):
 class PersonProfilePDF(flourish.report.PlainPDFPage):
 
     name = _("Profile")
+    message_title = _('profile report')
 
     def formatDate(self, date, format='mediumDate'):
         if date is None:

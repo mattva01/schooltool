@@ -21,10 +21,13 @@ Report browser views.
 
 """
 from urllib import quote, urlencode, unquote_plus
+
+import z3c.form
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts, queryMultiAdapter
 from zope.i18n import translate
 from zope.i18n.interfaces.locales import ICollator
+from zope.interface import Interface
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces import NotFound
@@ -34,7 +37,7 @@ from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.interface import implements
 from zope.cachedescriptors.property import Lazy
-from z3c.form import button
+from z3c.form import button, form
 
 import schooltool.traverser.traverser
 from schooltool.person.interfaces import IPerson
@@ -202,7 +205,7 @@ class ReportsLinks(RefineLinksViewlet):
         return result
 
 
-class RequestReportDownloadDialog(DialogForm):
+class RequestReportDownloadDialog(DialogForm, z3c.form.form.EditForm):
 
     template = ViewPageTemplateFile('templates/f_request_report_download.pt')
 
@@ -254,8 +257,27 @@ class RequestRemoteReportDialog(RequestReportDownloadDialog):
     report_task = None
     replace_dialog = None
 
+    fields = z3c.form.field.Fields(Interface)
+    form_params = None
+
+    def update(self):
+        self.form_params = {}
+        RequestReportDownloadDialog.update(self)
+
+    def getContent(self):
+        return self.form_params
+
     @button.buttonAndHandler(_("Generate"), name='download')
     def handleDownload(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        changes = self.applyChanges(data)
+        if changes:
+            self.status = self.successMessage
+        else:
+            self.status = self.noChangesMessage
         task = self.task_factory(self.report_builder, self.target)
         self.schedule(task)
         self.report_task = task
@@ -283,8 +305,12 @@ class RequestRemoteReportDialog(RequestReportDownloadDialog):
     def target(self):
         return self.context
 
-    def schedule(self, task):
+    def updateTaskParams(self, task):
         """Subclasses should update task.request_params dict here."""
+        task.request_params.update(self.form_params)
+
+    def schedule(self, task):
+        self.updateTaskParams(task)
         task.schedule(self.request)
 
     def render(self, *args, **kw):
@@ -341,7 +367,6 @@ class ReportMessageDownloadsPlugin(schooltool.traverser.traverser.TraverserPlugi
 class DownloadReportDialog(MessageDialog):
 
     template = flourish.templates.File('templates/f_download_report_dialog.pt')
-
     @property
     def report(self):
         return getattr(self.context, 'report', None)

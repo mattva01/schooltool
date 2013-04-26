@@ -1,5 +1,5 @@
 <div i18n:domain="schooltool">
-  <table>
+  <table class="report-dialog-message">
     <tbody>
       <tr>
         <td i18n:translate="">
