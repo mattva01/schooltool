@@ -67,7 +67,7 @@ start-services: build instance instance/run/supervisord.pid
 
 .PHONY: restart
 restart: build instance instance/run/supervisord.pid
-	bin/supervisorctl restart "services:celery"
+	@bin/supervisorctl restart "services:celery_report"
 	@bin/supervisorctl start "services:*"
 	bin/supervisorctl restart schooltool
 	@bin/supervisorctl status
