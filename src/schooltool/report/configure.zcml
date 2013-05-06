@@ -125,6 +125,15 @@
       factory=".report.OnPDFReportScheduled"
       />
 
+  <adapter
+      name="schooltool.report.report.OnPDFReportScheduled"
+      for="schooltool.task.interfaces.IRemoteTask
+           *
+           schooltool.app.browser.report.PDFView"
+      provides="schooltool.task.interfaces.ITaskScheduledNotification"
+      factory=".report.OnPDFReportScheduled"
+      />
+
   <include file="security.zcml" />
 
   <include package="schooltool.report.browser" />

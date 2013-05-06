@@ -66,6 +66,7 @@ from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.browser.person import PersonTable, PersonTableFormatter
 from schooltool.person.browser.person import PersonTableFilter
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.report.report import OldReportTask
 from schooltool.report.browser.report import RequestRemoteReportDialog
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
@@ -81,7 +82,6 @@ from schooltool.task.tasks import getLastMessagesReadTime
 from schooltool.task.tasks import markMessagesRead
 from schooltool.task.browser.task import MessageColumn
 from schooltool.term.interfaces import IDateManager
-from schooltool.report.browser.report import RequestReportDownloadDialog
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -1153,16 +1153,10 @@ class FlourishManagePeopleOverview(flourish.page.Content):
         return preferences.title
 
 
-class FlourishRequestPersonXMLExportView(RequestReportDownloadDialog):
+class FlourishRequestPersonIDCardView(RequestRemoteReportDialog):
 
-    def nextURL(self):
-        return absoluteURL(self.context, self.request) + '/person_export.xml'
-
-
-class FlourishRequestPersonIDCardView(RequestReportDownloadDialog):
-
-    def nextURL(self):
-        return absoluteURL(self.context, self.request) + '/person_id_card.pdf'
+    report_task = OldReportTask
+    report_builder = 'person_id_card.pdf'
 
 
 class IDCardsPageTemplate(DefaultPageTemplate):
@@ -1345,12 +1339,17 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
 class FlourishPersonIDCardView(FlourishPersonIDCardsViewBase):
 
     @property
+    def filename(self):
+        return 'id_cards_%s_%s.pdf' % (
+            self.context.last_name,  self.context.first_name)
+
+    @property
     def title(self):
         return _('ID Card: ${person}',
                  mapping={'person': self.context.title})
 
     def persons(self):
-        return [self.getPersonData(self.context)]
+        return [self.getPersonData(self.context)] * self.total_cards_in_page
 
 
 def getUserViewlet(context, request, view, manager, name):

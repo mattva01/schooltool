@@ -426,6 +426,8 @@ class ReportTask(RemoteTask):
         return pdf
 
     def makePDFFile(self, filename, data):
+        if not filename or not filename.strip():
+            filename = 'report.pdf'
         pdf = ReportFile()
         pdf.mimeType = 'application/pdf'
         pdf.__name__ = filename
@@ -461,6 +463,20 @@ class ReportTask(RemoteTask):
         self.context_intid = intid
 
 
+class OldReportTask(ReportTask):
+
+    def renderToFile(self, renderer, *args, **kwargs):
+        # XXX:
+        #if not schooltool.app.pdf.isEnabled():
+        #    return translate(renderer.pdf_disabled_text,
+        #                     context=renderer.request)
+        filename, data = renderer.renderToFile()
+        if data is None:
+            return None
+        pdf = self.makePDFFile(filename, data)
+        return pdf
+
+
 class ReportMessage(Message):
     implements(IReportMessage)
 
@@ -473,7 +489,7 @@ class ReportMessage(Message):
                  requested_on=None, filename=None):
         Message.__init__(self, title=title)
         self.requested_on = requested_on
-        self.filename = filename
+        self.filename = filename or 'report.pdf'
 
 
 class OnReportScheduled(TaskScheduledNotification):
@@ -509,9 +525,9 @@ class OnPDFReportScheduled(TaskScheduledNotification):
 
     def makeReportTitle(self):
         title = getattr(self.view, 'message_title', None)
-        if title is None:
+        if not title:
             title = getattr(self.view, 'filename', None)
-        if title is None:
+        if not title:
             title = _(u'report')
         return title
 

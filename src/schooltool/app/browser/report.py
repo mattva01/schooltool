@@ -72,16 +72,22 @@ class PDFView(BrowserView):
             disposition += '; filename="%s"' % filename
         response.setHeader('Content-Disposition', disposition)
 
-    def __call__(self):
+    def renderToFile(self):
+        filename = _quoteUrl(self.filename)
         if not pdf.isEnabled():
-            return translate(self.pdf_disabled_text, context=self.request)
+            return filename, None
         filename = _quoteUrl(self.filename)
         xml = self.template()
         stream = rml2pdf.parseString(xml, filename=filename)
         data = stream.getvalue()
+        return filename, data
+
+    def __call__(self):
+        if not pdf.isEnabled():
+            return translate(self.pdf_disabled_text, context=self.request)
+        filename, data = self.renderToFile()
         self.setUpResponse(data, filename)
         return data
-
 
 class PageTemplateEnablingHelper(object):
 
