@@ -79,4 +79,13 @@
       permission="schooltool.view"
       />
 
+  <flourish:content
+      name="short"
+      for="schooltool.task.tasks.TaskFailedMessage"
+      view="zope.interface.Interface"
+      template="templates/f_short_fail_message.pt"
+      permission="schooltool.view"
+      />
+
+
 </configure>

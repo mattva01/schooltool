@@ -1,12 +1,38 @@
 <div i18n:domain="schooltool">
-  <tal:block condition="nocall:context/report">
-    <tal:block i18n:translate="">
-      Generated
+  <tal:block condition="not:view/failure_ticket_id">
+    <tal:block condition="nocall:context/report">
+      <p>
+        <tal:block i18n:translate="">
+          Download <span i18n:name="report" tal:content="context/title" />
+          <a i18n:name="link"
+             tal:attributes="href context/report/@@absolute_url"
+             tal:content="context/filename"/>.
+        </tal:block>
+      </p>
     </tal:block>
-    <a tal:attributes="href context/report/@@absolute_url"
-       tal:content="context/filename"/>
+
+    <tal:block condition="not:nocall:context/report">
+      <p>
+        <tal:block i18n:translate="">
+          Generating <span i18n:name="report" tal:content="context/title" />.
+        </tal:block>
+      </p>
+    </tal:block>
   </tal:block>
-  <tal:block condition="not:nocall:context/report">
-    <tal:block content="context/title" />
+
+  <tal:block condition="view/failure_ticket_id">
+    <p>
+      <span class="error" i18n:translate="">
+        Sytem failure while generating
+        <tal:block i18n:name="report" content="context/title" />.
+      </span>
+      <span i18n:translate="">
+        Ticket nr.
+        <tal:block i18n:name="ticket_id" tal:content="view/failure_ticket_id" />.
+      </span>
+    </p>
+    <p i18n:translate="">
+      Please contact your administrator.
+    </p>
   </tal:block>
 </div>

@@ -66,6 +66,16 @@
       provides="zope.catalog.interfaces.ICatalog"
       factory=".tasks.getMessageCatalog" />
 
+  <adapter
+      name="schooltool.task.tasks.OnTaskFailed"
+      for="schooltool.task.interfaces.IRemoteTask
+           *
+           *
+           *"
+      provides="schooltool.task.interfaces.ITaskFailedNotification"
+      factory=".tasks.OnTaskFailed"
+      />
+
   <include package=".browser" />
 
 </configure>

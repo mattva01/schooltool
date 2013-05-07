@@ -150,6 +150,9 @@ class PDFPage(page.PageBase):
 
 class IPlainPDFPage(interfaces.IPDFPage):
 
+    message_title = zope.schema.TextLine(
+        title=u"Short report description", required=False)
+
     name = zope.schema.TextLine(
         title=u"Report name", required=False)
 
@@ -174,6 +177,7 @@ class PlainPDFPage(PDFPage):
     title = None
     subtitles_left = None
     subtitles_right = None
+    message_title = _('report')
 
 
 class PDFInitSection(viewlet.ViewletManager):

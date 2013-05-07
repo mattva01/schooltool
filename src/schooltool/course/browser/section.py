@@ -69,7 +69,6 @@ from schooltool.course.section import Section
 from schooltool.course.section import copySection
 from schooltool.course.browser.course import CoursesActiveTabMixin as SectionsActiveTabMixin
 from schooltool.person.interfaces import IPerson
-from schooltool.report.browser.report import RequestReportDownloadDialog
 from schooltool.report.browser.report import RequestRemoteReportDialog
 from schooltool.resource.browser.resource import EditLocationRelationships
 from schooltool.resource.browser.resource import EditEquipmentRelationships
@@ -1827,6 +1826,11 @@ class SectionRosterPDFView(flourish.report.PlainPDFPage):
     name = _("Section Roster")
 
     content_template = flourish.templates.XMLFile('rml/section_roster.pt')
+
+    @property
+    def message_title(self):
+        return _("section ${title} roster",
+                 mapping={'title': self.context.title})
 
     def formatDate(self, date, format='mediumDate'):
         if date is None:

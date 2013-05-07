@@ -237,6 +237,14 @@ a.modify img {
     padding: 4px 8px;
 }
 
+.header ul.second-nav > li a.new-messages {
+    padding: 4px 0px;
+}
+
+.header ul.second-nav > li a.new-messages:hover {
+    text-decoration: none;
+}
+
 .header ul.second-nav > li span {
     font-weight: bold;
 }

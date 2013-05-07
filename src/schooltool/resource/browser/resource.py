@@ -66,7 +66,7 @@ from schooltool.resource.interfaces import IBookingCalendar
 from schooltool.resource.interfaces import (
              IResourceContainer, IResourceTypeInformation, IResourceSubTypes,
              IResource, IEquipment, ILocation, IResourceDemographicsFields)
-from schooltool.report.browser.report import RequestReportDownloadDialog
+from schooltool.report.browser.report import RequestRemoteReportDialog
 from schooltool.resource.resource import Resource, Location, Equipment
 from schooltool.person.browser.person import PersonFilterWidget
 from schooltool.resource.interfaces import IResourceFactoryUtility
@@ -955,16 +955,16 @@ class FlourishManageResourcesOverview(flourish.page.Content):
         return types
 
 
-class FlourishRequestResourceReportView(RequestReportDownloadDialog):
+class FlourishRequestResourceReportView(RequestRemoteReportDialog):
 
-    def nextURL(self):
-        return '%s/resource_report.pdf' % absoluteURL(self.context,
-                                                      self.request)
+    report_builder='resource_report.pdf'
 
 
 class ResourceReportPDFView(flourish.report.PlainPDFPage):
 
     name = _("Resource Report")
+
+    message_title = _("resource report")
 
     @property
     def title(self):

@@ -74,7 +74,8 @@ from schooltool import table
 
 from schooltool.common import SchoolToolMessage as _
 from schooltool.basicperson.browser.person import FlourishPersonIDCardsViewBase
-from schooltool.report.browser.report import RequestReportDownloadDialog
+from schooltool.report.report import OldReportTask
+from schooltool.report.browser.report import RequestRemoteReportDialog
 
 
 class GroupContainerAbsoluteURLAdapter(BrowserView):
@@ -805,10 +806,10 @@ class FlourishManageGroupsOverview(flourish.page.Content):
         return IGroupContainer(self.schoolyear, None)
 
 
-class FlourishRequestGroupIDCardsView(RequestReportDownloadDialog):
+class FlourishRequestGroupIDCardsView(RequestRemoteReportDialog):
 
-    def nextURL(self):
-        return absoluteURL(self.context, self.request) + '/group_id_cards.pdf'
+    report_builder = 'group_id_cards.pdf'
+    report_task = OldReportTask
 
 
 class FlourishGroupIDCardsView(FlourishPersonIDCardsViewBase):
@@ -817,6 +818,12 @@ class FlourishGroupIDCardsView(FlourishPersonIDCardsViewBase):
     def title(self):
         return _('ID Cards for Group: ${group}',
                  mapping={'group': self.context.title})
+
+    @property
+    def filename(self):
+        sy = ISchoolYear(self.context.__parent__)
+        return 'id_cards_%s_%s.pdf' % (
+            self.context.title,  sy.title)
 
     def persons(self):
         result = [self.getPersonData(person)

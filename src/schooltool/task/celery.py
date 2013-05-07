@@ -108,6 +108,7 @@ class SchoolToolReportMachinery(ConfiguratedSchoolToolMachinery):
 
     def configure(self, options):
         self.options = options
+        print options.config.report_server_definition
         self.configureComponents(
             options,
             site_zcml=options.config.report_server_definition)

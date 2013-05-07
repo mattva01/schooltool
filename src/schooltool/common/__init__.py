@@ -24,6 +24,7 @@ import re
 import locale
 import datetime
 import urllib
+import HTMLParser
 
 import zope.interface
 import zope.component
@@ -702,3 +703,16 @@ def data_uri(payload, mime=None):
         result += mime + ';'
     result = result + 'base64,' + payload
     return result
+
+
+class HTMLToText(HTMLParser.HTMLParser):
+
+    def __init__(self):
+        self.reset()
+        self.text_lines = []
+
+    def handle_data(self, data):
+        self.text_lines.append(data)
+
+    def get_data(self):
+        return ''.join(self.text_lines)

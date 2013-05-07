@@ -63,64 +63,6 @@ We can click on John and edit his record (we'll change it back as well):
     >>> manager.getControl('First name').value = 'John'
     >>> manager.getControl('Apply').click()
 
-Now there even are person export views:
-
-    >>> manager.open('http://localhost/persons/@@person_export.xml')
-    >>> print manager.contents
-    <person_export xmlns:basic="http://schooltool.org/ns/model/0.1/basicperson"
-                   xmlns="http://schooltool.org/ns/model/0.1">
-      <groups>
-        <group>
-          <id>teachers</id>
-          <title>Teachers</title>
-        </group>
-      </groups>
-      <persons>
-        <person>
-          <username>john</username>
-          <title>Petterson, John</title>
-          <basic:first_name>John</basic:first_name>
-          <basic:last_name>Petterson</basic:last_name>
-          <basic:gender>male</basic:gender>
-          <basic:birth_date>1980-01-01</basic:birth_date>
-          <groups>
-            <group id="teachers" />
-          </groups>
-        </person>
-        <person>
-          <username>manager</username>
-          <title>Administrator, SchoolTool</title>
-          <basic:first_name>SchoolTool</basic:first_name>
-          <basic:last_name>Administrator</basic:last_name>
-        </person>
-      </persons>
-    </person_export>
-
-    >>> manager.open('http://localhost/persons/john/@@person_export.xml')
-    >>> print manager.contents
-    <person_export xmlns:basic="http://schooltool.org/ns/model/0.1/basicperson"
-                   xmlns="http://schooltool.org/ns/model/0.1">
-      <groups>
-        <group>
-          <id>teachers</id>
-          <title>Teachers</title>
-        </group>
-      </groups>
-      <persons>
-        <person>
-          <username>john</username>
-          <title>Petterson, John</title>
-          <basic:first_name>John</basic:first_name>
-          <basic:last_name>Petterson</basic:last_name>
-          <basic:gender>male</basic:gender>
-          <basic:birth_date>1980-01-01</basic:birth_date>
-          <groups>
-            <group id="teachers" />
-          </groups>
-        </person>
-      </persons>
-    </person_export>
-
 Now let's create another teacher, Bob.
 
     >>> manager.open('http://localhost/')
@@ -251,23 +193,6 @@ using this kind of person:
     <div class="info">
       <p>CSV text imported successfully.</p>
     </div>
-
-Now we have some additional persons in the database, let's look at one
-of them:
-
-    >>> manager.open('http://localhost/persons/steve/@@person_export.xml')
-    >>> print manager.contents
-    <person_export xmlns:basic="http://schooltool.org/ns/model/0.1/basicperson"
-                   xmlns="http://schooltool.org/ns/model/0.1">
-      <persons>
-        <person>
-          <username>steve</username>
-          <title>Smith, Steve</title>
-          <basic:first_name>Steve</basic:first_name>
-          <basic:last_name>Smith</basic:last_name>
-        </person>
-      </persons>
-    </person_export>
 
 Let's add another person, this time setting the group and the advisor in the
 add form.

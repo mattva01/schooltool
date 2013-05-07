@@ -185,3 +185,7 @@ table.show-photo {
 img.st-table-button-spinner {
     margin: 3px 0px 0px 0px;
 }
+
+table.report-dialog-message td:first-child {
+    width: 20%;
+}

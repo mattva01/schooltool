@@ -21,10 +21,13 @@ Report browser views.
 
 """
 from urllib import quote, urlencode, unquote_plus
+
+import z3c.form
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts, queryMultiAdapter
 from zope.i18n import translate
 from zope.i18n.interfaces.locales import ICollator
+from zope.interface import Interface
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces import NotFound
@@ -34,9 +37,10 @@ from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.interface import implements
 from zope.cachedescriptors.property import Lazy
-from z3c.form import button
+from z3c.form import button, form
 
 import schooltool.traverser.traverser
+from schooltool.person.interfaces import IPerson
 from schooltool.report.interfaces import IReportLinksURL
 from schooltool.report.interfaces import IReportFile
 from schooltool.report.report import IFlourishReportLinkViewletManager
@@ -48,6 +52,7 @@ from schooltool.skin.flourish.page import RefineLinksViewlet
 from schooltool.skin.flourish import IFlourishLayer
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.task.tasks import query_message
+from schooltool.task.interfaces import IRemoteTask
 from schooltool.task.browser.task import MessageDialog
 
 from schooltool.common import SchoolToolMessage as _
@@ -200,7 +205,7 @@ class ReportsLinks(RefineLinksViewlet):
         return result
 
 
-class RequestReportDownloadDialog(DialogForm):
+class RequestReportDownloadDialog(DialogForm, z3c.form.form.EditForm):
 
     template = ViewPageTemplateFile('templates/f_request_report_download.pt')
 
@@ -245,14 +250,34 @@ class RequestRemoteReportDialog(RequestReportDownloadDialog):
     dialog_close_actions = ('cancel',)
     label = None
 
-    report_builder = None # report generating class
+    report_builder = None # report generating class or view name
+
     task_factory = ReportTask
 
     report_task = None
     replace_dialog = None
 
+    fields = z3c.form.field.Fields(Interface)
+    form_params = None
+
+    def update(self):
+        self.form_params = {}
+        RequestReportDownloadDialog.update(self)
+
+    def getContent(self):
+        return self.form_params
+
     @button.buttonAndHandler(_("Generate"), name='download')
     def handleDownload(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        changes = self.applyChanges(data)
+        if changes:
+            self.status = self.successMessage
+        else:
+            self.status = self.noChangesMessage
         task = self.task_factory(self.report_builder, self.target)
         self.schedule(task)
         self.report_task = task
@@ -280,8 +305,12 @@ class RequestRemoteReportDialog(RequestReportDownloadDialog):
     def target(self):
         return self.context
 
-    def schedule(self, task):
+    def updateTaskParams(self, task):
         """Subclasses should update task.request_params dict here."""
+        task.request_params.update(self.form_params)
+
+    def schedule(self, task):
+        self.updateTaskParams(task)
         task.schedule(self.request)
 
     def render(self, *args, **kw):
@@ -338,7 +367,6 @@ class ReportMessageDownloadsPlugin(schooltool.traverser.traverser.TraverserPlugi
 class DownloadReportDialog(MessageDialog):
 
     template = flourish.templates.File('templates/f_download_report_dialog.pt')
-
     @property
     def report(self):
         return getattr(self.context, 'report', None)
@@ -346,3 +374,35 @@ class DownloadReportDialog(MessageDialog):
     @property
     def report_generated(self):
         return bool(self.report)
+
+    @property
+    def main_recipient(self):
+        person = IPerson(self.request, None)
+        if self.context.recipients is None:
+            return None
+        recipients = sorted(self.context.recipients, key=lambda r: r.__name__)
+        if person in recipients:
+            return person
+        for recipient in recipients:
+            if flourish.canView(recipient):
+                return recipient
+        return None
+
+    @Lazy
+    def failure_ticket_id(self):
+        sender = self.context.sender
+        if (IRemoteTask.providedBy(sender) and
+            sender.failed):
+            return sender.__name__
+        return None
+
+
+class ShortReportMessage(flourish.content.ContentProvider):
+
+    @Lazy
+    def failure_ticket_id(self):
+        sender = self.context.sender
+        if (IRemoteTask.providedBy(sender) and
+            sender.failed):
+            return sender.__name__
+        return None

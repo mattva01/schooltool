@@ -31,6 +31,7 @@ import transaction
 import transaction.interfaces
 from celery.task import task, periodic_task
 from persistent import Persistent
+from zope.annotation.interfaces import IAnnotations
 from zope.interface import implements, implementer
 from zope.intid.interfaces import IIntIds
 from zope.catalog.text import TextIndex
@@ -43,12 +44,14 @@ from zope.app.publication.zopepublication import ZopePublication
 from zope.component.hooks import getSite, setSite
 from zope.container.interfaces import INameChooser
 from zope.proxy import sameProxiedObjects
+from zope.security.proxy import removeSecurityProxy
 from zc.catalog.catalogindex import SetIndex
 
 from schooltool.app.app import StartUpBase
 from schooltool.app.catalog import AttributeCatalog
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.traceback import format_html_exception
+from schooltool.common import HTMLToText
 from schooltool.person.interfaces import IPerson
 from schooltool.task.celery import open_schooltool_db
 from schooltool.task.interfaces import IRemoteTask, ITaskContainer
@@ -57,9 +60,13 @@ from schooltool.task.interfaces import ITaskScheduledNotification
 from schooltool.task.interfaces import ITaskCompletedNotification
 from schooltool.task.interfaces import ITaskFailedNotification
 
+from schooltool.common import format_message
+from schooltool.common import SchoolToolMessage as _
+
 
 IN_PROGRESS = 'IN_PROGRESS'
 COMMITTING = 'COMMITTING_ZODB'
+LAST_READ_MESSAGES_TIME_KEY = 'schooltool.task.tasks:last_read_messages'
 
 
 class NoDatabaseException(Exception):
@@ -102,6 +109,14 @@ class FormattedTraceback(Exception):
         if self.message:
             self.message += '\n\n'
         self.message += str(another)
+
+    def plaintext(self, strip_empty_lines=True):
+        parser = HTMLToText()
+        parser.feed(unicode(self))
+        text = parser.get_data()
+        if not strip_empty_lines:
+            text = '\n'.join(filter(None, text.splitlines()))
+        return text
 
     def __str__(self):
         return str(self.message)
@@ -209,6 +224,13 @@ class DBTaskMixin(object):
                 self.runTransaction('fail', False, self, result, failure)
             except Exception:
                 failure.append(FormattedTraceback())
+            try:
+                print >> sys.stderr, failure.plaintext(strip_empty_lines=True)
+            except:
+                try:
+                    print >> sys.stderr, str(failure)
+                except:
+                    pass
             raise failure
         finally:
             self.closeTransaction()
@@ -295,7 +317,7 @@ class RemoteTask(Persistent, Contained):
     routing_key = None
 
     permanent_traceback = None
-    premanent_result = None
+    permanent_result = None
 
     def __init__(self):
         Persistent.__init__(self)
@@ -356,23 +378,30 @@ class RemoteTask(Persistent, Contained):
 
     def fail(self, request, result, traceback):
         self.permanent_result = result
-        self.permanent_traceback = str(traceback) or ''
+        traceback_text = str(traceback) or ''
+        if isinstance(self.permanent_traceback, FormattedTraceback):
+            self.permanent_traceback.append(traceback_text)
+        else:
+            self.permanent_traceback = traceback_text
+        self.notifyFailed(request, result, traceback)
 
     def notifyScheduled(self, request):
         subscribers = getAdapters((self, request), ITaskScheduledNotification)
         for name, subscriber in subscribers:
             try:
                 subscriber(name=name)
-            except Exception, exception:
-                self.notifyFailed(request, None, exception)
+            except Exception:
+                failure = FormattedTraceback()
+                self.notifyFailed(request, None, failure)
 
     def notifyComplete(self, request, result):
         subscribers = getAdapters((self, request, result), ITaskCompletedNotification)
         for name, subscriber in subscribers:
             try:
                 subscriber(name=name)
-            except Exception, exception:
-                self.notifyFailed(request, result, exception)
+            except Exception:
+                failure = FormattedTraceback()
+                self.notifyFailed(request, result, failure)
 
     def notifyFailed(self, request, result, traceback):
         subscribers = getAdapters((self, request, result, traceback), ITaskFailedNotification)
@@ -397,7 +426,7 @@ class RemoteTask(Persistent, Contained):
 
     @property
     def finished(self):
-        if (self.premanent_result is not None or
+        if (self.permanent_result is not None or
             self.permanent_traceback is not None):
             return True
         # Note: non-existing tasks will be permanently pending on
@@ -406,7 +435,7 @@ class RemoteTask(Persistent, Contained):
 
     @property
     def succeeded(self):
-        if (self.premanent_result is not None and
+        if (self.permanent_result is not None and
             self.permanent_traceback is None):
             return True
         return self.async_result.successful()
@@ -590,6 +619,9 @@ class MessagesStartUp(StartUpBase):
             self.app['schooltool.task.messages'] = MessageContainer()
 
 
+UNCHANGED = object()
+
+
 class Message(Persistent, Contained):
     implements(IMessage)
 
@@ -603,11 +635,9 @@ class Message(Persistent, Contained):
     title = u''
     group = u''
 
-    def __init__(self, title=u'', sender=None, recipients=None):
-        self.title = title
-        if recipients is not None:
-            self.recipients = recipients
-        self.sender = sender
+    def __init__(self, title=None):
+        if title is not None:
+            self.title = title
         self.created_on = self.utcnow
         self.updated_on = self.created_on
 
@@ -615,7 +645,10 @@ class Message(Persistent, Contained):
     def utcnow(self):
         return pytz.UTC.localize(datetime.datetime.utcnow())
 
-    def send(self):
+    def send(self, sender=None, recipients=None):
+        self.sender = sender
+        if recipients is not None:
+            self.recipients = recipients
         self.updated_on = self.utcnow
         app = ISchoolToolApplication(None)
         messages = IMessageContainer(app)
@@ -630,10 +663,14 @@ class Message(Persistent, Contained):
             name = name_chooser.chooseName('', self)
             messages[name] = self
 
-    def replace(self, other):
+    def replace(self, other, sender=UNCHANGED, recipients=UNCHANGED):
         """Replace the other message with this one."""
+        if sender is UNCHANGED:
+            sender = self.sender
+        if recipients is UNCHANGED:
+            recipients = self.recipients
         self.__name__ = other.__name__
-        self.send()
+        self.send(sender=sender, recipients=recipients)
 
     @property
     def sender(self):
@@ -723,8 +760,38 @@ class TaskFailedNotification(TaskNotification):
         self.traceback = traceback
 
 
+class TaskFailedMessage(Message):
+
+    task_id = None
+    title = _("Internal server error, ticket ${ticket}")
+
+    def __init__(self, task):
+        Message.__init__(self)
+        self.task_id = task.__name__
+
+    def send(self, sender=None, recipients=None):
+        self.title = format_message(
+            self.title,
+            mapping={'ticket': self.task_id})
+        Message.send(
+            self, sender=sender, recipients=recipients)
+
+
+class OnTaskFailed(TaskFailedNotification):
+
+    def send(self):
+        pass
+        # XXX: we should send a message to sys admin!
+        # XXX: failure to notify about failure should also be handled.
+        #msg = TaskFailedMessage(self.task)
+        #msg.send(
+        #    sender=self.task,
+        #    recipients=[sysadmin],
+        #    )
+
+
 class MessageCatalog(AttributeCatalog):
-    version = '1 - initial'
+    version = '1.1 - catalog recipient ids'
     interface = IMessage
     attributes = ('sender_id', 'title', 'group', 'created_on', 'updated_on')
 
@@ -734,6 +801,21 @@ class MessageCatalog(AttributeCatalog):
 
 
 getMessageCatalog = MessageCatalog.get
+
+
+def markMessagesRead(target, dt=None):
+    target = removeSecurityProxy(target)
+    ann = IAnnotations(target)
+    if dt is None:
+        dt = pytz.UTC.localize(datetime.datetime.utcnow())
+    ann[LAST_READ_MESSAGES_TIME_KEY] = dt
+
+
+def getLastMessagesReadTime(target):
+    target = removeSecurityProxy(target)
+    ann = IAnnotations(target)
+    result = ann.get(LAST_READ_MESSAGES_TIME_KEY, None)
+    return result
 
 
 def query_messages(sender):
@@ -750,11 +832,20 @@ def query_messages(sender):
     return tuple([obj for obj in result if obj is not None])
 
 
-def query_message(sender):
+def query_message(sender, recipient=None):
     result = query_messages(sender)
     if not result:
         return None
-    return result[0]
+    if recipient is None:
+        return result[0]
+    int_ids = getUtility(IIntIds)
+    recipient_id = int_ids.queryId(recipient, None)
+    if recipient_id is None:
+        return None
+    for message in result:
+        if recipient_id in message.recipient_ids:
+            return message
+    return None
 
 
 def load_plugin_tasks():

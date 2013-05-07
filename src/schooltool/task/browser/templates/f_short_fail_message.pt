@@ -1,0 +1,9 @@
+<div i18n:domain="schooltool">
+  <p i18n:translate="">
+    <span class="error">Sytem failure.</span>  Ticket nr.
+    <span i18n:name="ticket_id" tal:content="context/task_id" />.
+  </p>
+  <p i18n:translate="">
+    Please contact your administrator.
+  </p>
+</div>

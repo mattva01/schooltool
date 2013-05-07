@@ -1,20 +1,56 @@
-<div i18n:domain="schooltool">
-  <table>
+<tal:block i18n:domain="schooltool">
+  <tal:block condition="not:nocall:context/report">
+    <h3 tal:condition="not:view/failure_ticket_id" i18n:translate="">Building the report</h3>
+    <h3 tal:condition="view/failure_ticket_id" i18n:translate="">Failed to build the report</h3>
+  </tal:block>
+  <tal:block condition="nocall:context/report">
+    <h3 i18n:translate="">Download report</h3>
+  </tal:block>
+  <table class="report-dialog-message">
     <tbody>
-      <tr>
+      <tal:block condition="not:view/failure_ticket_id">
+        <tr tal:condition="view/main_recipient">
+          <td colspan="2" i18n:translate="">
+            You can close this dialog and download the report later from your
+            <a tal:attributes="href view/main_recipient/@@absolute_url"
+               i18n:name="home-link" i18n:translate="">home page</a>.
+          </td>
+        </tr>
+      </tal:block>
+
+      <tr tal:condition="nocall:context/report">
+        <td i18n:translate="">Direct download</td>
         <td>
-          <tal:block condition="nocall:context/report">
-            <tal:block i18n:translate="">
-              Generated
-            </tal:block>
-            <a tal:attributes="href context/report/@@absolute_url"
-               tal:content="context/filename"/>
-          </tal:block>
-          <tal:block condition="not:nocall:context/report">
-            <tal:block content="context/title" />
-          </tal:block>
+          <a tal:attributes="href context/report/@@absolute_url"
+             tal:content="context/filename"/>
         </td>
       </tr>
+
+      <tal:block condition="not:view/failure_ticket_id">
+      <tr tal:condition="not:nocall:context/report">
+        <td i18n:translate="" colspan="2">
+          Generating
+          <tal:block i18n:name="report" content="context/title" /> ...
+        </td>
+      </tr>
+      </tal:block>
+
+      <tal:block condition="view/failure_ticket_id">
+        <tr>
+          <td>
+            <span class="error" i18n:translate="">Sytem failure.</span>
+          </td>
+          <td i18n:translate="">
+              Ticket nr.
+              <span i18n:name="ticket_id" tal:content="view/failure_ticket_id" />.
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" i18n:translate="">
+              Please contact your administrator.
+          </td>
+        </tr>
+      </tal:block>
     </tbody>
   </table>
   <form method="post" class="standalone" action=""
@@ -41,4 +77,4 @@
     }
   </script>
   <script>ST.state.pop()</script>
-</div>
+</tal:block>

@@ -62,6 +62,7 @@ from schooltool.task.tasks import Message
 from schooltool.task.interfaces import ITaskScheduledNotification
 from schooltool.task.tasks import TaskCompletedNotification
 from schooltool.task.tasks import TaskScheduledNotification
+from schooltool.task.tasks import TaskFailedMessage
 from schooltool.term.interfaces import IDateManager
 
 from schooltool.common import format_message
@@ -320,6 +321,15 @@ class RemoteReportRequest(object):
     def __getitem__(self, name):
         return self.form[name]
 
+    def __contains__(self, name):
+        return name in self.form
+
+    def getVirtualHostRoot(self):
+        return None
+
+    def getApplicationURL(self, depth=0, path_only=False):
+        return ''
+
 
 class ReportTask(RemoteTask):
     implements(IReportTask)
@@ -327,9 +337,15 @@ class ReportTask(RemoteTask):
     routing_key = "zodb.report"
     report = None
 
-    def __init__(self, report_factory, context, remote_request=None):
+    view_name = None
+    factory_name = None
+
+    def __init__(self, report_builder, context, remote_request=None):
         RemoteTask.__init__(self)
-        self.factory = report_factory
+        if isinstance(report_builder, str):
+            self.view_name = report_builder
+        else:
+            self.factory = report_builder
         self.context = context
         if remote_request is None:
             self.request_params = RemoteRequestParams()
@@ -359,6 +375,7 @@ class ReportTask(RemoteTask):
         principal = Principal(self.creator.__name__, 'XXX:title',
                               person=ProxyFactory(self.creator))
         request.principal = principal
+        zope.security.management.endInteraction()
         zope.security.management.newInteraction(request)
 
     def endRequest(self, request=None):
@@ -398,12 +415,15 @@ class ReportTask(RemoteTask):
         context = self.context
         if context is None:
             return None
-        factory = self.factory
-        if factory is None:
-            return None
         if request is None:
             request = self.getCurrentRequest()
-        renderer = factory(context, request)
+        renderer = None
+        factory = self.factory
+        if factory is not None:
+            renderer = factory(context, request)
+        else:
+            renderer = zope.component.queryMultiAdapter(
+                (context, request), name=self.view_name)
         return renderer
 
     def renderToFile(self, renderer, *args, **kwargs):
@@ -420,6 +440,8 @@ class ReportTask(RemoteTask):
         return pdf
 
     def makePDFFile(self, filename, data):
+        if not filename or not filename.strip():
+            filename = 'report.pdf'
         pdf = ReportFile()
         pdf.mimeType = 'application/pdf'
         pdf.__name__ = filename
@@ -455,6 +477,20 @@ class ReportTask(RemoteTask):
         self.context_intid = intid
 
 
+class OldReportTask(ReportTask):
+
+    def renderToFile(self, renderer, *args, **kwargs):
+        # XXX:
+        #if not schooltool.app.pdf.isEnabled():
+        #    return translate(renderer.pdf_disabled_text,
+        #                     context=renderer.request)
+        filename, data = renderer.renderToFile()
+        if data is None:
+            return None
+        pdf = self.makePDFFile(filename, data)
+        return pdf
+
+
 class ReportMessage(Message):
     implements(IReportMessage)
 
@@ -463,15 +499,19 @@ class ReportMessage(Message):
     group = _("Reports")
     filename = None
 
-    def __init__(self, title=u'', sender=None, recipients=None,
+    def __init__(self, title=None,
                  requested_on=None, filename=None):
-        super(ReportMessage, self).__init__(
-            title=title, sender=sender, recipients=recipients)
+        Message.__init__(self, title=title)
         self.requested_on = requested_on
-        self.filename = filename
+        self.filename = filename or 'report.pdf'
 
 
 class OnReportScheduled(TaskScheduledNotification):
+
+    def __init__(self, task, http_request):
+        super(TaskScheduledNotification, self).__init__(
+            task, http_request)
+        self.request = RemoteReportRequest(task.request_params)
 
     def send(self):
         renderer = self.task.getRenderer(request=self.request)
@@ -482,6 +522,13 @@ class OnReportScheduled(TaskScheduledNotification):
             subscriber(name=name)
 
 
+class ReportFailedMessage(ReportMessage, TaskFailedMessage):
+
+    def __init__(self, task, requested_on=None, filename=None):
+        ReportMessage.__init__(self, requested_on=requested_on, filename=filename)
+        TaskFailedMessage.__init__(self, task)
+
+
 class OnPDFReportScheduled(TaskScheduledNotification):
 
     view = None
@@ -490,32 +537,32 @@ class OnPDFReportScheduled(TaskScheduledNotification):
         super(OnPDFReportScheduled, self).__init__(task, request)
         self.view = view
 
+    def makeReportTitle(self):
+        title = getattr(self.view, 'message_title', None)
+        if not title:
+            title = getattr(self.view, 'filename', None)
+        if not title:
+            title = _(u'report')
+        return title
+
     def send(self):
         view = self.view
         view.render_invariant = True
         task = self.task
-        title = format_message(
-            _(u"Requested report ${filename}."),
-            mapping={'filename': view.filename})
+        title = self.makeReportTitle()
         msg = ReportMessage(
             title=title,
-            sender=task,
-            recipients=[self.task.creator],
             requested_on=task.scheduled,
             filename=view.filename,
             )
-        msg.send()
+        msg.send(sender=task, recipients=[self.task.creator])
 
 
 class GeneratedReportMessage(ReportMessage):
 
-    template = _(u"Generated report ${filename}.")
-
     def __init__(self, *args, **kw):
         if not kw.get('title'):
-            kw['title'] = format_message(
-                self.template,
-                mapping={'filename': kw.get('filename', '')})
+            kw['title'] = kw.get('filename', _('report'))
         report = kw.pop('report', None)
         super(GeneratedReportMessage, self).__init__(*args, **kw)
         self.report = report
@@ -534,12 +581,14 @@ class OnReportGenerated(TaskCompletedNotification):
         messages = self.messages
         for message in messages:
             generated_msg = GeneratedReportMessage(
-                sender=self.task.creator,
-                recipients=message.recipients,
+                title=getattr(message, 'title', None),
                 requested_on=message.requested_on,
                 filename=message.filename,
                 report = self.task.report)
             generated_msg.updated_on = self.task.utcnow
-            generated_msg.replace(message)
+            generated_msg.replace(
+                message,
+                sender=self.task.creator,
+                recipients=message.recipients)
             # XXX: set message expiration date
             # message.expires_on =

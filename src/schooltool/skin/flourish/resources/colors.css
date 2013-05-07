@@ -52,7 +52,7 @@ h3.done-link a:hover {
     background-color: #026b6e;
     border-color: #026b6e;
 }
- 
+
 h3.done-link a:active {
     background-color: #056163;
     border-color: #056163;
@@ -163,6 +163,10 @@ h3.done-link a:active {
 .header ul.second-nav > li a,
 .header ul.second-nav > li span {
     color: #ffffff;
+}
+
+.header ul.second-nav > li a.new-messages {
+    color: #ff0000;
 }
 
 .header ul.second-nav > li.active a,
@@ -415,6 +419,18 @@ table.schooldaymodel tbody td.schoolday {
 
 table.schoolday-legend td.schoolday {
     background: #efefef;
+}
+
+table.schooltool-tasks-status td .error {
+    color: #ff0000;
+}
+
+table.schooltool-tasks-status td .info {
+    color: #ff8800;
+}
+
+table.schooltool-tasks-status td .success {
+    color: #0000ff;
 }
 
 /*
@@ -909,6 +925,10 @@ td.cal_yearly_day a.cal-day-today {
 
 .tree_list li a.leaf_url {
     color: #005c61;
+}
+
+table.report-dialog-message span.error {
+    color: #ff0000;
 }
 
 }
