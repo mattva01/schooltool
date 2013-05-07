@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:i18n="http://namespaces.zope.org/i18n"
+           i18n_domain="schooltool">
+
+  <!-- set up custom security policy -->
+  <include package="schooltool.securitypolicy"/>
+
+  <!-- Permissions -->
+
+  <permission id="schooltool.view" title="View" />
+  <permission id="schooltool.edit" title="Edit Info" />
+  <permission id="schooltool.add" title="Add Info" />
+  <permission id="schooltool.editCalendarOverlays" title="Edit Calendar Overlays" />
+
+</configure>

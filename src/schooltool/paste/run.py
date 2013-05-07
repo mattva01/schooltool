@@ -23,6 +23,7 @@ SchoolTool run script.
 from __future__ import with_statement
 
 import optparse
+import os
 import os.path
 
 import paste.script.command
@@ -94,9 +95,16 @@ def parse_args():
     return options, args
 
 
+def set_default_celery_config():
+    if 'CELERY_CONFIG_MODULE' not in os.environ:
+        os.environ['CELERY_CONFIG_MODULE']='schooltool.task.config.zope'
+
+
 def main():
     options, args = parse_args()
     conf_file = os.path.abspath(args[0])
+
+    set_default_celery_config()
 
     extra_options = []
     if options.start_daemon:

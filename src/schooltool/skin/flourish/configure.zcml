@@ -345,4 +345,11 @@
       provides="zope.interface.Interface"
       name="data_uri"/>
 
+  <page
+      name="index.html"
+      for="zope.file.interfaces.IFile"
+      permission="zope.Public"
+      class=".widgets.DownloadFile"
+      />
+
 </configure>

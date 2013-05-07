@@ -17,16 +17,22 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
+import zope.component
 from zope.cachedescriptors.property import Lazy
 from zope.interface import directlyProvides
+from zope.intid.interfaces import IIntIds
+from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
 
+import zc.table.column
 from zc.table.interfaces import ISortableColumn
 
+from schooltool import table
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin import flourish
+from schooltool.person.interfaces import IPerson
+from schooltool.task.interfaces import IMessageContainer
 from schooltool.task.tasks import TaskReadStatus
-from schooltool import table
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -129,3 +135,25 @@ class TaskTable(table.ajax.IndexedTable):
 class TaskTableDevmode(TaskTable):
 
     task_id_formatter = lambda self, *a: task_id_debug_cell_formatter(*a)
+
+
+class MessageColumn(zc.table.column.GetterColumn):
+
+    def renderCell(self, item, formatter):
+        content = flourish.content.queryContentProvider(
+            item, formatter.request, getattr(formatter, 'view', None),
+            'short')
+        if content is None:
+            return ''
+        result = content()
+        return result
+
+
+class MessageDialog(flourish.form.Dialog):
+
+    template = flourish.templates.File('templates/task_dialog.pt')
+    refresh_delay = 10000
+
+    @Lazy
+    def form_id(self):
+        return flourish.page.obj_random_html_id(self)

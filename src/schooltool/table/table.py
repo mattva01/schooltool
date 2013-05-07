@@ -24,6 +24,7 @@ import urllib
 import zope.security
 from zope.interface import implements
 from zope.interface import directlyProvides
+from zope.i18n import translate
 from zope.browserpage import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
 from zope.component import queryMultiAdapter
@@ -270,6 +271,12 @@ def url_cell_formatter(value, item, formatter):
     return '<a href="%s">%s</a>' % (url, value)
 
 
+def translate_cell_formatter(value, item, formatter):
+    if not value:
+        return value
+    return translate(value, formatter.request)
+
+
 def datetime_formatter(value, item, formatter):
     if value is None:
         return ''
@@ -427,6 +434,7 @@ class SchoolToolTableFormatter(object):
             prefix=self.prefix,
             group_by_column=self.group_by_column)
         formatter.cssClasses.update(self.css_classes)
+        formatter.view = self
         return formatter
 
     def render(self):
@@ -470,6 +478,7 @@ class TableContent(flourish.content.ContentProvider, SchoolToolTableFormatter):
             prefix=self.prefix,
             group_by_column=self.group_by_column)
         formatter.cssClasses.update(self.css_classes)
+        formatter.view = self
         return formatter
 
     render = SchoolToolTableFormatter.render

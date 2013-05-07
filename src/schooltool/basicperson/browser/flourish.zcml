@@ -860,4 +860,20 @@
       factory=".person.IDCardsPageTemplate"
       />
 
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class=".person.PersonMessageFilter"
+      manager=".person.MessageTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="messages_table"
+      for="*"
+      class=".person.MessageTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
 </configure>

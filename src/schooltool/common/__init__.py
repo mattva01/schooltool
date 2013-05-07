@@ -25,8 +25,10 @@ import locale
 import datetime
 import urllib
 
+import zope.interface
 import zope.component
 from zope.publisher.interfaces import IApplicationRequest
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.security.management import queryInteraction
 from zope.schema import Date
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -655,14 +657,48 @@ def simple_form_key(item):
     return key
 
 
-def getResourceURL(library_name, image_name, request):
-    if not image_name:
-        return None
-    if library_name is not None:
-        library = zope.component.queryAdapter(request, name=library_name)
-        image = library.get(image_name)
-    else:
-        image = zope.component.queryAdapter(request, name=image_name)
-    if image is None:
-        return None
-    return absoluteURL(image, request)
+class IResourceURIGetter(zope.interface.Interface):
+
+    def __call__(library_name, resource_name):
+        """Return resource from the library."""
+
+
+def getResourceURL(library_name, resource_name, request):
+    getter = zope.component.queryAdapter(
+        request, IResourceURIGetter,
+        name=library_name, default=None)
+    if getter is None:
+        getter = zope.component.queryAdapter(
+            request, IResourceURIGetter,
+            default=None)
+    resource = getter(library_name, resource_name)
+    return resource
+
+
+class CommonResourceURL(object):
+    zope.component.adapts(IBrowserRequest)
+    zope.interface.implements(IResourceURIGetter)
+
+    def __init__(self, request):
+        self.request = request
+
+    def __call__(self, library_name, resource_name):
+        if not resource_name:
+            return None
+        if library_name is not None:
+            library = zope.component.queryAdapter(self.request, name=library_name)
+            resource = library.get(resource_name)
+        else:
+            resource = zope.component.queryAdapter(self.request, name=resource_name)
+        if resource is None:
+            return None
+        return absoluteURL(resource, self.request)
+
+
+def data_uri(payload, mime=None):
+    payload = payload.encode('base64').replace('\n','')
+    result = 'data:'
+    if mime:
+        result += mime + ';'
+    result = result + 'base64,' + payload
+    return result

@@ -31,6 +31,8 @@ from zope.i18n import translate
 from z3c.form import form, field, button, validator
 from z3c.form.interfaces import DISPLAY_MODE
 from zope.interface import invariant, Invalid
+from zope.interface import directlyProvides
+from zope.intid.interfaces import IIntIds
 from zope.schema import Password, TextLine, Choice, List
 from zope.schema import ValidationError
 from zope.schema.interfaces import ITitledTokenizedTerm
@@ -39,6 +41,8 @@ from zope.security.checker import canAccess
 
 from reportlab.lib import units
 import z3c.form.interfaces
+import zc.table.column
+from zc.table.interfaces import ISortableColumn
 from z3c.form.validator import SimpleFieldValidator
 
 from schooltool.app.browser.app import RelationshipViewBase
@@ -66,8 +70,10 @@ from schooltool.skin.flourish.interfaces import IViewletManager
 from schooltool.skin.flourish.form import FormViewlet
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.content import ContentProvider
-from schooltool.table import table
+from schooltool import table
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
+from schooltool.task.interfaces import IMessageContainer
+from schooltool.task.browser.task import MessageColumn
 from schooltool.term.interfaces import IDateManager
 from schooltool.report.browser.report import RequestReportDownloadDialog
 
@@ -93,7 +99,7 @@ class BasicPersonContainerView(TableContainerView):
         return syc
 
 
-class DeletePersonCheckboxColumn(table.DependableCheckboxColumn):
+class DeletePersonCheckboxColumn(table.table.DependableCheckboxColumn):
 
     def __init__(self, *args, **kw):
         kw = dict(kw)
@@ -103,7 +109,7 @@ class DeletePersonCheckboxColumn(table.DependableCheckboxColumn):
     def hasDependents(self, item):
         if self.disable_items and item.__name__ in self.disable_items:
             return True
-        return table.DependableCheckboxColumn.hasDependents(self, item)
+        return table.table.DependableCheckboxColumn.hasDependents(self, item)
 
 
 class FlourishBasicPersonContainerView(flourish.page.Page):
@@ -1142,12 +1148,6 @@ class FlourishRequestPersonIDCardView(RequestReportDownloadDialog):
         return absoluteURL(self.context, self.request) + '/person_id_card.pdf'
 
 
-class FlourishRequestPersonProfileView(RequestReportDownloadDialog):
-
-    def nextURL(self):
-        return absoluteURL(self.context, self.request) + '/person_profile.pdf'
-
-
 class IDCardsPageTemplate(DefaultPageTemplate):
 
     template = ViewPageTemplateFile('templates/f_id_cards_template.pt',
@@ -1427,3 +1427,71 @@ class UserLinkViewlet(flourish.page.LinkViewlet):
         if not link or user is None:
             return None
         return "%s/%s" % (absoluteURL(user, self.request), self.link)
+
+
+class PersonMessageFilter(table.table.DoNotFilter):
+
+    @property
+    def catalog(self):
+        return self.manager.catalog
+
+    @property
+    def person(self):
+        return IPerson(self.context)
+
+    @property
+    def active_person_intid(self):
+        person = self.person
+        int_ids = getUtility(IIntIds)
+        person_intid = int_ids.queryId(person, None)
+        return person_intid
+
+    def filter(self, results):
+        person_intid = self.active_person_intid
+        if person_intid is None:
+            return []
+        recipient_index = self.catalog['recipient_ids']
+        message_ids = recipient_index.apply({'any_of': set([person_intid])})
+
+        results = [item for item in results
+                   if item['id'] in message_ids]
+        return results
+
+
+class MessageTable(table.ajax.IndexedTable):
+
+    @property
+    def source(self):
+        return IMessageContainer(ISchoolToolApplication(None))
+
+    def columns(self):
+        group = table.column.IndexedGetterColumn(
+            name='group',
+            title=_(u"Group"),
+            getter=lambda i, f: i.group,
+            cell_formatter=table.table.translate_cell_formatter,
+            index='group',
+            subsort=True)
+        directlyProvides(group, ISortableColumn)
+        updated = table.column.IndexedGetterColumn(
+            name='updated_on',
+            title=_("Received"),
+            getter=lambda i, f: i.updated_on,
+            cell_formatter=table.table.datetime_formatter,
+            index='updated_on',
+            subsort=True)
+        directlyProvides(updated, ISortableColumn)
+        message = MessageColumn(
+            name='message',
+            title=_("Message"))
+        return [message, group, updated]
+
+    def sortOn(self):
+        return (('updated_on', True), )
+
+
+from schooltool.report.browser.report import RequestRemoteReportDialog
+class FlourishRequestPersonProfileView(RequestRemoteReportDialog):
+
+    report_builder = PersonProfilePDF
+

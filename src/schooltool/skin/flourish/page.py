@@ -19,6 +19,7 @@
 """
 SchoolTool flourish pages.
 """
+import os
 import re
 import urllib
 
@@ -440,6 +441,15 @@ def sanitize_id(html_id):
     if not html_id[0].isalpha():
         html_id = 'i' + html_id
     return html_id
+
+
+def obj_random_html_id(obj, prefix='', len=6):
+    name_list = ([
+            'o'+os.urandom(len).encode('hex'),
+            getattr(obj, '__name__', ''),
+            prefix])
+    return sanitize_id('-'.join(reversed(filter(None, name_list))))
+
 
 def generic_viewlet_html_id(viewlet, prefix=''):
     parent = viewlet.manager.__parent__

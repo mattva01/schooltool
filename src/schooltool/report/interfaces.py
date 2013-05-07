@@ -21,9 +21,17 @@ Report interfaces
 
 """
 
-from zope.interface import Interface
-from zope.schema import Dict
+import zope.schema
+import zope.file.interfaces
+from zope.interface import Attribute, Interface
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.viewlet.interfaces import IViewletManager
+
+from schooltool.task.interfaces import IRemoteTask
+from schooltool.task.interfaces import IMessage
+from schooltool.skin.flourish.interfaces import IFlourishLayer
+
+from schooltool.common import SchoolToolMessage as _
 
 
 class IReportLinkViewletManager(IViewletManager):
@@ -32,7 +40,7 @@ class IReportLinkViewletManager(IViewletManager):
 
 class IRegisteredReportsUtility(Interface):
 
-    reports_by_group = Dict(
+    reports_by_group = zope.schema.Dict(
         title=u"Reports by group",
         description=u"Maps report group names to lists of report descriptions")
 
@@ -54,3 +62,31 @@ class IReportLinksURL(Interface):
     def __call__():
         """Returns an ASCII string with all unicode characters url quoted."""
 
+
+class IReportTask(IRemoteTask):
+
+   factory = Attribute('Report factory class or callable')
+   context = Attribute('Context object')
+
+
+class IReportFile(zope.file.interfaces.IFile):
+   pass
+
+
+class IReportMessage(IMessage):
+
+    report = zope.schema.Object(
+       title=_('Report'),
+       schema=IReportFile,
+       required=False)
+
+    filename = zope.schema.TextLine(
+       title=_('Filename'),
+       required=False)
+
+    requested_on = zope.schema.Datetime(
+       title=_("Requested on"),
+       required=False)
+
+class IRemoteReportLayer(IFlourishLayer, IBrowserRequest):
+   pass

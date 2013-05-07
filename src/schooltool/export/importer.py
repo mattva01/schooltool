@@ -66,7 +66,7 @@ from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.common import DateRange
 from schooltool.common import parse_time_range
-from schooltool.task.tasks import RemoteTask, db_task
+from schooltool.task.tasks import RemoteTask
 from schooltool.task.tasks import TaskReadStatus, TaskWriteStatus
 from schooltool.timetable.daytemplates import CalendarDayTemplates
 from schooltool.timetable.daytemplates import WeekDayTemplates
@@ -2038,7 +2038,7 @@ class FlourishRemoteMegaImporter(flourish.page.Page):
         if not self.errors:
             xlsfile = createFile(xls_upload)
             self.task = ImporterTask(xlsfile)
-            self.task.schedule()
+            self.task.schedule(self.request)
             #self.request.response.redirect(self.nextURL())
 
 
@@ -2125,7 +2125,6 @@ class ImportProgress(Timer):
         self.task_status.set_progress(self.value)
 
 
-
 class RemoteMegaImporter(MegaImporter):
 
     def update(self):
@@ -2173,30 +2172,22 @@ class RemoteMegaImporter(MegaImporter):
         return self.update()
 
 
-@db_task
-def import_xls():
-    remote = import_xls.remote_task
-    if remote is None: # SchoolTool counterpart not committed yet
-        self = import_xls
-        max_retries = getattr(self, 'max_db_conflict_retries',
-                              self.app.conf.SCHOOLTOOL_RETRY_DB_CONFLICTS)
-        raise self.retry(exc=None, retries=max_retries)
-
-    app = ISchoolToolApplication(None)
-    importer = RemoteMegaImporter(app, import_xls)
-    result = importer()
-    return result
-
-
 class ImporterTask(RemoteTask):
     implements(IImporterTask)
 
-    handler = import_xls
+    routing_key = "zodb.import"
+
     xls_file = None
 
     def __init__(self, xls_file):
         RemoteTask.__init__(self)
         self.xls_file = xls_file
+
+    def execute(self, request):
+        app = ISchoolToolApplication(None)
+        importer = RemoteMegaImporter(app, request)
+        result = importer()
+        return result
 
 
 class ImportProgressContent(flourish.page.Content):

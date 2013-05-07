@@ -71,4 +71,12 @@
       permission="schooltool.view"
       />
 
+  <page
+      name="dialog"
+      for="schooltool.task.interfaces.IMessage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".task.MessageDialog"
+      permission="schooltool.view"
+      />
+
 </configure>

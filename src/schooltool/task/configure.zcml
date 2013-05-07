@@ -35,6 +35,37 @@
       provides="zope.catalog.interfaces.ICatalog"
       factory=".tasks.getRemoteTaskCatalog" />
 
+  <class class=".tasks.MessageContainer">
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__" />
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+  </class>
+
+  <class class=".tasks.Message">
+    <require permission="schooltool.view"
+             interface=".interfaces.IMessage" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IMessage" />
+  </class>
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".tasks.MessagesStartUp"
+      name="schooltool.task.messages" />
+
+  <adapter factory=".tasks.getMessageContainerForApp" />
+
+  <adapter
+      factory=".tasks.MessageCatalog"
+      name="schooltool.task.tasks.MessageCatalog" />
+
+  <adapter
+      for=".interfaces.IMessageContainer"
+      provides="zope.catalog.interfaces.ICatalog"
+      factory=".tasks.getMessageCatalog" />
+
   <include package=".browser" />
 
 </configure>

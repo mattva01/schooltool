@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configure xmlns="http://namespaces.zope.org/zope">
+
+  <!-- To disable a plugin, add an exclude, e.g.
+
+  <exclude package="schooltool.gradebook" />
+  -->
+
+  <!-- Instance type. One of
+
+  <include package="schooltool.standard" />
+
+       or, for the new skin,
+
+  <include package="schooltool.skin.flourish.instance" />
+  -->
+  <include package="${instance_package}" />
+
+  <include files="plugins/*.zcml" />
+
+</configure>

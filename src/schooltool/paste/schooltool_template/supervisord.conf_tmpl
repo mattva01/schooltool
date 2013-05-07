@@ -27,6 +27,7 @@ serverurl=unix://${run_dir}/supervisord.sock
 priority=999
 directory=${data_dir}
 command=${bin_dir}/start-schooltool-instance ${config_dir}
+environment=CELERY_CONFIG_MODULE=schooltool.task.config.zope
 process_name=%(program_name)s
 numprocs=1
 autostart=false
@@ -68,11 +69,14 @@ stopsignal=QUIT
 stopwaitsecs=10
 killasgroup=false
 
-[program:celery]
+[program:celery_report]
 priority=110
 directory=${data_dir}
-command=${bin_dir}/celeryd -B --loglevel=INFO
-environment=PYTHONPATH=${config_dir}
+; celery 3.x:
+;command=${bin_dir}/celeryctl worker --loglevel=INFO --loader=schooltool.task.celery:ReportLoader --config=schooltool.task.config.worker_report --queues=zodb.report
+; celery 2.x:
+command=${bin_dir}/celeryd --loader=schooltool.task.celery:ReportLoader --config=schooltool.task.config.worker_report --queues=zodb.report,default
+environment=SCHOOLTOOL_CONF=${config_dir}/schooltool.conf,REDIS_HOST=127.0.0.1,REDIS_PORT=7079
 numprocs=1
 autostart=true
 autorestart=false
@@ -82,9 +86,30 @@ exitcodes=0,2
 stopsignal=QUIT
 stopwaitsecs=600
 killasgroup=false
-stdout_logfile=${log_dir}/celery.log
+stdout_logfile=${log_dir}/celery_report.log
 redirect_stderr=true
 
+;[program:celery_import]
+;priority=110
+;directory=${data_dir}
+;; celery 3.x:
+;;command=${bin_dir}/celeryctl worker --loglevel=INFO --loader=schooltool.task.celery:ZopeLoader --config=schooltool.task.config.worker_import --queues=zodb.import
+;; celery 2.x:
+;command=${bin_dir}/celeryd --loader=schooltool.task.celery:ZopeLoader --config=schooltool.task.config.worker_import --queues=zodb.import
+;environment=SCHOOLTOOL_CONF=${config_dir}/schooltool.conf,REDIS_HOST=127.0.0.1,REDIS_PORT=7079
+;numprocs=1
+;autostart=true
+;autorestart=false
+;startsecs=1
+;startretries=0
+;exitcodes=0,2
+;stopsignal=QUIT
+;stopwaitsecs=600
+;killasgroup=false
+;stdout_logfile=${log_dir}/celery_import.log
+;redirect_stderr=true
+
 [group:services]
-programs=zeo, redis, celery
+programs=zeo, redis, celery_report
+;, celery_import
 priority=100
