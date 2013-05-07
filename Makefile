@@ -4,7 +4,7 @@ PACKAGE=schooltool
 LOCALES=src/schooltool/locales
 TRANSLATIONS_ZCML=schooltool/common/translations.zcml
 
-DIST=/home/ftp/pub/schooltool/flourish
+DIST=/home/ftp/pub/schooltool/trunk
 PYTHON=python
 
 INSTANCE_TYPE=schooltool
@@ -209,8 +209,8 @@ upload:
 	    echo cp dist/$(PACKAGE)-$${VERSION}.tar.gz $${DIST} ;\
 	    cp dist/$(PACKAGE)-$${VERSION}.tar.gz $${DIST} ;\
 	else \
-	    echo scp dist/$(PACKAGE)-$${VERSION}.tar.gz* schooltool.org:$${DIST} ;\
-	    scp dist/$(PACKAGE)-$${VERSION}.tar.gz* schooltool.org:$${DIST} ;\
+	    echo scp dist/$(PACKAGE)-$${VERSION}.tar.gz* ftp.schooltool.org:$${DIST} ;\
+	    scp dist/$(PACKAGE)-$${VERSION}.tar.gz* ftp.schooltool.org:$${DIST} ;\
 	fi
 
 # Helpers
