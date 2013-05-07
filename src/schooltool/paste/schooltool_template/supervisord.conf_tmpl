@@ -1,0 +1,90 @@
+; Sample supervisor config file.
+
+[unix_http_server]
+file=${run_dir}/supervisord.sock
+
+[supervisord]
+logfile=${log_dir}/supervisord.log
+logfile_maxbytes=50MB
+loglevel=info
+pidfile=${run_dir}/supervisord.pid
+nodaemon=false
+
+; the below section must remain in the config file for RPC
+; (supervisorctl/web interface) to work, additional interfaces may be
+; added by defining them in separate rpcinterface: sections
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+[supervisorctl]
+serverurl=unix://${run_dir}/supervisord.sock
+
+; The below sample program section shows all possible program subsection values,
+; create one or more 'real' program: sections to be able to control them under
+; supervisor.
+
+[program:schooltool]
+priority=999
+directory=${data_dir}
+command=${bin_dir}/start-schooltool-instance ${config_dir}
+process_name=%(program_name)s
+numprocs=1
+autostart=false
+autorestart=false
+startsecs=1
+startretries=0
+exitcodes=0,2
+stopsignal=QUIT
+stopwaitsecs=10
+killasgroup=false
+
+[program:zeo]
+priority=100
+directory=${bin_dir}
+command=${bin_dir}/runzeo -C ${config_dir}/zeo.conf
+process_name=%(program_name)s
+numprocs=1
+autostart=true
+autorestart=false
+startsecs=1
+startretries=0
+exitcodes=0,2
+stopsignal=QUIT
+stopwaitsecs=10
+killasgroup=false
+
+[program:redis]
+priority=100
+directory=${data_dir}
+command=redis-server ${config_dir}/redis.conf
+process_name=%(program_name)s
+numprocs=1
+autostart=true
+autorestart=false
+startsecs=0
+startretries=0
+exitcodes=0,2
+stopsignal=QUIT
+stopwaitsecs=10
+killasgroup=false
+
+[program:celery]
+priority=110
+directory=${data_dir}
+command=${bin_dir}/celeryd -B --loglevel=INFO
+environment=PYTHONPATH=${config_dir}
+numprocs=1
+autostart=true
+autorestart=false
+startsecs=1
+startretries=0
+exitcodes=0,2
+stopsignal=QUIT
+stopwaitsecs=600
+killasgroup=false
+stdout_logfile=${log_dir}/celery.log
+redirect_stderr=true
+
+[group:services]
+programs=zeo, redis, celery
+priority=100

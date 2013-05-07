@@ -1,0 +1,16 @@
+<tal:block i18n:domain="schooltool">
+
+  <div tal:content="structure context/schooltool:content/ajax/table" />
+
+  <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit">
+    <tal:block condition="can_manage">
+      <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/control"
+         i18n:translate="">Done</a>
+    </tal:block>
+    <tal:block condition="not:can_manage">
+      <a tal:attributes="href request/principal/schooltool:person/@@absolute_url"
+         i18n:translate="">Done</a>
+    </tal:block>
+  </h3>
+
+</tal:block>

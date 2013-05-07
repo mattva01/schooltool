@@ -416,16 +416,27 @@ def get_schooltool_plugin_configurations():
 plugin_configurations = get_schooltool_plugin_configurations()
 
 
-class SchoolToolServer(object):
+class SchoolToolMachinery(object):
 
     ZCONFIG_SCHEMA = os.path.join(os.path.dirname(__file__),
                                   'config-schema.xml')
 
-    system_name = "SchoolTool"
-
     Options = Options
 
-    def configure(self, options):
+    def readConfig(self, filename):
+        # Read configuration file
+        schema_string = open(self.ZCONFIG_SCHEMA).read()
+        plugins = [configuration
+                   for (configuration, handler) in plugin_configurations]
+        schema_string = schema_string % {'plugins': "\n".join(plugins)}
+        schema_file = StringIO(schema_string)
+
+        schema = ZConfig.loadSchemaFile(schema_file, self.ZCONFIG_SCHEMA)
+
+        config, handler = ZConfig.loadConfig(schema, filename)
+        return config, handler
+
+    def configureComponents(self, options):
         """Configure Zope 3 components."""
         # Hook up custom component architecture calls
         setHooks()
@@ -439,12 +450,59 @@ class SchoolToolServer(object):
             context.provideFeature('devmode')
 
         zope.configuration.xmlconfig.registerCommonDirectives(context)
+        site_config_filename = options.config.site_definition
         context = zope.configuration.xmlconfig.file(
-            self.siteConfigFile, context=context)
+            site_config_filename, context=context)
 
         # Store the configuration context
         from zope.app.appsetup import appsetup
         appsetup.__dict__['__config_context'] = context
+
+    def configureReportlab(self, fontdirs):
+        """Configure reportlab given a path to TrueType fonts.
+
+        Disables PDF support in SchoolTool if fontdir is empty.
+        Outputs a warning to stderr in case of errors.
+        """
+        if not fontdirs:
+            return
+
+        existing_directories = []
+        for fontdir in fontdirs.split(':'):
+            if os.path.isdir(fontdir):
+                existing_directories.append(fontdir)
+
+        if not existing_directories:
+            print >> sys.stderr, (_("Warning: font directories '%s' do"
+                                    " not exist.\nPDF support disabled.")
+                                  % fontdirs)
+            return
+
+        for font_file in pdf.font_map.values():
+            font_exists = False
+            for fontdir in existing_directories:
+                font_path = os.path.join(fontdir, font_file)
+                if os.path.exists(font_path):
+                    font_exists = True
+            if not font_exists:
+                print >> sys.stderr, _("Warning: font '%s' does not exist"
+                                       " in the font directories '%s'.\n"
+                                       "PDF support disabled.") % (font_file,
+                                                                   fontdirs)
+                return
+
+        pdf.setUpFonts(existing_directories)
+
+    def configure(self, options):
+        self.options = options
+        self.configureComponents(options)
+        setLanguage(options.config.lang)
+        self.configureReportlab(options.config.reportlab_fontdir)
+
+
+class SchoolToolServer(SchoolToolMachinery):
+
+    system_name = "SchoolTool"
 
     def load_options(self, argv):
         """Parse the command line and read the configuration file."""
@@ -489,23 +547,13 @@ class SchoolToolServer(object):
                     password = getpass(_("Manager password: "))
                     options.manager_password = password
 
-        # Read configuration file
-        schema_string = open(self.ZCONFIG_SCHEMA).read()
-        plugins = [configuration
-                   for (configuration, handler) in plugin_configurations]
-        schema_string = schema_string % {'plugins': "\n".join(plugins)}
-        schema_file = StringIO(schema_string)
-
         if not options.config_file:
             print >> sys.stderr, _("No configuration file given")
             sys.exit(1)
 
-        schema = ZConfig.loadSchemaFile(schema_file, self.ZCONFIG_SCHEMA)
-
         print _("Reading configuration from %s") % options.config_file
         try:
-            options.config, handler = ZConfig.loadConfig(schema,
-                                                         options.config_file)
+            options.config, handler = self.readConfig(options.config_file)
         except ZConfig.ConfigurationError, e:
             print >> sys.stderr, "%s: %s" % (progname, e)
             sys.exit(1)
@@ -613,16 +661,14 @@ class SchoolToolServer(object):
         # to lock the database file, and we don't want that.
         logging.getLogger('ZODB.lock_file').disabled = True
 
-        # Process ZCML
-        self.siteConfigFile = options.config.site_definition
         self.configure(options)
 
-        # Set language specified in the configuration
-        setLanguage(options.config.lang)
+        # Connect to the database
+        db = self.openDB(options)
 
-        # Configure reportlab.
-        self.configureReportlab(options.config.reportlab_fontdir)
+        return db
 
+    def openDB(self, options):
         # Open the database
         db_configuration = options.config.database
         try:
@@ -656,41 +702,6 @@ class SchoolToolServer(object):
         db.setActivityMonitor(ActivityMonitor())
 
         return db
-
-    def configureReportlab(self, fontdirs):
-        """Configure reportlab given a path to TrueType fonts.
-
-        Disables PDF support in SchoolTool if fontdir is empty.
-        Outputs a warning to stderr in case of errors.
-        """
-        if not fontdirs:
-            return
-
-        existing_directories = []
-        for fontdir in fontdirs.split(':'):
-            if os.path.isdir(fontdir):
-                existing_directories.append(fontdir)
-
-        if not existing_directories:
-            print >> sys.stderr, (_("Warning: font directories '%s' do"
-                                    " not exist.\nPDF support disabled.")
-                                  % fontdirs)
-            return
-
-        for font_file in pdf.font_map.values():
-            font_exists = False
-            for fontdir in existing_directories:
-                font_path = os.path.join(fontdir, font_file)
-                if os.path.exists(font_path):
-                    font_exists = True
-            if not font_exists:
-                print >> sys.stderr, _("Warning: font '%s' does not exist"
-                                       " in the font directories '%s'.\n"
-                                       "PDF support disabled.") % (font_file,
-                                                                   fontdirs)
-                return
-
-        pdf.setUpFonts(existing_directories)
 
     def main(self, argv=sys.argv):
         options = self.load_options(argv)

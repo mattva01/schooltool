@@ -1,0 +1,30 @@
+CELERY_LOADER = "schooltool.task.celery:ZopeLoader"
+
+CELERY_RESULT_BACKEND = "redis"
+CELERY_REDIS_HOST = "127.0.0.1"
+CELERY_REDIS_PORT = 7079
+CELERY_REDIS_DB = 1
+
+_BROKER_REDIS_DB = 0
+
+BROKER_URL = "redis://%s:%s/%d" % (
+    CELERY_REDIS_HOST, CELERY_REDIS_PORT, _BROKER_REDIS_DB)
+
+CELERY_ENABLE_UTC = True
+
+CELERY_IMPORTS = ("schooltool.task.tasks", )
+
+CELERYBEAT_OPTS="--schedule=${data_dir}/celerybeat-schedule"
+CELERYBEAT_SCHEDULE = {}
+
+CELERY_STORE_ERRORS_EVEN_IF_IGNORED = True
+CELERY_SERIALIZER = 'json'
+
+# CELERYD uses process by default, but it consumes quite a lot of RAM
+# Real deployments should consider solo/threads/eventlet/gevent
+# CELERYD_POOL = 'eventlet'
+
+# CELERYD_CONCURRENCY = 1 # use a single worker
+
+SCHOOLTOOL_CONFIG = '${config_dir}/schooltool.conf'
+SCHOOLTOOL_RETRY_DB_CONFLICTS = 3

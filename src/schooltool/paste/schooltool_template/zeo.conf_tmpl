@@ -1,0 +1,30 @@
+<zeo>
+  address ${run_dir}/zeo.sock
+</zeo>
+<eventlog>
+  <logfile>
+    path ${log_dir}/zeo.log
+  </logfile>
+</eventlog>
+
+# <filestorage>		traditional FileStorage
+#   path filename		required
+#   create yes|no		default: yes
+#   read-only yes|no		default: no
+#   quota size		default: no quota
+#   blob-dir directory        directory to hold blob data
+# </filestorage>
+<filestorage>
+  path ${data_dir}/Data.fs
+  blob-dir ${data_dir}/blobs
+</filestorage>
+
+# cache-size n
+#
+# Default:
+#   cache-size 5000
+
+# pool-size n
+#
+# Default:
+#   pool-size 7

@@ -6,6 +6,16 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <zope:resourceLibrary
+      name="schooltool.export"
+      require="schooltool.skin.flourish"
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+        source="resources"
+        include="importer.js"
+        />
+  </zope:resourceLibrary>
+
   <flourish:page
      name="export.xls"
      for="schooltool.app.interfaces.ISchoolToolApplication"
@@ -24,14 +34,22 @@
      name="import.html"
      subtitle="Import Data"
      for="schooltool.app.interfaces.ISchoolToolApplication"
-     content_template="templates/f_import.pt"
-     class=".importer.FlourishMegaImporter"
+     content_template="templates/f_import_remote.pt"
+     class=".importer.FlourishRemoteMegaImporter"
      permission="schooltool.edit" />
 
   <flourish:activeViewlet
       name="manage_school"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
       view=".importer.FlourishMegaImporter"
+      />
+
+  <flourish:content
+      name="progress"
+      for=".importer.ImporterTask"
+      class=".importer.ImportProgressContent"
+      template="templates/f_import_progress.pt"
+      permission="schooltool.view"
       />
 
   <flourish:page
