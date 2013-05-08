@@ -12,6 +12,11 @@
       permission="zope.Public"
       />
 
+  <zope:adapter
+      factory=".report.ReportLinkViewletProxy"
+      permission="zope.Public"
+      />
+
   <flourish:viewlet
       name="school-reports-links"
       after="school-actions-links"

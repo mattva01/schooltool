@@ -11,6 +11,13 @@ New features
 - Background XLS import (disabled)
 - Background report generation
 - Messages about finished background tasks
+- Added resource library for filtered/chart reports
+
+Bugfixes
+++++++++
+
+- Added warning for unsaved changes in the gradebook
+- Comment dialog submits the gradebook
 
 Cleanup
 +++++++

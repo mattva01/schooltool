@@ -47,6 +47,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.course.interfaces import ISectionContainer
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.report.interfaces import IReportLinkViewletManager
+from schooltool.report.interfaces import IReportLinkViewlet
 from schooltool.report.interfaces import IRegisteredReportsUtility
 from schooltool.report.interfaces import IReportLinksURL
 from schooltool.report.interfaces import IReportTask
@@ -104,6 +105,9 @@ class FlourishReportLinkViewletManager(flourish.viewlet.ViewletManager):
 
 
 class ReportLinkViewlet(object):
+
+    implements(IReportLinkViewlet)
+
     template=ViewPageTemplateFile('templates/report_link.pt')
     group=u''
     title=u''

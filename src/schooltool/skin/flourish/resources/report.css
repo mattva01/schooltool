@@ -1,0 +1,110 @@
+/* Filters sidebar */
+
+select.report-filter {
+    width: 140px;
+}
+
+/* Chart report table */
+
+.section-report th.skills {
+    width: 220px;
+}
+
+.section-report .chart-container {
+    height: 14px;
+}
+
+.section-report tbody td {
+    vertical-align: middle;
+}
+
+.skills-completion-report tbody th {
+    font-weight: bold;
+}
+
+/* Chart axis */
+
+.axis path, .axis line {
+    fill: none;
+    shape-rendering: crispEdges;
+}
+
+.x-axis path, .x-axis line {
+    stroke: #6C7B7C;
+}
+
+.x-axis text {
+    font-size: 8px;
+    fill: #BEAFA8;
+}
+
+.y-axis path, .y-axis line {
+    stroke: #000;
+}
+
+/* Chart backgrounds */
+
+.bg-chart rect {
+    fill: #D2EBE0;
+}
+
+.bg-passing-target rect {
+    fill: #fff;
+}
+
+/* "Meets target" gradient */
+
+.section-report, .gradient-example {
+    background: -webkit-linear-gradient(left,  #DFF2EA,  #F7F7F7);
+    background: -moz-linear-gradient(left,  #DFF2EA,  #F7F7F7);
+}
+
+.section-report tr, .gradient-example tr {
+    background-color: #F7F7F7;
+}
+
+.section-report tr.above-passing-target,
+.gradient-example tr.above-passing-target {
+    background-color: transparent;
+}
+
+.section-report thead tr {
+    background-color: #6C7B7C;
+}
+
+/* Score Colors help */
+
+.score-colors-container form {
+    margin-top: 0;
+}
+
+.score-colors-container .no-batch-navigation {
+    margin-top: 0;
+    padding: 0;
+}
+
+.score-colors-container table {
+    margin-top: 0;
+}
+
+.score-colors-table {
+    margin-bottom: 0;
+}
+
+.score-colors-table thead {
+    display: none;
+}
+
+.score-colors-table tbody  {
+    border-top: none;
+}
+
+.score-color-cell .color {
+    width: 16px;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.score-color-cell .passing-target {
+    background-color: #D2EBE0;
+}
