@@ -50,6 +50,13 @@
              set_schema=".interfaces.IMessage" />
   </class>
 
+  <class class=".progress.ProgressMessage">
+    <require permission="schooltool.view"
+             interface=".interfaces.IProgressMessage" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IProgressMessage" />
+  </class>
+
   <adapter
       for="schooltool.app.interfaces.ISchoolToolApplication"
       factory=".tasks.MessagesStartUp"

@@ -79,7 +79,8 @@
 
   <zope:resourceLibrary
       name="schooltool.skin.flourish"
-      require="schooltool.skin.flourish-scripts"
+      require="schooltool.skin.flourish-scripts
+               schooltool.task"
       layer="schooltool.skin.flourish.IFlourishLayer">
     <directory
       source="resources"

@@ -29,7 +29,6 @@ import celery.utils
 import celery.states
 import transaction
 import transaction.interfaces
-from celery.task import task, periodic_task
 from persistent import Persistent
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import implements, implementer
@@ -38,7 +37,6 @@ from zope.catalog.text import TextIndex
 from zope.component import adapter, getUtility, getAdapters
 from zope.container.btree import BTreeContainer
 from zope.container.contained import Contained
-from zope.interface import implements
 from ZODB.POSException import ConflictError
 from zope.app.publication.zopepublication import ZopePublication
 from zope.component.hooks import getSite, setSite
@@ -59,13 +57,12 @@ from schooltool.task.interfaces import IMessage, IMessageContainer
 from schooltool.task.interfaces import ITaskScheduledNotification
 from schooltool.task.interfaces import ITaskCompletedNotification
 from schooltool.task.interfaces import ITaskFailedNotification
+from schooltool.task.state import TaskWriteState
 
 from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
 
 
-IN_PROGRESS = 'IN_PROGRESS'
-COMMITTING = 'COMMITTING_ZODB'
 LAST_READ_MESSAGES_TIME_KEY = 'schooltool.task.tasks:last_read_messages'
 
 
@@ -188,7 +185,7 @@ class DBTaskMixin(object):
                 setSite(old_site)
                 if set_committing:
                     try:
-                        status = TaskWriteStatus(self.request.id)
+                        status = TaskWriteState(self.request.id)
                         status.set_committing()
                     except Exception:
                         pass # don't care really
@@ -495,98 +492,6 @@ class TasksStartUp(StartUpBase):
     def __call__(self):
         if 'schooltool.tasks' not in self.app:
             self.app['schooltool.tasks'] = TaskContainer()
-
-
-class TaskReadStatus(object):
-
-    task_id = None
-    _meta = None
-    _progress_states = (celery.states.STARTED, IN_PROGRESS)
-
-    def __init__(self, task_id):
-        self.task_id = task_id
-        self._meta = None, None, None
-        self.reload()
-
-    def reload(self):
-        result = celery.task.Task.AsyncResult(self.task_id)
-        self._meta = result.state, result.result, result.traceback
-
-    @property
-    def state(self):
-        return self._meta[0]
-
-    @property
-    def in_progress(self):
-        return (self.state in self._progress_states or self.committing)
-
-    @property
-    def committing(self):
-        return self.state == COMMITTING
-
-    @property
-    def pending(self):
-        return self.state in celery.states.UNREADY_STATES
-
-    @property
-    def finished(self):
-        return self.state in celery.states.READY_STATES
-
-    @property
-    def failed(self):
-        return self.state in celery.states.PROPAGATE_STATES
-
-    @property
-    def succeeded(self):
-        return self.state == celery.states.SUCCESS
-
-    @property
-    def progress(self):
-        if self.in_progress:
-            return self._meta[1]
-
-    @property
-    def result(self):
-        if self.succeeded:
-            return self._meta[1]
-
-    @property
-    def failure(self):
-        if self.failed:
-            return self._meta[1]
-
-    @property
-    def info(self):
-        return self._meta[1]
-
-    @property
-    def traceback(self):
-        return self._meta[2]
-
-
-class NotInProgress(Exception):
-    pass
-
-
-undefined = object()
-
-class TaskWriteStatus(TaskReadStatus):
-
-    def set_progress(self, progress=None):
-        result = celery.task.Task.AsyncResult(self.task_id)
-        # XXX: only check this if task.track_started
-        if result.state not in self._progress_states:
-            raise NotInProgress(result.state, self._progress_states)
-        result.backend.store_result(result.task_id, progress, IN_PROGRESS)
-        self.reload()
-
-    def set_committing(self):
-        result = celery.task.Task.AsyncResult(self.task_id)
-        # XXX: only check this if task.track_started
-        if result.state not in self._progress_states:
-            raise NotInProgress(result.state, self._progress_states)
-        result.backend.store_result(result.task_id, self.info, COMMITTING)
-        self.reload()
 
 
 class RemoteTaskCatalog(AttributeCatalog):
