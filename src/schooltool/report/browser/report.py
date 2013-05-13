@@ -383,6 +383,7 @@ class ReportMessageDownloadsPlugin(schooltool.traverser.traverser.TraverserPlugi
 class DownloadReportDialog(MessageDialog):
 
     template = flourish.templates.File('templates/f_download_report_dialog.pt')
+
     @property
     def report(self):
         return getattr(self.context, 'report', None)

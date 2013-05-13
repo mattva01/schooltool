@@ -33,6 +33,13 @@
              set_schema=".interfaces.IReportTask" />
   </class>
 
+  <class class=".report.OldReportTask">
+    <require permission="schooltool.view"
+             interface=".interfaces.IReportTask" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IReportTask" />
+  </class>
+
   <class class=".report.ReportMessage">
     <require permission="schooltool.view"
              interface=".interfaces.IReportMessage" />

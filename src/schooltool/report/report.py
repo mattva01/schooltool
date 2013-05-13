@@ -307,8 +307,10 @@ class RemoteReportRequest(object):
     interaction = None
     form = None
     URL = ''
+    task = None
 
-    def __init__(self, params=None):
+    def __init__(self, params=None, task=None):
+        self.task = task
         if params is None:
             params = {}
         self.form = dict(params)
@@ -318,6 +320,12 @@ class RemoteReportRequest(object):
         locale_id = getattr(params, 'locale_id', None)
         if locale_id is not None:
             self.locale = zope.i18n.locales.Locale(locale_id)
+
+    @property
+    def task_id(self):
+        if self.task is None:
+            return None
+        return self.task.task_id
 
     def get(self, value, default=None):
         return self.form.get(value, default)
@@ -335,14 +343,18 @@ class RemoteReportRequest(object):
         return ''
 
 
-class ReportTask(RemoteTask):
+class AbstractReportTask(RemoteTask):
     implements(IReportTask)
 
     routing_key = "zodb.report"
     report = None
 
+    abstract = True
+
     view_name = None
     factory_name = None
+
+    context_intid = None
 
     def __init__(self, report_builder, context, remote_request=None):
         RemoteTask.__init__(self)
@@ -362,7 +374,7 @@ class ReportTask(RemoteTask):
             self.request_params[name] = other[name]
 
     def update(self, request):
-        super(ReportTask, self).update(request)
+        super(AbstractReportTask, self).update(request)
         if (self.request_params.locale_id is None and
             request.locale is not None):
             self.request_params.locale_id = request.locale.id
@@ -372,7 +384,7 @@ class ReportTask(RemoteTask):
         # XXX: move begin/end requests to runTransaction level
         if params is None:
             params = self.request_params
-        request = RemoteReportRequest(params)
+        request = RemoteReportRequest(params, task=self)
         # XXX:
         from schooltool.app.security import Principal
         from zope.security.checker import ProxyFactory
@@ -399,19 +411,19 @@ class ReportTask(RemoteTask):
         renderer = self.getRenderer()
         if renderer is None:
             return # skip the report
-        pdf_file = self.renderToFile(renderer, *args, **kwargs)
-        self.report = pdf_file
+        report_file = self.renderToFile(renderer, *args, **kwargs)
+        self.report = report_file
         self.endRequest()
 
     def complete(self, request, result):
         self.beginRequest()
-        res = super(ReportTask, self).complete(request, result)
+        res = super(AbstractReportTask, self).complete(request, result)
         self.endRequest()
         return res
 
     def fail(self, request, result, traceback):
         self.beginRequest()
-        res = super(ReportTask, self).fail(request, result, traceback)
+        res = super(AbstractReportTask, self).fail(request, result, traceback)
         self.endRequest()
         return res
 
@@ -431,28 +443,10 @@ class ReportTask(RemoteTask):
         return renderer
 
     def renderToFile(self, renderer, *args, **kwargs):
-        # XXX:
-        #if not schooltool.app.pdf.isEnabled():
-        #    return translate(renderer.pdf_disabled_text,
-        #                     context=renderer.request)
-        renderer.update()
-        rml = renderer.render()
-        filename = renderer.filename
-        stream = rml2pdf.parseString(rml, filename=filename or None)
-        data = stream.getvalue()
-        pdf = self.makePDFFile(filename, data)
-        return pdf
+        raise NotImplemented()
 
-    def makePDFFile(self, filename, data):
-        if not filename or not filename.strip():
-            filename = 'report.pdf'
-        pdf = ReportFile()
-        pdf.mimeType = 'application/pdf'
-        pdf.__name__ = filename
-        stream = pdf.open('w')
-        stream.write(data)
-        stream.close()
-        return pdf
+    def makeReportFile(self, filename, data):
+        raise NotImplemented()
 
     @property
     def factory(self):
@@ -481,6 +475,33 @@ class ReportTask(RemoteTask):
         self.context_intid = intid
 
 
+class ReportTask(AbstractReportTask):
+
+    def renderToFile(self, renderer, *args, **kwargs):
+        # XXX:
+        #if not schooltool.app.pdf.isEnabled():
+        #    return translate(renderer.pdf_disabled_text,
+        #                     context=renderer.request)
+        renderer.update()
+        rml = renderer.render()
+        filename = renderer.filename
+        stream = rml2pdf.parseString(rml, filename=filename or None)
+        data = stream.getvalue()
+        pdf = self.makeReportFile(filename, data)
+        return pdf
+
+    def makeReportFile(self, filename, data):
+        if not filename or not filename.strip():
+            filename = 'report.pdf'
+        pdf = ReportFile()
+        pdf.mimeType = 'application/pdf'
+        pdf.__name__ = filename
+        stream = pdf.open('w')
+        stream.write(data)
+        stream.close()
+        return pdf
+
+
 class OldReportTask(ReportTask):
 
     def renderToFile(self, renderer, *args, **kwargs):
@@ -491,7 +512,7 @@ class OldReportTask(ReportTask):
         filename, data = renderer.renderToFile()
         if data is None:
             return None
-        pdf = self.makePDFFile(filename, data)
+        pdf = self.makeReportFile(filename, data)
         return pdf
 
 
@@ -536,6 +557,7 @@ class ReportFailedMessage(ReportMessage, TaskFailedMessage):
 class OnPDFReportScheduled(TaskScheduledNotification):
 
     view = None
+    message_factory = ReportMessage
 
     def __init__(self, task, request, view):
         super(OnPDFReportScheduled, self).__init__(task, request)
@@ -554,7 +576,7 @@ class OnPDFReportScheduled(TaskScheduledNotification):
         view.render_invariant = True
         task = self.task
         title = self.makeReportTitle()
-        msg = ReportMessage(
+        msg = self.message_factory(
             title=title,
             requested_on=task.scheduled,
             filename=view.filename,

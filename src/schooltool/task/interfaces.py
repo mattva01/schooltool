@@ -126,7 +126,11 @@ class IMessageBase(Interface):
 
 
 class IMessage(IMessageBase, IContained):
-    pass
+    """A message sent because of remote task."""
+
+
+class IProgressMessage(IMessage):
+    """Message that has a displayable progress."""
 
 
 class IMessageContainer(IContainer):

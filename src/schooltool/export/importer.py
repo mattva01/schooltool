@@ -66,8 +66,9 @@ from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.common import DateRange
 from schooltool.common import parse_time_range
+from schooltool.task.progress import Timer
 from schooltool.task.tasks import RemoteTask
-from schooltool.task.tasks import TaskReadStatus, TaskWriteStatus
+from schooltool.task.state import TaskWriteState, TaskReadState
 from schooltool.timetable.daytemplates import CalendarDayTemplates
 from schooltool.timetable.daytemplates import WeekDayTemplates
 from schooltool.timetable.daytemplates import SchoolDayTemplates
@@ -2042,47 +2043,6 @@ class FlourishRemoteMegaImporter(flourish.page.Page):
             #self.request.response.redirect(self.nextURL())
 
 
-class Timer(object):
-
-    update_interval = datetime.timedelta(seconds=1)
-    last_updated = None
-
-    def __init__(self):
-        self.reset()
-
-    def reset(self):
-        self.last_updated = None
-
-    @property
-    def now(self):
-        return datetime.datetime.utcnow()
-
-    @property
-    def delta(self):
-        last_updated = self.last_updated
-        if last_updated is None:
-            return None
-        return self.now - last_updated
-
-    def tick(self, *args, **kw):
-        raise NotImplemented()
-
-    def tock(self, *args, **kw):
-        raise NotImplemented()
-
-    def force(self, *args, **kw):
-        self.tick(*args, **kw)
-        self.tock(*args, **kw)
-        self.last_updated = self.now
-
-    def __call__(self, *args, **kw):
-        self.tick(*args, **kw)
-        if (self.last_updated is None or
-            self.delta >= self.update_interval):
-            self.tock(*args, **kw)
-            self.last_updated = self.now
-
-
 class ImportProgress(Timer):
 
     importers = None
@@ -2091,7 +2051,7 @@ class ImportProgress(Timer):
 
     def __init__(self, importers, task_id):
         self.importers = importers
-        self.task_status = TaskWriteStatus(task_id)
+        self.task_status = TaskWriteState(task_id)
         Timer.__init__(self)
 
     def reset(self):
@@ -2194,7 +2154,7 @@ class ImportProgressContent(flourish.page.Content):
 
     @Lazy
     def status(self):
-        return TaskReadStatus(self.task_id)
+        return TaskReadState(self.task_id)
 
     @property
     def progress_id(self):

@@ -7,6 +7,16 @@
            xmlns:report="http://namespaces.schooltool.org/report"
            i18n_domain="schooltool">
 
+  <zope:resourceLibrary
+      name="schooltool.task"
+      require=""
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+        source="resources"
+        include="task.js"
+        />
+  </zope:resourceLibrary>
+
   <flourish:page
       name="index.html"
       for="schooltool.task.interfaces.ITaskContainer"
@@ -87,5 +97,12 @@
       permission="schooltool.view"
       />
 
+  <flourish:page
+      name="dialog"
+      for="schooltool.task.interfaces.IProgressMessage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".task.TaskProgressDialog"
+      permission="schooltool.view"
+      />
 
 </configure>

@@ -19,8 +19,6 @@
 from __future__ import absolute_import
 
 import bottle
-import celery.result
-import sys
 import types
 try:
     import json
@@ -34,10 +32,8 @@ from zope.i18n import translate
 from zope.interface import directlyProvides
 from zope.publisher.http import IHTTPRequest
 
-import schooltool.task
 from schooltool.app.main import SchoolToolMachinery, setLanguage
-from schooltool.task.tasks import TaskReadStatus
-from schooltool.testing.setup import ZCMLWrapper
+from schooltool.task.state import TaskReadState
 
 
 not_translatable = object()
@@ -102,7 +98,7 @@ def status_dict(status):
 
 
 def make_task_result(task_id):
-    status = TaskReadStatus(task_id)
+    status = TaskReadState(task_id)
     result = {
         'internal_state': status.state,
         'status': status_dict(status),

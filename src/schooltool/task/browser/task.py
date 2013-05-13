@@ -32,7 +32,8 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin import flourish
 from schooltool.person.interfaces import IPerson
 from schooltool.task.interfaces import IMessageContainer
-from schooltool.task.tasks import TaskReadStatus
+from schooltool.task.interfaces import IRemoteTask
+from schooltool.task.state import TaskReadState
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -46,9 +47,9 @@ class TaskContainerView(flourish.page.Page):
 
 class TaskStatusView(flourish.page.Page):
 
-    @Lazy
+    @property
     def status(self):
-        return TaskReadStatus(self.task_id)
+        return TaskReadState(self.task_id)
 
     @property
     def persistent_failed(self):
@@ -193,3 +194,56 @@ class MessageDialog(flourish.form.Dialog):
     @Lazy
     def form_id(self):
         return flourish.page.obj_random_html_id(self)
+
+
+class TaskProgressDialog(flourish.form.Dialog):
+
+    template = flourish.templates.File('templates/f_task_progress.pt')
+
+    @property
+    def main_recipient(self):
+        person = IPerson(self.request, None)
+        if self.context.recipients is None:
+            return None
+        recipients = sorted(self.context.recipients, key=lambda r: r.__name__)
+        if person in recipients:
+            return person
+        for recipient in recipients:
+            if flourish.canView(recipient):
+                return recipient
+        return None
+
+    @property
+    def task_id(self):
+        return self.task and self.task.__name__
+
+    @property
+    def progress_id(self):
+        return flourish.page.sanitize_id('progress-%s' % (self.task_id or self.__name__))
+
+    @Lazy
+    def task(self):
+        sender = self.context.sender
+        if IRemoteTask.providedBy(sender):
+            return sender
+        return None
+
+    @property
+    def failed(self):
+        return self.task and self.task.failed
+
+    @property
+    def completed(self):
+        return (self.task and (self.task.succeeded or
+                               self.task.finished and not self.task.failed))
+
+    @property
+    def pending(self):
+        return self.task and not self.task.finished
+
+    @property
+    def should_reload(self):
+        sender = self.context.sender
+        if IRemoteTask.providedBy(sender):
+            return not sender.finished
+        return False
