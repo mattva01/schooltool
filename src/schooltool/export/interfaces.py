@@ -19,6 +19,10 @@
 
 import zope.schema
 import zope.file.interfaces
+from zope.publisher.interfaces.browser import IBrowserPage
+
+from schooltool.report.interfaces import IReportMessage
+from schooltool.task.interfaces import IProgressMessage
 from schooltool.task.interfaces import IRemoteTask
 
 from schooltool.common import SchoolToolMessage as _
@@ -29,3 +33,23 @@ class IImporterTask(IRemoteTask):
     xls_file = zope.schema.Object(
         title=_("XLS File"),
         schema=zope.file.interfaces.IFile)
+
+
+class IXLSExportView(IBrowserPage):
+
+    filename = zope.schema.TextLine(
+        title=u"XLS file name", required=False)
+
+    render_invariant = zope.schema.Bool(
+        title=u"Render invariant",
+        description=u"Render without influence form environment, like current time.",
+        required=False)
+
+    render_debug = zope.schema.Bool(
+        title=u"Render debug",
+        description=u"Render with debug information.",
+        required=False)
+
+
+class IXLSProgressMessage(IProgressMessage, IReportMessage):
+    pass

@@ -8,7 +8,7 @@
 
   <zope:resourceLibrary
       name="schooltool.export"
-      require="schooltool.skin.flourish"
+      require=""
       layer="schooltool.skin.flourish.IFlourishLayer">
     <directory
         source="resources"
@@ -20,6 +20,13 @@
      name="export.xls"
      for="schooltool.app.interfaces.ISchoolToolApplication"
      class=".export.MegaExporter"
+     permission="schooltool.edit" />
+
+  <flourish:page
+     name="export.xls"
+     for="schooltool.app.interfaces.ISchoolToolApplication"
+     layer="schooltool.report.interfaces.IRemoteReportLayer"
+     class=".export.RemoteMegaExporter"
      permission="schooltool.edit" />
 
   <flourish:viewlet
@@ -81,5 +88,12 @@
        file_type="xls"
        link="request_export_xls.html"
        />
+
+  <zope:class class=".export.XLSProgressMessage">
+    <require permission="schooltool.view"
+             interface="schooltool.export.interfaces.IXLSProgressMessage" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.export.interfaces.IXLSProgressMessage" />
+  </zope:class>
 
 </configure>
