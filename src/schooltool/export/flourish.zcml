@@ -41,8 +41,8 @@
      name="import.html"
      subtitle="Import Data"
      for="schooltool.app.interfaces.ISchoolToolApplication"
-     content_template="templates/f_import_remote.pt"
-     class=".importer.FlourishRemoteMegaImporter"
+     content_template="templates/f_import.pt"
+     class=".importer.FlourishMegaImporter"
      permission="schooltool.edit" />
 
   <flourish:activeViewlet

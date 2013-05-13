@@ -228,6 +228,6 @@ ubuntu-environment:
 	sudo apt-get install build-essential gettext enscript \
 	    python-dev python-virtualenv \
 	    ttf-ubuntu-font-family ttf-liberation \
-	    libicu-dev libxslt1-dev libfreetype6-dev libjpeg-dev
+	    libicu-dev libxslt1-dev libfreetype6-dev libjpeg-dev \
 	    redis-server
 
