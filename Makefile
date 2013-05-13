@@ -72,6 +72,14 @@ restart: build instance instance/run/supervisord.pid
 	bin/supervisorctl restart schooltool
 	@bin/supervisorctl status
 
+.PHONY: rerun
+rerun: build instance instance/run/supervisord.pid
+	@bin/supervisorctl restart "services:celery_report"
+	@bin/supervisorctl start "services:*"
+	@bin/supervisorctl status schooltool | grep RUNNING && bin/supervisorctl stop schooltool || exit 0
+	@bin/supervisorctl status
+	bin/start-schooltool-instance instance
+
 .PHONY: stop
 stop:
 	@test -S instance/run/supervisord.sock && bin/supervisorctl status | grep -v STOPPED && bin/supervisorctl stop all || exit 0
