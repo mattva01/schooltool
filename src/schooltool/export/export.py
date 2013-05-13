@@ -935,7 +935,7 @@ class XLSReportTask(AbstractReportTask):
 
 class RemoteMegaExporter(MegaExporter):
 
-    base_filename = 'school_export'
+    base_filename = 'school'
     message_title = _('school export')
     makeProgress = ExcelExportView.makeProgress
 
