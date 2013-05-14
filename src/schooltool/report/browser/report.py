@@ -341,7 +341,7 @@ class ReportAbsoluteURLAdapter(AbsoluteURL):
 
     def __str__(self):
         base = absoluteURL(self.context.__parent__, self.request)
-        filename = quote(unicode(self.context.__name__))
+        filename = quote(unicode(self.context.__name__).encode('UTF-8'))
         url = base + '/download/' + filename
         return url
 
