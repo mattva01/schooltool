@@ -30,7 +30,7 @@
     <div class="label">
       <label for="SEARCH_TYPE"
              tal:attributes="for view/search_type_id">
-        <span i18n:translate="">Filter by...</span>
+        <span i18n:translate="">Type</span>
       </label>
     </div>
     <div class="widget">
