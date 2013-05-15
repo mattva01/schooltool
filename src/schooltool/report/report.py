@@ -51,7 +51,9 @@ from schooltool.report.interfaces import IReportLinkViewlet
 from schooltool.report.interfaces import IRegisteredReportsUtility
 from schooltool.report.interfaces import IReportLinksURL
 from schooltool.report.interfaces import IReportTask
+from schooltool.report.interfaces import IReportDetails
 from schooltool.report.interfaces import IReportMessage
+from schooltool.report.interfaces import IReportProgressMessage
 from schooltool.report.interfaces import IRemoteReportLayer
 from schooltool.report.interfaces import IReportFile
 from schooltool.schoolyear.interfaces import ISchoolYear
@@ -60,13 +62,13 @@ from schooltool.skin.skin import OrderedViewletManager
 from schooltool.task.tasks import RemoteTask
 from schooltool.task.tasks import query_messages
 from schooltool.task.tasks import Message
+from schooltool.task.progress import ProgressMessage
 from schooltool.task.interfaces import ITaskScheduledNotification
 from schooltool.task.tasks import TaskCompletedNotification
 from schooltool.task.tasks import TaskScheduledNotification
 from schooltool.task.tasks import TaskFailedMessage
 from schooltool.term.interfaces import IDateManager
 
-from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -516,19 +518,39 @@ class OldReportTask(ReportTask):
         return pdf
 
 
-class ReportMessage(Message):
-    implements(IReportMessage)
+class ReportDetails(object):
+    implements(IReportDetails)
 
     report = None
     requested_on = None
     group = _("Reports")
     filename = None
 
+    def __init__(self, requested_on=None, filename=None):
+        self.requested_on = requested_on
+        self.filename = filename
+
+
+class ReportProgressMessage(ProgressMessage, ReportDetails):
+    implements(IReportProgressMessage)
+
+    def __init__(self, title=None,
+                 requested_on=None, filename=None):
+        ProgressMessage.__init__(self, title=title)
+        ReportDetails.__init__(
+            self, requested_on=requested_on,
+            filename=(filename or 'report.pdf'))
+
+
+class ReportMessage(Message, ReportDetails):
+    implements(IReportMessage)
+
     def __init__(self, title=None,
                  requested_on=None, filename=None):
         Message.__init__(self, title=title)
-        self.requested_on = requested_on
-        self.filename = filename or 'report.pdf'
+        ReportDetails.__init__(
+            self, requested_on=requested_on,
+            filename=(filename or 'report.pdf'))
 
 
 class OnReportScheduled(TaskScheduledNotification):
@@ -557,7 +579,7 @@ class ReportFailedMessage(ReportMessage, TaskFailedMessage):
 class OnPDFReportScheduled(TaskScheduledNotification):
 
     view = None
-    message_factory = ReportMessage
+    message_factory = ReportProgressMessage
 
     def __init__(self, task, request, view):
         super(OnPDFReportScheduled, self).__init__(task, request)
@@ -598,6 +620,8 @@ class GeneratedReportMessage(ReportMessage):
 
 class OnReportGenerated(TaskCompletedNotification):
 
+    message_factory = GeneratedReportMessage
+
     @property
     def messages(self):
         messages = query_messages(self.task)
@@ -606,7 +630,7 @@ class OnReportGenerated(TaskCompletedNotification):
     def send(self):
         messages = self.messages
         for message in messages:
-            generated_msg = GeneratedReportMessage(
+            generated_msg = self.message_factory(
                 title=getattr(message, 'title', None),
                 requested_on=message.requested_on,
                 filename=message.filename,

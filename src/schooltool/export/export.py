@@ -53,7 +53,6 @@ from schooltool.report.browser.report import RequestRemoteReportDialog
 from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.task.progress import TaskProgress
 from schooltool.task.progress import normalized_progress
-from schooltool.task.progress import ProgressMessage
 from schooltool.report.report import AbstractReportTask
 from schooltool.report.report import ReportFile
 from schooltool.report.report import ReportMessage
@@ -949,7 +948,7 @@ class RequestXLSReportDialog(RequestRemoteReportDialog):
     task_factory = XLSReportTask
 
 
-class XLSProgressMessage(ProgressMessage, ReportMessage):
+class XLSProgressMessage(ReportMessage):
     implements(IXLSProgressMessage)
 
 

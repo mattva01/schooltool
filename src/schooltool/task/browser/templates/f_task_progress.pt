@@ -6,6 +6,7 @@
   <h3 tal:attributes="id string:${progress_id}-progress-title"
       tal:condition="view/pending" i18n:translate="">
     Scheduled.
+    <img i18n:name="spinner" tal:attributes="src context/++resource++schooltool.skin.flourish/spinner.gif" />
   </h3>
 
   <h3 tal:attributes="id string:${progress_id}-progress-title"

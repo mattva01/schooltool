@@ -47,6 +47,13 @@
              set_schema=".interfaces.IReportMessage" />
   </class>
 
+  <class class=".report.ReportProgressMessage">
+    <require permission="schooltool.view"
+             interface=".interfaces.IReportProgressMessage" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IReportProgressMessage" />
+  </class>
+
   <class class=".report.GeneratedReportMessage">
     <require permission="schooltool.view"
              interface=".interfaces.IReportMessage" />

@@ -28,6 +28,7 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.viewlet.interfaces import IViewletManager
 
 from schooltool.task.interfaces import IRemoteTask
+from schooltool.task.interfaces import IProgressMessage
 from schooltool.task.interfaces import IMessage
 from schooltool.skin.flourish.interfaces import IFlourishLayer
 
@@ -83,7 +84,7 @@ class IReportFile(zope.file.interfaces.IFile):
    pass
 
 
-class IReportMessage(IMessage):
+class IReportDetails(Interface):
 
     report = zope.schema.Object(
        title=_('Report'),
@@ -97,6 +98,15 @@ class IReportMessage(IMessage):
     requested_on = zope.schema.Datetime(
        title=_("Requested on"),
        required=False)
+
+
+class IReportProgressMessage(IProgressMessage, IReportDetails):
+   pass
+
+
+class IReportMessage(IMessage, IReportDetails):
+   pass
+
 
 class IRemoteReportLayer(IFlourishLayer, IBrowserRequest):
    pass
