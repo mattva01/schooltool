@@ -31,7 +31,7 @@ except ImportError:
 from reportlab.lib import units, pagesizes
 
 import zope.schema
-from zope.component import adapts, queryMultiAdapter
+from zope.component import adapts, queryMultiAdapter, getMultiAdapter
 from zope.cachedescriptors.property import Lazy
 from zope.interface import implements, Interface
 from zope.i18n import translate
@@ -381,11 +381,13 @@ class PlainPageTemplate(PageTemplate):
              extra_subtitles['margin'].bottom) * self.min_header_lines)
         height += self.header_padding_top + self.header_padding_bottom
         height -= extra_subtitles['height'] + padding.top + padding.bottom
-        ratio = image.size and image.size[0]/image.size[1] or 1
+        ratio = image.size and float(image.size[0])/image.size[1] or 1
         width = height*ratio
 
         # XXX: hard-coded logo url
         url = absoluteURL(ISchoolToolApplication(None), self.request)+'/logo'
+        logo_data = getMultiAdapter((prefs.logo, self.request),
+                                    name='data_uri')
 
         logo = {
             'x': right - width - padding.right,
@@ -393,6 +395,7 @@ class PlainPageTemplate(PageTemplate):
             'width': width,
             'height': height,
             'url': url,
+            'logo_data': logo_data,
             }
         return logo
 

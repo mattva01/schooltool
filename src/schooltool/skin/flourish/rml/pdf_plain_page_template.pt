@@ -114,7 +114,7 @@
 
       <image
           tal:condition="header/logo"
-          tal:attributes="file header/logo/url;
+          tal:attributes="file header/logo/logo_data;
                           x header/logo/x;
                           y header/logo/y;
                           height header/logo/height;
