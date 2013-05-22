@@ -21,10 +21,10 @@ Schooltool PDF support.
 """
 from reportlab.pdfbase import pdfmetrics
 
+enabled = False
 
 def isEnabled():
-    from schooltool.app.browser import pdfcal
-    return not pdfcal.disabled
+    return enabled
 
 
 # ------------------
@@ -111,8 +111,8 @@ def setUpFonts(directories=()):
     addMapping('Ubuntu_Regular', 1, 0, 'Ubuntu_Bold')
     addMapping('Ubuntu_Regular', 1, 1, 'Ubuntu_Bold_Italic')
 
-    from schooltool.app.browser import pdfcal
-    pdfcal.disabled = False
+    global enabled
+    enabled = True
 
 
 # z3c.rml >= 1.1.0 calls _reset when processing each document
