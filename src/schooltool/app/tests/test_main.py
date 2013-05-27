@@ -380,6 +380,7 @@ class ConfigStub(object):
 class OptionsStub(object):
 
     config = ConfigStub()
+    config_file = ''
 
 
 def doctest_bootstrapSchoolTool():
