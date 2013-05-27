@@ -50,10 +50,12 @@ from schooltool.term.interfaces import ITermContainer
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
 from schooltool.report.browser.report import RequestRemoteReportDialog
+from schooltool.report.browser.report import ProgressReportPage
 from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.task.progress import TaskProgress
 from schooltool.task.progress import normalized_progress
 from schooltool.report.report import AbstractReportTask
+from schooltool.report.report import NoReportException
 from schooltool.report.report import ReportFile
 from schooltool.report.report import ReportMessage
 from schooltool.report.report import OnPDFReportScheduled
@@ -65,29 +67,9 @@ from schooltool.timetable.daytemplates import WeekDayTemplates
 from schooltool.timetable.daytemplates import SchoolDayTemplates
 
 
-class ExcelExportView(BrowserView):
+class ExcelExportView(ProgressReportPage):
 
     implements(IXLSExportView)
-
-    render_invariant = False
-    render_debug = False
-
-    base_filename = 'export'
-
-    message_title = _('export')
-
-    task_progress = None
-    overall_line_id = None
-
-    def makeFileName(self, basename):
-        if self.render_invariant:
-            return '%s.xls' % basename
-        timestamp = datetime.datetime.now().strftime('%y-%m-%d-%H-%M')
-        return '%s_%s.xls' % (basename, timestamp)
-
-    @property
-    def filename(self):
-        return self.makeFileName(self.base_filename)
 
     def __init__(self, context, request):
         super(ExcelExportView, self).__init__(context, request)
@@ -175,30 +157,6 @@ class ExcelExportView(BrowserView):
         YELLOW = 5
         self.write(ws, row, col, data, borders=borders, bold=True, color=YELLOW,
                    merge=merge)
-
-    def makeProgress(self):
-        self.task_progress = TaskProgress(self.request.task_id)
-
-    def updateOverall(self):
-        if self.overall_line_id is None:
-            return
-        max_progress = 0.0
-        overall = 0.0
-        for lid, line in self.task_progress.lines.items():
-            if line.get('progress', None) is not None:
-                overall += line.progress
-                max_progress += 1.0
-        if max_progress > 0.0:
-            overall /= max_progress
-        self.task_progress('overall', progress=overall)
-
-    def progress(self, importer, value):
-        self.task_progress(importer, progress=value, active=True)
-        self.updateOverall()
-
-    def finish(self, importer):
-        self.task_progress.finish(importer)
-        self.updateOverall()
 
 
 class SchoolTimetableExportView(ExcelExportView):
@@ -882,6 +840,10 @@ class MegaExporter(SchoolTimetableExportView):
         progress.add('overall',
                      title=_('School Data'), progress=0.0)
 
+    def update(self):
+        super(MegaExporter, self).update()
+        self.addImporters(self.task_progress)
+
     def render(self, workbook):
         datafile = StringIO()
         workbook.save(datafile)
@@ -914,22 +876,14 @@ class MegaExporter(SchoolTimetableExportView):
 
 class XLSReportTask(AbstractReportTask):
 
-    def renderToFile(self, renderer, *args, **kwargs):
-        workbook = renderer()
-        filename = renderer.filename
-        xls = self.makeReportFile(filename, workbook)
-        return xls
+    default_filename = 'report.xls'
+    default_mimetype = 'application/vnd.ms-excel'
 
-    def makeReportFile(self, filename, workbook):
-        if not filename or not filename.strip():
-            filename = 'report.xls'
-        pdf = ReportFile()
-        pdf.mimeType = 'application/vnd.ms-excel'
-        pdf.__name__ = filename
-        stream = pdf.open('w')
+    def renderReport(self, renderer, stream, *args, **kw):
+        workbook = renderer(*args, **kw)
+        if workbook is None:
+            raise NoReportException()
         workbook.save(stream)
-        stream.close()
-        return pdf
 
 
 class RemoteMegaExporter(MegaExporter):

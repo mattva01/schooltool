@@ -24,7 +24,9 @@ Report interfaces
 import zope.schema
 import zope.file.interfaces
 from zope.interface import Attribute, Interface
+from zope.location.interfaces import ILocation
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces.browser import IBrowserPage
 from zope.viewlet.interfaces import IViewletManager
 
 from schooltool.task.interfaces import IRemoteTask
@@ -79,6 +81,13 @@ class IReportTask(IRemoteTask):
       required=False)
    context = Attribute('Context object')
 
+   default_filename = zope.schema.TextLine(
+      title=u'Default report filename',
+      required=False)
+   default_mimetype = zope.schema.TextLine(
+      title=u'Default report mime type',
+      required=False)
+
 
 class IReportFile(zope.file.interfaces.IFile):
    pass
@@ -110,3 +119,12 @@ class IReportMessage(IMessage, IReportDetails):
 
 class IRemoteReportLayer(IFlourishLayer, IBrowserRequest):
    pass
+
+
+class IArchivePage(IBrowserPage, ILocation):
+
+    def update(self):
+        pass
+
+    def render(stream, *args, **kw):
+        """Render the archive to stream."""
