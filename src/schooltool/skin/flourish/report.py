@@ -43,7 +43,6 @@ from z3c.rml import rml2pdf
 from schooltool.app import pdf
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
-from schooltool.common import getResourceURL
 from schooltool.skin.flourish import content
 from schooltool.skin.flourish import interfaces
 from schooltool.skin.flourish import form
@@ -483,11 +482,7 @@ class PlainPageTemplate(PageTemplate):
         x = self.manager.margin.left
         y = self.manager.margin.bottom
         slot_y = y + padding.bottom
-        url = getResourceURL('schooltool.skin.flourish',
-                             'logo_bw.png',
-                             self.request)
         return {
-            'logo_url': url,
             'fontSize': fontSize,
             'height': height,
             'width': width,
