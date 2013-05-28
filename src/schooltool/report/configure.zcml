@@ -40,6 +40,13 @@
              set_schema=".interfaces.IReportTask" />
   </class>
 
+  <class class=".report.ArchiveReportTask">
+    <require permission="schooltool.view"
+             interface=".interfaces.IReportTask" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IReportTask" />
+  </class>
+
   <class class=".report.ReportMessage">
     <require permission="schooltool.view"
              interface=".interfaces.IReportMessage" />
@@ -146,6 +153,15 @@
            schooltool.app.browser.report.PDFView"
       provides="schooltool.task.interfaces.ITaskScheduledNotification"
       factory=".report.OnPDFReportScheduled"
+      />
+
+  <adapter
+      name="schooltool.report.report.OnReportArchiveScheduled"
+      for="schooltool.task.interfaces.IRemoteTask
+           *
+           schooltool.report.browser.report.ReportArchivePage"
+      provides="schooltool.task.interfaces.ITaskScheduledNotification"
+      factory=".report.OnReportArchiveScheduled"
       />
 
   <include file="security.zcml" />

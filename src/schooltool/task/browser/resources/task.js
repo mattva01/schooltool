@@ -40,9 +40,15 @@ ST.task = $.extend(ST.task, {progress: function() {
                     '<tr name="'+counter+'"><td name="title"></td><td width="80%"><div name="progress"></div></td></tr>'));
                 row = tbody.find('tr[name="'+counter+'"]');
             }
-            var counter_value = progress.info.lines[counter].progress * 100;
-            row.find('td[name="title"]').html(progress.info.lines[counter].title);
+            var title_td = row.find('td[name="title"]')
+            title_td.html(progress.info.lines[counter].title);
+            if (progress.info.lines[counter].progress == null) {
+                title_td.attr('colspan', 2);
+            } else {
+                title_td.attr('colspan', 1);
+                var counter_value = progress.info.lines[counter].progress * 100;
                 row.find('div[name="progress"]').progressbar({value:counter_value});
+            }
             if (progress.info.lines[counter].active) {
                 row.show();
             } else {

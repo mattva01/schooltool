@@ -697,8 +697,9 @@ class SchoolToolServer(SchoolToolMachinery):
             transaction.commit()
             connection.close()
 
-        if options.pack or options.restore_manager:
-            return db
+        # TODO: don't start application when running from command line
+        #if options.pack or options.restore_manager:
+        #    return db
 
         self.startApplication(db)
 

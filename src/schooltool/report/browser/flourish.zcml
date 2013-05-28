@@ -204,6 +204,15 @@
       permission="schooltool.view"
       />
 
+  <flourish:content
+      name="short"
+      for="schooltool.report.interfaces.IReportProgressMessage"
+      view="zope.interface.Interface"
+      template="templates/f_short_report_message.pt"
+      class=".report.ShortReportMessage"
+      permission="schooltool.view"
+      />
+
   <zope:adapter
       factory=".report.ReportAbsoluteURLAdapter"
       provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
@@ -231,6 +240,13 @@
       for="schooltool.report.interfaces.IReportMessage"
       layer="schooltool.skin.flourish.IFlourishLayer"
       class=".report.DownloadReportDialog"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewletManager
+      name="file_manager"
+      view="schooltool.report.browser.report.ReportArchivePage"
+      class="schooltool.report.browser.report.ArchiveFileManager"
       permission="schooltool.view"
       />
 

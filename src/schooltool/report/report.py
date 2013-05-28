@@ -323,6 +323,12 @@ class RemoteReportRequest(object):
         if locale_id is not None:
             self.locale = zope.i18n.locales.Locale(locale_id)
 
+    def clone(self):
+        clone = self.__class__(params=self.form, task=self.task)
+        if self.locale is not None:
+            clone.locale = zope.i18n.locales.Locale(self.locale.id)
+        return clone
+
     @property
     def task_id(self):
         if self.task is None:
@@ -345,10 +351,16 @@ class RemoteReportRequest(object):
         return ''
 
 
+class NoReportException(Exception):
+    pass
+
+
 class AbstractReportTask(RemoteTask):
     implements(IReportTask)
 
     routing_key = "zodb.report"
+    default_mimetype = None
+    default_filename = 'report'
     report = None
 
     abstract = True
@@ -444,11 +456,31 @@ class AbstractReportTask(RemoteTask):
                 (context, request), name=self.view_name)
         return renderer
 
-    def renderToFile(self, renderer, *args, **kwargs):
-        raise NotImplemented()
+    def renderReport(self, renderer, stream, *args, **kw):
+        data = renderer()
+        stream.write(data)
 
-    def makeReportFile(self, filename, data):
-        raise NotImplemented()
+    def updateReport(self, renderer, report):
+        if not report.mimeType:
+            report.mimeType = getattr(renderer, 'mimetype', None)
+        if not report.mimeType:
+            report.mimeType = self.default_mimetype
+        if not report.__name__ or not report.__name__.strip():
+            report.__name__ = getattr(renderer, 'filename', None)
+        if not report.__name__ or not report.__name__.strip():
+            report.__name__ = self.default_filename
+
+    def renderToFile(self, renderer, *args, **kw):
+        report = ReportFile()
+        stream = report.open('w')
+        try:
+            self.renderReport(renderer, stream, *args, **kw)
+        except NoReportException:
+            return None
+        finally:
+            stream.close()
+        self.updateReport(renderer, report)
+        return report
 
     @property
     def factory(self):
@@ -479,43 +511,46 @@ class AbstractReportTask(RemoteTask):
 
 class ReportTask(AbstractReportTask):
 
-    def renderToFile(self, renderer, *args, **kwargs):
-        # XXX:
-        #if not schooltool.app.pdf.isEnabled():
-        #    return translate(renderer.pdf_disabled_text,
-        #                     context=renderer.request)
+    default_filename = 'report.pdf'
+    default_mimetype = 'application/pdf'
+
+    def renderReport(self, renderer, stream, *args, **kw):
         renderer.update()
         rml = renderer.render()
         filename = renderer.filename
-        stream = rml2pdf.parseString(rml, filename=filename or None)
-        data = stream.getvalue()
-        pdf = self.makeReportFile(filename, data)
-        return pdf
-
-    def makeReportFile(self, filename, data):
-        if not filename or not filename.strip():
-            filename = 'report.pdf'
-        pdf = ReportFile()
-        pdf.mimeType = 'application/pdf'
-        pdf.__name__ = filename
-        stream = pdf.open('w')
-        stream.write(data)
-        stream.close()
-        return pdf
+        pdf = rml2pdf.parseString(rml, filename=filename or None)
+        stream.write(pdf.getvalue())
 
 
 class OldReportTask(ReportTask):
 
-    def renderToFile(self, renderer, *args, **kwargs):
-        # XXX:
-        #if not schooltool.app.pdf.isEnabled():
-        #    return translate(renderer.pdf_disabled_text,
-        #                     context=renderer.request)
+    filename = None
+
+    def renderReport(self, renderer, stream, *args, **kw):
         filename, data = renderer.renderToFile()
         if data is None:
-            return None
-        pdf = self.makeReportFile(filename, data)
-        return pdf
+            raise NoReportException()
+        self.filename = filename
+        stream.write(data)
+
+    def updateReport(self, renderer, report):
+        if not report.__name__ or not report.__name__.strip():
+            report.__name__ = self.filename
+        if not report.__name__ or not report.__name__.strip():
+            report.__name__ = self.default_filename
+        return ReportTask.updateReport(renderer, report)
+
+
+class ArchiveReportTask(AbstractReportTask):
+
+    default_filename = 'report.zip'
+    default_mimetype = 'application/zip'
+
+    def renderReport(self, renderer, stream, *args, **kw):
+        renderer.update()
+        written = renderer.render(stream, *args, **kw)
+        if not written:
+            raise NoReportException()
 
 
 class ReportDetails(object):
@@ -604,6 +639,10 @@ class OnPDFReportScheduled(TaskScheduledNotification):
             filename=view.filename,
             )
         msg.send(sender=task, recipients=[self.task.creator])
+
+
+class OnReportArchiveScheduled(OnPDFReportScheduled):
+    pass
 
 
 class GeneratedReportMessage(ReportMessage):
