@@ -390,7 +390,7 @@ class PlainPageTemplate(PageTemplate):
              extra_subtitles['margin'].bottom) * self.min_header_lines)
         height += self.header_padding_top + self.header_padding_bottom
         height -= extra_subtitles['height'] + padding.top + padding.bottom
-        ratio = image.size and image.size[0]/image.size[1] or 1
+        ratio = image.size and float(image.size[0])/image.size[1] or 1
         width = height*ratio
 
         logo_data = getMultiAdapter((prefs.logo, self.request),
