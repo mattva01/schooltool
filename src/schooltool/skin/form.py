@@ -61,7 +61,7 @@ class EditForm(form.PageEditForm):
     def edit_action(self, action, data):
         if not form.applyChanges(self.context, self.form_fields, data,
                                  self.adapters):
-            self.status = _('No changes')
+            self.status = 'No changes'
             return
 
         event.notify(ObjectModifiedEvent(self.context))

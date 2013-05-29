@@ -2717,7 +2717,7 @@ class CalendarEventBreadcrumbInfo(GenericBreadcrumbInfo):
         return '%s/%s/edit.html' %(parent_info.url, name)
 
 
-CalendarBreadcrumbInfo = CustomNameBreadCrumbInfo(_('Calendar'))
+CalendarBreadcrumbInfo = CustomNameBreadCrumbInfo('Calendar')
 
 
 class CalendarActionMenuViewlet(object):
