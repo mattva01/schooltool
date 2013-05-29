@@ -5,7 +5,7 @@ CHANGES
 2.4.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed report generation to not do network requests (https://launchpad.net/bugs/1185418).
 
 
 2.4.0 (2013-04-19)

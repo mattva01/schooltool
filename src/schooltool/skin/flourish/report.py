@@ -32,12 +32,11 @@ except ImportError:
 from reportlab.lib import units, pagesizes
 
 import zope.schema
-from zope.component import adapts, queryMultiAdapter
+from zope.component import adapts, queryMultiAdapter, getMultiAdapter
 from zope.cachedescriptors.property import Lazy
 from zope.interface import implements, Interface
 from zope.i18n import translate
 from zope.publisher.browser import BrowserView
-from zope.traversing.browser.absoluteurl import absoluteURL
 from z3c.rml import rml2pdf
 
 from schooltool.app import pdf
@@ -394,15 +393,15 @@ class PlainPageTemplate(PageTemplate):
         ratio = image.size and image.size[0]/image.size[1] or 1
         width = height*ratio
 
-        # XXX: hard-coded logo url
-        url = absoluteURL(ISchoolToolApplication(None), self.request)+'/logo'
+        logo_data = getMultiAdapter((prefs.logo, self.request),
+                                    name='data_uri')
 
         logo = {
             'x': right - width - padding.right,
             'y': top - extra_subtitles['height'] - height - padding.top,
             'width': width,
             'height': height,
-            'url': url,
+            'logo_data': logo_data,
             }
         return logo
 
