@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: schooltool-developers@lists.launchpad.net\n"
-"POT-Creation-Date: 2013-01-15 15:41+0200\n"
-"PO-Revision-Date: 2012-11-23 22:13+0000\n"
+"POT-Creation-Date: 2013-05-27 19:54+0300\n"
+"PO-Revision-Date: 2013-04-20 02:49+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Traditional Chinese <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-12 05:07+0000\n"
-"X-Generator: Launchpad (build 16361)\n"
+"X-Launchpad-Export-Date: 2013-05-28 05:48+0000\n"
+"X-Generator: Launchpad (build 16640)\n"
 "Language: zh\n"
 
 #: /src/schooltool/app/app.py:193
@@ -254,10 +254,6 @@ msgstr ""
 msgid "Available responsible parties"
 msgstr ""
 
-#: /src/schooltool/app/browser/app.py:622
-msgid "school"
-msgstr "學校"
-
 #: /src/schooltool/app/browser/app.py:741
 #: /src/schooltool/app/browser/flourish.zcml:149
 #: /src/schooltool/app/browser/flourish.zcml:170
@@ -324,6 +320,21 @@ msgstr ""
 #: /src/schooltool/app/browser/app.py:998
 #: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
+msgstr ""
+
+#: /src/schooltool/app/browser/app.py:1005
+#: /src/schooltool/basicperson/browser/demographics.py:413
+#: /src/schooltool/basicperson/browser/demographics.py:473
+#: /src/schooltool/basicperson/browser/person.py:951
+#: /src/schooltool/course/browser/course.py:568
+#: /src/schooltool/course/browser/section.py:1261
+#: /src/schooltool/group/browser/group.py:669
+#: /src/schooltool/schoolyear/browser/schoolyear.py:490
+#: /src/schooltool/schoolyear/browser/schoolyear.py:538
+#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:23
+#: /src/schooltool/term/browser/term.py:291
+#: /src/schooltool/term/browser/term.py:404
+msgid "Submit"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:1025
@@ -909,19 +920,6 @@ msgstr "類別"
 msgid "Booked by others"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:2611
-#: /src/schooltool/app/browser/configure.zcml:532
-#: /src/schooltool/app/browser/flourish.zcml:22
-#: /src/schooltool/app/browser/flourish.zcml:32
-#: /src/schooltool/app/browser/flourish.zcml:42
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
-#: /src/schooltool/calendar/browser/flourish.zcml:8
-#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:24
-#: /src/schooltool/resource/browser/flourish.zcml:192
-msgid "Calendar"
-msgstr "行事曆"
-
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
 #: /src/schooltool/app/browser/flourish.zcml:465
@@ -976,6 +974,20 @@ msgstr "編輯事件"
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
 msgstr "ZODB 控制"
+
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/flourish.zcml:22
+#: /src/schooltool/app/browser/flourish.zcml:32
+#: /src/schooltool/app/browser/flourish.zcml:42
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
+#: /src/schooltool/basicperson/browser/flourish.zcml:808
+#: /src/schooltool/calendar/browser/flourish.zcml:8
+#: /src/schooltool/calendar/browser/flourish.zcml:13
+#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
+#: /src/schooltool/resource/browser/flourish.zcml:223
+msgid "Calendar"
+msgstr "行事曆"
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -2715,9 +2727,7 @@ msgid ""
 "The name for the school or organization running this server.  This will be "
 "displayed on the public calendar, the bottom of all pages and in the page "
 "title."
-msgstr ""
-"正在執行的學校或組織名稱 此伺服器。這將會察看在公用行事曆上 在所有頁面的標題"
-"和最上方處。"
+msgstr "正在執行的學校或組織名稱 此伺服器。這將會察看在公用行事曆上 在所有頁面的標題和最上方處。"
 
 #: /src/schooltool/app/interfaces.py:138
 msgid "Front Page Calendar"
@@ -2731,11 +2741,7 @@ msgstr "將行事曆察看為整個網站的首頁"
 msgid "School logo"
 msgstr ""
 
-#: /src/schooltool/app/main.py:305
-msgid "Going to background, daemon pid %d"
-msgstr "背景處理，背景程式 pid %d"
-
-#: /src/schooltool/app/main.py:361
+#: /src/schooltool/app/main.py:311
 msgid "Cannot resolve plugin action order:\n"
 msgstr "無法解決插件動作要求：\n"
 
@@ -2752,8 +2758,10 @@ msgid ""
 "  -h, --help             show this help message\n"
 "  --pack                 pack the database\n"
 "  -r, --restore-manager password\n"
-"                         restore the manager user with the provided password\n"
-"                         (read password from the standart input if 'password'\n"
+"                         restore the manager user with the provided "
+"password\n"
+"                         (read password from the standart input if "
+"'password'\n"
 "                         is '-')\n"
 msgstr ""
 "\n"
@@ -2767,11 +2775,15 @@ msgstr ""
 "                         (從標准輸入中讀取密碼如果參數 'password'\n"
 "                         是 '-')\n"
 
-#: /src/schooltool/app/main.py:528
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s:您的作業系統不支援背景執行"
+#: /src/schooltool/app/main.py:489
+msgid "Manager password: "
+msgstr ""
 
-#: /src/schooltool/app/main.py:566
+#: /src/schooltool/app/main.py:500
+msgid "No configuration file given"
+msgstr ""
+
+#: /src/schooltool/app/main.py:505
 msgid "Reading configuration from %s"
 msgstr "從 %s 讀取配置"
 
@@ -2795,15 +2807,7 @@ msgstr ""
 "\n"
 "可能其他的程式實例%s 正在使用它？"
 
-#: /src/schooltool/app/main.py:767
-msgid ""
-"Warning: could not find the reportlab library.\n"
-"PDF support disabled."
-msgstr ""
-"警告：沒有找到 reportlab 程式庫。\n"
-"PDF 支援已禁用。"
-
-#: /src/schooltool/app/main.py:773
+#: /src/schooltool/app/main.py:675
 msgid ""
 "Warning: font directories '%s' do not exist.\n"
 "PDF support disabled."
@@ -2815,13 +2819,9 @@ msgid ""
 "PDF support disabled."
 msgstr ""
 
-#: /src/schooltool/app/main.py:775
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "啟動時間: %.3f sec real, %.3f sec CPU"
-
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:209
+#: /src/schooltool/group/browser/flourish.zcml:227
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
@@ -3092,6 +3092,12 @@ msgstr ""
 msgid "This ID is not unique."
 msgstr ""
 
+#: /src/schooltool/basicperson/browser/flourish.zcml:11
+#: /src/schooltool/basicperson/browser/flourish.zcml:16
+#: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
+msgid "People"
+msgstr ""
+
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
 msgstr ""
@@ -3115,6 +3121,10 @@ msgstr "添加新學生"
 #: /src/schooltool/basicperson/browser/person.py:999
 msgid "Add new administrator"
 msgstr "添加新管理員"
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:153
+msgid "Person"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:161
 msgid "Add Person"
@@ -3193,7 +3203,16 @@ msgid ""
 "number."
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:733
+#: /src/schooltool/basicperson/browser/flourish.zcml:655
+msgid "Person profile, contacts, groups, etc."
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:655
+#: /src/schooltool/basicperson/browser/person.py:1369
+msgid "Profile"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:784
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
 msgstr "首頁"
@@ -3359,6 +3378,15 @@ msgstr ""
 msgid "ID Card: ${person}"
 msgstr ""
 
+#: /src/schooltool/basicperson/browser/person.py:1385
+msgid "Username: ${username}"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:1404
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
+msgid "General Information"
+msgstr ""
+
 #: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
@@ -3400,15 +3428,6 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:37
 msgid "The person has no advisees."
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
@@ -3505,12 +3524,8 @@ msgstr "必需的"
 msgid "Limited"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
-msgid "General Information"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:25
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:10
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:29
 msgid "Edit this person's information"
 msgstr ""
 
@@ -4506,6 +4521,33 @@ msgstr ""
 msgid "Import Students"
 msgstr ""
 
+#: /src/schooltool/course/browser/flourish.zcml:644
+msgid "Roster"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:644
+msgid "Students and instructors of a section"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:11
+msgid "Students (continued)"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:14
+#: /src/schooltool/resource/browser/rml/resource_report.pt:18
+#: /src/schooltool/skin/flourish/rml/pdf_form.pt:14
+#: /src/schooltool/table/rml/grid_part.pt:42
+msgid "Continued on next page &gt;"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:23
+#: /src/schooltool/course/browser/templates/f_section_roster_rml.pt:15
+#: /src/schooltool/person/browser/person.py:594
+#: /src/schooltool/person/browser/person.py:683
+#: /src/schooltool/person/interfaces.py:52
+msgid "Full name"
+msgstr "全名"
+
 #: /src/schooltool/course/browser/section-member-csvimport.pt:4
 msgid "Upload SchoolTool section members as CSV"
 msgstr "以 CSV 格式上傳 SchoolTool 班別成員"
@@ -4628,6 +4670,14 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1435
 msgid "Link ${section} to Section in Other Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1833
+msgid "Section Roster"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1853
+msgid "Instructors: ${instructors}"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
@@ -5214,7 +5264,8 @@ msgid ""
 msgstr "任何人都可以看到班別的基本資料，包括名冊。"
 
 #: /src/schooltool/course/security.zcml:74
-msgid "A course in SchoolTool describes a set curriculum taught in a section."
+msgid ""
+"A course in SchoolTool describes a set curriculum taught in a section."
 msgstr "SchoolTool中的課程代表某個班別中所教的內容。"
 
 #: /src/schooltool/course/security.zcml:79
@@ -5649,6 +5700,10 @@ msgid "School Export"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:79
+msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
 msgstr "不是有效的整數"
 
@@ -6044,6 +6099,11 @@ msgstr ""
 msgid "ID Cards for Group: ${group}"
 msgstr ""
 
+#: /src/schooltool/group/browser/group.py:887
+#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:5
+msgid "Group memberships"
+msgstr ""
+
 #: /src/schooltool/group/browser/templates/f_group_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/group-csvimport.pt:24
 msgid ""
@@ -6109,10 +6169,6 @@ msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_group_view.pt:102
 msgid "This group has no responsible parties"
-msgstr ""
-
-#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:5
-msgid "Group memberships"
 msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:6
@@ -6433,15 +6489,9 @@ msgstr "變更密碼"
 msgid "Wrong password supplied"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:507
-#: /src/schooltool/person/browser/person.py:596
-#: /src/schooltool/person/interfaces.py:51
-msgid "Full name"
-msgstr "全名"
-
-#: /src/schooltool/person/browser/person.py:508
-#: /src/schooltool/person/browser/person.py:597
-#: /src/schooltool/person/interfaces.py:52
+#: /src/schooltool/person/browser/person.py:595
+#: /src/schooltool/person/browser/person.py:684
+#: /src/schooltool/person/interfaces.py:53
 msgid "Name that should be displayed"
 msgstr "察看名稱"
 
@@ -6688,6 +6738,10 @@ msgstr "資源"
 msgid "Reserve"
 msgstr ""
 
+#: /src/schooltool/resource/browser/flourish.zcml:452
+msgid "List all resources"
+msgstr ""
+
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
 msgstr "以 CSV 形式上傳 schooltool 資源"
@@ -6803,6 +6857,16 @@ msgstr "編輯設備"
 
 #: /src/schooltool/resource/browser/resource.py:854
 msgid "Delete ${resource_title}"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:967
+#: /src/schooltool/resource/browser/rml/resource_report.pt:21
+msgid "Resource Report"
+msgstr ""
+
+#: /src/schooltool/resource/browser/rml/resource_report.pt:10
+#: /src/schooltool/resource/browser/rml/resource_report.pt:23
+msgid "Resource Report (continued)"
 msgstr ""
 
 #: /src/schooltool/resource/browser/subtype_widget.pt:8
@@ -7401,10 +7465,6 @@ msgstr "超級用戶 - 這個SchoolTool程式的擁有者。"
 msgid "Title of the group."
 msgstr "組群標題"
 
-#: /src/schooltool/skin/breadcrumbs.py:76
-msgid "top"
-msgstr "頂部"
-
 #: /src/schooltool/skin/flourish/instance/skin.zcml:50
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
@@ -7416,6 +7476,10 @@ msgstr "伺服器錯誤"
 #: /src/schooltool/skin/templates/notfound.pt:11
 msgid "Not Found"
 msgstr "未找到"
+
+#: /src/schooltool/skin/flourish/report.py:584
+msgid "${title} (continued)"
+msgstr ""
 
 #: /src/schooltool/skin/flourish/templates/image_input.pt:11
 msgid "delete this image"
@@ -7436,10 +7500,6 @@ msgstr ""
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
 msgstr ""
-
-#: /src/schooltool/skin/form.py:64
-msgid "No changes"
-msgstr "未變更"
 
 #: /src/schooltool/skin/templates/error.pt:15
 #: /src/schooltool/skin/templates/f_error.pt:2
@@ -7528,45 +7588,9 @@ msgstr "日期時間字串與 yyyy-mm-dd 模型不符合"
 msgid "Year has to be equal or greater than 1900"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:111
-msgid "Width"
-msgstr "寬度"
-
-#: /src/schooltool/skin/widgets.py:100
-msgid "Editor frame width"
-msgstr "編輯程式框架寬度"
-
-#: /src/schooltool/skin/widgets.py:103
-msgid "Height"
-msgstr "高度"
-
-#: /src/schooltool/skin/widgets.py:104
-msgid "Editor frame height"
-msgstr "編輯程式框架高度"
-
-#: /src/schooltool/skin/widgets.py:107
-msgid "Toolbar configuration"
-msgstr "工具軸配置"
-
-#: /src/schooltool/skin/widgets.py:108
-msgid "The name of the toolbar configuration to use."
-msgstr "欲使用的工具列配置的名字。"
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Relative configuration path"
-msgstr "相對的配置路徑"
-
-#: /src/schooltool/skin/widgets.py:112
-msgid "Path to the FCKconfiguration javascript file."
-msgstr "FCK配置javascript檔案的路徑。"
-
-#: /src/schooltool/skin/widgets.py:137
-msgid "Configuration"
-msgstr "配置"
-
-#: /src/schooltool/skin/widgets.py:138
-msgid "FCK editor configuration."
-msgstr "FCK 編輯程式配置。"
+#: /src/schooltool/table/pdf.py:637
+msgid "Continued ..."
+msgstr ""
 
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7

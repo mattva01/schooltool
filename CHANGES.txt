@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - Replaced Filter by... labels
+- Updated Italian, Greek, Portuguese, and other translations.
 
 
 2.4.0 (2013-04-19)

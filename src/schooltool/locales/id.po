@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-01-23 19:08+0200\n"
-"PO-Revision-Date: 2013-02-28 11:26+0000\n"
+"POT-Creation-Date: 2013-05-27 19:54+0300\n"
+"PO-Revision-Date: 2013-04-20 02:43+0000\n"
 "Last-Translator: dhardiputra <dhardiputra@gmail.com>\n"
 "Language-Team: Indonesian <id@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-01 05:14+0000\n"
-"X-Generator: Launchpad (build 16514)\n"
+"X-Launchpad-Export-Date: 2013-05-28 05:44+0000\n"
+"X-Generator: Launchpad (build 16640)\n"
 "Language: id\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -259,10 +259,6 @@ msgstr "Bertanggung Jawab sekarang"
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
 msgstr "Ada yang bertanggung jawab"
-
-#: /src/schooltool/app/browser/app.py:622
-msgid "school"
-msgstr "Sekolah"
 
 #: /src/schooltool/app/browser/app.py:741
 #: /src/schooltool/app/browser/flourish.zcml:149
@@ -930,19 +926,6 @@ msgstr "Tipe"
 msgid "Booked by others"
 msgstr "Dicatat oleh orang lain"
 
-#: /src/schooltool/app/browser/cal.py:2611
-#: /src/schooltool/app/browser/configure.zcml:532
-#: /src/schooltool/app/browser/flourish.zcml:22
-#: /src/schooltool/app/browser/flourish.zcml:32
-#: /src/schooltool/app/browser/flourish.zcml:42
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
-#: /src/schooltool/calendar/browser/flourish.zcml:8
-#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:24
-#: /src/schooltool/resource/browser/flourish.zcml:192
-msgid "Calendar"
-msgstr "Kalender"
-
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
 #: /src/schooltool/app/browser/flourish.zcml:465
@@ -997,6 +980,20 @@ msgstr "Sunting Event"
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
 msgstr "Kontrol ZODB"
+
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/flourish.zcml:22
+#: /src/schooltool/app/browser/flourish.zcml:32
+#: /src/schooltool/app/browser/flourish.zcml:42
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
+#: /src/schooltool/basicperson/browser/flourish.zcml:808
+#: /src/schooltool/calendar/browser/flourish.zcml:8
+#: /src/schooltool/calendar/browser/flourish.zcml:13
+#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
+#: /src/schooltool/resource/browser/flourish.zcml:223
+msgid "Calendar"
+msgstr "Kalender"
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -1784,6 +1781,11 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event_booking.pt:45
 msgid "UnBook"
 msgstr "BelumDipesan"
+
+#: /src/schooltool/app/browser/templates/event_booking.pt:54
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:55
+msgid "Available Resources"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:60
 msgid "Book"
@@ -2772,11 +2774,7 @@ msgstr ""
 msgid "School logo"
 msgstr ""
 
-#: /src/schooltool/app/main.py:305
-msgid "Going to background, daemon pid %d"
-msgstr "Pergi ke latar belakang, pid daemon %d"
-
-#: /src/schooltool/app/main.py:361
+#: /src/schooltool/app/main.py:311
 msgid "Cannot resolve plugin action order:\n"
 msgstr "Tidak dapat menyelesaikan tindakan plugin order:\n"
 
@@ -2784,7 +2782,31 @@ msgstr "Tidak dapat menyelesaikan tindakan plugin order:\n"
 msgid "Run %s -h for help."
 msgstr "Jalankan %s -h untuk pertolongan"
 
-#: /src/schooltool/app/main.py:566
+#: /src/schooltool/app/main.py:517
+msgid ""
+"\n"
+"Usage: %s [options]\n"
+"Options:\n"
+"  -c, --config xxx       use this configuration file\n"
+"  -h, --help             show this help message\n"
+"  --pack                 pack the database\n"
+"  -r, --restore-manager password\n"
+"                         restore the manager user with the provided "
+"password\n"
+"                         (read password from the standart input if "
+"'password'\n"
+"                         is '-')\n"
+msgstr ""
+
+#: /src/schooltool/app/main.py:489
+msgid "Manager password: "
+msgstr ""
+
+#: /src/schooltool/app/main.py:500
+msgid "No configuration file given"
+msgstr ""
+
+#: /src/schooltool/app/main.py:505
 msgid "Reading configuration from %s"
 msgstr "Pembacaan Konfigurasi dari %s"
 
@@ -2808,15 +2830,7 @@ msgstr ""
 "\n"
 "Mungkin %s instan lainnya sedang menggunakannya?"
 
-#: /src/schooltool/app/main.py:767
-msgid ""
-"Warning: could not find the reportlab library.\n"
-"PDF support disabled."
-msgstr ""
-"Perhatian: tidak dapat menemukan pustaka reportlab.\n"
-"Dukungan PDF tidak aktif"
-
-#: /src/schooltool/app/main.py:773
+#: /src/schooltool/app/main.py:675
 msgid ""
 "Warning: font directories '%s' do not exist.\n"
 "PDF support disabled."
@@ -2828,13 +2842,9 @@ msgid ""
 "PDF support disabled."
 msgstr ""
 
-#: /src/schooltool/app/main.py:775
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "Waktu mulai: %.3f detik sebenarnya, %.3f detik CPU"
-
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:209
+#: /src/schooltool/group/browser/flourish.zcml:227
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
@@ -3105,6 +3115,12 @@ msgstr ""
 msgid "This ID is not unique."
 msgstr ""
 
+#: /src/schooltool/basicperson/browser/flourish.zcml:11
+#: /src/schooltool/basicperson/browser/flourish.zcml:16
+#: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
+msgid "People"
+msgstr ""
+
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
 msgstr ""
@@ -3128,6 +3144,10 @@ msgstr "Tambah Siswa Baru"
 #: /src/schooltool/basicperson/browser/person.py:999
 msgid "Add new administrator"
 msgstr "Tambah Administrator Baru"
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:153
+msgid "Person"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:161
 msgid "Add Person"
@@ -3433,15 +3453,6 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:37
 msgid "The person has no advisees."
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
@@ -5747,6 +5758,10 @@ msgid "School Export"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:79
+msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
 msgstr "bukan merupakan bilangan bulat yang valid"
 
@@ -6312,6 +6327,10 @@ msgstr ""
 #: /src/schooltool/level/browser/templates/levels.pt:3
 #: /src/schooltool/level/browser/templates/levels.pt:6
 msgid "Grade Levels"
+msgstr ""
+
+#: /src/schooltool/level/browser/flourish.zcml:62
+msgid "Level"
 msgstr ""
 
 #: /src/schooltool/level/browser/flourish.zcml:82
@@ -7450,6 +7469,10 @@ msgstr ""
 msgid "Resource calendars"
 msgstr ""
 
+#: /src/schooltool/securitypolicy/browser/views.py:67
+msgid "Gradebook"
+msgstr ""
+
 #: /src/schooltool/securitypolicy/browser/views.py:68
 msgid "Journal"
 msgstr "Jurnal"
@@ -7490,10 +7513,6 @@ msgstr ""
 msgid "Title of the group."
 msgstr "Judul grup"
 
-#: /src/schooltool/skin/breadcrumbs.py:76
-msgid "top"
-msgstr "atas"
-
 #: /src/schooltool/skin/flourish/instance/skin.zcml:50
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
@@ -7529,10 +7548,6 @@ msgstr ""
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
 msgstr ""
-
-#: /src/schooltool/skin/form.py:64
-msgid "No changes"
-msgstr "Tidak ada perubahan"
 
 #: /src/schooltool/skin/templates/error.pt:15
 #: /src/schooltool/skin/templates/f_error.pt:2

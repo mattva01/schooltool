@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-01-23 19:08+0200\n"
-"PO-Revision-Date: 2013-03-09 21:40+0000\n"
+"POT-Creation-Date: 2013-05-27 19:54+0300\n"
+"PO-Revision-Date: 2013-04-30 22:17+0000\n"
 "Last-Translator: Andi Chandler <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-10 05:01+0000\n"
-"X-Generator: Launchpad (build 16523)\n"
+"X-Launchpad-Export-Date: 2013-05-28 05:48+0000\n"
+"X-Generator: Launchpad (build 16640)\n"
 "Language: \n"
 
 #: /src/schooltool/app/app.py:193
@@ -258,10 +258,6 @@ msgstr "Current responsible parties"
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
 msgstr "Available responsible parties"
-
-#: /src/schooltool/app/browser/app.py:622
-msgid "school"
-msgstr "school"
 
 #: /src/schooltool/app/browser/app.py:741
 #: /src/schooltool/app/browser/flourish.zcml:149
@@ -926,14 +922,6 @@ msgstr "Type"
 msgid "Booked by others"
 msgstr "Booked by others"
 
-#: /src/schooltool/app/browser/cal.py:2715
-#: /src/schooltool/app/browser/configure.zcml:597
-#: /src/schooltool/app/browser/configure.zcml:684
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/configure.zcml:348
-msgid "Calendar"
-msgstr "Calendar"
-
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
 #: /src/schooltool/app/browser/flourish.zcml:465
@@ -988,6 +976,20 @@ msgstr "Edit Event"
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
 msgstr "ZODB Control"
+
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/flourish.zcml:22
+#: /src/schooltool/app/browser/flourish.zcml:32
+#: /src/schooltool/app/browser/flourish.zcml:42
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
+#: /src/schooltool/basicperson/browser/flourish.zcml:808
+#: /src/schooltool/calendar/browser/flourish.zcml:8
+#: /src/schooltool/calendar/browser/flourish.zcml:13
+#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
+#: /src/schooltool/resource/browser/flourish.zcml:223
+msgid "Calendar"
+msgstr "Calendar"
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -2793,8 +2795,10 @@ msgid ""
 "  -h, --help             show this help message\n"
 "  --pack                 pack the database\n"
 "  -r, --restore-manager password\n"
-"                         restore the manager user with the provided password\n"
-"                         (read password from the standart input if 'password'\n"
+"                         restore the manager user with the provided "
+"password\n"
+"                         (read password from the standart input if "
+"'password'\n"
 "                         is '-')\n"
 msgstr ""
 "\n"
@@ -2804,11 +2808,21 @@ msgstr ""
 "  -h, --help             show this help message\n"
 "  --pack                 pack the database\n"
 "  -r, --restore-manager password\n"
-"                         restore the manager user with the provided password\n"
-"                         (read password from the standart input if 'password'\n"
+"                         restore the manager user with the provided "
+"password\n"
+"                         (read password from the standart input if "
+"'password'\n"
 "                         is '-')\n"
 
-#: /src/schooltool/app/main.py:566
+#: /src/schooltool/app/main.py:489
+msgid "Manager password: "
+msgstr "Manager password: "
+
+#: /src/schooltool/app/main.py:500
+msgid "No configuration file given"
+msgstr "No configuration file given"
+
+#: /src/schooltool/app/main.py:505
 msgid "Reading configuration from %s"
 msgstr "Reading configuration from %s"
 
@@ -3468,15 +3482,6 @@ msgstr "Manage this person's advisees"
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:37
 msgid "The person has no advisees."
 msgstr "The person has no advisees."
-
-#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
-msgstr "Filter by..."
 
 #: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
 #: /src/schooltool/person/browser/f_person_filter.pt:26
@@ -5832,6 +5837,11 @@ msgid "School Export"
 msgstr "School Export"
 
 #: /src/schooltool/export/importer.py:79
+msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
+msgstr ""
+"SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
+
+#: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
 msgstr "is not a valid integer"
 
@@ -7669,10 +7679,6 @@ msgstr "The super user - owner of this SchoolTool application."
 msgid "Title of the group."
 msgstr "Title of the group."
 
-#: /src/schooltool/skin/breadcrumbs.py:76
-msgid "top"
-msgstr "top"
-
 #: /src/schooltool/skin/flourish/instance/skin.zcml:50
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
@@ -7708,10 +7714,6 @@ msgstr "The file uploaded is not a JPEG or PNG image"
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
 msgstr "The image uploaded cannot be larger than ${size} MB"
-
-#: /src/schooltool/skin/form.py:64
-msgid "No changes"
-msgstr "No changes"
 
 #: /src/schooltool/skin/templates/error.pt:15
 #: /src/schooltool/skin/templates/f_error.pt:2

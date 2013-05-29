@@ -9,15 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el-1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-15 15:41+0200\n"
-"PO-Revision-Date: 2012-12-19 17:31+0000\n"
+"POT-Creation-Date: 2013-05-27 19:54+0300\n"
+"PO-Revision-Date: 2013-05-24 21:42+0000\n"
 "Last-Translator: alexxtasi <Unknown>\n"
 "Language-Team: Greek <prassaschr@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-20 05:06+0000\n"
-"X-Generator: Launchpad (build 16378)\n"
+"X-Launchpad-Export-Date: 2013-05-28 05:43+0000\n"
+"X-Generator: Launchpad (build 16640)\n"
 "X-Poedit-Country: GREECE\n"
 "Language: el\n"
 "X-Poedit-Language: Greek\n"
@@ -240,10 +240,10 @@ msgstr "Όνομα"
 
 #: /src/schooltool/app/browser/app.py:923
 msgid "Logo"
-msgstr ""
+msgstr "Λογότυπο"
 
-#: /src/schooltool/app/browser/app.py:951
-#: /src/schooltool/app/security.py:304
+#: /src/schooltool/app/browser/app.py:322
+#: /src/schooltool/app/security.py:308
 msgid "Leaders"
 msgstr "Ομαδάρχες"
 
@@ -262,10 +262,6 @@ msgstr "Τρέχοντες υπεύθυνοι"
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
 msgstr "Διαθέσιμοι υπεύθυνοι"
-
-#: /src/schooltool/app/browser/app.py:622
-msgid "school"
-msgstr "σχολείο"
 
 #: /src/schooltool/app/browser/app.py:741
 #: /src/schooltool/app/browser/flourish.zcml:149
@@ -936,19 +932,6 @@ msgstr "Τύπος"
 msgid "Booked by others"
 msgstr "Δεσμεύτηκε από άλλους"
 
-#: /src/schooltool/app/browser/cal.py:2611
-#: /src/schooltool/app/browser/configure.zcml:532
-#: /src/schooltool/app/browser/flourish.zcml:22
-#: /src/schooltool/app/browser/flourish.zcml:32
-#: /src/schooltool/app/browser/flourish.zcml:42
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
-#: /src/schooltool/calendar/browser/flourish.zcml:8
-#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:24
-#: /src/schooltool/resource/browser/flourish.zcml:192
-msgid "Calendar"
-msgstr "Ημερολόγιο"
-
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
 #: /src/schooltool/app/browser/flourish.zcml:465
@@ -1003,6 +986,20 @@ msgstr "Επεξεργασία γεγονότος"
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
 msgstr "Έλεγχος ZODB"
+
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/flourish.zcml:22
+#: /src/schooltool/app/browser/flourish.zcml:32
+#: /src/schooltool/app/browser/flourish.zcml:42
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
+#: /src/schooltool/basicperson/browser/flourish.zcml:808
+#: /src/schooltool/calendar/browser/flourish.zcml:8
+#: /src/schooltool/calendar/browser/flourish.zcml:13
+#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
+#: /src/schooltool/resource/browser/flourish.zcml:223
+msgid "Calendar"
+msgstr "Ημερολόγιο"
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -1243,9 +1240,9 @@ msgstr "Ημερολόγια που έχουν εμφανιστεί"
 #: /src/schooltool/app/browser/flourish.zcml:737
 #: /src/schooltool/app/browser/flourish.zcml:747
 msgid "School Logo"
-msgstr ""
+msgstr "Λογότυπο Σχολείου"
 
-#: /src/schooltool/app/browser/overlay.py:220
+#: /src/schooltool/app/browser/overlay.py:205
 msgid "Saved changes."
 msgstr "Αποθηκευμένες αλλαγές"
 
@@ -2199,7 +2196,7 @@ msgstr "Τρέχουσα γενιά βάσης δεδομένων"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:27
 msgid "Evolve?"
-msgstr ""
+msgstr "Να αναπτύξω;"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:40
 msgid "No, up to date"
@@ -2357,6 +2354,22 @@ msgid ""
 "\"johnny\"\n"
 "\"pete\"\n"
 msgstr ""
+"\n"
+"\"Φθινόπωρο\", \"Άνοιξη\"\n"
+"\"\",\"\",\"\"\n"
+"\"Φιλοσοφία\",\"lorch\"\n"
+"\"εβδομαδιαίο ωρολόγιο πρόγραμμα\"\n"
+"\"Δευτέρα\",\"A\"\n"
+"\"Δευτέρα\",\"B\"\n"
+"\"Τρίτη\",\"B\"\n"
+"\"***\"\n"
+"\"Γιαννάκης\"\n"
+"\"Βασίλης\"\n"
+"\"\"\n"
+"\"Νέα Ελληνικά\",\"Ελύτης\",\"Κείμενα-Αf\",\"Κείμενα-Β\"\n"
+"\"***\"\n"
+"\"Γιαννάκης\"\n"
+"\"Πέτρος\"\n"
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:70
 msgid ""
@@ -2377,6 +2390,7 @@ msgstr "Πληροφορίες Διακομιστή"
 #: /src/schooltool/app/browser/templates/f_settings.pt:5
 msgid "Please wait for confirmation that the database has been packed."
 msgstr ""
+"Παρακαλώ περιμένετε την επιβεβαίωση ότι η βάση δεδομένων έχει πακεταριστεί."
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:13
 msgid "Domain ${domain}"
@@ -2497,6 +2511,9 @@ msgid ""
 "The second row should be empty. After that, several section descriptions may "
 "follow. They are separated by an extra carriage return (i.e., a blank line)."
 msgstr ""
+"Η δεύτερη σειρά πρέπει να είναι κενή. Μετά από αυτή, μπορούν να ακολουθούν "
+"διάφορες περιγραφές ενοτήτων. Διαχωρίζονται από μια πρόσθετη αλλαγή γραμμής "
+"(π.χ., μια κενή γραμμή)."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:43
 msgid ""
@@ -2538,6 +2555,23 @@ msgid ""
 "\"johnny\"\n"
 "\"pete\"\n"
 msgstr ""
+"\n"
+"\"τρεις-ημέρες\"\n"
+"\"\",\"\",\"\"\n"
+"\"Φιλοσοφία\",\"Στέλιος Ράμφος\"\n"
+"\"Δευτέρα\",\"A\"\n"
+"\"Δευτέρα\",\"B\"\n"
+"\"Τρίτη\",\"C\"\n"
+"\"***\"\n"
+"\"Γιαννάκης\"\n"
+"\"Βασίλης\"\n"
+"\"\"\n"
+"\"Νέα Ελληνικά\",\"Ελύτης\"\n"
+"\"Τετάρτη\",\"B\"\n"
+"\"Τετάρτη\",\"C\"\n"
+"\"***\"\n"
+"\"Γιαννάκης\"\n"
+"\"Πέτρος\"\n"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:74
 msgid ""
@@ -2563,6 +2597,14 @@ msgid ""
 "other columns are ignored. You can import the same data several times "
 "without any side effects."
 msgstr ""
+"Σημειώστε ότι στο αρχείο μπορούν να χρησιμοποιηθούν μόνο κωδικοί ids για "
+"αντικείμενα και όχι τίτλοι. Αν μία σειρά τελειώνει  με κενά κελιά (π.χ. "
+"<em>\"Φιλοσοφία\",\"Στέλιος Ράμφος\",\"\",\"\"</em>), αυτά τα κελιά θα "
+"αγνοηθούν. Μπορείτε να χωρίσετε τις περιγραφές της κάθε ενότητας με "
+"περισσότερες από μια γραμμή. Στον κατάλογο των μαθητών, γίνεται επεξεργασία "
+"μόνο στην πρώτη στήλη που περιέχει τον κωδικό του ατόμου, ενώ οι άλλες "
+"στήλες θα αγνοηθούν. Μπορείτε να εισάγετε τα ίδια δεδομένα πολλές φορές "
+"χωρίς καμιά παρενέργεια."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:94
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:48
@@ -2655,6 +2697,9 @@ msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id, an "
 "instructor id and optional SchoolTool section IDs for each of the terms)"
 msgstr ""
+"Λάθος κεφαλίδα ενότητας στη γραμμή ${line_no} (θα πρέπει να περιλαμβάνει ένα "
+"κωδικό ID  μαθημάτων, έναν κωδικό ID εκπαιδευτή και, προαιρετικά, την "
+"ενότητα Κωδικοί ID του SchoolTool για την κάθε σχολική περίοδο)"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:220
 #: /src/schooltool/app/browser/timetablecsvimport.py:231
@@ -2668,8 +2713,10 @@ msgid ""
 "Timetable id must be specified before day id and a period id at at line "
 "${line_no}"
 msgstr ""
+"Ο κωδικός ID ωρολογίου προγράμματος πρέπει να ορισθεί πριν τον κωδικό ID "
+"ημέρας και τον κωδικό ID περιόδου, στη γραμμή ${line_no}"
 
-#: /src/schooltool/app/browser/timetablecsvimport.py:276
+#: /src/schooltool/app/browser/csvimport.py:380
 msgid "Incomplete section description on line ${line}"
 msgstr "Ελλειπής περιγραφή ενότητας στη γραμμή ${line}"
 
@@ -2691,8 +2738,10 @@ msgstr "Ο όρος ${term} δεν υπάρχει."
 #: /src/schooltool/app/browser/timetablecsvimport.py:460
 msgid "First term ${first} starts after last term ${last}."
 msgstr ""
+"Η πρώτη σχολική περίοδος, ${first} αρχίζει μετά την τελευταία περίοδο "
+"${last}."
 
-#: /src/schooltool/app/browser/timetablecsvimport.py:497
+#: /src/schooltool/app/browser/csvimport.py:508
 msgid "Error in timetable CSV data, line ${line_no}"
 msgstr "Σφάλμα δεδομένων χρονοδιαγράμματος CSV, γραμμή ${line_no}"
 
@@ -2779,11 +2828,7 @@ msgstr ""
 
 #: /src/schooltool/app/interfaces.py:145
 msgid "School logo"
-msgstr ""
-
-#: /src/schooltool/app/main.py:305
-msgid "Going to background, daemon pid %d"
-msgstr "Πηγαίνοντας σε παρασκήνιο, δαίμονας pid %d"
+msgstr "Λογότυπο σχολείου"
 
 #: /src/schooltool/app/main.py:361
 msgid "Cannot resolve plugin action order:\n"
@@ -2793,12 +2838,43 @@ msgstr "Δεν μπορείτε να λύσετε το πρόσθετο ώστε
 msgid "Run %s -h for help."
 msgstr "Εκτελέστε %s -h για βοήθεια."
 
-#: /src/schooltool/app/main.py:528
-msgid "%s: daemon mode not supported on your operating system."
+#: /src/schooltool/app/main.py:517
+msgid ""
+"\n"
+"Usage: %s [options]\n"
+"Options:\n"
+"  -c, --config xxx       use this configuration file\n"
+"  -h, --help             show this help message\n"
+"  --pack                 pack the database\n"
+"  -r, --restore-manager password\n"
+"                         restore the manager user with the provided "
+"password\n"
+"                         (read password from the standart input if "
+"'password'\n"
+"                         is '-')\n"
 msgstr ""
-"%s: του δαίμονα η λειτουργία δεν υποστηρίζεται στο λειτουργικό σας σύστημα."
+"\n"
+"Χρήση: %s [options]\n"
+"Επιλογές:\n"
+"  -c, --config xxx       χρησιμοποιήστε αυτό το αρχείο ρυθμίσεων\n"
+"  -h, --help             προβολή αυτού του μηνύματος βοήθειας\n"
+"  --pack                 πακετάρισμα της βάσης δεδομένων\n"
+"  -r, --restore-manager password\n"
+"                         ανάκτηση του χρήστη Διευθυντής με τον κωδικό που "
+"αποδώθηκε\n"
+"                         (ανάγνωση κωδικού από την πρότυπη είσοδο αν ο "
+"'password'\n"
+"                         είναι '-')\n"
 
-#: /src/schooltool/app/main.py:566
+#: /src/schooltool/app/main.py:489
+msgid "Manager password: "
+msgstr "Κωδικός Διευθυντή: "
+
+#: /src/schooltool/app/main.py:500
+msgid "No configuration file given"
+msgstr "Δεν δώθηκε αρχείο ρυθμίσεων"
+
+#: /src/schooltool/app/main.py:575
 msgid "Reading configuration from %s"
 msgstr "Ανάγνωση διαμόρφωσης από %s"
 
@@ -2822,15 +2898,7 @@ msgstr ""
 "\n"
 "Ισως σε άλλη περίπτωση %s το χρησιμοποιούν;"
 
-#: /src/schooltool/app/main.py:767
-msgid ""
-"Warning: could not find the reportlab library.\n"
-"PDF support disabled."
-msgstr ""
-"Προειδοποίηση: δεν βρέθηκε στη βιβλιοθήκη reportlab.\n"
-"PDF υποστήριξη ακυρώθηκε.."
-
-#: /src/schooltool/app/main.py:773
+#: /src/schooltool/app/main.py:675
 msgid ""
 "Warning: font directories '%s' do not exist.\n"
 "PDF support disabled."
@@ -2841,16 +2909,12 @@ msgid ""
 "Warning: font '%s' does not exist in the font directories '%s'.\n"
 "PDF support disabled."
 msgstr ""
-
-#: /src/schooltool/app/main.py:775
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "Εκκίνηση του χρόνου: %.3f sec real, %.3f sec CPU"
+"Προειδοποίηση: η γραμματοσειρά '%s' δεν υπάρχει μέσα στους καταλόγους "
+"γραμαματοσειρών '%s'.\n"
+"Η υποστήριξη PDF απενεργοποιήθηκε."
 
 #: /src/schooltool/app/membership.py:261
-#: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:209
-#: /src/schooltool/group/browser/templates/f_group_view.pt:75
-#: /src/schooltool/group/browser/templates/group.pt:16
+#: /src/schooltool/group/browser/group.pt:16
 msgid "Members"
 msgstr "Μέλη"
 
@@ -2896,11 +2960,11 @@ msgstr "Προβολή Ημερολογίου"
 msgid "Change calendar"
 msgstr "Αλλαγή ημερολογίου"
 
-#: /src/schooltool/app/timetable-integration.zcml:28
+#: /src/schooltool/timetable/security.zcml:46
 msgid "Assign timetables"
-msgstr ""
+msgstr "Να αποδωθούν ωρολόγια προγράμματα"
 
-#: /src/schooltool/app/timetable-integration.zcml:36
+#: /src/schooltool/timetable/security.zcml:54
 msgid "Change schedule"
 msgstr "Αλλαγή Προγράμματος"
 
@@ -3068,15 +3132,15 @@ msgstr "Αλλαγή πληροφοριών για ${field_title}"
 
 #: /src/schooltool/basicperson/browser/demographics.py:305
 msgid "Stud."
-msgstr ""
+msgstr "Μαθητ."
 
 #: /src/schooltool/basicperson/browser/demographics.py:306
 msgid "Teach."
-msgstr ""
+msgstr "Εκπαιδευτ,"
 
 #: /src/schooltool/basicperson/browser/demographics.py:307
 msgid "Admin."
-msgstr ""
+msgstr "Διαχειρ."
 
 #: /src/schooltool/basicperson/browser/demographics.py:310
 msgid "Selection"
@@ -3105,6 +3169,9 @@ msgid ""
 "If you select one or more groups below, this field will only be displayed in "
 "forms and reports for members of the selected groups."
 msgstr ""
+"Αν επιλεξετε μια ή και περισσότερες ομάδες από τις παρακάτω, αυτό το πεδίο "
+"θα εμφανίζεται μόνο στις φόρμες και στις αναφορές για τα μέλη των "
+"επιλεγμένων ομάδων."
 
 #: /src/schooltool/basicperson/browser/demographics.py:406
 #: /src/schooltool/basicperson/browser/demographics.py:462
@@ -3118,6 +3185,12 @@ msgstr "Παρακαλώ εισάγετε ένα έγκυρο ID"
 #: /src/schooltool/basicperson/browser/demographics.py:588
 msgid "This ID is not unique."
 msgstr "Αυτό το ID δεν είναι μοναδικό."
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:11
+#: /src/schooltool/basicperson/browser/flourish.zcml:16
+#: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
+msgid "People"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
@@ -3196,7 +3269,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:359
 msgid "Reorder or Delete Fields"
-msgstr ""
+msgstr "Αναδιάταξη ή Διαγραφή πεδίων"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:365
 msgid "New Description Field"
@@ -3204,11 +3277,11 @@ msgstr "Νέο πεδίο περιγραφής"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:412
 msgid "New Integer Field"
-msgstr ""
+msgstr "Νέο πεδίο ακέραιων αριθμών"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:590
 msgid "Contains an XML representation of the person."
-msgstr ""
+msgstr "Περιέχει μια αναπαράσταση του προσώπου σε μορφή XML"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Export as XML"
@@ -3226,7 +3299,15 @@ msgstr ""
 "Περιλαμβάνει όνομα μαθητή, αριθμό μητρώου, ημερομηνία γέννησης, όνομα και "
 "αριθμό τηλεφώνου επαφής."
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:733
+#: /src/schooltool/basicperson/browser/flourish.zcml:655
+msgid "Person profile, contacts, groups, etc."
+msgstr "Προφίλ  του προσώπου, επαφές, ομάδες, κλπ."
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:655
+#: /src/schooltool/basicperson/browser/person.py:1369
+msgid "Profile"
+msgstr ""
+
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
 msgstr "Αρχική"
@@ -3266,8 +3347,10 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/person.py:169
 msgid "Users cannot log in until a password is assigned."
 msgstr ""
+"Οι χρήστες δεν μπορούν να συνδεθούν αν δεν τους έχει δωθεί ένας κωδικός "
+"πρόσβασης."
 
-#: /src/schooltool/basicperson/browser/person.py:173
+#: /src/schooltool/basicperson/browser/person.py:68
 #: /src/schooltool/widget/password.py:39
 msgid "Confirm password"
 msgstr "Επιβεβαίωση κωδικού πρόσβασης"
@@ -3290,6 +3373,9 @@ msgid ""
 "(3:4 aspect ratio). Uploaded images must be JPEG or PNG files smaller than "
 "10 MB"
 msgstr ""
+"Ένα αρχείο εικόνας που θα μετατραπεί σε μορφή JPEG όχι μεγαλύτερο από 99x132 "
+"pixels (3:4 aspect ratio). Οι εικόνες που φορτώνετε πρέπει να είναι σε μορφή "
+"JPEG ή σε PNG, μικρότερες των 10ΜΒ"
 
 #: /src/schooltool/basicperson/browser/person.py:229
 msgid "This username is already in use"
@@ -3396,7 +3482,16 @@ msgstr "Ταυτότητες"
 msgid "ID Card: ${person}"
 msgstr "Κάρτα μητρώου: ${person}"
 
-#: /src/schooltool/basicperson/browser/templates/container.pt:18
+#: /src/schooltool/basicperson/browser/person.py:1385
+msgid "Username: ${username}"
+msgstr "Όνομα χρήστη: ${username}"
+
+#: /src/schooltool/basicperson/browser/person.py:1404
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
+msgid "General Information"
+msgstr "Γενικές πληροφορίες"
+
+#: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
 msgstr ""
@@ -3441,24 +3536,14 @@ msgstr "Διαχείριση συμβούλων αυτού του ατόμου"
 msgid "The person has no advisees."
 msgstr "Το άτομο δεν έχει συμβούλους."
 
-#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
-msgstr ""
-
 #: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
 #: /src/schooltool/person/browser/f_person_filter.pt:26
 #: /src/schooltool/person/browser/f_person_table_filter.pt:45
 #: /src/schooltool/person/browser/person_filter.pt:5
 msgid "All groups"
-msgstr ""
+msgstr "Όλες οι ομάδες"
 
-#: /src/schooltool/basicperson/browser/templates/f_csvimport_description.pt:3
-#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:24
+#: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:29
 msgid ""
 "CSV data <strong>must</strong> contain a user name a first name and a last "
 "name. An optional password <strong>may</strong> be included as well."
@@ -3549,12 +3634,8 @@ msgstr "Απαιτούμενο"
 msgid "Limited"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
-msgid "General Information"
-msgstr "Γενικές πληροφορίες"
-
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:25
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:10
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:29
 msgid "Edit this person's information"
 msgstr "Επεξεργασία πληροφοριών αυτού το ατόμου"
 
@@ -3568,14 +3649,13 @@ msgstr "Διαχείριση ανθρώπων"
 
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:14
 msgid "There are ${count} people defined in ${school}."
-msgstr ""
+msgstr "Έχουν ορισθεί ${count} άνθρωποι στο ${school}."
 
 #: /src/schooltool/basicperson/browser/templates/f_person_add_multiple.pt:10
 #: /src/schooltool/basicperson/browser/templates/person_add_multiple.pt:13
 msgid "Added persons"
-msgstr ""
+msgstr "Άτομα που προστέθηκαν"
 
-#: /src/schooltool/basicperson/browser/templates/f_person_add_subform.pt:3
 #: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
 msgid "New person"
 msgstr "Νέο άτομο"
@@ -3587,7 +3667,7 @@ msgstr "Νέο άτομο"
 #: /src/schooltool/skin/flourish/templates/z3c-schooltool-form.pt:51
 #: /src/schooltool/timetable/browser/templates/f_specialday_select.pt:12
 msgid "signifies a required field"
-msgstr ""
+msgstr "σημαίνει ότι είναι ένα υποχρεωτικό πεδίο"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:90
 msgid "ID:"
@@ -3667,23 +3747,23 @@ msgstr "Πληροφορίες ατόμου: ${title}"
 msgid "Ethnicity"
 msgstr "Εθνικότητα"
 
-#: /src/schooltool/basicperson/demographics.py:144
+#: /src/schooltool/basicperson/demographics.py:143
 msgid "American Indian or Alaska Native"
-msgstr ""
+msgstr "Αμερικανός Ινδιάνος ή Γηγενής της Αλάσκας"
+
+#: /src/schooltool/basicperson/demographics.py:144
+msgid "Asian"
+msgstr "Ασιάτης"
 
 #: /src/schooltool/basicperson/demographics.py:145
-msgid "Asian"
-msgstr ""
+msgid "Black or African American"
+msgstr "Μαύρος ή Αφρικανός Αμερικανός"
 
 #: /src/schooltool/basicperson/demographics.py:146
-msgid "Black or African American"
-msgstr ""
+msgid "Native Hawaiian or Other Pacific Islander"
+msgstr "Γηγενής Χαβανέζος ή Νησιώτης από άλλα νησιά του Ειρηνικού"
 
 #: /src/schooltool/basicperson/demographics.py:147
-msgid "Native Hawaiian or Other Pacific Islander"
-msgstr ""
-
-#: /src/schooltool/basicperson/demographics.py:148
 msgid "White"
 msgstr ""
 
@@ -3756,13 +3836,15 @@ msgstr ""
 
 #: /src/schooltool/basicperson/interfaces.py:163
 msgid "Selection list"
-msgstr ""
+msgstr "Λίστα επιλογής"
 
 #: /src/schooltool/basicperson/interfaces.py:163
 msgid ""
 "Enter the valid values for the field below.  One value per line.  These "
 "values will be displayed as a menu in forms."
 msgstr ""
+"Εισάγετε τις εκυρες τιμές για τα παρακάτω πεδία. Μία τιμή ανά γραμμή. Αυτές "
+"οι τιμές θα εμφανίζονται σαν Μενού στις φόρμες."
 
 #: /src/schooltool/basicperson/interfaces.py:173
 msgid "Minimum value"
@@ -3782,13 +3864,13 @@ msgstr "Όνομα"
 msgid "Last Name"
 msgstr "Επώνυμο"
 
-#: /src/schooltool/basicperson/security.py:33
+#: /src/schooltool/basicperson/security.py:66
 msgid "Advisors of a person."
-msgstr ""
+msgstr "Σύμβουλοι για ένα άτομο."
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
-msgstr ""
+msgstr "Δημιουργία, διαγραφή δημογραφικών πεδίίων και αλλαγή της σειράς τους"
 
 #: /src/schooltool/basicperson/security.zcml:35
 msgid "Edit fields"
@@ -3796,15 +3878,15 @@ msgstr "Επεξεργασία πεδίων"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "View user demographics"
-msgstr ""
+msgstr "Προβολή δημογραφικών χρήστη"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "View user's demographics information"
-msgstr ""
+msgstr "Προβολή πληροφοριών των δημογραφικών του χρήστη"
 
 #: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user demographics"
-msgstr ""
+msgstr "Επεξεργασία δημογραφικών χρήστη"
 
 #: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user's demographics information."
@@ -3960,7 +4042,7 @@ msgstr ""
 
 #: /src/schooltool/common/fields.py:39
 msgid "Size in pixels"
-msgstr ""
+msgstr "Μέγεθος σε pixels"
 
 #: /src/schooltool/common/fields.py:44
 msgid "Image format"
@@ -3968,11 +4050,9 @@ msgstr ""
 
 #: /src/schooltool/common/fields.py:48
 msgid "Max file size in bytes"
-msgstr ""
+msgstr "Μέγιστο μέγεθος του αρχείου σε bytes"
 
-#: /src/schooltool/contact/browser/basicperson.py:123
-#: /src/schooltool/contact/browser/contact.py:195
-#: /src/schooltool/contact/browser/contact.py:392
+#: /src/schooltool/contact/browser/contact.py:310
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:31
 msgid "Address"
 msgstr "Διεύθυνση"
@@ -4089,11 +4169,11 @@ msgstr "Υπήρξαν κάποια λάθη"
 
 #: /src/schooltool/contact/browser/contact.py:819
 msgid "${person_full_name} as Contact"
-msgstr ""
+msgstr "${person_full_name} ως Επαφή"
 
 #: /src/schooltool/contact/browser/contact.py:867
 msgid "Delete ${contact_full_name}"
-msgstr ""
+msgstr "Διαγραφή ${contact_full_name}"
 
 #: /src/schooltool/contact/browser/flourish.zcml:206
 msgid "Edit Contact Information"
@@ -4113,32 +4193,31 @@ msgstr ""
 msgid "Assign existing contact"
 msgstr ""
 
-#: /src/schooltool/contact/browser/relationship.py:94
+#: /src/schooltool/contact/browser/relationship.py:91
 msgid "Manage contacts of ${person}"
-msgstr ""
+msgstr "Διαχείριση επαφών του/της ${person}"
 
 #: /src/schooltool/contact/browser/relationship.py:186
 msgid "Current contacts"
-msgstr ""
+msgstr "Τρέχουσες επαφές"
 
 #: /src/schooltool/contact/browser/relationship.py:187
 msgid "Available contacts"
-msgstr ""
+msgstr "Διαθέσιμες επαφές"
 
 #: /src/schooltool/contact/browser/templates/contact_view.pt:16
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:18
 msgid "${relationship} of ${person}"
-msgstr ""
+msgstr "${συγγενική σχέση} με τον/την ${person}"
 
 #: /src/schooltool/contact/browser/templates/contact_view.pt:20
-#: /src/schooltool/contact/browser/templates/contactperson_subform.pt:4
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:22
 msgid "Contact of ${person}"
-msgstr ""
+msgstr "Επαφή του/της ${person}"
 
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:3
 msgid "Deleting a contact is permanent and irreversible."
-msgstr ""
+msgstr "Η διαγραφή ενός ατόμου είναι μόνιμη και μη αναστρέψιμη."
 
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:12
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:46
@@ -4148,7 +4227,7 @@ msgstr ""
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:16
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:49
 msgid "Contact of"
-msgstr ""
+msgstr "Επαφή του/της"
 
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
 msgid "Contact information"
@@ -4157,32 +4236,37 @@ msgstr ""
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:6
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:9
 msgid "Edit this contact"
-msgstr ""
+msgstr "Τροποποίηση αυτής της επαφής"
 
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:27
 msgid "This person has no contacts."
-msgstr ""
+msgstr "Αυτό το άτομο δεν έχει επαφές."
 
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:31
 #: /src/schooltool/contact/browser/templates/f_manage_contacts_overview.pt:4
 msgid "Manage contacts"
-msgstr ""
+msgstr "Διαχείριση επαφών"
 
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:6
 msgid ""
 "A student may have one or more \"contacts\", people who may need to recieve "
 "notifications and information about the student or the school as a whole."
 msgstr ""
+"Ένας μαθητής μπορεί να έχει μια ή και περισσότερες \"επαφές\", ανθρώπους που "
+"χρειάζεται να λαμβάνουν ειδοποιήσεις και πληροφορίες σχετικά με τον μαθητή, "
+"ή και συνολικά, για το σχολείο."
 
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:11
 msgid ""
 "A user may also be a contact for him or herself, particularly in the case of "
 "older students and adults."
 msgstr ""
+"Ένας χρήστης μπορεί επίσης να είναι και ως επαφή του εαυτού του, ιδιαίτερα "
+"στην περίπτωση μεγαλύτερων μαθητών και ενηλίκων."
 
 #: /src/schooltool/contact/browser/templates/f_manage_contacts_overview.pt:12
 msgid "The school has ${total} contact persons."
-msgstr ""
+msgstr "Το σχολείο έχει ${σύνολο} άτομα ως Επαφές."
 
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/person/browser/person_filter.pt:11
@@ -4205,7 +4289,7 @@ msgstr "Εκκαθάριση"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 msgid "Shortcut: Alt-R"
-msgstr ""
+msgstr "Συντόμευση: Alt-R"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"
@@ -4224,10 +4308,12 @@ msgid ""
 "You don't have an email address set. Ask your administrator to set your "
 "email address in your contact information."
 msgstr ""
+"Δεν ορίσατε μια διεύθυνση ηλεκτρονικού ταχυδρομείου. Ζητήστε από τον "
+"διαχειριστή σας να ορίσει μια διεύθυνση email στις πληροφορίες επαφής."
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:8
 msgid "Contact information for ${person}"
-msgstr ""
+msgstr "Πληροφορίες επαφής για τον/την  ${άτομο}"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:36
 #: /src/schooltool/contact/interfaces.py:68
@@ -4255,25 +4341,24 @@ msgid ""
 "but may need to recieve notifications and information about the student or "
 "the school as a whole."
 msgstr ""
+"Να υπάρχουν πληροφορίες επαφής για όλους τους χρήστες του SchoolTool, που "
+"περιλαμβάνουν διεύθυνση σπιτιού, αριθμό τηλεφώνου, email, κλπ.\n"
+"Μπορούν να δημιουργηθούν και \"Εξωτερικές Επαφές\"  - άνθρωποι που δεν είναι "
+"χρήστες του SchoolToo, αλλά που χρειάζονται να λαμβάνουν ειδοποιήσεις και "
+"πληροφορίες για τους μαθητές ή συνολικά για το σχολείο."
 
-#: /src/schooltool/contact/contact.py:220
-#: /src/schooltool/course/browser/flourish.zcml:424
-#: /src/schooltool/course/browser/section.py:561
+#: /src/schooltool/contact/contact.py:198
+#: /src/schooltool/course/browser/section.py:522
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
-#: /src/schooltool/course/browser/templates/f_link_existing.pt:72
-#: /src/schooltool/course/browser/templates/f_section_linkage.pt:66
-#: /src/schooltool/course/browser/templates/f_section_view.pt:114
-#: /src/schooltool/course/browser/templates/link_existing.pt:53
 #: /src/schooltool/course/browser/templates/link_section.pt:69
-#: /src/schooltool/course/browser/templates/section.pt:58
+#: /src/schooltool/course/browser/templates/section.pt:80
 #: /src/schooltool/course/browser/templates/section_container.pt:42
-#: /src/schooltool/course/browser/templates/section_linkage.pt:39
-#: /src/schooltool/course/section.py:275
-#: /src/schooltool/course/section.py:286
+#: /src/schooltool/course/section.py:281
+#: /src/schooltool/course/section.py:291
 msgid "Instructors"
-msgstr ""
+msgstr "Εκπαιδευτικοί"
 
-#: /src/schooltool/contact/contact.py:203
+#: /src/schooltool/contact/contact.py:199
 msgid "Instructors of student(s) related to this contact."
 msgstr ""
 
@@ -4315,13 +4400,13 @@ msgstr "Κινητό τηλέφωνο"
 
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Other 1"
-msgstr ""
+msgstr "Άλλος 1"
 
 #: /src/schooltool/contact/interfaces.py:84
 msgid "Other 2"
-msgstr ""
+msgstr "Άλλος 2"
 
-#: /src/schooltool/contact/interfaces.py:109
+#: /src/schooltool/contact/interfaces.py:102
 msgid "Contact's relationship with the person"
 msgstr ""
 
@@ -4363,15 +4448,15 @@ msgstr "Διαχείριση επαφών χρήστη"
 
 #: /src/schooltool/contact/security.zcml:46
 msgid "Create/Delete an external contact"
-msgstr ""
+msgstr "Δημιουργία/Διαγραφή μιας εξωτερικής επαφής"
 
 #: /src/schooltool/contact/security.zcml:54
 msgid "View an external contact"
-msgstr ""
+msgstr "Προβολή μιας εξωτερικής επαφής"
 
 #: /src/schooltool/contact/security.zcml:62
 msgid "Modify an external contact"
-msgstr ""
+msgstr "Τροποποίηση μιας εξωτερικής επαφής"
 
 #: /src/schooltool/contact/security.zcml:70
 msgid "View user's contact information"
@@ -4549,6 +4634,31 @@ msgstr ""
 msgid "Import Students"
 msgstr ""
 
+#: /src/schooltool/course/browser/flourish.zcml:644
+msgid "Roster"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:644
+msgid "Students and instructors of a section"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:11
+msgid "Students (continued)"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:14
+#: /src/schooltool/resource/browser/rml/resource_report.pt:18
+#: /src/schooltool/skin/flourish/rml/pdf_form.pt:14
+#: /src/schooltool/table/rml/grid_part.pt:42
+msgid "Continued on next page &gt;"
+msgstr ""
+
+#: /src/schooltool/person/browser/person.py:285
+#: /src/schooltool/person/browser/person.py:374
+#: /src/schooltool/person/interfaces.py:51
+msgid "Full name"
+msgstr "Πλήρες Όνομα"
+
 #: /src/schooltool/course/browser/section-member-csvimport.pt:4
 msgid "Upload SchoolTool section members as CSV"
 msgstr ""
@@ -4671,6 +4781,14 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1435
 msgid "Link ${section} to Section in Other Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1833
+msgid "Section Roster"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1853
+msgid "Instructors: ${instructors}"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
@@ -5248,7 +5366,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/course/security.zcml:74
-msgid "A course in SchoolTool describes a set curriculum taught in a section."
+msgid ""
+"A course in SchoolTool describes a set curriculum taught in a section."
 msgstr ""
 
 #: /src/schooltool/course/security.zcml:79
@@ -5683,6 +5802,10 @@ msgid "School Export"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:79
+msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:69
 msgid "is not a valid integer"
 msgstr ""
 
@@ -6075,8 +6198,12 @@ msgstr ""
 msgid "ID Cards for Group: ${group}"
 msgstr ""
 
-#: /src/schooltool/group/browser/templates/f_group_csvimport_description.pt:3
-#: /src/schooltool/group/browser/templates/group-csvimport.pt:24
+#: /src/schooltool/group/browser/group.py:887
+#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:5
+msgid "Group memberships"
+msgstr ""
+
+#: /src/schooltool/group/browser/group-csvimport.pt:24
 msgid ""
 "CSV data <strong>must</strong> include a group title and "
 "<strong>may</strong> include an optional group description. Any extra "
@@ -6132,12 +6259,7 @@ msgstr ""
 msgid "This group has no responsible parties"
 msgstr ""
 
-#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:5
-msgid "Group memberships"
-msgstr ""
-
-#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:6
-#: /src/schooltool/group/browser/templates/groupsviewlet.pt:23
+#: /src/schooltool/group/browser/groupsviewlet.pt:22
 msgid "Manage this person's memberships"
 msgstr ""
 
@@ -6448,14 +6570,8 @@ msgstr "Αλλαγή κωδικού πρόσβασης"
 msgid "Wrong password supplied"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:507
-#: /src/schooltool/person/browser/person.py:596
-#: /src/schooltool/person/interfaces.py:51
-msgid "Full name"
-msgstr "Πλήρες Όνομα"
-
-#: /src/schooltool/person/browser/person.py:508
-#: /src/schooltool/person/browser/person.py:597
+#: /src/schooltool/person/browser/person.py:286
+#: /src/schooltool/person/browser/person.py:375
 #: /src/schooltool/person/interfaces.py:52
 msgid "Name that should be displayed"
 msgstr ""
@@ -6703,6 +6819,10 @@ msgstr ""
 msgid "Reserve"
 msgstr ""
 
+#: /src/schooltool/resource/browser/flourish.zcml:452
+msgid "List all resources"
+msgstr ""
+
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
 msgstr ""
@@ -6813,6 +6933,16 @@ msgstr "Επεξεργασία εξοπλισμού"
 
 #: /src/schooltool/resource/browser/resource.py:854
 msgid "Delete ${resource_title}"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:967
+#: /src/schooltool/resource/browser/rml/resource_report.pt:21
+msgid "Resource Report"
+msgstr ""
+
+#: /src/schooltool/resource/browser/rml/resource_report.pt:10
+#: /src/schooltool/resource/browser/rml/resource_report.pt:23
+msgid "Resource Report (continued)"
 msgstr ""
 
 #: /src/schooltool/resource/browser/subtype_widget.pt:8
@@ -7411,10 +7541,6 @@ msgstr ""
 msgid "Title of the group."
 msgstr "Όνομα ομάδας"
 
-#: /src/schooltool/skin/breadcrumbs.py:76
-msgid "top"
-msgstr "επάνω"
-
 #: /src/schooltool/skin/flourish/instance/skin.zcml:50
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
@@ -7425,6 +7551,10 @@ msgstr ""
 #: /src/schooltool/skin/templates/notfound.pt:3
 #: /src/schooltool/skin/templates/notfound.pt:11
 msgid "Not Found"
+msgstr ""
+
+#: /src/schooltool/skin/flourish/report.py:584
+msgid "${title} (continued)"
 msgstr ""
 
 #: /src/schooltool/skin/flourish/templates/image_input.pt:11
@@ -7445,10 +7575,6 @@ msgstr ""
 
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
-msgstr ""
-
-#: /src/schooltool/skin/form.py:64
-msgid "No changes"
 msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:15
@@ -7532,44 +7658,8 @@ msgstr ""
 msgid "Year has to be equal or greater than 1900"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:111
-msgid "Width"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:100
-msgid "Editor frame width"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:103
-msgid "Height"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:104
-msgid "Editor frame height"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:107
-msgid "Toolbar configuration"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:108
-msgid "The name of the toolbar configuration to use."
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Relative configuration path"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:112
-msgid "Path to the FCKconfiguration javascript file."
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:137
-msgid "Configuration"
-msgstr ""
-
-#: /src/schooltool/skin/widgets.py:138
-msgid "FCK editor configuration."
+#: /src/schooltool/table/pdf.py:637
+msgid "Continued ..."
 msgstr ""
 
 #: /src/schooltool/table/templates/batch.pt:5

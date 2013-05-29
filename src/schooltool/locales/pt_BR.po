@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-01-23 19:08+0200\n"
-"PO-Revision-Date: 2013-02-05 14:03+0000\n"
-"Last-Translator: Rafael Neri <Unknown>\n"
+"POT-Creation-Date: 2013-05-27 19:54+0300\n"
+"PO-Revision-Date: 2013-05-02 19:26+0000\n"
+"Last-Translator: Adriano Steffler <Unknown>\n"
 "Language-Team: Portuguese (Brazil) <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-02-06 05:31+0000\n"
-"X-Generator: Launchpad (build 16468)\n"
+"X-Launchpad-Export-Date: 2013-05-28 05:48+0000\n"
+"X-Generator: Launchpad (build 16640)\n"
 "Language: \n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -259,10 +259,6 @@ msgstr "Responsáveis atuais"
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
 msgstr "Responsáveis disponíveis"
-
-#: /src/schooltool/app/browser/app.py:622
-msgid "school"
-msgstr "escola"
 
 #: /src/schooltool/app/browser/app.py:741
 #: /src/schooltool/app/browser/flourish.zcml:149
@@ -930,19 +926,6 @@ msgstr "Tipo"
 msgid "Booked by others"
 msgstr "Reservado por outros"
 
-#: /src/schooltool/app/browser/cal.py:2611
-#: /src/schooltool/app/browser/configure.zcml:532
-#: /src/schooltool/app/browser/flourish.zcml:22
-#: /src/schooltool/app/browser/flourish.zcml:32
-#: /src/schooltool/app/browser/flourish.zcml:42
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
-#: /src/schooltool/calendar/browser/flourish.zcml:8
-#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:24
-#: /src/schooltool/resource/browser/flourish.zcml:192
-msgid "Calendar"
-msgstr "Calendário"
-
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
 #: /src/schooltool/app/browser/flourish.zcml:465
@@ -997,6 +980,20 @@ msgstr "Editar Evento"
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
 msgstr "Controle do ZODB"
+
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/flourish.zcml:22
+#: /src/schooltool/app/browser/flourish.zcml:32
+#: /src/schooltool/app/browser/flourish.zcml:42
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
+#: /src/schooltool/basicperson/browser/flourish.zcml:808
+#: /src/schooltool/calendar/browser/flourish.zcml:8
+#: /src/schooltool/calendar/browser/flourish.zcml:13
+#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
+#: /src/schooltool/resource/browser/flourish.zcml:223
+msgid "Calendar"
+msgstr "Calendário"
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -2858,11 +2855,7 @@ msgstr "Mostrar calendário público como a página inicial do site."
 msgid "School logo"
 msgstr "Logotipo da escola"
 
-#: /src/schooltool/app/main.py:314
-msgid "Going to background, daemon pid %d"
-msgstr "Indo para background, o número de processo do daemon é %d"
-
-#: /src/schooltool/app/main.py:361
+#: /src/schooltool/app/main.py:311
 msgid "Cannot resolve plugin action order:\n"
 msgstr "Não posso resolver um comando da extensão (plugin)\n"
 
@@ -2892,15 +2885,20 @@ msgstr ""
 "  -h, --help             exibe esta mensagem de ajuda\n"
 "  --pack                 empacota o banco de dados\n"
 "  -r, --restore-manager senha\n"
-"                         restaura o usuário do gerente com a senha fornecida\n"
+"                         restaura o usuário do gerente com a senha "
+"fornecida\n"
 "                         (lê a senha da entrada padrão se a \"senha\" for \"-"
 "\")\n"
 
-#: /src/schooltool/app/main.py:536
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s: modo daemon não suportado pelo seu sistema operacional"
+#: /src/schooltool/app/main.py:489
+msgid "Manager password: "
+msgstr "Senha do administrador: "
 
-#: /src/schooltool/app/main.py:566
+#: /src/schooltool/app/main.py:500
+msgid "No configuration file given"
+msgstr "Nenhum arquivo de configuração foi definido"
+
+#: /src/schooltool/app/main.py:505
 msgid "Reading configuration from %s"
 msgstr "Lendo configuração de %s"
 
@@ -2924,15 +2922,7 @@ msgstr ""
 "\n"
 "Uma outra instância de %s está usando-o?"
 
-#: /src/schooltool/app/main.py:767
-msgid ""
-"Warning: could not find the reportlab library.\n"
-"PDF support disabled."
-msgstr ""
-"Aviso: biblioteca reportlab não foi encontrada.\n"
-"Suporte à PDF foi desabilitado."
-
-#: /src/schooltool/app/main.py:773
+#: /src/schooltool/app/main.py:675
 msgid ""
 "Warning: font directories '%s' do not exist.\n"
 "PDF support disabled."
@@ -2948,13 +2938,9 @@ msgstr ""
 "Aviso: a fonte '%s' não existe no diretório de fontes  '%s'.\n"
 "Suporte a PDF desabilitado."
 
-#: /src/schooltool/app/main.py:775
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "Tempo desde inicialização: %.3f seg real, %.3f seg CPU"
-
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:209
+#: /src/schooltool/group/browser/flourish.zcml:227
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
@@ -3574,15 +3560,6 @@ msgstr "Gerenciar os orientandos desta pessoa"
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:37
 msgid "The person has no advisees."
 msgstr "Esta pessoa não tem orientandos."
-
-#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
-msgstr "Filtrar por..."
 
 #: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
 #: /src/schooltool/person/browser/f_person_filter.pt:26
@@ -5954,7 +5931,12 @@ msgstr ""
 msgid "School Export"
 msgstr "Exportação da escola"
 
-#: /src/schooltool/export/importer.py:77
+#: /src/schooltool/export/importer.py:79
+msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
+msgstr ""
+"O SchoolTool não pode ler este arquivo. Ele é uma planilha no formato .xls?"
+
+#: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
 msgstr "não é um inteiro válido"
 
@@ -7797,10 +7779,6 @@ msgstr "O super-usuário - que controla esse instância do SchoolTool."
 msgid "Title of the group."
 msgstr "Título do grupo."
 
-#: /src/schooltool/skin/breadcrumbs.py:76
-msgid "top"
-msgstr "topo"
-
 #: /src/schooltool/skin/flourish/instance/skin.zcml:50
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
@@ -7836,10 +7814,6 @@ msgstr "O arquivo enviado não é uma imagem JPEG ou PNG"
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
 msgstr "A imagem a ser upada não pode ser maior do que ${size} MB"
-
-#: /src/schooltool/skin/form.py:64
-msgid "No changes"
-msgstr "Nenhuma modificação"
 
 #: /src/schooltool/skin/templates/error.pt:15
 #: /src/schooltool/skin/templates/f_error.pt:2
@@ -7929,46 +7903,6 @@ msgstr "A string de data e hora não se adequa ao padrão aaa-mm-dd"
 #: /src/schooltool/skin/widgets.py:103
 msgid "Year has to be equal or greater than 1900"
 msgstr "O ano tem que ser igual ou maior que 1900"
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Width"
-msgstr "Largura"
-
-#: /src/schooltool/skin/widgets.py:100
-msgid "Editor frame width"
-msgstr "Largura do quadro do Editor"
-
-#: /src/schooltool/skin/widgets.py:103
-msgid "Height"
-msgstr "Altura"
-
-#: /src/schooltool/skin/widgets.py:104
-msgid "Editor frame height"
-msgstr "Altura do quadro do editor"
-
-#: /src/schooltool/skin/widgets.py:107
-msgid "Toolbar configuration"
-msgstr "Configuração da barra de ferramentas"
-
-#: /src/schooltool/skin/widgets.py:108
-msgid "The name of the toolbar configuration to use."
-msgstr "O nome da configuração de barra de ferramentas a ser usado."
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Relative configuration path"
-msgstr "caminho da configuração relativa"
-
-#: /src/schooltool/skin/widgets.py:112
-msgid "Path to the FCKconfiguration javascript file."
-msgstr "Caminho para o arquivo javascript FCKconfiguration."
-
-#: /src/schooltool/skin/widgets.py:137
-msgid "Configuration"
-msgstr "Configuração"
-
-#: /src/schooltool/skin/widgets.py:138
-msgid "FCK editor configuration."
-msgstr "Configuração do FCK editor."
 
 #: /src/schooltool/table/pdf.py:637
 msgid "Continued ..."

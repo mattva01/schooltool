@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-01-15 15:41+0200\n"
-"PO-Revision-Date: 2012-11-23 22:13+0000\n"
+"POT-Creation-Date: 2013-05-27 19:54+0300\n"
+"PO-Revision-Date: 2013-04-20 02:49+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-12 05:06+0000\n"
-"X-Generator: Launchpad (build 16361)\n"
+"X-Launchpad-Export-Date: 2013-05-28 05:47+0000\n"
+"X-Generator: Launchpad (build 16640)\n"
 "Language: vi\n"
 
 #: /src/schooltool/app/app.py:193
@@ -258,10 +258,6 @@ msgstr ""
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
 msgstr ""
-
-#: /src/schooltool/app/browser/app.py:622
-msgid "school"
-msgstr "trường"
 
 #: /src/schooltool/app/browser/app.py:741
 #: /src/schooltool/app/browser/flourish.zcml:149
@@ -930,19 +926,6 @@ msgstr "Kiểu"
 msgid "Booked by others"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:2611
-#: /src/schooltool/app/browser/configure.zcml:532
-#: /src/schooltool/app/browser/flourish.zcml:22
-#: /src/schooltool/app/browser/flourish.zcml:32
-#: /src/schooltool/app/browser/flourish.zcml:42
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
-#: /src/schooltool/calendar/browser/flourish.zcml:8
-#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:24
-#: /src/schooltool/resource/browser/flourish.zcml:192
-msgid "Calendar"
-msgstr "Lịch"
-
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
 #: /src/schooltool/app/browser/flourish.zcml:465
@@ -997,6 +980,20 @@ msgstr "Sửa Sự kiện"
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
 msgstr "Điểu khiển ZODB"
+
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/flourish.zcml:22
+#: /src/schooltool/app/browser/flourish.zcml:32
+#: /src/schooltool/app/browser/flourish.zcml:42
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
+#: /src/schooltool/basicperson/browser/flourish.zcml:808
+#: /src/schooltool/calendar/browser/flourish.zcml:8
+#: /src/schooltool/calendar/browser/flourish.zcml:13
+#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
+#: /src/schooltool/resource/browser/flourish.zcml:223
+msgid "Calendar"
+msgstr "Lịch"
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -2782,11 +2779,7 @@ msgstr "Hiển thị trang Lịch biểu như là trang chủ"
 msgid "School logo"
 msgstr ""
 
-#: /src/schooltool/app/main.py:305
-msgid "Going to background, daemon pid %d"
-msgstr "Chạy trên nền, daemon pid %d"
-
-#: /src/schooltool/app/main.py:361
+#: /src/schooltool/app/main.py:311
 msgid "Cannot resolve plugin action order:\n"
 msgstr "Không thể giải quyết được vấn đề theo yêu cầu\n"
 
@@ -2794,11 +2787,31 @@ msgstr "Không thể giải quyết được vấn đề theo yêu cầu\n"
 msgid "Run %s -h for help."
 msgstr "Gõ %s -h để được trợ giúp"
 
-#: /src/schooltool/app/main.py:528
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s: Chế độ daemon không được hệ thống trợ giúp"
+#: /src/schooltool/app/main.py:517
+msgid ""
+"\n"
+"Usage: %s [options]\n"
+"Options:\n"
+"  -c, --config xxx       use this configuration file\n"
+"  -h, --help             show this help message\n"
+"  --pack                 pack the database\n"
+"  -r, --restore-manager password\n"
+"                         restore the manager user with the provided "
+"password\n"
+"                         (read password from the standart input if "
+"'password'\n"
+"                         is '-')\n"
+msgstr ""
 
-#: /src/schooltool/app/main.py:566
+#: /src/schooltool/app/main.py:489
+msgid "Manager password: "
+msgstr ""
+
+#: /src/schooltool/app/main.py:500
+msgid "No configuration file given"
+msgstr ""
+
+#: /src/schooltool/app/main.py:505
 msgid "Reading configuration from %s"
 msgstr "Đọc cấu hình từ %s"
 
@@ -2820,13 +2833,7 @@ msgstr ""
 "\n"
 "Có thể một người khác %s đang sử dụng nó?"
 
-#: /src/schooltool/app/main.py:767
-msgid ""
-"Warning: could not find the reportlab library.\n"
-"PDF support disabled."
-msgstr "Cảnh báo: Không thấy thư viện báo cáo reportlab."
-
-#: /src/schooltool/app/main.py:773
+#: /src/schooltool/app/main.py:675
 msgid ""
 "Warning: font directories '%s' do not exist.\n"
 "PDF support disabled."
@@ -2838,13 +2845,9 @@ msgid ""
 "PDF support disabled."
 msgstr ""
 
-#: /src/schooltool/app/main.py:775
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "Thời gian bắt đầu: %.3f sec real, %.3f sec CPU"
-
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:209
+#: /src/schooltool/group/browser/flourish.zcml:227
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
@@ -3226,7 +3229,16 @@ msgid ""
 "number."
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:733
+#: /src/schooltool/basicperson/browser/flourish.zcml:655
+msgid "Person profile, contacts, groups, etc."
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:655
+#: /src/schooltool/basicperson/browser/person.py:1369
+msgid "Profile"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:784
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
 msgstr "Trang chủ"
@@ -3392,6 +3404,15 @@ msgstr ""
 msgid "ID Card: ${person}"
 msgstr ""
 
+#: /src/schooltool/basicperson/browser/person.py:1385
+msgid "Username: ${username}"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:1404
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
+msgid "General Information"
+msgstr ""
+
 #: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
@@ -3433,15 +3454,6 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:37
 msgid "The person has no advisees."
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
@@ -3542,12 +3554,8 @@ msgstr "Cần thiết"
 msgid "Limited"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
-msgid "General Information"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:25
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:10
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:29
 msgid "Edit this person's information"
 msgstr ""
 
@@ -4552,6 +4560,33 @@ msgstr ""
 msgid "Import Students"
 msgstr ""
 
+#: /src/schooltool/course/browser/flourish.zcml:644
+msgid "Roster"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:644
+msgid "Students and instructors of a section"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:11
+msgid "Students (continued)"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:14
+#: /src/schooltool/resource/browser/rml/resource_report.pt:18
+#: /src/schooltool/skin/flourish/rml/pdf_form.pt:14
+#: /src/schooltool/table/rml/grid_part.pt:42
+msgid "Continued on next page &gt;"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:23
+#: /src/schooltool/course/browser/templates/f_section_roster_rml.pt:15
+#: /src/schooltool/person/browser/person.py:594
+#: /src/schooltool/person/browser/person.py:683
+#: /src/schooltool/person/interfaces.py:52
+msgid "Full name"
+msgstr "Tên đầy đủ"
+
 #: /src/schooltool/course/browser/section-member-csvimport.pt:4
 msgid "Upload SchoolTool section members as CSV"
 msgstr "Upload Các thành viên của lớp học dưới dạng CSV"
@@ -4674,6 +4709,14 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1435
 msgid "Link ${section} to Section in Other Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1833
+msgid "Section Roster"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1853
+msgid "Instructors: ${instructors}"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
@@ -5277,7 +5320,8 @@ msgid ""
 msgstr "Thông tin về lớp học và học sinh trong lớp là công khai."
 
 #: /src/schooltool/course/security.zcml:74
-msgid "A course in SchoolTool describes a set curriculum taught in a section."
+msgid ""
+"A course in SchoolTool describes a set curriculum taught in a section."
 msgstr ""
 "Một khoá học trong Schooltool mô tả một tập các chương trình giảng dạy của "
 "một lớp."
@@ -5714,6 +5758,10 @@ msgid "School Export"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:79
+msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
 msgstr "không là số nguyên hợp lệ"
 
@@ -6119,6 +6167,11 @@ msgstr ""
 msgid "ID Cards for Group: ${group}"
 msgstr ""
 
+#: /src/schooltool/group/browser/group.py:887
+#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:5
+msgid "Group memberships"
+msgstr ""
+
 #: /src/schooltool/group/browser/templates/f_group_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/group-csvimport.pt:24
 msgid ""
@@ -6186,10 +6239,6 @@ msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_group_view.pt:102
 msgid "This group has no responsible parties"
-msgstr ""
-
-#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:5
-msgid "Group memberships"
 msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:6
@@ -6512,15 +6561,9 @@ msgstr "Đổi mật khẩu"
 msgid "Wrong password supplied"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:507
-#: /src/schooltool/person/browser/person.py:596
-#: /src/schooltool/person/interfaces.py:51
-msgid "Full name"
-msgstr "Tên đầy đủ"
-
-#: /src/schooltool/person/browser/person.py:508
-#: /src/schooltool/person/browser/person.py:597
-#: /src/schooltool/person/interfaces.py:52
+#: /src/schooltool/person/browser/person.py:595
+#: /src/schooltool/person/browser/person.py:684
+#: /src/schooltool/person/interfaces.py:53
 msgid "Name that should be displayed"
 msgstr "Tên có thể được hiển thị"
 
@@ -6769,6 +6812,10 @@ msgstr "Tài nguyên"
 msgid "Reserve"
 msgstr ""
 
+#: /src/schooltool/resource/browser/flourish.zcml:452
+msgid "List all resources"
+msgstr ""
+
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
 msgstr "Upload tài nguyên Schooltool dưới dạng file CSV"
@@ -6889,6 +6936,16 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:854
 msgid "Delete ${resource_title}"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:967
+#: /src/schooltool/resource/browser/rml/resource_report.pt:21
+msgid "Resource Report"
+msgstr ""
+
+#: /src/schooltool/resource/browser/rml/resource_report.pt:10
+#: /src/schooltool/resource/browser/rml/resource_report.pt:23
+msgid "Resource Report (continued)"
 msgstr ""
 
 #: /src/schooltool/resource/browser/subtype_widget.pt:8
@@ -7503,10 +7560,6 @@ msgstr "Người quản lý - Riêng đối với ứng dụng Schooltool"
 msgid "Title of the group."
 msgstr "Tiêu đề của nhóm"
 
-#: /src/schooltool/skin/breadcrumbs.py:76
-msgid "top"
-msgstr "trên"
-
 #: /src/schooltool/skin/flourish/instance/skin.zcml:50
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
@@ -7518,6 +7571,10 @@ msgstr "Lỗi máy chủ"
 #: /src/schooltool/skin/templates/notfound.pt:11
 msgid "Not Found"
 msgstr "Không tìm thấy"
+
+#: /src/schooltool/skin/flourish/report.py:584
+msgid "${title} (continued)"
+msgstr ""
 
 #: /src/schooltool/skin/flourish/templates/image_input.pt:11
 msgid "delete this image"
@@ -7538,10 +7595,6 @@ msgstr ""
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
 msgstr ""
-
-#: /src/schooltool/skin/form.py:64
-msgid "No changes"
-msgstr "Không có thay đổi gì"
 
 #: /src/schooltool/skin/templates/error.pt:15
 #: /src/schooltool/skin/templates/f_error.pt:2
@@ -7632,45 +7685,9 @@ msgstr "Ngày tháng không đúng định dạng yyyy-mm-dd"
 msgid "Year has to be equal or greater than 1900"
 msgstr ""
 
-#: /src/schooltool/skin/widgets.py:111
-msgid "Width"
-msgstr "Độ rộng"
-
-#: /src/schooltool/skin/widgets.py:100
-msgid "Editor frame width"
-msgstr "Độ rộng của khung soạn thảo"
-
-#: /src/schooltool/skin/widgets.py:103
-msgid "Height"
-msgstr "Chiều cao"
-
-#: /src/schooltool/skin/widgets.py:104
-msgid "Editor frame height"
-msgstr "Độ cao của khung soạn thảo"
-
-#: /src/schooltool/skin/widgets.py:107
-msgid "Toolbar configuration"
-msgstr "Cấu hình thanh công cụ"
-
-#: /src/schooltool/skin/widgets.py:108
-msgid "The name of the toolbar configuration to use."
-msgstr "Tên của thanh công cụ vừa cấu hình đã được sử dụng"
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Relative configuration path"
-msgstr "Đường dẫn cấu hình tương đối"
-
-#: /src/schooltool/skin/widgets.py:112
-msgid "Path to the FCKconfiguration javascript file."
-msgstr "Đường dẫn đến cấu hình FCK trong file javaScript"
-
-#: /src/schooltool/skin/widgets.py:137
-msgid "Configuration"
-msgstr "Cấu hình"
-
-#: /src/schooltool/skin/widgets.py:138
-msgid "FCK editor configuration."
-msgstr "Cấu hình FCK"
+#: /src/schooltool/table/pdf.py:637
+msgid "Continued ..."
+msgstr ""
 
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7
