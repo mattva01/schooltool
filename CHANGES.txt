@@ -16,6 +16,8 @@ New features
 Bugfixes
 ++++++++
 
+- Fixed report generation to not do network requests (https://launchpad.net/bugs/1185418).
+- Fixed ratio of school logo in reports
 - Added warning for unsaved changes in the gradebook
 - Comment dialog submits the gradebook
 

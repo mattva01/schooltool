@@ -75,7 +75,7 @@ from schooltool.table.table import CheckboxColumn
 from schooltool.table.interfaces import IFilterWidget
 from schooltool.app.cal import CalendarEvent
 from schooltool.app.browser import ViewPreferences, same
-from schooltool.app.browser import pdfcal
+from schooltool.app import pdf
 from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.app.browser.interfaces import IEventForDisplay
 from schooltool.app.browser.interfaces import IHaveEventLegend
@@ -398,7 +398,7 @@ class CalendarViewBase(BrowserView):
         return url
 
     def pdfURL(self):
-        if pdfcal.disabled:
+        if not pdf.enabled:
             return None
         else:
             assert self.cal_type != 'yearly'
