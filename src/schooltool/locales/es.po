@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-23 19:08+0200\n"
-"PO-Revision-Date: 2013-04-03 14:17+0000\n"
+"POT-Creation-Date: 2013-05-27 19:54+0300\n"
+"PO-Revision-Date: 2013-04-20 02:43+0000\n"
 "Last-Translator: Sebastian Tabares <sytabaresa@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-04-04 05:38+0000\n"
-"X-Generator: Launchpad (build 16546)\n"
+"X-Launchpad-Export-Date: 2013-05-28 05:46+0000\n"
+"X-Generator: Launchpad (build 16640)\n"
 "Language: es\n"
 
 #: /src/schooltool/app/browser/__init__.py:311
@@ -252,10 +252,6 @@ msgstr "Responsables actuales"
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
 msgstr "Disponibles los responsables"
-
-#: /src/schooltool/app/browser/app.py:622
-msgid "school"
-msgstr "colegio"
 
 #: /src/schooltool/app/browser/app.py:741
 #: /src/schooltool/app/browser/flourish.zcml:149
@@ -923,19 +919,6 @@ msgstr "Tipo"
 msgid "Booked by others"
 msgstr "Reservado por otros"
 
-#: /src/schooltool/app/browser/cal.py:2611
-#: /src/schooltool/app/browser/configure.zcml:532
-#: /src/schooltool/app/browser/flourish.zcml:22
-#: /src/schooltool/app/browser/flourish.zcml:32
-#: /src/schooltool/app/browser/flourish.zcml:42
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
-#: /src/schooltool/calendar/browser/flourish.zcml:8
-#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:24
-#: /src/schooltool/resource/browser/flourish.zcml:192
-msgid "Calendar"
-msgstr "Calendario"
-
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
 #: /src/schooltool/app/browser/flourish.zcml:465
@@ -990,6 +973,20 @@ msgstr "Editar Evento"
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
 msgstr "Control de ZODB"
+
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/flourish.zcml:22
+#: /src/schooltool/app/browser/flourish.zcml:32
+#: /src/schooltool/app/browser/flourish.zcml:42
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
+#: /src/schooltool/basicperson/browser/flourish.zcml:808
+#: /src/schooltool/calendar/browser/flourish.zcml:8
+#: /src/schooltool/calendar/browser/flourish.zcml:13
+#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
+#: /src/schooltool/resource/browser/flourish.zcml:223
+msgid "Calendar"
+msgstr "Calendario"
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -2857,7 +2854,15 @@ msgstr ""
 "'contraseña')\n"
 "                         es '-')\n"
 
-#: /src/schooltool/app/main.py:566
+#: /src/schooltool/app/main.py:489
+msgid "Manager password: "
+msgstr ""
+
+#: /src/schooltool/app/main.py:500
+msgid "No configuration file given"
+msgstr ""
+
+#: /src/schooltool/app/main.py:505
 msgid "Reading configuration from %s"
 msgstr "Leyendo configuración de %s"
 
@@ -3520,15 +3525,6 @@ msgstr "Gestionar las asesorías de esta persona"
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:37
 msgid "The person has no advisees."
 msgstr "La persona no tiene asesorias"
-
-#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
-msgstr "Filtrado por..."
 
 #: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
 #: /src/schooltool/person/browser/f_person_filter.pt:26
@@ -5859,6 +5855,10 @@ msgid "School Export"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:79
+msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
 msgstr "no es un número válido"
 
@@ -7668,10 +7668,6 @@ msgstr "El super usuario - propietario de esta aplicación SchoolTool"
 msgid "Title of the group."
 msgstr "Nombre del grupo."
 
-#: /src/schooltool/skin/breadcrumbs.py:76
-msgid "top"
-msgstr "top"
-
 #: /src/schooltool/skin/flourish/instance/skin.zcml:50
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
@@ -7707,10 +7703,6 @@ msgstr ""
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
 msgstr ""
-
-#: /src/schooltool/skin/form.py:64
-msgid "No changes"
-msgstr "Sin cambios"
 
 #: /src/schooltool/skin/templates/error.pt:15
 #: /src/schooltool/skin/templates/f_error.pt:2

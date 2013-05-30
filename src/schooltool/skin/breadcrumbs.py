@@ -30,7 +30,6 @@ from zope.security.management import checkPermission
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.traversing.api import getParents
 
-from schooltool.common import SchoolToolMessage as _
 from schooltool.skin import interfaces
 
 
@@ -73,7 +72,7 @@ class GenericBreadcrumbInfo(object):
         if name is None:
             name = getattr(self.context, '__name__', None)
         if name is None and IContainmentRoot.providedBy(self.context):
-            name = _('top')
+            name = 'top'
         return name
 
     @property

@@ -984,7 +984,7 @@ class ViewRobot(BrowserPage):
         return "User-agent: *\nDisallow: /"
 
 
-SchoolBreadcrumbInfo = CustomNameBreadCrumbInfo(_('school'))
+SchoolBreadcrumbInfo = CustomNameBreadCrumbInfo('school')
 
 
 @adapter(ISchoolToolApplication)

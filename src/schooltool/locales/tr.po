@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-01-23 19:08+0200\n"
-"PO-Revision-Date: 2013-03-19 22:59+0000\n"
-"Last-Translator: Uğur ADIYAMAN <uguradiyaman@gmx.com>\n"
+"POT-Creation-Date: 2013-05-27 19:54+0300\n"
+"PO-Revision-Date: 2013-05-13 05:06+0000\n"
+"Last-Translator: Kaya Zeren <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-21 04:49+0000\n"
-"X-Generator: Launchpad (build 16532)\n"
+"X-Launchpad-Export-Date: 2013-05-28 05:47+0000\n"
+"X-Generator: Launchpad (build 16640)\n"
 "Language: tr\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -259,10 +259,6 @@ msgstr "Geçerli sorumlu taraflar"
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
 msgstr "Müsait veli toplantısı"
-
-#: /src/schooltool/app/browser/app.py:622
-msgid "school"
-msgstr "okul"
 
 #: /src/schooltool/app/browser/app.py:741
 #: /src/schooltool/app/browser/flourish.zcml:149
@@ -932,19 +928,6 @@ msgstr "Tip"
 msgid "Booked by others"
 msgstr "Başkaları tarafından ayrılmış"
 
-#: /src/schooltool/app/browser/cal.py:2611
-#: /src/schooltool/app/browser/configure.zcml:532
-#: /src/schooltool/app/browser/flourish.zcml:22
-#: /src/schooltool/app/browser/flourish.zcml:32
-#: /src/schooltool/app/browser/flourish.zcml:42
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
-#: /src/schooltool/calendar/browser/flourish.zcml:8
-#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:24
-#: /src/schooltool/resource/browser/flourish.zcml:192
-msgid "Calendar"
-msgstr "Takvim"
-
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
 #: /src/schooltool/app/browser/flourish.zcml:465
@@ -999,6 +982,20 @@ msgstr "Etkinlik Düzenle"
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
 msgstr "ZODB Denetimi"
+
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/flourish.zcml:22
+#: /src/schooltool/app/browser/flourish.zcml:32
+#: /src/schooltool/app/browser/flourish.zcml:42
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
+#: /src/schooltool/basicperson/browser/flourish.zcml:808
+#: /src/schooltool/calendar/browser/flourish.zcml:8
+#: /src/schooltool/calendar/browser/flourish.zcml:13
+#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
+#: /src/schooltool/resource/browser/flourish.zcml:223
+msgid "Calendar"
+msgstr "Takvim"
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -2841,10 +2838,6 @@ msgstr "Site genel takvimini site açılış sayfası olarak göster."
 msgid "School logo"
 msgstr "Okul Logosu"
 
-#: /src/schooltool/app/main.py:305
-msgid "Going to background, daemon pid %d"
-msgstr "Daemon pid %d arkaplana alındı"
-
 #: /src/schooltool/app/main.py:361
 msgid "Cannot resolve plugin action order:\n"
 msgstr "Eklenti işlem sırası anlaşılamadı:\n"
@@ -2882,11 +2875,15 @@ msgstr ""
 "yazılmasını \n"
 "                         ister)\n"
 
-#: /src/schooltool/app/main.py:528
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s: art hizmet kipi işletim sisteminiz tarafından desteklenmiyor."
+#: /src/schooltool/app/main.py:489
+msgid "Manager password: "
+msgstr "Müdür parolası "
 
-#: /src/schooltool/app/main.py:566
+#: /src/schooltool/app/main.py:500
+msgid "No configuration file given"
+msgstr "Herhangi bir ayar dosyası belirtilmemiş"
+
+#: /src/schooltool/app/main.py:575
 msgid "Reading configuration from %s"
 msgstr "%s üzerinden yapılandırma okunuyor"
 
@@ -2910,15 +2907,7 @@ msgstr ""
 "\n"
 "Başka bir %s kopyası kullanıyor olabilir mi?"
 
-#: /src/schooltool/app/main.py:767
-msgid ""
-"Warning: could not find the reportlab library.\n"
-"PDF support disabled."
-msgstr ""
-"Uyarı: Reportlab kütüphanesi başlatılamadı.\n"
-"PDF desteği devre dışı."
-
-#: /src/schooltool/app/main.py:773
+#: /src/schooltool/app/main.py:675
 msgid ""
 "Warning: font directories '%s' do not exist.\n"
 "PDF support disabled."
@@ -2934,15 +2923,8 @@ msgstr ""
 "Dikkat: '%s' yazı tipi '%s' yazı tipi klasöründe bulunamadı.\n"
 "PDF desteği devre dışı bırakıldı."
 
-#: /src/schooltool/app/main.py:775
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "Başlangıç zamanı: %.3f saniye Gerçek, %.3f saniye İşlemci"
-
 #: /src/schooltool/app/membership.py:261
-#: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:209
-#: /src/schooltool/group/browser/templates/f_group_view.pt:75
-#: /src/schooltool/group/browser/templates/group.pt:16
+#: /src/schooltool/group/browser/group.pt:16
 msgid "Members"
 msgstr "Üyeler"
 
@@ -3562,15 +3544,6 @@ msgstr "Bu kişinin danışanlarını yönet."
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:37
 msgid "The person has no advisees."
 msgstr "Bu kişinin danışanı yok."
-
-#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
-msgstr "Süz..."
 
 #: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
 #: /src/schooltool/person/browser/f_person_filter.pt:26
@@ -5936,6 +5909,12 @@ msgid "School Export"
 msgstr "Okulu Ver"
 
 #: /src/schooltool/export/importer.py:79
+msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
+msgstr ""
+"SchoolTool bu dosyayı okuyamadı. .xls biçiminde bir hesap sayfası olduğundan "
+"emin misiniz?"
+
+#: /src/schooltool/export/importer.py:69
 msgid "is not a valid integer"
 msgstr "geçerli bir tamsayı değil"
 
@@ -7766,10 +7745,6 @@ msgstr "Süper kullanıcı - bu SchoolTool uygulamasının sahibi."
 msgid "Title of the group."
 msgstr "Grubun başlığı."
 
-#: /src/schooltool/skin/breadcrumbs.py:76
-msgid "top"
-msgstr "başa dön"
-
 #: /src/schooltool/skin/flourish/instance/skin.zcml:50
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
@@ -7805,10 +7780,6 @@ msgstr "Yüklenen dosya JPEG ya da PNG biçiminde bir görsel değil."
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
 msgstr "Yüklenecek görsel ${size} MB boyutundan büyük olamaz"
-
-#: /src/schooltool/skin/form.py:64
-msgid "No changes"
-msgstr "Değişiklik yok"
 
 #: /src/schooltool/skin/templates/error.pt:15
 #: /src/schooltool/skin/templates/f_error.pt:2
@@ -7898,46 +7869,6 @@ msgstr "Tarih zaman karakter dizisi yyyy-aa-gg yapısında değil."
 #: /src/schooltool/skin/widgets.py:103
 msgid "Year has to be equal or greater than 1900"
 msgstr "Yıl 1900 değerinden büyük olmalıdır"
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Width"
-msgstr "Genişlik"
-
-#: /src/schooltool/skin/widgets.py:100
-msgid "Editor frame width"
-msgstr "Düzenleyici çerçeve genişliği"
-
-#: /src/schooltool/skin/widgets.py:103
-msgid "Height"
-msgstr "Yükseklik"
-
-#: /src/schooltool/skin/widgets.py:104
-msgid "Editor frame height"
-msgstr "Düzenleyici çerçeve yüksekliği"
-
-#: /src/schooltool/skin/widgets.py:107
-msgid "Toolbar configuration"
-msgstr "Araç çubuğu yapılandırması"
-
-#: /src/schooltool/skin/widgets.py:108
-msgid "The name of the toolbar configuration to use."
-msgstr "Kullanılacak araç çubuğu yapılandırmasının adı."
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Relative configuration path"
-msgstr "Bağıl yapılandırma yolu"
-
-#: /src/schooltool/skin/widgets.py:112
-msgid "Path to the FCKconfiguration javascript file."
-msgstr "FCKconfiguration javascript dosyasının yolu."
-
-#: /src/schooltool/skin/widgets.py:137
-msgid "Configuration"
-msgstr "Yapılandırma"
-
-#: /src/schooltool/skin/widgets.py:138
-msgid "FCK editor configuration."
-msgstr "FCK düzenleyici yapılandırması."
 
 #: /src/schooltool/table/pdf.py:637
 msgid "Continued ..."

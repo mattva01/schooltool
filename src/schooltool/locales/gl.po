@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-01-15 15:41+0200\n"
+"POT-Creation-Date: 2013-05-27 19:54+0300\n"
 "PO-Revision-Date: 2012-11-10 01:14+0000\n"
 "Last-Translator: ghas <Unknown>\n"
 "Language-Team: Galician <gl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-12 05:01+0000\n"
-"X-Generator: Launchpad (build 16361)\n"
+"X-Launchpad-Export-Date: 2013-05-28 05:43+0000\n"
+"X-Generator: Launchpad (build 16640)\n"
 "Language: gl\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -259,10 +259,6 @@ msgstr ""
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
 msgstr ""
-
-#: /src/schooltool/app/browser/app.py:622
-msgid "school"
-msgstr "escola"
 
 #: /src/schooltool/app/browser/app.py:741
 #: /src/schooltool/app/browser/flourish.zcml:149
@@ -930,19 +926,6 @@ msgstr "Tipo"
 msgid "Booked by others"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:2611
-#: /src/schooltool/app/browser/configure.zcml:532
-#: /src/schooltool/app/browser/flourish.zcml:22
-#: /src/schooltool/app/browser/flourish.zcml:32
-#: /src/schooltool/app/browser/flourish.zcml:42
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
-#: /src/schooltool/calendar/browser/flourish.zcml:8
-#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:24
-#: /src/schooltool/resource/browser/flourish.zcml:192
-msgid "Calendar"
-msgstr "Axenda"
-
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
 #: /src/schooltool/app/browser/flourish.zcml:465
@@ -997,6 +980,20 @@ msgstr "Modificar actividade"
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
 msgstr "Control ZODB"
+
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/flourish.zcml:22
+#: /src/schooltool/app/browser/flourish.zcml:32
+#: /src/schooltool/app/browser/flourish.zcml:42
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
+#: /src/schooltool/basicperson/browser/flourish.zcml:808
+#: /src/schooltool/calendar/browser/flourish.zcml:8
+#: /src/schooltool/calendar/browser/flourish.zcml:13
+#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
+#: /src/schooltool/resource/browser/flourish.zcml:223
+msgid "Calendar"
+msgstr "Axenda"
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -1789,6 +1786,11 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/event_booking.pt:45
 msgid "UnBook"
 msgstr "Anular a reserva"
+
+#: /src/schooltool/app/browser/templates/event_booking.pt:54
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:55
+msgid "Available Resources"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:60
 msgid "Book"
@@ -2757,11 +2759,7 @@ msgstr ""
 msgid "School logo"
 msgstr ""
 
-#: /src/schooltool/app/main.py:305
-msgid "Going to background, daemon pid %d"
-msgstr "Pasamos a background, pid %d"
-
-#: /src/schooltool/app/main.py:361
+#: /src/schooltool/app/main.py:311
 msgid "Cannot resolve plugin action order:\n"
 msgstr ""
 
@@ -2769,11 +2767,39 @@ msgstr ""
 msgid "Run %s -h for help."
 msgstr "Execute %s -h para obter axuda"
 
-#: /src/schooltool/app/main.py:566
+#: /src/schooltool/app/main.py:517
+msgid ""
+"\n"
+"Usage: %s [options]\n"
+"Options:\n"
+"  -c, --config xxx       use this configuration file\n"
+"  -h, --help             show this help message\n"
+"  --pack                 pack the database\n"
+"  -r, --restore-manager password\n"
+"                         restore the manager user with the provided "
+"password\n"
+"                         (read password from the standart input if "
+"'password'\n"
+"                         is '-')\n"
+msgstr ""
+
+#: /src/schooltool/app/main.py:489
+msgid "Manager password: "
+msgstr ""
+
+#: /src/schooltool/app/main.py:500
+msgid "No configuration file given"
+msgstr ""
+
+#: /src/schooltool/app/main.py:505
 msgid "Reading configuration from %s"
 msgstr "Lemos a configuración de %s"
 
-#: /src/schooltool/app/main.py:672
+#: /src/schooltool/app/main.py:513
+msgid "No storage defined in the configuration file."
+msgstr ""
+
+#: /src/schooltool/app/main.py:633
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2789,15 +2815,7 @@ msgstr ""
 "\n"
 "Se cadra outra instancia %s está a usalo?"
 
-#: /src/schooltool/app/main.py:767
-msgid ""
-"Warning: could not find the reportlab library.\n"
-"PDF support disabled."
-msgstr ""
-"Aviso: non se puido atopar a libraría reportlab.\n"
-"O soporte para PDF está desactivado."
-
-#: /src/schooltool/app/main.py:773
+#: /src/schooltool/app/main.py:675
 msgid ""
 "Warning: font directories '%s' do not exist.\n"
 "PDF support disabled."
@@ -3082,6 +3100,12 @@ msgstr ""
 msgid "This ID is not unique."
 msgstr ""
 
+#: /src/schooltool/basicperson/browser/flourish.zcml:11
+#: /src/schooltool/basicperson/browser/flourish.zcml:16
+#: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
+msgid "People"
+msgstr ""
+
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
 msgstr ""
@@ -3104,6 +3128,10 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/flourish.zcml:141
 #: /src/schooltool/basicperson/browser/person.py:999
 msgid "Add new administrator"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:153
+msgid "Person"
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:161
@@ -3183,7 +3211,16 @@ msgid ""
 "number."
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:733
+#: /src/schooltool/basicperson/browser/flourish.zcml:655
+msgid "Person profile, contacts, groups, etc."
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:655
+#: /src/schooltool/basicperson/browser/person.py:1369
+msgid "Profile"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:784
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
 msgstr ""
@@ -3349,6 +3386,15 @@ msgstr ""
 msgid "ID Card: ${person}"
 msgstr ""
 
+#: /src/schooltool/basicperson/browser/person.py:1385
+msgid "Username: ${username}"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:1404
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
+msgid "General Information"
+msgstr ""
+
 #: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
@@ -3390,15 +3436,6 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:37
 msgid "The person has no advisees."
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
@@ -3489,12 +3526,8 @@ msgstr ""
 msgid "Limited"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
-msgid "General Information"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:6
-#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:25
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:10
+#: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:29
 msgid "Edit this person's information"
 msgstr ""
 
@@ -4488,6 +4521,33 @@ msgstr ""
 msgid "Import Students"
 msgstr ""
 
+#: /src/schooltool/course/browser/flourish.zcml:644
+msgid "Roster"
+msgstr ""
+
+#: /src/schooltool/course/browser/flourish.zcml:644
+msgid "Students and instructors of a section"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:11
+msgid "Students (continued)"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:14
+#: /src/schooltool/resource/browser/rml/resource_report.pt:18
+#: /src/schooltool/skin/flourish/rml/pdf_form.pt:14
+#: /src/schooltool/table/rml/grid_part.pt:42
+msgid "Continued on next page &gt;"
+msgstr ""
+
+#: /src/schooltool/course/browser/rml/section_roster.pt:23
+#: /src/schooltool/course/browser/templates/f_section_roster_rml.pt:15
+#: /src/schooltool/person/browser/person.py:594
+#: /src/schooltool/person/browser/person.py:683
+#: /src/schooltool/person/interfaces.py:52
+msgid "Full name"
+msgstr ""
+
 #: /src/schooltool/course/browser/section-member-csvimport.pt:4
 msgid "Upload SchoolTool section members as CSV"
 msgstr ""
@@ -4610,6 +4670,14 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1435
 msgid "Link ${section} to Section in Other Term"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1833
+msgid "Section Roster"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1853
+msgid "Instructors: ${instructors}"
 msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
@@ -5187,7 +5255,8 @@ msgid ""
 msgstr ""
 
 #: /src/schooltool/course/security.zcml:74
-msgid "A course in SchoolTool describes a set curriculum taught in a section."
+msgid ""
+"A course in SchoolTool describes a set curriculum taught in a section."
 msgstr ""
 
 #: /src/schooltool/course/security.zcml:79
@@ -5622,6 +5691,10 @@ msgid "School Export"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:79
+msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
 msgstr ""
 
@@ -6014,6 +6087,11 @@ msgstr ""
 msgid "ID Cards for Group: ${group}"
 msgstr ""
 
+#: /src/schooltool/group/browser/group.py:887
+#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:5
+msgid "Group memberships"
+msgstr ""
+
 #: /src/schooltool/group/browser/templates/f_group_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/group-csvimport.pt:24
 msgid ""
@@ -6069,10 +6147,6 @@ msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_group_view.pt:102
 msgid "This group has no responsible parties"
-msgstr ""
-
-#: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:5
-msgid "Group memberships"
 msgstr ""
 
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:6
@@ -6387,15 +6461,9 @@ msgstr ""
 msgid "Wrong password supplied"
 msgstr ""
 
-#: /src/schooltool/person/browser/person.py:507
-#: /src/schooltool/person/browser/person.py:596
-#: /src/schooltool/person/interfaces.py:51
-msgid "Full name"
-msgstr ""
-
-#: /src/schooltool/person/browser/person.py:508
-#: /src/schooltool/person/browser/person.py:597
-#: /src/schooltool/person/interfaces.py:52
+#: /src/schooltool/person/browser/person.py:595
+#: /src/schooltool/person/browser/person.py:684
+#: /src/schooltool/person/interfaces.py:53
 msgid "Name that should be displayed"
 msgstr ""
 
@@ -6642,6 +6710,10 @@ msgstr ""
 msgid "Reserve"
 msgstr ""
 
+#: /src/schooltool/resource/browser/flourish.zcml:452
+msgid "List all resources"
+msgstr ""
+
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
 msgstr ""
@@ -6752,6 +6824,16 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:854
 msgid "Delete ${resource_title}"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:967
+#: /src/schooltool/resource/browser/rml/resource_report.pt:21
+msgid "Resource Report"
+msgstr ""
+
+#: /src/schooltool/resource/browser/rml/resource_report.pt:10
+#: /src/schooltool/resource/browser/rml/resource_report.pt:23
+msgid "Resource Report (continued)"
 msgstr ""
 
 #: /src/schooltool/resource/browser/subtype_widget.pt:8
@@ -7253,6 +7335,11 @@ msgstr ""
 msgid "Edit the access rights"
 msgstr ""
 
+#: /src/schooltool/securitypolicy/browser/templates/f_security_descriptions.pt:48
+#: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:56
+msgid "Legend"
+msgstr ""
+
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:9
 msgid "Access rights"
 msgstr ""
@@ -7345,10 +7432,6 @@ msgstr ""
 msgid "Title of the group."
 msgstr ""
 
-#: /src/schooltool/skin/breadcrumbs.py:76
-msgid "top"
-msgstr ""
-
 #: /src/schooltool/skin/flourish/instance/skin.zcml:50
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
@@ -7359,6 +7442,10 @@ msgstr ""
 #: /src/schooltool/skin/templates/notfound.pt:3
 #: /src/schooltool/skin/templates/notfound.pt:11
 msgid "Not Found"
+msgstr ""
+
+#: /src/schooltool/skin/flourish/report.py:584
+msgid "${title} (continued)"
 msgstr ""
 
 #: /src/schooltool/skin/flourish/templates/image_input.pt:11
@@ -7379,10 +7466,6 @@ msgstr ""
 
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
-msgstr ""
-
-#: /src/schooltool/skin/form.py:64
-msgid "No changes"
 msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:15
@@ -7466,8 +7549,14 @@ msgstr ""
 msgid "Year has to be equal or greater than 1900"
 msgstr ""
 
+#: /src/schooltool/table/pdf.py:637
+msgid "Continued ..."
+msgstr ""
+
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7
+#: /src/schooltool/table/templates/f_batch.pt:8
+#: /src/schooltool/table/templates/f_batch.pt:10
 msgid "&laquo; Previous"
 msgstr ""
 

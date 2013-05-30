@@ -32,7 +32,7 @@
     <div class="row" tal:define="course_id view/search_course_id">
       <div class="label">
         <label tal:attributes="for course_id">
-          <span i18n:translate="">Filter by...</span>
+          <span i18n:translate="">Course</span>
         </label>
       </div>
       <div class="widget">

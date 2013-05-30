@@ -103,7 +103,7 @@ def test_breadcrumbs():
 
       >>> generic_root = breadcrumbs.GenericBreadcrumbInfo(root, request)
       >>> generic_root.name
-      u'top'
+      'top'
 
     Now, a common use case is to specify a custom name for the breadcrumbs. In
     those cases you simply create a class as follows:

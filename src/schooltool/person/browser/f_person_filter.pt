@@ -17,7 +17,7 @@
   <div class="row">
     <div class="label">
       <label for="SEARCH_GROUP">
-        <span i18n:translate="">Filter by...</span>
+        <span i18n:translate="">Group</span>
       </label>
     </div>
     <div class="widget">

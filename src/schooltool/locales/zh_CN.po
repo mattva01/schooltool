@@ -8,15 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-23 19:08+0200\n"
-"PO-Revision-Date: 2013-03-08 01:19+0000\n"
+"POT-Creation-Date: 2013-05-27 19:54+0300\n"
+"PO-Revision-Date: 2013-04-20 02:33+0000\n"
 "Last-Translator: Li Jin <lijin@lijinit.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-09 05:25+0000\n"
-"X-Generator: Launchpad (build 16523)\n"
+"X-Launchpad-Export-Date: 2013-05-28 05:48+0000\n"
+"X-Generator: Launchpad (build 16640)\n"
 "Language: \n"
 
 #: /src/schooltool/app/app.py:193
@@ -259,10 +259,6 @@ msgstr "当前负责团体"
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
 msgstr ""
-
-#: /src/schooltool/app/browser/app.py:622
-msgid "school"
-msgstr "学校"
 
 #: /src/schooltool/app/browser/app.py:741
 #: /src/schooltool/app/browser/flourish.zcml:149
@@ -930,19 +926,6 @@ msgstr "类型"
 msgid "Booked by others"
 msgstr "其他人订阅"
 
-#: /src/schooltool/app/browser/cal.py:2611
-#: /src/schooltool/app/browser/configure.zcml:532
-#: /src/schooltool/app/browser/flourish.zcml:22
-#: /src/schooltool/app/browser/flourish.zcml:32
-#: /src/schooltool/app/browser/flourish.zcml:42
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
-#: /src/schooltool/calendar/browser/flourish.zcml:8
-#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:24
-#: /src/schooltool/resource/browser/flourish.zcml:192
-msgid "Calendar"
-msgstr "日历"
-
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
 #: /src/schooltool/app/browser/flourish.zcml:465
@@ -997,6 +980,20 @@ msgstr "编辑事件"
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
 msgstr "ZODB 控制"
+
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/flourish.zcml:22
+#: /src/schooltool/app/browser/flourish.zcml:32
+#: /src/schooltool/app/browser/flourish.zcml:42
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
+#: /src/schooltool/basicperson/browser/flourish.zcml:808
+#: /src/schooltool/calendar/browser/flourish.zcml:8
+#: /src/schooltool/calendar/browser/flourish.zcml:13
+#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
+#: /src/schooltool/resource/browser/flourish.zcml:223
+msgid "Calendar"
+msgstr "日历"
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -2750,11 +2747,7 @@ msgstr "将日历显示为整个网站的首页"
 msgid "School logo"
 msgstr ""
 
-#: /src/schooltool/app/main.py:305
-msgid "Going to background, daemon pid %d"
-msgstr "后台处理，后台程序 pid %d"
-
-#: /src/schooltool/app/main.py:361
+#: /src/schooltool/app/main.py:311
 msgid "Cannot resolve plugin action order:\n"
 msgstr "无法解决插件动作请求：\n"
 
@@ -2771,8 +2764,10 @@ msgid ""
 "  -h, --help             show this help message\n"
 "  --pack                 pack the database\n"
 "  -r, --restore-manager password\n"
-"                         restore the manager user with the provided password\n"
-"                         (read password from the standart input if 'password'\n"
+"                         restore the manager user with the provided "
+"password\n"
+"                         (read password from the standart input if "
+"'password'\n"
 "                         is '-')\n"
 msgstr ""
 "\n"
@@ -2786,11 +2781,15 @@ msgstr ""
 "                         (从标准输入中读取密码如果参数 'password'\n"
 "                         是 '-')\n"
 
-#: /src/schooltool/app/main.py:528
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s:你的操作系统不支持后台运行"
+#: /src/schooltool/app/main.py:489
+msgid "Manager password: "
+msgstr ""
 
-#: /src/schooltool/app/main.py:566
+#: /src/schooltool/app/main.py:500
+msgid "No configuration file given"
+msgstr ""
+
+#: /src/schooltool/app/main.py:505
 msgid "Reading configuration from %s"
 msgstr "从 %s 读入配置"
 
@@ -2814,15 +2813,7 @@ msgstr ""
 "\n"
 "可能其他的 %s 正在使用它？"
 
-#: /src/schooltool/app/main.py:767
-msgid ""
-"Warning: could not find the reportlab library.\n"
-"PDF support disabled."
-msgstr ""
-"警告：没有找到 reportlab 库。\n"
-"PDF 支持已禁用。"
-
-#: /src/schooltool/app/main.py:773
+#: /src/schooltool/app/main.py:675
 msgid ""
 "Warning: font directories '%s' do not exist.\n"
 "PDF support disabled."
@@ -2838,13 +2829,9 @@ msgstr ""
 "警告：字体 '%s' 在字体目录 '%s' 中不存在。\n"
 "PDF 支持已禁用。"
 
-#: /src/schooltool/app/main.py:775
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "启动时间: %.3f sec real, %.3f sec CPU"
-
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:209
+#: /src/schooltool/group/browser/flourish.zcml:227
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
@@ -3114,6 +3101,12 @@ msgstr "请输入一个有效 ID"
 #: /src/schooltool/basicperson/browser/demographics.py:588
 msgid "This ID is not unique."
 msgstr "该 ID 不唯一。"
+
+#: /src/schooltool/basicperson/browser/flourish.zcml:11
+#: /src/schooltool/basicperson/browser/flourish.zcml:16
+#: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
+msgid "People"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
@@ -3445,15 +3438,6 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:37
 msgid "The person has no advisees."
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
@@ -5720,6 +5704,10 @@ msgid "School Export"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:79
+msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
 msgstr ""
 
@@ -7475,10 +7463,6 @@ msgstr ""
 msgid "Title of the group."
 msgstr "组群标题"
 
-#: /src/schooltool/skin/breadcrumbs.py:76
-msgid "top"
-msgstr "顶部"
-
 #: /src/schooltool/skin/flourish/instance/skin.zcml:50
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
@@ -7514,10 +7498,6 @@ msgstr ""
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
 msgstr ""
-
-#: /src/schooltool/skin/form.py:64
-msgid "No changes"
-msgstr "未更改"
 
 #: /src/schooltool/skin/templates/error.pt:15
 #: /src/schooltool/skin/templates/f_error.pt:2
@@ -7601,30 +7581,6 @@ msgstr "日期时间字符串与 yyyy-mm-dd 模型不匹配"
 #: /src/schooltool/skin/widgets.py:103
 msgid "Year has to be equal or greater than 1900"
 msgstr ""
-
-#: /src/schooltool/skin/widgets.py:111
-msgid "Width"
-msgstr "宽度"
-
-#: /src/schooltool/skin/widgets.py:100
-msgid "Editor frame width"
-msgstr "编辑器框架宽度"
-
-#: /src/schooltool/skin/widgets.py:103
-msgid "Height"
-msgstr "高度"
-
-#: /src/schooltool/skin/widgets.py:104
-msgid "Editor frame height"
-msgstr "编辑器框架高度"
-
-#: /src/schooltool/skin/widgets.py:107
-msgid "Toolbar configuration"
-msgstr "工具栏配置"
-
-#: /src/schooltool/skin/widgets.py:137
-msgid "Configuration"
-msgstr "配置"
 
 #: /src/schooltool/table/pdf.py:637
 msgid "Continued ..."

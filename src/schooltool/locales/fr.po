@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-01-23 19:08+0200\n"
-"PO-Revision-Date: 2013-03-07 21:01+0000\n"
-"Last-Translator: lann <lann@worldonline.fr>\n"
+"POT-Creation-Date: 2013-05-27 19:54+0300\n"
+"PO-Revision-Date: 2013-05-25 07:05+0000\n"
+"Last-Translator: GHOSTnew <ghostnew@team-mondial.net>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-08 05:10+0000\n"
-"X-Generator: Launchpad (build 16523)\n"
+"X-Launchpad-Export-Date: 2013-05-28 05:43+0000\n"
+"X-Generator: Launchpad (build 16640)\n"
 "Language: fr\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -293,10 +293,6 @@ msgstr "Titulaires actuels"
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
 msgstr "Titulaires disponibles"
-
-#: /src/schooltool/app/browser/app.py:622
-msgid "school"
-msgstr "école"
 
 #: /src/schooltool/app/browser/app.py:741
 #: /src/schooltool/app/browser/flourish.zcml:149
@@ -966,19 +962,6 @@ msgstr "Type"
 msgid "Booked by others"
 msgstr "Réservé par d'autres"
 
-#: /src/schooltool/app/browser/cal.py:2611
-#: /src/schooltool/app/browser/configure.zcml:532
-#: /src/schooltool/app/browser/flourish.zcml:22
-#: /src/schooltool/app/browser/flourish.zcml:32
-#: /src/schooltool/app/browser/flourish.zcml:42
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
-#: /src/schooltool/calendar/browser/flourish.zcml:8
-#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:24
-#: /src/schooltool/resource/browser/flourish.zcml:192
-msgid "Calendar"
-msgstr "Calendrier"
-
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
 #: /src/schooltool/app/browser/flourish.zcml:465
@@ -1033,6 +1016,20 @@ msgstr "Modifier l'Évènement"
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
 msgstr "Contrôle ZODB"
+
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/flourish.zcml:22
+#: /src/schooltool/app/browser/flourish.zcml:32
+#: /src/schooltool/app/browser/flourish.zcml:42
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
+#: /src/schooltool/basicperson/browser/flourish.zcml:808
+#: /src/schooltool/calendar/browser/flourish.zcml:8
+#: /src/schooltool/calendar/browser/flourish.zcml:13
+#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
+#: /src/schooltool/resource/browser/flourish.zcml:223
+msgid "Calendar"
+msgstr "Calendrier"
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -2865,10 +2862,6 @@ msgstr "Afficher le calendrier complet sur la page de garde."
 msgid "School logo"
 msgstr "Logo de l'école"
 
-#: /src/schooltool/app/main.py:305
-msgid "Going to background, daemon pid %d"
-msgstr "Mettre le daemon pid %d en arrière plan"
-
 #: /src/schooltool/app/main.py:361
 msgid "Cannot resolve plugin action order:\n"
 msgstr "Impossible de résoudre l'ordre d'action des plugins :\n"
@@ -2886,8 +2879,10 @@ msgid ""
 "  -h, --help             show this help message\n"
 "  --pack                 pack the database\n"
 "  -r, --restore-manager password\n"
-"                         restore the manager user with the provided password\n"
-"                         (read password from the standart input if 'password'\n"
+"                         restore the manager user with the provided "
+"password\n"
+"                         (read password from the standart input if "
+"'password'\n"
 "                         is '-')\n"
 msgstr ""
 "\n"
@@ -2897,15 +2892,20 @@ msgstr ""
 "  -h, --help           affiche ce message d'aide\n"
 "  --pack               pack the database\n"
 "  -r, --restore-manager password\n"
-"                       restaure le compte du gestionnaire avec le mot de passe\n"
+"                       restaure le compte du gestionnaire avec le mot de "
+"passe\n"
 "                       indiqué (lit le mot de passe à partir de l'entrée\n"
 "                       standard si 'password' prend la valeur '-')\n"
 
-#: /src/schooltool/app/main.py:528
-msgid "%s: daemon mode not supported on your operating system."
-msgstr "%s : Ce daemon n'est pas supporté par votre système d'exploitation"
+#: /src/schooltool/app/main.py:489
+msgid "Manager password: "
+msgstr "Gestionnaire de mot de passe : "
 
-#: /src/schooltool/app/main.py:566
+#: /src/schooltool/app/main.py:500
+msgid "No configuration file given"
+msgstr "Aucun fichier de configuration donné"
+
+#: /src/schooltool/app/main.py:575
 msgid "Reading configuration from %s"
 msgstr "Lire la configuration depuis %s"
 
@@ -2929,15 +2929,7 @@ msgstr ""
 "\n"
 "Peut être une autre instance de %s est utilisé ?"
 
-#: /src/schooltool/app/main.py:767
-msgid ""
-"Warning: could not find the reportlab library.\n"
-"PDF support disabled."
-msgstr ""
-"Avertissement : Impossible de trouver la librairie reportlab.\n"
-"Le support PDF est désactivé."
-
-#: /src/schooltool/app/main.py:773
+#: /src/schooltool/app/main.py:675
 msgid ""
 "Warning: font directories '%s' do not exist.\n"
 "PDF support disabled."
@@ -2954,15 +2946,8 @@ msgstr ""
 "polices « %s ».\n"
 "Prise en charge PDF désactivé."
 
-#: /src/schooltool/app/main.py:775
-msgid "Startup time: %.3f sec real, %.3f sec CPU"
-msgstr "Démarré : %.3f sec Reel,  %.3f sec CPU"
-
 #: /src/schooltool/app/membership.py:261
-#: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:209
-#: /src/schooltool/group/browser/templates/f_group_view.pt:75
-#: /src/schooltool/group/browser/templates/group.pt:16
+#: /src/schooltool/group/browser/group.pt:16
 msgid "Members"
 msgstr "Membres"
 
@@ -3585,15 +3570,6 @@ msgstr "Gérer les personnes que cette personne conseille"
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:37
 msgid "The person has no advisees."
 msgstr "La personne n'a pas de personne à conseiller"
-
-#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
-msgstr "Filtrer par..."
 
 #: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
 #: /src/schooltool/person/browser/f_person_filter.pt:26
@@ -5985,6 +5961,10 @@ msgid "School Export"
 msgstr "Export de l'Ecole"
 
 #: /src/schooltool/export/importer.py:79
+msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
+msgstr "SchoolTool ne peut pas lire ce fichier. Est-il au format .xls?"
+
+#: /src/schooltool/export/importer.py:69
 msgid "is not a valid integer"
 msgstr "n'est pas un entier valide"
 
@@ -7846,10 +7826,6 @@ msgstr ""
 msgid "Title of the group."
 msgstr "Nom du groupe."
 
-#: /src/schooltool/skin/breadcrumbs.py:76
-msgid "top"
-msgstr "Haut"
-
 #: /src/schooltool/skin/flourish/instance/skin.zcml:50
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
@@ -7886,10 +7862,6 @@ msgstr "Le fichier chargé n'est ni une image JPEG ni un PNG"
 msgid "The image uploaded cannot be larger than ${size} MB"
 msgstr ""
 "L'image téléchargée ne peut pas avoir une taille de plus de ${size} MB"
-
-#: /src/schooltool/skin/form.py:64
-msgid "No changes"
-msgstr "Aucune modifications"
 
 #: /src/schooltool/skin/templates/error.pt:15
 #: /src/schooltool/skin/templates/f_error.pt:2

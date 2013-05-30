@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-01-23 19:08+0200\n"
-"PO-Revision-Date: 2013-04-17 17:43+0300\n"
-"Last-Translator: mathinan <mathinan@jaansi.com>\n"
+"POT-Creation-Date: 2013-05-27 19:54+0300\n"
+"PO-Revision-Date: 2013-05-29 18:37+0300\n"
+"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Thai <th@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-03-26 05:02+0000\n"
-"X-Generator: Launchpad (build 16540)\n"
+"X-Launchpad-Export-Date: 2013-05-28 05:47+0000\n"
+"X-Generator: Launchpad (build 16640)\n"
 
 #: /src/schooltool/app/app.py:193
 msgid "Your School"
@@ -257,10 +257,6 @@ msgstr "บุคคลที่รับผิดชอบในปัจจุ
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
 msgstr "บุคคลที่รับผิดชอบที่มี"
-
-#: /src/schooltool/app/browser/app.py:622
-msgid "school"
-msgstr "โรงเรียน"
 
 #: /src/schooltool/app/browser/app.py:741
 #: /src/schooltool/app/browser/flourish.zcml:149
@@ -928,19 +924,6 @@ msgstr "ประเภท"
 msgid "Booked by others"
 msgstr "จองโดยอื่นๆ"
 
-#: /src/schooltool/app/browser/cal.py:2611
-#: /src/schooltool/app/browser/configure.zcml:532
-#: /src/schooltool/app/browser/flourish.zcml:22
-#: /src/schooltool/app/browser/flourish.zcml:32
-#: /src/schooltool/app/browser/flourish.zcml:42
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
-#: /src/schooltool/calendar/browser/flourish.zcml:8
-#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:24
-#: /src/schooltool/resource/browser/flourish.zcml:192
-msgid "Calendar"
-msgstr "ปฏิทิน"
-
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
 #: /src/schooltool/app/browser/flourish.zcml:465
@@ -995,6 +978,20 @@ msgstr "แก้ไขเหตุการณ์"
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
 msgstr ""
+
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/flourish.zcml:22
+#: /src/schooltool/app/browser/flourish.zcml:32
+#: /src/schooltool/app/browser/flourish.zcml:42
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
+#: /src/schooltool/basicperson/browser/flourish.zcml:808
+#: /src/schooltool/calendar/browser/flourish.zcml:8
+#: /src/schooltool/calendar/browser/flourish.zcml:13
+#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
+#: /src/schooltool/resource/browser/flourish.zcml:223
+msgid "Calendar"
+msgstr "ปฏิทิน"
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -2739,11 +2736,39 @@ msgstr "Cannot resolve plugin action order:\n"
 msgid "Run %s -h for help."
 msgstr "สั่งงาน %s -h เพื่อการช่วยเหลือ"
 
-#: /src/schooltool/app/main.py:566
+#: /src/schooltool/app/main.py:517
+msgid ""
+"\n"
+"Usage: %s [options]\n"
+"Options:\n"
+"  -c, --config xxx       use this configuration file\n"
+"  -h, --help             show this help message\n"
+"  --pack                 pack the database\n"
+"  -r, --restore-manager password\n"
+"                         restore the manager user with the provided "
+"password\n"
+"                         (read password from the standart input if "
+"'password'\n"
+"                         is '-')\n"
+msgstr ""
+
+#: /src/schooltool/app/main.py:489
+msgid "Manager password: "
+msgstr ""
+
+#: /src/schooltool/app/main.py:500
+msgid "No configuration file given"
+msgstr ""
+
+#: /src/schooltool/app/main.py:505
 msgid "Reading configuration from %s"
 msgstr "กำลังอ่านการตั้งค่าจาก %s"
 
-#: /src/schooltool/app/main.py:672
+#: /src/schooltool/app/main.py:513
+msgid "No storage defined in the configuration file."
+msgstr ""
+
+#: /src/schooltool/app/main.py:633
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2754,8 +2779,6 @@ msgid ""
 "\n"
 "Perhaps another %s instance is using it?"
 msgstr ""
-"\n"
-"Perhaps another %s instance is using it?"
 
 #: /src/schooltool/app/main.py:773
 msgid ""
@@ -3389,15 +3412,6 @@ msgstr "จัดการผู้ที่อยู่ในที่ปรึ
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:37
 msgid "The person has no advisees."
 msgstr "บุคคลนี้ไม่มีผู้ที่อยู่ในที่ปรึกษา"
-
-#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
-msgstr "กรองข้อมูลโดย"
 
 #: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
 #: /src/schooltool/person/browser/f_person_filter.pt:26
@@ -5685,12 +5699,19 @@ msgid ""
 "including students, contacts, years, terms, courses, groups and timetables.  "
 "Can be modified and re-imported."
 msgstr ""
+"A single .xls spreadsheet containing the basic structure of the school, "
+"including students, contacts, years, terms, courses, groups and timetables. "
+"Can be modified and re-imported."
 
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School Export"
 msgstr "การส่งออกโรงเรียน"
 
 #: /src/schooltool/export/importer.py:79
+msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
 msgstr "ตัวเลขจำนวนเต็มไม่ถูกต้อง"
 
@@ -7463,10 +7484,6 @@ msgstr "เจ้าของระบบ SchoolTool"
 msgid "Title of the group."
 msgstr "ชื่อของกลุ่ม"
 
-#: /src/schooltool/skin/breadcrumbs.py:76
-msgid "top"
-msgstr "บนสุด"
-
 #: /src/schooltool/skin/flourish/instance/skin.zcml:50
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
@@ -7502,10 +7519,6 @@ msgstr "ไฟล์ที่อัพโหลดต้องไม่ใช่
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
 msgstr "รูปภาพที่อัพโหลดต้องไม่ใหญ่กว่า  ${size} MB"
-
-#: /src/schooltool/skin/form.py:64
-msgid "No changes"
-msgstr "ไม่เปลี่ยนแปลง"
 
 #: /src/schooltool/skin/templates/error.pt:15
 #: /src/schooltool/skin/templates/f_error.pt:2

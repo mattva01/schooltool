@@ -24,6 +24,12 @@ Cleanup
 
 - Removed Person XML reports
 
+Language
+++++++++
+
+- Replaced Filter by... labels
+- Updated Italian, Greek, Portuguese, and other translations.
+
 
 2.4.0 (2013-04-19)
 ------------------
@@ -32,7 +38,7 @@ Cleanup
 - Fix PDF reports crashing with newer z3c.rml (https://launchpad.net/bugs/1169723)
 - Remove dependency on ``zope.app.server``
 - Remove or deprecate unused schooltool.conf options
-- Do not echo password being entered using schooltool-server --restore-manager -
+- Do not echo password being entered using ``schooltool-server --restore-manager -``
 
 
 2.4b1 (2013-04-17)

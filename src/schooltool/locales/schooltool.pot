@@ -17,7 +17,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2013-04-19 19:08+0300\n"
+"POT-Creation-Date: 2013-05-27 19:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -265,10 +265,6 @@ msgstr ""
 
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
-msgstr ""
-
-#: /src/schooltool/app/browser/app.py:622
-msgid "school"
 msgstr ""
 
 #: /src/schooltool/app/browser/app.py:741
@@ -937,19 +933,6 @@ msgstr ""
 msgid "Booked by others"
 msgstr ""
 
-#: /src/schooltool/app/browser/cal.py:2611
-#: /src/schooltool/app/browser/configure.zcml:532
-#: /src/schooltool/app/browser/flourish.zcml:22
-#: /src/schooltool/app/browser/flourish.zcml:32
-#: /src/schooltool/app/browser/flourish.zcml:42
-#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
-#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
-#: /src/schooltool/calendar/browser/flourish.zcml:8
-#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:24
-#: /src/schooltool/resource/browser/flourish.zcml:192
-msgid "Calendar"
-msgstr ""
-
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
 #: /src/schooltool/app/browser/flourish.zcml:465
@@ -1003,6 +986,20 @@ msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
+msgstr ""
+
+#: /src/schooltool/app/browser/configure.zcml:514
+#: /src/schooltool/app/browser/flourish.zcml:22
+#: /src/schooltool/app/browser/flourish.zcml:32
+#: /src/schooltool/app/browser/flourish.zcml:42
+#: /src/schooltool/app/browser/templates/calendar_tab_viewlet.pt:3
+#: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:3
+#: /src/schooltool/basicperson/browser/flourish.zcml:808
+#: /src/schooltool/calendar/browser/flourish.zcml:8
+#: /src/schooltool/calendar/browser/flourish.zcml:13
+#: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
+#: /src/schooltool/resource/browser/flourish.zcml:223
+msgid "Calendar"
 msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:545
@@ -3300,15 +3297,6 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:37
 msgid "The person has no advisees."
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:39
-#: /src/schooltool/course/browser/templates/f_section_table_filter.pt:35
-#: /src/schooltool/person/browser/f_person_filter.pt:20
-#: /src/schooltool/person/browser/f_person_table_filter.pt:39
-#: /src/schooltool/resource/browser/templates/f_resource_filter.pt:20
-#: /src/schooltool/resource/browser/templates/f_resource_table_filter.pt:33
-msgid "Filter by..."
 msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
@@ -7130,10 +7118,6 @@ msgstr ""
 msgid "Title of the group."
 msgstr ""
 
-#: /src/schooltool/skin/breadcrumbs.py:76
-msgid "top"
-msgstr ""
-
 #: /src/schooltool/skin/flourish/instance/skin.zcml:50
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:12
@@ -7168,10 +7152,6 @@ msgstr ""
 
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
-msgstr ""
-
-#: /src/schooltool/skin/form.py:64
-msgid "No changes"
 msgstr ""
 
 #: /src/schooltool/skin/templates/error.pt:15
