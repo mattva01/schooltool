@@ -13,18 +13,27 @@ New features
 - Messages about finished background tasks
 - Added resource library for filtered/chart reports
 
-Bugfixes
-++++++++
-
-- Fixed report generation to not do network requests (https://launchpad.net/bugs/1185418).
-- Fixed ratio of school logo in reports
-- Added warning for unsaved changes in the gradebook
-- Comment dialog submits the gradebook
-
 Cleanup
 +++++++
 
 - Removed Person XML reports
+
+
+2.4.1 (2013-05-30)
+------------------
+
+Reports
++++++++
+
+- Fixed report generation to not do network requests (https://launchpad.net/bugs/1185418).
+- Fixed ratio of school logo.
+- Fixed rendering of "&" in headers.
+
+Bugfixes
+++++++++
+
+- Warn about unsaved changes when leaving gradebook (https://launchpad.net/bugs/907999)
+- Comment dialog submits the gradebook
 
 Language
 ++++++++

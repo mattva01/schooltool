@@ -26,7 +26,7 @@ And read it:
     >>> xls = downloads.read()
 
     >>> print xls
-    <xlrd.Book object ...>
+    <xlrd...Book object ...>
 
 Exported XLS is not in the new list anymore (but we could still
 use downloads.get(name=xxx) or downloads.read(name=xxx) to get it later)
