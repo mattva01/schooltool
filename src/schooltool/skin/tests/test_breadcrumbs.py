@@ -126,7 +126,7 @@ def test_breadcrumbs():
       >>> crumbs = breadcrumbs.Breadcrumbs(sub1, request)
       >>> pprint(list(crumbs.crumbs))
       [{'active': False,
-        'name': u'top',
+        'name': 'top',
         'url': 'http://127.0.0.1'},
        {'active': False,
         'name': 'Sub-Object 1',
@@ -144,7 +144,7 @@ def test_breadcrumbs():
       >>> crumbs = breadcrumbs.Breadcrumbs(sub1, request)
       >>> pprint(list(crumbs.crumbs))
       [{'active': False,
-        'name': u'top',
+        'name': 'top',
         'url': 'http://127.0.0.1'},
        {'active': True,
         'name': 'Sub-Object 1',
@@ -155,7 +155,7 @@ def test_breadcrumbs():
       >>> allow = False
       >>> pprint(list(crumbs.crumbs))
       [{'active': False,
-        'name': u'top',
+        'name': 'top',
         'url': 'http://127.0.0.1'},
        {'active': False,
         'name': 'Sub-Object 1',
