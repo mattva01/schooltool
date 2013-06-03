@@ -15,5 +15,14 @@
       </tr>
     </tbody>
   </table>
-  <metal:block use-macro="macro:form" />
+  <metal:block use-macro="macro:form">
+    <div metal:fill-slot="extra-widgets">
+      <input name="file_type" type="hidden"
+             tal:attributes="value view/request/file_type|nothing"
+             tal:condition="view/request/file_type|nothing" />
+      <input name="description" type="hidden"
+             tal:attributes="value view/request/description|nothing"
+             tal:condition="view/request/description|nothing" />
+    </div>
+  </metal:block>
 </div>
