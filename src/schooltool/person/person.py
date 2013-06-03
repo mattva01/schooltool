@@ -39,7 +39,8 @@ from schooltool.app.overlay import OverlaidCalendarsProperty
 from schooltool.app.catalog import AttributeCatalog
 from schooltool.person import interfaces
 from schooltool.relationship import RelationshipProperty
-from schooltool.securitypolicy.crowds import Crowd, AdministrationCrowd
+from schooltool.securitypolicy.crowds import Crowd, AdministratorsCrowd
+from schooltool.securitypolicy.crowds import ClerksCrowd, ManagersCrowd
 from schooltool.person.interfaces import IPerson
 from schooltool.app.security import ICalendarParentCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd
@@ -160,7 +161,8 @@ class PersonCalendarCrowd(AggregateCrowd):
     implements(ICalendarParentCrowd)
 
     def crowdFactories(self):
-        return [PublicCalendarCrowd, OwnerCrowd]
+        return [PublicCalendarCrowd, ManagersCrowd, ClerksCrowd,
+                AdministratorsCrowd, OwnerCrowd]
 
 
 def getCalendarOwner(calendar):
@@ -203,7 +205,8 @@ class PasswordWriterCrowd(ConfigurableCrowd):
         if self.context.person is super_user:
             person = IPerson(principal, None)
             return same(person, super_user)
-        if AdministrationCrowd(self.context.person).contains(principal):
+        if (ManagersCrowd(self.context.person).contains(principal) or
+            ClerksCrowd(self.context.person).contains(principal)):
             return True
         return (ConfigurableCrowd.contains(self, principal) and
                 OwnerCrowd(self.context.person).contains(principal))

@@ -53,6 +53,7 @@ from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.schoolyear.interfaces import ISubscriber
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
+from schooltool.securitypolicy.crowds import ClerksCrowd, AdministratorsCrowd
 from schooltool.term.term import getNextTerm
 from schooltool.term.interfaces import ITerm
 
@@ -324,7 +325,8 @@ class SectionCalendarViewers(AggregateCrowd):
     adapts(interfaces.ISection)
 
     def crowdFactories(self):
-        return [InstructorsCrowd, LearnersCrowd, SectionCalendarSettingCrowd]
+        return [ClerksCrowd, AdministratorsCrowd,
+                InstructorsCrowd, LearnersCrowd, SectionCalendarSettingCrowd]
 
 
 class PersonLearnerAdapter(object):

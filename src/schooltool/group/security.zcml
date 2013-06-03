@@ -36,20 +36,20 @@
 
   <allow
       interface="schooltool.group.interfaces.IGroupContainer"
-      crowds="administration group_list_viewers"
+      crowds="administrators managers clerks group_list_viewers"
       permission="schooltool.view" />
   <allow
       interface="schooltool.group.interfaces.IGroupContainer"
-      crowds="administration"
+      crowds="managers clerks"
       permission="schooltool.edit" />
 
   <allow
       interface="schooltool.group.interfaces.IGroup"
-      crowds="administration leaders group_viewers"
+      crowds="administrators managers clerks leaders group_viewers"
       permission="schooltool.view" />
   <allow
       interface="schooltool.group.interfaces.IGroup"
-      crowds="administration leaders"
+      crowds="managers clerks leaders"
       permission="schooltool.edit" />
 
   <!-- Security descriptions -->
@@ -125,11 +125,6 @@
      group="schooltool.group"
      crowd_factory="schooltool.app.security.CalendarEditorsCrowd"
      use_crowd_factory=".group.GroupCalendarEditorsCrowd"
-  />
-
-  <describe_crowd
-      crowd_factory=".group.GroupCalendarEditorsCrowd"
-      factory=".group.GroupCalendarEditorsCrowdDescription"
   />
 
 </configure>

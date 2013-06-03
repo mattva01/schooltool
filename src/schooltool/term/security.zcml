@@ -11,7 +11,7 @@
       permission="schooltool.view" />
   <allow
       interface="schooltool.term.interfaces.ITermContainer"
-      crowds="administration"
+      crowds="managers"
       permission="schooltool.edit" />
 
   <!-- Security descriptions -->

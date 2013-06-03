@@ -162,6 +162,7 @@ class SecurityDescriptions(BrowserView):
                          key=lambda a: '%d %s' % (a.order, a.__name__))
         for action in actions:
             snippets = self.getCrowdSnippets(action)
+
             yield {
                 'action': action,
                 'crowds': snippets,

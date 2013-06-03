@@ -32,20 +32,20 @@
 
   <allow
       interface="schooltool.resource.interfaces.IResourceContainer"
-      crowds="administration resource_list_viewers"
+      crowds="administrators managers clerks resource_list_viewers"
       permission="schooltool.view" />
   <allow
       interface="schooltool.resource.interfaces.IResourceContainer"
-      crowds="administration"
+      crowds="managers clerks"
       permission="schooltool.edit" />
 
   <allow
       interface="schooltool.resource.interfaces.IBaseResource"
-      crowds="administration leaders resource_viewers teachers"
+      crowds="administrators managers clerks leaders resource_viewers teachers"
       permission="schooltool.view" />
   <allow
       interface="schooltool.resource.interfaces.IBaseResource"
-      crowds="administration leaders"
+      crowds="managers clerks leaders"
       permission="schooltool.edit" />
 
   <!-- Security descriptions -->

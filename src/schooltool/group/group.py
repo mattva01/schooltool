@@ -53,10 +53,10 @@ from schooltool.relationship import RelationshipProperty
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
-from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
-from schooltool.securitypolicy.crowds import AggregateCrowdDescription
-from schooltool.securitypolicy.metaconfigure import getCrowdsUtility
-from schooltool.securitypolicy.interfaces import ICrowd
+from schooltool.securitypolicy.crowds import AggregateCrowd
+from schooltool.securitypolicy.crowds import AdministratorsCrowd
+from schooltool.securitypolicy.crowds import ManagersCrowd
+from schooltool.securitypolicy.crowds import ClerksCrowd
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -187,34 +187,24 @@ class GroupCalendarViewersCrowd(AggregateCrowd):
     adapts(interfaces.IGroup)
 
     def crowdFactories(self):
-        return [GroupCalendarSettingCrowd, GroupMemberCrowd, LeaderCrowd]
+        return [GroupCalendarSettingCrowd, GroupMemberCrowd, LeaderCrowd,
+                AdministratorsCrowd, ManagersCrowd, ClerksCrowd]
 
 
 class GroupCalendarMemberSettingCrowd(ConfigurableCrowd):
     setting_key = 'members_can_edit_group_calendar'
 
+    def contains(self, principal):
+        return (ConfigurableCrowd.contains(self, principal) and
+                GroupMemberCrowd(self.context).contains(principal))
 
-class GroupCalendarEditorsCrowd(Crowd):
+
+class GroupCalendarEditorsCrowd(AggregateCrowd):
     implements(ICalendarParentCrowd)
     adapts(interfaces.IGroup)
 
-    def contains(self, principal):
-        """Return the value of the related setting (True or False)."""
-        if (GroupCalendarMemberSettingCrowd(self.context).contains(principal) and
-            GroupMemberCrowd(self.context).contains(principal)):
-            return True
-
-        # Fall back to schooltool.edit for IGroup
-        crowd = getAdapter(self.context, ICrowd, name='schooltool.edit')
-        return crowd.contains(principal)
-
-
-class GroupCalendarEditorsCrowdDescription(AggregateCrowdDescription):
-
-    def getFactories(self):
-        crowd_util = getCrowdsUtility()
-        crowds = crowd_util.getFactories('schooltool.edit', interfaces.IGroup)
-        return [GroupCalendarMemberSettingCrowd] + crowds
+    def crowdFactories(self):
+        return [GroupCalendarMemberSettingCrowd, LeaderCrowd]
 
 
 class RemoveGroupsWhenSchoolYearIsDeleted(ObjectEventAdapterSubscriber):

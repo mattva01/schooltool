@@ -4,11 +4,11 @@
 
   <allow
       interface="schooltool.timetable.interfaces.ITimetableContainer"
-      crowds="administration everybody"
+      crowds="everybody"
       permission="schooltool.view" />
   <allow
       interface="schooltool.timetable.interfaces.ITimetableContainer"
-      crowds="administration"
+      crowds="managers"
       permission="schooltool.edit" />
 
   <crowd
@@ -23,12 +23,12 @@
 
   <allow
       interface="schooltool.timetable.interfaces.IScheduleContainer"
-      crowds="administration schedule_viewers"
+      crowds="managers clerks schedule_viewers"
       permission="schooltool.view" />
 
   <allow
       interface="schooltool.timetable.interfaces.IScheduleContainer"
-      crowds="administration"
+      crowds="managers"
       permission="schooltool.edit" />
 
   <!-- Security descriptions -->
