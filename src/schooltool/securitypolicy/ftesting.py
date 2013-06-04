@@ -24,10 +24,7 @@ $Id$
 import os
 
 from schooltool.testing.functional import ZCMLLayer
-from schooltool.skin.skin import ISchoolToolSkin
 
-class ISecurityFtestingSkin(ISchoolToolSkin):
-    """ Skin for securitypolicy testing. """
 
 dir = os.path.abspath(os.path.dirname(__file__))
 filename = os.path.join(dir, 'ftesting.zcml')

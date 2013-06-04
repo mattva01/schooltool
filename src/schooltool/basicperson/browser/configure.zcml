@@ -7,7 +7,6 @@
       name="index.html"
       for="schooltool.person.interfaces.IPersonContainer"
       class=".person.BasicPersonContainerView"
-      layer=".skin.IBasicPersonLayer"
       permission="schooltool.view"
       />
 
@@ -17,7 +16,6 @@
       class=".person.PersonView"
       permission="schooltool.view"
       menu="schooltool_actions"
-      layer=".skin.IBasicPersonLayer"
       title="View"
       />
 
@@ -103,24 +101,21 @@
      for="schooltool.person.interfaces.IPersonContainer"
      class=".person.PersonAddView"
      permission="schooltool.edit"
-     menu="schooltool_actions" title="New Person"
-     layer=".skin.IBasicPersonLayer" />
+     menu="schooltool_actions" title="New Person" />
 
   <page
      name="add_multiple.html"
      for="schooltool.person.interfaces.IPersonContainer"
      class=".person.MultiplePersonAddView"
      permission="schooltool.edit"
-     menu="schooltool_actions" title="Add Multiple Persons"
-     layer=".skin.IBasicPersonLayer" />
+     menu="schooltool_actions" title="Add Multiple Persons" />
 
   <page
      name="person-csvimport.html"
      for="schooltool.person.interfaces.IPersonContainer"
      class=".csvimport.BasicPersonCSVImportView"
      template="templates/person-csvimport.pt"
-     permission="schooltool.edit"
-     layer=".skin.IBasicPersonLayer" />
+     permission="schooltool.edit" />
 
   <zope:adapter
      factory=".person.UsernameValidator" />

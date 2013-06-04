@@ -99,6 +99,7 @@
   <include package="schooltool.app" />
   <include package="schooltool.course" />
   <include package="schooltool.person" />
+  <include package="schooltool.basicperson" />
   <include package="schooltool.contact" />
   <include package="schooltool.group" />
   <include package="schooltool.resource" />

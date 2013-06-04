@@ -14,8 +14,8 @@ Set up
 
 Let's create a person so that we can fool around with his calendar:
 
-    >>> from schooltool.app.browser.ftests.setup import addPerson
-    >>> addPerson('Frog', 'frog', 'pwd')
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Frog', 'Prince', 'frog', 'pwd')
 
 Now let's create some resources that can be booked:
 
@@ -185,7 +185,7 @@ Frog should see the event in the resource calendar too:
                style="background: #7590ae">
         <a style="color: #000;"
            href="...ZHVtbXktdWlk/booking.html?date=2005-02-04">Booked by</a></h6>
-      <a href="http://localhost/persons/frog">Frog</a>
+      <a href="http://localhost/persons/frog">Frog Prince</a>
     </div>
     ...
 
@@ -406,7 +406,7 @@ Unless we are looking at "Test event2" itself:
 
 Let's add another person, frog's boss:
 
-    >>> addPerson('Stork', 'stork', 'pwd')
+    >>> addPerson('Stork', 'Hunter', 'stork', 'pwd')
 
 The boss decides to take a mud bath, so he creates an event.
 
@@ -602,4 +602,4 @@ for frog:
     Booked resources
     fish
     Booked by
-    Frog
+    Frog Prince

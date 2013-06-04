@@ -38,11 +38,6 @@
         set_schema=".interfaces.IPerson" />
   </class>
 
-  <utility
-     factory=".utility.PersonFactoryUtility"
-     provides="schooltool.person.interfaces.IPersonFactory"
-     />
-
   <class class=".preference.PersonPreferences">
     <require
         permission="schooltool.view"
@@ -81,40 +76,8 @@
       provides=".interfaces.IPerson"
       for="schooltool.person.interfaces.IPersonPreferences" />
 
-  <adapter factory=".person.PersonCatalog"
-           name="schooltool.person.person.PersonCatalog" />
-
-  <adapter
-      for="schooltool.person.interfaces.IPersonContainer"
-      factory=".person.getPersonCatalog"
-      provides="zope.catalog.interfaces.ICatalog" />
-
   <adapter
       factory=".person.getContainerOfPerson" />
-
-  <configure
-      xmlns:zcml="http://namespaces.zope.org/zcml"
-      zcml:condition="have devmode">
-
-    <utility
-        factory=".sampledata.SampleStudents"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="students"
-        />
-
-    <utility
-        factory=".sampledata.SampleTeachers"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="teachers"
-        />
-
-    <utility
-        factory=".sampledata.SamplePersonalEvents"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="personal_events"
-        />
-
-  </configure>
 
   <include package=".browser" />
 

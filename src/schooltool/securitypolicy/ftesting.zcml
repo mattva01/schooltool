@@ -12,15 +12,6 @@
 
   <include package="schooltool.securitypolicy.browser" />
 
-  <interface
-      interface="schooltool.securitypolicy.ftesting.ISecurityFtestingSkin"
-      type="zope.publisher.interfaces.browser.IBrowserSkinType"
-      name="SecurityFtestingSkin"
-      />
-
-  <!-- Provide local overrides of standard configurations-->
-  <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
-
-  <browser:defaultSkin name="SecurityFtestingSkin" />
+  <browser:defaultSkin name="SchoolTool" />
 
 </configure>

@@ -314,7 +314,7 @@ We can fill the New Person form with Unicode text:
     >>> manager.getControl('Confirm').value = "pwd"
     >>> manager.getControl('Add').click()
 
-    >>> analyze.printQuery("//div[@class='content-nav'][11]/a",
+    >>> analyze.printQuery("//div[@class='content-nav'][10]/a",
     ...                    manager.contents)
     <a href="http://localhost/persons/pedro/contact">Contacts</a>
 
