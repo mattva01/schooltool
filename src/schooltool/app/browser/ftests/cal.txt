@@ -11,11 +11,11 @@ Set up
 Let's create a person so that we can fool around with his calendar:
 
     >>> from schooltool.basicperson.browser.ftests.setup import addPerson
-    >>> addPerson('Frog', 'Frog', 'frog', 'pwd')
+    >>> addPerson('The', 'Frog', 'frog', 'pwd')
 
 Let's create a second person so that we can test access control.
 
-    >>> addPerson('Toad', 'toad', 'doat')
+    >>> addPerson('A', 'Toad', 'toad', 'doat')
 
 Also, let's create a group:
 
