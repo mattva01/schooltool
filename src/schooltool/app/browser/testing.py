@@ -54,7 +54,6 @@ from zope.browsermenu.interfaces import IBrowserMenu
 from zope.publisher.interfaces.browser import IBrowserView
 
 from schooltool.relationship.tests import setUpRelationships
-from schooltool.skin import breadcrumbs
 from schooltool.skin.macros import SchoolToolMacros
 
 from schooltool.app.browser import SchoolToolAPI, SortBy
@@ -177,16 +176,6 @@ def setUp(test=None):
     ztapi.browserView(None, 'view_get_menu', MenuAccessView)
     provideUtility(BrowserMenuStub('schooltool_actions'), IBrowserMenu,
                    'schooltool_actions')
-
-    # breadcrumbs
-    provideAdapter(
-        breadcrumbs.Breadcrumbs,
-        (Interface, IDefaultBrowserLayer),
-        Interface,
-        name='breadcrumbs')
-
-    provideAdapter(
-        breadcrumbs.GenericBreadcrumbInfo)
 
     # `provider` TALES namespaces
     from zope.browserpage import metaconfigure

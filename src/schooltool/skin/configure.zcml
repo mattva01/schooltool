@@ -13,13 +13,6 @@
       type="zope.contentprovider.interfaces.ITALNamespaceData" />
 
   <viewletManager
-      name="schooltool.Actions"
-      permission="zope.Public"
-      class=".skin.ActionMenuViewletManager"
-      template="templates/actions.pt"
-      />
-
-  <viewletManager
       name="schooltool.CSS"
       permission="zope.Public"
       provides=".skin.ICSSManager"
@@ -208,22 +201,6 @@
   <resource name="private-note-body-l.gif"
             file="resources/private-note-body-l.gif"
             layer="schooltool.skin.ISchoolToolLayer" />
-
-  <!-- Breadcrumbs -->
-
-  <page
-      for="*"
-      name="breadcrumbs"
-      class=".breadcrumbs.Breadcrumbs"
-      permission="zope.Public"
-      allowed_interface=".interfaces.IBreadcrumbs"
-      />
-
-  <zope:adapter
-      factory=".breadcrumbs.GenericBreadcrumbInfo"
-      trusted="true"
-      permission="zope.Public"
-      />
 
   <!-- Error messages -->
 

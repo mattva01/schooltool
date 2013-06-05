@@ -20,12 +20,11 @@
 SchoolTool skin.
 """
 
-from zope.component import getAdapter, getMultiAdapter, subscribers
+from zope.component import getAdapter, subscribers
 from zope.interface import Interface, implements
 from zope.schema import Object
 from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.viewlet.interfaces import IViewletManager
 from zope.viewlet.manager import ViewletManagerBase
 from zope.viewlet.metadirectives import IViewletDirective
@@ -41,7 +40,6 @@ from schooltool.app.interfaces import ICookieLanguageSelector
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import ICrowd
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.skin.interfaces import IBreadcrumbInfo
 
 
 class IJavaScriptManager(IViewletManager):
@@ -167,9 +165,7 @@ class ActionMenuViewletManager(OrderedViewletManager):
     implements(IActionMenuContext, IActionMenuManager)
 
     def title(self):
-        breadcrumb = getMultiAdapter((self.context, self.request),
-                                          IBreadcrumbInfo)
-        return breadcrumb.name
+        return ''
 
     def getSubItems(self, context):
         """Collect all items that should be displayed in the submenu of context.
