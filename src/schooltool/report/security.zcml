@@ -13,4 +13,17 @@
       crowds="administration"
       permission="schooltool.edit" />
 
+  <allow
+      interface="schooltool.report.interfaces.IReportMessage"
+      crowds="message_readers"
+      permission="schooltool.view" />
+
+  <describe_action
+     group="schooltool.task_messages" name="view-reports"
+     title="Download reports"
+     order="20"
+     interface="schooltool.report.interfaces.IReportMessage"
+     permission="schooltool.view"
+     />
+
 </configure>

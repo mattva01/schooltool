@@ -50,12 +50,13 @@ def doctest_described_interfaces():
         ...         discriminator, [action.title for action in described])
         ('schooltool.edit', <...ISchoolToolApplication>):
             [u'Activate current school year',
-             ...
-             u'Create/Delete an external contact',
         ...
              u'Modify']
         ('schooltool.view', <...ISchoolToolApplication>):
             [u'List', u'Access', u'View']
+        ...
+        ('schooltool.edit', <...IFieldDescription>):
+            [u'Edit fields']
         ('schooltool.edit', <...ISchoolToolCalendar>):
             [u'Change calendar',
         ...
@@ -103,7 +104,6 @@ def doctest_described_interfaces():
         - ---------------------------------------
         -  School Years / Activate current school year
         -  Levels / Add/Remove
-        -  Contacts / Create/Delete an external contact
         -  School Years / Create/Delete
         -  Demographics / Manage
         -  SchoolTool application / Manage school settings and configuration
@@ -119,6 +119,10 @@ def doctest_described_interfaces():
         =================================
         schooltool.basicperson.interfaces
         =================================
+        - IBasicPerson, schooltool.view
+        - -----------------------------
+        -  Messages / Browse other users' messages (overview)
+        -
         - IFieldDescription, schooltool.edit
         - ----------------------------------
         -  Demographics / Edit fields
@@ -159,6 +163,10 @@ def doctest_described_interfaces():
         - IContact, schooltool.view
         - -------------------------
         -  Contacts / View an external contact
+        -
+        - IContactContainer, schooltool.edit
+        - ----------------------------------
+        -  Contacts / Create/Delete an external contact
         -
         - IContactContainer, schooltool.view
         - ----------------------------------
@@ -259,6 +267,13 @@ def doctest_described_interfaces():
         - -----------------------------------
         -  Users / View preferences
         -
+        ============================
+        schooltool.report.interfaces
+        ============================
+        - IReportMessage, schooltool.view
+        - -------------------------------
+        -  Messages / Download reports
+        -
         ==============================
         schooltool.resource.interfaces
         ==============================
@@ -277,6 +292,13 @@ def doctest_described_interfaces():
         - IResourceContainer, schooltool.view
         - -----------------------------------
         -  Reservations / List/Search resources
+        -
+        ==========================
+        schooltool.task.interfaces
+        ==========================
+        - IMessage, schooltool.view
+        - -------------------------
+        -  Messages / Read messages
         -
         ==========================
         schooltool.term.interfaces
@@ -320,15 +342,21 @@ def doctest_described_interfaces():
         schooltool.app.interfaces
         -------------------------
         ISchoolToolApplication, zope.ManageSite
-        ---------------------------------
-        schooltool.basicperson.interfaces
-        ---------------------------------
-        IBasicPerson, schooltool.view
         ----------------------------------
         schooltool.relationship.interfaces
         ----------------------------------
         IRelationshipLink, schooltool.edit
         IRelationshipLink, schooltool.view
+        ----------------------------
+        schooltool.report.interfaces
+        ----------------------------
+        IReportTask, schooltool.edit
+        IReportTask, schooltool.view
+        --------------------------
+        schooltool.task.interfaces
+        --------------------------
+        IRemoteTask, schooltool.edit
+        IRemoteTask, schooltool.view
         -------------------------------
         schooltool.timetable.interfaces
         -------------------------------
@@ -337,7 +365,7 @@ def doctest_described_interfaces():
 
         >>> print 'Total undescribed interface permissions: %d of %d (%d done)' % (
         ...     len(missing), len(crowds), len(actions))
-        Total undescribed interface permissions: 12 of 49 (37 done)
+        Total undescribed interface permissions: 15 of 56 (41 done)
 
     """
 

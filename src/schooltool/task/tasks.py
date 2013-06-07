@@ -51,6 +51,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.traceback import format_html_exception
 from schooltool.common import HTMLToText
 from schooltool.person.interfaces import IPerson
+from schooltool.securitypolicy.crowds import Crowd
 from schooltool.task.celery import open_schooltool_db
 from schooltool.task.interfaces import IRemoteTask, ITaskContainer
 from schooltool.task.interfaces import IMessage, IMessageContainer
@@ -751,6 +752,24 @@ def query_message(sender, recipient=None):
         if recipient_id in message.recipient_ids:
             return message
     return None
+
+
+class MessageReaders(Crowd):
+    """Crowd of instructors of a section."""
+
+    title = _(u'Senders and recipients')
+    description = _(u'Senders, recipients of the message, requesters of a report.')
+
+    def contains(self, principal):
+        int_ids = getUtility(IIntIds)
+        principal_id = int_ids.queryId(IPerson(principal, None))
+        if principal_id is None:
+            return False
+        if principal_id == self.context.sender_id:
+            return True
+        if principal_id in self.context.recipient_ids:
+            return True
+        return False
 
 
 def load_plugin_tasks():
