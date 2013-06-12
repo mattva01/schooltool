@@ -331,7 +331,7 @@ function removeSavingWarning() {
     window.onbeforeunload = null;
 }
 
-$(document).ready(function() {
+function initGradebook() {
     var form = $('#grid-form');
     form.data('base-font-size', parseInt(form.css('fontSize')));
     // gradebook-part width calculation
@@ -677,10 +677,13 @@ $(document).ready(function() {
     form.on('click', 'input[type="submit"]', function() {
         removeSavingWarning();
     });
-});
+}
+
+$(document).ready(initGradebook);
+
 // warning dialog for unsaved changes
 window.onbeforeunload = function() {
-    if ($('#grid-form input[type="text"]').length > 0) {
+    if ($('#grades-part input[type="text"]').length > 0) {
         return $('#unsaved-changes-warning').text();
     }
 };

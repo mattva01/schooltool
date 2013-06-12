@@ -77,12 +77,16 @@ class Table(flourish.ajax.CompositeAJAXPart, TableContent):
     container_wrapper = ViewPageTemplateFile('templates/f_ajax_table.pt')
 
     form_wrapper = InlineViewPageTemplate("""
-      <form method="post" tal:attributes="action view/@@absolute_url">
+      <form method="post" tal:attributes="action view/@@absolute_url;
+                                          class view/form_class;
+                                          id view/form_id">
         <tal:block replace="structure view/template" />
       </form>
     """)
 
     empty_message = u""
+    form_class = None
+    form_id = None
 
     table_formatter = AJAXFormSortFormatter
 
