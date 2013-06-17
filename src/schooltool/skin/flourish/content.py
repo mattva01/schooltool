@@ -91,7 +91,7 @@ class ContentProviders(object):
         self.cache = {}
 
     def __contains__(self, name):
-        return self.cache.get(name) is not None
+        return self.get(name) is not None
 
     def get(self, name, default=None):
         if name not in self.cache:
