@@ -236,12 +236,12 @@ h3.done-link a:active {
     background-color: #f7f7f7;
 }
 
-.page > .body > .sidebar > .content > .header {
+.page > .body > .sidebar .content > .header {
     border-bottom-color: #00abb3;
     color: #333333;
 }
 
-.page > .body > .sidebar > .content > .body > ul.filter > li.active > a {
+.page > .body > .sidebar .content > .body > ul.filter > li.active > a {
     color: #00abb3;
 }
 
