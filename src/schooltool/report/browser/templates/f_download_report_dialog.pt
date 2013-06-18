@@ -19,10 +19,10 @@
       </tal:block>
 
       <tr tal:condition="nocall:context/report">
-        <td i18n:translate="">Direct download</td>
+        <td i18n:translate="">Download</td>
         <td>
           <a tal:attributes="href context/report/@@absolute_url"
-             tal:content="context/filename"/>
+             tal:content="context/filename">filename</a>
         </td>
       </tr>
 
@@ -30,7 +30,7 @@
       <tr tal:condition="not:nocall:context/report">
         <td i18n:translate="" colspan="2">
           Generating
-          <tal:block i18n:name="report" content="context/title" /> ...
+          <tal:block i18n:name="report" content="context/title" />...
         </td>
       </tr>
       </tal:block>
@@ -38,7 +38,7 @@
       <tal:block condition="view/failure_ticket_id">
         <tr>
           <td>
-            <span class="error" i18n:translate="">Sytem failure.</span>
+            <span class="error" i18n:translate="">System failure.</span>
           </td>
           <td i18n:translate="">
               Ticket nr.

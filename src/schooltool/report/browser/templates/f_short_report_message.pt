@@ -6,7 +6,7 @@
           Download <span i18n:name="report" tal:content="context/title" />
           <a i18n:name="link"
              tal:attributes="href context/report/@@absolute_url"
-             tal:content="context/filename"/>.
+             tal:content="context/filename">filename</a>.
         </tal:block>
       </p>
     </tal:block>
@@ -14,7 +14,7 @@
     <tal:block condition="not:nocall:context/report">
       <p>
         <tal:block i18n:translate="">
-          Generating <span i18n:name="report" tal:content="context/title" />.
+          Generating <span i18n:name="report" tal:content="context/title" />...
         </tal:block>
       </p>
     </tal:block>
@@ -23,7 +23,7 @@
   <tal:block condition="view/failure_ticket_id">
     <p>
       <span class="error" i18n:translate="">
-        Sytem failure while generating
+        System failure while generating
         <tal:block i18n:name="report" content="context/title" />.
       </span>
       <span i18n:translate="">

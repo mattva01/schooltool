@@ -39,7 +39,7 @@
         <td tal:content="view/persistent_task/permanent_result"></td>
       </tr>
       <tr>
-        <td i18n:translate="" class="label">InternalState</td>
+        <td i18n:translate="" class="label">Internal state</td>
         <td tal:content="status/state" />
       </tr>
     </tbody>

@@ -9,9 +9,9 @@
                              task_id view/context/task_id" />
 
   <div tal:attributes="id string:${progress_id}-pending">
-    <h3 i18n:translate="">Import scheduled.
-      <img i18n:name="spinner"
-           tal:attributes="src context/++resource++schooltool.skin.flourish/spinner.gif" />
+    <h3>
+      <span i18n:translate="">Import scheduled.</span>
+      <img tal:attributes="src context/++resource++schooltool.skin.flourish/spinner.gif" />
     </h3>
   </div>
   <div style="display: none;" tal:attributes="id string:${progress_id}-in-progress">
@@ -22,9 +22,9 @@
     </table>
   </div>
   <div style="display: none;" tal:attributes="id string:${progress_id}-committing">
-    <h3 i18n:translate="">Committing to database.
-      <img i18n:name="spinner"
-           tal:attributes="src context/++resource++schooltool.skin.flourish/spinner.gif" />
+    <h3>
+      <span i18n:translate="">Committing to database.</span>
+      <img tal:attributes="src context/++resource++schooltool.skin.flourish/spinner.gif" />
     </h3>
   </div>
   <div style="display: none;" tal:attributes="id string:${progress_id}-succeeded">
@@ -49,9 +49,9 @@
 
   </div>
   <div style="display: none;" tal:attributes="id string:${progress_id}-failed">
-    <h3 i18n:translate="">Server error</h3>
+    <h3 i18n:translate="">Server Error</h3>
     <div name="traceback" class="traceback"></div>
-    <h3 i18n:translate="">Additional info</h3>
+    <h3 i18n:translate="">Additional Info</h3>
     <div name="info" class="traceback"></div>
   </div>
 

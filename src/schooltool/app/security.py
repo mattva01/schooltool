@@ -346,7 +346,7 @@ class GroupCrowdDescription(Description):
         group = self.user_group
         if group is None:
             return ''
-        return _(u'$group group.',
+        return _(u'${group} group.',
                  mapping={'group': group.title})
 
 
@@ -361,6 +361,6 @@ class ManagersCrowdDescription(GroupCrowdDescription):
         group = self.user_group
         if group is None:
             return ''
-        return _(u'$group group and the super user.',
+        return _(u'${group} group and the super user.',
                  mapping={'group': group.title})
 

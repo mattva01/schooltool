@@ -17,11 +17,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-import zope.component
 from zope.cachedescriptors.property import Lazy
 from zope.interface import directlyProvides
-from zope.intid.interfaces import IIntIds
-from zope.publisher.browser import BrowserPage
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 import zc.table.column
@@ -31,7 +28,6 @@ from schooltool import table
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin import flourish
 from schooltool.person.interfaces import IPerson
-from schooltool.task.interfaces import IMessageContainer
 from schooltool.task.interfaces import IRemoteTask
 from schooltool.task.state import TaskReadState
 
@@ -149,7 +145,7 @@ class TaskTable(table.ajax.IndexedTable):
         internal_state = table.column.IndexedGetterColumn(
             index='internal_state',
             name='internal_state',
-            title=_(u'Status'),
+            title=_(u'Internal state'),
             getter=lambda i, f: i,
             cell_formatter=task_state_formatter,
             subsort=True)

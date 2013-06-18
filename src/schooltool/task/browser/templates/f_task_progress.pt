@@ -4,9 +4,11 @@
   <tal:block replace="resource_library:schooltool.export" />
 
   <h3 tal:attributes="id string:${progress_id}-progress-title"
-      tal:condition="view/pending" i18n:translate="">
-    Scheduled.
-    <img i18n:name="spinner" tal:attributes="src context/++resource++schooltool.skin.flourish/spinner.gif" />
+      tal:condition="view/pending">
+    <span i18n:translate="">
+      Scheduled.
+    </span>
+    <img tal:attributes="src context/++resource++schooltool.skin.flourish/spinner.gif" />
   </h3>
 
   <h3 tal:attributes="id string:${progress_id}-progress-title"
@@ -56,8 +58,7 @@
   </form>
 
   <script>ST.state.push()</script>
-  <tal:script tal:replace="structure scriptlocal:
-                             progress_id;
+  <tal:script tal:replace="structure scriptlocal:progress_id;
                              should_reload view/should_reload;
                              task_id view/task_id" />
   <script type="text/javascript">
