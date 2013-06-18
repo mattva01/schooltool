@@ -1,6 +1,6 @@
 # Redis configuration file example
 
-# Note on units: when memory size is needed, it is possible to specifiy
+# Note on units: when memory size is needed, it is possible to specify
 # it in the usual form of 1k 5GB 4M and so forth:
 #
 # 1k => 1000 bytes
@@ -123,7 +123,7 @@ dir ${data_dir}
 # is still in progress, the slave can act in two different ways:
 #
 # 1) if slave-serve-stale-data is set to 'yes' (the default) the slave will
-#    still reply to client requests, possibly with out of data data, or the
+#    still reply to client requests, possibly with out of date data, or the
 #    data set may just be empty if this is the first synchronization.
 #
 # 2) if slave-serve-stale data is set to 'no' the slave will reply with
@@ -149,7 +149,7 @@ slave-serve-stale-data yes
 
 # Command renaming.
 #
-# It is possilbe to change the name of dangerous commands in a shared
+# It is possible to change the name of dangerous commands in a shared
 # environment. For instance the CONFIG command may be renamed into something
 # of hard to guess so that it will be still available for internal-use
 # tools but not available for general clients.
@@ -158,37 +158,46 @@ slave-serve-stale-data yes
 #
 # rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
 #
-# It is also possilbe to completely kill a command renaming it into
+# It is also possible to completely kill a command renaming it into
 # an empty string:
 #
 # rename-command CONFIG ""
 
 ################################### LIMITS ####################################
 
-# Set the max number of connected clients at the same time. By default there
-# is no limit, and it's up to the number of file descriptors the Redis process
-# is able to open. The special value '0' means no limits.
+# Set the max number of connected clients at the same time. By default
+# this limit is set to 10000 clients, however if the Redis server is not
+# able ot configure the process file limit to allow for the specified limit
+# the max number of allowed clients is set to the current file limit
+# minus 32 (as Redis reserves a few file descriptors for internal uses).
+#
 # Once the limit is reached Redis will close all the new connections sending
 # an error 'max number of clients reached'.
 #
-# maxclients 128
+# maxclients 10000
 
 # Don't use more memory than the specified amount of bytes.
-# When the memory limit is reached Redis will try to remove keys with an
-# EXPIRE set. It will try to start freeing keys that are going to expire
-# in little time and preserve keys with a longer time to live.
-# Redis will also try to remove objects from free lists if possible.
+# When the memory limit is reached Redis will try to remove keys
+# accordingly to the eviction policy selected (see maxmemmory-policy).
 #
-# If all this fails, Redis will start to reply with errors to commands
-# that will use more memory, like SET, LPUSH, and so on, and will continue
-# to reply to most read-only commands like GET.
+# If Redis can't remove keys according to the policy, or if the policy is
+# set to 'noeviction', Redis will start to reply with errors to commands
+# that would use more memory, like SET, LPUSH, and so on, and will continue
+# to reply to read-only commands like GET.
 #
-# WARNING: maxmemory can be a good idea mainly if you want to use Redis as a
-# 'state' server or cache, not as a real DB. When Redis is used as a real
-# database the memory usage will grow over the weeks, it will be obvious if
-# it is going to use too much memory in the long run, and you'll have the time
-# to upgrade. With maxmemory after the limit is reached you'll start to get
-# errors for write operations, and this may even lead to DB inconsistency.
+# This option is usually useful when using Redis as an LRU cache, or to set
+# an hard memory limit for an instance (using the 'noeviction' policy).
+#
+# WARNING: If you have slaves attached to an instance with maxmemory on,
+# the size of the output buffers needed to feed the slaves are subtracted
+# from the used memory count, so that network problems / resyncs will
+# not trigger a loop where keys are evicted, and in turn the output
+# buffer of slaves is full with DELs of keys evicted triggering the deletion
+# of more keys, and so forth until the database is completely emptied.
+#
+# In short... if you have slaves attached it is suggested that you set a lower
+# limit for maxmemory so that there is some free RAM on the system for slave
+# output buffers (but this is not needed if the policy is 'noeviction').
 #
 # maxmemory <bytes>
 
@@ -198,7 +207,7 @@ slave-serve-stale-data yes
 # volatile-lru -> remove the key with an expire set using an LRU algorithm
 # allkeys-lru -> remove any key accordingly to the LRU algorithm
 # volatile-random -> remove a random key with an expire set
-# allkeys->random -> remove a random key, any key
+# allkeys-random -> remove a random key, any key
 # volatile-ttl -> remove the key with the nearest expire time (minor TTL)
 # noeviction -> don't expire at all, just return an error on write operations
 #
@@ -225,21 +234,23 @@ slave-serve-stale-data yes
 
 ############################## APPEND ONLY MODE ###############################
 
-# By default Redis asynchronously dumps the dataset on disk. If you can live
-# with the idea that the latest records will be lost if something like a crash
-# happens this is the preferred way to run Redis. If instead you care a lot
-# about your data and don't want to that a single record can get lost you should
-# enable the append only mode: when this mode is enabled Redis will append
-# every write operation received in the file appendonly.aof. This file will
-# be read on startup in order to rebuild the full dataset in memory.
+# By default Redis asynchronously dumps the dataset on disk. This mode is
+# good enough in many applications, but an issue with the Redis process or
+# a power outage may result into a few minutes of writes lost (depending on
+# the configured save points).
 #
-# Note that you can have both the async dumps and the append only file if you
-# like (you have to comment the "save" statements above to disable the dumps).
-# Still if append only mode is enabled Redis will load the data from the
-# log file at startup ignoring the dump.rdb file.
+# The Append Only File is an alternative persistence mode that provides
+# much better durability. For instance using the default data fsync policy
+# (see later in the config file) Redis can lose just one second of writes in a
+# dramatic event like a server power outage, or a single write if something
+# wrong with the Redis process itself happens, but the operating system is
+# still running correctly.
 #
-# IMPORTANT: Check the BGREWRITEAOF to check how to rewrite the append
-# log file in background when it gets too big.
+# AOF and RDB persistence can be enabled at the same time without problems.
+# If the AOF is enabled on startup Redis will load the AOF, that is the file
+# with the better durability guarantees.
+#
+# Please check http://redis.io/topics/persistence for more information.
 
 appendonly no
 
@@ -254,15 +265,18 @@ appendonly no
 #
 # no: don't fsync, just let the OS flush the data when it wants. Faster.
 # always: fsync after every write to the append only log . Slow, Safest.
-# everysec: fsync only if one second passed since the last fsync. Compromise.
+# everysec: fsync only one time every second. Compromise.
 #
 # The default is "everysec" that's usually the right compromise between
 # speed and data safety. It's up to you to understand if you can relax this to
-# "no" that will will let the operating system flush the output buffer when
+# "no" that will let the operating system flush the output buffer when
 # it wants, for better performances (but if you can live with the idea of
 # some data loss consider the default persistence mode that's snapshotting),
 # or on the contrary, use "always" that's very slow but a bit safer than
 # everysec.
+#
+# More details please check the following article:
+# http://antirez.com/post/redis-persistence-demystified.html
 #
 # If unsure, use "everysec".
 
@@ -282,7 +296,7 @@ appendfsync everysec
 # BGSAVE or BGREWRITEAOF is in progress.
 #
 # This means that while another child is saving the durability of Redis is
-# the same as "appendfsync none", that in pratical terms means that it is
+# the same as "appendfsync none", that in practical terms means that it is
 # possible to lost up to 30 seconds of log in the worst scenario (with the
 # default Linux settings).
 #
@@ -294,9 +308,9 @@ no-appendfsync-on-rewrite no
 
 # Active rehashing uses 1 millisecond every 100 milliseconds of CPU time in
 # order to help rehashing the main Redis hash table (the one mapping top-level
-# keys to values). The hash table implementation redis uses (see dict.c)
+# keys to values). The hash table implementation Redis uses (see dict.c)
 # performs a lazy rehashing: the more operation you run into an hash table
-# that is rhashing, the more rehashing "steps" are performed, so if the
+# that is rehashing, the more rehashing "steps" are performed, so if the
 # server is idle the rehashing is never complete and some more memory is used
 # by the hash table.
 #
@@ -315,7 +329,7 @@ activerehashing yes
 ################################## INCLUDES ###################################
 
 # Include one or more other config files here.  This is useful if you
-# have a standard template that goes to all redis server but also need
+# have a standard template that goes to all Redis server but also need
 # to customize a few per-server settings.  Include files can include
 # other files, so use this wisely.
 #
