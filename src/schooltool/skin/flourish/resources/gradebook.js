@@ -179,6 +179,9 @@ function fillPopupMenu(link) {
     var data = link.data('popup-menu-data');
     var popup = link.prev();
     popup.empty();
+    if (!data) {
+        return;
+    }
     var header = $('<li class="header"></li>');
     header.text(data.header);
     popup.append(header);
