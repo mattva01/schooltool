@@ -113,7 +113,7 @@ ST.table = function() {
       if (counter)
           count = counter.count;
 
-      var last_header = container.find('table.data>thead th:last');
+      var last_header = container.find('table.data>thead:first th:last');
       if (!last_header)
           return;
 
