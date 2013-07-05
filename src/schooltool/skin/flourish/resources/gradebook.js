@@ -85,7 +85,12 @@ function cellInputName(td) {
 }
 
 function findRowHeader(td) {
-    var rowIndex = td.parent().index();
+    var parent = td.parent();
+    var rowIndex = parent.index();
+    if (parent.hasClass('double-even') ||
+        parent.hasClass('double-odd')) {
+        rowIndex = parseInt(rowIndex/2);
+    }
     return $('#students-part').find('td').eq(rowIndex);
 }
 
@@ -96,7 +101,22 @@ function findColumnHeader(td) {
 
 function isScorable(td) {
     var columnHeader = findColumnHeader(td);
-    return columnHeader.hasClass('scorable');
+    var rowHeader = td.parent();
+    return columnHeader.hasClass('scorable') && (!rowHeader.hasClass('grade-hint'));
+}
+
+function getScorableInput(td) {
+    var columnHeader = findColumnHeader(td);
+    var rowHeader = td.parent();
+    if (!columnHeader.hasClass('scorable')) {
+        return null;
+    }
+    if (rowHeader.hasClass('grade-hint')) {
+        var scoreHeader = rowHeader.next();
+        td = scoreHeader.find('td').eq(td.index());
+    }
+    var input = getInput(td);
+    return input;
 }
 
 function getInput(td) {
@@ -381,10 +401,10 @@ function initGradebook() {
     grades.on('click', 'td', function() {
         var td = $(this);
         makeGradeCellVisible(td);
-        if (isScorable(td)) {
-            var input = getInput(td);
+        var input = getScorableInput(td);
+        if (input !== null) {
             input[0].select();
-            input.focus();
+            input.focus()
         }
     });
     grades.on('click', 'input', function() {

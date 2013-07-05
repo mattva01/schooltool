@@ -187,6 +187,27 @@
     border-left-style: solid;
     border-left-width: 1px;
     width: 4.0em;
+    line-height: 8px;
+}
+
+.grades tbody td {
+    width: 4.0em;
+}
+
+.grades tbody tr.grade-hint,
+.grades tbody tr.grade-score {
+    height: 1.1em;
+}
+
+.grades tbody tr.grade-score td input {
+    padding: 0;
+    border: 0;
+    height: 1em;
+}
+
+.grades tbody tr.grade-hint {
+    border-bottom-style: none;
+    border-bottom-width: 1px;
 }
 
 .totals {
