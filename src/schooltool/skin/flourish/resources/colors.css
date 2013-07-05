@@ -563,6 +563,24 @@ table.schooltool-tasks-status td .success {
     background-color: #f0efee;
 }
 
+.gradebook-part tbody tr.single-odd,
+.gradebook-part tbody tr.double-odd {
+    background-color: #f0efee;
+}
+
+.gradebook-part tbody tr.single-even,
+.gradebook-part tbody tr.double-even {
+    background-color: #f7f7f7;
+}
+
+.gradebook-part tbody tr.grade-hint.double-odd {
+    background-color: #d0efee;
+}
+
+.gradebook-part tbody tr.grade-hint.double-even {
+    background-color: #d0f7f7;
+}
+
 .gradebook-part th, .gradebook-part td {
     border-color: #cccccc;
 }

@@ -388,3 +388,12 @@ def collectCrowdDescriptions(action):
         descriptions.append(getCrowdDescription(crowd, action, group))
     return descriptions
 
+
+def inCrowd(principal, name, context=None):
+    crowds = getCrowdsUtility()
+    try:
+        factory = crowds.getFactory(name)
+    except CrowdNotRegistered:
+        return False
+    crowd = factory(context)
+    return crowd.contains(principal)
