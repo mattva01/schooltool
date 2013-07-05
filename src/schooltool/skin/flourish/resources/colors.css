@@ -573,11 +573,11 @@ table.schooltool-tasks-status td .success {
     background-color: #f7f7f7;
 }
 
-.gradebook-part tbody tr.grade-hint.double-odd {
+.gradebook-part tbody tr.grade-hint.double-odd td:not(.placeholder) {
     background-color: #d0efee;
 }
 
-.gradebook-part tbody tr.grade-hint.double-even {
+.gradebook-part tbody tr.grade-hint.double-even td:not(.placeholder) {
     background-color: #d0f7f7;
 }
 
