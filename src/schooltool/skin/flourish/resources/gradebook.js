@@ -86,12 +86,8 @@ function cellInputName(td) {
 
 function findRowHeader(td) {
     var parent = td.parent();
-    var rowIndex = parent.index();
-    if (parent.hasClass('double-even') ||
-        parent.hasClass('double-odd')) {
-        rowIndex = parseInt(rowIndex/2);
-    }
-    return $('#students-part').find('td').eq(rowIndex);
+    var rowIndex = (parent.prevUntil("tbody").filter(":not('.grade-hint')")).length;
+    return $('#students-part tbody').find('tr').eq(rowIndex).find('td');
 }
 
 function findColumnHeader(td) {
@@ -493,7 +489,9 @@ function initGradebook() {
         var cells = [];
         rows.each(function(i, row) {
             var cell = $(row).children()[idx];
-            cells.push(cell);
+            if (isScorable($(cell))) {
+                cells.push(cell);
+            }
         });
         container.data('schooltool.gradebook-filldown-dialog-cells', cells);
         var filldown_title = container.find('.filldown-dialog-title').text();
@@ -521,7 +519,8 @@ function initGradebook() {
             $(cells).each(function(i, cell) {
                 var cell = $(cell);
                 if (cell.is(':empty')) {
-                    var input = getInput(cell);
+                    cellInputName(cell);
+                    var input = getScorableInput(cell);
                     input.val(fillval);
                     input.trigger('keyup');
                     input.blur();
