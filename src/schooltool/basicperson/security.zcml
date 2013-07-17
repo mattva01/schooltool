@@ -14,12 +14,12 @@
 
   <allow
      interface="schooltool.person.interfaces.IPerson"
-     crowds="person_advisors"
+     crowds="person_advisors superuser"
      permission="schooltool.view" />
 
   <allow
      interface="schooltool.basicperson.interfaces.IBasicPerson"
-     crowds="owner person_instructors person_advisors managers administrators clerks"
+     crowds="owner person_instructors person_advisors managers administrators clerks superuser"
      permission="schooltool.view" />
 
   <!-- Security descriptions -->
