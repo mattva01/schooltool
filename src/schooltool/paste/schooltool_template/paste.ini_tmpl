@@ -2,6 +2,7 @@
 use = egg:Paste#urlmap
 / = schooltool
 /schooltool.task_results = task_results
+${paste_extra_paths}
 
 [app:schooltool]
 use = egg:schooltool#main
@@ -10,6 +11,8 @@ config_file=schooltool.conf
 [app:task_results]
 use = egg:schooltool#task_results
 config_file=schooltool.conf
+
+${paste_extra_parts}
 
 [server:main]
 use = egg:Paste#http
