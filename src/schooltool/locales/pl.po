@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-05-27 19:54+0300\n"
-"PO-Revision-Date: 2013-04-20 02:48+0000\n"
-"Last-Translator: Mike08 <micou8@gmail.com>\n"
+"PO-Revision-Date: 2013-06-27 20:14+0000\n"
+"Last-Translator: smugas <smugasek@o2.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-28 05:45+0000\n"
-"X-Generator: Launchpad (build 16640)\n"
+"X-Launchpad-Export-Date: 2013-06-28 06:06+0000\n"
+"X-Generator: Launchpad (build 16681)\n"
 "Language: pl\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -3274,12 +3274,12 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 msgid "Person profile, contacts, groups, etc."
-msgstr ""
+msgstr "Profil osoby, kontakty, grupy, itp."
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 #: /src/schooltool/basicperson/browser/person.py:1369
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:784
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
@@ -3455,7 +3455,7 @@ msgstr "ID: ${person}"
 
 #: /src/schooltool/basicperson/browser/person.py:1385
 msgid "Username: ${username}"
-msgstr ""
+msgstr "Nazwa użytkownika: ${username}"
 
 #: /src/schooltool/basicperson/browser/person.py:1404
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
@@ -4624,18 +4624,18 @@ msgstr ""
 
 #: /src/schooltool/course/browser/flourish.zcml:644
 msgid "Students and instructors of a section"
-msgstr ""
+msgstr "Studenci oraz instruktorzy sekcji"
 
 #: /src/schooltool/course/browser/rml/section_roster.pt:11
 msgid "Students (continued)"
-msgstr ""
+msgstr "Studenci (kontynuacja)"
 
 #: /src/schooltool/course/browser/rml/section_roster.pt:14
 #: /src/schooltool/resource/browser/rml/resource_report.pt:18
 #: /src/schooltool/skin/flourish/rml/pdf_form.pt:14
 #: /src/schooltool/table/rml/grid_part.pt:42
 msgid "Continued on next page &gt;"
-msgstr ""
+msgstr "Kontynuacja na następnej stronie &gt;"
 
 #: /src/schooltool/course/browser/rml/section_roster.pt:23
 #: /src/schooltool/course/browser/templates/f_section_roster_rml.pt:15
@@ -4777,7 +4777,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1853
 msgid "Instructors: ${instructors}"
-msgstr ""
+msgstr "Instruktorzy: ${instructors}"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
 #: /src/schooltool/course/browser/templates/link_section.pt:9
@@ -5118,7 +5118,7 @@ msgstr "Łączenie istniejącej sekcji"
 
 #: /src/schooltool/course/browser/templates/f_section_list_table_filter.pt:25
 msgid "(${count} sections)"
-msgstr ""
+msgstr "(${count} sekcji)"
 
 #: /src/schooltool/course/browser/templates/f_section_member_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:3
@@ -5859,6 +5859,8 @@ msgstr "Eksportuj szkołę"
 #: /src/schooltool/export/importer.py:79
 msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
 msgstr ""
+"SchoolTool   nie potrafi odczytać tego pliku. Czy jest on w formacie arkusza "
+"kalkulacyjnego .xls?"
 
 #: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
@@ -5882,11 +5884,11 @@ msgstr "Data zakończenia nie może być przed datą rozpoczęcia"
 
 #: /src/schooltool/export/importer.py:82
 msgid "start date overlaps another year"
-msgstr ""
+msgstr "data początkowa nakłada się na inny rok"
 
 #: /src/schooltool/export/importer.py:83
 msgid "end date overlaps another year"
-msgstr ""
+msgstr "data końcowa nakłada się na inny rok"
 
 #: /src/schooltool/export/importer.py:84
 msgid "invalid school year"
@@ -5902,11 +5904,11 @@ msgstr "dzień zakończenia po zakończeniu roku szkolnego"
 
 #: /src/schooltool/export/importer.py:87
 msgid "start date overlaps another term"
-msgstr ""
+msgstr "data początkowa nakłada się na inny semestr"
 
 #: /src/schooltool/export/importer.py:88
 msgid "end date overlaps another term"
-msgstr ""
+msgstr "data końcowa nakłada się na inny semestr"
 
 #: /src/schooltool/export/importer.py:91
 msgid "has no days"
@@ -6033,7 +6035,7 @@ msgstr "nie okreslono planu zajęć dla tej sekcji"
 
 #: /src/schooltool/export/importer.py:122
 msgid "no day is defined in this row"
-msgstr ""
+msgstr "nie zdefiniowano żadnego dnia w tym wierszu"
 
 #: /src/schooltool/export/importer.py:123
 msgid "must have a valid period id"
@@ -6118,6 +6120,8 @@ msgid ""
 "You do not have to import all worksheets at the same time. You can import "
 "individual worksheets sequentially."
 msgstr ""
+"Nie musisz importować wszystkich arkuszy od razu. Możesz zaimportować każdy "
+"z arkuszy indywidualnie."
 
 #: /src/schooltool/export/templates/f_import_related.pt:23
 #: /src/schooltool/export/templates/import.pt:45
@@ -6934,7 +6938,7 @@ msgstr "Rezerwa"
 
 #: /src/schooltool/resource/browser/flourish.zcml:452
 msgid "List all resources"
-msgstr ""
+msgstr "Lista wszystkich zasobów"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:4
 msgid "Upload schooltool resources as CSV"
@@ -6960,6 +6964,10 @@ msgid ""
 "Main Auditorium,,location\n"
 "LC-805, Laptop Computer #805\n"
 msgstr ""
+"\n"
+"PRJ302,  Projektor podsufitowy #302\n"
+"Aula Główna,,location\n"
+"LC-805, Komputer Laptop#805\n"
 
 #: /src/schooltool/resource/browser/resource-csvimport.pt:36
 #: /src/schooltool/resource/browser/templates/f_resource_csvimport_description.pt:16
@@ -7060,12 +7068,12 @@ msgstr "Usuń ${resource_title}"
 #: /src/schooltool/resource/browser/resource.py:967
 #: /src/schooltool/resource/browser/rml/resource_report.pt:21
 msgid "Resource Report"
-msgstr ""
+msgstr "Raport zasobów"
 
 #: /src/schooltool/resource/browser/rml/resource_report.pt:10
 #: /src/schooltool/resource/browser/rml/resource_report.pt:23
 msgid "Resource Report (continued)"
-msgstr ""
+msgstr "Raport zasobów (ciąg dalszy)"
 
 #: /src/schooltool/resource/browser/subtype_widget.pt:8
 msgid "Choose One"
@@ -7708,7 +7716,7 @@ msgstr "Nie znaleziono"
 
 #: /src/schooltool/skin/flourish/report.py:584
 msgid "${title} (continued)"
-msgstr ""
+msgstr "${title} (kontynuacja)"
 
 #: /src/schooltool/skin/flourish/templates/image_input.pt:11
 msgid "delete this image"
@@ -7818,7 +7826,7 @@ msgstr "Rok musi być większy lub równy 1900"
 
 #: /src/schooltool/table/pdf.py:637
 msgid "Continued ..."
-msgstr ""
+msgstr "Kontynuacja ..."
 
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7
@@ -8176,7 +8184,7 @@ msgstr "Harmonogram Harmonogram"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:549
 msgid "Custom date range"
-msgstr ""
+msgstr "Własny zakres dat"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:563
 msgid "Term(s)"
