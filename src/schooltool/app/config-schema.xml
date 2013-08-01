@@ -152,6 +152,26 @@
     </example>
   </key>
 
+  <key name="result-server-definition" default="result-server.zcml">
+    <description>
+      The name of the top-level ZCML file that defines the component
+      configuration used for remote task result server.
+    </description>
+    <example>
+      result-server-definition result-server.zcml
+    </example>
+  </key>
+
+  <key name="report-server-definition" default="report-server.zcml">
+    <description>
+      The name of the top-level ZCML file that defines the component
+      configuration used for remote task report server.
+    </description>
+    <example>
+      report-server-definition report-server.zcml
+    </example>
+  </key>
+
   %(plugins)s
 
 </schema>

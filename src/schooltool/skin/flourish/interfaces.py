@@ -34,7 +34,11 @@ from zope.traversing.interfaces import ITraversable
 from z3c.form.interfaces import IFormLayer
 
 
-class IFlourishLayer(IDefaultBrowserLayer, IFormLayer):
+class IFlourishLayer(IFormLayer):
+    """SchoolTool flourish skin."""
+
+
+class IFlourishBrowserLayer(IFlourishLayer, IDefaultBrowserLayer):
     """SchoolTool flourish skin."""
 
 
@@ -168,6 +172,19 @@ class IPDFPage(IRMLTemplated, IPageBase):
         title=u"Page rotation",
         required=False
         )
+
+    render_invariant = zope.schema.Bool(
+        title=u"Render invariant",
+        description=u"Render without influence form environment, like current time.",
+        required=False)
+
+    render_debug = zope.schema.Bool(
+        title=u"Render debug",
+        description=u"Render with debug information.",
+        required=False)
+
+    inline = zope.schema.Bool(
+        title=u"Render inline", required=False)
 
     content_template = Attribute(
         u"Template that renders the main content.")

@@ -149,24 +149,6 @@
       file="resources/calwidget/icon.gif"
       layer="schooltool.skin.ISchoolToolLayer" />
 
-  <!-- Breadcrumbs -->
-
-  <zope:adapter
-      for="schooltool.app.interfaces.ISchoolToolCalendar
-           zope.publisher.interfaces.http.IHTTPRequest"
-      factory=".cal.CalendarBreadcrumbInfo"
-      trusted="true"
-      permission="zope.Public"
-      />
-
-  <zope:adapter
-      for="schooltool.app.interfaces.ISchoolToolCalendarEvent
-           zope.publisher.interfaces.http.IHTTPRequest"
-      factory=".cal.CalendarEventBreadcrumbInfo"
-      trusted="true"
-      permission="zope.Public"
-      />
-
   <!-- Actions menu -->
 
   <!-- TODO: remove this menu - 2006-07-04 gintas -->
@@ -603,14 +585,6 @@
   <zope:adapter
       factory=".cal.CalendarMenuViewletCrowd"
       name="schooltool.view" />
-
-  <zope:adapter
-      for="schooltool.app.interfaces.ISchoolToolApplication
-           zope.publisher.interfaces.http.IHTTPRequest"
-      factory=".app.SchoolBreadcrumbInfo"
-      trusted="true"
-      permission="zope.Public"
-      />
 
   <!-- Authentication adapter traverser and views -->
 

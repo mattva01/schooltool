@@ -157,20 +157,10 @@ def doctest_ActionMenuViewletManager():
          >>> request = TestRequest()
          >>> manager = ActionMenuViewletManager(context, request, None)
 
-         >>> from zope.publisher.interfaces.browser import IBrowserRequest
-         >>> from schooltool.skin.interfaces import IBreadcrumbInfo
-         >>> class StubBreadcrumbInfo(object):
-         ...     adapts(Interface, IBrowserRequest)
-         ...     implements(IBreadcrumbInfo)
-         ...     def __init__(self, context, request):
-         ...         self.name = "Breadcrumb name"
-
-         >>> provideAdapter(StubBreadcrumbInfo)
-
     Viewlet managers title is taken from it's contexts breadcrumb info:
 
          >>> manager.title()
-         'Breadcrumb name'
+         ''
 
     subItems is a shortctut that gets subitems for the managers context:
 

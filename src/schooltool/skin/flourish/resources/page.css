@@ -127,11 +127,11 @@
 
 /* Sidebar */
 
-.page > .body > .sidebar > .content {
+.page > .body > .sidebar .content {
     margin-bottom: 16px;
 }
 
-.page > .body > .sidebar > .content > .header {
+.page > .body > .sidebar .content > .header {
     border-bottom-style: dotted;
     border-bottom-width: 1px;
     font-size: 14px;
@@ -140,27 +140,27 @@
     margin-bottom: 8px;
 }
 
-.page > .body > .sidebar > .content > .body > ul.filter {
+.page > .body > .sidebar .content > .body > ul.filter {
     margin-left: 8px;
 }
 
-.page > .body > .sidebar > .content > .body > ul.filter > li {
+.page > .body > .sidebar .content > .body > ul.filter > li {
     padding-bottom: 2px;
 }
 
-.page > .body > .sidebar > .content > .body > ul.filter > li.active {
+.page > .body > .sidebar .content > .body > ul.filter > li.active {
     font-size: 12px;
     line-height: 16px;
 }
 
-.page > .body > .sidebar > .content > .body > ul.filter > li > a {
+.page > .body > .sidebar .content > .body > ul.filter > li > a {
     font-size: 12px;
     line-height: 16px;
 }
 
 
-.page > .body > .sidebar > .content > .header > .photo-display > img,
-.page > .body > .sidebar > .content > .header > .photo-display {
+.page > .body > .sidebar .content > .header > .photo-display > img,
+.page > .body > .sidebar .content > .header > .photo-display {
     float: none;
     width: 128px;
     height: auto;
@@ -168,11 +168,11 @@
     text-align: center;
 }
 
-.page > .body > .sidebar > .content > .header > .photo-display {
+.page > .body > .sidebar .content > .header > .photo-display {
     padding: 0px 8px;
 }
 
-.page > .body > .sidebar > .content > .header > .photo-display > img {
+.page > .body > .sidebar .content > .header > .photo-display > img {
     padding: 0px;
 }
 

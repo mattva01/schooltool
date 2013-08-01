@@ -3,6 +3,71 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            i18n_domain="schooltool">
 
+  <include file="meta.zcml" />
+
+  <class class=".report.ReportFile">
+    <require
+        permission="zope.View"
+        interface="zope.mimetype.interfaces.IContentTypeAware"
+        attributes="size openDetached"
+        />
+    <require
+        permission="zope.ManageContent"
+        set_attributes="mimeType parameters"
+        />
+    <require
+        permission="zope.ManageContent"
+        attributes="open"
+        />
+    <implements
+        interface="
+          zope.annotation.interfaces.IAttributeAnnotatable
+          "
+        />
+  </class>
+
+  <class class=".report.ReportTask">
+    <require permission="schooltool.view"
+             interface=".interfaces.IReportTask" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IReportTask" />
+  </class>
+
+  <class class=".report.OldReportTask">
+    <require permission="schooltool.view"
+             interface=".interfaces.IReportTask" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IReportTask" />
+  </class>
+
+  <class class=".report.ArchiveReportTask">
+    <require permission="schooltool.view"
+             interface=".interfaces.IReportTask" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IReportTask" />
+  </class>
+
+  <class class=".report.ReportMessage">
+    <require permission="schooltool.view"
+             interface=".interfaces.IReportMessage" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IReportMessage" />
+  </class>
+
+  <class class=".report.ReportProgressMessage">
+    <require permission="schooltool.view"
+             interface=".interfaces.IReportProgressMessage" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IReportProgressMessage" />
+  </class>
+
+  <class class=".report.GeneratedReportMessage">
+    <require permission="schooltool.view"
+             interface=".interfaces.IReportMessage" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IReportMessage" />
+  </class>
+
   <browser:viewletManager
       name="schooltool.ReportLinks"
       permission="zope.Public"
@@ -53,7 +118,53 @@
       provides="schooltool.report.interfaces.IReportLinksURL"
       />
 
-  <include file="meta.zcml" />
+  <adapter factory=".report.ReportResourceURL" />
+
+  <adapter
+      name="schooltool.report.report.OnReportScheduled"
+      for="schooltool.report.interfaces.IReportTask
+           *"
+      provides="schooltool.task.interfaces.ITaskScheduledNotification"
+      factory=".report.OnReportScheduled"
+      />
+
+  <adapter
+      name="schooltool.report.report.OnReportGenerated"
+      for="schooltool.report.interfaces.IReportTask
+           *
+           *"
+      provides="schooltool.task.interfaces.ITaskCompletedNotification"
+      factory=".report.OnReportGenerated"
+      />
+
+  <adapter
+      name="schooltool.report.report.OnPDFReportScheduled"
+      for="schooltool.task.interfaces.IRemoteTask
+           *
+           schooltool.skin.flourish.interfaces.IPDFPage"
+      provides="schooltool.task.interfaces.ITaskScheduledNotification"
+      factory=".report.OnPDFReportScheduled"
+      />
+
+  <adapter
+      name="schooltool.report.report.OnPDFReportScheduled"
+      for="schooltool.task.interfaces.IRemoteTask
+           *
+           schooltool.app.browser.report.PDFView"
+      provides="schooltool.task.interfaces.ITaskScheduledNotification"
+      factory=".report.OnPDFReportScheduled"
+      />
+
+  <adapter
+      name="schooltool.report.report.OnReportArchiveScheduled"
+      for="schooltool.task.interfaces.IRemoteTask
+           *
+           schooltool.report.browser.report.ReportArchivePage"
+      provides="schooltool.task.interfaces.ITaskScheduledNotification"
+      factory=".report.OnReportArchiveScheduled"
+      />
+
+  <include file="security.zcml" />
 
   <include package="schooltool.report.browser" />
 

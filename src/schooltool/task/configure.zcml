@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <include file="security.zcml" />
+
+  <class class=".tasks.TaskContainer">
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__" />
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+  </class>
+
+  <class class=".tasks.RemoteTask">
+    <require permission="schooltool.view"
+             interface=".interfaces.IRemoteTask" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IRemoteTask" />
+  </class>
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".tasks.TasksStartUp"
+      name="schooltool.task" />
+
+  <adapter factory=".tasks.getTaskContainerForApp" />
+
+  <adapter
+      factory=".tasks.RemoteTaskCatalog"
+      name="schooltool.task.tasks.RemoteTaskCatalog" />
+
+  <adapter
+      for=".interfaces.ITaskContainer"
+      provides="zope.catalog.interfaces.ICatalog"
+      factory=".tasks.getRemoteTaskCatalog" />
+
+  <class class=".tasks.MessageContainer">
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__" />
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+  </class>
+
+  <class class=".tasks.Message">
+    <require permission="schooltool.view"
+             interface=".interfaces.IMessage" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IMessage" />
+  </class>
+
+  <class class=".progress.ProgressMessage">
+    <require permission="schooltool.view"
+             interface=".interfaces.IProgressMessage" />
+    <require permission="schooltool.edit"
+             set_schema=".interfaces.IProgressMessage" />
+  </class>
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".tasks.MessagesStartUp"
+      name="schooltool.task.messages" />
+
+  <adapter factory=".tasks.getMessageContainerForApp" />
+
+  <adapter
+      factory=".tasks.MessageCatalog"
+      name="schooltool.task.tasks.MessageCatalog" />
+
+  <adapter
+      for=".interfaces.IMessageContainer"
+      provides="zope.catalog.interfaces.ICatalog"
+      factory=".tasks.getMessageCatalog" />
+
+  <adapter
+      name="schooltool.task.tasks.OnTaskFailed"
+      for="schooltool.task.interfaces.IRemoteTask
+           *
+           *
+           *"
+      provides="schooltool.task.interfaces.ITaskFailedNotification"
+      factory=".tasks.OnTaskFailed"
+      />
+
+  <include package=".browser" />
+
+</configure>

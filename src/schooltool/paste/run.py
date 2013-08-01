@@ -23,9 +23,8 @@ SchoolTool run script.
 from __future__ import with_statement
 
 import optparse
+import os
 import os.path
-import re
-import sys
 
 import paste.script.command
 
@@ -81,18 +80,7 @@ def parse_args():
     instance_root = os.path.abspath(args[0])
     conf_file = os.path.join(instance_root, "paste.ini")
     if not os.path.exists(conf_file):
-        schooltool_ini = os.path.join(instance_root, 'schooltool.ini')
-        if os.path.exists(schooltool_ini):
-            try:
-                print >> sys.stderr, 'Updating instance files...'
-                update_instance(instance_root)
-                print >> sys.stderr, 'Done.'
-            except OSError, e:
-                print >> sys.stderr, 'Failed.'
-                if os.path.exists(schooltool_ini):
-                    conf_file = schooltool_ini
-        else:
-            parser.error("This is not a schooltool instance: %s" % args[0])
+        parser.error("This is not a schooltool instance: %s" % args[0])
     args[0] = conf_file
 
     if (options.start_daemon or
@@ -107,47 +95,16 @@ def parse_args():
     return options, args
 
 
-# BBB since schooltool 1.6
-def update_instance(instance_root):
-    """Renames configuration files to match Ubuntu layout"""
-    os.rename(os.path.join(instance_root, 'schooltool.ini'),
-              os.path.join(instance_root, 'paste.ini'))
-    os.rename(os.path.join(instance_root, 'school.zcml'),
-              os.path.join(instance_root, 'site.zcml'))
-    with open(os.path.join(instance_root, 'schooltool.conf'), 'r') as f:
-        schooltool_conf = f.read()
-
-        instance = os.path.basename(instance_root)
-        schooltool_conf = re.sub(os.path.join(instance, 'school.zcml'),
-                                 os.path.join(instance, 'site.zcml'),
-                                 schooltool_conf, 1)
-        schooltool_conf = re.sub('Arial and Times New Roman',
-                                 'Liberation',
-                                 schooltool_conf, 1)
-        schooltool_conf = re.sub('msttcorefonts',
-                                 'ttf-liberation',
-                                 schooltool_conf)
-        # uncomment reportlab_fontdir
-        schooltool_conf = re.sub('\n#?(reportlab_fontdir.*)ttf-liberation\n',
-                                 r'\n\1ttf-liberation\n',
-                                 schooltool_conf, 1)
-        # comment out obsolete attendance-log-file option
-        schooltool_conf = re.sub('\n(attendance-log-file.*)\n',
-                                 r'\n#\1\n',
-                                 schooltool_conf, 1)
-        # specify absolute path to pid file
-        schooltool_conf = re.sub('\npid-file (var/schooltool.pid)\n',
-                                 r'\npid-file %(instance)s/\1\n' % {
-                                     'instance': instance_root},
-                                 schooltool_conf, 1)
-
-    with open(os.path.join(instance_root, 'schooltool.conf'), 'w') as f:
-        f.write(schooltool_conf)
+def set_default_celery_config():
+    if 'CELERY_CONFIG_MODULE' not in os.environ:
+        os.environ['CELERY_CONFIG_MODULE']='schooltool.task.config.zope'
 
 
 def main():
     options, args = parse_args()
     conf_file = os.path.abspath(args[0])
+
+    set_default_celery_config()
 
     extra_options = []
     if options.start_daemon:

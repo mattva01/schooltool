@@ -5,8 +5,13 @@
 
   <allow
       interface="schooltool.contact.interfaces.IContactContainer"
-      crowds="administration"
+      crowds="administrators clerks"
       permission="schooltool.view" />
+
+  <allow
+      interface="schooltool.contact.interfaces.IContactContainer"
+      crowds="clerks"
+      permission="schooltool.edit" />
 
   <crowd
       name="contact_person_instructors"
@@ -14,17 +19,17 @@
 
   <allow
       interface="schooltool.contact.interfaces.IContact"
-      crowds="administration contact_person_instructors"
+      crowds="administrators clerks contact_person_instructors"
       permission="schooltool.view" />
 
   <allow
       interface="schooltool.contact.basicperson.IBoundContact"
-      crowds="administration owner person_instructors contact_person_instructors"
+      crowds="administrators clerks owner person_instructors contact_person_instructors"
       permission="schooltool.view" />
 
   <allow
       interface="schooltool.contact.interfaces.IContact"
-      crowds="administration contact_person_instructors"
+      crowds="clerks contact_person_instructors"
       permission="schooltool.edit" />
 
   <!-- Security descriptions -->
@@ -51,7 +56,7 @@
      group="schooltool.contact" name="create_delete"
      title="Create/Delete an external contact"
      order="30"
-     interface="schooltool.app.interfaces.ISchoolToolApplication"
+     interface="schooltool.contact.interfaces.IContactContainer"
      permission="schooltool.edit"
   />
 

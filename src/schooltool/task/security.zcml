@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<configure xmlns="http://schooltool.org/securitypolicy"
+           xmlns:zope="http://namespaces.zope.org/zope">
+
+  <crowd
+      name="message_readers"
+      factory="schooltool.task.tasks.MessageReaders" />
+
+  <allow
+      interface="schooltool.task.interfaces.IMessage"
+      crowds="administrators message_readers"
+      permission="schooltool.view" />
+
+  <allow
+      interface="schooltool.task.interfaces.IRemoteTask"
+      crowds="administration"
+      permission="schooltool.view" />
+
+  <allow
+      interface="schooltool.task.interfaces.IRemoteTask"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <describe_group
+      name="schooltool.task_messages"
+      title="Messages"
+      />
+
+  <describe_action
+     group="schooltool.task_messages" name="view"
+     title="Read messages"
+     order="10"
+     interface="schooltool.task.interfaces.IMessage"
+     permission="schooltool.view"
+     />
+
+  <describe_action
+     group="schooltool.task_messages" name="browse-messages"
+     title="Browse other users' messages (overview)"
+     order="15"
+     interface="schooltool.basicperson.interfaces.IBasicPerson"
+     permission="schooltool.view"
+     />
+
+</configure>

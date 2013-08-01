@@ -294,3 +294,15 @@
 .worksheets-list li.active {
     background-color: #6C7B7C;
 }
+
+.unsaved-changes-warning {
+    display: none;
+}
+
+.gradebook-part th.no-activities p {
+    font-size: 16px;
+    line-height: 20px;
+    margin-left: 8px;
+    margin-bottom: 8px;
+    margin-top: 8px;
+}

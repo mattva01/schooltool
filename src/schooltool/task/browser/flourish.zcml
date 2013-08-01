@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<configure xmlns="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zcml="http://namespaces.zope.org/zcml"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:flourish="http://schooltool.org/flourish"
+           xmlns:report="http://namespaces.schooltool.org/report"
+           i18n_domain="schooltool">
+
+  <zope:resourceLibrary
+      name="schooltool.task"
+      require=""
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+        source="resources"
+        include="task.js"
+        />
+  </zope:resourceLibrary>
+
+  <flourish:page
+      name="index.html"
+      for="schooltool.task.interfaces.ITaskContainer"
+      class=".task.TaskContainerView"
+      content_template="templates/task_container.pt"
+      permission="schooltool.edit"
+      />
+
+   <flourish:page
+      name="index.html"
+      for="schooltool.task.interfaces.IRemoteTask"
+      class=".task.TaskStatusView"
+      content_template="templates/task_status.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="schooltool.tasks"
+      title="Scheduled Tasks"
+      class=".task.TaskContainerLinkViewlet"
+      manager="schooltool.app.browser.app.ApplicationControlLinks"
+      permission="schooltool.edit"
+      />
+
+  <flourish:activeViewlet
+      name="manage_site"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      view=".task.TaskContainerView"
+      />
+
+  <flourish:activeViewlet
+      name="manage_site"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      view=".task.TaskStatusView"
+      />
+
+  <configure zcml:condition="not-have devmode">
+    <flourish:viewlet
+        name="table"
+        for="schooltool.task.interfaces.ITaskContainer"
+        class=".task.TaskTable"
+        manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+        permission="schooltool.view"
+        />
+  </configure>
+
+  <configure zcml:condition="have devmode">
+    <flourish:viewlet
+        name="table"
+        for="schooltool.task.interfaces.ITaskContainer"
+        class=".task.TaskTableDevmode"
+        manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+        permission="schooltool.view"
+        />
+  </configure>
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class="schooltool.table.table.DoNotFilter"
+      manager=".task.TaskTable"
+      permission="schooltool.view"
+      />
+
+  <page
+      name="dialog"
+      for="schooltool.task.interfaces.IMessage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".task.MessageDialog"
+      permission="schooltool.view"
+      />
+
+  <flourish:content
+      name="short"
+      for="schooltool.task.tasks.TaskFailedMessage"
+      view="zope.interface.Interface"
+      template="templates/f_short_fail_message.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="dialog"
+      for="schooltool.task.interfaces.IProgressMessage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".task.TaskProgressDialog"
+      permission="schooltool.view"
+      />
+
+</configure>

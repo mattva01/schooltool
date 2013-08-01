@@ -631,17 +631,6 @@
   <!-- Reports -->
 
   <report:reportLink
-       name="person_export_xml"
-       for="schooltool.person.interfaces.IPerson"
-       permission="schooltool.edit"
-       group="Person"
-       description="Contains an XML representation of the person."
-       title="Export as XML"
-       file_type="xml"
-       link="request_person_export_xml.html"
-       />
-
-  <report:reportLink
       name="person_id_card_pdf"
       for="schooltool.person.interfaces.IPerson"
       permission="schooltool.edit"
@@ -661,20 +650,6 @@
       title="Profile"
       file_type="pdf"
       link="request_person_profile_pdf.html"
-      />
-
-  <flourish:page
-      name="person_export.xml"
-      for="schooltool.person.interfaces.IPerson"
-      class=".xml.FlourishPersonXMLExportView"
-      permission="schooltool.edit"
-      />
-
-  <flourish:page
-      name="request_person_export_xml.html"
-      for="schooltool.person.interfaces.IPerson"
-      class=".person.FlourishRequestPersonXMLExportView"
-      permission="schooltool.edit"
       />
 
    <flourish:page
@@ -858,6 +833,32 @@
       provides="schooltool.app.browser.interfaces.IReportPageTemplate"
       name="cards"
       factory=".person.IDCardsPageTemplate"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      before="batch table"
+      class=".person.PersonMessageFilter"
+      manager=".person.MessageTable"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="messages_table"
+      for="*"
+      class=".person.MessageTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="new_messages"
+      after="logged-in-name"
+      before="login language_selector"
+      for="*"
+      manager="schooltool.skin.flourish.page.ISecondaryNavigationManager"
+      permission="schooltool.view"
+      class=".person.NewMessageIndicatorViewlet"
       />
 
 </configure>

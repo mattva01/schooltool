@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<configure xmlns="http://schooltool.org/securitypolicy"
+           xmlns:zope="http://namespaces.zope.org/zope"
+           i18n_domain="schooltool">
+
+  <allow
+      interface="schooltool.report.interfaces.IReportTask"
+      crowds="administration"
+      permission="schooltool.view" />
+
+  <allow
+      interface="schooltool.report.interfaces.IReportTask"
+      crowds="administration"
+      permission="schooltool.edit" />
+
+  <allow
+      interface="schooltool.report.interfaces.IReportMessage"
+      crowds="message_readers"
+      permission="schooltool.view" />
+
+  <describe_action
+     group="schooltool.task_messages" name="view-reports"
+     title="Download reports"
+     order="20"
+     interface="schooltool.report.interfaces.IReportMessage"
+     permission="schooltool.view"
+     />
+
+</configure>

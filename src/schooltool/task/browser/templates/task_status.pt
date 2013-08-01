@@ -1,0 +1,55 @@
+<tal:block i18n:domain="schooltool"
+           define="status view/status">
+
+  <table class="form-fields">
+    <thead>
+      <tr>
+        <th i18n:translate="" class="label">ID</th>
+        <th>
+          <span tal:content="context/task_id" />
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr tal:condition="status/pending">
+        <td i18n:translate="" colspan="2">Task pending or removed</td>
+      </tr>
+      <tr tal:condition="status/in_progress">
+        <td i18n:translate="">In Progress</td>
+        <td tal:content="status/progress"></td>
+      </tr>
+      <tr tal:condition="status/failed">
+        <td i18n:translate="">Failed</td>
+        <td tal:content="status/failure"></td>
+      </tr>
+      <tr tal:condition="status/failed">
+        <td i18n:translate="">Traceback</td>
+        <td tal:content="structure status/traceback"></td>
+      </tr>
+      <tr tal:condition="status/succeeded">
+        <td i18n:translate="">Succeeded</td>
+        <td tal:content="status/result"></td>
+      </tr>
+      <tr tal:condition="view/persistent_failed">
+        <td i18n:translate="">Persisted traceback</td>
+        <td tal:content="structure view/persistent_task/permanent_traceback"></td>
+      </tr>
+      <tr tal:condition="view/persistent_finished">
+        <td i18n:translate="">Persisted result</td>
+        <td tal:content="view/persistent_task/permanent_result"></td>
+      </tr>
+      <tr>
+        <td i18n:translate="" class="label">Internal state</td>
+        <td tal:content="status/state" />
+      </tr>
+    </tbody>
+  </table>
+
+  <tal:block content="structure context/schooltool:content/progress|nothing" />
+
+  <h3>
+    <a tal:attributes="href context/__parent__/@@absolute_url"
+       i18n:translate="">Done</a>
+  </h3>
+
+</tal:block>

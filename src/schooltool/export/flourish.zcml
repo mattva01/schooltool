@@ -6,10 +6,27 @@
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
+  <zope:resourceLibrary
+      name="schooltool.export"
+      require=""
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+        source="resources"
+        include="importer.js"
+        />
+  </zope:resourceLibrary>
+
   <flourish:page
      name="export.xls"
      for="schooltool.app.interfaces.ISchoolToolApplication"
      class=".export.MegaExporter"
+     permission="schooltool.edit" />
+
+  <flourish:page
+     name="export.xls"
+     for="schooltool.app.interfaces.ISchoolToolApplication"
+     layer="schooltool.report.interfaces.IRemoteReportLayer"
+     class=".export.RemoteMegaExporter"
      permission="schooltool.edit" />
 
   <flourish:viewlet
@@ -32,6 +49,14 @@
       name="manage_school"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
       view=".importer.FlourishMegaImporter"
+      />
+
+  <flourish:content
+      name="progress"
+      for=".importer.ImporterTask"
+      class=".importer.ImportProgressContent"
+      template="templates/f_import_progress.pt"
+      permission="schooltool.view"
       />
 
   <flourish:page
@@ -63,5 +88,12 @@
        file_type="xls"
        link="request_export_xls.html"
        />
+
+  <zope:class class=".export.XLSProgressMessage">
+    <require permission="schooltool.view"
+             interface="schooltool.export.interfaces.IXLSProgressMessage" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.export.interfaces.IXLSProgressMessage" />
+  </zope:class>
 
 </configure>

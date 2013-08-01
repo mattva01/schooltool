@@ -32,12 +32,6 @@ from schooltool.common import SchoolToolMessage as _
 from schooltool.app.browser.report import ReportPDFView
 
 
-# XXX: This is the old way to tell if PDF support is enabled.
-#      It is very, very evil and is deprecated.
-#      Please use a bit less evil isEnabled() in schooltool.app.pdf
-global disabled
-disabled = True
-
 SANS = 'Arial_Normal'
 SANS_OBLIQUE = 'Arial_Italic'
 SANS_BOLD = 'Arial_Bold'

@@ -59,8 +59,8 @@
           name="Ubuntu_Regular"
           tal:attributes="size bottom_bar/fontSize" />
       <image
-          tal:attributes="file bottom_bar/logo_url;
-                          x bottom_bar/slots/left/x;
+          file="[schooltool.skin.flourish]/resources/logo_bw.png"
+          tal:attributes="x bottom_bar/slots/left/x;
                           y bottom_bar/y;
                           height bottom_bar/height;"
           preserveAspectRatio="True" />
@@ -114,7 +114,7 @@
 
       <image
           tal:condition="header/logo"
-          tal:attributes="file header/logo/url;
+          tal:attributes="file header/logo/logo_data;
                           x header/logo/x;
                           y header/logo/y;
                           height header/logo/height;

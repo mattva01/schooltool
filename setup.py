@@ -59,7 +59,9 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     package_dir={'': 'src'},
     packages=find_packages('src'),
     namespace_packages=["schooltool"],
-    install_requires=['PasteDeploy',
+    install_requires=['celery',
+                      'bottle',
+                      'PasteDeploy',
                       'PasteScript',
                       'Pillow',
                       'pytz',
@@ -158,6 +160,7 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     entry_points = """
     [paste.app_factory]
     main = schooltool.paste.main:schooltool_app_factory
+    task_results = schooltool.paste.main:task_result_app_factory
 
     [console_scripts]
     start-schooltool-instance = schooltool.paste.run:main
@@ -168,9 +171,11 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
     schooltool_deploy = schooltool.paste.templates:SchoolToolDeploy
 
     [schooltool.instance_type]
-    flourish = schooltool.skin.flourish.instance
     standard = schooltool.standard
     schooltool = schooltool.skin.flourish.instance
+
+    [schooltool.tasks]
+    schooltool.export.importer = schooltool.export.importer
 
     """,
     )

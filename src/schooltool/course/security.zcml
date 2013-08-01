@@ -23,20 +23,20 @@
 
   <allow
       interface="schooltool.course.interfaces.ISectionContainer"
-      crowds="administration configurable_section_viewers"
+      crowds="administrators clerks configurable_section_viewers"
       permission="schooltool.view" />
   <allow
       interface="schooltool.course.interfaces.ISectionContainer"
-      crowds="administration"
+      crowds="clerks"
       permission="schooltool.edit" />
 
   <allow
       interface="schooltool.course.interfaces.ISection"
-      crowds="administration teachers section_instructors section_learners configurable_section_viewers"
+      crowds="administrators clerks teachers section_instructors section_learners configurable_section_viewers"
       permission="schooltool.view" />
   <allow
       interface="schooltool.course.interfaces.ISection"
-      crowds="administration section_instructors"
+      crowds="clerks section_instructors"
       permission="schooltool.edit" />
 
   <setting
@@ -47,11 +47,11 @@
 
   <allow
       interface="schooltool.course.interfaces.ICourseContainer"
-      crowds="administration everybody"
+      crowds="everybody"
       permission="schooltool.view" />
   <allow
       interface="schooltool.course.interfaces.ICourseContainer"
-      crowds="administration"
+      crowds="clerks"
       permission="schooltool.edit" />
 
   <allow
@@ -60,7 +60,7 @@
       permission="schooltool.view" />
   <allow
       interface="schooltool.course.interfaces.ICourse"
-      crowds="administration leaders"
+      crowds="clerks leaders"
       permission="schooltool.edit" />
 
   <!-- Grant read access to person's data to his instructors -->

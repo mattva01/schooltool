@@ -41,15 +41,8 @@
   <include package="zope.app.pagetemplate" />
   <include package="zope.app.generations" />
 
-  <include package="zope.i18n" />
-
   <!-- Views -->
   <include package="zope.app.http" />
-
-  <!-- Translations -->
-  <configure package="zope.app.locales">
-    <i18n:registerTranslations directory="." />
-  </configure>
 
   <!-- Database boostrapping and maintanance -->
   <include package="zope.app.appsetup" />

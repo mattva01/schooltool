@@ -4,7 +4,7 @@ PACKAGE=schooltool
 LOCALES=src/schooltool/locales
 TRANSLATIONS_ZCML=schooltool/common/translations.zcml
 
-DIST=/home/ftp/pub/schooltool/flourish
+DIST=/home/ftp/pub/schooltool/trunk
 PYTHON=python
 
 INSTANCE_TYPE=schooltool
@@ -44,28 +44,77 @@ update:
 instance: | build
 	bin/make-schooltool-instance instance instance_type=$(INSTANCE_TYPE)
 
+instance/run/supervisord.pid:
+	bin/supervisord
+
 .PHONY: run
-run: build instance
+run: build instance instance/run/supervisord.pid
+	@bin/supervisorctl start "services:*"
+	@bin/supervisorctl status schooltool | grep RUNNING && bin/supervisorctl stop schooltool || exit 0
+	@bin/supervisorctl status
 	bin/start-schooltool-instance instance
+
+.PHONY: start
+start: build instance instance/run/supervisord.pid
+	bin/supervisorctl start all
+	@bin/supervisorctl status
+
+.PHONY: start-services
+start-services: build instance instance/run/supervisord.pid
+	@bin/supervisorctl status | grep services[:] | grep -v RUNNING && bin/supervisorctl start "services:*" || exit 0
+	@bin/supervisorctl status | grep services[:]
+
+.PHONY: restart
+restart: build instance instance/run/supervisord.pid
+	@bin/supervisorctl restart "services:celery_report"
+	@bin/supervisorctl start "services:*"
+	bin/supervisorctl restart schooltool
+	@bin/supervisorctl status
+
+.PHONY: rerun
+rerun: build instance instance/run/supervisord.pid
+	@bin/supervisorctl restart "services:celery_report"
+	@bin/supervisorctl start "services:*"
+	@bin/supervisorctl status schooltool | grep RUNNING && bin/supervisorctl stop schooltool || exit 0
+	@bin/supervisorctl status
+	bin/start-schooltool-instance instance
+
+.PHONY: stop
+stop:
+	@test -S instance/run/supervisord.sock && bin/supervisorctl status | grep -v STOPPED && bin/supervisorctl stop all || exit 0
+	@test -S instance/run/supervisord.sock && bin/supervisorctl shutdown || echo Nothing to stop
+	@rm -f instance/run/zeo.sock
+	@rm -f instance/run/supervisord.sock
+	@rm -f instance/run/supervisord.pid
+
+.PHONY: status
+status:
+	@test -f instance/run/supervisord.pid && bin/supervisorctl status || echo All services shut down
 
 .PHONY: tags
 tags: build
 	bin/ctags
 
 .PHONY: clean
-clean:
+clean: stop
 	rm -rf python
 	rm -rf bin develop-eggs parts .installed.cfg
 	rm -rf build
 	rm -f ID TAGS tags
 	rm -rf coverage ftest-coverage
 	rm -rf docs
+	rm -rf instance/var/celerybeat-schedule
+	rm -rf instance/var/redis-dump.rdb
+	rm -rf instance/run/zeo.sock
+	rm -rf instance/run/supervisord.sock
+	rm -rf instance/run/supervisord.pid
+	rm -rf instance/var/Data.fs.lock
 	find . -name '*.py[co]' -delete
 	find . -name '*.mo' -delete
 	find . -name 'LC_MESSAGES' -exec rmdir -p --ignore-fail-on-non-empty {} +
 
 .PHONY: realclean
-realclean:
+realclean: stop
 	rm -f buildout.cfg
 	rm -rf eggs
 	rm -rf dist
@@ -168,8 +217,8 @@ upload:
 	    echo cp dist/$(PACKAGE)-$${VERSION}.tar.gz $${DIST} ;\
 	    cp dist/$(PACKAGE)-$${VERSION}.tar.gz $${DIST} ;\
 	else \
-	    echo scp dist/$(PACKAGE)-$${VERSION}.tar.gz* schooltool.org:$${DIST} ;\
-	    scp dist/$(PACKAGE)-$${VERSION}.tar.gz* schooltool.org:$${DIST} ;\
+	    echo scp dist/$(PACKAGE)-$${VERSION}.tar.gz* ftp.schooltool.org:$${DIST} ;\
+	    scp dist/$(PACKAGE)-$${VERSION}.tar.gz* ftp.schooltool.org:$${DIST} ;\
 	fi
 
 # Helpers
@@ -179,5 +228,6 @@ ubuntu-environment:
 	sudo apt-get install build-essential gettext enscript \
 	    python-dev python-virtualenv \
 	    ttf-ubuntu-font-family ttf-liberation \
-	    libicu-dev libxslt1-dev libfreetype6-dev libjpeg-dev
+	    libicu-dev libxslt1-dev libfreetype6-dev libjpeg-dev \
+	    redis-server
 

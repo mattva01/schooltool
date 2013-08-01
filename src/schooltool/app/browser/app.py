@@ -76,7 +76,6 @@ from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.table import ImageInputColumn
 from schooltool.table.interfaces import ITableFormatter
 from schooltool.skin.skin import OrderedViewletManager
-from schooltool.skin.breadcrumbs import CustomNameBreadCrumbInfo
 from schooltool.skin import flourish
 from schooltool.skin.flourish.form import Form
 from schooltool.skin.flourish.form import Dialog
@@ -760,7 +759,6 @@ class LoginNavigationViewlet(flourish.page.LinkViewlet):
             return _("Log in")
         return _("Log out")
 
-
     @property
     def login_url(self):
         app_url = absoluteURL(ISchoolToolApplication(None), self.request)
@@ -983,9 +981,6 @@ class ViewRobot(BrowserPage):
 
     def __call__(self):
         return "User-agent: *\nDisallow: /"
-
-
-SchoolBreadcrumbInfo = CustomNameBreadCrumbInfo(_('school'))
 
 
 @adapter(ISchoolToolApplication)

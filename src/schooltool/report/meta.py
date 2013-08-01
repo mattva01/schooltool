@@ -32,9 +32,10 @@ from zope.viewlet.metaconfigure import viewletDirective
 from schooltool.report.interfaces import IReportLinkViewletManager
 from schooltool.report.report import ReportLinkViewlet
 from schooltool.report.report import getReportRegistrationUtility
+from schooltool.skin.flourish.zcml import IViewletOrder
 
 
-class IReportLinkDirective(IViewletDirective):
+class IReportLinkDirective(IViewletDirective, IViewletOrder):
     group = MessageID(title=u"Report group", required=True)
     title = MessageID(title=u"Report link text", required=True)
     description = MessageID(title=u"Report link description", required=True)

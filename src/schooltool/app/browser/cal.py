@@ -34,9 +34,6 @@ from zope.component import subscribers
 from zope.event import notify
 from zope.interface import implements, implementer, Interface
 from zope.i18n import translate
-from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.publisher.interfaces import NotFound
-from zope.security import checkPermission
 from zope.security.interfaces import ForbiddenAttribute, Unauthorized
 from zope.security.proxy import removeSecurityProxy
 from zope.proxy import sameProxiedObjects
@@ -68,14 +65,11 @@ from zc.table import table
 
 from schooltool.common import SchoolToolMessage as _
 
-from schooltool.skin.interfaces import IBreadcrumbInfo
-from schooltool.skin.breadcrumbs import GenericBreadcrumbInfo
-from schooltool.skin.breadcrumbs import CustomNameBreadCrumbInfo
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.interfaces import IFilterWidget
 from schooltool.app.cal import CalendarEvent
 from schooltool.app.browser import ViewPreferences, same
-from schooltool.app.browser import pdfcal
+from schooltool.app import pdf
 from schooltool.app.browser.interfaces import ICalendarProvider
 from schooltool.app.browser.interfaces import IEventForDisplay
 from schooltool.app.browser.interfaces import IHaveEventLegend
@@ -398,7 +392,7 @@ class CalendarViewBase(BrowserView):
         return url
 
     def pdfURL(self):
-        if pdfcal.disabled:
+        if not pdf.enabled:
             return None
         else:
             assert self.cal_type != 'yearly'
@@ -2665,59 +2659,6 @@ def enableICalendarUpload(ical_view):
 
     """
     return IWriteFile(ical_view.context)
-
-
-class CalendarEventBreadcrumbInfo(GenericBreadcrumbInfo):
-    """Calendar Event Breadcrumb Info
-
-      >>> from zope.component import provideAdapter
-      >>> from zope.interface import directlyProvides
-
-    First, set up a parent:
-
-      >>> class Object(object):
-      ...     def __init__(self, parent=None, name=None):
-      ...         self.__parent__ = parent
-      ...         self.__name__ = name
-
-      >>> calendar = Object()
-      >>> from zope.traversing.interfaces import IContainmentRoot
-      >>> directlyProvides(calendar, IContainmentRoot)
-
-    Now setup the event:
-
-      >>> event = Object(calendar, u'+1243@localhost')
-
-    Setup a request:
-
-      >>> from zope.publisher.browser import TestRequest
-      >>> request = TestRequest()
-
-    Now register the breadcrumb info component and other setup:
-
-      >>> provideAdapter(GenericBreadcrumbInfo,
-      ...                (Object, TestRequest),
-      ...                IBreadcrumbInfo)
-
-      >>> from zope.app.testing import setup
-      >>> setup.setUpTraversal()
-
-    Now initialize this info and test it:
-
-      >>> info = CalendarEventBreadcrumbInfo(event, request)
-      >>> info.url
-      'http://127.0.0.1/+1243@localhost/edit.html'
-    """
-
-    @property
-    def url(self):
-        name = urllib.quote(self.context.__name__.encode('utf-8'), "@+")
-        parent_info = getMultiAdapter(
-            (self.context.__parent__, self.request), IBreadcrumbInfo)
-        return '%s/%s/edit.html' %(parent_info.url, name)
-
-
-CalendarBreadcrumbInfo = CustomNameBreadCrumbInfo(_('Calendar'))
 
 
 class CalendarActionMenuViewlet(object):

@@ -1,0 +1,18 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="schooltool"
+    >
+
+  <include package="zope.component" file="meta.zcml" />
+  <include package="schooltool.securitypolicy" file="meta.zcml" />
+
+  <adapter
+    factory="zope.publisher.browser.BrowserLanguages"
+    for="zope.publisher.interfaces.http.IHTTPRequest"
+    provides="zope.i18n.interfaces.IUserPreferredLanguages"
+    />
+
+  <include package="schooltool.common" file="i18n.zcml" />
+
+</configure>

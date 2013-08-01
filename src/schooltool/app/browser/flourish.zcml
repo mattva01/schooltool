@@ -584,7 +584,7 @@
       class=".app.ApplicationControlLinks"
       for="zope.app.applicationcontrol.interfaces.IApplicationControl"
       view=".app.FlourishRuntimeInfoView"
-      title="Actions"
+      title="Details"
       permission="schooltool.edit"
       />
 

@@ -20,20 +20,22 @@
 SchoolTool XLS export views.
 """
 import xlwt
-from StringIO import StringIO
 import datetime
 from operator import attrgetter
+from StringIO import StringIO
 
+from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
+from zope.cachedescriptors.property import Lazy
 
+from schooltool.skin import flourish
 from schooltool.basicperson.demographics import DateFieldDescription
 from schooltool.basicperson.interfaces import IDemographics, IBasicPerson
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.common import SchoolToolMessage as _
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import IAsset
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.common import format_time_range
@@ -41,11 +43,22 @@ from schooltool.contact.contact import URIPerson, URIContact
 from schooltool.contact.contact import URIContactRelationship
 from schooltool.contact.interfaces import IContact, IContactContainer
 from schooltool.contact.interfaces import IContactable
+from schooltool.export.interfaces import IXLSExportView
+from schooltool.export.interfaces import IXLSProgressMessage
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.term.interfaces import ITermContainer
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
+from schooltool.report.browser.report import RequestRemoteReportDialog
+from schooltool.report.browser.report import ProgressReportPage
 from schooltool.relationship.relationship import IRelationshipLinks
+from schooltool.task.progress import TaskProgress
+from schooltool.task.progress import normalized_progress
+from schooltool.report.report import AbstractReportTask
+from schooltool.report.report import NoReportException
+from schooltool.report.report import ReportFile
+from schooltool.report.report import ReportMessage
+from schooltool.report.report import OnPDFReportScheduled
 from schooltool.timetable.interfaces import ITimetableContainer
 from schooltool.timetable.interfaces import IScheduleContainer
 from schooltool.timetable.interfaces import IHaveTimetables
@@ -54,7 +67,9 @@ from schooltool.timetable.daytemplates import WeekDayTemplates
 from schooltool.timetable.daytemplates import SchoolDayTemplates
 
 
-class ExcelExportView(BrowserView):
+class ExcelExportView(ProgressReportPage):
+
+    implements(IXLSExportView)
 
     def __init__(self, context, request):
         super(ExcelExportView, self).__init__(context, request)
@@ -201,14 +216,18 @@ class SchoolTimetableExportView(ExcelExportView):
         return offset + 1
 
     def export_school_timetables(self, wb):
+        self.task_progress.force('export_school_timetables', active=True)
         ws = wb.add_sheet("School Timetables")
         school_years = sorted(ISchoolYearContainer(self.context).values(),
                               key=lambda s: s.first)
         row = 0
-        for school_year in sorted(school_years, key=lambda i: i.last):
+        for ny, school_year in enumerate(sorted(school_years, key=lambda i: i.last)):
             timetables = ITimetableContainer(school_year)
-            for timetable in sorted(timetables.values(), key=lambda i: i.__name__):
+            for nt, timetable in enumerate(sorted(timetables.values(), key=lambda i: i.__name__)):
                 row = self.format_school_timetable(timetable, ws, row) + 1
+                self.progress('export_school_timetables', normalized_progress(
+                        ny, len(school_years), nt, len(timetables)))
+        self.finish('export_school_timetables')
 
 
 def merge_date_ranges(dates):
@@ -268,20 +287,26 @@ class ContactRelationship(object):
 
 class MegaExporter(SchoolTimetableExportView):
 
+    overall_line_id = 'overall'
+
     def print_table(self, table, ws):
         for x, row in enumerate(table):
             for y, cell in enumerate(row):
                 self.write(ws, x, y, cell.data, **cell.style)
         return len(table)
 
-    def format_table(self, fields, items):
+    def format_table(self, fields, items, importer=None, major_progress=()):
         headers = [Header(header)
                    for header, style, getter in fields]
         rows = []
-        for item in items:
+        total_items = len(removeSecurityProxy(items))
+        for n, item in enumerate(items):
             row = [style(getter(item))
                    for header, style, getter in fields]
             rows.append(row)
+            if importer is not None:
+                self.progress(importer, normalized_progress(
+                        *(major_progress + (n, total_items))))
         rows.sort()
         return [headers] + rows
 
@@ -291,11 +316,14 @@ class MegaExporter(SchoolTimetableExportView):
                   ('Start', Date, attrgetter('first')),
                   ('End', Date, attrgetter('last'))]
         items = ISchoolYearContainer(self.context).values()
-        return self.format_table(fields, items)
+        result = self.format_table(fields, items, importer='export_school_years')
+        return result
 
     def export_school_years(self, wb):
+        self.task_progress.force('export_school_years', active=True)
         ws = wb.add_sheet("School Years")
         self.print_table(self.format_school_years(), ws)
+        self.finish('export_school_years')
 
     def calculate_holidays_and_weekdays(self):
 
@@ -389,7 +417,7 @@ class MegaExporter(SchoolTimetableExportView):
         for year in school_years:
             items.extend([term for term in
                           ITermContainer(year).values()])
-        terms_table = self.format_table(fields, items)
+        terms_table = self.format_table(fields, items, importer='export_terms')
         holidays, weekends, exceptions = self.calculate_holidays_and_weekdays()
         terms_table.extend(self.format_holidays(holidays))
         terms_table.extend(self.format_weekends(weekends))
@@ -397,8 +425,10 @@ class MegaExporter(SchoolTimetableExportView):
         return terms_table
 
     def export_terms(self, wb):
+        self.task_progress.force('export_terms', active=True)
         ws = wb.add_sheet("Terms")
         self.print_table(self.format_terms(), ws)
+        self.finish('export_terms')
 
     def format_persons(self):
         fields = [('User Name', Text, attrgetter('__name__')),
@@ -429,11 +459,13 @@ class MegaExporter(SchoolTimetableExportView):
             fields.append((title, format, getter))
 
         items = self.context['persons'].values()
-        return self.format_table(fields, items)
+        return self.format_table(fields, items, importer='export_persons')
 
     def export_persons(self, wb):
+        self.task_progress.force('export_persons', active=True)
         ws = wb.add_sheet("Persons")
         self.print_table(self.format_persons(), ws)
+        self.finish('export_persons')
 
     def format_contact_persons(self):
         def contact_getter(attribute):
@@ -470,7 +502,8 @@ class MegaExporter(SchoolTimetableExportView):
         for contact in IContactContainer(self.context).values():
             items.append(contact)
 
-        return self.format_table(fields, items)
+        return self.format_table(fields, items, importer='export_contacts',
+                                 major_progress=(0,2))
 
     def format_contact_relationships(self):
         fields = [('Person ID', Text, attrgetter('person')),
@@ -496,24 +529,29 @@ class MegaExporter(SchoolTimetableExportView):
                     name, link.extra_info.relationship)
                 items.append(item)
 
-        return self.format_table(fields, items)
+        return self.format_table(fields, items, importer='export_contacts',
+                                 major_progress=(1,2))
 
     def export_contacts(self, wb):
+        self.task_progress.force('export_contacts', active=True)
         ws = wb.add_sheet("Contact Persons")
         self.print_table(self.format_contact_persons(), ws)
         ws = wb.add_sheet("Contact Relationships")
         self.print_table(self.format_contact_relationships(), ws)
+        self.finish('export_contacts')
 
     def format_resources(self):
         fields = [('ID', Text, attrgetter('__name__')),
                   ('Type', Text, lambda r: r.__class__.__name__),
                   ('Title', Text, attrgetter('title'))]
         items = self.context['resources'].values()
-        return self.format_table(fields, items)
+        return self.format_table(fields, items, importer='export_resources')
 
     def export_resources(self, wb):
+        self.task_progress.force('export_resources', active=True)
         ws = wb.add_sheet("Resources")
         self.print_table(self.format_resources(), ws)
+        self.finish('export_resources')
 
     def format_courses(self):
         fields = [('School Year', Text, lambda c: ISchoolYear(c).__name__),
@@ -529,11 +567,13 @@ class MegaExporter(SchoolTimetableExportView):
         for year in school_years:
             items.extend([term for term in
                           ICourseContainer(year).values()])
-        return self.format_table(fields, items)
+        return self.format_table(fields, items, importer='export_courses')
 
     def export_courses(self, wb):
+        self.task_progress.force('export_courses', active=True)
         ws = wb.add_sheet("Courses")
         self.print_table(self.format_courses(), ws)
+        self.finish('export_courses')
 
     def format_timetables(self, section, ws, offset):
         schedules = IScheduleContainer(section)
@@ -582,6 +622,7 @@ class MegaExporter(SchoolTimetableExportView):
         self.write(ws, row, 9, ', '.join(resources))
 
     def export_sections(self, wb):
+        self.task_progress.force('export_sections', active=True)
         ws = wb.add_sheet("Sections")
         headers = ["School Year", "Courses", "Term", "Section ID",
                    "Previous ID", "Next ID", "Title", "Description",
@@ -600,9 +641,14 @@ class MegaExporter(SchoolTimetableExportView):
                                      section.__name__, section))
 
         row = 1
-        for year, courses, first, term, section_id, section in sorted(sections):
+        sections.sort()
+        n_sections = len(sections)
+        for n, (year, courses, first, term, section_id, section) in enumerate(sections):
             self.format_section(year, courses, term, section, ws, row)
+            self.progress('export_sections', normalized_progress(
+                    n, n_sections))
             row += 1
+        self.finish('export_sections')
 
     def format_student_sections(self, year, student_sections, ws, row):
         headers = ["School Year", "Term", "Section ID"]
@@ -627,13 +673,16 @@ class MegaExporter(SchoolTimetableExportView):
         return row + 1
 
     def export_section_enrollment(self, wb):
+        self.task_progress.force('export_section_enrollment', active=True)
         ws = wb.add_sheet("SectionEnrollment")
 
         year_sections = {}
-        for year in ISchoolYearContainer(self.context).values():
+        years = ISchoolYearContainer(self.context)
+        for ny, year in enumerate(years.values()):
             sections = year_sections[year] = {}
-            for term in year.values():
-                for section in ISectionContainer(term).values():
+            for nt, term in enumerate(year.values()):
+                term_sections = ISectionContainer(term)
+                for ns, section in enumerate(term_sections.values()):
                     if not list(section.courses):
                         continue
                     student_ids = [s.username for s in section.members]
@@ -641,13 +690,23 @@ class MegaExporter(SchoolTimetableExportView):
                     student_sections = sections.setdefault(students, [])
                     student_sections.append((term.first, term, section.__name__,
                                              section))
+                    self.progress('export_section_enrollment', normalized_progress(
+                        ny, len(years),
+                        nt, len(year),
+                        ns, len(term_sections),
+                        ) * 0.9)
 
         row = 0
-        for year, sections in sorted(year_sections.items()):
-            for students, student_sections in sorted(sections.items()):
+        for ny, (year, sections) in enumerate(sorted(year_sections.items())):
+            for ns, (students, student_sections) in enumerate(sorted(sections.items())):
                 row = self.format_student_sections(year, student_sections, ws,
                                                    row)
                 row = self.format_students_block(students, ws, row)
+                self.progress('export_section_enrollment', normalized_progress(
+                        ny, len(year_sections),
+                        ns, len(sections),
+                        ) * 0.1 + 0.9)
+        self.finish('export_section_enrollment')
 
     def format_timetable_sections(self, year, timetable_sections, ws, row):
         headers = ["School Year", "Term", "Section ID"]
@@ -685,6 +744,7 @@ class MegaExporter(SchoolTimetableExportView):
         return row + 1
 
     def export_section_timetables(self, wb):
+        self.task_progress.force('export_section_timetables', active=True)
         ws = wb.add_sheet("SectionTimetables")
 
         year_sections = {}
@@ -714,11 +774,15 @@ class MegaExporter(SchoolTimetableExportView):
                                                section.__name__, section))
 
         row = 0
-        for year, sections in sorted(year_sections.items()):
-            for timetables, timetable_sections in sorted(sections.items()):
+        for ny, (year, sections) in enumerate(sorted(year_sections.items())):
+            for nt, (timetables, timetable_sections) in enumerate(sorted(sections.items())):
                 row = self.format_timetable_sections(year, timetable_sections,
                                                      ws, row)
                 row = self.format_timetables_block(timetables, ws, row)
+                self.progress('export_section_timetables', normalized_progress(
+                        ny, len(year_sections), nt, len(sections)
+                        ))
+        self.finish('export_section_timetables')
 
     def format_group(self, group, ws, offset):
         fields = [lambda i: ("Group Title", i.title, None),
@@ -733,18 +797,66 @@ class MegaExporter(SchoolTimetableExportView):
         return offset
 
     def export_groups(self, wb):
+        self.task_progress.force('export_groups', active=True)
         ws = wb.add_sheet("Groups")
         school_years = sorted(ISchoolYearContainer(self.context).values(),
                               key=lambda s: s.first)
         row = 0
-        for school_year in sorted(school_years, key=lambda i: i.last):
+        for ny, school_year in enumerate(sorted(school_years, key=lambda i: i.last)):
             groups = IGroupContainer(school_year)
-            for group in sorted(groups.values(), key=lambda i: i.__name__):
+            for ng, group in enumerate(sorted(groups.values(), key=lambda i: i.__name__)):
                 row = self.format_group(group, ws, row) + 1
+                self.progress('export_groups', normalized_progress(
+                        ny, len(school_years), ng, len(groups)
+                        ))
+        self.finish('export_groups')
+
+    def makeProgress(self):
+        self.task_progress = TaskProgress(None)
+
+    def addImporters(self, progress):
+        progress.add('export_school_years', active=False,
+                     title=_('School Years'), progress=0.0)
+        progress.add('export_terms', active=False,
+                     title=_('Terms'), progress=0.0)
+        progress.add('export_school_timetables', active=False,
+                     title=_('School Timetables'), progress=0.0)
+        progress.add('export_resources', active=False,
+                     title=_('Resources'), progress=0.0)
+        progress.add('export_persons', active=False,
+                     title=_('Persons'), progress=0.0)
+        progress.add('export_contacts', active=False,
+                     title=_('Contacts'), progress=0.0)
+        progress.add('export_courses', active=False,
+                     title=_('Courses'), progress=0.0)
+        progress.add('export_sections', active=False,
+                     title=_('Sections'), progress=0.0)
+        progress.add('export_section_enrollment', active=False,
+                     title=_('Section Enrollment'), progress=0.0)
+        progress.add('export_section_timetables', active=False,
+                     title=_('Section Schedules'), progress=0.0)
+        progress.add('export_groups', active=False,
+                     title=_('Groups'), progress=0.0)
+        progress.add('overall',
+                     title=_('School Data'), progress=0.0)
+
+    def update(self):
+        super(MegaExporter, self).update()
+        self.addImporters(self.task_progress)
+
+    def render(self, workbook):
+        datafile = StringIO()
+        workbook.save(datafile)
+        data = datafile.getvalue()
+        self.setUpHeaders(data)
+        return data
 
     def __call__(self):
-        wb = xlwt.Workbook()
+        self.makeProgress()
+        self.task_progress.title = _("Exporting school data")
+        self.addImporters(self.task_progress)
 
+        wb = xlwt.Workbook()
         self.export_school_years(wb)
         self.export_terms(wb)
         self.export_school_timetables(wb)
@@ -756,9 +868,52 @@ class MegaExporter(SchoolTimetableExportView):
         self.export_section_enrollment(wb)
         self.export_section_timetables(wb)
         self.export_groups(wb)
-
-        datafile = StringIO()
-        wb.save(datafile)
-        data = datafile.getvalue()
-        self.setUpHeaders(data)
+        self.task_progress.title = _("Export complete")
+        self.task_progress.force('overall', progress=1.0)
+        data = self.render(wb)
         return data
+
+
+class XLSReportTask(AbstractReportTask):
+
+    default_filename = 'report.xls'
+    default_mimetype = 'application/vnd.ms-excel'
+
+    def renderReport(self, renderer, stream, *args, **kw):
+        workbook = renderer(*args, **kw)
+        if workbook is None:
+            raise NoReportException()
+        workbook.save(stream)
+
+
+class RemoteMegaExporter(MegaExporter):
+
+    base_filename = 'school'
+    message_title = _('school export')
+    makeProgress = ExcelExportView.makeProgress
+
+    def render(self, workbook):
+        # Return the workbook itself, should use it to save to blob directly
+        return workbook
+
+
+class RequestXLSReportDialog(RequestRemoteReportDialog):
+
+    task_factory = XLSReportTask
+
+
+class XLSProgressMessage(ReportMessage):
+    implements(IXLSProgressMessage)
+
+
+class OnXLSReportScheduled(OnPDFReportScheduled):
+
+    message_factory = XLSProgressMessage
+
+    def makeReportTitle(self):
+        title = getattr(self.view, 'message_title', None)
+        if not title:
+            title = getattr(self.view, 'filename', None)
+        if not title:
+            title = _(u'XLS export')
+        return title

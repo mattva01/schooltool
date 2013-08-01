@@ -151,9 +151,9 @@ support is enabled.
 
 Now we will try disabling PDF views and check if the switch works.
 
-    >>> from schooltool.app.browser import pdfcal
-    >>> real_pdfcal_disabled = pdfcal.disabled
-    >>> pdfcal.disabled = True
+    >>> from schooltool.app import pdf
+    >>> real_pdf_enabled = pdf.enabled
+    >>> pdf.enabled = False
 
     >>> frog.open('http://localhost/'
     ...           'persons/frog/calendar/2005-07-01.pdf')
@@ -163,7 +163,7 @@ Now we will try disabling PDF views and check if the switch works.
     <BLANKLINE>
     PDF support is disabled...
 
-    >>> pdfcal.disabled = real_pdfcal_disabled
+    >>> pdf.enabled = real_pdf_enabled
 
 The daily view should be the default:
 

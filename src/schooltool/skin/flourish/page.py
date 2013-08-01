@@ -19,6 +19,7 @@
 """
 SchoolTool flourish pages.
 """
+import os
 import re
 import urllib
 
@@ -395,7 +396,8 @@ class LinkViewlet(Viewlet):
     template = templates.Inline('''
     <tal:block define="url view/url">
       <a tal:condition="url"
-         tal:attributes="href view/url"
+         tal:attributes="href view/url;
+                         class view/css_class"
          tal:content="view/title"></a>
       <span tal:condition="not:url"
             tal:content="view/title"></span>
@@ -403,6 +405,7 @@ class LinkViewlet(Viewlet):
     ''')
 
     title = None
+    css_class = None
 
     @property
     def enabled(self):
@@ -440,6 +443,15 @@ def sanitize_id(html_id):
     if not html_id[0].isalpha():
         html_id = 'i' + html_id
     return html_id
+
+
+def obj_random_html_id(obj, prefix='', len=6):
+    name_list = ([
+            'o'+os.urandom(len).encode('hex'),
+            getattr(obj, '__name__', ''),
+            prefix])
+    return sanitize_id('-'.join(reversed(filter(None, name_list))))
+
 
 def generic_viewlet_html_id(viewlet, prefix=''):
     parent = viewlet.manager.__parent__

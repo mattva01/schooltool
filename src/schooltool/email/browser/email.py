@@ -50,7 +50,7 @@ from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
 from schooltool.skin.flourish.form import Form
-from schooltool.table import table
+from schooltool import table
 from schooltool.email.interfaces import IEmailContainer, IEmail
 from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email, status_messages
@@ -124,7 +124,7 @@ class IEmailSettingsEditForm(Interface):
         title=_('Password'),
         description=_('Current password to authenticate to the SMTP server.'),
         required=False)
-    
+
     password = Password(
         title=_('New Password'),
         description=_('The password to authenticate to the SMTP server.'),
@@ -234,7 +234,7 @@ class HostnameIsRequired(ValidationError):
     __doc__ = _('Hostname is required for enabling the service')
 
 
-# XXX: logic very similar to that in 
+# XXX: logic very similar to that in
 #      schooltool.person.browser.person
 class PasswordsDontMatch(ValidationError):
     __doc__ = _('Supplied new passwords are not identical')
@@ -360,7 +360,7 @@ class EmailView(form.Form):
                   ('CONFIRM', 'Confirm')]
         return '%s?%s' % (absoluteURL(email.__parent__, self.request),
                           urllib.urlencode(params),)
-        
+
     @button.buttonAndHandler(_('Retry'))
     def handle_retry_action(self, action):
         utility = getUtility(IEmailUtility)
@@ -468,13 +468,6 @@ def to_addresses_formatter(value, item, formatter):
     return ', '.join(item.to_addresses)
 
 
-def datetime_formatter(value, item, formatter):
-    preferences = get_application_preferences()
-    preferred_datetime_format = '%s %s' % (preferences.dateformat,
-                                           preferences.timeformat)
-    return to_application_timezone(value).strftime(preferred_datetime_format)
-
-
 def subject_formatter(value, item, formatter):
     if value is None:
         return ''
@@ -498,23 +491,23 @@ def email_container_table_columns():
                            getter=lambda i, f: i.subject,
                            cell_formatter=subject_formatter,
                            subsort=True)
-    directlyProvides(subject, ISortableColumn)    
+    directlyProvides(subject, ISortableColumn)
     time_created = GetterColumn(name='time_created',
                                 title=_(u'Created on'),
                                 getter=lambda i, f: i.time_created,
-                                cell_formatter=datetime_formatter,
+                                cell_formatter=table.table.datetime_formatter,
                                 subsort=True)
     directlyProvides(time_created, ISortableColumn)
     time_sent = GetterColumn(name='time_sent',
                                 title=_(u'Last time tried'),
                                 getter=lambda i, f: i.time_sent,
-                                cell_formatter=datetime_formatter,
+                                cell_formatter=table.table.datetime_formatter,
                                 subsort=True)
     directlyProvides(time_sent, ISortableColumn)
     return [from_address, to_addresses, subject, time_created, time_sent]
 
 
-class EmailContainerViewTableFormatter(table.SchoolToolTableFormatter):
+class EmailContainerViewTableFormatter(table.table.SchoolToolTableFormatter):
 
     columns = lambda self: email_container_table_columns()
 
@@ -535,13 +528,13 @@ class FlourishEmailContainerViewTableFormatter(
             name='time_created',
             title=_(u'Created on'),
             getter=lambda i, f: i.time_created,
-            cell_formatter=datetime_formatter,
+            cell_formatter=table.table.datetime_formatter,
             subsort=True)
         time_sent = GetterColumn(
             name='time_sent',
             title=_(u'Last time tried'),
             getter=lambda i, f: i.time_sent,
-            cell_formatter=datetime_formatter,
+            cell_formatter=table.table.datetime_formatter,
             subsort=True)
         directlyProvides(from_address, ISortableColumn)
         directlyProvides(time_created, ISortableColumn)
@@ -589,7 +582,6 @@ class EmailContainerView(TableContainerView):
 
 
 class FlourishEmailContainerView(flourish.page.Page):
-
     pass
 
 
@@ -621,21 +613,21 @@ class FlourishEmailContainerDetails(flourish.form.FormViewlet):
         return '%s/settings' % absoluteURL(app, self.request)
 
 
-class FlourishEmailQueueView(table.TableContainerView):
+class FlourishEmailQueueView(table.table.TableContainerView):
 
     def getColumnsAfter(self):
-        action = table.ImageInputColumn(
+        action = table.table.ImageInputColumn(
             'delete', name='action', title=_('Delete'),
             library='schooltool.skin.flourish',
             image='remove-icon.png',
-            id_getter=table.simple_form_key)
+            id_getter=table.table.simple_form_key)
         return [action]
 
     def update(self):
         super(FlourishEmailQueueView, self).update()
         # XXX: deletion without confirmation is quite dangerous
         delete = [key for key, item in self.container.items()
-                  if "delete.%s" % table.simple_form_key(item) in self.request]
+                  if "delete.%s" % table.table.simple_form_key(item) in self.request]
         for key in delete:
             del self.container[key]
         if delete:
@@ -679,7 +671,7 @@ class ISendEmailForm(Interface):
         title=_('Server Status'),
         description=_('Current status of the SchoolTool email service'),
         required=False)
-    
+
     from_address = TextLine(
         title=_(u'From'),
         description=_(u'The sender address'))

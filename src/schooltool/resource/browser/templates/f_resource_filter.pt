@@ -17,7 +17,7 @@
   <div class="row">
     <div class="label">
       <label for="SEARCH_TYPE">
-        <span i18n:translate="">Filter by...</span>
+        <span i18n:translate="">Type</span>
       </label>
     </div>
     <div class="widget">

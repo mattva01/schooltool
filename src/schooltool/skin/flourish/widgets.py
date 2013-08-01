@@ -59,6 +59,7 @@ from schooltool.skin.widgets import FckeditorFormlibWidget
 from schooltool.skin.widgets import FckeditorZ3CFormWidget
 from schooltool.skin.flourish.resource import ResourceLibrary
 from schooltool.skin.flourish.interfaces import IFlourishLayer
+from schooltool.skin.flourish.helpers import quoteFilename
 from schooltool.common.fields import IImage, ImageFile
 from schooltool.common import format_message
 from schooltool.common import SchoolToolMessage as _
@@ -342,4 +343,28 @@ class ImageView(BrowserPage):
 
         result = self.renderImage(image)
         return result
+
+
+class DownloadFile(BrowserView):
+
+    inline = False
+
+    def __call__(self):
+        response = self.request.response
+        mime = self.context.mimeType
+        if mime:
+            response.setHeader('Content-Type', mime)
+        response.setHeader('Content-Length', self.context.size)
+        if self.inline:
+            # We don't really accept ranges, but Acrobat Reader will not show the
+            # report in the browser page if this header is not provided.
+            response.setHeader('Accept-Ranges', 'bytes')
+        disposition = self.inline and 'inline' or 'attachment'
+        filename = self.context.__name__
+        quoted_filename = quoteFilename(filename)
+        if quoted_filename:
+            disposition += '; filename="%s"' % quoted_filename
+        response.setHeader('Content-Disposition', disposition)
+        return self.context.openDetached()
+
 

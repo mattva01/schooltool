@@ -79,7 +79,8 @@
 
   <zope:resourceLibrary
       name="schooltool.skin.flourish"
-      require="schooltool.skin.flourish-scripts"
+      require="schooltool.skin.flourish-scripts
+               schooltool.task"
       layer="schooltool.skin.flourish.IFlourishLayer">
     <directory
       source="resources"
@@ -113,6 +114,18 @@
     <directory
       source="resources"
       include="jstree.js"
+      />
+  </zope:resourceLibrary>
+
+  <zope:resourceLibrary
+      name="schooltool.skin.flourish-report"
+      require="schooltool.skin.flourish"
+      layer="schooltool.skin.flourish.IFlourishLayer">
+    <directory
+      source="resources"
+      include="d3.min.js
+               report.js
+               report.css"
       />
   </zope:resourceLibrary>
 
@@ -344,5 +357,12 @@
            zope.publisher.interfaces.browser.IBrowserRequest"
       provides="zope.interface.Interface"
       name="data_uri"/>
+
+  <page
+      name="index.html"
+      for="zope.file.interfaces.IFile"
+      permission="zope.Public"
+      class=".widgets.DownloadFile"
+      />
 
 </configure>

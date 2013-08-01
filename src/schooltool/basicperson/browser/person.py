@@ -23,6 +23,7 @@ Basic person browser views.
 from zope.interface import Interface, implements
 from zope.container.interfaces import INameChooser
 from zope.app.form.browser.interfaces import ITerms
+from zope.authentication.interfaces import IUnauthenticatedPrincipal
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
 from zope.component import adapts
@@ -31,14 +32,19 @@ from zope.i18n import translate
 from z3c.form import form, field, button, validator
 from z3c.form.interfaces import DISPLAY_MODE
 from zope.interface import invariant, Invalid
+from zope.interface import directlyProvides
+from zope.intid.interfaces import IIntIds
 from zope.schema import Password, TextLine, Choice, List
 from zope.schema import ValidationError
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.security.checker import canAccess
+from zope.proxy import sameProxiedObjects
 
 from reportlab.lib import units
 import z3c.form.interfaces
+import zc.table.column
+from zc.table.interfaces import ISortableColumn
 from z3c.form.validator import SimpleFieldValidator
 
 from schooltool.app.browser.app import RelationshipViewBase
@@ -60,16 +66,22 @@ from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.browser.person import PersonTable, PersonTableFormatter
 from schooltool.person.browser.person import PersonTableFilter
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.report.report import OldReportTask
+from schooltool.report.browser.report import RequestRemoteReportDialog
 from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
 from schooltool.skin.flourish.interfaces import IViewletManager
 from schooltool.skin.flourish.form import FormViewlet
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.content import ContentProvider
-from schooltool.table import table
+from schooltool import table
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
+from schooltool.task.interfaces import IMessageContainer
+from schooltool.task.tasks import MessageCatalog
+from schooltool.task.tasks import getLastMessagesReadTime
+from schooltool.task.tasks import markMessagesRead
+from schooltool.task.browser.task import MessageColumn
 from schooltool.term.interfaces import IDateManager
-from schooltool.report.browser.report import RequestReportDownloadDialog
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -93,7 +105,7 @@ class BasicPersonContainerView(TableContainerView):
         return syc
 
 
-class DeletePersonCheckboxColumn(table.DependableCheckboxColumn):
+class DeletePersonCheckboxColumn(table.table.DependableCheckboxColumn):
 
     def __init__(self, *args, **kw):
         kw = dict(kw)
@@ -103,7 +115,7 @@ class DeletePersonCheckboxColumn(table.DependableCheckboxColumn):
     def hasDependents(self, item):
         if self.disable_items and item.__name__ in self.disable_items:
             return True
-        return table.DependableCheckboxColumn.hasDependents(self, item)
+        return table.table.DependableCheckboxColumn.hasDependents(self, item)
 
 
 class FlourishBasicPersonContainerView(flourish.page.Page):
@@ -314,6 +326,17 @@ class FlourishPersonView(flourish.page.Page):
 
 class FlourishPersonInfo(flourish.page.Content):
     body_template = ViewPageTemplateFile('templates/f_person_view_details.pt')
+
+    def markRead(self):
+        auth_person = IPerson(self.request.principal, None)
+        if (auth_person is None or
+            not sameProxiedObjects(auth_person, self.context)):
+            return # not looking at his own homepage
+        markMessagesRead(self.context)
+
+    def update(self):
+        self.markRead()
+        super(FlourishPersonInfo, self).update()
 
     @property
     def canModify(self):
@@ -1130,22 +1153,10 @@ class FlourishManagePeopleOverview(flourish.page.Content):
         return preferences.title
 
 
-class FlourishRequestPersonXMLExportView(RequestReportDownloadDialog):
+class FlourishRequestPersonIDCardView(RequestRemoteReportDialog):
 
-    def nextURL(self):
-        return absoluteURL(self.context, self.request) + '/person_export.xml'
-
-
-class FlourishRequestPersonIDCardView(RequestReportDownloadDialog):
-
-    def nextURL(self):
-        return absoluteURL(self.context, self.request) + '/person_id_card.pdf'
-
-
-class FlourishRequestPersonProfileView(RequestReportDownloadDialog):
-
-    def nextURL(self):
-        return absoluteURL(self.context, self.request) + '/person_profile.pdf'
+    report_task = OldReportTask
+    report_builder = 'person_id_card.pdf'
 
 
 class IDCardsPageTemplate(DefaultPageTemplate):
@@ -1328,12 +1339,17 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
 class FlourishPersonIDCardView(FlourishPersonIDCardsViewBase):
 
     @property
+    def filename(self):
+        return 'id_cards_%s_%s.pdf' % (
+            self.context.last_name,  self.context.first_name)
+
+    @property
     def title(self):
         return _('ID Card: ${person}',
                  mapping={'person': self.context.title})
 
     def persons(self):
-        return [self.getPersonData(self.context)]
+        return [self.getPersonData(self.context)] * self.total_cards_in_page
 
 
 def getUserViewlet(context, request, view, manager, name):
@@ -1367,6 +1383,7 @@ class PersonContainerViewTableFilter(PersonTableFilter):
 class PersonProfilePDF(flourish.report.PlainPDFPage):
 
     name = _("Profile")
+    message_title = _('profile report')
 
     def formatDate(self, date, format='mediumDate'):
         if date is None:
@@ -1427,3 +1444,128 @@ class UserLinkViewlet(flourish.page.LinkViewlet):
         if not link or user is None:
             return None
         return "%s/%s" % (absoluteURL(user, self.request), self.link)
+
+
+class PersonMessageFilter(table.table.DoNotFilter):
+
+    @property
+    def catalog(self):
+        return self.manager.catalog
+
+    @property
+    def person(self):
+        return IPerson(self.context)
+
+    @property
+    def active_person_intid(self):
+        person = self.person
+        int_ids = getUtility(IIntIds)
+        person_intid = int_ids.queryId(person, None)
+        return person_intid
+
+    def filter(self, results):
+        person_intid = self.active_person_intid
+        if person_intid is None:
+            return []
+        recipient_index = self.catalog['recipient_ids']
+        message_ids = recipient_index.apply({'any_of': set([person_intid])})
+        results = [item for item in results
+                   if item['id'] in message_ids]
+        return results
+
+
+class MessageTable(table.ajax.IndexedTable):
+
+    @property
+    def source(self):
+        return IMessageContainer(ISchoolToolApplication(None))
+
+    def columns(self):
+        group = table.column.IndexedGetterColumn(
+            name='group',
+            title=_(u"Group"),
+            getter=lambda i, f: i.group,
+            cell_formatter=table.table.translate_cell_formatter,
+            index='group',
+            subsort=True)
+        directlyProvides(group, ISortableColumn)
+        updated = table.column.IndexedGetterColumn(
+            name='updated_on',
+            title=_("Received"),
+            getter=lambda i, f: i.updated_on,
+            cell_formatter=table.table.datetime_formatter,
+            index='updated_on',
+            subsort=True)
+        directlyProvides(updated, ISortableColumn)
+        message = MessageColumn(
+            name='message',
+            title=_("Message"))
+        return [message, group, updated]
+
+    def sortOn(self):
+        return (('updated_on', True), )
+
+
+class FlourishRequestPersonProfileView(RequestRemoteReportDialog):
+
+    report_builder = 'person_profile.pdf'
+
+
+class NewMessageIndicatorViewlet(flourish.page.LinkViewlet):
+
+    css_class = 'new-messages'
+
+    @property
+    def authenticated_person(self):
+        principal = getattr(self.request, 'principal', None)
+        if principal is None:
+            return None
+        if IUnauthenticatedPrincipal.providedBy(principal):
+            return None
+        return IPerson(principal, None)
+
+    @property
+    def authenticated_person_intid(self):
+        person = self.authenticated_person
+        if person is None:
+            return None
+        int_ids = getUtility(IIntIds)
+        person_intid = int_ids.queryId(person, None)
+        return person_intid
+
+    @property
+    def new_messages(self):
+        person = self.authenticated_person
+        if person is None:
+            return None
+        person_intid = self.authenticated_person_intid
+        if person_intid is None:
+            return None
+        dt = getLastMessagesReadTime(person)
+        catalog = MessageCatalog.get()
+        new_ids = catalog['updated_on'].apply(
+            {'between': (dt, None)})
+        my_ids = catalog['recipient_ids'].apply(
+            {'any_of': set([person_intid])})
+        new_messages = len(set(my_ids).intersection(new_ids))
+        return new_messages
+
+    @property
+    def title(self):
+        person = self.authenticated_person
+        if person is None:
+            return ''
+        new_messages = self.new_messages
+        if not new_messages:
+            return ''
+        title = _('(${number} new)',
+                  mapping={'number': new_messages})
+        return title
+
+    @property
+    def url(self):
+        person = self.authenticated_person
+        if person is None:
+            return None
+        url = absoluteURL(person, self.request) + '#messages'
+        return url

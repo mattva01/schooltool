@@ -236,7 +236,7 @@
   <zope:view
       name="rml"
       for="str"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      type="schooltool.skin.flourish.IFlourishLayer"
       factory=".report.Text2RML"
       permission="zope.Public"
       />
@@ -244,7 +244,7 @@
   <zope:view
       name="rml"
       for="unicode"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      type="schooltool.skin.flourish.IFlourishLayer"
       factory=".report.Text2RML"
       permission="zope.Public"
       />
@@ -252,7 +252,7 @@
   <zope:view
       name="html2rml"
       for="str"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      type="schooltool.skin.flourish.IFlourishLayer"
       factory=".report.HTML2RML"
       permission="zope.Public"
       />
@@ -260,7 +260,7 @@
   <zope:view
       name="html2rml"
       for="unicode"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      type="schooltool.skin.flourish.IFlourishLayer"
       factory=".report.HTML2RML"
       permission="zope.Public"
       />
@@ -268,7 +268,7 @@
   <zope:view
       name="rml"
       for="schooltool.skin.flourish.fields.ImageFile"
-      type="zope.publisher.interfaces.browser.IBrowserRequest"
+      type="schooltool.skin.flourish.IFlourishLayer"
       factory=".report.Image2RML"
       permission="zope.Public"
       />

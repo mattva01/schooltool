@@ -9,7 +9,7 @@
 
   <allow
      interface="schooltool.basicperson.interfaces.IFieldDescription"
-     crowds="administration"
+     crowds="managers"
      permission="schooltool.edit" />
 
   <allow
@@ -19,7 +19,7 @@
 
   <allow
      interface="schooltool.basicperson.interfaces.IBasicPerson"
-     crowds="owner person_instructors person_advisors administration"
+     crowds="owner person_instructors person_advisors managers administrators clerks"
      permission="schooltool.view" />
 
   <!-- Security descriptions -->

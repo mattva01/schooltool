@@ -24,19 +24,12 @@ $Id$
 __docformat__ = 'restructuredtext'
 
 from persistent import Persistent
-from persistent.dict import PersistentDict
 
 from zope.component import adapts, adapter
 from zope.interface import implements, implementer
-from zope.interface import Interface
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.container.contained import Contained
 from zope.container.btree import BTreeContainer
-from zope.container.ordered import OrderedContainer
-from zope.location.location import Location
-from zope.schema import TextLine, Bool, Date, Choice
-from zope.schema.vocabulary import SimpleVocabulary
-from zope.schema.vocabulary import SimpleTerm
 
 from schooltool.app.app import Asset
 from schooltool.app.app import InitBase, StartUpBase
@@ -44,7 +37,6 @@ from schooltool.app.utils import vocabulary
 from schooltool.app.security import LeaderCrowd
 from schooltool.app.interfaces import ICalendarParentCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.utils import vocabulary
 from schooltool.basicperson.demographics import PersonDemographicsData
 from schooltool.basicperson.demographics import DemographicsFields
 from schooltool.basicperson.demographics import IDemographicsForm
@@ -52,7 +44,8 @@ from schooltool.basicperson.interfaces import IFieldFilterVocabulary
 from schooltool.resource import interfaces
 from schooltool.securitypolicy.crowds import TeachersCrowd
 from schooltool.securitypolicy.crowds import ConfigurableCrowd, AggregateCrowd
-from schooltool.securitypolicy.crowds import AuthenticatedCrowd
+from schooltool.securitypolicy.crowds import AdministratorsCrowd
+from schooltool.securitypolicy.crowds import ManagersCrowd, ClerksCrowd
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -148,7 +141,8 @@ class ResourceCalendarViewersCrowd(AggregateCrowd):
 
     def crowdFactories(self):
         return [ResourceCalendarViewersSettingCrowd,
-                LeaderCrowd, AuthenticatedCrowd, TeachersCrowd]
+                AdministratorsCrowd, ManagersCrowd, ClerksCrowd,
+                LeaderCrowd, TeachersCrowd]
 
 
 class ResourceCalendarEditorsCrowd(AggregateCrowd):
@@ -157,7 +151,8 @@ class ResourceCalendarEditorsCrowd(AggregateCrowd):
     implements(ICalendarParentCrowd)
 
     def crowdFactories(self):
-        return [LeaderCrowd, TeachersCrowd]
+        return [ManagersCrowd, ClerksCrowd,
+                LeaderCrowd, TeachersCrowd]
 
 
 ###################  Demographics   #################
@@ -197,16 +192,6 @@ def getResourceDemographics(resource):
     return demographics
 
 
-@adapter(interfaces.IResourceDemographicsFields)
-@implementer(IFieldFilterVocabulary)
-def getLimitKeyVocabularyForResourceFields(resource_field_description_container):
-     return vocabulary([
-        ('resource', _('Resource')),
-        ('location', _('Location')),
-        ('equipment', _('Equipment')),
-        ])
-
-
 class DemographicsFormAdapter(object):
     implements(IDemographicsForm)
     adapts(interfaces.IBaseResource)
@@ -231,4 +216,3 @@ def getLimitKeyVocabularyForResourceFields(resource_field_description_container)
         ('location', _('Location')),
         ('equipment', _('Equipment')),
         ])
-

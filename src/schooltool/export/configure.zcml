@@ -53,4 +53,34 @@
       layer="zope.publisher.interfaces.browser.IBrowserRequest"
       />
 
+  <zope:class class=".importer.ImporterTask">
+    <require permission="schooltool.view"
+             interface="schooltool.export.interfaces.IImporterTask" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.export.interfaces.IImporterTask" />
+  </zope:class>
+
+  <zope:class class=".export.XLSReportTask">
+    <require permission="schooltool.view"
+             interface="schooltool.report.interfaces.IReportTask" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.report.interfaces.IReportTask" />
+  </zope:class>
+
+  <zope:adapter
+      name="schooltool.export.export.OnXLSReportScheduled"
+      for="schooltool.task.interfaces.IRemoteTask
+           *
+           schooltool.export.interfaces.IXLSExportView"
+      provides="schooltool.task.interfaces.ITaskScheduledNotification"
+      factory="schooltool.export.export.OnXLSReportScheduled"
+      />
+
+  <view
+     name="import.xls"
+     for="schooltool.export.interfaces.IImporterTask"
+     layer="zope.publisher.interfaces.http.IHTTPRequest"
+     class=".importer.DownloadImportXLS"
+     permission="schooltool.view" />
+
 </configure>

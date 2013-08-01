@@ -17,7 +17,7 @@
   <setting
       key="persons_can_change_their_passwords"
       text="Users can change their own passwords."
-      alt_text="Only school administration can change passwords."
+      alt_text="Only site managers and clerks can change passwords."
       default="True" />
 
   <crowd
@@ -34,20 +34,20 @@
 
   <allow
       interface="schooltool.person.interfaces.IPersonContainer"
-      crowds="administration person_list_viewers"
+      crowds="administrators managers clerks person_list_viewers"
       permission="schooltool.view" />
   <allow
       interface="schooltool.person.interfaces.IPersonContainer"
-      crowds="administration"
+      crowds="managers clerks"
       permission="schooltool.edit" />
 
   <allow
       interface="schooltool.person.interfaces.IPerson"
-      crowds="administration owner"
+      crowds="administrators managers clerks owner"
       permission="schooltool.view" />
   <allow
       interface="schooltool.person.interfaces.IPerson"
-      crowds="administration"
+      crowds="managers clerks"
       permission="schooltool.edit" />
   <allow
       interface="schooltool.person.interfaces.IPerson"
@@ -56,11 +56,11 @@
 
   <allow
       interface="schooltool.person.interfaces.IPersonPreferences"
-      crowds="administration owner"
+      crowds="managers clerks owner"
       permission="schooltool.view" /> <!-- XXX -->
   <allow
       interface="schooltool.person.interfaces.IPersonPreferences"
-      crowds="administration person_prefs_editors"
+      crowds="managers person_prefs_editors"
       permission="schooltool.edit" />
 
   <allow

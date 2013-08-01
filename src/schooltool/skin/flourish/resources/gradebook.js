@@ -1,43 +1,3 @@
-/* This is the Javascript to be included when rendering the gradebook overview. */
-function setNotEdited()
-{
-    edited = false;
-}
-
-function setEdited()
-{
-    edited = true;
-}
-
-function checkChanges()
-{
-    if (!edited)
-        return;
-    saveFlag = window.confirm(warningText);
-    if (saveFlag == true)
-        {
-        button = document.getElementsByName('UPDATE_SUBMIT')[0];
-        button.click();
-        }
-    else
-        return true;
-}
-
-function onLoadHandler()
-{
-    // highlight error values
-    for (a = 0; a < numactivities; a++)
-    {
-        activity = activities[a];
-        for (s = 0; s < numstudents; s++)
-        {
-            name = activity + '_' + students[s];
-            value = document.getElementById(name).value;
-            setBackgroundColor(name, activity, value, true);
-        }
-    }
-}
-
 // Changes made for flourish
 
 function makeGradeCellVisible(element) {
@@ -367,7 +327,11 @@ function createWorksheetsList() {
     return ul;
 }
 
-$(document).ready(function() {
+function removeSavingWarning() {
+    window.onbeforeunload = null;
+}
+
+function initGradebook() {
     var form = $('#grid-form');
     form.data('base-font-size', parseInt(form.css('fontSize')));
     // gradebook-part width calculation
@@ -573,7 +537,8 @@ $(document).ready(function() {
             'resizable': false,
             'width': 306,
             'minHeight': 105,
-            'dialogClass': 'narrow-dialog'
+            'dialogClass': 'narrow-dialog',
+            'modal': true
         });
         // XXX - this should have worked but doesn't
         //FCKeditorAPI.Instances['form-widgets-value'].EditorDocument.body.focus()
@@ -583,6 +548,18 @@ $(document).ready(function() {
         var container = $('#comment-cell-dialog-container');
         container.find('#form-widgets-value').val('');
         container.dialog('close');
+        return false;
+    });
+    $('body').on('click', '.comment-cell-submit', function() {
+        var student_id = $('#comment-student-id').val();
+        var activity_id = $('#comment-activity-id').val();
+        var form = $('#grid-form');
+        form.append($('<input type="hidden"/>').attr({
+            'name': activity_id + '_' + student_id,
+            'value': FCKeditorAPI.Instances['form-widgets-value'].GetHTML()
+        }));
+        removeSavingWarning();
+        form.submit();
         return false;
     });
     // Zoom buttons
@@ -696,4 +673,17 @@ $(document).ready(function() {
         }
         e.preventDefault();
     });
-});
+    // ignore warning dialog when clicking save button
+    form.on('click', 'input[type="submit"]', function() {
+        removeSavingWarning();
+    });
+}
+
+$(document).ready(initGradebook);
+
+// warning dialog for unsaved changes
+window.onbeforeunload = function() {
+    if ($('#grades-part input[type="text"]').length > 0) {
+        return $('#unsaved-changes-warning').text();
+    }
+};

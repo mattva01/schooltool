@@ -36,6 +36,13 @@ from schooltool.table.column import unindex
 from schooltool.common import SchoolToolMessage as _
 
 
+def minimal_escape_rml(value):
+    return value and unicode(value).replace(
+        '&', '&amp;').replace(
+        '<', '&lt;').replace(
+        '>', '&gt;').strip() or ''
+
+
 def getRMLTable(formatter, request):
     table = zope.component.queryMultiAdapter(
         (formatter.context, request, formatter.view, formatter),
@@ -182,7 +189,7 @@ class RMLTable(FlatRMLTable):
         rows = []
         current_group = None
         for item in items:
-            group = self.formatter.getSubGroup(item)
+            group = minimal_escape_rml(self.formatter.getSubGroup(item))
             if group != current_group:
                 if rows:
                     tables.append({
@@ -269,17 +276,13 @@ class RMLColumn(object):
         return self.column.title
 
     def renderHeader(self, formatter):
-        header = self.column.renderHeader(formatter)
+        header = self.escape(self.column.renderHeader(formatter))
         return header
 
     def renderCell(self, item, formatter):
         return ''
 
-    def escape(self, value):
-        return value and unicode(value).replace(
-            '&', '&amp;').replace(
-            '<', '&lt;').replace(
-            '>', '&gt;').strip() or ''
+    escape = lambda self, value: minimal_escape_rml(value)
 
 
 class HiddenRMLColumn(RMLColumn):

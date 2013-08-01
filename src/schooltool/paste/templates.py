@@ -41,5 +41,22 @@ class SchoolToolDeploy(Template):
     def check_vars(self, vars, cmd):
         vars = super(SchoolToolDeploy, self).check_vars(vars, cmd)
         vars['instance_package'] = dict(available_types)[vars['instance_type']]
-        vars['abspath'] = os.path.join(os.path.abspath(cmd.options.output_dir), vars['project'])
+        vars['config_dir'] = os.path.join(
+            os.path.abspath(cmd.options.output_dir), vars['project'])
+        vars['bin_dir'] = os.path.abspath(
+            vars.get('bin_dir', 'bin'))
+        vars['log_dir'] = os.path.abspath(
+            vars.get('log_dir', os.path.join(vars['project'], 'log')))
+        vars['data_dir'] = os.path.abspath(
+            vars.get('data_dir', os.path.join(vars['project'], 'var')))
+        vars['run_dir'] = os.path.abspath(
+            vars.get('run_dir', os.path.join(vars['project'], 'run')))
         return vars
+
+    def write_files(self, command, output_dir, vars):
+        super(SchoolToolDeploy, self).write_files(command, output_dir, vars)
+        for directory in (vars['log_dir'], vars['data_dir'], vars['run_dir']):
+            if not os.path.exists(directory):
+                print "Creating directory %s" % directory
+                if not command.simulate:
+                    os.makedirs(directory)

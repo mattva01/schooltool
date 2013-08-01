@@ -18,11 +18,13 @@
 #
 """Base code for table rendering and filtering.
 """
+import pytz
 import urllib
 
 import zope.security
 from zope.interface import implements
 from zope.interface import directlyProvides
+from zope.i18n import translate
 from zope.browserpage import ViewPageTemplateFile
 from zope.cachedescriptors.property import Lazy
 from zope.component import queryMultiAdapter
@@ -34,6 +36,8 @@ from zc.table.interfaces import IColumnSortedItems
 from zc.table.interfaces import ISortableColumn
 from zc.table.column import GetterColumn
 
+from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import stupid_form_key
 from schooltool.skin import flourish
 from schooltool.table.batch import Batch
@@ -267,6 +271,24 @@ def url_cell_formatter(value, item, formatter):
     return '<a href="%s">%s</a>' % (url, value)
 
 
+def translate_cell_formatter(value, item, formatter):
+    if not value:
+        return value
+    return translate(value, formatter.request)
+
+
+def datetime_formatter(value, item, formatter):
+    if value is None:
+        return ''
+    app = ISchoolToolApplication(None)
+    preferences = IApplicationPreferences(app)
+    preferred_datetime_format = '%s %s' % (preferences.dateformat,
+                                           preferences.timeformat)
+    app_timezone = pytz.timezone(preferences.timezone)
+    local_dt = value.astimezone(app_timezone)
+    return local_dt.strftime(preferred_datetime_format)
+
+
 class NullTableFormatter(object):
     implements(ITableFormatter)
 
@@ -411,7 +433,8 @@ class SchoolToolTableFormatter(object):
             sort_on=self._sort_on,
             prefix=self.prefix,
             group_by_column=self.group_by_column)
-        formatter.cssClasses.update(self.css_classes)
+        formatter.cssClasses.update(dict(self.css_classes))
+        formatter.view = self
         return formatter
 
     def render(self):
@@ -454,7 +477,8 @@ class TableContent(flourish.content.ContentProvider, SchoolToolTableFormatter):
             sort_on=self._sort_on,
             prefix=self.prefix,
             group_by_column=self.group_by_column)
-        formatter.cssClasses.update(self.css_classes)
+        formatter.cssClasses.update(dict(self.css_classes))
+        formatter.view = self
         return formatter
 
     render = SchoolToolTableFormatter.render
