@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-05-27 19:54+0300\n"
-"PO-Revision-Date: 2013-04-20 02:43+0000\n"
-"Last-Translator: dhardiputra <dhardiputra@gmail.com>\n"
+"PO-Revision-Date: 2013-06-18 08:27+0000\n"
+"Last-Translator: Trisno Pamuji <tri.snowman@gmail.com>\n"
 "Language-Team: Indonesian <id@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-28 05:44+0000\n"
-"X-Generator: Launchpad (build 16640)\n"
+"X-Launchpad-Export-Date: 2013-06-19 05:42+0000\n"
+"X-Generator: Launchpad (build 16673)\n"
 "Language: id\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -103,7 +103,7 @@ msgstr "Tidak ada sama sekali."
 #: /src/schooltool/timetable/browser/flourish.zcml:503
 #: /src/schooltool/timetable/browser/timetable.py:342
 msgid "Add"
-msgstr "Tambahkan"
+msgstr "Tambah"
 
 #: /src/schooltool/app/browser/app.py:276
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
@@ -116,7 +116,7 @@ msgstr "Hapus"
 #: /src/schooltool/app/browser/app.py:408
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:58
 msgid "Add all displayed"
-msgstr "Indonesia"
+msgstr "Tambahkan semua yang ditampilkan"
 
 #: /src/schooltool/app/browser/app.py:677
 msgid "Username or password is incorrect"
@@ -128,11 +128,11 @@ msgstr "Nama atau sandi salah"
 #: /src/schooltool/app/browser/templates/f_login.pt:72
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "Log in"
-msgstr "Login"
+msgstr "Log Masuk"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
-msgstr ""
+msgstr "Log keluar"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
@@ -237,7 +237,7 @@ msgstr "Nama"
 
 #: /src/schooltool/app/browser/app.py:923
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 #: /src/schooltool/app/browser/app.py:951
 #: /src/schooltool/app/security.py:304
@@ -277,7 +277,7 @@ msgstr "Ada yang bertanggung jawab"
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #: /src/schooltool/app/browser/app.py:1177
 #: /src/schooltool/app/browser/flourish.zcml:611
@@ -355,7 +355,7 @@ msgstr "Kesalahan"
 #: /src/schooltool/app/browser/flourish.zcml:292
 #: /src/schooltool/app/browser/flourish.zcml:301
 msgid "Tabs"
-msgstr ""
+msgstr "Tab"
 
 #: /src/schooltool/app/browser/cal.py:118
 msgid "January"
@@ -1233,7 +1233,7 @@ msgstr "Tampilkan Kalender"
 #: /src/schooltool/app/browser/flourish.zcml:737
 #: /src/schooltool/app/browser/flourish.zcml:747
 msgid "School Logo"
-msgstr ""
+msgstr "Logo Sekolah"
 
 #: /src/schooltool/app/browser/overlay.py:220
 msgid "Saved changes."
@@ -1776,7 +1776,7 @@ msgstr "Sumber daya dipesan untuk  ${title}"
 #: /src/schooltool/app/browser/templates/event_booking.pt:17
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:5
 msgid "Event Details"
-msgstr ""
+msgstr "Detil Acara"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:45
 msgid "UnBook"
@@ -1785,7 +1785,7 @@ msgstr "BelumDipesan"
 #: /src/schooltool/app/browser/templates/event_booking.pt:54
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:55
 msgid "Available Resources"
-msgstr ""
+msgstr "Sumber yang Tersedia"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:60
 msgid "Book"
@@ -2050,15 +2050,15 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:5
 msgid "Set Tab Visibility"
-msgstr ""
+msgstr "Atur Kenampakan Tab"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:10
 msgid "Visible"
-msgstr ""
+msgstr "Tampak"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:25
 msgid "Default"
-msgstr ""
+msgstr "Standar"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
 msgid ""

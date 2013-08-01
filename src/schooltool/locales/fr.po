@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-05-27 19:54+0300\n"
-"PO-Revision-Date: 2013-05-25 07:05+0000\n"
-"Last-Translator: GHOSTnew <ghostnew@team-mondial.net>\n"
+"PO-Revision-Date: 2013-07-06 16:07+0000\n"
+"Last-Translator: Yves MATHIEU <MisterY_vonvon@hotmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-28 05:43+0000\n"
-"X-Generator: Launchpad (build 16640)\n"
+"X-Launchpad-Export-Date: 2013-07-07 05:38+0000\n"
+"X-Generator: Launchpad (build 16696)\n"
 "Language: fr\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -4689,7 +4689,7 @@ msgstr "Importer les Étudiants"
 
 #: /src/schooltool/course/browser/flourish.zcml:644
 msgid "Roster"
-msgstr ""
+msgstr "Liste"
 
 #: /src/schooltool/course/browser/flourish.zcml:644
 msgid "Students and instructors of a section"
@@ -4843,7 +4843,7 @@ msgstr "Lier ${section} à une Section dans une Autre Période"
 
 #: /src/schooltool/course/browser/section.py:1833
 msgid "Section Roster"
-msgstr ""
+msgstr "Liste des Sections"
 
 #: /src/schooltool/course/browser/section.py:1853
 msgid "Instructors: ${instructors}"
@@ -6147,7 +6147,7 @@ msgstr "Ce doit être une période id valide"
 
 #: /src/schooltool/export/importer.py:124
 msgid "course credits need to be a valid number"
-msgstr ""
+msgstr "Les crédits de cours doivent être un nombre valide"
 
 #: /src/schooltool/export/importer.py:125
 msgid "gender must be male or female"
@@ -6177,6 +6177,7 @@ msgstr ""
 #: /src/schooltool/export/importer.py:131
 msgid "school years must be consistent within this table"
 msgstr ""
+"Les années d'école doivent être consistants à l'intérieur de cette table"
 
 #: /src/schooltool/export/importer.py:1871
 msgid "${sheet_name} ${column}${row} ${message}"
@@ -7189,7 +7190,7 @@ msgstr "Rapport des ressources"
 #: /src/schooltool/resource/browser/rml/resource_report.pt:10
 #: /src/schooltool/resource/browser/rml/resource_report.pt:23
 msgid "Resource Report (continued)"
-msgstr ""
+msgstr "Rapport de ressources (suite)"
 
 #: /src/schooltool/resource/browser/subtype_widget.pt:8
 msgid "Choose One"
@@ -8316,7 +8317,7 @@ msgstr "Planifier les Grilles-Horaires"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:549
 msgid "Custom date range"
-msgstr ""
+msgstr "Période de date personnalisée"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:563
 msgid "Term(s)"
@@ -8696,11 +8697,11 @@ msgstr "Planifier une calendrier scolaire"
 
 #: /src/schooltool/timetable/browser/timetable.py:521
 msgid "First term"
-msgstr ""
+msgstr "Première période"
 
 #: /src/schooltool/timetable/browser/timetable.py:526
 msgid "Last term"
-msgstr ""
+msgstr "Dernière période"
 
 #: /src/schooltool/timetable/browser/timetable.py:678
 #: /src/schooltool/timetable/browser/timetable.py:821

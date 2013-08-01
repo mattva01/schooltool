@@ -7,19 +7,19 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-27 19:54+0300\n"
-"PO-Revision-Date: 2013-04-20 02:43+0000\n"
-"Last-Translator: Sebastian Tabares <sytabaresa@gmail.com>\n"
+"PO-Revision-Date: 2013-07-15 04:55+0000\n"
+"Last-Translator: Julio Costa <juliocostaz@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-28 05:46+0000\n"
-"X-Generator: Launchpad (build 16640)\n"
+"X-Launchpad-Export-Date: 2013-07-17 07:06+0000\n"
+"X-Generator: Launchpad (build 16696)\n"
 "Language: es\n"
 
 #: /src/schooltool/app/browser/__init__.py:311
 msgid "1 person"
-msgstr "1 Persona"
+msgstr "1 persona"
 
 #: /src/schooltool/app/app.py:193
 msgid "Your School"
@@ -33,7 +33,7 @@ msgstr "Personas"
 
 #: /src/schooltool/app/browser/__init__.py:313
 msgid "${number} persons"
-msgstr "${number} persona(s)"
+msgstr "${number} personas"
 
 #: /src/schooltool/app/browser/app.py:262
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:37
@@ -62,7 +62,7 @@ msgstr "${number} persona(s)"
 #: /src/schooltool/timetable/browser/templates/f_timetable_container.pt:5
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:16
 msgid "There are none."
-msgstr "No hay nada"
+msgstr "No hay ninguno"
 
 #: /src/schooltool/app/browser/app.py:352
 #: /src/schooltool/app/browser/app.py:531
@@ -101,7 +101,7 @@ msgstr "No hay nada"
 #: /src/schooltool/timetable/browser/flourish.zcml:503
 #: /src/schooltool/timetable/browser/timetable.py:342
 msgid "Add"
-msgstr "Añadir"
+msgstr "Agregar"
 
 #: /src/schooltool/app/browser/app.py:276
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
@@ -2048,7 +2048,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:5
 msgid "Set Tab Visibility"
-msgstr ""
+msgstr "Definir visibilidad de la pestaña"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:10
 msgid "Visible"
@@ -2063,6 +2063,9 @@ msgid ""
 "Schools that are not using all components of SchoolTool can reduce visual "
 "clutter by hiding unnecessary links in the top navigation bar."
 msgstr ""
+"Las escuelas que no estén usando todo los componente de SchoolTool pueden "
+"reducir el desorden visual escondiendo algunos enlaces de la barra de "
+"navegación superior."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:10
 msgid ""
@@ -2070,6 +2073,9 @@ msgid ""
 "links; they don't change the functionality, data, or security settings of "
 "SchoolTool in any way."
 msgstr ""
+"Note que estas configuraciones no tienen otro efecto que remover enlaces de "
+"navegación, ellas no cambian de ninguna forma la funcionalidad, datos o "
+"configuraciones de seguridad de SchoolTool."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
 msgid "Links can be changed from visible to hidden at any time."
@@ -2856,7 +2862,7 @@ msgstr ""
 
 #: /src/schooltool/app/main.py:489
 msgid "Manager password: "
-msgstr ""
+msgstr "Contraseña del administrador: "
 
 #: /src/schooltool/app/main.py:500
 msgid "No configuration file given"

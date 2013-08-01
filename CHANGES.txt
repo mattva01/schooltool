@@ -5,7 +5,7 @@ CHANGES
 2.5.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Updated translations
 
 
 2.5.0 (2013-06-03)
