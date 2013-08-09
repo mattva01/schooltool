@@ -126,3 +126,27 @@
 .hidden-dialog {
     display: none;
 }
+
+.ui-autocomplete {
+    border-radius: 0px 0px 0px 0px;
+    font-size: 1em;
+    padding: 0;
+}
+
+.ui-autocomplete .ui-menu-item .ui-corner-all {
+    border-radius: 0px 0px 0px 0px;
+}
+
+.ui-autocomplete .ui-menu-item .ui-state-hover {
+    border-type: solid;
+    border-width: 1px;
+}
+
+.ui-autocomplete .ui-menu-item {
+    font-size: 1em;
+}
+
+.ui-autocomplete .ui-menu-item a {
+    line-height: 1;
+    padding: 0.3em 0 0.3em 0.1em;
+}

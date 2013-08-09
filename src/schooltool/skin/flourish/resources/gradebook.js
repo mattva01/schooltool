@@ -115,6 +115,33 @@ function getScorableInput(td) {
     return input;
 }
 
+function setAutoComplete(input, scores) {
+    input.autocomplete({
+        appendTo: input.parent(),
+        delay: 0,
+        minLength: 1,
+        search: function(e, ui) {
+            // ignore navigation keys
+            switch(e.keyCode) {
+            case 27: // escape
+            case 37: // left
+            case 39: // right
+            case 38: // up
+            case 13: // enter
+            case 40: // down
+                return false;
+            }
+        },
+	source: function(request, response) {
+            // match only the beginning of the label
+	    var matcher = new RegExp("^"+$.ui.autocomplete.escapeRegex(request.term), 'i');
+	    response($.grep(scores, function(item) {
+		return matcher.test(item.label);
+	    }));
+	}
+    });
+}
+
 function getInput(td) {
     if (td.find('input').length < 1) {
         var new_input = $('<input type="text" />');
@@ -125,7 +152,13 @@ function getInput(td) {
         td.attr('original', value);
         td.html($('<div>').append(new_input).html());
     }
-    return td.find('input');
+    var input = td.find('input');
+    var columnHeader = findColumnHeader(td);
+    var scores = columnHeader.data('scores');
+    if (scores) {
+        setAutoComplete(input, scores);
+    }
+    return input;
 }
 
 function removeInput(td) {
@@ -350,6 +383,10 @@ function removeSavingWarning() {
     window.onbeforeunload = null;
 }
 
+function autoCompleteDisplayed() {
+    return $('.ui-autocomplete:visible').length
+}
+
 function initGradebook() {
     var form = $('#grid-form');
     form.data('base-font-size', parseInt(form.css('fontSize')));
@@ -457,21 +494,32 @@ function initGradebook() {
             e.preventDefault();
             break;
         case 37: // left
-            focusInputHorizontally(td.prevUntil('tr'));
-            e.preventDefault();
+            if (!autoCompleteDisplayed()) {
+                focusInputHorizontally(td.prevUntil('tr'));
+                e.preventDefault();
+            }
             break;
         case 39: // right
-            focusInputHorizontally(td.nextAll());
-            e.preventDefault();
+            if (!autoCompleteDisplayed()) {
+                focusInputHorizontally(td.nextAll());
+                e.preventDefault();
+            }
             break;
         case 38: // up
-            focusInputVertically(tr.prevUntil('tbody'), td.index());
-            e.preventDefault();
+            if (!autoCompleteDisplayed()) {
+                focusInputVertically(tr.prevUntil('tbody'), td.index());
+                e.preventDefault();
+            }
             break;
         case 13: // enter
-        case 40: // down
             focusInputVertically(tr.nextAll(), td.index());
             e.preventDefault();
+            break;
+        case 40: // down
+            if (!autoCompleteDisplayed()) {
+                focusInputVertically(tr.nextAll(), td.index());
+                e.preventDefault();
+            }
             break;
         }
     });

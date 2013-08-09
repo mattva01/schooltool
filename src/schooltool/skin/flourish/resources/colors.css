@@ -458,6 +458,7 @@ table.schooltool-tasks-status td .success {
       + state-active
     - dialog
     - datepicker
+    - autocomplete
 
 */
 
@@ -538,6 +539,19 @@ table.schooltool-tasks-status td .success {
 .ui-datepicker-calendar tr th:nth-child(even),
 .ui-datepicker-calendar tr td:nth-child(even) {
     background: #f0f0f0;
+}
+
+.ui-autocomplete .ui-menu-item .ui-state-hover {
+    background: #009499;
+    border-color: #009499;
+}
+
+.ui-autocomplete .ui-menu-item {
+    background: #6C7B7C
+}
+
+.ui-autocomplete .ui-menu-item a {
+    color: #ffffff;
 }
 
 /*
