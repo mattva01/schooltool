@@ -127,6 +127,7 @@ function setAutoComplete(input, scores) {
             case 37: // left
             case 39: // right
             case 38: // up
+            case 9: // tab
             case 13: // enter
             case 40: // down
                 return false;
@@ -511,6 +512,7 @@ function initGradebook() {
                 e.preventDefault();
             }
             break;
+        case 9: //tab
         case 13: // enter
             focusInputVertically(tr.nextAll(), td.index());
             e.preventDefault();
