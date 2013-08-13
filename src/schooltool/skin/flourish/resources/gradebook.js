@@ -512,7 +512,10 @@ function initGradebook() {
                 e.preventDefault();
             }
             break;
-        case 9: //tab
+        case 9: // tab
+            focusInputHorizontally(td.nextAll());
+            e.preventDefault();
+            break;
         case 13: // enter
             focusInputVertically(tr.nextAll(), td.index());
             e.preventDefault();
