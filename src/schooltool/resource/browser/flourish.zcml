@@ -2,6 +2,7 @@
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
            xmlns:flourish="http://schooltool.org/flourish"
            xmlns:report="http://namespaces.schooltool.org/report"
            i18n_domain="schooltool">
@@ -44,7 +45,7 @@
       title="Resource Attributes"
       class="schooltool.skin.flourish.page.LinkViewlet"
       manager="schooltool.app.browser.app.CustomizeSchoolLinks"
-      permission="schooltool.view"
+      permission="schooltool.edit"
       />
 
   <flourish:viewlet
@@ -315,10 +316,15 @@
       name="manage-resources-overview"
       after="manage-timetables-overview"
       view="schooltool.app.browser.app.ManageSchool"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       manager="schooltool.skin.flourish.page.IPageContentManager"
       class=".resource.FlourishManageResourcesOverview"
       />
+
+  <security:allow
+     interface=".resource.FlourishManageResourcesOverview"
+     crowds="managers administrators clerks"
+     permission="schooltool.view" />
 
   <flourish:page
       for="schooltool.resource.interfaces.IBookingCalendar"

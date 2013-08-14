@@ -75,6 +75,7 @@ from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.table import ImageInputColumn
 from schooltool.table.interfaces import ITableFormatter
+from schooltool.securitypolicy.crowds import inCrowd
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin import flourish
 from schooltool.skin.flourish.form import Form
@@ -1503,3 +1504,12 @@ class SchoolLoginLogoViewlet(SchoolLogoViewlet):
       </div>
     </div>
     """)
+
+
+class ManageSchoolViewlet(flourish.page.LinkViewlet):
+
+    @property
+    def enabled(self):
+        if not self.title:
+            return False
+        return inCrowd(self.request.principal, 'administration', context=self.context)

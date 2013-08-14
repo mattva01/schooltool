@@ -27,8 +27,8 @@ from zope.publisher.interfaces.browser import IBrowserView
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.schema import TextLine
 from zope.viewlet.metadirectives import IViewletDirective
-from zope.viewlet.metaconfigure import viewletDirective
 
+from schooltool.skin import flourish
 from schooltool.report.interfaces import IReportLinkViewletManager
 from schooltool.report.report import ReportLinkViewlet
 from schooltool.report.report import getReportRegistrationUtility
@@ -49,13 +49,14 @@ def reportLinkDirective(_context, name, permission, for_=Interface,
     class_=ReportLinkViewlet, template=None, group=u'', title=u'',
     description='', link='', file_type='', **kwargs):
 
-    # forward our defaults to the viewletDirective
-    viewletDirective(_context, name, permission,
-        for_=for_, layer=layer, view=view, manager=manager,
+    flourish.zcml.viewlet(
+        _context, name, permission,
+        for_=for_, layer=layer, view=view,
+        manager=manager,
         class_=class_, template=template,
         group=group, title=title, description=description, link=link,
         file_type=file_type, **kwargs)
 
-    # and register the report for reference
+    # Register the report for reference
     utility = getReportRegistrationUtility()
     utility.registerReport(group, title, description, file_type, name, layer)
