@@ -74,7 +74,7 @@
       class="schooltool.report.browser.report.ReportsLinks"
       title="Reports"
       view="schooltool.term.browser.term.FlourishTermView"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       />
 
   <flourish:viewlet
@@ -84,7 +84,7 @@
       class="schooltool.report.browser.report.ReportsLinks"
       title="Reports"
       view="schooltool.course.browser.section.FlourishSectionView"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       />
 
   <flourish:viewlet

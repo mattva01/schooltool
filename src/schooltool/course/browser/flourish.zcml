@@ -2,6 +2,7 @@
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
            xmlns:flourish="http://schooltool.org/flourish"
            xmlns:report="http://namespaces.schooltool.org/report"
            i18n_domain="schooltool">
@@ -491,10 +492,15 @@
       name="manage-courses-overview"
       after="manage-people-overview"
       view="schooltool.app.browser.app.ManageSchool"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       manager="schooltool.skin.flourish.page.IPageContentManager"
       class=".course.FlourishManageCoursesOverview"
       />
+
+  <security:allow
+     interface=".course.FlourishManageCoursesOverview"
+     crowds="managers administrators clerks"
+     permission="schooltool.view" />
 
   <!-- breadcrumbs -->
 

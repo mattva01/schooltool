@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:flourish="http://schooltool.org/flourish"
+           xmlns:security="http://schooltool.org/securitypolicy"
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
@@ -136,10 +137,15 @@
       name="manage-years-overview"
       after="manage-courses-overview"
       view="schooltool.app.browser.app.ManageSchool"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       manager="schooltool.skin.flourish.page.IPageContentManager"
       class=".term.FlourishManageYearsOverview"
       />
+
+  <security:allow
+     interface=".term.FlourishManageYearsOverview"
+     crowds="managers administrators clerks"
+     permission="schooltool.view" />
 
   <flourish:viewlet
       name="terms_table"
