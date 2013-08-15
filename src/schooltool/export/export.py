@@ -51,6 +51,7 @@ from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
 from schooltool.report.browser.report import RequestRemoteReportDialog
 from schooltool.report.browser.report import ProgressReportPage
+from schooltool.report.report import ReportLinkViewlet
 from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.task.progress import TaskProgress
 from schooltool.task.progress import normalized_progress
@@ -917,3 +918,11 @@ class OnXLSReportScheduled(OnPDFReportScheduled):
         if not title:
             title = _(u'XLS export')
         return title
+
+
+class ExportLinkVielwet(ReportLinkViewlet):
+    pass
+
+
+class ImportLinkViewlet(flourish.page.LinkViewlet):
+    pass

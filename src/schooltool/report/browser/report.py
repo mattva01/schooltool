@@ -647,3 +647,7 @@ class ReportArchivePage(ProgressReportPage):
 class RequestReportArchiveDialog(RequestRemoteReportDialog):
 
     task_factory = ArchiveReportTask
+
+
+class ReportReferenceLinkViewlet(flourish.page.LinkViewlet):
+    pass

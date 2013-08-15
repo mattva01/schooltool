@@ -220,7 +220,7 @@
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.app.browser.app.SchoolActionsLinks"
       title="Actions"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       view="schooltool.app.browser.app.ManageSchool"
       />
 
