@@ -1,5 +1,9 @@
 // Changes made for flourish
 
+ST.gradebook = {};
+ST.gradebook.readonly = false;
+
+
 function makeGradeCellVisible(element) {
     var cell = $(element);
     var cell_left_border = cell.position().left;
@@ -388,50 +392,7 @@ function autoCompleteDisplayed() {
     return $('.ui-autocomplete:visible').length
 }
 
-function initGradebook() {
-    var form = $('#grid-form');
-    form.data('base-font-size', parseInt(form.css('fontSize')));
-    // gradebook-part width calculation
-    updateGradebookPartsWidths(form);
-    // row colors
-    $('.gradebook-part').find('tbody').find('tr:odd').addClass('odd');
-    // fill down
-    preloadFilldown(form);
-    // comment cell
-    preloadCommentCell(form);
-    // popup menus
-    preloadPopups(form);
-    var gradebook = form.find('#gradebook');
-    gradebook.on('click', '.popup_link', function(e) {
-        var link = $(this);
-        var popup = link.prev();
-        if (link.parent().is('th')) {
-            var popup = link.prev();
-            var left = calculatePopupLeft(popup);
-            popup.css('left', left);
-        }
-        hidePopup(form);
-        popup.addClass('popup_active').show();
-        e.preventDefault();
-    });
-    var grades = form.find('#grades-part');
-    grades.scroll(function() {
-        hidePopup(form);
-    });
-    $(document).click(function(e) {
-        if (!$(e.target).hasClass('popup_link')) {
-            hidePopup(form);
-        }
-        if (!$(e.target).hasClass('navbar-list-worksheets')) {
-            var list = $('#worksheets-list');
-            if (list.is(':visible')) {
-                list.slideUp('fast');
-                $('#navbar-list-worksheets').toggleClass(
-                    'navbar-list-worksheets-active');
-            }
-        }
-    });
-    // cell navigation
+function initGrading(grades) {
     grades.on('click', 'td', function() {
         var td = $(this);
         makeGradeCellVisible(td);
@@ -528,7 +489,9 @@ function initGradebook() {
             break;
         }
     });
-    // filldown
+}
+
+function initFillDown(form) {
     form.on('click', '.filldown', function() {
         hidePopup(form);
         var container = $('#filldown-dialog-container');
@@ -584,6 +547,9 @@ function initGradebook() {
         container.dialog('close');
         return false;
     });
+}
+
+function initComments(form) {
     // comment-cell
     form.on('click', '.comment-cell', function() {
         hidePopup(form);
@@ -637,6 +603,64 @@ function initGradebook() {
         form.submit();
         return false;
     });
+}
+
+function initGradebook() {
+    var form = $('#grid-form');
+    form.data('base-font-size', parseInt(form.css('fontSize')));
+
+    updateGradebookPartsWidths(form);
+
+    // row colors
+    $('.gradebook-part').find('tbody').find('tr:odd').addClass('odd');
+
+    if (!ST.gradebook.readonly) {
+        preloadFilldown(form);
+        preloadCommentCell(form);
+    }
+
+    preloadPopups(form);
+
+    var gradebook = form.find('#gradebook');
+    gradebook.on('click', '.popup_link', function(e) {
+        var link = $(this);
+        var popup = link.prev();
+        if (link.parent().is('th')) {
+            var popup = link.prev();
+            var left = calculatePopupLeft(popup);
+            popup.css('left', left);
+        }
+        hidePopup(form);
+        popup.addClass('popup_active').show();
+        e.preventDefault();
+    });
+
+    var grades = form.find('#grades-part');
+
+    grades.scroll(function() {
+        hidePopup(form);
+    });
+
+    $(document).click(function(e) {
+        if (!$(e.target).hasClass('popup_link')) {
+            hidePopup(form);
+        }
+        if (!$(e.target).hasClass('navbar-list-worksheets')) {
+            var list = $('#worksheets-list');
+            if (list.is(':visible')) {
+                list.slideUp('fast');
+                $('#navbar-list-worksheets').toggleClass(
+                    'navbar-list-worksheets-active');
+            }
+        }
+    });
+
+    if (!ST.gradebook.readonly) {
+        initGrading(grades);
+        initFillDown(form);
+        initComments(form);
+    }
+
     // Zoom buttons
     var normal_width = 752;
     var wide_width = 944;
@@ -701,6 +725,7 @@ function initGradebook() {
         $(this).hide();
         $('.expand').show();
     });
+
     // tertiary navigation
     var third_nav_container = $('#third-nav-container');
     var third_nav = third_nav_container.find('.third-nav');
@@ -748,6 +773,7 @@ function initGradebook() {
         }
         e.preventDefault();
     });
+
     // ignore warning dialog when clicking save button
     form.on('click', 'input[type="submit"]', function() {
         removeSavingWarning();
