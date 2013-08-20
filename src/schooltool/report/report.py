@@ -404,6 +404,8 @@ class AbstractReportTask(RemoteTask):
         from zope.security.checker import ProxyFactory
         principal = Principal(self.creator.__name__, 'XXX:title',
                               person=ProxyFactory(self.creator))
+        for group in self.creator.groups:
+            principal.groups.append("sb.group." + group.__name__)
         request.principal = principal
         zope.security.management.endInteraction()
         zope.security.management.newInteraction(request)
