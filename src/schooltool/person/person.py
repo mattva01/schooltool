@@ -17,8 +17,6 @@
 #
 """
 Person implementation and support objects
-
-$Id$
 """
 
 import hashlib

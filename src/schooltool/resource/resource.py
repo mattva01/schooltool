@@ -17,8 +17,6 @@
 #
 """
 SchoolTool resource object
-
-$Id$
 """
 __docformat__ = 'restructuredtext'
 

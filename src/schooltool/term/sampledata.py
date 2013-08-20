@@ -16,8 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 """Term sample data generation
-
-$Id$
 """
 import datetime
 import zope.interface

@@ -17,8 +17,6 @@
 #
 """
 Registration of types of resources.
-
-$Id$
 """
 from zope.component import adapts
 from zope.component import queryUtility

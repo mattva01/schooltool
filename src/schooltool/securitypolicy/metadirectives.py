@@ -18,8 +18,6 @@
 """
 SchoolTool security policy metadirectives.
 
-$Id$
-
 """
 
 from zope.interface import Interface

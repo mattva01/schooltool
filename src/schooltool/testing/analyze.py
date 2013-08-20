@@ -17,8 +17,6 @@
 #
 """
 HTML Analyzation Tools
-
-$Id$
 """
 from lxml import etree
 

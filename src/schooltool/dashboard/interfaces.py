@@ -16,8 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 """Dashboard Interfaces
-
-$Id$
 """
 __docformat__ = 'reStructuredText'
 import zope.schema

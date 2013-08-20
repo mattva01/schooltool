@@ -17,8 +17,6 @@
 #
 """
 Macros
-
-$Id$
 """
 import zope.interface
 

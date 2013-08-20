@@ -17,8 +17,6 @@
 #
 """
 Interfaces for SchoolTool calendar browser views.
-
-$Id$
 """
 import zope.schema
 from zope.interface import Interface, Attribute

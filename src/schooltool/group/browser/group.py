@@ -17,8 +17,6 @@
 #
 """
 group views.
-
-$Id$
 """
 import zc.table.table
 import zc.table.column

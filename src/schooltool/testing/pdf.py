@@ -18,8 +18,6 @@
 """
 SchoolTool Reporlab PDF testing helpers.
 
-$Id$
-
 """
 
 import cgi

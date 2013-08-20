@@ -17,8 +17,6 @@
 #
 """
 SchoolTool skin containers
-
-$Id$
 """
 import urllib
 

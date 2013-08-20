@@ -17,8 +17,6 @@
 #
 """
 Person sample data generation
-
-$Id$
 """
 
 from zope.interface import implements

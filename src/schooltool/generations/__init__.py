@@ -17,8 +17,6 @@
 #
 """
 Generations for database version upgrades.
-
-$Id$
 """
 
 from zope.app.generations.generations import SchemaManager

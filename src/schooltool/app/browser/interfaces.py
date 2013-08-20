@@ -17,8 +17,6 @@
 #
 """
 Interfaces for SchoolTool calendar browser views.
-
-$Id$
 """
 
 from zope.viewlet.interfaces import IViewletManager

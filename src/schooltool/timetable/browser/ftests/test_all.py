@@ -17,8 +17,6 @@
 #
 """
 Functional tests for schooltool.timetable.
-
-$Id$
 """
 
 import unittest

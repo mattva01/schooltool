@@ -17,8 +17,6 @@
 #
 """
 Configuration views for SchoolTool security policy.
-
-$Id$
 """
 
 from zope.publisher.browser import BrowserView

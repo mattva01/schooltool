@@ -17,8 +17,6 @@
 #
 """
 SchoolTool skin.
-
-$Id$
 """
 
 from zope.interface import Interface

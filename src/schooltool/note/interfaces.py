@@ -17,8 +17,6 @@
 #
 """
 Notes support interfaces
-
-$Id$
 """
 import zope.interface
 import zope.schema

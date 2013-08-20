@@ -17,8 +17,6 @@
 #
 """
 SchoolTool application views.
-
-$Id$
 """
 import urllib
 

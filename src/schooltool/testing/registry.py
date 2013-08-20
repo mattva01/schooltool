@@ -17,8 +17,6 @@
 #
 """
 Testing registries.
-
-$Id$
 """
 __docformat__ = 'restructuredtext'
 

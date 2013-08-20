@@ -17,8 +17,6 @@
 #
 """
 SchoolTool Application
-
-$Id$
 """
 
 def registerTestSetup():

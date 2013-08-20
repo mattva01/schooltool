@@ -17,8 +17,6 @@
 #
 """
 SchoolTool sample data generator interfaces
-
-$Id$
 """
 import zope.interface
 import zope.schema

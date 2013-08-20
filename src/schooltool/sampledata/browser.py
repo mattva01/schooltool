@@ -17,8 +17,6 @@
 #
 """
 Views for the sample data generation
-
-$Id$
 """
 from zope.publisher.browser import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile

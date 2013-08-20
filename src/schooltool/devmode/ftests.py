@@ -17,8 +17,6 @@
 #
 """
 Functional tests for schooltool.devmode.
-
-$Id$
 """
 
 import unittest

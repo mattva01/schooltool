@@ -17,8 +17,6 @@
 #
 """
 Functional Testing Utilities for basic person
-
-$Id$
 """
 import os
 

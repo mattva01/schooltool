@@ -17,8 +17,6 @@
 #
 """
 Browser views for the SchoolTool application.
-
-$Id$
 """
 import calendar
 import itertools

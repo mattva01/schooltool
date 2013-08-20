@@ -17,8 +17,6 @@
 #
 """
 CSV import view for BasicPerson.
-
-$Id$
 """
 from zope.component import getUtility
 from zope.container.interfaces import INameChooser

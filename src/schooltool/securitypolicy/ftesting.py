@@ -17,8 +17,6 @@
 #
 """
 Functional Testing Utilities for securitypolicy
-
-$Id$
 """
 import os
 

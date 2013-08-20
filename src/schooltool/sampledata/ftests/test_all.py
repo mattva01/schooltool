@@ -17,8 +17,6 @@
 #
 """
 Functional tests for schooltool.sampledata.
-
-$Id$
 """
 
 import unittest

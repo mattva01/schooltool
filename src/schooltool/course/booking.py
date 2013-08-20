@@ -17,8 +17,6 @@
 #
 """
 Resource booking for sections.
-
-$Id$
 """
 
 from schooltool.relationship.uri import URIObject

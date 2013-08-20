@@ -17,8 +17,6 @@
 #
 """
 Utilities used when generating sample data.
-
-$Id$
 """
 from random import Random
 

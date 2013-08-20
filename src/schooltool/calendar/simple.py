@@ -17,8 +17,6 @@
 #
 """
 Simple calendar events and calendars.
-
-$Id$
 """
 
 import datetime

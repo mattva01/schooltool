@@ -18,8 +18,6 @@
 """
 SchoolTool security policy.
 
-$Id$
-
 """
 from persistent import Persistent
 import zope.keyreference.interfaces

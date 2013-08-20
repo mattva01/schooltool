@@ -17,8 +17,6 @@
 #
 """
 Batching for schooltool.
-
-$Id$
 """
 from zope.interface import implements
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile

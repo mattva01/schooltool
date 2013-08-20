@@ -17,8 +17,6 @@
 #
 """
 Functional Testing Utilities for timetabling
-
-$Id$
 """
 import os
 

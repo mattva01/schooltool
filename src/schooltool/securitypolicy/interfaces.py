@@ -18,8 +18,6 @@
 """
 Interfaces for SchoolTool security policy.
 
-$Id$
-
 """
 
 from zope.interface import Interface

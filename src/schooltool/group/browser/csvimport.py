@@ -17,8 +17,6 @@
 #
 """
 csv importing.
-
-$Id$
 """
 from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.absoluteurl import absoluteURL

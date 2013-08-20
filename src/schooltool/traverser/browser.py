@@ -17,8 +17,6 @@
 #
 """
 Pluggable Traverser Implementation for the Browser
-
-$Id$
 """
 from schooltool.traverser.traverser import PluggableTraverser
 from zope.publisher.defaultview import getDefaultViewName

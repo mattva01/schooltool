@@ -17,8 +17,6 @@
 #
 """
 SchoolTool person name generator
-
-$Id$
 """
 import os.path
 from schooltool.sampledata import PortableRandom

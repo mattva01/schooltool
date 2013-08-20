@@ -17,8 +17,6 @@
 #
 """
 Functional tests for schooltool.dashboard.
-
-$Id$
 """
 
 import unittest

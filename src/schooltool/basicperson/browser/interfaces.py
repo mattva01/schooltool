@@ -17,8 +17,6 @@
 #
 """
 Interfaces for person views.
-
-$Id$
 """
 from zope.interface import Interface
 

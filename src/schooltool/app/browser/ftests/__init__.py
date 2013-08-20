@@ -17,7 +17,5 @@
 #
 """
 Common code for functional tests.
-
-$Id$
 """
 

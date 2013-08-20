@@ -17,8 +17,6 @@
 #
 """
 Mixins for implementing calendars.
-
-$Id$
 """
 
 import datetime

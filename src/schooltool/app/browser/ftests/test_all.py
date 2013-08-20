@@ -17,8 +17,6 @@
 #
 """
 Functional tests for schooltool.app.app.
-
-$Id$
 """
 
 import unittest

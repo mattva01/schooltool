@@ -17,8 +17,6 @@
 #
 """
 Group Timetable caledar views.
-
-$Id$
 """
 import urllib
 import pytz

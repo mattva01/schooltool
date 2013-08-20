@@ -17,8 +17,6 @@
 #
 """
 Functional tests for schooltool.basicperson
-
-$Id$
 """
 
 import unittest

@@ -20,8 +20,6 @@ Pluggable Traverser Interfaces
 
 This implementation is independent of the presentation type. Sub-interfaces
 must be written for every specific presentation type.
-
-$Id$
 """
 
 from zope.interface import Interface, Attribute
