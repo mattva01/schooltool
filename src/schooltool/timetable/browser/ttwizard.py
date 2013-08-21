@@ -580,8 +580,15 @@ class NamedPeriodsStep(ChoiceStep):
     question = _("Do periods have names or are they simply"
                  " designated by time?")
 
-    choices = ((True,  _("Have names")),
-               (False, _("Designated by time")))
+    @property
+    def choices(self):
+        session = self.getSessionData()
+        if session['cycle'] == 'rotating':
+            choices = ((True,  _("Have names")),)
+        else:
+            choices = ((True,  _("Have names")),
+                       (False, _("Designated by time")))
+        return choices
 
     def next(self):
         session = self.getSessionData()
@@ -740,6 +747,10 @@ class PeriodOrderComplex(Step):
         return session['day_names']
 
     def numSlots(self):
+        session = self.getSessionData()
+        if (session['cycle'] != session.get('time_model')):
+            np = len(self.periods())
+            return [np for day in self.getSessionData()['day_names']]
         return [len(day) for day in self.getSessionData()['time_slots']]
 
     def update(self):
