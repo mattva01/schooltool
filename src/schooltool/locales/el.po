@@ -2927,11 +2927,11 @@ msgid "Assigned leaders."
 msgstr "Έσοδα για τους ηγέτες."
 
 #: /src/schooltool/app/security.py:349
-msgid "\"$group\" group."
+msgid "${group} group."
 msgstr "\"$ομάδα\" ομάδα."
 
 #: /src/schooltool/app/security.py:364
-msgid "\"$group\" group and the super user."
+msgid "${group} group and the super user."
 msgstr "\"$ομάδα\" την ομάδα και του υπερ-χρήστη."
 
 #: /src/schooltool/app/security.zcml:71

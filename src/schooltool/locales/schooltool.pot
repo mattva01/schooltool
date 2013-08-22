@@ -16,7 +16,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2013-06-18 19:19+0300\n"
+"POT-Creation-Date: 2013-08-22 19:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -7519,40 +7519,6 @@ msgstr ""
 #: /src/schooltool/task/browser/templates/task_status.pt:38
 #: /src/schooltool/task/interfaces.py:49
 msgid "Persisted result"
-msgstr ""
-
-#: /src/schooltool/task/interfaces.py:36
-#: /src/schooltool/task/interfaces.py:51
-#: /src/schooltool/task/interfaces.py:53
-msgid "Celery routing key"
-msgstr ""
-
-#: /src/schooltool/task/interfaces.py:39
-msgid "Working"
-msgstr ""
-
-#: /src/schooltool/task/interfaces.py:40
-msgid "Finished"
-msgstr ""
-
-#: /src/schooltool/task/interfaces.py:56
-msgid "Time Scheduled"
-msgstr ""
-
-#: /src/schooltool/task/interfaces.py:59
-msgid "Creator username"
-msgstr ""
-
-#: /src/schooltool/task/interfaces.py:63
-msgid "Creator"
-msgstr ""
-
-#: /src/schooltool/task/interfaces.py:113
-msgid "Updated on"
-msgstr ""
-
-#: /src/schooltool/task/interfaces.py:116
-msgid "Expires on"
 msgstr ""
 
 #: /src/schooltool/task/security.zcml:24

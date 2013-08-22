@@ -22,7 +22,7 @@ Group interfaces
 from zope.interface import Interface, Attribute
 import zope.schema
 from zope.container.interfaces import IContainer, IContained
-from zope.container.constraints import contains, containers
+from zope.container.constraints import contains
 
 from schooltool.person.interfaces import IPerson
 from schooltool.common import SchoolToolMessage as _
@@ -32,11 +32,11 @@ class ITask(Interface):
 
     task_id = zope.schema.TextLine(title=_("Task ID"))
 
-    routing_key = zope.schema.TextLine(title=_("Celery routing key"),
+    routing_key = zope.schema.TextLine(title=u"Celery routing key",
                                        required=False)
 
-    working = zope.schema.Bool(title=_("Working"))
-    finished = zope.schema.Bool(title=_("Finished"))
+    working = zope.schema.Bool(title=u"Working")
+    finished = zope.schema.Bool(title=u"Finished")
     succeeded = zope.schema.Bool(title=_("Succeeded"))
     failed = zope.schema.Bool(title=_("Failed"))
     internal_state = zope.schema.TextLine(title=_("Internal state"))
@@ -47,19 +47,14 @@ class ITask(Interface):
 
     permanent_result = Attribute(_("Persisted result"))
 
-    routing_key = zope.schema.TextLine(title=_("Celery routing key"),
-                                       required=False)
-    routing_key = zope.schema.TextLine(title=_("Celery routing key"),
-                                       required=False)
-
-    scheduled = zope.schema.Datetime(title=_("Time Scheduled"))
+    scheduled = zope.schema.Datetime(title=_("Scheduled"))
 
     creator_username = zope.schema.TextLine(
-        title=_("Creator username"),
+        title=u"Creator username",
         required=False)
 
     creator = zope.schema.Object(
-        title=_("Creator"),
+        title=u"Creator",
         schema=IPerson, required=False)
 
     def execute(request):
@@ -105,14 +100,14 @@ class IMessageBase(Interface):
         required=False)
 
     created_on = zope.schema.Datetime(
-       title=_("Created on"),
+       title=u"Created on",
        required=False)
 
     updated_on = zope.schema.Datetime(
-       title=_("Updated on"),
+       title=u"Updated on",
        required=False)
 
-    expires_on = zope.schema.Datetime(title=_("Expires on"))
+    expires_on = zope.schema.Datetime(title=u"Expires on")
 
     title = zope.schema.TextLine(title=u"Title")
 

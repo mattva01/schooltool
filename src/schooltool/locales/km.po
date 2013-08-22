@@ -2891,12 +2891,12 @@ msgid "Assigned leaders."
 msgstr "អ្នកដឹកនាំ​ដែល​បាន​កំណត់ ។"
 
 #: /src/schooltool/app/security.py:349
-msgid "\"$group\" group."
-msgstr "\"$group\" ក្រុម"
+msgid "${group} group."
+msgstr "${group} ក្រុម"
 
 #: /src/schooltool/app/security.py:364
-msgid "\"$group\" group and the super user."
-msgstr "\"$group\" ក្រម និង​ អ្នក​ប្រើប្រាស់​ពិសេស ។"
+msgid "${group} group and the super user."
+msgstr "${group} ក្រម និង​ អ្នក​ប្រើប្រាស់​ពិសេស ។"
 
 #: /src/schooltool/app/security.zcml:71
 msgid "SchoolTool application"
