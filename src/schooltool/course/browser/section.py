@@ -75,6 +75,7 @@ from schooltool.resource.interfaces import ILocation, IEquipment
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.browser.schoolyear import SchoolyearNavBreadcrumbs
+from schooltool.securitypolicy.crowds import inCrowd
 from schooltool.skin.containers import ContainerView
 from schooltool.skin import flourish
 from schooltool.skin.flourish.containers import ContainerDeleteView
@@ -890,7 +891,8 @@ class SectionAddLinkViewlet(LinkViewlet, SectionsActiveTabMixin):
 
     @property
     def enabled(self):
-        if not flourish.canEdit(self.context):
+        if (not flourish.canEdit(self.context) and
+            not inCrowd(self.request.principal, 'clerks', context=self.context)):
             return False
         return super(SectionAddLinkViewlet, self).enabled
 

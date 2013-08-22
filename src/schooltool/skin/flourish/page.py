@@ -24,7 +24,7 @@ import urllib
 
 from zope.cachedescriptors.property import Lazy
 from zope.component import getMultiAdapter, queryMultiAdapter
-from zope.interface import implements
+from zope.interface import implements, Interface
 from zope.publisher.browser import BrowserPage
 from zope.publisher.interfaces import NotFound
 from zope.browser.interfaces import IBrowserView
