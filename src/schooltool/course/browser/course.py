@@ -413,7 +413,7 @@ class CourseAddLinkFromCourseViewlet(CourseAddLinkViewlet):
 
     @property
     def schoolyear(self):
-        return ISchoolYear(self.context.__parent__)
+        return ISchoolYear(self.context)
 
     @property
     def url(self):
@@ -544,7 +544,11 @@ class FlourishCourseView(DisplayForm):
 
     @property
     def sections(self):
-        return list(self.context.sections)
+        return list(removeSecurityProxy(self.context).sections)
+
+    @property
+    def unproxied_course(self):
+        return removeSecurityProxy(self.context)
 
     @property
     def canModify(self):

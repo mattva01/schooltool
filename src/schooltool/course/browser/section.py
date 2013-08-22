@@ -1049,7 +1049,9 @@ class SectionListTable(SectionsTableBase):
         return sections
 
     def items(self):
-        return self.context.sections
+        if flourish.canView(self.context):
+            return removeSecurityProxy(self.context).sections
+        return ()
 
 
 class SchoolYearSectionsTable(SectionsTable):
