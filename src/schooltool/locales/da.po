@@ -2937,12 +2937,12 @@ msgid "Assigned leaders."
 msgstr "Tilknyttede ledere"
 
 #: /src/schooltool/app/security.py:349
-msgid "\"$group\" group."
-msgstr "\"$group\" gruppe."
+msgid "${group} group."
+msgstr "${group} gruppe."
 
 #: /src/schooltool/app/security.py:364
-msgid "\"$group\" group and the super user."
-msgstr "\"$group\" gruppe og superbrugeren."
+msgid "${group} group and the super user."
+msgstr "${group} gruppe og superbrugeren."
 
 #: /src/schooltool/app/security.zcml:71
 msgid "SchoolTool application"

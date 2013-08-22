@@ -2859,12 +2859,12 @@ msgid "Assigned leaders."
 msgstr "Pemimpin terpilih."
 
 #: /src/schooltool/app/security.py:349
-msgid "\"$group\" group."
-msgstr "\"$group\" kelompok."
+msgid "${group} group."
+msgstr "${group} kelompok."
 
 #: /src/schooltool/app/security.py:364
-msgid "\"$group\" group and the super user."
-msgstr "\"$group\" kelompok dan pengguna super."
+msgid "${group} group and the super user."
+msgstr "${group} kelompok dan pengguna super."
 
 #: /src/schooltool/app/security.zcml:71
 msgid "SchoolTool application"
