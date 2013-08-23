@@ -15,6 +15,7 @@ CHANGES
 - TAB key in gradebook moves to the next cell.
 - Further updates to permissions.
 - Clerks and administrators now have partial access to the School tab.
+- Updated translations
 
 
 2.5.1 (2013-08-01)

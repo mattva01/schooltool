@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-05-27 19:54+0300\n"
-"PO-Revision-Date: 2013-04-20 02:59+0000\n"
+"POT-Creation-Date: 2013-08-22 19:53+0300\n"
+"PO-Revision-Date: 2013-08-22 23:43+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-05-28 05:42+0000\n"
-"X-Generator: Launchpad (build 16640)\n"
+"X-Launchpad-Export-Date: 2013-08-23 05:55+0000\n"
+"X-Generator: Launchpad (build 16737)\n"
 "Language: fi\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -1220,7 +1220,23 @@ msgstr "Mukauta"
 msgid "Responsible parties"
 msgstr "Vastuuhenkilöt"
 
-#: /src/schooltool/app/browser/flourish.zcml:492
+#: /src/schooltool/app/browser/flourish.zcml:581
+#: /src/schooltool/app/browser/templates/event.pt:33
+#: /src/schooltool/basicperson/browser/person.py:609
+#: /src/schooltool/basicperson/browser/person.py:978
+#: /src/schooltool/basicperson/browser/templates/person_view.pt:29
+#: /src/schooltool/calendar/browser/templates/event.pt:24
+#: /src/schooltool/contact/browser/contact.py:193
+#: /src/schooltool/contact/browser/contact.py:390
+#: /src/schooltool/course/browser/templates/course.pt:23
+#: /src/schooltool/person/browser/home.pt:44
+#: /src/schooltool/person/browser/person.pt:34
+#: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:25
+#: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:34
+msgid "Details"
+msgstr "Yksityiskohdat"
+
+#: /src/schooltool/app/browser/flourish.zcml:608
 msgid "Information"
 msgstr "Tiedot"
 
@@ -1566,24 +1582,12 @@ msgstr "Kokopäiväinen tapahtuma"
 msgid "This is a recurring event."
 msgstr "Tämä on toistuva tapahtuma."
 
-#: /src/schooltool/app/browser/templates/event.pt:33
-#: /src/schooltool/basicperson/browser/person.py:549
-#: /src/schooltool/basicperson/browser/person.py:931
-#: /src/schooltool/basicperson/browser/templates/person_view.pt:29
-#: /src/schooltool/calendar/browser/templates/event.pt:24
-#: /src/schooltool/course/browser/templates/course.pt:23
-#: /src/schooltool/person/browser/home.pt:44
-#: /src/schooltool/person/browser/person.pt:34
-#: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:25
-#: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:34
-msgid "Details"
-msgstr "Yksityiskohdat"
-
 #: /src/schooltool/app/browser/templates/event.pt:37
+#: /src/schooltool/app/browser/templates/event_booking.pt:24
 #: /src/schooltool/calendar/browser/templates/event.pt:28
-#: /src/schooltool/calendar/browser/templates/event_booking.pt:18
-#: /src/schooltool/schoolyear/browser/schoolyear.py:157
-#: /src/schooltool/timetable/browser/app.py:103
+#: /src/schooltool/calendar/browser/templates/event_booking.pt:13
+#: /src/schooltool/schoolyear/browser/schoolyear.py:156
+#: /src/schooltool/timetable/browser/app.py:100
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:17
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:29
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:38
@@ -2787,7 +2791,19 @@ msgstr ""
 msgid "Cannot resolve plugin action order:\n"
 msgstr "En pysty antamaan liitännäisille toimintajärjestystä:\n"
 
-#: /src/schooltool/app/main.py:513
+#: /src/schooltool/app/main.py:478
+msgid ""
+"Warning: font directories '%s' do not exist.\n"
+"PDF support disabled."
+msgstr ""
+
+#: /src/schooltool/app/main.py:490
+msgid ""
+"Warning: font '%s' does not exist in the font directories '%s'.\n"
+"PDF support disabled."
+msgstr ""
+
+#: /src/schooltool/app/main.py:525
 msgid "Run %s -h for help."
 msgstr "Suorita %s -h ohjetiedoston käynnistämiseksi."
 
@@ -2849,21 +2865,9 @@ msgstr ""
 "\n"
 "Kenties toinen %s ohjelma käyttää sitä?"
 
-#: /src/schooltool/app/main.py:675
-msgid ""
-"Warning: font directories '%s' do not exist.\n"
-"PDF support disabled."
-msgstr ""
-
-#: /src/schooltool/app/main.py:785
-msgid ""
-"Warning: font '%s' does not exist in the font directories '%s'.\n"
-"PDF support disabled."
-msgstr ""
-
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
-#: /src/schooltool/group/browser/flourish.zcml:209
+#: /src/schooltool/group/browser/flourish.zcml:227
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
@@ -2946,15 +2950,7 @@ msgid "View"
 msgstr "Näytä"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:33
-msgid "Export Persons as XML"
-msgstr "Vie henkilöitä XML-muodossa"
-
-#: /src/schooltool/basicperson/browser/configure.zcml:42
-msgid "Export"
-msgstr "Vie"
-
-#: /src/schooltool/basicperson/browser/configure.zcml:51
-#: /src/schooltool/basicperson/browser/flourish.zcml:585
+#: /src/schooltool/basicperson/browser/flourish.zcml:692
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:6
 #: /src/schooltool/basicperson/security.py:32
 msgid "Advisors"
@@ -3227,15 +3223,7 @@ msgstr ""
 msgid "New Integer Field"
 msgstr ""
 
-#: /src/schooltool/basicperson/browser/flourish.zcml:590
-msgid "Contains an XML representation of the person."
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/flourish.zcml:560
-msgid "Export as XML"
-msgstr ""
-
-#: /src/schooltool/basicperson/browser/flourish.zcml:627
+#: /src/schooltool/basicperson/browser/flourish.zcml:633
 msgid "ID Card"
 msgstr "Henkilökortti"
 
@@ -3427,7 +3415,11 @@ msgstr "Henkilökortit"
 msgid "ID Card: ${person}"
 msgstr "Henkilökortti: ${person}"
 
-#: /src/schooltool/basicperson/browser/person.py:1385
+#: /src/schooltool/basicperson/browser/person.py:1386
+msgid "profile report"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:1402
 msgid "Username: ${username}"
 msgstr ""
 
@@ -3435,6 +3427,18 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
 msgid "General Information"
 msgstr "Yleiset tiedot"
+
+#: /src/schooltool/basicperson/browser/person.py:1494
+msgid "Received"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:1502
+msgid "Message"
+msgstr ""
+
+#: /src/schooltool/basicperson/browser/person.py:1561
+msgid "(${number} new)"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
@@ -3959,24 +3963,6 @@ msgstr ""
 msgid "Reserve Resources"
 msgstr "Varaa resursseja"
 
-#: /src/schooltool/common/configure.zcml:92
-#: /src/schooltool/course/browser/configure.zcml:25
-#: /src/schooltool/course/browser/configure.zcml:203
-#: /src/schooltool/group/browser/configure.zcml:36
-#: /src/schooltool/resource/browser/configure.zcml:243
-#: /src/schooltool/resource/browser/configure.zcml:257
-#: /src/schooltool/resource/browser/configure.zcml:271
-msgid "Edit Info"
-msgstr "Muuta tietoa"
-
-#: /src/schooltool/common/configure.zcml:93
-msgid "Add Info"
-msgstr "Lisää tieto"
-
-#: /src/schooltool/common/configure.zcml:94
-msgid "Edit Calendar Overlays"
-msgstr "Muokkaa kalenterinäkymää"
-
 #: /src/schooltool/common/fields.py:38
 msgid "Image size"
 msgstr ""
@@ -3992,6 +3978,25 @@ msgstr ""
 #: /src/schooltool/common/fields.py:48
 msgid "Max file size in bytes"
 msgstr ""
+
+#: /src/schooltool/common/security.zcml:12
+#: /src/schooltool/course/browser/configure.zcml:25
+#: /src/schooltool/course/browser/configure.zcml:203
+#: /src/schooltool/course/browser/templates/section.pt:35
+#: /src/schooltool/group/browser/configure.zcml:36
+#: /src/schooltool/resource/browser/configure.zcml:243
+#: /src/schooltool/resource/browser/configure.zcml:257
+#: /src/schooltool/resource/browser/configure.zcml:271
+msgid "Edit Info"
+msgstr "Muuta tietoa"
+
+#: /src/schooltool/common/security.zcml:13
+msgid "Add Info"
+msgstr "Lisää tieto"
+
+#: /src/schooltool/common/security.zcml:14
+msgid "Edit Calendar Overlays"
+msgstr "Muokkaa kalenterinäkymää"
 
 #: /src/schooltool/contact/browser/basicperson.py:123
 #: /src/schooltool/contact/browser/contact.py:195
@@ -4727,6 +4732,10 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1833
 msgid "Section Roster"
+msgstr ""
+
+#: /src/schooltool/course/browser/section.py:1832
+msgid "section ${title} roster"
 msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1853
@@ -5732,7 +5741,50 @@ msgstr "XLS-tuonti"
 msgid "XLS Export"
 msgstr "XLS-vienti"
 
-#: /src/schooltool/export/flourish.zcml:15
+#: /src/schooltool/export/export.py:819
+#: /src/schooltool/export/importer.py:381
+#: /src/schooltool/schoolyear/browser/configure.zcml:26
+#: /src/schooltool/schoolyear/browser/flourish.zcml:13
+#: /src/schooltool/schoolyear/browser/flourish.zcml:18
+#: /src/schooltool/schoolyear/browser/flourish.zcml:25
+#: /src/schooltool/schoolyear/browser/flourish.zcml:125
+#: /src/schooltool/schoolyear/browser/flourish.zcml:135
+#: /src/schooltool/schoolyear/browser/schoolyear.py:134
+#: /src/schooltool/schoolyear/browser/templates/f_manage_schoolyears_overview.pt:4
+#: /src/schooltool/schoolyear/security.zcml:7
+msgid "School Years"
+msgstr "Lukuvuodet"
+
+#: /src/schooltool/export/export.py:835
+#: /src/schooltool/export/importer.py:1518
+msgid "Section Enrollment"
+msgstr ""
+
+#: /src/schooltool/export/export.py:837
+msgid "Section Schedules"
+msgstr ""
+
+#: /src/schooltool/export/export.py:841
+msgid "School Data"
+msgstr ""
+
+#: /src/schooltool/export/export.py:856
+msgid "Exporting school data"
+msgstr ""
+
+#: /src/schooltool/export/export.py:871
+msgid "Export complete"
+msgstr ""
+
+#: /src/schooltool/export/export.py:892
+msgid "school export"
+msgstr ""
+
+#: /src/schooltool/export/export.py:918
+msgid "XLS export"
+msgstr ""
+
+#: /src/schooltool/export/flourish.zcml:32
 msgid "Import XLS"
 msgstr "Tuo XLS-tiedosto"
 
@@ -5966,13 +6018,37 @@ msgstr ""
 msgid "school years must be consistent within this table"
 msgstr ""
 
-#: /src/schooltool/export/importer.py:1871
+#: /src/schooltool/export/importer.py:923
+msgid "Contact Persons"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:1010
+msgid "Contact Relationships"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:1579
+msgid "Section Timetables"
+msgstr ""
+
+#: /src/schooltool/export/importer.py:1936
 msgid "${sheet_name} ${column}${row} ${message}"
 msgstr ""
 
 #: /src/schooltool/export/importer.py:1887
 msgid "The following errors occurred while importing:"
 msgstr ""
+
+#: /src/schooltool/export/importer.py:2067
+#: /src/schooltool/export/importer.py:2098
+msgid "Overall"
+msgstr ""
+
+#: /src/schooltool/export/interfaces.py:34
+#: /src/schooltool/export/templates/f_import.pt:42
+#: /src/schooltool/export/templates/f_import_remote.pt:28
+#: /src/schooltool/export/templates/import.pt:56
+msgid "XLS File"
+msgstr "XLS-tiedosto"
 
 #: /src/schooltool/export/templates/f_import.pt:19
 msgid "Please wait while the data is being imported."
@@ -5983,10 +6059,40 @@ msgstr ""
 msgid "Upload XLS File"
 msgstr "Lataa XLS-tiedostosta"
 
-#: /src/schooltool/export/templates/f_import.pt:40
-#: /src/schooltool/export/templates/import.pt:61
-msgid "XLS File"
-msgstr "XLS-tiedosto"
+#: /src/schooltool/export/templates/f_import_progress.pt:13
+msgid "Import scheduled."
+msgstr ""
+
+#: /src/schooltool/export/templates/f_import_progress.pt:18
+msgid "Importing"
+msgstr ""
+
+#: /src/schooltool/export/templates/f_import_progress.pt:26
+msgid "Committing to database."
+msgstr ""
+
+#: /src/schooltool/export/templates/f_import_progress.pt:31
+msgid "Finished importing."
+msgstr ""
+
+#: /src/schooltool/export/templates/f_import_progress.pt:34
+msgid "Data not saved due to these errors:"
+msgstr ""
+
+#: /src/schooltool/export/templates/f_import_progress.pt:46
+msgid "Download ${filename}"
+msgstr ""
+
+#: /src/schooltool/export/templates/f_import_progress.pt:52
+#: /src/schooltool/skin/flourish/instance/skin.zcml:36
+#: /src/schooltool/skin/templates/error.pt:3
+#: /src/schooltool/skin/templates/error.pt:7
+msgid "Server Error"
+msgstr "Palvelinvirhe"
+
+#: /src/schooltool/export/templates/f_import_progress.pt:54
+msgid "Additional Info"
+msgstr ""
 
 #: /src/schooltool/export/templates/f_import_related.pt:9
 #: /src/schooltool/export/templates/import.pt:31
@@ -6650,8 +6756,8 @@ msgid "Users cannot make their own calendars public."
 msgstr ""
 
 #: /src/schooltool/person/security.zcml:17
-msgid "Only school administration can change passwords."
-msgstr "Vain koulun ylläpitäjät voivat vaihtaa salasanan."
+msgid "Only site managers and clerks can change passwords."
+msgstr ""
 
 #: /src/schooltool/person/security.zcml:17
 msgid "Users can change their own passwords."
@@ -6734,6 +6840,94 @@ msgstr "Opetusryhmäraportit"
 msgid "Download"
 msgstr "Lataa"
 
+#: /src/schooltool/report/browser/report.py:300
+#: /src/schooltool/sampledata/sampledata.pt:80
+msgid "Generate"
+msgstr "Luo"
+
+#: /src/schooltool/report/browser/report.py:449
+msgid "export"
+msgstr ""
+
+#: /src/schooltool/report/browser/report.py:496
+msgid "Collecting (${name})"
+msgstr ""
+
+#: /src/schooltool/report/browser/report.py:501
+msgid "Archive"
+msgstr ""
+
+#: /src/schooltool/report/browser/report.py:522
+#: /src/schooltool/report/browser/report.py:531
+msgid "files"
+msgstr ""
+
+#: /src/schooltool/report/browser/report.py:600
+msgid "Preparing archive"
+msgstr ""
+
+#: /src/schooltool/report/browser/report.py:601
+msgid "Archiving"
+msgstr ""
+
+#: /src/schooltool/report/browser/report.py:602
+msgid "Archive complete"
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:3
+msgid "Building the report"
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:4
+msgid "Failed to build the report"
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:7
+msgid "Download report"
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:15
+msgid ""
+"You can close this dialog and download the report later from your ${home-"
+"link}."
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:15
+#: /src/schooltool/task/browser/templates/f_task_progress.pt:41
+msgid "home page"
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:33
+#: /src/schooltool/report/browser/templates/f_short_report_message.pt:17
+msgid "Generating ${report}..."
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:41
+#: /src/schooltool/task/browser/templates/f_short_fail_message.pt:3
+#: /src/schooltool/task/browser/templates/f_task_progress.pt:19
+msgid "System failure."
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:45
+#: /src/schooltool/report/browser/templates/f_short_report_message.pt:31
+#: /src/schooltool/task/browser/templates/f_short_fail_message.pt:6
+#: /src/schooltool/task/browser/templates/f_task_progress.pt:27
+msgid "Ticket nr. ${ticket_id}."
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:49
+#: /src/schooltool/report/browser/templates/f_short_report_message.pt:34
+#: /src/schooltool/task/browser/templates/f_short_fail_message.pt:9
+#: /src/schooltool/task/browser/templates/f_task_progress.pt:29
+msgid "Please contact your administrator."
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:64
+#: /src/schooltool/task/browser/templates/f_task_progress.pt:56
+#: /src/schooltool/task/browser/templates/task_dialog.pt:11
+msgid "Close"
+msgstr ""
+
 #: /src/schooltool/report/browser/templates/f_report_reference.pt:5
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
 msgid "Category"
@@ -6744,9 +6938,39 @@ msgstr "Kategoria"
 msgid "File Type"
 msgstr ""
 
+#: /src/schooltool/report/browser/templates/f_short_report_message.pt:7
+msgid "Download ${report} ${link}."
+msgstr ""
+
+#: /src/schooltool/report/browser/templates/f_short_report_message.pt:27
+msgid "System failure while generating ${report}."
+msgstr ""
+
 #: /src/schooltool/report/browser/templates/report_reference.pt:3
 #: /src/schooltool/report/browser/templates/report_reference.pt:7
 msgid "Report Reference"
+msgstr ""
+
+#: /src/schooltool/report/interfaces.py:99
+msgid "Report"
+msgstr ""
+
+#: /src/schooltool/report/interfaces.py:104
+msgid "Filename"
+msgstr ""
+
+#: /src/schooltool/report/interfaces.py:108
+msgid "Requested on"
+msgstr ""
+
+#: /src/schooltool/report/report.py:628
+#: /src/schooltool/report/report.py:652
+#: /src/schooltool/skin/flourish/report.py:178
+msgid "report"
+msgstr ""
+
+#: /src/schooltool/report/security.zcml:21
+msgid "Download reports"
 msgstr ""
 
 #: /src/schooltool/report/templates/f_report_link_manager.pt:13
@@ -6926,6 +7150,10 @@ msgstr ""
 #: /src/schooltool/resource/browser/resource.py:967
 #: /src/schooltool/resource/browser/rml/resource_report.pt:21
 msgid "Resource Report"
+msgstr ""
+
+#: /src/schooltool/resource/browser/resource.py:967
+msgid "resource report"
 msgstr ""
 
 #: /src/schooltool/resource/browser/rml/resource_report.pt:10
@@ -7197,24 +7425,8 @@ msgstr "Liitännäiset"
 msgid "View Dependencies"
 msgstr "Tarkastele riippuvaisuuksia"
 
-#: /src/schooltool/sampledata/sampledata.pt:80
-msgid "Generate"
-msgstr "Luo"
-
-#: /src/schooltool/schoolyear/browser/configure.zcml:26
-#: /src/schooltool/schoolyear/browser/flourish.zcml:13
-#: /src/schooltool/schoolyear/browser/flourish.zcml:18
-#: /src/schooltool/schoolyear/browser/flourish.zcml:25
-#: /src/schooltool/schoolyear/browser/flourish.zcml:109
-#: /src/schooltool/schoolyear/browser/flourish.zcml:119
-#: /src/schooltool/schoolyear/browser/schoolyear.py:136
-#: /src/schooltool/schoolyear/browser/templates/f_manage_schoolyears_overview.pt:4
-#: /src/schooltool/schoolyear/security.zcml:7
-msgid "School Years"
-msgstr "Lukuvuodet"
-
 #: /src/schooltool/schoolyear/browser/configure.zcml:87
-#: /src/schooltool/schoolyear/browser/flourish.zcml:109
+#: /src/schooltool/schoolyear/browser/flourish.zcml:125
 msgid "New School Year"
 msgstr "Uusi lukuvuosi"
 
@@ -7541,15 +7753,9 @@ msgstr "Pääkäyttäjä - tämän SchoolTool-sovelluksen hallinnoija."
 msgid "Title of the group."
 msgstr "Ryhmän nimike"
 
-#: /src/schooltool/skin/flourish/instance/skin.zcml:50
-#: /src/schooltool/skin/templates/error.pt:3
-#: /src/schooltool/skin/templates/error.pt:12
-msgid "Server Error"
-msgstr "Palvelinvirhe"
-
-#: /src/schooltool/skin/flourish/instance/skin.zcml:59
+#: /src/schooltool/skin/flourish/instance/skin.zcml:45
 #: /src/schooltool/skin/templates/notfound.pt:3
-#: /src/schooltool/skin/templates/notfound.pt:11
+#: /src/schooltool/skin/templates/notfound.pt:7
 msgid "Not Found"
 msgstr "Ei löytynyt"
 
@@ -7689,6 +7895,99 @@ msgstr "Näytä kaikki"
 #: /src/schooltool/table/templates/batch.pt:83
 msgid "Next &raquo;"
 msgstr "Seuraava &raquo;"
+
+#: /src/schooltool/task/browser/flourish.zcml:36
+msgid "Scheduled Tasks"
+msgstr ""
+
+#: /src/schooltool/task/browser/task.py:120
+msgid "JSON result"
+msgstr ""
+
+#: /src/schooltool/task/browser/task.py:137
+#: /src/schooltool/task/interfaces.py:34
+msgid "Task ID"
+msgstr ""
+
+#: /src/schooltool/task/browser/task.py:142
+msgid "Signature"
+msgstr ""
+
+#: /src/schooltool/task/browser/task.py:148
+#: /src/schooltool/task/browser/templates/task_status.pt:42
+#: /src/schooltool/task/interfaces.py:43
+msgid "Internal state"
+msgstr ""
+
+#: /src/schooltool/task/browser/task.py:156
+msgid "Scheduled"
+msgstr ""
+
+#: /src/schooltool/task/browser/templates/f_task_progress.pt:8
+msgid "Scheduled."
+msgstr ""
+
+#: /src/schooltool/task/browser/templates/f_task_progress.pt:14
+msgid "Completed."
+msgstr ""
+
+#: /src/schooltool/task/browser/templates/f_task_progress.pt:41
+msgid ""
+"You can close this dialog and download the exported data later from your "
+"${home-link}."
+msgstr ""
+
+#: /src/schooltool/task/browser/templates/task_status.pt:15
+msgid "Task pending or removed"
+msgstr ""
+
+#: /src/schooltool/task/browser/templates/task_status.pt:18
+msgid "In Progress"
+msgstr ""
+
+#: /src/schooltool/task/browser/templates/task_status.pt:22
+#: /src/schooltool/task/interfaces.py:42
+msgid "Failed"
+msgstr ""
+
+#: /src/schooltool/task/browser/templates/task_status.pt:30
+#: /src/schooltool/task/interfaces.py:41
+msgid "Succeeded"
+msgstr ""
+
+#: /src/schooltool/task/browser/templates/task_status.pt:34
+#: /src/schooltool/task/interfaces.py:46
+msgid "Persisted traceback"
+msgstr ""
+
+#: /src/schooltool/task/browser/templates/task_status.pt:38
+#: /src/schooltool/task/interfaces.py:49
+msgid "Persisted result"
+msgstr ""
+
+#: /src/schooltool/task/security.zcml:24
+msgid "Messages"
+msgstr ""
+
+#: /src/schooltool/task/security.zcml:29
+msgid "Read messages"
+msgstr ""
+
+#: /src/schooltool/task/security.zcml:37
+msgid "Browse other users' messages (overview)"
+msgstr ""
+
+#: /src/schooltool/task/tasks.py:672
+msgid "Internal server error, ticket ${ticket}"
+msgstr ""
+
+#: /src/schooltool/task/tasks.py:760
+msgid "Senders and recipients"
+msgstr ""
+
+#: /src/schooltool/task/tasks.py:761
+msgid "Senders, recipients of the message, requesters of a report."
+msgstr ""
 
 #: /src/schooltool/term/browser/configure.zcml:30
 msgid "Cancel School in Emergency"
