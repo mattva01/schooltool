@@ -2,21 +2,56 @@
 CHANGES
 =======
 
-2.5.0 (unreleased)
+2.5.3 (unreleased)
 ------------------
 
-New features
-++++++++++++
+- Nothing changed yet.
 
-- Background XLS import (disabled)
-- Background report generation
-- Messages about finished background tasks
-- Added resource library for filtered/chart reports
 
-Cleanup
+2.5.2 (2013-08-22)
+------------------
+
+- Autocompletion in gradebook for discrete score systems.
+- TAB key in gradebook moves to the next cell.
+- Further updates to permissions.
+- Clerks and administrators now have appropriate access to parts of the School.
+- Update GPL license and file headers from gnu.org (https://launchpad.net/bugs/1211145)
+- Rotating Schedules With Different Schedules Per Day Stop a 5 Days Edit (https://launchpad.net/bugs/1214131)
+- Updated translations
+
+
+2.5.1 (2013-08-01)
+------------------
+
+- Differentiate permissions of administrators, clerks, and managers.
+- Scripts and styles for the new attendance features.
+- Updated translations
+
+
+2.5.0 (2013-06-03)
+------------------
+
+Reports
 +++++++
 
+- Background XLS import (disabled)
+- Background XLS export
+- Background report generation
+- Multiple reports in a .zip archive
+- Messages about finished background tasks
+- Added resource library for filtered/chart reports
 - Removed Person XML reports
+
+Server
+++++++
+
+- There are now 4 processes, controlled by ``supervisor``: ``schooltool``, ``zeo``,
+  ``celery_report``, and ``redis``.
+- New ``make`` targets: start, stop, restart, rerun, status.
+- You have to install ``redis-server`` package on the system. Other new
+  dependencies are Python packages.
+- Instances have to be updated to run this version. If you run from a sandbox,
+  do ``bin/make-schooltool-instance instance``.
 
 
 2.4.1 (2013-05-30)

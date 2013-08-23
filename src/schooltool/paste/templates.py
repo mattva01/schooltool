@@ -13,8 +13,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 import os.path
 import pkg_resources
@@ -27,6 +26,14 @@ def get_available_types():
     return [(entry.name, entry.module_name) for entry in sorted(instance_types)]
 
 available_types = get_available_types()
+
+
+def get_paste_parts():
+    paste_part_factories = list(pkg_resources.iter_entry_points(
+            'schooltool.paste_configuration'))
+    return [entry.load() for entry in paste_part_factories]
+
+paste_configurers = get_paste_parts()
 
 
 class SchoolToolDeploy(Template):
@@ -51,6 +58,10 @@ class SchoolToolDeploy(Template):
             vars.get('data_dir', os.path.join(vars['project'], 'var')))
         vars['run_dir'] = os.path.abspath(
             vars.get('run_dir', os.path.join(vars['project'], 'run')))
+        vars['paste_extra_paths'] = ''
+        vars['paste_extra_parts'] = ''
+        for factory in paste_configurers:
+            factory(vars)
         return vars
 
     def write_files(self, command, output_dir, vars):

@@ -6,7 +6,6 @@
 ./python
 ./.installed.cfg
 ./instance
-./schooltool.conf
 ./src/schooltool.egg-info
 **/LC_MESSAGES/*.mo
 ./src/schooltool/generations/tests/Data2?.fs.*

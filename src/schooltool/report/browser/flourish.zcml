@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
@@ -24,18 +25,23 @@
       class="schooltool.report.browser.report.ReportsLinks"
       title="Reports"
       view="schooltool.app.browser.app.ManageSchool"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       />
 
   <flourish:viewlet
       name="report_reference.html"
       before="export.xls"
       title="Overview"
-      class="schooltool.skin.flourish.page.LinkViewlet"
+      class=".report.ReportReferenceLinkViewlet"
       manager="schooltool.report.browser.report.ReportsLinks"
       view="schooltool.app.browser.app.ManageSchool"
       permission="schooltool.edit"
       />
+
+  <security:allow
+      interface=".report.ReportReferenceLinkViewlet"
+      crowds="administrators clerks"
+      permission="schooltool.edit" />
 
   <flourish:viewlet
       name="person-reports-links"
@@ -74,7 +80,7 @@
       class="schooltool.report.browser.report.ReportsLinks"
       title="Reports"
       view="schooltool.term.browser.term.FlourishTermView"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       />
 
   <flourish:viewlet
@@ -84,7 +90,7 @@
       class="schooltool.report.browser.report.ReportsLinks"
       title="Reports"
       view="schooltool.course.browser.section.FlourishSectionView"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       />
 
   <flourish:viewlet
@@ -105,6 +111,11 @@
      content_template="templates/f_report_reference.pt"
      permission="schooltool.edit"
      />
+
+  <security:allow
+      interface=".report.FlourishReportReferenceView"
+      crowds="administrators clerks managers"
+      permission="schooltool.edit" />
 
   <flourish:activeViewlet
       name="manage_school"

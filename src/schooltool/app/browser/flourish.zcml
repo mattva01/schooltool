@@ -2,6 +2,7 @@
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
@@ -219,7 +220,7 @@
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class="schooltool.app.browser.app.SchoolActionsLinks"
       title="Actions"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       view="schooltool.app.browser.app.ManageSchool"
       />
 
@@ -457,7 +458,7 @@
       name="manage"
       for="schooltool.app.interfaces.ISchoolToolApplication"
       class="schooltool.app.browser.app.ManageSchool"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       />
 
   <flourish:viewletFactory
@@ -472,10 +473,10 @@
       after="manage_site"
       for="schooltool.app.interfaces.ISchoolToolApplication"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
-      class="schooltool.skin.flourish.page.LinkViewlet"
+      class="schooltool.app.browser.app.ManageSchoolViewlet"
       title="School"
       link="manage"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       />
 
   <flourish:activeViewlet
@@ -491,8 +492,13 @@
       class="schooltool.app.browser.app.CustomizeSchoolLinks"
       view="schooltool.app.browser.app.ManageSchool"
       title="Customize"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       />
+
+  <security:allow
+     interface=".app.CustomizeSchoolLinks"
+     crowds="managers administrators clerks"
+     permission="schooltool.edit" />
 
   <flourish:viewlet
       name="school_add_links"

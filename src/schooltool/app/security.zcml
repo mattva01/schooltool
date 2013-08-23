@@ -29,12 +29,12 @@
       permission="schooltool.view" />
   <allow
       interface="schooltool.app.interfaces.ISchoolToolApplication"
-      crowds="managers"
+      crowds="managers superuser"
       permission="schooltool.edit" />
 
   <allow
       interface="schooltool.app.interfaces.ISchoolToolApplication"
-      crowds="managers"
+      crowds="managers superuser"
       permission="zope.ManageSite" />
 
   <!-- Security declarations for calendaring -->

@@ -13,8 +13,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 """
 SchoolTool XLS export views.
@@ -51,6 +50,7 @@ from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
 from schooltool.report.browser.report import RequestRemoteReportDialog
 from schooltool.report.browser.report import ProgressReportPage
+from schooltool.report.report import ReportLinkViewlet
 from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.task.progress import TaskProgress
 from schooltool.task.progress import normalized_progress
@@ -917,3 +917,11 @@ class OnXLSReportScheduled(OnPDFReportScheduled):
         if not title:
             title = _(u'XLS export')
         return title
+
+
+class ExportLinkVielwet(ReportLinkViewlet):
+    pass
+
+
+class ImportLinkViewlet(flourish.page.LinkViewlet):
+    pass

@@ -13,13 +13,10 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 """
 SchoolTool application views.
-
-$Id$
 """
 import urllib
 
@@ -75,6 +72,7 @@ from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.table import ImageInputColumn
 from schooltool.table.interfaces import ITableFormatter
+from schooltool.securitypolicy.crowds import inCrowd
 from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin import flourish
 from schooltool.skin.flourish.form import Form
@@ -1503,3 +1501,12 @@ class SchoolLoginLogoViewlet(SchoolLogoViewlet):
       </div>
     </div>
     """)
+
+
+class ManageSchoolViewlet(flourish.page.LinkViewlet):
+
+    @property
+    def enabled(self):
+        if not self.title:
+            return False
+        return inCrowd(self.request.principal, 'administration', context=self.context)

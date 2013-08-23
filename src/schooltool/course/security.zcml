@@ -51,7 +51,12 @@
       permission="schooltool.view" />
   <allow
       interface="schooltool.course.interfaces.ICourseContainer"
-      crowds="clerks"
+      crowds="clerks managers"
+      permission="schooltool.edit" />
+
+  <allow
+      interface="schooltool.course.interfaces.ICourseContainerContainer"
+      crowds="clerks managers"
       permission="schooltool.edit" />
 
   <allow
@@ -60,7 +65,7 @@
       permission="schooltool.view" />
   <allow
       interface="schooltool.course.interfaces.ICourse"
-      crowds="clerks leaders"
+      crowds="clerks managers leaders"
       permission="schooltool.edit" />
 
   <!-- Grant read access to person's data to his instructors -->

@@ -2,6 +2,7 @@
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
            xmlns:flourish="http://schooltool.org/flourish"
            xmlns:report="http://namespaces.schooltool.org/report"
            i18n_domain="schooltool">
@@ -38,6 +39,11 @@
       view=".group.FlourishGroupsView"
       />
 
+  <security:allow
+     interface=".group.GroupsAddLinks"
+     crowds="clerks managers"
+     permission="schooltool.edit" />
+
   <flourish:viewlet
       name="group-links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
@@ -52,7 +58,7 @@
       manager="schooltool.skin.flourish.page.IPageRefineManager"
       class=".group.GroupAddLinks"
       title="Add"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       view=".group.FlourishGroupView"
       />
 
@@ -66,6 +72,11 @@
       view=".group.FlourishGroupView"
       />
 
+  <security:allow
+     interface=".group.GroupManageActionsLinks"
+     crowds="clerks managers"
+     permission="schooltool.edit" />
+
   <!-- viewlets -->
 
   <flourish:viewlet
@@ -77,6 +88,11 @@
       permission="schooltool.edit"
       />
 
+  <security:allow
+     interface=".group.GroupAddLinkViewlet"
+     crowds="clerks managers"
+     permission="schooltool.edit" />
+
   <flourish:viewlet
       name="group-add"
       title="Group"
@@ -85,6 +101,11 @@
       manager=".group.GroupAddLinks"
       permission="schooltool.edit"
       />
+
+  <security:allow
+     interface=".group.GroupAddLinkFromGroupViewlet"
+     crowds="clerks managers"
+     permission="schooltool.edit" />
 
   <flourish:viewlet
       name="delete.html"
@@ -119,6 +140,11 @@
       manager="schooltool.skin.flourish.page.IPageContentManager"
       class=".group.FlourishManageGroupsOverview"
       />
+
+  <security:allow
+     interface=".group.FlourishManageGroupsOverview"
+     crowds="administrators clerks managers superuser"
+     permission="schooltool.edit" />
 
   <!-- views -->
 
@@ -315,6 +341,11 @@
       permission="schooltool.edit"
       />
 
+  <security:allow
+     interface=".group.GroupImportLinks"
+     crowds="clerks managers"
+     permission="schooltool.edit" />
+
   <flourish:viewlet
       name="csvimport.html"
       title="Import CSV"
@@ -323,6 +354,11 @@
       view=".group.FlourishGroupsView"
       permission="schooltool.edit"
       />
+
+  <security:allow
+     interface=".csvimport.ImportGroupsLinkViewlet"
+     crowds="clerks managers"
+     permission="schooltool.edit" />
 
   <flourish:page
       name="csvimport.html"

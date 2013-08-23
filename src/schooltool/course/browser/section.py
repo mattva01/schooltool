@@ -13,8 +13,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 """
 SchoolTool section views
@@ -76,6 +75,7 @@ from schooltool.resource.interfaces import ILocation, IEquipment
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.browser.schoolyear import SchoolyearNavBreadcrumbs
+from schooltool.securitypolicy.crowds import inCrowd
 from schooltool.skin.containers import ContainerView
 from schooltool.skin import flourish
 from schooltool.skin.flourish.containers import ContainerDeleteView
@@ -891,7 +891,8 @@ class SectionAddLinkViewlet(LinkViewlet, SectionsActiveTabMixin):
 
     @property
     def enabled(self):
-        if not flourish.canEdit(self.context):
+        if (not flourish.canEdit(self.context) and
+            not inCrowd(self.request.principal, 'clerks', context=self.context)):
             return False
         return super(SectionAddLinkViewlet, self).enabled
 
@@ -1048,7 +1049,9 @@ class SectionListTable(SectionsTableBase):
         return sections
 
     def items(self):
-        return self.context.sections
+        if flourish.canView(self.context):
+            return removeSecurityProxy(self.context).sections
+        return ()
 
 
 class SchoolYearSectionsTable(SectionsTable):

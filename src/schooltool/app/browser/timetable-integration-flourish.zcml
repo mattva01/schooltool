@@ -2,6 +2,7 @@
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
@@ -24,6 +25,10 @@
       permission="schooltool.edit"
       />
 
+  <security:allow
+     interface="schooltool.app.browser.timetablecsvimport.ImportSectionsLinkViewlet"
+     crowds="clerks"
+     permission="schooltool.edit" />
 
   <flourish:page
       name="section-csvimport.html"
@@ -32,6 +37,11 @@
       class="schooltool.app.browser.timetablecsvimport.FlourishTimetableCSVImportView"
       permission="schooltool.edit"
      />
+
+  <security:allow
+     interface="schooltool.app.browser.timetablecsvimport.FlourishTimetableCSVImportView"
+     crowds="clerks"
+     permission="schooltool.edit" />
 
   <flourish:content
       name="import-description"

@@ -13,8 +13,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 """
 course browser views.
@@ -259,6 +258,7 @@ class FlourishCoursesViewlet(Viewlet):
     def sectionsAs(self, role_interface):
         schoolyears_data = {}
         for section in role_interface(self.context).sections():
+            section = removeSecurityProxy(section)
             sy = ISchoolYear(section)
             if sy not in schoolyears_data:
                 schoolyears_data[sy] = {}
@@ -311,7 +311,7 @@ class CoursesTertiaryNavigationManager(TertiaryNavigationManager):
     @property
     def items(self):
         result = []
-        schoolyears = ISchoolYearContainer(self.context)
+        schoolyears = ISchoolYearContainer(ISchoolToolApplication(None))
         active = schoolyears.getActiveSchoolYear()
         if 'schoolyear_id' in self.request:
             schoolyear_id = self.request['schoolyear_id']
@@ -328,15 +328,32 @@ class CoursesTertiaryNavigationManager(TertiaryNavigationManager):
         return result
 
 
-class CoursesAddLinks(RefineLinksViewlet):
+class CoursesActiveTabRefineLinksViewlet(RefineLinksViewlet):
+
+    def __init__(self, context, request, view, manager):
+        courses = self.getCourseContainer(context, request)
+        RefineLinksViewlet.__init__(self, courses, request, view, manager)
+
+    @classmethod
+    def getCourseContainer(cls, context, request):
+        schoolyears = ISchoolYearContainer(ISchoolToolApplication(None))
+        schoolyear = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in request:
+            schoolyear_id = request['schoolyear_id']
+            schoolyear = schoolyears.get(schoolyear_id, schoolyear)
+        courses = ICourseContainer(schoolyear, context)
+        return courses
+
+
+class CoursesAddLinks(CoursesActiveTabRefineLinksViewlet):
     """Manager for Add links in CoursesView"""
 
 
-class CoursesImportLinks(RefineLinksViewlet):
+class CoursesImportLinks(CoursesActiveTabRefineLinksViewlet):
     """Course import links viewlet."""
 
 
-class CourseAddLinks(RefineLinksViewlet):
+class CourseAddLinks(CoursesActiveTabRefineLinksViewlet):
     """Manager for Add links in CourseView"""
 
     def render(self):
@@ -375,7 +392,7 @@ class CoursesActiveTabMixin(object):
 
     @property
     def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
+        schoolyears = ISchoolYearContainer(ISchoolToolApplication(None))
         result = schoolyears.getActiveSchoolYear()
         if 'schoolyear_id' in self.request:
             schoolyear_id = self.request['schoolyear_id']
@@ -396,7 +413,7 @@ class CourseAddLinkFromCourseViewlet(CourseAddLinkViewlet):
 
     @property
     def schoolyear(self):
-        return ISchoolYear(self.context.__parent__)
+        return ISchoolYear(self.context)
 
     @property
     def url(self):
@@ -527,7 +544,11 @@ class FlourishCourseView(DisplayForm):
 
     @property
     def sections(self):
-        return list(self.context.sections)
+        return list(removeSecurityProxy(self.context).sections)
+
+    @property
+    def unproxied_course(self):
+        return removeSecurityProxy(self.context)
 
     @property
     def canModify(self):

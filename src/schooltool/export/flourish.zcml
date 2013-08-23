@@ -3,6 +3,7 @@
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
            xmlns:report="http://namespaces.schooltool.org/report"
+           xmlns:security="http://schooltool.org/securitypolicy"
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
@@ -22,6 +23,11 @@
      class=".export.MegaExporter"
      permission="schooltool.edit" />
 
+  <security:allow
+      interface=".export.MegaExporter"
+      crowds="clerks managers"
+      permission="schooltool.edit" />
+
   <flourish:page
      name="export.xls"
      for="schooltool.app.interfaces.ISchoolToolApplication"
@@ -29,13 +35,23 @@
      class=".export.RemoteMegaExporter"
      permission="schooltool.edit" />
 
+  <security:allow
+      interface=".export.RemoteMegaExporter"
+      crowds="clerks managers"
+      permission="schooltool.edit" />
+
   <flourish:viewlet
       name="import.html"
       title="Import XLS"
-      class="schooltool.skin.flourish.page.LinkViewlet"
+      class=".export.ImportLinkViewlet"
       manager="schooltool.app.browser.app.SchoolActionsLinks"
       permission="schooltool.edit"
       />
+
+  <security:allow
+      interface=".export.ImportLinkViewlet"
+      crowds="managers clerks"
+      permission="schooltool.edit" />
 
   <flourish:page
      name="import.html"
@@ -44,6 +60,11 @@
      content_template="templates/f_import.pt"
      class=".importer.FlourishMegaImporter"
      permission="schooltool.edit" />
+
+  <security:allow
+      interface=".importer.FlourishMegaImporter"
+      crowds="managers clerks"
+      permission="schooltool.edit" />
 
   <flourish:activeViewlet
       name="manage_school"
@@ -66,13 +87,18 @@
       permission="schooltool.edit"
       />
 
+  <security:allow
+      interface=".app.FlourishRequestXLSExportView"
+      crowds="clerks managers"
+      permission="schooltool.edit" />
+
   <flourish:viewlet
       name="what-is-this"
       class="schooltool.skin.flourish.page.Related"
       template="templates/f_import_related.pt"
       view=".importer.FlourishMegaImporter"
       manager="schooltool.skin.flourish.page.IPageRelatedManager"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       />
 
   <!-- Reports -->
@@ -81,6 +107,7 @@
        name="export.xls"
        for="schooltool.app.interfaces.ISchoolToolApplication"
        view="schooltool.app.browser.app.ManageSchool"
+       class=".export.ExportLinkVielwet"
        permission="schooltool.edit"
        group="School"
        description="A single .xls spreadsheet containing the basic structure of the school, including students, contacts, years, terms, courses, groups and timetables.  Can be modified and re-imported."
@@ -88,6 +115,11 @@
        file_type="xls"
        link="request_export_xls.html"
        />
+
+  <security:allow
+      interface=".export.ExportLinkVielwet"
+      crowds="managers clerks"
+      permission="schooltool.edit" />
 
   <zope:class class=".export.XLSProgressMessage">
     <require permission="schooltool.view"

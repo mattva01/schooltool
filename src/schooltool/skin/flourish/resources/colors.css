@@ -458,6 +458,7 @@ table.schooltool-tasks-status td .success {
       + state-active
     - dialog
     - datepicker
+    - autocomplete
 
 */
 
@@ -540,6 +541,19 @@ table.schooltool-tasks-status td .success {
     background: #f0f0f0;
 }
 
+.ui-autocomplete .ui-menu-item .ui-state-hover {
+    background: #009499;
+    border-color: #009499;
+}
+
+.ui-autocomplete .ui-menu-item {
+    background: #6C7B7C
+}
+
+.ui-autocomplete .ui-menu-item a {
+    color: #ffffff;
+}
+
 /*
 
   Gradebook:
@@ -561,6 +575,24 @@ table.schooltool-tasks-status td .success {
 
 .gradebook-part tbody tr.odd {
     background-color: #f0efee;
+}
+
+.gradebook-part tbody tr.single-odd,
+.gradebook-part tbody tr.double-odd {
+    background-color: #f0efee;
+}
+
+.gradebook-part tbody tr.single-even,
+.gradebook-part tbody tr.double-even {
+    background-color: #f7f7f7;
+}
+
+.gradebook-part tbody tr.grade-hint.double-odd td:not(.placeholder) {
+    background-color: #d0efee;
+}
+
+.gradebook-part tbody tr.grade-hint.double-even td:not(.placeholder) {
+    background-color: #d0f7f7;
 }
 
 .gradebook-part th, .gradebook-part td {

@@ -13,8 +13,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 """
 Timetable setup wizard for SchoolTool.
@@ -36,7 +35,7 @@ The workflow is as follows:
     2. "Does your school's timetable cycle use days of the week, or a rotating
         cycle?"
 
-        Skip to step 3 if days of the week was chosen.
+        Skip to step 4 if days of the week was chosen.
 
     3. "Enter names of days in cycle:"
 
@@ -70,7 +69,7 @@ The workflow is as follows:
 
     8. "Enter the start and end times of each slot on each day:"
 
-        (The user sees N columns of text lines, with five buttons that let him
+        (The user sees N columns of text lines, with N buttons that let him
         add an extra slot for each column.)
 
     9. "Do periods have names or are they simply designated by time?"
@@ -581,8 +580,15 @@ class NamedPeriodsStep(ChoiceStep):
     question = _("Do periods have names or are they simply"
                  " designated by time?")
 
-    choices = ((True,  _("Have names")),
-               (False, _("Designated by time")))
+    @property
+    def choices(self):
+        session = self.getSessionData()
+        if session['cycle'] == 'rotating':
+            choices = ((True,  _("Have names")),)
+        else:
+            choices = ((True,  _("Have names")),
+                       (False, _("Designated by time")))
+        return choices
 
     def next(self):
         session = self.getSessionData()
@@ -741,6 +747,10 @@ class PeriodOrderComplex(Step):
         return session['day_names']
 
     def numSlots(self):
+        session = self.getSessionData()
+        if (session['cycle'] != session.get('time_model')):
+            np = len(self.periods())
+            return [np for day in self.getSessionData()['day_names']]
         return [len(day) for day in self.getSessionData()['time_slots']]
 
     def update(self):

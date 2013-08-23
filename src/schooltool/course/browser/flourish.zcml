@@ -2,6 +2,7 @@
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:z3c="http://namespaces.zope.org/z3c"
            xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
            xmlns:flourish="http://schooltool.org/flourish"
            xmlns:report="http://namespaces.schooltool.org/report"
            i18n_domain="schooltool">
@@ -144,6 +145,11 @@
       view=".section.FlourishSectionsView"
       />
 
+  <security:allow
+     interface=".section.SectionsAddLinks"
+     crowds="clerks"
+     permission="schooltool.edit" />
+
   <flourish:viewlet
       name="section-links"
       manager="schooltool.skin.flourish.page.IPageRefineManager"
@@ -171,6 +177,11 @@
       permission="schooltool.edit"
       view=".section.FlourishSectionView"
       />
+
+  <security:allow
+     interface=".section.SectionActionsLinks"
+     crowds="clerks"
+     permission="schooltool.edit" />
 
   <!-- viewlets -->
 
@@ -226,21 +237,31 @@
       permission="schooltool.edit"
       />
 
-   <flourish:viewlet
-       name="section-add"
-       title="Section"
-       class=".section.SectionAddLinkFromSectionViewlet"
-       manager=".section.SectionAddLinks"
-       permission="schooltool.edit"
-       />
+  <security:allow
+      interface=".section.SectionAddLinkViewlet"
+      crowds="clerks"
+      permission="schooltool.edit" />
 
-   <flourish:viewlet
-       name="delete.html"
-       title="Delete"
-       class=".section.SectionDeleteLink"
-       manager=".section.SectionActionsLinks"
-       permission="schooltool.edit"
-       />
+  <flourish:viewlet
+      name="section-add"
+      title="Section"
+      class=".section.SectionAddLinkFromSectionViewlet"
+      manager=".section.SectionAddLinks"
+      permission="schooltool.edit"
+      />
+
+  <security:allow
+      interface=".section.SectionAddLinkFromSectionViewlet"
+      crowds="clerks"
+      permission="schooltool.edit" />
+
+  <flourish:viewlet
+      name="delete.html"
+      title="Delete"
+      class=".section.SectionDeleteLink"
+      manager=".section.SectionActionsLinks"
+      permission="schooltool.edit"
+      />
 
   <flourish:viewletManager
       name="tertiary_navigation"
@@ -401,6 +422,11 @@
       subtitle="Add Section"
       />
 
+  <security:allow
+     interface=".section.FlourishSectionAddView"
+     crowds="clerks"
+     permission="schooltool.edit" />
+
   <zope:adapter
       factory=".section.getSectionAddTitleHint" />
 
@@ -491,10 +517,15 @@
       name="manage-courses-overview"
       after="manage-people-overview"
       view="schooltool.app.browser.app.ManageSchool"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       manager="schooltool.skin.flourish.page.IPageContentManager"
       class=".course.FlourishManageCoursesOverview"
       />
+
+  <security:allow
+     interface=".course.FlourishManageCoursesOverview"
+     crowds="managers administrators clerks"
+     permission="schooltool.view" />
 
   <!-- breadcrumbs -->
 
@@ -611,6 +642,11 @@
       title="Import"
       permission="schooltool.edit"
       />
+
+  <security:allow
+     interface=".section.SectionImportLinks"
+     crowds="clerks"
+     permission="schooltool.edit" />
 
   <flourish:viewlet
       name="csvimport.html"

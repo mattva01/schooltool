@@ -13,15 +13,12 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 """
 SchoolTool application factory useable with paste.
-
-$Id$
 """
-import os, sys
+import os
 
 from zope.app.wsgi import WSGIPublisherApplication
 from zope.app.publication.httpfactory import HTTPPublicationRequestFactory
@@ -33,7 +30,6 @@ class PasteSchoolToolPublisherApplication(SchoolToolServer,
                                           WSGIPublisherApplication):
 
     def __init__(self, config_file, factory=HTTPPublicationRequestFactory):
-        sys.path[0:0] = [os.path.dirname(config_file)]
         options = self.load_options(['schooltool', '-c', config_file])
         db = self.setup(options)
 
@@ -51,8 +47,6 @@ def schooltool_app_factory(global_conf, config_file):
 
 
 def task_result_app_factory(global_conf, config_file):
-    sys.path[0:0] = [global_conf['here']]
-
     from schooltool.task.result_server import ResultServerMachinery
     machinery = ResultServerMachinery()
     machinery.configure(os.path.join(global_conf['here'], config_file))
