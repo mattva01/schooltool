@@ -2,19 +2,15 @@
 CHANGES
 =======
 
-2.5.3 (unreleased)
-------------------
-
-- Nothing changed yet.
-
-
-2.5.2 (2013-08-20)
+2.5.2 (2013-08-22)
 ------------------
 
 - Autocompletion in gradebook for discrete score systems.
 - TAB key in gradebook moves to the next cell.
 - Further updates to permissions.
-- Clerks and administrators now have partial access to the School tab.
+- Clerks and administrators now have appropriate access to parts of the School.
+- Update GPL license and file headers from gnu.org (https://launchpad.net/bugs/1211145)
+- Rotating Schedules With Different Schedules Per Day Stop a 5 Days Edit (https://launchpad.net/bugs/1214131)
 - Updated translations
 
 

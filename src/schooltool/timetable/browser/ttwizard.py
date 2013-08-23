@@ -35,7 +35,7 @@ The workflow is as follows:
     2. "Does your school's timetable cycle use days of the week, or a rotating
         cycle?"
 
-        Skip to step 3 if days of the week was chosen.
+        Skip to step 4 if days of the week was chosen.
 
     3. "Enter names of days in cycle:"
 
@@ -69,7 +69,7 @@ The workflow is as follows:
 
     8. "Enter the start and end times of each slot on each day:"
 
-        (The user sees N columns of text lines, with five buttons that let him
+        (The user sees N columns of text lines, with N buttons that let him
         add an extra slot for each column.)
 
     9. "Do periods have names or are they simply designated by time?"
