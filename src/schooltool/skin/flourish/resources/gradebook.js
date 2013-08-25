@@ -393,6 +393,7 @@ function autoCompleteDisplayed() {
 }
 
 function initGrading(grades) {
+    var form = grades.closest('form');
     grades.on('click', 'td', function() {
         var td = $(this);
         makeGradeCellVisible(td);
