@@ -2,6 +2,7 @@
 
 ST.gradebook = {};
 ST.gradebook.readonly = false;
+ST.gradebook.needs_comments = false;
 
 
 function makeGradeCellVisible(element) {
@@ -617,7 +618,9 @@ function initGradebook() {
 
     if (!ST.gradebook.readonly) {
         preloadFilldown(form);
-        preloadCommentCell(form);
+        if (ST.gradebook.needs_comments) {
+            preloadCommentCell(form);
+        }
     }
 
     preloadPopups(form);
@@ -659,7 +662,9 @@ function initGradebook() {
     if (!ST.gradebook.readonly) {
         initGrading(grades);
         initFillDown(form);
-        initComments(form);
+        if (ST.gradebook.needs_comments) {
+            initComments(form);
+        }
     }
 
     // Zoom buttons
