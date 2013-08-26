@@ -61,6 +61,7 @@ class FlourishAccessControlView(AccessControlView):
         'everyone_can_view_resource_list': _('List of resources'),
         'everyone_can_view_resource_info': _('Resource information'),
         'everyone_can_view_resource_calendar': _('Resource calendars'),
+        'instructors_can_schedule_sections': _('Schedules'),
         'administration_can_grade_students': _('Gradebook'),
         'administration_can_grade_journal': _('Journal'),
         }

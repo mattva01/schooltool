@@ -37,8 +37,14 @@
       group="schooltool.course-sections" name="edit_schedule"
       title="Change schedule"
       order="42"
-      interface="schooltool.course.interfaces.ISection"
+      interface="schooltool.timetable.interfaces.IScheduleContainer"
       permission="schooltool.edit"
+  />
+
+  <security:switch_description
+     group="schooltool.course-sections"
+     crowd_factory="schooltool.timetable.app.ScheduleEditorsCrowd"
+     use_crowd_factory="schooltool.timetable.app.ConfigurableScheduleEditors"
   />
 
 </configure>

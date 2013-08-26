@@ -35,7 +35,7 @@ from schooltool.course.section import InstructorsCrowd, LearnersCrowd
 from schooltool.course.interfaces import ISection
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.schoolyear.interfaces import ISchoolYear
-from schooltool.securitypolicy.crowds import Crowd
+from schooltool.securitypolicy.crowds import Crowd, ConfigurableCrowd
 from schooltool.securitypolicy.crowds import AggregateCrowd
 from schooltool.timetable import interfaces
 from schooltool.timetable.schedule import ScheduleContainer
@@ -228,9 +228,37 @@ class ScheduleViewersCrowd(AdaptingParentCrowdTemplate):
     permission = "schooltool.view"
 
 
+class ScheduleEditorsCrowd(AdaptingParentCrowdTemplate):
+    adapter = interfaces.IHaveSchedule
+    interface = interfaces.IScheduleParentCrowd
+    permission = "schooltool.edit"
+
+
 class SectionScheduleViewers(AggregateCrowd):
     """Crowd of those who can see the section schedule."""
     adapts(ISection)
 
     def crowdFactories(self):
         return [InstructorsCrowd, LearnersCrowd]
+
+
+class ConfigurableScheduleEditors(ConfigurableCrowd):
+    setting_key = 'instructors_can_schedule_sections'
+
+
+class SectionScheduleEditors(AggregateCrowd):
+    """Crowd of those who can see the section schedule."""
+    adapts(ISection)
+
+    def contains(self, principal):
+        setting = ConfigurableScheduleEditors(self.context)
+        if not setting.contains(principal):
+            return False
+        section = ISection(self.context, None)
+        if section is None:
+            return False
+        contains = InstructorsCrowd(section).contains(principal)
+        return contains
+
+    def crowdFactories(self):
+        return [ConfigurableScheduleEditors]

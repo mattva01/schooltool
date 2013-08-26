@@ -212,4 +212,3 @@ class ScheduleContainer(BTreeContainer):
         return iterMeetingsWithExceptions(
             meetings, self.exceptions, self.timezone,
             date, until_date=until_date)
-

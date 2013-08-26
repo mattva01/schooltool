@@ -2,6 +2,16 @@
 <configure xmlns="http://schooltool.org/securitypolicy"
            xmlns:zope="http://namespaces.zope.org/zope">
 
+  <setting
+      key="instructors_can_schedule_sections"
+      text="Instructors can schedule their own sections."
+      alt_text="Only clerks can section schedules."
+      default="False" />
+
+  <crowd
+      name="configurable_instructors_can_schedule"
+      factory=".app.ConfigurableScheduleEditors" />
+
   <allow
       interface="schooltool.timetable.interfaces.ITimetableContainer"
       crowds="everybody"
@@ -21,6 +31,16 @@
       provides="schooltool.timetable.interfaces.IScheduleParentCrowd"
       name="schooltool.view" />
 
+  <crowd
+      name="schedule_editors"
+      factory=".app.ScheduleEditorsCrowd" />
+
+  <zope:adapter
+      trusted="yes"
+      factory=".app.SectionScheduleEditors"
+      provides="schooltool.timetable.interfaces.IScheduleParentCrowd"
+      name="schooltool.edit" />
+
   <allow
       interface="schooltool.timetable.interfaces.IScheduleContainer"
       crowds="managers clerks schedule_viewers"
@@ -28,7 +48,7 @@
 
   <allow
       interface="schooltool.timetable.interfaces.IScheduleContainer"
-      crowds="managers"
+      crowds="clerks schedule_editors"
       permission="schooltool.edit" />
 
   <!-- Security descriptions -->
