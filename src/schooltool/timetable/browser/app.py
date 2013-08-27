@@ -279,3 +279,8 @@ class FlourishManageTimetablesOverview(flourish.page.Content):
         if timetables is not None:
             return sorted(timetables.values(), key=lambda t:t.first,
                           reverse=True)
+
+    def timetables_url(self):
+        app_url = absoluteURL(self.context, self.request)
+        return '%s/timetables?schoolyear_id=%s' % (app_url,
+                                                   self.schoolyear.__name__)

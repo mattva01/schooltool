@@ -802,6 +802,11 @@ class FlourishManageGroupsOverview(flourish.page.Content):
     def groups(self):
         return IGroupContainer(self.schoolyear, None)
 
+    def groups_url(self):
+        app_url = absoluteURL(self.context, self.request)
+        return '%s/groups?schoolyear_id=%s' % (app_url,
+                                               self.schoolyear.__name__)
+
 
 class FlourishRequestGroupIDCardsView(RequestRemoteReportDialog):
 

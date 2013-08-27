@@ -774,3 +774,15 @@ class FlourishManageCoursesOverview(Content, CoursesActiveTabMixin):
                self.schoolyear and \
                self.courses is not None and \
                self.courses
+
+    def schoolyear_view_url(self, name):
+        app_url = absoluteURL(self.context, self.request)
+        return '%s/%s?schoolyear_id=%s' % (app_url,
+                                                name,
+                                                self.schoolyear.__name__)
+
+    def courses_url(self):
+        return self.schoolyear_view_url('courses')
+
+    def sections_url(self):
+        return self.schoolyear_view_url('sections')

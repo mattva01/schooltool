@@ -779,6 +779,11 @@ class FlourishManageYearsOverview(flourish.page.Content):
         if terms is not None:
             return sorted(terms.values(), key=lambda t:t.first)
 
+    def terms_url(self):
+        app_url = absoluteURL(self.context, self.request)
+        return '%s/terms?schoolyear_id=%s' % (app_url,
+                                              self.schoolyear.__name__)
+
 
 class TermContainerBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
 

@@ -1,7 +1,7 @@
 <div class="manage-view" i18n:domain="schooltool"
      tal:condition="view/has_schoolyear">
   <h3>
-    <a tal:attributes="href string:${context/@@absolute_url}/groups"
+    <a tal:attributes="href view/groups_url"
        title="Manage groups" i18n:attributes="title"
        i18n:translate="">
       Groups
