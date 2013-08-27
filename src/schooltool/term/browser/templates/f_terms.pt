@@ -3,8 +3,4 @@
   <div tal:condition="not:year/empty"
        tal:content="structure context/schooltool:content/ajax/view/schoolyear/terms_table" />
   <h3 tal:condition="year/empty" i18n:translate="">There are no terms.</h3>
-  <h3 class="done-link">
-    <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
-       i18n:translate="">Done</a>
-  </h3>
 </div>

@@ -1151,6 +1151,10 @@ class FlourishManagePeopleOverview(flourish.page.Content):
         preferences = IApplicationPreferences(self.context)
         return preferences.title
 
+    def persons_url(self):
+        app_url = absoluteURL(self.context, self.request)
+        return '%s/persons?schoolyear_id=%s' % (app_url,
+                                                self.schoolyear.__name__)
 
 class FlourishRequestPersonIDCardView(RequestRemoteReportDialog):
 

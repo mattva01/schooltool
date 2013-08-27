@@ -43,6 +43,16 @@
       />
 
   <flourish:viewlet
+      name="done"
+      after="*"
+      manager=".course.CoursesTable"
+      view=".course.FlourishCoursesView"
+      class="schooltool.app.browser.app.ManageItemDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
       name="schoolyear"
       after="filter"
       view="schooltool.course.browser.course.FlourishCoursesView"

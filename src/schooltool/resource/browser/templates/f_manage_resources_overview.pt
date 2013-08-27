@@ -1,7 +1,7 @@
 <div class="manage-view" i18n:domain="schooltool"
      tal:condition="view/has_schoolyear"
      tal:define="resource_types view/resource_types;
-                 resources_link string:${context/@@absolute_url}/resources">
+                 resources_link view/resources_url">
   <h3>
     <a title="Manage resources"
        tal:attributes="href resources_link"

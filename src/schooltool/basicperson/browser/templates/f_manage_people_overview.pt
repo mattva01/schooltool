@@ -1,7 +1,7 @@
 <div class="manage-view" i18n:domain="schooltool"
      tal:condition="view/has_schoolyear">
   <h3>
-    <a tal:attributes="href context/schooltool:app/persons/@@absolute_url"
+    <a tal:attributes="href view/persons_url"
        title="Manage people" i18n:attributes="title"
        i18n:translate="">
       People

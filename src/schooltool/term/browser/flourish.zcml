@@ -162,4 +162,14 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="done"
+      after="*"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      view=".term.FlourishTermsView"
+      class="schooltool.app.browser.app.ManageItemDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
+
 </configure>

@@ -953,6 +953,11 @@ class FlourishManageResourcesOverview(flourish.page.Content):
             types[info.id]['amount'] += 1
         return types
 
+    def resources_url(self):
+        app_url = absoluteURL(self.context, self.request)
+        return '%s/resources?schoolyear_id=%s' % (app_url,
+                                                  self.schoolyear.__name__)
+
 
 class FlourishRequestResourceReportView(RequestRemoteReportDialog):
 
