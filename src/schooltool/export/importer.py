@@ -26,6 +26,7 @@ from decimal import Decimal, InvalidOperation
 
 import zope.file.upload
 import zope.file.file
+import zope.lifecycleevent
 from zope.interface import implements
 from zope.cachedescriptors.property import Lazy
 from zope.container.contained import containedEvent
@@ -813,6 +814,7 @@ class PersonImporter(ImporterBase):
             self.applyData(person, data)
         else:
             pc[person.username] = person
+        return person
 
     def process(self):
         sh = self.sheet
@@ -895,9 +897,9 @@ class PersonImporter(ImporterBase):
                 demographics[field.name] = value
 
             if num_errors == len(self.errors):
-                self.addPerson(person, data)
+                person = self.addPerson(person, data)
                 if group and person not in group.members:
-                    group.members.add(person)
+                    group.members.add(removeSecurityProxy(person))
             self.progress(row, nrows)
 
 
