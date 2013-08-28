@@ -1,5 +1,5 @@
+<tal:block condition="view/has_schoolyear">
 <div class="manage-view" i18n:domain="schooltool"
-     tal:condition="view/has_schoolyear"
      tal:define="timetables_link view/timetables_url;
                  timetables view/timetables">
   <h3>
@@ -44,3 +44,4 @@
     </tbody>
   </table>
 </div>
+</tal:block>

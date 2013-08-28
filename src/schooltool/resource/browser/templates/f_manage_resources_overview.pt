@@ -1,5 +1,5 @@
+<tal:block condition="view/has_schoolyear">
 <div class="manage-view" i18n:domain="schooltool"
-     tal:condition="view/has_schoolyear"
      tal:define="resource_types view/resource_types;
                  resources_link view/resources_url">
   <h3>
@@ -39,3 +39,4 @@
     </tbody>
   </table>
 </div>
+</tal:block>
