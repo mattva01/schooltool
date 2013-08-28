@@ -850,10 +850,17 @@ class FlourishManageContactsOverview(flourish.page.Content):
         'templates/f_manage_contacts_overview.pt')
 
     @property
-    def has_schoolyear(self):
+    def schoolyear(self):
         schoolyears = ISchoolYearContainer(self.context)
-        schoolyear = schoolyears.getActiveSchoolYear()
-        return schoolyear is not None
+        result = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            result = schoolyears.get(schoolyear_id, result)
+        return result
+
+    @property
+    def has_schoolyear(self):
+        return self.schoolyear is not None
 
     @property
     def contacts(self):
@@ -865,6 +872,11 @@ class FlourishManageContactsOverview(flourish.page.Content):
     def total(self):
         catalog = ICatalog(self.contacts)
         return len(catalog.extent)
+
+    def contacts_url(self):
+        app_url = absoluteURL(self.context, self.request)
+        return '%s/contacts?schoolyear_id=%s' % (app_url,
+                                                 self.schoolyear.__name__)
 
 
 class ContactActionsLinks(flourish.page.RefineLinksViewlet):

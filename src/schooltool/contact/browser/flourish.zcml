@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/browser"
            xmlns:zope="http://namespaces.zope.org/zope"
+           xmlns:security="http://schooltool.org/securitypolicy"
            xmlns:flourish="http://schooltool.org/flourish"
            i18n_domain="schooltool">
 
@@ -98,10 +99,15 @@
       name="manage-contacts-overview"
       after="manage-people-overview"
       view="schooltool.app.browser.app.ManageSchool"
-      permission="schooltool.edit"
+      permission="schooltool.view"
       manager="schooltool.skin.flourish.page.IPageContentManager"
       class=".contact.FlourishManageContactsOverview"
       />
+
+  <security:allow
+      interface=".contact.FlourishManageContactsOverview"
+      crowds="administrators clerks"
+      permission="schooltool.view" />
 
   <flourish:viewlet
       name="contacts-links"
@@ -119,7 +125,7 @@
       title="New Contact"
       class="schooltool.skin.flourish.page.LinkIdViewlet"
       manager="schooltool.contact.browser.contact.ContactsLinks"
-      permission="schooltool.view"
+      permission="schooltool.edit"
       />
 
   <flourish:content
