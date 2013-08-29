@@ -67,6 +67,9 @@ defaultGroups =  {"manager"       : _("Site Managers"),
                   }
 
 
+defaultManagerGroups = ("manager", "clerks")
+
+
 class GroupContainerContainer(BTreeContainer):
     """Container of group containers."""
 
@@ -142,6 +145,13 @@ class InitGroupsForNewSchoolYear(ObjectEventAdapterSubscriber):
         for id, title in defaultGroups.items():
             group = groups[id] = Group(title)
             IDependable(group).addDependent('')
+        persons = ISchoolToolApplication(None)['persons']
+        manager = persons.get('manager', None)
+        if manager is None:
+            return
+        for id in defaultManagerGroups:
+            if manager not in groups[id].members:
+                groups[id].members.add(manager)
 
     def importDefaultGroups(self, activeSchoolyear):
         oldGroups = IGroupContainer(activeSchoolyear)
