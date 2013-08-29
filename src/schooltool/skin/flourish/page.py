@@ -85,7 +85,14 @@ class Page(PageBase):
 
     render = PageBase.render
 
+    disabled = False
+
     def __call__(self, *args, **kw):
+        disabled = self.disabled
+        if (disabled and
+            (not isinstance(disabled, (str, unicode)) or
+             disabled.strip().lower() not in ('no', 'false'))):
+            raise NotFound(self, self.__name__, self.request)
         self.update()
         if self.request.response.getStatus() in [300, 301, 302, 303,
                                                  304, 305, 307]:
