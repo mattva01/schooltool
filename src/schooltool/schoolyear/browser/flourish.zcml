@@ -87,6 +87,14 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="activate.html"
+      title="Activate New Year"
+      class=".schoolyear.FlourishActivateNewYearLink"
+      manager="schooltool.app.browser.app.CustomizeSchoolLinks"
+      permission="schooltool.view"
+      />
+
   <flourish:breadcrumb
       for="schooltool.schoolyear.interfaces.ISchoolYear"
       />

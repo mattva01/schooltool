@@ -807,6 +807,10 @@ class FlourishSchoolYearActivateView(flourish.page.Page):
                                  "'Submit'.")
 
     def nextURL(self):
+        next = self.request.get('next')
+        if next:
+            app_url = absoluteURL(ISchoolToolApplication(None), self.request)
+            return app_url + '/' + next
         return absoluteURL(self.context, self.request)
 
 
@@ -891,3 +895,26 @@ class SchoolYearAddLink(flourish.page.LinkViewlet):
     def url(self):
         schoolyears = ISchoolYearContainer(self.context)
         return absoluteURL(schoolyears, self.request) + '/add.html'
+
+
+class FlourishActivateNewYearLink(flourish.page.LinkViewlet):
+
+    @property
+    def enabled(self):
+        if not flourish.canEdit(self.schoolyears):
+            return False
+        return super(FlourishActivateNewYearLink, self).enabled
+
+    @property
+    def schoolyears(self):
+        return ISchoolYearContainer(ISchoolToolApplication(None))
+
+    @property
+    def url(self):
+        link = self.link
+        if not link:
+            return None
+        return "%s/%s?next=%s" % (
+            absoluteURL(self.schoolyears, self.request),
+            self.link,
+            self.view.__name__)
