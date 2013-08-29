@@ -1222,6 +1222,13 @@ class FlourishSectionView(DisplayForm):
         return list(self.context.courses)
 
     @property
+    def show_extended_roster(self):
+        if flourish.canEdit(self.context):
+            return True
+        persons = ISchoolToolApplication(None)['persons']
+        return flourish.canView(persons)
+
+    @property
     def linked_terms(self):
         sections = []
         current = self.context
@@ -1270,6 +1277,22 @@ class FlourishSectionView(DisplayForm):
 
     def has_learners(self):
         return bool(list(self.context.members))
+
+    def instructor_titles(self):
+        instructors = []
+        if flourish.canView(self.context):
+            instructors = list(removeSecurityProxy(self.context).instructors)
+        titles = [getMultiAdapter((instructor, self.request), name='title')()
+                  for instructor in instructors]
+        return titles
+
+    def student_titles(self):
+        students = []
+        if flourish.canView(self.context):
+            students = list(removeSecurityProxy(self.context).members)
+        titles = [getMultiAdapter((student, self.request), name='title')()
+                  for student in students]
+        return titles
 
     def has_locations(self):
         return bool([r for r in self.context.resources
