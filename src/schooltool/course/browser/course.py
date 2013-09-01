@@ -48,6 +48,7 @@ from z3c.form.interfaces import HIDDEN_MODE
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.app import ContentTitle
+from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.term.interfaces import ITerm
@@ -297,7 +298,8 @@ class FlourishCoursesViewlet(Viewlet):
         return self.collator.cmp(this['course'], other['course'])
 
 
-class CoursesTertiaryNavigationManager(TertiaryNavigationManager):
+class CoursesTertiaryNavigationManager(TertiaryNavigationManager,
+                                       ActiveSchoolYearContentMixin):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class">
@@ -311,11 +313,8 @@ class CoursesTertiaryNavigationManager(TertiaryNavigationManager):
     @property
     def items(self):
         result = []
-        schoolyears = ISchoolYearContainer(ISchoolToolApplication(None))
-        active = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            active = schoolyears.get(schoolyear_id, active)
+        active = self.schoolyear
+        schoolyears = active.__parent__ if active is not None else {}
         for schoolyear in schoolyears.values():
             url = '%s/%s?schoolyear_id=%s' % (
                 absoluteURL(self.context, self.request),
@@ -328,7 +327,8 @@ class CoursesTertiaryNavigationManager(TertiaryNavigationManager):
         return result
 
 
-class CoursesActiveTabRefineLinksViewlet(RefineLinksViewlet):
+class CoursesActiveTabRefineLinksViewlet(RefineLinksViewlet,
+                                         ActiveSchoolYearContentMixin):
 
     def __init__(self, context, request, view, manager):
         courses = self.getCourseContainer(context, request)
@@ -336,12 +336,7 @@ class CoursesActiveTabRefineLinksViewlet(RefineLinksViewlet):
 
     @classmethod
     def getCourseContainer(cls, context, request):
-        schoolyears = ISchoolYearContainer(ISchoolToolApplication(None))
-        schoolyear = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in request:
-            schoolyear_id = request['schoolyear_id']
-            schoolyear = schoolyears.get(schoolyear_id, schoolyear)
-        courses = ICourseContainer(schoolyear, context)
+        courses = ICourseContainer(cls.schoolyear, context)
         return courses
 
 
@@ -388,19 +383,7 @@ class CourseDeleteLink(ModalFormLinkViewlet):
         return translate(title, context=self.request)
 
 
-class CoursesActiveTabMixin(object):
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(ISchoolToolApplication(None))
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
-
-
-class CourseAddLinkViewlet(LinkViewlet, CoursesActiveTabMixin):
+class CourseAddLinkViewlet(LinkViewlet, ActiveSchoolYearContentMixin):
 
     @property
     def url(self):
@@ -425,7 +408,7 @@ class CourseAddLinkFromCourseViewlet(CourseAddLinkViewlet):
 
 
 class FlourishCoursesView(table.table.TableContainerView,
-                          CoursesActiveTabMixin):
+                          ActiveSchoolYearContentMixin):
 
     content_template = InlineViewPageTemplate('''
       <div>
@@ -746,14 +729,10 @@ class FlourishCourseTableFormatter(table.table.SchoolToolTableFormatter):
         return [title, course_id]
 
 
-class FlourishManageCoursesOverview(Content, CoursesActiveTabMixin):
+class FlourishManageCoursesOverview(Content, ActiveSchoolYearContentMixin):
 
     body_template = ViewPageTemplateFile(
         'templates/f_manage_courses_overview.pt')
-
-    @property
-    def has_schoolyear(self):
-        return self.schoolyear is not None
 
     @property
     def courses(self):
@@ -775,14 +754,8 @@ class FlourishManageCoursesOverview(Content, CoursesActiveTabMixin):
                self.courses is not None and \
                self.courses
 
-    def schoolyear_view_url(self, name):
-        app_url = absoluteURL(self.context, self.request)
-        return '%s/%s?schoolyear_id=%s' % (app_url,
-                                                name,
-                                                self.schoolyear.__name__)
-
     def courses_url(self):
-        return self.schoolyear_view_url('courses')
+        return self.url_with_schoolyear_id(self.context, view_name='courses')
 
     def sections_url(self):
-        return self.schoolyear_view_url('sections')
+        return self.url_with_schoolyear_id(self.context, view_name='sections')

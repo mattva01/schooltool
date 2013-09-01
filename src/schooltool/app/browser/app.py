@@ -20,6 +20,7 @@ SchoolTool application views.
 """
 import urllib
 
+from zope.cachedescriptors.property import Lazy
 from ZODB.FileStorage.FileStorage import FileStorageError
 from ZODB.interfaces import IDatabase
 from zope.location.location import LocationProxy
@@ -1119,7 +1120,31 @@ class ManageSchool(flourish.page.Page):
     pass
 
 
-class ManageItemDoneLink(flourish.viewlet.Viewlet):
+class ActiveSchoolYearContentMixin(object):
+
+    @Lazy
+    def schoolyear(self):
+        schoolyears = ISchoolYearContainer(ISchoolToolApplication(None))
+        result = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            result = schoolyears.get(schoolyear_id, result)
+        return result
+
+    @property
+    def has_schoolyear(self):
+        return self.schoolyear is not None
+
+    def url_with_schoolyear_id(self, obj, view_name=''):
+        schoolyear = self.schoolyear
+        schoolyear_id = schoolyear.__name__ if schoolyear is not None else ''
+        params = {'schoolyear_id': schoolyear_id.encode('utf-8')}
+        context_url = absoluteURL(obj, self.request)
+        return '%s/%s?%s' % (context_url, view_name, urllib.urlencode(params))
+
+
+class ManageItemDoneLink(flourish.viewlet.Viewlet,
+                         ActiveSchoolYearContentMixin):
     template = InlineViewPageTemplate('''
       <h3 tal:define="can_manage view/can_manage"
           class="done-link"
@@ -1141,18 +1166,8 @@ class ManageItemDoneLink(flourish.viewlet.Viewlet):
                inCrowd(self.request.principal, 'administration', self.context)
 
     def manage_url(self):
-        app_url = absoluteURL(ISchoolToolApplication(None), self.request)
-        return '%s/manage?schoolyear_id=%s' % (app_url,
-                                               self.schoolyear.__name__)
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(ISchoolToolApplication(None))
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
+        app = ISchoolToolApplication(None)
+        return self.url_with_schoolyear_id(app, view_name='manage')
 
 
 class ManageSiteLinks(flourish.page.RefineLinksViewlet):

@@ -44,6 +44,7 @@ from z3c.form.interfaces import HIDDEN_MODE
 from zc.table.interfaces import ISortableColumn
 from zope.security.interfaces import Unauthorized
 
+from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.app import BaseAddView, BaseEditView
@@ -340,7 +341,8 @@ class FlourishGroupListView(EditRelationships):
         return "%s.%s" % (schoolyear.__name__, item.__name__)
 
 
-class GroupsTertiaryNavigationManager(flourish.page.TertiaryNavigationManager):
+class GroupsTertiaryNavigationManager(flourish.page.TertiaryNavigationManager,
+                                      ActiveSchoolYearContentMixin):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class">
@@ -354,11 +356,8 @@ class GroupsTertiaryNavigationManager(flourish.page.TertiaryNavigationManager):
     @property
     def items(self):
         result = []
-        schoolyears = ISchoolYearContainer(self.context)
-        active = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            active = schoolyears.get(schoolyear_id, active)
+        active = self.schoolyear
+        schoolyears = active.__parent__ if active is not None else {}
         for schoolyear in schoolyears.values():
             url = '%s/%s?schoolyear_id=%s' % (
                 absoluteURL(self.context, self.request),
@@ -446,19 +445,8 @@ class GroupDeleteLink(flourish.page.ModalFormLinkViewlet):
             return super(GroupDeleteLink, self).render(*args, **kw)
 
 
-class GroupsActiveTabMixin(object):
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
-
-
-class GroupAddLinkViewlet(flourish.page.LinkViewlet, GroupsActiveTabMixin):
+class GroupAddLinkViewlet(flourish.page.LinkViewlet,
+                          ActiveSchoolYearContentMixin):
 
     @property
     def url(self):
@@ -491,7 +479,7 @@ class GroupContainerTitle(ContentTitle):
 
 
 class FlourishGroupsView(flourish.page.Page,
-                         GroupsActiveTabMixin):
+                         ActiveSchoolYearContentMixin):
 
     content_template = InlineViewPageTemplate('''
       <div tal:content="structure context/schooltool:content/ajax/view/container/table" />
@@ -780,32 +768,18 @@ class FlourishMemberViewPersons(EditPersonRelationships):
         return self.context.members
 
 
-class FlourishManageGroupsOverview(flourish.page.Content):
+class FlourishManageGroupsOverview(flourish.page.Content,
+                                   ActiveSchoolYearContentMixin):
 
     body_template = ViewPageTemplateFile(
         'templates/f_manage_groups_overview.pt')
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
-
-    @property
-    def has_schoolyear(self):
-        return self.schoolyear is not None
 
     @property
     def groups(self):
         return IGroupContainer(self.schoolyear, None)
 
     def groups_url(self):
-        app_url = absoluteURL(self.context, self.request)
-        return '%s/groups?schoolyear_id=%s' % (app_url,
-                                               self.schoolyear.__name__)
+        return self.url_with_schoolyear_id(self.context, view_name='groups')
 
 
 class FlourishRequestGroupIDCardsView(RequestRemoteReportDialog):

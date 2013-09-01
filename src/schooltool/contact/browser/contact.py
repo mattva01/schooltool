@@ -42,6 +42,7 @@ from zope.i18n import translate
 from z3c.form import form, subform, field, button
 from z3c.form.interfaces import DISPLAY_MODE
 
+from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.catalog import buildQueryString
 from schooltool.contact.interfaces import IContactable
@@ -844,23 +845,11 @@ class PersonAsContactLinkViewlet(flourish.page.LinkIdViewlet):
                                                          person.last_name)})
 
 
-class FlourishManageContactsOverview(flourish.page.Content):
+class FlourishManageContactsOverview(flourish.page.Content,
+                                     ActiveSchoolYearContentMixin):
 
     body_template = ViewPageTemplateFile(
         'templates/f_manage_contacts_overview.pt')
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
-
-    @property
-    def has_schoolyear(self):
-        return self.schoolyear is not None
 
     @property
     def contacts(self):
@@ -874,9 +863,7 @@ class FlourishManageContactsOverview(flourish.page.Content):
         return len(catalog.extent)
 
     def contacts_url(self):
-        app_url = absoluteURL(self.context, self.request)
-        return '%s/contacts?schoolyear_id=%s' % (app_url,
-                                                 self.schoolyear.__name__)
+        return self.url_with_schoolyear_id(self.context, view_name='contacts')
 
 
 class ContactActionsLinks(flourish.page.RefineLinksViewlet):

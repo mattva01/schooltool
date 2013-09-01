@@ -38,7 +38,7 @@ Let's go to Resources and add some:
     >>> manager.query.link('School').click()
     >>> manager.query.link('Resources').click()
     >>> manager.url
-    u'http://localhost/resources'
+    u'http://localhost/resources?schoolyear_id=2012'
 
 We'll add a couple of Equipment resources.
 

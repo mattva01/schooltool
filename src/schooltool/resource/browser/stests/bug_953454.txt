@@ -28,7 +28,7 @@ Let's go to Resources:
     >>> manager.query.link('School').click()
     >>> manager.query.link('Resources').click()
     >>> manager.url
-    u'http://localhost/resources'
+    u'http://localhost/resources?schoolyear_id=2012'
 
 Add Equipment and cancel the action. We should be redirected back to
 the Resources pages:
