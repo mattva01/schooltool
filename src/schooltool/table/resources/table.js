@@ -231,6 +231,16 @@ ST.table = function() {
           request.success(function(){ update_all_table_spinners(container_id); });
           show_table_spinner(container_id, request);
           return false;
+      },
+
+      check_children: function(element) {
+          var value = $(element).attr('checked');
+          if (!value) {
+              value = null;
+          }
+          var elements = $(element).closest('table').find('tbody input[type="checkbox"]')
+          elements.attr('checked', value);
+          return true;
       }
 
   };

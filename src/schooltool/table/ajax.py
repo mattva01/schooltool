@@ -198,6 +198,9 @@ class TableBatch(flourish.viewlet.Viewlet):
     def html_id(self):
         return flourish.page.generic_viewlet_html_id(self)
 
+    def __iter__(self):
+        return iter(self.batch)
+
     def update(self):
         if self.manager.prefix:
             self.name = "." + self.manager.prefix
