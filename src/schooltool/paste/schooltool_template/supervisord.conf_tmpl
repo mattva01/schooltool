@@ -27,7 +27,7 @@ serverurl=unix://${run_dir}/supervisord.sock
 priority=999
 directory=${data_dir}
 command=${bin_dir}/start-schooltool-instance ${config_dir}
-environment=CELERY_CONFIG_MODULE=schooltool.task.config.zope
+environment=CELERY_CONFIG_MODULE=schooltool.task.config.zope,REDIS_HOST=127.0.0.1,REDIS_PORT=7079
 process_name=%(program_name)s
 numprocs=1
 autostart=false
