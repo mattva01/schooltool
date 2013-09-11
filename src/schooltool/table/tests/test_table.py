@@ -212,6 +212,9 @@ def doctest_ImageInputColumn():
         ...     def __init__(self, name="itemStub"):
         ...         self.__name__ = name
 
+        >>> from schooltool.common import CommonResourceURL
+        >>> provideAdapter(CommonResourceURL)
+
     When resources are not found, column will render empty.
 
         >>> column.renderCell(ItemStub(), FormatterStub())
