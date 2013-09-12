@@ -122,30 +122,42 @@ def doctest_GroupCalendarViewersCrowd():
         ...         print 'Getting %s' % key
         ...         return setting
 
+        >>> class PersonsStub(object):
+        ...     super_user = None
+
         >>> class AppStub(object):
         ...     implements(ISchoolToolApplication)
         ...     def __conform__(self, iface):
         ...         if iface == IAccessControlCustomisations:
         ...             return CustomisationsStub()
+        ...     def __getitem__(self, name):
+        ...         if name == 'persons':
+        ...             return PersonsStub()
 
         >>> from zope.component import provideAdapter
         >>> provideAdapter(lambda context: AppStub(),
         ...                adapts=[None],
         ...                provides=ISchoolToolApplication)
 
+        >>> member_of = ()
         >>> from schooltool.person.interfaces import IPerson
         >>> class PrincipalStub(object):
         ...     def __init__(self, name):
         ...         self.name = name
         ...     def __conform__(self, iface):
         ...         if iface == IPerson: return "IPerson(%s)" % self.name
+        ...     class groups(object):
+        ...         def __contains__(self, item):
+        ...             print "Checking for membership in group %s" % item
+        ...             return item in member_of
+        ...     groups = groups()
 
         >>> from schooltool.group.group import GroupCalendarViewersCrowd
 
     Off we go:
 
         >>> group_val = True
-        >>> leader_val = False
+        >>> leader_val = True
         >>> class GroupStub(object):
         ...     implements(IAsset)
         ...     class members(object):
@@ -179,13 +191,28 @@ def doctest_GroupCalendarViewersCrowd():
         Getting everyone_can_view_group_calendar
         Checking for membership of IPerson(Principal) in a group
         Checking for leadership of IPerson(Principal) in a group
-        False
+        True
 
-        >>> leader_val = True
+    If leadership fails, check for membership in system groups
+
+        >>> leader_val = False
         >>> crowd.contains(PrincipalStub("Principal"))
         Getting everyone_can_view_group_calendar
         Checking for membership of IPerson(Principal) in a group
         Checking for leadership of IPerson(Principal) in a group
+        Checking for membership in group sb.group.administrators
+        Checking for membership in group sb.group.manager
+        Checking for membership in group sb.group.clerks
+        False
+
+    Add to administrators
+
+        >>> member_of = ['sb.group.administrators']
+        >>> crowd.contains(PrincipalStub("Principal"))
+        Getting everyone_can_view_group_calendar
+        Checking for membership of IPerson(Principal) in a group
+        Checking for leadership of IPerson(Principal) in a group
+        Checking for membership in group sb.group.administrators
         True
 
     Clean up

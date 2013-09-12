@@ -2,10 +2,30 @@
 CHANGES
 =======
 
-2.5.3 (unreleased)
+2.5.4 (unreleased)
 ------------------
 
+- Nothing changed yet.
+
+
+2.5.3 (2013-09-12)
+------------------
+
+Bugfixes
+++++++++
+
+- Fix integer demographic fields handling in importer (https://launchpad.net/bugs/1211613)
+- Add Activate school year link in School tab under Customize (https://launchpad.net/bugs/1216992 )
+- Fix links and Done buttons inside School tab when a different school year is selected
+- Manager needs to be in Site Managers and Clerks by default (https://launchpad.net/bugs/1216915)
+- Access setting: allow instructor to add students to their section (https://launchpad.net/bugs/637759)
+- Access setting: allow instructor to modify section
 - Updated translations
+
+Internals
++++++++++
+
+- Add ability to disable views in customized packages (https://launchpad.net/bugs/716346)
 
 
 2.5.2 (2013-08-22)
@@ -16,7 +36,7 @@ CHANGES
 - Further updates to permissions.
 - Clerks and administrators now have appropriate access to parts of the School.
 - Update GPL license and file headers from gnu.org (https://launchpad.net/bugs/1211145)
-- Rotating Schedules With Different Schedules Per Day Stop a 5 Days Edit (https://launchpad.net/bugs/1214131)
+- Fix failures when creating timetables with rotating periods and weekly time slots (https://launchpad.net/bugs/1214131)
 - Updated translations
 
 

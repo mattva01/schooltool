@@ -46,6 +46,7 @@ import zc.table.column
 from zc.table.interfaces import ISortableColumn
 from z3c.form.validator import SimpleFieldValidator
 
+from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import EditRelationships
 from schooltool.app.browser.app import RelationshipAddTableMixin
@@ -1117,26 +1118,14 @@ class BasicPersonTableFormatter(PersonTableFormatter):
         return formatter
 
 
-class FlourishManagePeopleOverview(flourish.page.Content):
+class FlourishManagePeopleOverview(flourish.page.Content,
+                                   ActiveSchoolYearContentMixin):
 
     body_template = ViewPageTemplateFile(
         'templates/f_manage_people_overview.pt')
 
     built_in_groups = ('administrators', 'clerks', 'manager', 'teachers',
                        'students')
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
-
-    @property
-    def has_schoolyear(self):
-        return self.schoolyear is not None
 
     @property
     def groups(self):
@@ -1150,6 +1139,9 @@ class FlourishManagePeopleOverview(flourish.page.Content):
     def school_name(self):
         preferences = IApplicationPreferences(self.context)
         return preferences.title
+
+    def persons_url(self):
+        return self.url_with_schoolyear_id(self.context, view_name='persons')
 
 
 class FlourishRequestPersonIDCardView(RequestRemoteReportDialog):

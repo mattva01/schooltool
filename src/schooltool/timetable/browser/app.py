@@ -33,6 +33,7 @@ from zc.table.interfaces import ISortableColumn
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.containers
 import schooltool.skin.flourish.content
+from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import TitledContainerItemVocabulary
 from schooltool.common.inlinept import InlineViewPageTemplate
@@ -161,7 +162,8 @@ def timetableVocabularyFactory():
 
 
 class SchoolTimetablesTertiaryNavigation(flourish.page.Content,
-                                         flourish.page.TertiaryNavigationManager):
+                                         flourish.page.TertiaryNavigationManager,
+                                         ActiveSchoolYearContentMixin):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class">
@@ -176,11 +178,8 @@ class SchoolTimetablesTertiaryNavigation(flourish.page.Content,
     @property
     def items(self):
         result = []
-        schoolyears = ISchoolYearContainer(self.context)
-        active = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            active = schoolyears.get(schoolyear_id, active)
+        active = self.schoolyear
+        schoolyears = active.__parent__ if active is not None else {}
         for schoolyear in schoolyears.values():
             url = '%s/%s?schoolyear_id=%s' % (
                 absoluteURL(self.context, self.request),
@@ -194,7 +193,8 @@ class SchoolTimetablesTertiaryNavigation(flourish.page.Content,
         return result
 
 
-class FlourishTimetablesView(table.TableContainerView):
+class FlourishTimetablesView(table.TableContainerView,
+                             ActiveSchoolYearContentMixin):
 
     content_template = ViewPageTemplateFile('templates/f_timetables.pt')
 
@@ -205,15 +205,6 @@ class FlourishTimetablesView(table.TableContainerView):
                  mapping={'schoolyear': schoolyear.title})
 
     @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
-
-    @property
     def container(self):
         return ITimetableContainer(self.schoolyear)
 
@@ -222,19 +213,16 @@ class TimetableAddLinks(flourish.page.RefineLinksViewlet):
     """Manager for Add links in FlourishTimetablesView"""
 
 
-class TimetablesLinkViewlet(flourish.page.LinkViewlet):
+class TimetablesLinkViewlet(flourish.page.LinkViewlet,
+                            ActiveSchoolYearContentMixin):
 
     def __init__(self, context, request, *args, **kw):
+        self.request = request
         super(TimetablesLinkViewlet, self).__init__(
-            self.actualContext(context, request), request, *args, **kw)
+            self.actualContext(context), request, *args, **kw)
 
-    def actualContext(self, context, request):
-        schoolyears = ISchoolYearContainer(context)
-        year = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in request:
-            schoolyear_id = request['schoolyear_id']
-            year = schoolyears.get(schoolyear_id, year)
-        return ITimetableContainer(year)
+    def actualContext(self, context):
+        return ITimetableContainer(self.schoolyear)
 
 
 class TimetableDoneLink(object):
@@ -256,22 +244,10 @@ class TimetableDoneLink(object):
         return url
 
 
-class FlourishManageTimetablesOverview(flourish.page.Content):
+class FlourishManageTimetablesOverview(flourish.page.Content,
+                                       ActiveSchoolYearContentMixin):
 
     body_template = ViewPageTemplateFile('templates/f_manage_timetables_overview.pt')
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
-
-    @property
-    def has_schoolyear(self):
-        return self.schoolyear is not None
 
     @property
     def timetables(self):
@@ -279,3 +255,7 @@ class FlourishManageTimetablesOverview(flourish.page.Content):
         if timetables is not None:
             return sorted(timetables.values(), key=lambda t:t.first,
                           reverse=True)
+
+    def timetables_url(self):
+        return self.url_with_schoolyear_id(self.context,
+                                           view_name='timetables')

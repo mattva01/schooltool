@@ -26,6 +26,7 @@ from decimal import Decimal, InvalidOperation
 
 import zope.file.upload
 import zope.file.file
+import zope.lifecycleevent
 from zope.interface import implements
 from zope.cachedescriptors.property import Lazy
 from zope.container.contained import containedEvent
@@ -40,6 +41,7 @@ from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.demographics import DateFieldDescription
 from schooltool.basicperson.demographics import BoolFieldDescription
+from schooltool.basicperson.demographics import IntFieldDescription
 from schooltool.basicperson.person import BasicPerson
 from schooltool.contact.contact import Contact, ContactPersonInfo
 from schooltool.contact.interfaces import IContact, IContactContainer
@@ -202,7 +204,18 @@ class ImporterBase(object):
     def getIntFoundValid(self, sheet, row, col, default=0):
         value, found = self.getCellAndFound(sheet, row, col, default)
         valid = True
+        if (isinstance(value, (str, unicode)) and
+            not value.strip()):
+            found = False
+            value = default
         if found:
+            try:
+                value = int(value)
+            except (TypeError, ValueError):
+                try:
+                    value = float(value)
+                except (TypeError, ValueError):
+                    pass
             if isinstance(value, float):
                 if int(value) != value:
                     self.error(row, col, ERROR_NOT_INT)
@@ -813,6 +826,7 @@ class PersonImporter(ImporterBase):
             self.applyData(person, data)
         else:
             pc[person.username] = person
+        return person
 
     def process(self):
         sh = self.sheet
@@ -875,11 +889,14 @@ class PersonImporter(ImporterBase):
 
             demographics = IDemographics(person)
             for n, field in enumerate(fields):
+                # /me wraps head in tinfoil for protection:
                 if field.required:
                     if isinstance(field, DateFieldDescription):
                         value = self.getDateFromCell(sh, row, n + 10)
                     elif isinstance(field, BoolFieldDescription):
                         value = self.getRequiredBoolFromCell(sh, row, n + 10)
+                    elif isinstance(field, IntFieldDescription):
+                        value = self.getRequiredIntFromCell(sh, row, n + 10)
                     else:
                         value = self.getRequiredTextFromCell(sh, row, n + 10)
                 else:
@@ -888,6 +905,8 @@ class PersonImporter(ImporterBase):
                                                      default=None)
                     elif isinstance(field, BoolFieldDescription):
                         value = self.getBoolFromCell(sh, row, n + 10)
+                    elif isinstance(field, IntFieldDescription):
+                        value = self.getIntFromCell(sh, row, n + 10)
                     else:
                         value = self.getTextFromCell(sh, row, n + 10)
                     if value == '':
@@ -895,9 +914,9 @@ class PersonImporter(ImporterBase):
                 demographics[field.name] = value
 
             if num_errors == len(self.errors):
-                self.addPerson(person, data)
+                person = self.addPerson(person, data)
                 if group and person not in group.members:
-                    group.members.add(person)
+                    group.members.add(removeSecurityProxy(person))
             self.progress(row, nrows)
 
 

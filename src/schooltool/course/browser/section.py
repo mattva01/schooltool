@@ -53,6 +53,7 @@ from z3c.form.validator import WidgetValidatorDiscriminators
 from zc.table.column import GetterColumn
 from zc.table.interfaces import ISortableColumn
 
+from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.browser.app import BaseEditView
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -66,7 +67,6 @@ from schooltool.course.interfaces import ICourse, ICourseContainer
 from schooltool.course.interfaces import ISection, ISectionContainer
 from schooltool.course.section import Section
 from schooltool.course.section import copySection
-from schooltool.course.browser.course import CoursesActiveTabMixin as SectionsActiveTabMixin
 from schooltool.person.interfaces import IPerson
 from schooltool.report.browser.report import RequestRemoteReportDialog
 from schooltool.resource.browser.resource import EditLocationRelationships
@@ -805,7 +805,8 @@ class UnlinkSectionView(BrowserView):
         return absoluteURL(self.context, self.request) + '/section_linkage.html'
 
 
-class SectionsTertiaryNavigationManager(TertiaryNavigationManager):
+class SectionsTertiaryNavigationManager(TertiaryNavigationManager,
+                                        ActiveSchoolYearContentMixin):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class">
@@ -819,11 +820,8 @@ class SectionsTertiaryNavigationManager(TertiaryNavigationManager):
     @property
     def items(self):
         result = []
-        schoolyears = ISchoolYearContainer(self.context)
-        active = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            active = schoolyears.get(schoolyear_id, active)
+        active = self.schoolyear
+        schoolyears = active.__parent__ if active is not None else {}
         for schoolyear in schoolyears.values():
             url = '%s/%s?schoolyear_id=%s' % (
                 absoluteURL(self.context, self.request),
@@ -887,7 +885,7 @@ class SectionActionsLinks(RefineLinksViewlet):
             return super(SectionActionsLinks, self).render()
 
 
-class SectionAddLinkViewlet(LinkViewlet, SectionsActiveTabMixin):
+class SectionAddLinkViewlet(LinkViewlet, ActiveSchoolYearContentMixin):
 
     @property
     def enabled(self):
@@ -973,7 +971,7 @@ def section_instructors_formatter(value, section, formatter):
 
 
 class FlourishSectionsView(flourish.page.Page,
-                           SectionsActiveTabMixin):
+                           ActiveSchoolYearContentMixin):
 
     container_class = 'container widecontainer'
     content_template = InlineViewPageTemplate('''
@@ -1074,7 +1072,9 @@ class SchoolYearSectionsTable(SectionsTable):
         return sections
 
 
-class SectionsTableFilter(table.ajax.TableFilter, FlourishSectionFilterWidget):
+class SectionsTableFilter(table.ajax.TableFilter,
+                          FlourishSectionFilterWidget,
+                          ActiveSchoolYearContentMixin):
 
     multiple_terms = True
     template = ViewPageTemplateFile('templates/f_section_table_filter.pt')
@@ -1095,16 +1095,6 @@ class SectionsTableFilter(table.ajax.TableFilter, FlourishSectionFilterWidget):
     @property
     def search_term_ids(self):
         return self.manager.html_id+"-terms"
-
-    @Lazy
-    def schoolyear(self):
-        app = ISchoolToolApplication(None)
-        schoolyears = ISchoolYearContainer(app)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
 
     def termContainer(self):
         return self.schoolyear
@@ -1222,6 +1212,13 @@ class FlourishSectionView(DisplayForm):
         return list(self.context.courses)
 
     @property
+    def show_extended_roster(self):
+        if flourish.canEdit(self.context):
+            return True
+        persons = ISchoolToolApplication(None)['persons']
+        return flourish.canView(persons)
+
+    @property
     def linked_terms(self):
         sections = []
         current = self.context
@@ -1270,6 +1267,22 @@ class FlourishSectionView(DisplayForm):
 
     def has_learners(self):
         return bool(list(self.context.members))
+
+    def instructor_titles(self):
+        instructors = []
+        if flourish.canView(self.context):
+            instructors = list(removeSecurityProxy(self.context).instructors)
+        titles = [getMultiAdapter((instructor, self.request), name='title')()
+                  for instructor in instructors]
+        return titles
+
+    def student_titles(self):
+        students = []
+        if flourish.canView(self.context):
+            students = list(removeSecurityProxy(self.context).members)
+        titles = [getMultiAdapter((student, self.request), name='title')()
+                  for student in students]
+        return titles
 
     def has_locations(self):
         return bool([r for r in self.context.resources

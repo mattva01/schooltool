@@ -363,6 +363,16 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="done"
+      after="*"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      view=".app.FlourishTimetablesView"
+      class="schooltool.app.browser.app.ManageItemDoneLink"
+      render="template"
+      permission="schooltool.view"
+      />
+
   <flourish:content
       name="tertiary_navigation"
       class=".app.SchoolTimetablesTertiaryNavigation"

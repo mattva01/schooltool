@@ -23,11 +23,11 @@ from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 import schooltool.skin.flourish.page
+from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.csvimport import BaseCSVImporter
 from schooltool.app.browser.csvimport import BaseCSVImportView
 from schooltool.app.browser.csvimport import FlourishBaseCSVImportView
-from schooltool.course.browser.course import CoursesActiveTabMixin
 from schooltool.course.course import Course
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.schoolyear.interfaces import ISchoolYear
@@ -136,7 +136,8 @@ class FlourishCourseCSVImportView(FlourishBaseCSVImportView):
         return url
 
 
-class ImportCoursesLinkViewlet(flourish.page.LinkViewlet, CoursesActiveTabMixin):
+class ImportCoursesLinkViewlet(flourish.page.LinkViewlet,
+                               ActiveSchoolYearContentMixin):
 
     @property
     def enabled(self):

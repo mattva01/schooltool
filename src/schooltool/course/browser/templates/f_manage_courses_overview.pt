@@ -4,7 +4,7 @@
                  sections view/sections;">
   <h3>
     <a title="Manage courses"
-       tal:attributes="href string:${context/@@absolute_url}/courses"
+       tal:attributes="href view/courses_url"
        i18n:attributes="title"
        i18n:translate="">
       Courses
@@ -23,7 +23,7 @@
   <metal:block tal:condition="view/render_sections_link">
     <h3>
       <a title="Manage sections"
-         tal:attributes="href string:${context/@@absolute_url}/sections"
+         tal:attributes="href view/sections_url"
          i18n:attributes="title"
          i18n:translate="">
         Sections

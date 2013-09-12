@@ -24,6 +24,7 @@
              i18n:attributes="value" />
       <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
              i18n:attributes="value cancel-button" />
+      <input type="hidden" name="next" tal:attributes="value request/next|nothing" />
     </div>
   </form>
 </div>

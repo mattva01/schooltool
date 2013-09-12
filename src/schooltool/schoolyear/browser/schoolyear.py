@@ -56,6 +56,7 @@ import zc.table.column
 
 import schooltool.skin.flourish.containers
 import schooltool.skin.flourish.breadcrumbs
+from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
@@ -746,23 +747,11 @@ class ActiveSchoolYears(ViewletBase):
             return syc.getNextSchoolYear()
 
 
-class FlourishManageYearOverview(flourish.page.Content):
+class FlourishManageYearOverview(flourish.page.Content,
+                                 ActiveSchoolYearContentMixin):
 
     body_template = ViewPageTemplateFile(
         'templates/f_manage_year_overview.pt')
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
-
-    @property
-    def has_schoolyear(self):
-        return self.schoolyear is not None
 
 
 class FlourishSchoolYearView(flourish.page.Page):
@@ -807,11 +796,16 @@ class FlourishSchoolYearActivateView(flourish.page.Page):
                                  "'Submit'.")
 
     def nextURL(self):
+        next = self.request.get('next')
+        if next:
+            app_url = absoluteURL(ISchoolToolApplication(None), self.request)
+            return app_url + '/' + next
         return absoluteURL(self.context, self.request)
 
 
 class ManageSchoolTertiaryNavigation(flourish.page.Content,
-                                     flourish.page.TertiaryNavigationManager):
+                                     flourish.page.TertiaryNavigationManager,
+                                     ActiveSchoolYearContentMixin):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class"
@@ -827,11 +821,8 @@ class ManageSchoolTertiaryNavigation(flourish.page.Content,
     @property
     def items(self):
         result = []
-        schoolyears = ISchoolYearContainer(self.context)
-        active = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            active = schoolyears.get(schoolyear_id, active)
+        active = self.schoolyear
+        schoolyears = active.__parent__ if active is not None else {}
         for schoolyear in schoolyears.values():
             url = '%s/%s?schoolyear_id=%s' % (
                 absoluteURL(self.context, self.request),
@@ -891,3 +882,26 @@ class SchoolYearAddLink(flourish.page.LinkViewlet):
     def url(self):
         schoolyears = ISchoolYearContainer(self.context)
         return absoluteURL(schoolyears, self.request) + '/add.html'
+
+
+class FlourishActivateNewYearLink(flourish.page.LinkViewlet):
+
+    @property
+    def enabled(self):
+        if not flourish.canEdit(self.schoolyears):
+            return False
+        return super(FlourishActivateNewYearLink, self).enabled
+
+    @property
+    def schoolyears(self):
+        return ISchoolYearContainer(ISchoolToolApplication(None))
+
+    @property
+    def url(self):
+        link = self.link
+        if not link:
+            return None
+        return "%s/%s?next=%s" % (
+            absoluteURL(self.schoolyears, self.request),
+            self.link,
+            self.view.__name__)

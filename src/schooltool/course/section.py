@@ -319,6 +319,15 @@ class SectionCalendarSettingCrowd(ConfigurableCrowd):
     setting_key = 'everyone_can_view_section_info'
 
 
+class SectionEditorSettingCrowd(ConfigurableCrowd):
+    adapts(interfaces.ISection)
+    setting_key = 'instructors_can_edit_section'
+
+    def contains(self, principal):
+        return (ConfigurableCrowd.contains(self, principal) and
+                InstructorsCrowd(self.context).contains(principal))
+
+
 class SectionCalendarViewers(AggregateCrowd):
     """Crowd of those who can see the section calendar."""
     adapts(interfaces.ISection)

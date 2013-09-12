@@ -70,25 +70,25 @@
     <metal:block define-slot="bottom">
     </metal:block>
   </metal:block>
-  <tal:block tal:condition="context/schooltool:can_edit">
-    <h3 i18n:translate="">Courses</h3>
-    <tal:block define="courses view/courses">
-      <tal:block condition="courses"
-                 content="structure context/schooltool:content/ajax/courses_table" />
-      <p tal:condition="not:courses" i18n:translate="">
-        This section has no courses
-      </p>
-    </tal:block>
-    <h3>
-      <tal:block i18n:translate="">Terms</tal:block>
-      <a class="modify" href="" title="Edit terms for this section"
-         tal:attributes="href string:${context/@@absolute_url}/section_linkage.html"
-         i18n:attributes="title">
-        <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
-             alt="Edit"
-             i18n:attributes="alt" />
-      </a>
-    </h3>
+  <h3 i18n:translate="">Courses</h3>
+  <tal:block define="courses view/courses">
+    <tal:block condition="courses"
+               content="structure context/schooltool:content/ajax/courses_table" />
+    <p tal:condition="not:courses" i18n:translate="">
+      This section has no courses
+    </p>
+  </tal:block>
+  <h3>
+    <tal:block i18n:translate="">Terms</tal:block>
+    <a class="modify" href="" title="Edit terms for this section"
+       tal:attributes="href string:${context/@@absolute_url}/section_linkage.html"
+       tal:condition="context/schooltool:can_edit"
+       i18n:attributes="title">
+      <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
+           alt="Edit"
+           i18n:attributes="alt" />
+    </a>
+  </h3>
     <table class="section-terms">
       <tbody>
         <tr tal:repeat="info view/linked_terms">
@@ -109,6 +109,7 @@
       <tal:block i18n:translate="">Instructors</tal:block>
       <a class="modify" href="" title="Edit instructors for this section"
          tal:attributes="href string:${context/@@absolute_url}/instructors.html"
+         tal:condition="context/schooltool:can_edit"
          i18n:attributes="title">
         <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
              alt="Edit"
@@ -116,15 +117,22 @@
       </a>
     </h3>
     <tal:block tal:condition="view/has_instructors">
-      <tal:block content="structure context/schooltool:content/ajax/view/context/instructors/person_table" />
+      <tal:block condition="not:view/show_extended_roster">
+        <p tal:repeat="title view/instructor_titles" tal:content="title" />
+      </tal:block>
+      <tal:block
+          condition="view/show_extended_roster"
+          content="structure context/schooltool:content/ajax/view/context/instructors/person_table" />
     </tal:block>
     <p tal:condition="not:view/has_instructors" i18n:translate="">
       This section has no instructors
     </p>
+
     <h3>
       <tal:block i18n:translate="">Students</tal:block>
       <a class="modify" href="" title="Edit students for this section"
          tal:attributes="href string:${context/@@absolute_url}/learners.html"
+         tal:condition="context/schooltool:can_edit"
          i18n:attributes="title">
         <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
              alt="Edit"
@@ -132,7 +140,12 @@
       </a>
     </h3>
     <tal:block tal:condition="view/has_learners">
-      <tal:block content="structure context/schooltool:content/ajax/view/context/members/person_table" />
+      <tal:block condition="not:view/show_extended_roster">
+        <p tal:repeat="title view/student_titles" tal:content="title" />
+      </tal:block>
+      <tal:block
+          condition="view/show_extended_roster"
+          content="structure context/schooltool:content/ajax/view/context/members/person_table" />
     </tal:block>
     <p tal:condition="not:view/has_learners" i18n:translate="">
       This section has no students
@@ -141,6 +154,7 @@
       <tal:block i18n:translate="">Locations</tal:block>
       <a class="modify" href="" title="Edit locations for this section"
          tal:attributes="href string:${context/@@absolute_url}/locations.html"
+         tal:condition="context/schooltool:can_edit"
          i18n:attributes="title">
         <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
              alt="Edit"
@@ -157,6 +171,7 @@
       <tal:block i18n:translate="">Equipment</tal:block>
       <a class="modify" href="" title="Edit equipment for this section"
          tal:attributes="href string:${context/@@absolute_url}/equipment.html"
+         tal:condition="context/schooltool:can_edit"
          i18n:attributes="title">
         <img tal:attributes="src context/++resource++schooltool.skin.flourish/edit-icon.png"
              alt="Edit"
@@ -169,7 +184,7 @@
     <p tal:condition="not:view/has_equipment" i18n:translate="">
       This section has no equipment
     </p>
-  </tal:block>
+
   <h3 class="done-link">
     <a tal:attributes="href view/done_link"
        i18n:translate="">Done</a>

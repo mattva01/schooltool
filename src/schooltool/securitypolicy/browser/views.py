@@ -51,6 +51,7 @@ class FlourishAccessControlView(AccessControlView):
 
     fieldset_titles = {
         'everyone_can_view_section_info': _('Section information'),
+        'instructors_can_edit_section': _('Section information'),
         'everyone_can_view_person_list': _('List of accounts'),
         'persons_can_set_their_preferences': _('User calendars'),
         'persons_can_change_their_passwords': _('User passwords'),
@@ -61,6 +62,7 @@ class FlourishAccessControlView(AccessControlView):
         'everyone_can_view_resource_list': _('List of resources'),
         'everyone_can_view_resource_info': _('Resource information'),
         'everyone_can_view_resource_calendar': _('Resource calendars'),
+        'instructors_can_schedule_sections': _('Schedules'),
         'administration_can_grade_students': _('Gradebook'),
         'administration_can_grade_journal': _('Journal'),
         }

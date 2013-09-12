@@ -51,6 +51,7 @@ from zope.traversing.browser.interfaces import IAbsoluteURL
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.browser.app import EditRelationships
 from schooltool.app.browser.app import RelationshipAddTableMixin
 from schooltool.app.browser.app import RelationshipRemoveTableMixin
@@ -919,23 +920,11 @@ class FlourishResourceDeleteLink(flourish.page.ModalFormLinkViewlet):
         return translate(title, context=self.request)
 
 
-class FlourishManageResourcesOverview(flourish.page.Content):
+class FlourishManageResourcesOverview(flourish.page.Content,
+                                      ActiveSchoolYearContentMixin):
 
     body_template = ViewPageTemplateFile(
         'templates/f_manage_resources_overview.pt')
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
-
-    @property
-    def has_schoolyear(self):
-        return self.schoolyear is not None
 
     @property
     def resources(self):
@@ -952,6 +941,10 @@ class FlourishManageResourcesOverview(flourish.page.Content):
                 types[info.id]['id'] = info.id
             types[info.id]['amount'] += 1
         return types
+
+    def resources_url(self):
+        return self.url_with_schoolyear_id(self.context,
+                                           view_name='resources')
 
 
 class FlourishRequestResourceReportView(RequestRemoteReportDialog):

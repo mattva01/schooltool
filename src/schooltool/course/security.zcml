@@ -34,9 +34,20 @@
       interface="schooltool.course.interfaces.ISection"
       crowds="administrators clerks teachers section_instructors section_learners configurable_section_viewers"
       permission="schooltool.view" />
+
+  <setting
+      key="instructors_can_edit_section"
+      text="Section instructors can modify section's title, schedule, roster, equipment and so on."
+      alt_text="Only clerks can modify the section."
+      default="True" />
+
+  <crowd
+      name="configurable_section_editors"
+      factory=".section.SectionEditorSettingCrowd" />
+
   <allow
       interface="schooltool.course.interfaces.ISection"
-      crowds="clerks section_instructors"
+      crowds="clerks configurable_section_editors"
       permission="schooltool.edit" />
 
   <setting
@@ -184,6 +195,5 @@
      crowd_factory="schooltool.app.security.CalendarEditorsCrowd"
      use_crowd_factory=".section.InstructorsCrowd"
   />
-
 
 </configure>

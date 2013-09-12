@@ -2,6 +2,7 @@
 
 ST.gradebook = {};
 ST.gradebook.readonly = false;
+ST.gradebook.needs_comments = false;
 
 
 function makeGradeCellVisible(element) {
@@ -393,6 +394,7 @@ function autoCompleteDisplayed() {
 }
 
 function initGrading(grades) {
+    var form = grades.closest('form');
     grades.on('click', 'td', function() {
         var td = $(this);
         makeGradeCellVisible(td);
@@ -616,7 +618,9 @@ function initGradebook() {
 
     if (!ST.gradebook.readonly) {
         preloadFilldown(form);
-        preloadCommentCell(form);
+        if (ST.gradebook.needs_comments) {
+            preloadCommentCell(form);
+        }
     }
 
     preloadPopups(form);
@@ -658,7 +662,9 @@ function initGradebook() {
     if (!ST.gradebook.readonly) {
         initGrading(grades);
         initFillDown(form);
-        initComments(form);
+        if (ST.gradebook.needs_comments) {
+            initComments(form);
+        }
     }
 
     // Zoom buttons

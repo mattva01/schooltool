@@ -3,7 +3,7 @@
      tal:define="year view/schoolyear">
   <h3>
     <a title="Manage terms"
-       tal:attributes="href string:${context/@@absolute_url}/terms"
+       tal:attributes="href view/terms_url"
        i18n:attributes="title"
        i18n:translate="">
       Terms

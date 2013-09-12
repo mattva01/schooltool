@@ -20,6 +20,7 @@ SchoolTool application views.
 """
 import urllib
 
+from zope.cachedescriptors.property import Lazy
 from ZODB.FileStorage.FileStorage import FileStorageError
 from ZODB.interfaces import IDatabase
 from zope.location.location import LocationProxy
@@ -77,6 +78,7 @@ from schooltool.skin.skin import OrderedViewletManager
 from schooltool.skin import flourish
 from schooltool.skin.flourish.form import Form
 from schooltool.skin.flourish.form import Dialog
+from schooltool.schoolyear.interfaces import ISchoolYearContainer
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -1118,13 +1120,37 @@ class ManageSchool(flourish.page.Page):
     pass
 
 
-class ManageItemDoneLink(flourish.viewlet.Viewlet):
+class ActiveSchoolYearContentMixin(object):
+
+    @Lazy
+    def schoolyear(self):
+        schoolyears = ISchoolYearContainer(ISchoolToolApplication(None))
+        result = schoolyears.getActiveSchoolYear()
+        if 'schoolyear_id' in self.request:
+            schoolyear_id = self.request['schoolyear_id']
+            result = schoolyears.get(schoolyear_id, result)
+        return result
+
+    @property
+    def has_schoolyear(self):
+        return self.schoolyear is not None
+
+    def url_with_schoolyear_id(self, obj, view_name=''):
+        schoolyear = self.schoolyear
+        schoolyear_id = schoolyear.__name__ if schoolyear is not None else ''
+        params = {'schoolyear_id': schoolyear_id.encode('utf-8')}
+        context_url = absoluteURL(obj, self.request)
+        return '%s/%s?%s' % (context_url, view_name, urllib.urlencode(params))
+
+
+class ManageItemDoneLink(flourish.viewlet.Viewlet,
+                         ActiveSchoolYearContentMixin):
     template = InlineViewPageTemplate('''
-      <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit"
+      <h3 tal:define="can_manage view/can_manage"
           class="done-link"
           i18n:domain="schooltool">
         <tal:block condition="can_manage">
-          <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"
+          <a tal:attributes="href view/manage_url"
              i18n:translate="">Done</a>
         </tal:block>
         <tal:block condition="not:can_manage">
@@ -1133,6 +1159,15 @@ class ManageItemDoneLink(flourish.viewlet.Viewlet):
         </tal:block>
       </h3>
       ''')
+
+    @property
+    def can_manage(self):
+        return flourish.canEdit(self.context) or \
+               inCrowd(self.request.principal, 'administration', self.context)
+
+    def manage_url(self):
+        app = ISchoolToolApplication(None)
+        return self.url_with_schoolyear_id(app, view_name='manage')
 
 
 class ManageSiteLinks(flourish.page.RefineLinksViewlet):

@@ -16,7 +16,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2013-08-22 19:53+0300\n"
+"POT-Creation-Date: 2013-09-12 18:35+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -5040,7 +5040,15 @@ msgstr ""
 msgid "Sections must be in consecutive terms"
 msgstr ""
 
-#: /src/schooltool/course/security.zcml:42
+#: /src/schooltool/course/security.zcml:38
+msgid "Only clerks can modify the section."
+msgstr ""
+
+#: /src/schooltool/course/security.zcml:38
+msgid "Section instructors can modify section's title, schedule, roster, equipment and so on."
+msgstr ""
+
+#: /src/schooltool/course/security.zcml:53
 msgid "Basic information about sections is only visible to instructors and students in that section, and school administration."
 msgstr ""
 
@@ -7283,7 +7291,11 @@ msgstr ""
 msgid "Resource calendars"
 msgstr ""
 
-#: /src/schooltool/securitypolicy/browser/views.py:67
+#: /src/schooltool/securitypolicy/browser/views.py:65
+msgid "Schedules"
+msgstr ""
+
+#: /src/schooltool/securitypolicy/browser/views.py:66
 msgid "Gradebook"
 msgstr ""
 
@@ -8391,7 +8403,15 @@ msgstr ""
 msgid "Treat consecutive periods as one meeting"
 msgstr ""
 
-#: /src/schooltool/timetable/security.zcml:36
+#: /src/schooltool/timetable/security.zcml:5
+msgid "Instructors can schedule their own sections."
+msgstr ""
+
+#: /src/schooltool/timetable/security.zcml:5
+msgid "Only clerks can schedule sections."
+msgstr ""
+
+#: /src/schooltool/timetable/security.zcml:56
 msgid "School timetables"
 msgstr ""
 

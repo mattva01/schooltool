@@ -71,7 +71,7 @@
                                          form_id view/form_id;
                                          generated view/report_generated" />
   <script>
-    if (!generated) {
+    if (!ST.local.generated) {
         var form = $(ST.dialogs.jquery_id(ST.local.form_id));
         setTimeout(function(){ST.dialogs.submit(form);}, ST.local.delay);
     }

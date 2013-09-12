@@ -29,6 +29,7 @@ from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 import schooltool.skin.flourish.page
+from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.browser.csvimport import BaseCSVImportView
 from schooltool.course.interfaces import ICourseContainer
@@ -41,7 +42,6 @@ from schooltool.term.term import getNextTerm
 from schooltool.timetable.interfaces import ITimetableContainer
 from schooltool.timetable.interfaces import IScheduleContainer
 from schooltool.timetable.timetable import SelectedPeriodsSchedule
-from schooltool.course.browser.section import SectionsActiveTabMixin
 from schooltool.skin import flourish
 
 from schooltool.common import SchoolToolMessage as _
@@ -545,7 +545,8 @@ class FlourishTimetableCSVImportView(FlourishBaseCSVImportView,
                  mapping={'schoolyear': schoolyear.title})
 
 
-class ImportSectionsLinkViewlet(flourish.page.LinkViewlet, SectionsActiveTabMixin):
+class ImportSectionsLinkViewlet(flourish.page.LinkViewlet,
+                                ActiveSchoolYearContentMixin):
 
     @property
     def url(self):

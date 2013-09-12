@@ -47,6 +47,7 @@ from zc.table.column import GetterColumn
 
 import schooltool.skin.flourish.breadcrumbs
 from schooltool import table
+from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.browser.cal import month_names
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.calendar.utils import parse_date
@@ -676,7 +677,7 @@ class TermRenderer(object):
                 'days': days}
 
 
-class FlourishTermsView(flourish.page.Page):
+class FlourishTermsView(flourish.page.Page, ActiveSchoolYearContentMixin):
 
     @property
     def title(self):
@@ -684,19 +685,6 @@ class FlourishTermsView(flourish.page.Page):
         if year is not None:
             return _('Terms for ${schoolyear}',
                      mapping={'schoolyear': year.title})
-
-    @property
-    def has_schoolyear(self):
-        return self.schoolyear is not None
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
 
     def year(self):
         year = self.schoolyear
@@ -725,7 +713,8 @@ class FlourishTermsView(flourish.page.Page):
 
 
 class TermsTertiaryNavigationManager(
-    flourish.page.TertiaryNavigationManager):
+    flourish.page.TertiaryNavigationManager,
+    ActiveSchoolYearContentMixin):
 
     template = InlineViewPageTemplate("""
         <ul tal:attributes="class view/list_class">
@@ -739,11 +728,8 @@ class TermsTertiaryNavigationManager(
     @property
     def items(self):
         result = []
-        schoolyears = ISchoolYearContainer(self.context)
-        active = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            active = schoolyears.get(schoolyear_id, active)
+        active = self.schoolyear
+        schoolyears = active.__parent__ if active is not None else {}
         for schoolyear in schoolyears.values():
             url = '%s/terms?schoolyear_id=%s' % (
                 absoluteURL(self.context, self.request),
@@ -755,29 +741,20 @@ class TermsTertiaryNavigationManager(
         return result
 
 
-class FlourishManageYearsOverview(flourish.page.Content):
+class FlourishManageYearsOverview(flourish.page.Content,
+                                  ActiveSchoolYearContentMixin):
 
     body_template = ViewPageTemplateFile(
         'templates/f_manage_years_overview.pt')
-
-    @property
-    def schoolyear(self):
-        schoolyears = ISchoolYearContainer(self.context)
-        result = schoolyears.getActiveSchoolYear()
-        if 'schoolyear_id' in self.request:
-            schoolyear_id = self.request['schoolyear_id']
-            result = schoolyears.get(schoolyear_id, result)
-        return result
-
-    @property
-    def has_schoolyear(self):
-        return self.schoolyear is not None
 
     @property
     def terms(self):
         terms = ITermContainer(self.schoolyear, None)
         if terms is not None:
             return sorted(terms.values(), key=lambda t:t.first)
+
+    def terms_url(self):
+        return self.url_with_schoolyear_id(self.context, view_name='terms')
 
 
 class TermContainerBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
