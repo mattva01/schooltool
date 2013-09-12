@@ -14,6 +14,7 @@ Bugfixes
 - Manager needs to be in Site Managers and Clerks by default (https://launchpad.net/bugs/1216915)
 - Access setting: allow instructor to add students to their section (https://launchpad.net/bugs/637759)
 - Access setting: allow instructor to modify section
+- Updated translations
 
 Internals
 +++++++++

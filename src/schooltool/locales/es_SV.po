@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-08-22 19:53+0300\n"
-"PO-Revision-Date: 2013-08-21 15:00+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2013-09-07 17:23+0000\n"
+"Last-Translator: Douglas Cerna <douglascerna@yahoo.com>\n"
 "Language-Team: Spanish (El Salvador) <es_SV@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-23 06:00+0000\n"
-"X-Generator: Launchpad (build 16737)\n"
+"X-Launchpad-Export-Date: 2013-09-08 05:04+0000\n"
+"X-Generator: Launchpad (build 16760)\n"
 
 #: /src/schooltool/app/app.py:193
 msgid "Your School"
@@ -235,7 +235,7 @@ msgstr "Nombre"
 
 #: /src/schooltool/app/browser/app.py:923
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 #: /src/schooltool/app/browser/app.py:951
 #: /src/schooltool/app/security.py:304
@@ -373,7 +373,7 @@ msgstr "Abril"
 
 #: /src/schooltool/app/browser/cal.py:118
 msgid "May"
-msgstr ""
+msgstr "Mayo"
 
 #: /src/schooltool/app/browser/cal.py:119
 msgid "June"
@@ -787,7 +787,7 @@ msgstr "Semana"
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:119
 #: /src/schooltool/calendar/browser/templates/calendar_jump_to.pt:9
 msgid "Month"
-msgstr ""
+msgstr "Mes"
 
 #: /src/schooltool/app/browser/cal.py:1687
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:132
@@ -991,7 +991,7 @@ msgstr "Control de ZODB"
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
 #: /src/schooltool/resource/browser/flourish.zcml:223
 msgid "Calendar"
-msgstr ""
+msgstr "Calendario"
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
@@ -1248,7 +1248,7 @@ msgstr "Calendarios Mostrados"
 #: /src/schooltool/app/browser/flourish.zcml:737
 #: /src/schooltool/app/browser/flourish.zcml:747
 msgid "School Logo"
-msgstr ""
+msgstr "Logo de la Escuela"
 
 #: /src/schooltool/app/browser/overlay.py:220
 msgid "Saved changes."
@@ -2065,7 +2065,7 @@ msgstr "Visible"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:25
 msgid "Default"
-msgstr ""
+msgstr "Por Defecto"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
 msgid ""
@@ -2089,12 +2089,16 @@ msgstr ""
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
 msgid "Links can be changed from visible to hidden at any time."
 msgstr ""
+"Los enlaces se pueden cambiar de visibles a ocultos, en cualquier momento."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:18
 msgid ""
 "When users log in, they will usually be directed to the tab selected in the "
 "default column. The default tab must also be visible."
 msgstr ""
+"Cuando los usuarios inician sesión, usualmente serán dirigidos a la pestaña "
+"seleccionada en la columna por defecto. La pestaña por defecto también debe "
+"estar visible."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:12
 #: /src/schooltool/app/browser/templates/login.pt:8
@@ -2824,7 +2828,7 @@ msgstr "Muestra el calendario en la página principal del sitio."
 
 #: /src/schooltool/app/interfaces.py:145
 msgid "School logo"
-msgstr ""
+msgstr "Logo de la escuela"
 
 #: /src/schooltool/app/main.py:311
 msgid "Cannot resolve plugin action order:\n"
@@ -2924,11 +2928,11 @@ msgstr "Líderes asignados."
 
 #: /src/schooltool/app/security.py:349
 msgid "${group} group."
-msgstr ""
+msgstr "Grupo ${group}."
 
 #: /src/schooltool/app/security.py:364
 msgid "${group} group and the super user."
-msgstr ""
+msgstr "El grupo ${group} y el super usuario."
 
 #: /src/schooltool/app/security.zcml:62
 msgid "SchoolTool application"
@@ -3280,7 +3284,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 msgid "Person profile, contacts, groups, etc."
-msgstr ""
+msgstr "Perfil de la persona, contactos, grupos, etc."
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 #: /src/schooltool/basicperson/browser/person.py:1369

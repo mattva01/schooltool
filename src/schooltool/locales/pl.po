@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-23 05:58+0000\n"
-"X-Generator: Launchpad (build 16737)\n"
+"X-Launchpad-Export-Date: 2013-08-24 05:40+0000\n"
+"X-Generator: Launchpad (build 16738)\n"
 "Language: pl\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -6051,7 +6051,7 @@ msgid ""
 "must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all "
 "valid)"
 msgstr ""
-"musi zawierać PRAWDA, FAŁSZ, TAK lub NIE (wielkość znaków nie ma znaczenia)"
+"musi zawierać TRUE, FALSE, YES lub NO (wielkość znaków nie ma znaczenia)"
 
 #: /src/schooltool/export/importer.py:114
 msgid "must have a school year"
@@ -7321,7 +7321,7 @@ msgstr "Całkowity"
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:24
 msgid "There are no ${resources} set up."
-msgstr "Nie dodano jeszcze żadnych ${resources} ."
+msgstr "Nie dodano jeszcze żadnych ${resources}."
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:24
 msgid "school resources"

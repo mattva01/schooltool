@@ -174,6 +174,7 @@ extract-translations: build
 
 .PHONY: compile-translations
 compile-translations:
+	set -e ;\
 	for f in $(LOCALES)/*.po; do \
 	    mkdir -p $${f%.po}/LC_MESSAGES; \
 	    msgfmt -o $${f%.po}/LC_MESSAGES/$(PACKAGE).mo $$f;\
@@ -181,6 +182,7 @@ compile-translations:
 
 .PHONY: update-translations
 update-translations:
+	set -e ;\
 	for f in $(LOCALES)/*.po; do \
 	    msgmerge -qUN $$f $(LOCALES)/$(PACKAGE).pot ;\
 	done
