@@ -32,7 +32,6 @@ from zope.intid import addIntIdSubscriber
 from zope.intid.interfaces import IIntIds
 from zope.component import adapter
 from zope.component import adapts
-from zope.component import getAdapter
 from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import implements
@@ -146,7 +145,7 @@ class InitGroupsForNewSchoolYear(ObjectEventAdapterSubscriber):
             group = groups[id] = Group(title)
             IDependable(group).addDependent('')
         persons = ISchoolToolApplication(None)['persons']
-        manager = persons.get('manager', None)
+        manager = persons.super_user
         if manager is None:
             return
         for id in defaultManagerGroups:
