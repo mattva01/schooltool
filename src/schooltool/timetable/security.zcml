@@ -5,7 +5,7 @@
   <setting
       key="instructors_can_schedule_sections"
       text="Instructors can schedule their own sections."
-      alt_text="Only clerks can section schedules."
+      alt_text="Only clerks can schedule sections."
       default="False" />
 
   <crowd
