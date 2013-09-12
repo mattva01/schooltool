@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-08-22 19:53+0300\n"
-"PO-Revision-Date: 2013-08-22 23:43+0000\n"
-"Last-Translator: rob <linuxned@gmail.com>\n"
+"PO-Revision-Date: 2013-09-08 18:28+0000\n"
+"Last-Translator: raggar <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-23 05:54+0000\n"
-"X-Generator: Launchpad (build 16737)\n"
+"X-Launchpad-Export-Date: 2013-09-09 05:00+0000\n"
+"X-Generator: Launchpad (build 16760)\n"
 "Language: nl\n"
 
 #: /src/schooltool/app/app.py:193
@@ -1618,7 +1618,7 @@ msgstr "gebeurtenis bewerken"
 #: /src/schooltool/app/browser/templates/event.pt:64
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:65
 msgid "Scheduled resources"
-msgstr "Geplande voorzieningen"
+msgstr "Ingeplande voorzieningen"
 
 #: /src/schooltool/app/browser/templates/event.pt:72
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:73
@@ -2324,8 +2324,8 @@ msgid ""
 "<strong>period title</strong>, follows. Section schedule description is "
 "terminated by three asterisks ('***') in the first column."
 msgstr ""
-"Hierna <strong>kunnen</strong> een aantal rijen volgen met de "
-"sectieplanning. Eerst is er een rij met het <strong>rooster-ID</strong>. Dan "
+"Hierna <strong>kunnen</strong> een aantal rijen volgen met de sectie-"
+"inplanning. Eerst is er een rij met het <strong>rooster-ID</strong>. Dan "
 "volgt een aantal regels, die elk een <strong>dagtitel</strong> en een "
 "<strong>periodetitel<strong/> bevatten. De sectieplanningomschrijving wordt "
 "beëindigd met drie asterisken (***) in de eerste kolom."
@@ -2406,10 +2406,10 @@ msgstr ""
 "Het voorbeeld hierboven zal nieuwe secties aanmaken voor de filosofielessen "
 "en literatuurlessen. De secties zullen onderwezen worden vanaf de herfst tot "
 "de lente. De sectie voor de filosofieles heeft personen met de "
-"gebruikersnamen 'johhny' en 'billy' als leerlingen. Deze zal gepland worden "
-"op maandag (twee lessen, periodes 'A' en 'B') en dinsdag. De "
+"gebruikersnamen 'johhny' en 'billy' als leerlingen. Deze zal ingepland "
+"worden op maandag (twee lessen, periodes 'A' en 'B') en dinsdag. De "
 "literatuursectie zal op dezelfde manier verwerkt worden, maar zonder "
-"planning. De SchoolTool-ID's zullen ingesteld worden op literatuur-h in de "
+"inplanning. De SchoolTool-ID's zullen ingesteld worden op literatuur-h in de "
 "herfst en literatuur-l in de lente."
 
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:3
@@ -3000,7 +3000,7 @@ msgstr "Roosters toewijzen"
 
 #: /src/schooltool/app/timetable-integration.zcml:36
 msgid "Change schedule"
-msgstr "Planning wijzigen"
+msgstr "Inplanning wijzigen"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:14
 #: /src/schooltool/basicperson/browser/configure.zcml:217
@@ -3503,7 +3503,7 @@ msgstr "ID-kaart: ${person}"
 
 #: /src/schooltool/basicperson/browser/person.py:1386
 msgid "profile report"
-msgstr ""
+msgstr "Profielrapport"
 
 #: /src/schooltool/basicperson/browser/person.py:1402
 msgid "Username: ${username}"
@@ -3516,15 +3516,15 @@ msgstr "Algemene informatie"
 
 #: /src/schooltool/basicperson/browser/person.py:1494
 msgid "Received"
-msgstr ""
+msgstr "Ontvangen"
 
 #: /src/schooltool/basicperson/browser/person.py:1502
 msgid "Message"
-msgstr ""
+msgstr "Bericht"
 
 #: /src/schooltool/basicperson/browser/person.py:1561
 msgid "(${number} new)"
-msgstr ""
+msgstr "(${number} nieuwe)"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
@@ -4847,7 +4847,7 @@ msgstr "Sectierooster"
 
 #: /src/schooltool/course/browser/section.py:1832
 msgid "section ${title} roster"
-msgstr ""
+msgstr "Sectierooster ${title}"
 
 #: /src/schooltool/course/browser/section.py:1853
 msgid "Instructors: ${instructors}"
@@ -5579,6 +5579,9 @@ msgid ""
 "Most recent checks last. Red indicates insufficient permissions. \"=>\" "
 "indicates relayed checks, usually to parent object."
 msgstr ""
+"Meest recente controles als laatste.  Rood betekent onvoldoende "
+"machtigingen. \"=>\" Betekent doorgegeven controles, meestal naar "
+"bovenliggend object."
 
 #: /src/schooltool/devmode/flourish-overrides.zcml:8
 #: /src/schooltool/skin/flourish/instance/skin.zcml:68
@@ -5942,31 +5945,31 @@ msgstr "Schooljaren"
 #: /src/schooltool/export/export.py:835
 #: /src/schooltool/export/importer.py:1518
 msgid "Section Enrollment"
-msgstr ""
+msgstr "Sectie-inschrijving"
 
 #: /src/schooltool/export/export.py:837
 msgid "Section Schedules"
-msgstr ""
+msgstr "Sectieinplanningen"
 
 #: /src/schooltool/export/export.py:841
 msgid "School Data"
-msgstr ""
+msgstr "Schoolgegevens"
 
 #: /src/schooltool/export/export.py:856
 msgid "Exporting school data"
-msgstr ""
+msgstr "Schoolgegevens exporteren"
 
 #: /src/schooltool/export/export.py:871
 msgid "Export complete"
-msgstr ""
+msgstr "Exporteren voltooid"
 
 #: /src/schooltool/export/export.py:892
 msgid "school export"
-msgstr ""
+msgstr "school export"
 
 #: /src/schooltool/export/export.py:918
 msgid "XLS export"
-msgstr ""
+msgstr "XLS-export"
 
 #: /src/schooltool/export/flourish.zcml:32
 msgid "Import XLS"
@@ -6133,8 +6136,8 @@ msgid ""
 "must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all "
 "valid)"
 msgstr ""
-"moet Waar, Onwaar, JA of NEE zijn (hoofdletters, kleine letters en beide "
-"door elkaar heen is allemaal toegestaan)"
+"moet TRUE, FALSE, YES of NO zijn (hoofdletters, kleine letters en beide door "
+"elkaar heen is allemaal toegestaan)"
 
 #: /src/schooltool/export/importer.py:114
 msgid "must have a school year"
@@ -6210,15 +6213,15 @@ msgstr "schooljaren moeten consistent binnen deze tabel"
 
 #: /src/schooltool/export/importer.py:923
 msgid "Contact Persons"
-msgstr ""
+msgstr "Contact personen"
 
 #: /src/schooltool/export/importer.py:1010
 msgid "Contact Relationships"
-msgstr ""
+msgstr "Contactrelaties"
 
 #: /src/schooltool/export/importer.py:1579
 msgid "Section Timetables"
-msgstr ""
+msgstr "Sectieroosters"
 
 #: /src/schooltool/export/importer.py:1936
 msgid "${sheet_name} ${column}${row} ${message}"
@@ -6231,7 +6234,7 @@ msgstr "De volgende fouten zijn opgetreden bij het importeren:"
 #: /src/schooltool/export/importer.py:2067
 #: /src/schooltool/export/importer.py:2098
 msgid "Overall"
-msgstr ""
+msgstr "Totaal"
 
 #: /src/schooltool/export/interfaces.py:34
 #: /src/schooltool/export/templates/f_import.pt:42
@@ -6251,27 +6254,27 @@ msgstr "Upload XLS-bestand"
 
 #: /src/schooltool/export/templates/f_import_progress.pt:13
 msgid "Import scheduled."
-msgstr ""
+msgstr "Ingeplande import."
 
 #: /src/schooltool/export/templates/f_import_progress.pt:18
 msgid "Importing"
-msgstr ""
+msgstr "Importeren"
 
 #: /src/schooltool/export/templates/f_import_progress.pt:26
 msgid "Committing to database."
-msgstr ""
+msgstr "Toevoegen aan databank."
 
 #: /src/schooltool/export/templates/f_import_progress.pt:31
 msgid "Finished importing."
-msgstr ""
+msgstr "Importeren voltooid."
 
 #: /src/schooltool/export/templates/f_import_progress.pt:34
 msgid "Data not saved due to these errors:"
-msgstr ""
+msgstr "Gegevens niet opgeslagen vanwege de volgende fouten:"
 
 #: /src/schooltool/export/templates/f_import_progress.pt:46
 msgid "Download ${filename}"
-msgstr ""
+msgstr "Download ${filename}"
 
 #: /src/schooltool/export/templates/f_import_progress.pt:52
 #: /src/schooltool/skin/flourish/instance/skin.zcml:36
@@ -6282,7 +6285,7 @@ msgstr "Serverfout"
 
 #: /src/schooltool/export/templates/f_import_progress.pt:54
 msgid "Additional Info"
-msgstr ""
+msgstr "Extra informatie"
 
 #: /src/schooltool/export/templates/f_import_related.pt:9
 #: /src/schooltool/export/templates/import.pt:31
@@ -6982,7 +6985,7 @@ msgstr "Gebruikers kunnen hun eigen agenda niet openbaar maken."
 
 #: /src/schooltool/person/security.zcml:17
 msgid "Only site managers and clerks can change passwords."
-msgstr ""
+msgstr "Alleen sitebeheerders en klerken kunnen wachtwoorden wijzigen."
 
 #: /src/schooltool/person/security.zcml:17
 msgid "Users can change their own passwords."
@@ -7069,11 +7072,11 @@ msgstr "Downloaden"
 #: /src/schooltool/report/browser/report.py:300
 #: /src/schooltool/sampledata/sampledata.pt:80
 msgid "Generate"
-msgstr "Genereren"
+msgstr "Aanmaken"
 
 #: /src/schooltool/report/browser/report.py:449
 msgid "export"
-msgstr ""
+msgstr "Exporteren"
 
 #: /src/schooltool/report/browser/report.py:496
 msgid "Collecting (${name})"
@@ -7081,42 +7084,44 @@ msgstr ""
 
 #: /src/schooltool/report/browser/report.py:501
 msgid "Archive"
-msgstr ""
+msgstr "Archief"
 
 #: /src/schooltool/report/browser/report.py:522
 #: /src/schooltool/report/browser/report.py:531
 msgid "files"
-msgstr ""
+msgstr "Bestanden"
 
 #: /src/schooltool/report/browser/report.py:600
 msgid "Preparing archive"
-msgstr ""
+msgstr "Archief voorbereiden"
 
 #: /src/schooltool/report/browser/report.py:601
 msgid "Archiving"
-msgstr ""
+msgstr "Archiveren"
 
 #: /src/schooltool/report/browser/report.py:602
 msgid "Archive complete"
-msgstr ""
+msgstr "Archiveren voltooid"
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:3
 msgid "Building the report"
-msgstr ""
+msgstr "Rapport opbouwen"
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:4
 msgid "Failed to build the report"
-msgstr ""
+msgstr "Rapport opbouwen mislukt"
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:7
 msgid "Download report"
-msgstr ""
+msgstr "Rapport downloaden"
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:15
 msgid ""
 "You can close this dialog and download the report later from your ${home-"
 "link}."
 msgstr ""
+"U kunt deze dialoog sluiten en het rapport later downloaden vanaf uw ${home-"
+"link}."
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:15
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:41
@@ -7126,33 +7131,33 @@ msgstr ""
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:33
 #: /src/schooltool/report/browser/templates/f_short_report_message.pt:17
 msgid "Generating ${report}..."
-msgstr ""
+msgstr "${report} wordt aangemaakt…"
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:41
 #: /src/schooltool/task/browser/templates/f_short_fail_message.pt:3
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:19
 msgid "System failure."
-msgstr ""
+msgstr "Systeemfout."
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:45
 #: /src/schooltool/report/browser/templates/f_short_report_message.pt:31
 #: /src/schooltool/task/browser/templates/f_short_fail_message.pt:6
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:27
 msgid "Ticket nr. ${ticket_id}."
-msgstr ""
+msgstr "Label-nr. ${ticket_id}."
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:49
 #: /src/schooltool/report/browser/templates/f_short_report_message.pt:34
 #: /src/schooltool/task/browser/templates/f_short_fail_message.pt:9
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:29
 msgid "Please contact your administrator."
-msgstr ""
+msgstr "Neem a.u.b. contact op met uw beheerder."
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:64
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:56
 #: /src/schooltool/task/browser/templates/task_dialog.pt:11
 msgid "Close"
-msgstr ""
+msgstr "Sluiten"
 
 #: /src/schooltool/report/browser/templates/f_report_reference.pt:5
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
@@ -7166,11 +7171,11 @@ msgstr "Bestandstype"
 
 #: /src/schooltool/report/browser/templates/f_short_report_message.pt:7
 msgid "Download ${report} ${link}."
-msgstr ""
+msgstr "Download ${report} ${link}."
 
 #: /src/schooltool/report/browser/templates/f_short_report_message.pt:27
 msgid "System failure while generating ${report}."
-msgstr ""
+msgstr "Er is een systeemfout opgetreden bij het aanmmaken van ${report}."
 
 #: /src/schooltool/report/browser/templates/report_reference.pt:3
 #: /src/schooltool/report/browser/templates/report_reference.pt:7
@@ -7179,11 +7184,11 @@ msgstr "Rapportreferentie"
 
 #: /src/schooltool/report/interfaces.py:99
 msgid "Report"
-msgstr ""
+msgstr "Rapport"
 
 #: /src/schooltool/report/interfaces.py:104
 msgid "Filename"
-msgstr ""
+msgstr "Bestandsnaam"
 
 #: /src/schooltool/report/interfaces.py:108
 msgid "Requested on"
@@ -7193,11 +7198,11 @@ msgstr ""
 #: /src/schooltool/report/report.py:652
 #: /src/schooltool/skin/flourish/report.py:178
 msgid "report"
-msgstr ""
+msgstr "rapport"
 
 #: /src/schooltool/report/security.zcml:21
 msgid "Download reports"
-msgstr ""
+msgstr "Download rapporten"
 
 #: /src/schooltool/report/templates/f_report_link_manager.pt:13
 msgid "${file_type} Reports"
@@ -7383,7 +7388,7 @@ msgstr "Voorzieningenrapport"
 
 #: /src/schooltool/resource/browser/resource.py:967
 msgid "resource report"
-msgstr ""
+msgstr "Bronrapport"
 
 #: /src/schooltool/resource/browser/rml/resource_report.pt:10
 #: /src/schooltool/resource/browser/rml/resource_report.pt:23
@@ -7623,7 +7628,7 @@ msgstr "Reserveringenagenda bekijken"
 
 #: /src/schooltool/resource/security.zcml:96
 msgid "Schedule reservation via calendar"
-msgstr "Reserveringen plannen via de agenda"
+msgstr "Reserveringen inplannen via de agenda"
 
 #: /src/schooltool/sampledata/sampledata.pt:3
 #: /src/schooltool/sampledata/sampledata.pt:9
@@ -8152,20 +8157,20 @@ msgstr "Volgende &raquo;"
 
 #: /src/schooltool/task/browser/flourish.zcml:36
 msgid "Scheduled Tasks"
-msgstr ""
+msgstr "Ingeplande taken"
 
 #: /src/schooltool/task/browser/task.py:120
 msgid "JSON result"
-msgstr ""
+msgstr "JSON-resultaat"
 
 #: /src/schooltool/task/browser/task.py:137
 #: /src/schooltool/task/interfaces.py:34
 msgid "Task ID"
-msgstr ""
+msgstr "Taak-ID"
 
 #: /src/schooltool/task/browser/task.py:142
 msgid "Signature"
-msgstr ""
+msgstr "Handtekening"
 
 #: /src/schooltool/task/browser/task.py:148
 #: /src/schooltool/task/browser/templates/task_status.pt:42
@@ -8175,39 +8180,41 @@ msgstr ""
 
 #: /src/schooltool/task/browser/task.py:156
 msgid "Scheduled"
-msgstr ""
+msgstr "Ingepland"
 
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:8
 msgid "Scheduled."
-msgstr ""
+msgstr "Ingepland."
 
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:14
 msgid "Completed."
-msgstr ""
+msgstr "Voltooid."
 
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:41
 msgid ""
 "You can close this dialog and download the exported data later from your "
 "${home-link}."
 msgstr ""
+"U kunt deze dialoog sluiten en de geëxporteerde  gegevens later van uw "
+"${home-link} downloaden."
 
 #: /src/schooltool/task/browser/templates/task_status.pt:15
 msgid "Task pending or removed"
-msgstr ""
+msgstr "Taak nog in behandeling of verwijderd"
 
 #: /src/schooltool/task/browser/templates/task_status.pt:18
 msgid "In Progress"
-msgstr ""
+msgstr "In behandeling"
 
 #: /src/schooltool/task/browser/templates/task_status.pt:22
 #: /src/schooltool/task/interfaces.py:42
 msgid "Failed"
-msgstr ""
+msgstr "Mislukt"
 
 #: /src/schooltool/task/browser/templates/task_status.pt:30
 #: /src/schooltool/task/interfaces.py:41
 msgid "Succeeded"
-msgstr ""
+msgstr "Voltooid"
 
 #: /src/schooltool/task/browser/templates/task_status.pt:34
 #: /src/schooltool/task/interfaces.py:46
@@ -8221,23 +8228,23 @@ msgstr ""
 
 #: /src/schooltool/task/security.zcml:24
 msgid "Messages"
-msgstr ""
+msgstr "Berichten"
 
 #: /src/schooltool/task/security.zcml:29
 msgid "Read messages"
-msgstr ""
+msgstr "Berichten lezen"
 
 #: /src/schooltool/task/security.zcml:37
 msgid "Browse other users' messages (overview)"
-msgstr ""
+msgstr "Bekijk mededelingen van andere gebruikers (overzicht)"
 
 #: /src/schooltool/task/tasks.py:672
 msgid "Internal server error, ticket ${ticket}"
-msgstr ""
+msgstr "Interne serverfout, labelnummer ${ticket}"
 
 #: /src/schooltool/task/tasks.py:760
 msgid "Senders and recipients"
-msgstr ""
+msgstr "Afzenders en ontvangers"
 
 #: /src/schooltool/task/tasks.py:761
 msgid "Senders, recipients of the message, requesters of a report."
@@ -8541,11 +8548,11 @@ msgstr "Nieuw rooster"
 #: /src/schooltool/timetable/browser/flourish.zcml:441
 #: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:38
 msgid "Schedule"
-msgstr "Planning"
+msgstr "Inplanning"
 
 #: /src/schooltool/timetable/browser/configure.zcml:116
 msgid "Change Schedule for One Day"
-msgstr "Planning wijzigen voor één dag"
+msgstr "Inplanning wijzigen voor één dag"
 
 #: /src/schooltool/timetable/browser/configure.zcml:127
 msgid "Change Timetable for One Day"
@@ -8575,11 +8582,11 @@ msgstr "Rooster"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:462
 msgid "Edit Schedule"
-msgstr "Planning bewerken"
+msgstr "Inplanning bewerken"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:512
 msgid "Schedule Timetable"
-msgstr "Rooster plannen"
+msgstr "Rooster inplannen"
 
 #: /src/schooltool/timetable/browser/flourish.zcml:549
 msgid "Custom date range"
@@ -8615,14 +8622,14 @@ msgstr "De datum hoort bij geen enkele termijn."
 
 #: /src/schooltool/timetable/browser/templates/confirm_schedule_delete.pt:15
 msgid "Are you sure you want to unschedule?"
-msgstr "Wilt u de planning verwijderen?"
+msgstr "Wilt u de inplanning verwijderen?"
 
 #: /src/schooltool/timetable/browser/templates/f_confirm_delete_selected_schedule.pt:3
 msgid ""
 "Removing this schedule will also remove generated calendar events for "
 "${title} and all other related data."
 msgstr ""
-"Het verwijderen van deze planning zal ook de gegenereerde "
+"Het verwijderen van deze inplanning zal ook de gegenereerde "
 "agendagebeurtenissen voor ${title} en alle andere gerelateerde gegevens "
 "verwijderen."
 
@@ -8662,12 +8669,12 @@ msgstr "roosters"
 #: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:45
 #: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:55
 msgid "Scheduled periods"
-msgstr "Geplande periodes"
+msgstr "Ingeplande periodes"
 
 #: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:3
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:36
 msgid "Nothing scheduled yet."
-msgstr "Nog niets gepland."
+msgstr "Nog niets ingepland."
 
 #: /src/schooltool/timetable/browser/templates/f_schedule_container_view.pt:14
 msgid "Select periods"
@@ -8703,7 +8710,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_specialday_change.pt:28
 msgid "Schedule exception on ${date}"
-msgstr "Uitzondering planning op ${date}"
+msgstr "Uitzondering inplannen op ${date}"
 
 #: /src/schooltool/timetable/browser/templates/f_specialday_change.pt:37
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:28
@@ -8740,7 +8747,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_specialday_select.pt:16
 msgid "Schedule exception"
-msgstr "Uitzondering planning"
+msgstr "Uitzondering inplannen"
 
 #: /src/schooltool/timetable/browser/templates/f_timetable.pt:9
 msgid "Timezone:"
@@ -8755,7 +8762,7 @@ msgstr "Periodes"
 #: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:59
 #: /src/schooltool/timetable/browser/templates/timetable.pt:25
 msgid "Time schedule"
-msgstr "Tijdsplanning"
+msgstr "Tijdsinplanning"
 
 #: /src/schooltool/timetable/browser/templates/f_timetable_container_related.pt:6
 msgid ""
@@ -8771,7 +8778,7 @@ msgid ""
 "about your school's schedule."
 msgstr ""
 "Wanneer u een nieuw rooster aanmaakt, zal er een serie vragen gesteld worden "
-"over de planning van uw school."
+"over de inplanning van uw school."
 
 #: /src/schooltool/timetable/browser/templates/f_ttwizard_choice.pt:12
 #: /src/schooltool/timetable/browser/templates/f_ttwizard_form.pt:25
@@ -8785,7 +8792,7 @@ msgstr "Terug"
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:5
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:15
 msgid "Schedule for ${owner}"
-msgstr "Planning voor ${owner}"
+msgstr "Inplanning voor ${owner}"
 
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:24
 msgid "school days"
@@ -8818,12 +8825,12 @@ msgstr "Rooster ${title}"
 
 #: /src/schooltool/timetable/browser/templates/selected_period_date_boundaries.pt:10
 msgid "(scheduled ${starts} - ${ends})"
-msgstr "(gepland ${starts} - ${ends})"
+msgstr "(ingepland ${starts} - ${ends})"
 
 #: /src/schooltool/timetable/browser/templates/selected_periods_add.pt:4
 #: /src/schooltool/timetable/browser/templates/selected_periods_add.pt:11
 msgid "Scheduling for ${object}"
-msgstr "Planning voor ${object}"
+msgstr "Inplanning voor ${object}"
 
 #: /src/schooltool/timetable/browser/templates/selected_periods_content.pt:6
 msgid "No periods selected."
@@ -8836,7 +8843,7 @@ msgstr "Opeenvolgende periodes worden beschouwd als één enkele bijeenkomst."
 #: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:4
 #: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:12
 msgid "Scheduling for ${section}"
-msgstr "Planning voor ${section}"
+msgstr "Inplanning voor ${section}"
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:3
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:6
@@ -8957,7 +8964,7 @@ msgstr "Toepassen tot"
 
 #: /src/schooltool/timetable/browser/timetable.py:405
 msgid "Schedule a school timetable"
-msgstr "Schoolrooster plannen"
+msgstr "Schoolrooster inplannen"
 
 #: /src/schooltool/timetable/browser/timetable.py:521
 msgid "First term"
@@ -8974,7 +8981,7 @@ msgstr "Opslaan"
 
 #: /src/schooltool/timetable/browser/timetable.py:619
 msgid "Unschedule timetable ${timetable}"
-msgstr "Planning rooster ${timetable} verwijderen"
+msgstr "Inplanning rooster ${timetable} verwijderen"
 
 #: /src/schooltool/timetable/browser/timetable.py:641
 msgid "Delete ${timetable}"
@@ -9139,11 +9146,11 @@ msgid ""
 "equivalent?"
 msgstr ""
 "Controleert u de aanwezigheid van de leerlingen voor de gehele dag in een "
-"\"thuisklas\"-periode of equivalent?"
+"thuisklas-periode of equivalent?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:810
 msgid "Please indicate the homeroom period(s) for each day:"
-msgstr "Geef de \"thuisklas\"-periodes aan voor elke dag:"
+msgstr "Geef de thuisklas-periodes aan voor elke dag:"
 
 #: /src/schooltool/timetable/interfaces.py:46
 msgid "Lesson"
@@ -9167,11 +9174,11 @@ msgstr "Soort activiteit."
 
 #: /src/schooltool/timetable/interfaces.py:104
 msgid "First scheduled day"
-msgstr "Eerste geplande dag"
+msgstr "Eerste ingeplande dag"
 
 #: /src/schooltool/timetable/interfaces.py:108
 msgid "Last scheduled day"
-msgstr "Laatste geplande dag"
+msgstr "Laatste ingeplande dag"
 
 #: /src/schooltool/timetable/interfaces.py:130
 msgid "Exceptions"

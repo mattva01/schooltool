@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-08-22 19:53+0300\n"
-"PO-Revision-Date: 2013-08-22 23:44+0000\n"
-"Last-Translator: Mads Dyrmann Larsen <madsdyrmannlarsen@gmail.com>\n"
+"PO-Revision-Date: 2013-09-03 18:39+0000\n"
+"Last-Translator: suemi mika takahashi <Unknown>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-23 05:54+0000\n"
-"X-Generator: Launchpad (build 16737)\n"
+"X-Launchpad-Export-Date: 2013-09-04 05:04+0000\n"
+"X-Generator: Launchpad (build 16753)\n"
 "Language: da\n"
 
 #: /src/schooltool/app/app.py:193
@@ -1249,7 +1249,7 @@ msgstr "Viste kalendere"
 #: /src/schooltool/app/browser/flourish.zcml:737
 #: /src/schooltool/app/browser/flourish.zcml:747
 msgid "School Logo"
-msgstr ""
+msgstr "skole logo"
 
 #: /src/schooltool/app/browser/overlay.py:220
 msgid "Saved changes."
@@ -2063,7 +2063,7 @@ msgstr "Synlig"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:25
 msgid "Default"
-msgstr ""
+msgstr "Standard"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
 msgid ""
@@ -2085,7 +2085,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
 msgid "Links can be changed from visible to hidden at any time."
-msgstr ""
+msgstr "links kan blive ændret fra synlige til skuldte fra hver en tid."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:18
 msgid ""
@@ -3486,7 +3486,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:1402
 msgid "Username: ${username}"
-msgstr ""
+msgstr "Brugernavn: ${username}"
 
 #: /src/schooltool/basicperson/browser/person.py:1404
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
@@ -3495,15 +3495,15 @@ msgstr "Generelle oplysninger"
 
 #: /src/schooltool/basicperson/browser/person.py:1494
 msgid "Received"
-msgstr ""
+msgstr "Modtaget"
 
 #: /src/schooltool/basicperson/browser/person.py:1502
 msgid "Message"
-msgstr ""
+msgstr "Besked"
 
 #: /src/schooltool/basicperson/browser/person.py:1561
 msgid "(${number} new)"
-msgstr ""
+msgstr "(${number} ny)"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
@@ -4034,19 +4034,19 @@ msgstr "Reserver ressourcer"
 
 #: /src/schooltool/common/fields.py:38
 msgid "Image size"
-msgstr ""
+msgstr "Billedstørrelse"
 
 #: /src/schooltool/common/fields.py:39
 msgid "Size in pixels"
-msgstr ""
+msgstr "Størrelse i pixels"
 
 #: /src/schooltool/common/fields.py:44
 msgid "Image format"
-msgstr ""
+msgstr "Billedformat"
 
 #: /src/schooltool/common/fields.py:48
 msgid "Max file size in bytes"
-msgstr ""
+msgstr "Maksimal filstørrelse i bytes"
 
 #: /src/schooltool/common/security.zcml:12
 #: /src/schooltool/course/browser/configure.zcml:25
@@ -4664,22 +4664,22 @@ msgstr "Importer studerende"
 
 #: /src/schooltool/course/browser/flourish.zcml:644
 msgid "Roster"
-msgstr ""
+msgstr "vagtplan"
 
 #: /src/schooltool/course/browser/flourish.zcml:644
 msgid "Students and instructors of a section"
-msgstr ""
+msgstr "Elever og undervisere fra et afsnit"
 
 #: /src/schooltool/course/browser/rml/section_roster.pt:11
 msgid "Students (continued)"
-msgstr ""
+msgstr "Elever (fortsættelse)"
 
 #: /src/schooltool/course/browser/rml/section_roster.pt:14
 #: /src/schooltool/resource/browser/rml/resource_report.pt:18
 #: /src/schooltool/skin/flourish/rml/pdf_form.pt:14
 #: /src/schooltool/table/rml/grid_part.pt:42
 msgid "Continued on next page &gt;"
-msgstr ""
+msgstr "Fortsættelse på næste side &gt;"
 
 #: /src/schooltool/course/browser/rml/section_roster.pt:23
 #: /src/schooltool/course/browser/templates/f_section_roster_rml.pt:15
@@ -4751,6 +4751,8 @@ msgstr "Sektion titel"
 msgid ""
 "If no title is specified, one will be created based on the course title."
 msgstr ""
+"Hvis ingen titel er specificeret, en vil være skabt på grundlag af kursets "
+"titel."
 
 #: /src/schooltool/course/browser/section.py:1295
 #: /src/schooltool/course/browser/section.py:1517
@@ -4767,7 +4769,7 @@ msgstr "Vælg et kursus"
 
 #: /src/schooltool/course/browser/section.py:1470
 msgid "Additional locations can be added via the section view."
-msgstr ""
+msgstr "Yderligere placeringer kan tilføjes via snitbillede."
 
 #: /src/schooltool/course/browser/section.py:1580
 msgid "Current instructors"
@@ -4815,15 +4817,15 @@ msgstr "Link ${section} til sektion i et andet termin"
 
 #: /src/schooltool/course/browser/section.py:1833
 msgid "Section Roster"
-msgstr ""
+msgstr "Vagtplanens afsnit"
 
 #: /src/schooltool/course/browser/section.py:1832
 msgid "section ${title} roster"
-msgstr ""
+msgstr "Afsnit ${title} vagtplan"
 
 #: /src/schooltool/course/browser/section.py:1853
 msgid "Instructors: ${instructors}"
-msgstr ""
+msgstr "Undervisere: ${instructors}"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
 #: /src/schooltool/course/browser/templates/link_section.pt:9
@@ -5049,7 +5051,7 @@ msgstr "Rediger dette kursus"
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:78
 msgid "This course has no sections"
-msgstr ""
+msgstr "Dette kursus har ingen sektioner"
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:84
 msgid "Edit responsible parties for this course"
@@ -5178,7 +5180,7 @@ msgstr "Link til en eksisterende sektion"
 
 #: /src/schooltool/course/browser/templates/f_section_list_table_filter.pt:25
 msgid "(${count} sections)"
-msgstr ""
+msgstr "(${count} sektioner)"
 
 #: /src/schooltool/course/browser/templates/f_section_member_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:3
@@ -5205,7 +5207,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_table_filter.pt:41
 msgid "All courses"
-msgstr ""
+msgstr "Alle kurser"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:4
 msgid "Edit this section"
@@ -5908,31 +5910,31 @@ msgstr "Skoleår"
 #: /src/schooltool/export/export.py:835
 #: /src/schooltool/export/importer.py:1518
 msgid "Section Enrollment"
-msgstr ""
+msgstr "Tilmeldning af afsnit"
 
 #: /src/schooltool/export/export.py:837
 msgid "Section Schedules"
-msgstr ""
+msgstr "Tidsplaner for afdeling"
 
 #: /src/schooltool/export/export.py:841
 msgid "School Data"
-msgstr ""
+msgstr "skoledata"
 
 #: /src/schooltool/export/export.py:856
 msgid "Exporting school data"
-msgstr ""
+msgstr "Eksportere skoledata"
 
 #: /src/schooltool/export/export.py:871
 msgid "Export complete"
-msgstr ""
+msgstr "Eksport færdig"
 
 #: /src/schooltool/export/export.py:892
 msgid "school export"
-msgstr ""
+msgstr "skoleeksport"
 
 #: /src/schooltool/export/export.py:918
 msgid "XLS export"
-msgstr ""
+msgstr "XLS eksport"
 
 #: /src/schooltool/export/flourish.zcml:32
 msgid "Import XLS"
@@ -5955,13 +5957,14 @@ msgstr ""
 
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School Export"
-msgstr ""
+msgstr "Skoleeksport"
 
 #: /src/schooltool/export/importer.py:79
 msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
 msgstr ""
+"Skoleredskaber kan ikke læse denne fil. Er det et xls formateret regneark?"
 
-#: /src/schooltool/export/importer.py:69
+#: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
 msgstr "Er ikke et gyldigt heltal"
 
@@ -6087,7 +6090,7 @@ msgstr "Er ikke et gyldig resource id"
 
 #: /src/schooltool/export/importer.py:110
 msgid "Username cannot contain non-ascii characters"
-msgstr ""
+msgstr "Brugernavn kan ikke indeholde nogen ASCII-tegn"
 
 #: /src/schooltool/export/importer.py:111
 msgid "is not a valid contact relationship"
@@ -6098,26 +6101,28 @@ msgid ""
 "must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all "
 "valid)"
 msgstr ""
+"Må være enten Sandt, Falsk, Ja eller Nej (øvre, nedre og blandet sag er alle "
+"gyldige)"
 
 #: /src/schooltool/export/importer.py:114
 msgid "must have a school year"
-msgstr ""
+msgstr "Må have et skoleår"
 
 #: /src/schooltool/export/importer.py:115
 msgid "must have a course"
-msgstr ""
+msgstr "må have et kursus"
 
 #: /src/schooltool/export/importer.py:116
 msgid "must have a term"
-msgstr ""
+msgstr "må have en valgperiode"
 
 #: /src/schooltool/export/importer.py:117
 msgid "the current section is in the first term of the school year"
-msgstr ""
+msgstr "den aktuelle sektion er i den første periode af skoleåret"
 
 #: /src/schooltool/export/importer.py:118
 msgid "the current section is in the last term of the school year"
-msgstr ""
+msgstr "den aktuelle sektion er i den sidste periode af skoleåret"
 
 #: /src/schooltool/export/importer.py:119
 msgid "is not a valid section id in the previous term"

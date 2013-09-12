@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-08-22 19:53+0300\n"
-"PO-Revision-Date: 2013-08-22 23:37+0000\n"
-"Last-Translator: Daniel Winzen <d@winzen4.de>\n"
+"PO-Revision-Date: 2013-09-03 11:12+0000\n"
+"Last-Translator: Phillip Sz <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-23 05:55+0000\n"
-"X-Generator: Launchpad (build 16737)\n"
+"X-Launchpad-Export-Date: 2013-09-04 05:04+0000\n"
+"X-Generator: Launchpad (build 16753)\n"
 "Language: de\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -3280,7 +3280,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 msgid "Person profile, contacts, groups, etc."
-msgstr ""
+msgstr "Personen Profile, Kontakte, Gruppen, etc."
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 #: /src/schooltool/basicperson/browser/person.py:1369
@@ -3321,6 +3321,8 @@ msgstr "Lehrer"
 #: /src/schooltool/basicperson/browser/person.py:164
 msgid "Cannot begin with '+' or '@,' contain non-ascii characters or '/.'"
 msgstr ""
+"Kann nicht mit '+' oder '@' beginnen, darf nur keine-ASCII-Zeichen oder '/' "
+"enthalten."
 
 #: /src/schooltool/basicperson/browser/person.py:169
 msgid "Users cannot log in until a password is assigned."
@@ -4725,7 +4727,7 @@ msgstr "Schuljahresabschnitt"
 #: /src/schooltool/course/browser/section.py:1077
 #: /src/schooltool/course/browser/templates/f_section_filter.pt:6
 msgid "Section title"
-msgstr ""
+msgstr "Bereichsname"
 
 #: /src/schooltool/course/browser/section.py:1287
 msgid ""
@@ -4767,11 +4769,11 @@ msgstr "Schüler hinzufügen"
 
 #: /src/schooltool/course/browser/section.py:1380
 msgid "Current locations"
-msgstr ""
+msgstr "Aktuelle Orte"
 
 #: /src/schooltool/course/browser/section.py:1381
 msgid "Add locations"
-msgstr ""
+msgstr "Orte hinzufügen"
 
 #: /src/schooltool/course/browser/section.py:1404
 msgid "Current equipment"
@@ -5148,7 +5150,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_list_table_filter.pt:25
 msgid "(${count} sections)"
-msgstr ""
+msgstr "(${count} Bereiche)"
 
 #: /src/schooltool/course/browser/templates/f_section_member_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:3
@@ -6044,7 +6046,7 @@ msgstr "ist keine gültige Stunde am gegebenen Tag"
 
 #: /src/schooltool/export/importer.py:105
 msgid "is not a valid username or contact id"
-msgstr ""
+msgstr "ist kein gültiger Benutzername oder Kontakt ID"
 
 #: /src/schooltool/export/importer.py:106
 msgid "must be empty when ID is a user id"
@@ -6102,7 +6104,7 @@ msgstr ""
 
 #: /src/schooltool/export/importer.py:122
 msgid "no day is defined in this row"
-msgstr ""
+msgstr "Es ist kein Tag in dieser Zeile definiert"
 
 #: /src/schooltool/export/importer.py:123
 msgid "must have a valid period id"
@@ -6114,11 +6116,11 @@ msgstr ""
 
 #: /src/schooltool/export/importer.py:125
 msgid "gender must be male or female"
-msgstr ""
+msgstr "Geschlecht muss Männlich oder Weiblich sein"
 
 #: /src/schooltool/export/importer.py:126
 msgid "has an invalid username"
-msgstr ""
+msgstr "hat einen ungültigen Benutzernamen"
 
 #: /src/schooltool/export/importer.py:127
 msgid "has an invalid resource id"
@@ -6511,7 +6513,7 @@ msgstr "Gruppen bearbeiten"
 
 #: /src/schooltool/group/group.py:63
 msgid "Site Managers"
-msgstr ""
+msgstr "Seitenverwaltung"
 
 #: /src/schooltool/group/group.py:66
 msgid "Clerks"
@@ -6519,7 +6521,7 @@ msgstr "Mitarbeiter"
 
 #: /src/schooltool/group/group.py:67
 msgid "School Administrators"
-msgstr ""
+msgstr "Schul-Administratoren"
 
 #: /src/schooltool/group/security.zcml:5
 msgid "Only school administration can view the list of groups."
@@ -7664,7 +7666,7 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:802
 msgid "Please select a school year before clicking 'Submit'."
-msgstr ""
+msgstr "Bitte wählen Sie ein Schuljahr bevor Sie auf 'Absenden' klicken."
 
 #: /src/schooltool/schoolyear/browser/templates/f_confirm_delete_schoolyear.pt:1
 msgid ""
@@ -7812,7 +7814,7 @@ msgstr "Betrete einstellungen"
 
 #: /src/schooltool/securitypolicy/browser/templates/f_security_descriptions.pt:4
 msgid "Edit the access rights"
-msgstr ""
+msgstr "Zugriffsrechte bearbeiten"
 
 #: /src/schooltool/securitypolicy/browser/templates/f_security_descriptions.pt:48
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:56
@@ -7821,7 +7823,7 @@ msgstr "Legende"
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:9
 msgid "Access rights"
-msgstr ""
+msgstr "Zugriffsrechte"
 
 #: /src/schooltool/securitypolicy/browser/views.py:56
 msgid "Section information"
@@ -7923,7 +7925,7 @@ msgstr ""
 
 #: /src/schooltool/skin/flourish/templates/image_input.pt:11
 msgid "delete this image"
-msgstr ""
+msgstr "Dieses Bild löschen"
 
 #: /src/schooltool/skin/flourish/templates/main.pt:89
 msgid "server running"
@@ -7939,7 +7941,7 @@ msgstr "Die hochgeladene Datei ist kein JPEG oder PNG Bild"
 
 #: /src/schooltool/skin/flourish/widgets.py:248
 msgid "The image uploaded cannot be larger than ${size} MB"
-msgstr ""
+msgstr "Das hochgeladene Bild darf nicht größer als ${size} MB sein"
 
 #: /src/schooltool/skin/templates/error.pt:15
 #: /src/schooltool/skin/templates/f_error.pt:2
@@ -8031,7 +8033,7 @@ msgstr ""
 
 #: /src/schooltool/skin/widgets.py:103
 msgid "Year has to be equal or greater than 1900"
-msgstr ""
+msgstr "Das Jahr muss größer oder gleich 1900 sein"
 
 #: /src/schooltool/table/pdf.py:637
 msgid "Continued ..."

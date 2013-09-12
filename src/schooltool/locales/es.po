@@ -7,14 +7,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-22 19:53+0300\n"
-"PO-Revision-Date: 2013-08-22 23:43+0000\n"
-"Last-Translator: Julio Costa <juliocostaz@gmail.com>\n"
+"PO-Revision-Date: 2013-08-29 14:42+0000\n"
+"Last-Translator: Sergio Cuellar Valdes <herrsergio@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-23 05:58+0000\n"
-"X-Generator: Launchpad (build 16737)\n"
+"X-Launchpad-Export-Date: 2013-08-30 05:25+0000\n"
+"X-Generator: Launchpad (build 16750)\n"
 "Language: es\n"
 
 #: /src/schooltool/app/app.py:193
@@ -4755,7 +4755,7 @@ msgstr "Información de la sección"
 
 #: /src/schooltool/course/browser/section.py:1206
 msgid "Starting term is later than ending term"
-msgstr ""
+msgstr "La fecha del periodo de incio es más grande que la del periodo final"
 
 #: /src/schooltool/course/browser/section.py:1232
 msgid "Select a course"
@@ -4819,7 +4819,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1853
 msgid "Instructors: ${instructors}"
-msgstr ""
+msgstr "Instructores: ${instructors}"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
 #: /src/schooltool/course/browser/templates/link_section.pt:9
@@ -5024,7 +5024,7 @@ msgstr "Editar este curso"
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:78
 msgid "This course has no sections"
-msgstr ""
+msgstr "Este curso no tiene secciones"
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:84
 msgid "Edit responsible parties for this course"
@@ -5074,6 +5074,8 @@ msgid ""
 "Select a section and click 'Link' if you would like to copy and link this "
 "section to the target section."
 msgstr ""
+"Seleccione una sección y haga clic en 'Enlace' si usted desea copiar y "
+"vincular esta sección a la sección de destino."
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:33
 msgid "Instructor"
@@ -5085,6 +5087,9 @@ msgid ""
 "You may provide part of an instructor's name or username and click 'Filter' "
 "to limit the list of sections to those taught by a matching instructor."
 msgstr ""
+"Usted puede proporcionar una parte del nombre o nombre de usuario de un "
+"instructor y haga clic en \"Filtro\" para limitar la lista de las secciones "
+"a las que enseña un instructor correspondiente."
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:51
 #: /src/schooltool/course/browser/templates/link_existing.pt:46
@@ -5094,7 +5099,7 @@ msgstr "Filtro"
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:61
 #: /src/schooltool/course/browser/templates/link_existing.pt:35
 msgid "You must select a section before clicking 'Link'."
-msgstr ""
+msgstr "Debe seleccionar una sección antes de hacer clic en 'Enlace'."
 
 #. Default: "Link"
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:96
@@ -5113,7 +5118,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:21
 msgid "There are no courses defined for ${schoolyear}."
-msgstr ""
+msgstr "No hay cursos definidos para ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:25
 msgid "Manage sections"
@@ -5125,12 +5130,12 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:40
 msgid "There are no sections defined for ${schoolyear}."
-msgstr ""
+msgstr "No hay secciones definidas para ${schoolyear}."
 
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:25
 #: /src/schooltool/course/browser/templates/f_section_view.pt:104
 msgid "(currently viewing)"
-msgstr ""
+msgstr "(viendo actualmente)"
 
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:43
 msgid "Unlink"
@@ -5139,21 +5144,22 @@ msgstr "Desvincular"
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:92
 #: /src/schooltool/course/browser/templates/section_linkage.pt:55
 msgid "Extend to This Term"
-msgstr ""
+msgstr "Extender a este término"
 
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:119
 #: /src/schooltool/course/browser/templates/section_linkage.pt:59
 msgid "Link an Existing Section"
-msgstr ""
+msgstr "Vincular una sección existente"
 
 #: /src/schooltool/course/browser/templates/f_section_list_table_filter.pt:25
 msgid "(${count} sections)"
-msgstr ""
+msgstr "(${count} secciones)"
 
 #: /src/schooltool/course/browser/templates/f_section_member_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:3
 msgid "CSV data should contain a SchoolTool username in each line."
 msgstr ""
+"Datos CSV debe contener un nombre de usuario SchoolTool en cada línea."
 
 #. Default: "john_b peter_j"
 #: /src/schooltool/course/browser/templates/f_section_member_csvimport_description.pt:8
@@ -5170,6 +5176,8 @@ msgid ""
 "The above example will add users 'john_b' and 'peter_j' as students of this "
 "section."
 msgstr ""
+"El ejemplo anterior añadirá a los usuarios \"john_b 'y' peter_j 'como "
+"estudiantes de esta sección."
 
 #: /src/schooltool/course/browser/templates/f_section_table_filter.pt:41
 msgid "All courses"
@@ -5177,11 +5185,11 @@ msgstr "Todos los cursos"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:4
 msgid "Edit this section"
-msgstr ""
+msgstr "Editar esta sección"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:83
 msgid "This section has no courses"
-msgstr ""
+msgstr "Esta sección no tiene cursos"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:89
 msgid "Edit terms for this section"
@@ -5189,19 +5197,19 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:115
 msgid "Edit instructors for this section"
-msgstr ""
+msgstr "Editar instructores para esta sección"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:125
 msgid "This section has no instructors"
-msgstr ""
+msgstr "Esta sección no tiene instructores"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:130
 msgid "Edit students for this section"
-msgstr ""
+msgstr "Editar los estudiantes para esta sección"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:140
 msgid "This section has no students"
-msgstr ""
+msgstr "Esta sección no tiene estudiantes"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:149
 msgid "Edit locations for this section"
@@ -5213,7 +5221,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:165
 msgid "Edit equipment for this section"
-msgstr ""
+msgstr "Editar equipo para esta sección"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:176
 msgid "This section has no equipment"
@@ -5337,15 +5345,15 @@ msgstr ""
 #: /src/schooltool/course/interfaces.py:36
 #: /src/schooltool/course/interfaces.py:129
 msgid "SchoolTool ID"
-msgstr ""
+msgstr "SchoolTool ID"
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "An internal identifier of this course."
-msgstr ""
+msgstr "Un identificador interno de este curso."
 
 #: /src/schooltool/course/interfaces.py:53
 msgid "School identifier of this course."
-msgstr ""
+msgstr "Identificador de la escuela de este curso."
 
 #: /src/schooltool/course/interfaces.py:58
 msgid "Alternate ID"
@@ -5354,6 +5362,7 @@ msgstr ""
 #: /src/schooltool/course/interfaces.py:52
 msgid "Additional identifier for outside tracking or other purposes."
 msgstr ""
+"Identificador adicional para el seguimiento de fuera o para otros fines."
 
 #: /src/schooltool/course/interfaces.py:55
 msgid "Credits"
@@ -5373,7 +5382,7 @@ msgstr ""
 
 #: /src/schooltool/course/interfaces.py:130
 msgid "An internal identifier of this section."
-msgstr ""
+msgstr "Un identificador interno de esta sección."
 
 #: /src/schooltool/course/section.py:89
 msgid "${instructors} -- ${section_title}"
@@ -5505,11 +5514,11 @@ msgstr "Herramienta para desarrolladores"
 #: /src/schooltool/devmode/f_unauthorized.pt:3
 #: /src/schooltool/skin/templates/f_unauthorized.pt:3
 msgid "You are not authorized"
-msgstr ""
+msgstr "No está autorizado"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:9
 msgid "Permission checks"
-msgstr ""
+msgstr "Comprobaciones de permisos"
 
 #: /src/schooltool/devmode/f_unauthorized.pt:11
 msgid ""
@@ -5625,7 +5634,7 @@ msgstr "El nombre de host es requerido para habilitar el servicio"
 #: /src/schooltool/email/browser/email.py:240
 #: /src/schooltool/person/browser/person.py:366
 msgid "Supplied new passwords are not identical"
-msgstr ""
+msgstr "Nuevas contraseñas proporcionadas no son idénticas"
 
 #: /src/schooltool/email/browser/email.py:278
 #: /src/schooltool/email/browser/email.py:656
@@ -5710,15 +5719,15 @@ msgstr "Cuerpo del mensaje"
 
 #: /src/schooltool/email/browser/email.py:843
 msgid "Email Queue (${count})"
-msgstr ""
+msgstr "Cola de correos (${count})"
 
 #: /src/schooltool/email/browser/flourish.zcml:37
 msgid "Outgoing Email Queue"
-msgstr ""
+msgstr "Cola de correo saliente"
 
 #: /src/schooltool/email/browser/flourish.zcml:49
 msgid "Outgoing Email Settings"
-msgstr ""
+msgstr "Configuración del correo electrónico saliente"
 
 #: /src/schooltool/email/browser/flourish.zcml:60
 #: /src/schooltool/email/browser/flourish.zcml:106
@@ -5746,7 +5755,7 @@ msgstr "Estado del servidor: ${status}"
 
 #: /src/schooltool/email/browser/templates/f_email_container.pt:6
 msgid "Change email settings"
-msgstr ""
+msgstr "Cambiar la configuración de correo electrónico"
 
 #: /src/schooltool/email/browser/templates/f_email_container_related.pt:6
 msgid ""
@@ -5754,6 +5763,11 @@ msgid ""
 "server. That is, SchoolTool is not an email server, it sends mail as an "
 "email client, like a desktop application such as Evolution or Outlook."
 msgstr ""
+"SchoolTool puede enviar correos electrónicos a través de su servidor de "
+"correo electrónico de su escuela u otro servidor SMTP. Es decir, SchoolTool "
+"no es un servidor de correo electrónico, se envía el correo como un cliente "
+"de correo electrónico, es decir, como una aplicación de escritorio como "
+"Evolution u Outlook."
 
 #: /src/schooltool/email/browser/templates/f_email_container_related.pt:12
 msgid ""
@@ -5761,10 +5775,14 @@ msgid ""
 "your school's server, your ISP, or your webmail provider to configure a mail "
 "client to send mail via the provider's SMTP service."
 msgstr ""
+"Para activar el envio de mensajes de correo electrónico de SchoolTool, "
+"necesitará las instrucciones del servidor de su escuela, su ISP o proveedor "
+"de correo web para configurar un cliente de correo para enviar correo a "
+"través del servicio SMTP del proveedor."
 
 #: /src/schooltool/email/browser/templates/f_email_settings_overview.pt:3
 msgid "Edit email settings"
-msgstr ""
+msgstr "Editar configuración de correo electrónico"
 
 #: /src/schooltool/email/browser/templates/f_email_view.pt:2
 msgid "Email Details"
@@ -5871,31 +5889,31 @@ msgstr "Años Escolares"
 #: /src/schooltool/export/export.py:835
 #: /src/schooltool/export/importer.py:1518
 msgid "Section Enrollment"
-msgstr ""
+msgstr "Sección de Inscripción"
 
 #: /src/schooltool/export/export.py:837
 msgid "Section Schedules"
-msgstr ""
+msgstr "Sección de Horarios"
 
 #: /src/schooltool/export/export.py:841
 msgid "School Data"
-msgstr ""
+msgstr "Datos de la Escuela"
 
 #: /src/schooltool/export/export.py:856
 msgid "Exporting school data"
-msgstr ""
+msgstr "Exportar datos de la escuela"
 
 #: /src/schooltool/export/export.py:871
 msgid "Export complete"
-msgstr ""
+msgstr "Exportación completa"
 
 #: /src/schooltool/export/export.py:892
 msgid "school export"
-msgstr ""
+msgstr "exportar escuela"
 
 #: /src/schooltool/export/export.py:918
 msgid "XLS export"
-msgstr ""
+msgstr "Exportar a formato XLS"
 
 #: /src/schooltool/export/flourish.zcml:32
 msgid "Import XLS"
@@ -5912,14 +5930,19 @@ msgid ""
 "including students, contacts, years, terms, courses, groups and timetables.  "
 "Can be modified and re-imported."
 msgstr ""
+"Una sola hoja de cálculo .xls que contiene la estructura básica de la "
+"escuela, incluyendo a los estudiantes, contactos, años, términos, cursos, "
+"grupos y horarios. Se puede modificar y volver a importar."
 
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School Export"
-msgstr ""
+msgstr "Exportar Escuela"
 
 #: /src/schooltool/export/importer.py:79
 msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
 msgstr ""
+"SchoolTool no puede leer este archivo. ¿Es una hoja de cálculo en formato "
+".xls?"
 
 #: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
@@ -6023,7 +6046,7 @@ msgstr "no es un nombre de usuario válido"
 
 #: /src/schooltool/export/importer.py:102
 msgid "is not a valid timetable in the given school year"
-msgstr ""
+msgstr "no es un calendario válido en el año escolar"
 
 #: /src/schooltool/export/importer.py:103
 msgid "is not a valid day id for the given timetable"
@@ -6061,15 +6084,15 @@ msgstr ""
 
 #: /src/schooltool/export/importer.py:114
 msgid "must have a school year"
-msgstr ""
+msgstr "debe tener un año escolar"
 
 #: /src/schooltool/export/importer.py:115
 msgid "must have a course"
-msgstr ""
+msgstr "debe tener un curso"
 
 #: /src/schooltool/export/importer.py:116
 msgid "must have a term"
-msgstr ""
+msgstr "debe tener un término"
 
 #: /src/schooltool/export/importer.py:117
 msgid "the current section is in the first term of the school year"
@@ -6093,7 +6116,7 @@ msgstr ""
 
 #: /src/schooltool/export/importer.py:122
 msgid "no day is defined in this row"
-msgstr ""
+msgstr "ningún día se define en esta fila"
 
 #: /src/schooltool/export/importer.py:123
 msgid "must have a valid period id"
