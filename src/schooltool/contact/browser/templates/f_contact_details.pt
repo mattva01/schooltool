@@ -1,0 +1,37 @@
+<metal:block i18n:domain="schooltool">
+  <h3>
+    <tal:block condition="view/has_data" i18n:translate="">
+      Contact information
+    </tal:block>
+  </h3>
+  <table class="form-fields">
+    <tbody>
+      <tal:loop repeat="widget view/widgets/values">
+        <tr tal:condition="widget/value">
+          <td tal:content="widget/label" class="label"/>
+          <td tal:content="structure widget/render" />
+        </tr>
+      </tal:loop>
+      <tr tal:repeat="info view/relationships">
+        <td class="label">
+          <label>
+            <span tal:condition="info/relationship" i18n:translate="">
+              <tal:block tal:replace="info/getRelationshipTitle" i18n:name="relationship" />
+              of
+            </span>
+            <span tal:condition="not:info/relationship" i18n:translate="">
+              Contact of
+            </span>
+          </label>
+        </td>
+        <td>
+          <div class="widget">
+            <span>
+              <a tal:replace="structure info/__parent__/schooltool:content/link" />
+            </span>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</metal:block>

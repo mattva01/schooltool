@@ -27,7 +27,7 @@ from z3c.form.error import ErrorViewSnippet
 from z3c.form.term import BoolTerms
 from z3c.form.interfaces import IRadioWidget
 
-from schooltool.skin.flourish import page, viewlet, tal
+from schooltool.skin.flourish import page, content, viewlet, tal
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin.flourish.interfaces import IFlourishLayer
 
@@ -160,6 +160,16 @@ class FlourishErrorViewSnippet(ErrorViewSnippet):
     def update(self):
         super(FlourishErrorViewSnippet, self).update()
         self.widget.addClass('error')
+
+
+class FormContent(content.ContentProvider, z3c.form.form.Form):
+
+    def update(self):
+        z3c.form.form.Form.update(self)
+        content.ContentProvider.update(self)
+
+    def render(self, *args, **kw):
+        return z3c.form.form.Form.render(self)
 
 
 class FormViewlet(viewlet.Viewlet, z3c.form.form.Form):

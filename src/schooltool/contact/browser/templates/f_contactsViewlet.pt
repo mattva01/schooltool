@@ -1,5 +1,9 @@
 <div i18n:domain="schooltool">
   <h2 i18n:translate="">Contacts</h2>
+  <div>
+
+  <tal:block tal:content="structure view/bound_contact/schooltool:content/details" />
+
   <div tal:define="contacts view/getContacts">
     <tal:block repeat="contact contacts">
     <div class="photo-display" tal:condition="contact/obj/photo">
@@ -37,5 +41,6 @@
         Manage contacts
       </a>
     </h3>
+  </div>
   </div>
 </div>

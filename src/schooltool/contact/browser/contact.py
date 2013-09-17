@@ -48,7 +48,7 @@ from schooltool.app.catalog import buildQueryString
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContainer
 from schooltool.contact.interfaces import IContactPersonInfo
-from schooltool.contact.interfaces import IAddress
+from schooltool.contact.interfaces import IAddress, IPhoto
 from schooltool.contact.interfaces import IUniqueFormKey
 from schooltool.contact.contact import ContactPersonInfo
 from schooltool.contact.interfaces import IContact
@@ -429,6 +429,27 @@ class FlourishContactView(flourish.page.Page):
     pass
 
 
+class FlourishBoundContactDetails(flourish.form.FormContent):
+
+    fields = field.Fields(IContact).omit(*(
+        list(IPhoto) +
+        list(IContactPerson)
+        ))
+    mode = DISPLAY_MODE
+
+    @property
+    def has_data(self):
+        return any([widget.value for widget in self.widgets.values()])
+
+    def relationships(self):
+        return [relationship_info.extra_info
+                for relationship_info in self.context.persons.relationships]
+
+    @property
+    def canModify(self):
+        return canAccess(self.context.__parent__, '__delitem__')
+
+
 class FlourishContactDetails(flourish.form.FormViewlet):
 
     template = ViewPageTemplateFile('templates/f_contact_view.pt')
@@ -757,6 +778,10 @@ class FlourishContactsViewlet(flourish.viewlet.Viewlet):
 
     template = ViewPageTemplateFile('templates/f_contactsViewlet.pt')
     body_template = None
+
+    @property
+    def bound_contact(self):
+        return IContact(self.context)
 
     @property
     def getContacts(self):
