@@ -883,7 +883,7 @@ class FlourishApplicationPreferencesView(Form, form.EditForm):
     def update(self):
         form.EditForm.update(self)
 
-    @button.buttonAndHandler(_('Apply'))
+    @button.buttonAndHandler(_('Submit'), name='apply')
     def handle_edit_action(self, action):
         super(FlourishApplicationPreferencesView, self).handleApply.func(self, action)
         # XXX: hacky sucessful submit check
@@ -1545,3 +1545,37 @@ class ManageSchoolViewlet(flourish.page.LinkViewlet):
         if not self.title:
             return False
         return inCrowd(self.request.principal, 'administration', context=self.context)
+
+
+class NameSortingEditView(FlourishApplicationPreferencesView):
+
+    fields = field.Fields(IApplicationPreferences).select('name_sorting')
+    legend = _('Name Sorting')
+
+    def updateActions(self):
+        super(NameSortingEditView, self).updateActions()
+        self.actions['apply'].addClass('button-ok')
+        self.actions['cancel'].addClass('button-cancel')
+
+    def updateWidgets(self):
+        super(NameSortingEditView, self).updateWidgets()
+        self.widgets['name_sorting'].label = _('Field')
+
+    def nextURL(self):
+        url = absoluteURL(self.context, self.request) + '/settings'
+        return url
+
+
+class NameSortingBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
+
+    title = _('Name Sorting')
+
+    @property
+    def url(self):
+        app = ISchoolToolApplication(None)
+        app_url = absoluteURL(app, self.request)
+        return '%s/name_sorting.html' % app_url
+
+    @property
+    def follow_crumb(self):
+        return ManageSiteBreadcrumb(self.context, self.request, self.view)
