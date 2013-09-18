@@ -68,6 +68,7 @@ from schooltool.course.interfaces import ISection, ISectionContainer
 from schooltool.course.section import Section
 from schooltool.course.section import copySection
 from schooltool.person.interfaces import IPerson
+from schooltool.person.interfaces import IPersonFactory
 from schooltool.report.browser.report import RequestRemoteReportDialog
 from schooltool.resource.browser.resource import EditLocationRelationships
 from schooltool.resource.browser.resource import EditEquipmentRelationships
@@ -702,7 +703,7 @@ class LinkExistingView(BrowserView):
         if not teacher_filter:
             return True
         for teacher in section.instructors:
-            name = '%s %s' % (teacher.first_name, teacher.last_name)
+            name = teacher.title
             if (teacher_filter in name.lower() or
                 teacher_filter in teacher.username.lower()):
                 return True
@@ -1890,10 +1891,10 @@ class SectionRosterPDFView(flourish.report.PlainPDFPage):
     def rows(self):
         result = []
         collator = ICollator(self.request.locale)
-        for student in sorted(self.context.members,
-                              key=lambda x:collator.key(x.title)):
+        factory = getUtility(IPersonFactory)
+        sorting_key = lambda x: factory.getSortingKey(x, collator)
+        for student in sorted(self.context.members, key=sorting_key):
             demographics = IDemographics(student)
-
             result.append({
                     'full_name': self.full_name(student),
                     'ID': demographics.get('ID', '')
@@ -1901,10 +1902,7 @@ class SectionRosterPDFView(flourish.report.PlainPDFPage):
         return result
 
     def full_name(self, person):
-        # XXX: should be a content adapter somewhere
-        return '%s, %s %s' % (person.last_name,
-                              person.first_name,
-                              person.middle_name or '')
+        return person.title
 
 
 class FlourishRequestSectionRosterView(RequestRemoteReportDialog):

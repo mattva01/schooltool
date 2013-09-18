@@ -140,7 +140,7 @@ class PersonLinks(flourish.page.RefineLinksViewlet):
 
     @property
     def title(self):
-        return "%s %s" % (self.context.first_name, self.context.last_name)
+        return self.context.title
 
 
 class PersonImportLinks(flourish.page.RefineLinksViewlet):
@@ -1060,7 +1060,7 @@ class PersonTitle(ContentProvider):
 
     def title(self):
         person = self.context
-        return "%s %s" % (person.first_name, person.last_name)
+        return person.title
 
 
 class BasicPersonTable(PersonTable):
@@ -1215,8 +1215,7 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
         contacts = list(IContactable(person).contacts)
         if contacts:
             contact = contacts[0]
-            contact_title = ' '.join([contact.first_name,
-                                      contact.last_name])
+            contact_title = contact.title
             phones = [
                 contact.home_phone,
                 contact.work_phone,
@@ -1225,7 +1224,7 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
             if phones:
                 contact_phone = phones[0]
         return {
-            'title': ' '.join([person.first_name, person.last_name]),
+            'title': person.title,
             'username': person.username,
             'ID': demographics.get('ID'),
             'birth_date': person.birth_date,

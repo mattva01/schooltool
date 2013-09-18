@@ -47,6 +47,8 @@ class IContactPerson(Interface):
 
     suffix = TextLine(title=_(u"Suffix"), required=False)
 
+    title = Attribute('Full name')
+
 
 class IPhoto(Interface):
 

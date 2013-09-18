@@ -103,8 +103,7 @@ class CalendarPublicWidgetTerms(term.BoolTerms):
     def falseLabel(self):
         person = self.context.__parent__
         return _('${person_full_name} and school administration',
-                 mapping={'person_full_name': "%s %s" % (person.first_name,
-                                                         person.last_name)})
+                 mapping={'person_full_name': person.title})
 
 
 class CalendarPeriodsRadioWidget(RadioWidget):
@@ -126,8 +125,7 @@ class CalendarPublicRadioWidget(RadioWidget):
 def calendar_public_widget_label(adapter):
     person = adapter.context.__parent__
     return _("${person_full_name}'s calendar is visible to...",
-             mapping={'person_full_name': "%s %s" % (person.first_name,
-                                                     person.last_name)})
+             mapping={'person_full_name': person.title})
 
 
 CalendarPublicWidgetLabel = widget.ComputedWidgetAttribute(
@@ -156,8 +154,7 @@ class PersonPreferencesView(form.EditForm):
     def label(self):
         person = self.context.__parent__
         return _(u'Change preferences for ${person_full_name}',
-                 mapping={'person_full_name': "%s %s" % (person.first_name,
-                                                         person.last_name)})
+                 mapping={'person_full_name': person.title})
 
     @button.buttonAndHandler(_("Apply"))
     def handle_edit_action(self, action):
@@ -239,8 +236,7 @@ class FlourishPersonPreferencesLink(flourish.page.ModalFormLinkViewlet):
     def dialog_title(self):
         person = self.context
         title = _(u'Change preferences for ${person_full_name}',
-                  mapping={'person_full_name': "%s %s" % (person.first_name,
-                                                          person.last_name)})
+                  mapping={'person_full_name': person.title})
         return translate(title, context=self.request)
 
 
@@ -276,8 +272,7 @@ class FlourishPersonDeleteLink(flourish.page.ModalFormLinkViewlet):
     def dialog_title(self):
         person = self.context
         title = _(u'Delete ${person_full_name}',
-                  mapping={'person_full_name': "%s %s" % (person.first_name,
-                                                          person.last_name)})
+                  mapping={'person_full_name': person.title})
         return translate(title, context=self.request)
 
     def render(self, *args, **kw):

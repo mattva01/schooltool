@@ -75,12 +75,12 @@ def make_relationship_column_getter(person=None):
 
 
 def assigned_contacts_columns(person=None):
-    first_name, last_name = contact_table_columns()
+    default_columns = contact_table_columns()
     relationship = GetterColumn(
         name='relationship',
         title=_(u"Relationship"),
         getter=make_relationship_column_getter(person))
-    return [first_name, last_name, relationship]
+    return default_columns + [relationship]
 
 
 class ContactManagementView(BrowserView):

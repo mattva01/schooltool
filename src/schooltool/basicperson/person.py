@@ -76,6 +76,13 @@ class PersonFactoryUtility(object):
         preferences = IApplicationPreferences(app)
         return preferences.name_sorting
 
+    @property
+    def columns_order(self):
+        result = ['last_name', 'first_name']
+        if self.name_sorting == 'first_name':
+            result = list(reversed(result))
+        return result
+
     def columns(self):
         first_name = IndexedLocaleAwareGetterColumn(
             index='first_name',
@@ -91,16 +98,19 @@ class PersonFactoryUtility(object):
             title=_(u'Last Name'),
             getter=lambda i, f: i.last_name,
             subsort=True)
-        result = [last_name, first_name]
-        if self.name_sorting == 'first_name':
-            result = list(reversed(result))
+        result = []
+        for column_name in self.columns_order:
+            result.append(locals()[column_name])
         return result
 
     def createManagerUser(self, username, system_name):
         return self(username, system_name, "Administrator")
 
     def sortOn(self):
-        return ((self.name_sorting, False),)
+        result = []
+        for column_name in self.columns_order:
+            result.append((column_name, False))
+        return tuple(result)
 
     def groupBy(self):
         return (("grade", False),)
@@ -108,6 +118,13 @@ class PersonFactoryUtility(object):
     def __call__(self, *args, **kw):
         result = BasicPerson(*args, **kw)
         return result
+
+    def getSortingKey(self, person, collator):
+        result = []
+        for column_name in self.columns_order:
+            attr = getattr(person, column_name)
+            result.append(collator.key(attr))
+        return tuple(result)
 
 
 class BasicPersonCalendarCrowd(PersonCalendarCrowd):
@@ -124,7 +141,7 @@ class BasicPersonCalendarCrowd(PersonCalendarCrowd):
 
 class PersonCatalog(AttributeCatalog):
 
-    version = '2 - added text index'
+    version = '3 - updated title'
     interface = IBasicPerson
     attributes = ('__name__', 'title', 'first_name', 'last_name')
 
