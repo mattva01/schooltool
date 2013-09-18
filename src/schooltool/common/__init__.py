@@ -616,6 +616,17 @@ def get_version():
     return _version
 
 
+def get_all_versions():
+    import pkg_resources
+    versions = []
+    versions.append(pkg_resources.get_distribution('schooltool'))
+    for entry in pkg_resources.iter_entry_points('z3c.autoinclude.plugin'):
+        if (entry.name == 'target' and
+            entry.module_name == 'schooltool'):
+            versions.append(entry.dist)
+    return versions
+
+
 def getRequestFromInteraction(request_type=IApplicationRequest):
     """Extract the browser request from the current interaction.
 
@@ -715,3 +726,26 @@ class HTMLToText(HTMLParser.HTMLParser):
 
     def get_data(self):
         return ''.join(self.text_lines)
+
+
+# Launchpad projects assigned for packages
+_package_projects = {}
+
+def find_launchpad_project(traceback, default="schooltool"):
+    global _package_projects
+    project = default
+    while traceback is not None:
+        frame = traceback.tb_frame
+        package = frame.f_globals.get('__package__')
+        while package:
+            if package in _package_projects:
+                project = _package_projects[package]
+                break
+            package = package.rpartition('.')[0]
+        traceback = traceback.tb_next
+    return project
+
+
+def register_lauchpad_project(package, project):
+    global _package_projects
+    _package_projects[package] = project
