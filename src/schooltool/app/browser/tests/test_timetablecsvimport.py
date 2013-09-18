@@ -257,11 +257,11 @@ def doctest_TimetableCSVImporter():
 
         >>> printYearSections(schoolyear)
         **************************************************
-        Lorch, Heinrich -- Philosophy (1) in Fall
-          next: Lorch, Heinrich -- Philosophy (1) in Winter
+        Heinrich Lorch -- Philosophy (1) in Fall
+          next: Heinrich Lorch -- Philosophy (1) in Winter
           students:
-            Cook, Pete
-            Lewis, Daniel
+            Pete Cook
+            Daniel Lewis
         Schedule 'Rotating'
         Periods (list)
         +-------+-------+-------+
@@ -272,11 +272,11 @@ def doctest_TimetableCSVImporter():
         |       |       | C     |
         +-------+-------+-------+
         **************************************************
-        Guzman, Andreas -- Literature (2) in Fall
-          next: Guzman, Andreas -- Literature (2) in Winter
+        Andreas Guzman -- Literature (2) in Fall
+          next: Andreas Guzman -- Literature (2) in Winter
           students:
-            Black, John
-            Cook, Pete
+            John Black
+            Pete Cook
         Schedule 'Rotating'
         Periods (list)
         +-------+-------+-------+
@@ -296,16 +296,16 @@ def doctest_TimetableCSVImporter():
         |        |         |           |          |        |          |        |
         +--------+---------+-----------+----------+--------+----------+--------+
         **************************************************
-        Burton, Alan -- Math (3) in Fall
-          next: Burton, Alan -- Math (3) in Winter
+        Alan Burton -- Math (3) in Fall
+          next: Alan Burton -- Math (3) in Winter
           students:
-            Lewis, Daniel
+            Daniel Lewis
         **************************************************
-        Lorch, Heinrich -- Philosophy (1) in Winter
-          next: Lorch, Heinrich -- Philosophy (1) in Spring
+        Heinrich Lorch -- Philosophy (1) in Winter
+          next: Heinrich Lorch -- Philosophy (1) in Spring
           students:
-            Cook, Pete
-            Lewis, Daniel
+            Pete Cook
+            Daniel Lewis
         Schedule 'Rotating'
         Periods (list)
         +-------+-------+-------+
@@ -316,11 +316,11 @@ def doctest_TimetableCSVImporter():
         |       |       | C     |
         +-------+-------+-------+
         **************************************************
-        Guzman, Andreas -- Literature (2) in Winter
-          next: Guzman, Andreas -- Literature (2) in Spring
+        Andreas Guzman -- Literature (2) in Winter
+          next: Andreas Guzman -- Literature (2) in Spring
           students:
-            Black, John
-            Cook, Pete
+            John Black
+            Pete Cook
         Schedule 'Rotating'
         Periods (list)
         +-------+-------+-------+
@@ -340,15 +340,15 @@ def doctest_TimetableCSVImporter():
         |        |         |           |          |        |          |        |
         +--------+---------+-----------+----------+--------+----------+--------+
         **************************************************
-        Burton, Alan -- Math (3) in Winter
-          next: Burton, Alan -- Math (3) in Spring
+        Alan Burton -- Math (3) in Winter
+          next: Alan Burton -- Math (3) in Spring
           students:
-            Lewis, Daniel
+            Daniel Lewis
         **************************************************
-        Lorch, Heinrich -- Philosophy (1) in Spring
+        Heinrich Lorch -- Philosophy (1) in Spring
           students:
-            Cook, Pete
-            Lewis, Daniel
+            Pete Cook
+            Daniel Lewis
         Schedule 'Rotating'
         Periods (list)
         +-------+-------+-------+
@@ -359,10 +359,10 @@ def doctest_TimetableCSVImporter():
         |       |       | C     |
         +-------+-------+-------+
         **************************************************
-        Guzman, Andreas -- Literature (2) in Spring
+        Andreas Guzman -- Literature (2) in Spring
           students:
-            Black, John
-            Cook, Pete
+            John Black
+            Pete Cook
         Schedule 'Rotating'
         Periods (list)
         +-------+-------+-------+
@@ -382,9 +382,9 @@ def doctest_TimetableCSVImporter():
         |        |         |           |          |        |          |        |
         +--------+---------+-----------+----------+--------+----------+--------+
         **************************************************
-        Burton, Alan -- Math (3) in Spring
+        Alan Burton -- Math (3) in Spring
           students:
-            Lewis, Daniel
+            Daniel Lewis
 
 
     """
@@ -452,18 +452,18 @@ def doctest_TimetableCSVImporter_reimport():
 
         >>> printYearSections(schoolyear, with_ids=True)
         **************************************************
-        Burton, Alan -- Math (1) in Winter
+        Alan Burton -- Math (1) in Winter
           ID: 1
-          next: Burton, Alan -- Math (1) in Spring
+          next: Alan Burton -- Math (1) in Spring
           students:
-            Lewis, Daniel
+            Daniel Lewis
         **************************************************
-        Lorch, Heinrich -- Philosophy (1) in Winter
+        Heinrich Lorch -- Philosophy (1) in Winter
           ID: p-lorch-winter
-          next: Lorch, Heinrich -- Philosophy (1) in Spring
+          next: Heinrich Lorch -- Philosophy (1) in Spring
           students:
-            Cook, Pete
-            Lewis, Daniel
+            Pete Cook
+            Daniel Lewis
         Schedule 'Rotating'
         Periods (list)
         +-------+-------+-------+
@@ -474,16 +474,16 @@ def doctest_TimetableCSVImporter_reimport():
         |       |       | C     |
         +-------+-------+-------+
         **************************************************
-        Burton, Alan -- Math (1) in Spring
+        Alan Burton -- Math (1) in Spring
           ID: 1
           students:
-            Lewis, Daniel
+            Daniel Lewis
         **************************************************
-        Lorch, Heinrich -- Philosophy (1) in Spring
+        Heinrich Lorch -- Philosophy (1) in Spring
           ID: p-lorch-spring
           students:
-            Cook, Pete
-            Lewis, Daniel
+            Pete Cook
+            Daniel Lewis
         Schedule 'Rotating'
         Periods (list)
         +-------+-------+-------+
@@ -509,18 +509,18 @@ def doctest_TimetableCSVImporter_reimport():
 
         >>> printYearSections(schoolyear, with_ids=True)
         **************************************************
-        Burton, Alan -- Math (1) in Fall
+        Alan Burton -- Math (1) in Fall
           ID: 1
-          next: Burton, Alan -- Math (2) in Winter
+          next: Alan Burton -- Math (2) in Winter
           students:
-            Lewis, Daniel
+            Daniel Lewis
         **************************************************
-        Lorch, Heinrich -- Philosophy (1) in Fall
+        Heinrich Lorch -- Philosophy (1) in Fall
           ID: p-lorch-fall
-          next: Lorch, Heinrich -- Philosophy (1) in Winter
+          next: Heinrich Lorch -- Philosophy (1) in Winter
           students:
-            Cook, Pete
-            Miller, Glen
+            Pete Cook
+            Glen Miller
         Schedule 'Rotating'
         Periods (list)
         +-------+-------+-------+
@@ -531,25 +531,25 @@ def doctest_TimetableCSVImporter_reimport():
         |       |       |       |
         +-------+-------+-------+
         **************************************************
-        Burton, Alan -- Math (1) in Winter
+        Alan Burton -- Math (1) in Winter
           ID: 1
-          next: Burton, Alan -- Math (1) in Spring
+          next: Alan Burton -- Math (1) in Spring
           students:
-            Lewis, Daniel
+            Daniel Lewis
         **************************************************
-        Burton, Alan -- Math (2) in Winter
+        Alan Burton -- Math (2) in Winter
           ID: 2
-          next: Burton, Alan -- Math (2) in Spring
+          next: Alan Burton -- Math (2) in Spring
           students:
-            Lewis, Daniel
+            Daniel Lewis
         **************************************************
-        Lorch, Heinrich -- Philosophy (1) in Winter
+        Heinrich Lorch -- Philosophy (1) in Winter
           ID: p-lorch-winter
-          next: Lorch, Heinrich -- Philosophy (1) in Spring
+          next: Heinrich Lorch -- Philosophy (1) in Spring
           students:
-            Cook, Pete
-            Lewis, Daniel
-            Miller, Glen
+            Pete Cook
+            Daniel Lewis
+            Glen Miller
         Schedule 'Rotating'
         Periods (list)
         +-------+-------+-------+
@@ -560,22 +560,22 @@ def doctest_TimetableCSVImporter_reimport():
         |       |       |       |
         +-------+-------+-------+
         **************************************************
-        Burton, Alan -- Math (1) in Spring
+        Alan Burton -- Math (1) in Spring
           ID: 1
           students:
-            Lewis, Daniel
+            Daniel Lewis
         **************************************************
-        Burton, Alan -- Math (2) in Spring
+        Alan Burton -- Math (2) in Spring
           ID: 2
           students:
-            Lewis, Daniel
+            Daniel Lewis
         **************************************************
-        Lorch, Heinrich -- Philosophy (1) in Spring
+        Heinrich Lorch -- Philosophy (1) in Spring
           ID: p-lorch-spring
           students:
-            Cook, Pete
-            Lewis, Daniel
-            Miller, Glen
+            Pete Cook
+            Daniel Lewis
+            Glen Miller
         Schedule 'Rotating'
         Periods (list)
         +-------+-------+-------+

@@ -47,7 +47,7 @@ Another attempt:
 
 Now we are authenticated:
 
-    >>> 'User, Some' in anonymous.contents
+    >>> 'Some User' in anonymous.contents
     True
 
 Let's check whether our POST data preservation facilities work:

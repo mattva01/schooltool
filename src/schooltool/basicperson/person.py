@@ -53,7 +53,7 @@ class BasicPerson(Person):
 
     @property
     def title(self):
-        return "%s, %s" % (self.last_name, self.first_name)
+        return "%s %s" % (self.first_name, self.last_name)
 
     advisors = RelationshipProperty(rel_type=URIAdvising,
                                     my_role=URIStudent,

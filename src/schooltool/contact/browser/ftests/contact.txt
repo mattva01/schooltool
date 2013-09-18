@@ -4,8 +4,8 @@ Contacts
     >>> browser = Browser('manager', 'schooltool')
     >>> browser.getLink('Manage').click()
 
-    >>> from schooltool.contact.browser.ftests import addPerson
-    >>> addPerson('Bill Student', 'student', 'pwd')
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Bill', 'Student', 'student', 'pwd')
 
 Let's try and add a contact:
 
@@ -88,7 +88,7 @@ The "Contacts" action button in "Home" takes us to contacts overview page.
     >>> browser.printQuery("id('content-body')")
     <div id="content-body">
       <h1>Contact information for
-          <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+          <a href="http://localhost/persons/manager">SchoolTool Administrator</a>
       </h1>
       <div class="info-block">
       </div>
@@ -165,7 +165,7 @@ We can see them in the overview page also.
     >>> browser.printQuery("id('content-body')")
     <div id="content-body">
       <h1>Contact information for
-          <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+          <a href="http://localhost/persons/manager">SchoolTool Administrator</a>
       </h1>
       <div class="info-block">
       </div>
@@ -235,11 +235,11 @@ Now we can see two persons when we navigate to contact's view.
     ...
     <div class="row">
       Contact of
-      <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+      <a href="http://localhost/persons/manager">SchoolTool Administrator</a>
     </div>
     <div class="row">
       Contact of
-      <a href="http://localhost/persons/student">Student, Bill</a>
+      <a href="http://localhost/persons/student">Bill Student</a>
     </div>
 
 Let's change the relationship with Bill.
@@ -256,11 +256,11 @@ Let's change the relationship with Bill.
     ...
     <div class="row">
       Contact of
-      <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+      <a href="http://localhost/persons/manager">SchoolTool Administrator</a>
     </div>
     <div class="row">
       Parent of
-      <a href="http://localhost/persons/student">Student, Bill</a>
+      <a href="http://localhost/persons/student">Bill Student</a>
     </div>
 
 Let's test contact deletion.
@@ -366,7 +366,7 @@ SchoolTool Administrator.
     >>> browser.printQuery("id('content-body')")
     <div id="content-body">
       <h1>Contact information for
-        <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+        <a href="http://localhost/persons/manager">SchoolTool Administrator</a>
       </h1>
       <div class="info-block">
         <h4>Address</h4>
@@ -395,7 +395,7 @@ And assign SchoolTool Administrator user as contact of a student.
     >>> browser.getLink('Contacts').click()
     >>> browser.printQuery("//h1 | //fieldset//h2 | //fieldset//a")
     <h1>Contact information for
-      <a href="http://localhost/persons/student">Student, Bill</a>
+      <a href="http://localhost/persons/student">Bill Student</a>
     </h1>
     <h1>Contacts</h1>
     <h2>
@@ -413,11 +413,11 @@ We can see that manager's contact information is also updated.
     >>> browser.printQuery("id('content-body')")
     <div id="content-body">
     <h1>Contact information for
-      <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+      <a href="http://localhost/persons/manager">SchoolTool Administrator</a>
     </h1>
     <div>
       Contact of
-      <a href="http://localhost/persons/student">Student, Bill</a>
+      <a href="http://localhost/persons/student">Bill Student</a>
     </div>
     ...
 
@@ -432,10 +432,10 @@ And of course we can change Administrator's relationship with Bill.
     >>> browser.printQuery("id('content-body')")
     <div id="content-body">
     <h1>Contact information for
-      <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+      <a href="http://localhost/persons/manager">SchoolTool Administrator</a>
     </h1>
     <div>
       Sibling of
-      <a href="http://localhost/persons/student">Student, Bill</a>
+      <a href="http://localhost/persons/student">Bill Student</a>
     </div>
     ...
