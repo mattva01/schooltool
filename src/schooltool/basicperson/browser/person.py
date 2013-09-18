@@ -1070,7 +1070,7 @@ class BasicPersonTable(PersonTable):
         self.css_classes = {'table': ' data persons-table'}
 
     def columns(self):
-        cols = list(reversed(PersonTable.columns(self)))
+        cols = PersonTable.columns(self)
         username = IndexedLocaleAwareGetterColumn(
             index='__name__',
             name='username',

@@ -23,6 +23,8 @@ from zope.index.text.interfaces import ISearchableText
 from zope.interface import implements
 from zope.component import adapts
 
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.person.person import Person
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.course.section import PersonInstructorsCrowd
@@ -68,6 +70,12 @@ class PersonFactoryUtility(object):
 
     implements(IPersonFactory)
 
+    @property
+    def name_sorting(self):
+        app = ISchoolToolApplication(None)
+        preferences = IApplicationPreferences(app)
+        return preferences.name_sorting
+
     def columns(self):
         first_name = IndexedLocaleAwareGetterColumn(
             index='first_name',
@@ -83,14 +91,16 @@ class PersonFactoryUtility(object):
             title=_(u'Last Name'),
             getter=lambda i, f: i.last_name,
             subsort=True)
-
-        return [first_name, last_name]
+        result = [last_name, first_name]
+        if self.name_sorting == 'first_name':
+            result = list(reversed(result))
+        return result
 
     def createManagerUser(self, username, system_name):
         return self(username, system_name, "Administrator")
 
     def sortOn(self):
-        return (("last_name", False),)
+        return ((self.name_sorting, False),)
 
     def groupBy(self):
         return (("grade", False),)
