@@ -30,7 +30,7 @@
   <h2 i18n:translate="">Automatic Bug Report</h2>
   <p i18n:translate="">To submit automatic bug report you must be logged into <a href="https://launchpad.net/">Launchpad Issue Tracker</a></p>
 
-<form tal:attributes="action view/bugreport_url" method="POST">
+<form tal:attributes="action view/bugreport_url" method="POST" target="_blank">
 <textarea name="field.comment" style="display: none;">
 =====================================
 <tal:block i18n:translate="">Please fill in steps to reproduce this bug here:</tal:block>
