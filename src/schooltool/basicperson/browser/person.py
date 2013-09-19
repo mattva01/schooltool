@@ -66,7 +66,6 @@ from schooltool.skin.flourish.interfaces import IViewletManager
 from schooltool.skin.flourish.form import FormViewlet
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManager
 from schooltool.skin.flourish.content import ContentProvider
-from schooltool.table import table
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 from schooltool.term.interfaces import IDateManager
 from schooltool.report.browser.report import RequestReportDownloadDialog
@@ -91,19 +90,6 @@ class BasicPersonContainerView(TableContainerView):
         app = ISchoolToolApplication(None)
         syc = ISchoolYearContainer(app)
         return syc
-
-
-class DeletePersonCheckboxColumn(table.DependableCheckboxColumn):
-
-    def __init__(self, *args, **kw):
-        kw = dict(kw)
-        self.disable_items = kw.pop('disable_items', None)
-        super(DeletePersonCheckboxColumn, self).__init__(*args, **kw)
-
-    def hasDependents(self, item):
-        if self.disable_items and item.__name__ in self.disable_items:
-            return True
-        return table.DependableCheckboxColumn.hasDependents(self, item)
 
 
 class FlourishBasicPersonContainerView(flourish.page.Page):
