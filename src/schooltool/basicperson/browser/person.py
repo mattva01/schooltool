@@ -83,7 +83,7 @@ class BasicPersonContainerView(TableContainerView):
     index_title = _("Person index")
 
     def isDeletingHimself(self):
-        person = IBasicPerson(self.request.principal, None)
+        person = IPerson(self.request.principal, None)
         return person in self.itemsToDelete
 
     @property
