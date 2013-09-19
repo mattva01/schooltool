@@ -1559,7 +1559,7 @@ class NameSortingEditView(FlourishApplicationPreferencesView):
 
     def updateWidgets(self):
         super(NameSortingEditView, self).updateWidgets()
-        self.widgets['name_sorting'].label = _('Field')
+        self.widgets['name_sorting'].label = _('Sort by')
 
     def nextURL(self):
         url = absoluteURL(self.context, self.request) + '/settings'

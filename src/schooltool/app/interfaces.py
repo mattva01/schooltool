@@ -148,7 +148,6 @@ class IApplicationPreferences(ICalendarDisplayPreferences):
 
     name_sorting = zope.schema.Choice(
         title=_('Name sorting'),
-        description=_('XXX Sets the default sorting column for person lists. It also represents the first column in these lists. XXX'),
         vocabulary=vocabulary([('first_name', _('First name')),
                                ('last_name', _('Last name'))]))
 
