@@ -157,7 +157,7 @@
 .students {
     position: absolute;
     top: 0;
-    width: 17.8em;
+    width: 23.8em;
     z-index: 1;
 }
 
@@ -167,7 +167,10 @@
 
 .students th.name {
     text-align: left;
-    width: 11.0em;
+}
+
+.students th.name:first-child {
+    width: 11.9em;
 }
 
 .students th, .students td {

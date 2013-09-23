@@ -30,6 +30,7 @@ from zope.interface import Interface, Attribute
 from zope.location.interfaces import IContained
 from zope.authentication.interfaces import IAuthentication, ILogout
 
+from schooltool.app.utils import vocabulary
 from schooltool.common.fields import Image
 from schooltool.common import SchoolToolMessage as _
 from schooltool.person.interfaces import ICalendarDisplayPreferences
@@ -144,6 +145,11 @@ class IApplicationPreferences(ICalendarDisplayPreferences):
         title=_("School logo"),
         format="JPEG",
         required=False)
+
+    name_sorting = zope.schema.Choice(
+        title=_('Name sorting'),
+        vocabulary=vocabulary([('first_name', _('First name')),
+                               ('last_name', _('Last name'))]))
 
 
 class IApplicationTabs(Interface):

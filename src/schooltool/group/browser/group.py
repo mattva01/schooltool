@@ -54,6 +54,7 @@ from schooltool.app.browser.app import RelationshipAddTableMixin
 from schooltool.app.browser.app import RelationshipRemoveTableMixin
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.person.interfaces import IPerson
+from schooltool.person.interfaces import IPersonFactory
 from schooltool.person.browser.person import PersonTableFilter
 from schooltool.basicperson.browser.person import BasicPersonTable
 from schooltool.basicperson.browser.person import EditPersonRelationships
@@ -802,8 +803,12 @@ class FlourishGroupIDCardsView(FlourishPersonIDCardsViewBase):
             self.context.title,  sy.title)
 
     def persons(self):
+        collator = ICollator(self.request.locale)
+        factory = getUtility(IPersonFactory)
+        sorting_key = lambda x: factory.getSortingKey(x, collator)
+        sorted_persons = sorted(self.context.members, key=sorting_key)
         result = [self.getPersonData(person)
-                  for person in self.context.members]
+                  for person in sorted_persons]
         return result
 
 

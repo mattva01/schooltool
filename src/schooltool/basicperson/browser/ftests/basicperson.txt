@@ -290,11 +290,11 @@ We can also add a batch of persons.
     <fieldset><legend>Added persons</legend>
       <p>
         <span>juan</span>
-        <a href="http://localhost/persons/juan">Perez, Juan</a>
+        <a href="http://localhost/persons/juan">Juan Perez</a>
       </p>
       <p>
         <span>emanuel</span>
-        <a href="http://localhost/persons/emanuel">Perez, Emanuel</a>
+        <a href="http://localhost/persons/emanuel">Emanuel Perez</a>
       </p>
     </fieldset>
 
@@ -309,7 +309,7 @@ this flaw is somewhat acceptable.
     <fieldset><legend>Added persons</legend>
       <p>
         <span>juan</span>
-        <a href="http://localhost/persons/juan">Perez, Juan</a>
+        <a href="http://localhost/persons/juan">Juan Perez</a>
       </p>
     </fieldset>
 

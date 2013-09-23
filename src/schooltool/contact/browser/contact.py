@@ -54,6 +54,7 @@ from schooltool.contact.contact import ContactPersonInfo
 from schooltool.contact.interfaces import IContact
 from schooltool.contact.contact import Contact
 from schooltool.person.interfaces import IPerson
+from schooltool.person.interfaces import IPersonFactory
 from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email
 from schooltool.skin import flourish
@@ -64,9 +65,7 @@ from schooltool.contact.contact import URIPerson, URIContact
 from schooltool.contact.contact import URIContactRelationship
 from schooltool.contact.interfaces import IContactPerson
 from schooltool.contact.interfaces import IEmails, IPhones, ILanguages
-from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool import table
-from schooltool.table.interfaces import IIndexedColumn
 
 from schooltool.common import SchoolToolMessage as _
 
@@ -327,9 +326,8 @@ class ContactEditView(form.EditForm):
 
     @property
     def label(self):
-        return _(u'Change contact information for ${first_name} ${last_name}',
-                 mapping={'first_name': self.context.first_name,
-                          'last_name': self.context.last_name})
+        return _(u'Change contact information for ${person}',
+                 mapping={'person': self.context.title})
 
 
 class FlourishContactEditView(flourish.page.Page,
@@ -522,21 +520,7 @@ def format_street_address(item, formatter):
 
 
 def contact_table_columns():
-        first_name = table.column.IndexedLocaleAwareGetterColumn(
-            index='first_name',
-            name='first_name',
-            cell_formatter=table.table.url_cell_formatter,
-            title=_(u'First Name'),
-            getter=lambda i, f: i.first_name,
-            subsort=True)
-        last_name = table.column.IndexedLocaleAwareGetterColumn(
-            index='last_name',
-            name='last_name',
-            cell_formatter=table.table.url_cell_formatter,
-            title=_(u'Last Name'),
-            getter=lambda i, f: i.last_name,
-            subsort=True)
-        return [last_name, first_name]
+    return getUtility(IPersonFactory).columns()
 
 
 class ContactTableFormatter(table.catalog.IndexedTableFormatter):
@@ -544,7 +528,7 @@ class ContactTableFormatter(table.catalog.IndexedTableFormatter):
     columns = lambda self: contact_table_columns()
 
     def sortOn(self):
-        return (("first_name", False),)
+        return getUtility(IPersonFactory).sortOn()
 
 
 class FlourishContactTableFormatter(ContactTableFormatter):
@@ -555,7 +539,7 @@ class FlourishContactTableFormatter(ContactTableFormatter):
         return formatter
 
     def sortOn(self):
-        return (('last_name', False), ("first_name", False),)
+        return getUtility(IPersonFactory).sortOn()
 
 
 class ContactTable(table.ajax.IndexedTable, FlourishContactTableFormatter):
@@ -752,13 +736,11 @@ class SendEmailView(form.Form):
         user = IPerson(self.request.principal, None)
         if user is None:
             return u''
-        return "%s %s" % (user.first_name, user.last_name)
+        return user.title
 
     @property
     def recipient(self):
-        first_name = self.context.first_name or ''
-        last_name = self.context.last_name or ''
-        return "%s %s" % (first_name, last_name)
+        return self.context.title
 
 
 class NoTeacherEmailView(BrowserView):
@@ -866,8 +848,7 @@ class PersonAsContactLinkViewlet(flourish.page.LinkIdViewlet):
     def title(self):
         person = self.context
         return _('${person_full_name} as Contact',
-                 mapping={'person_full_name': '%s %s' % (person.first_name,
-                                                         person.last_name)})
+                 mapping={'person_full_name': person.title})
 
 
 class FlourishManageContactsOverview(flourish.page.Content,
@@ -906,11 +887,9 @@ class FlourishContactDeleteView(flourish.form.DialogForm, form.EditForm):
         super(FlourishContactDeleteView, self).initDialog()
         contact = self.context
         self.ajax_settings['dialog']['title'] = translate(
-            _(u'Delete ${contact_full_name}', mapping={
-                    'contact_full_name': "%s %s" % (contact.first_name,
-                                                    contact.last_name)}),
+            _(u'Delete ${contact_full_name}',
+              mapping={'contact_full_name': contact.title}),
               context=self.request)
-
 
     @button.buttonAndHandler(_("Delete"), name='apply')
     def handleDelete(self, action):

@@ -209,6 +209,8 @@ class ApplicationPreferences(Persistent):
 
     logo = None
 
+    name_sorting = 'last_name'
+
 
 class ApplicationTabs(PersistentDict):
     """Object for storing application tab preferences.

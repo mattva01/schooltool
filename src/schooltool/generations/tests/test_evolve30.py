@@ -144,12 +144,12 @@ def doctest_evolve30():
         >>> evolve(context)
         REMOVE:       Guests from Section TWO
         <BLANKLINE>
-        ADD:     John, Johny to   Section ONE
-        ADD:     Pete, Petey to   Section ONE
-        ADD:     Bill, Billy to   Section ONE
+        ADD:     Johny John to   Section ONE
+        ADD:     Petey Pete to   Section ONE
+        ADD:     Billy Bill to   Section ONE
         REMOVE:     Students from Section ONE
         <BLANKLINE>
-        ADD:     John, Johny to   Section TWO
+        ADD:     Johny John to   Section TWO
         REMOVE:     Students from Section TWO
 
     Course ids are also updated.

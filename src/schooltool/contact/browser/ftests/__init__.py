@@ -19,8 +19,6 @@
 Functional testing utilites for Contacts.
 """
 from schooltool.testing.functional import TestBrowser
-from schooltool.app.browser.ftests.setup import logInManager
-from schooltool.email.mail import EmailUtility
 
 
 def addContact(firstname, lastname, address='', email='', browser=None):
@@ -37,31 +35,4 @@ def addContact(firstname, lastname, address='', email='', browser=None):
     browser.getControl('Address line 1').value = address
     browser.getControl('Email').value = email
 
-    browser.getControl('Add').click()
-
-
-def addPerson(name, username=None, password=None, groups=None, browser=None):
-    """Add a person.
-
-    If username is not specified, it will be taken to be name.lower().
-
-    If password is not specified, it will be taken to be username + 'pwd'.
-    """
-    if not username:
-        username = name.lower()
-    if not password:
-        password = username + 'pwd'
-    if browser is None:
-        browser = logInManager()
-    browser.getLink('Manage').click()
-    browser.getLink('Persons').click()
-    browser.getLink('New Person').click()
-    split_name = name.split(' ', 1)
-    first_name = split_name.pop(0)
-    last_name = split_name and split_name.pop() or name
-    browser.getControl('First name').value = first_name
-    browser.getControl('Last name').value = last_name
-    browser.getControl('Username').value = username
-    browser.getControl('Password').value = password
-    browser.getControl('Confirm').value = password
     browser.getControl('Add').click()
