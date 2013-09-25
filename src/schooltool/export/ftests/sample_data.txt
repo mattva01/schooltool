@@ -238,7 +238,7 @@ Some sections:
       <a href="http://localhost/schoolyears/2006-2008/2006-fall/sections/art_a_2006-fall_teacher010_000">Art A (0)</a>
     </td>
     <td>
-        <a href="http://localhost/persons/teacher010">Walsh, Isabel</a>
+        <a href="http://localhost/persons/teacher010">Isabel Walsh</a>
     </td>
     <td>
       <span class="hint">
@@ -498,7 +498,7 @@ Some sections:
       <a href="http://localhost/schoolyears/2006-2008/2006-fall/sections/art_a_2006-fall_teacher010_000">Art A (0)</a>
     </td>
     <td>
-        <a href="http://localhost/persons/teacher010">Walsh, Isabel</a>
+        <a href="http://localhost/persons/teacher010">Isabel Walsh</a>
     </td>
     <td>
       <span class="hint">
