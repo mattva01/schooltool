@@ -69,6 +69,8 @@ from schooltool.skin import flourish
 from schooltool.skin.containers import TableContainerView
 from schooltool.securitypolicy.crowds import Crowd
 from schooltool.securitypolicy.interfaces import ICrowd
+from schooltool.table.column import IndexedLocaleAwareGetterColumn
+from schooltool.table.table import url_cell_formatter
 
 
 def SourceMultiCheckBoxWidget(field, request):
@@ -558,6 +560,27 @@ class PersonTableFilter(table.ajax.IndexedTableFilter,
         return PersonFilterWidget.filter(self, results)
 
 
+def person_table_columns():
+    """Columns for the old person table.
+
+    Functional tests expect the first column to be first name."""
+    first_name = IndexedLocaleAwareGetterColumn(
+        index='first_name',
+        name='first_name',
+        cell_formatter=url_cell_formatter,
+        title=_(u'First Name'),
+        getter=lambda i, f: i.first_name,
+        subsort=True)
+    last_name = IndexedLocaleAwareGetterColumn(
+        index='last_name',
+        name='last_name',
+        cell_formatter=url_cell_formatter,
+        title=_(u'Last Name'),
+        getter=lambda i, f: i.last_name,
+        subsort=True)
+    return [first_name, last_name]
+
+
 class PersonTable(table.ajax.IndexedTable):
 
     @property
@@ -565,7 +588,7 @@ class PersonTable(table.ajax.IndexedTable):
         return ISchoolToolApplication(None)['persons']
 
     def columns(self):
-        return getUtility(IPersonFactory).columns()
+        return person_table_columns()
 
     def sortOn(self):
         return getUtility(IPersonFactory).sortOn()
@@ -575,7 +598,7 @@ class PersonTableFormatter(table.catalog.IndexedTableFormatter):
     """Person container specific table formatter."""
 
     def columns(self):
-        return getUtility(IPersonFactory).columns()
+        return person_table_columns()
 
     def sortOn(self):
         return getUtility(IPersonFactory).sortOn()

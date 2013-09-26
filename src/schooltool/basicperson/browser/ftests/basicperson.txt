@@ -239,9 +239,8 @@ We can fill the New Person form with Unicode text:
     >>> manager.getControl('Confirm').value = "pwd"
     >>> manager.getControl('Add').click()
 
-    >>> analyze.printQuery("//div[@class='content-nav'][11]/a",
-    ...                    manager.contents)
-    <a href="http://localhost/persons/pedro/contact">Contacts</a>
+    >>> analyze.printQuery("//h3", manager.contents)
+    <h3>Pedro Jos... Mart...nez P...rez</h3>
 
 But we cannot assign non-ascii usernames:
 

@@ -22,6 +22,11 @@ import unittest
 import doctest
 
 from zope.app.testing import setup
+from zope.component import provideAdapter
+from zope.interface import implements
+
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 
 
 def doctest_BasicPerson():
@@ -52,13 +57,32 @@ def doctest_PersonFactoryUtility():
         >>> verifyObject(IPersonFactory, factory)
         True
 
+        >>> class AppStub(object):
+        ...     implements(ISchoolToolApplication, IApplicationPreferences)
+        ...     def __init__(self):
+        ...         self.name_sorting = 'last_name'
+        >>> app = AppStub()
+        >>> provideAdapter(lambda _: app,
+        ...                adapts=(None, ), provides=ISchoolToolApplication)
+
+        >>> for column in factory.columns():
+        ...     print "%s, %s" % (column.name, column.title)
+        last_name, Last Name
+        first_name, First Name
+
+        >>> factory.sortOn()
+        (('last_name', False), ('first_name', False))
+
+    If we change name sorting order, both the sort and column order changes:
+
+        >>> app.name_sorting = 'first_name'
         >>> for column in factory.columns():
         ...     print "%s, %s" % (column.name, column.title)
         first_name, First Name
         last_name, Last Name
 
         >>> factory.sortOn()
-        (('last_name', False),)
+        (('first_name', False), ('last_name', False))
 
     """
 

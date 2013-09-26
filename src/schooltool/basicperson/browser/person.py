@@ -1070,7 +1070,7 @@ class BasicPersonTable(PersonTable):
         self.css_classes = {'table': ' data persons-table'}
 
     def columns(self):
-        cols = PersonTable.columns(self)
+        cols = getUtility(IPersonFactory).columns()
         username = IndexedLocaleAwareGetterColumn(
             index='__name__',
             name='username',

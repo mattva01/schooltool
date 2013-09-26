@@ -1,7 +1,7 @@
 <tal:defs define="dummy view/update" />
 <html metal:use-macro="view/@@standard_macros/page" i18n:domain="schooltool">
   <head>
-    <title metal:fill-slot="title" i18n:translate="">Edit site preferences</title>
+    <title metal:fill-slot="title" i18n:translate="">Change site preferences</title>
   </head>
   <body>
     <metal:nothing metal:fill-slot="content-header" />
@@ -24,7 +24,7 @@
             <div metal:use-macro="context/@@form_macros/widget_row" />
           </div>
 
-          <div class="row" tal:define="widget nocall:view/frontPageCalendar_widget">
+          <div class="row" tal:define="widget nocall:view/name_sorting_widget">
             <div metal:use-macro="context/@@form_macros/widget_row" />
           </div>
 
@@ -32,8 +32,12 @@
 
         <fieldset>
           <legend i18n:translate="">
-            Calendar Preferences
+            Calendar settings
           </legend>
+
+          <div class="row" tal:define="widget nocall:view/frontPageCalendar_widget">
+            <div metal:use-macro="context/@@form_macros/widget_row" />
+          </div>
 
           <div class="row" tal:define="widget nocall:view/timezone_widget">
             <div metal:use-macro="context/@@form_macros/widget_row" />

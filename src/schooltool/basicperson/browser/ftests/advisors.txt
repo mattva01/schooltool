@@ -36,10 +36,10 @@ Also, we see the list of available advisors.
 
     >>> analyze.printQuery("id('content-body')/form/fieldset[2]//tbody//label", manager.contents)
     <label for="add_item.manager">SchoolTool</label>
-    <label for="add_item.teacher1">Teacher1</label>
     <label for="add_item.student1">Student1</label>
-    <label for="add_item.teacher2">Teacher2</label>
+    <label for="add_item.teacher1">Teacher1</label>
     <label for="add_item.student2">Student2</label>
+    <label for="add_item.teacher2">Teacher2</label>
 
 Now we'll add teacher1 as an advisor.
 
@@ -56,8 +56,8 @@ Also, we see that teacher1 is no longer available to be added as an advisor.
     >>> analyze.printQuery("id('content-body')/form/fieldset[2]//tbody//label", manager.contents)
     <label for="add_item.manager">SchoolTool</label>
     <label for="add_item.student1">Student1</label>
-    <label for="add_item.teacher2">Teacher2</label>
     <label for="add_item.student2">Student2</label>
+    <label for="add_item.teacher2">Teacher2</label>
 
 We'll view the advisees for teacher1.
 
@@ -76,8 +76,8 @@ Also, we see that student1 is not available to be added as an advisee.
     >>> analyze.printQuery("id('content-body')/form/fieldset[2]//tbody//label", manager.contents)
     <label for="add_item.manager">SchoolTool</label>
     <label for="add_item.teacher1">Teacher1</label>
-    <label for="add_item.teacher2">Teacher2</label>
     <label for="add_item.student2">Student2</label>
+    <label for="add_item.teacher2">Teacher2</label>
 
 We'll add student2 as an advisee and remove student1.
 
@@ -95,8 +95,8 @@ Also, we see that student2 is not available to be added as an advisee.
 
     >>> analyze.printQuery("id('content-body')/form/fieldset[2]//tbody//label", manager.contents)
     <label for="add_item.manager">SchoolTool</label>
-    <label for="add_item.teacher1">Teacher1</label>
     <label for="add_item.student1">Student1</label>
+    <label for="add_item.teacher1">Teacher1</label>
     <label for="add_item.teacher2">Teacher2</label>
 
 Finally, we'll view the advisors for student2.
@@ -116,8 +116,8 @@ Also, we see that teacher1 is not available to be added as an advisor.
     >>> analyze.printQuery("id('content-body')/form/fieldset[2]//tbody//label", manager.contents)
     <label for="add_item.manager">SchoolTool</label>
     <label for="add_item.student1">Student1</label>
-    <label for="add_item.teacher2">Teacher2</label>
     <label for="add_item.student2">Student2</label>
+    <label for="add_item.teacher2">Teacher2</label>
 
 We'll remove teacher1 as an advisor.
 
@@ -135,8 +135,8 @@ Also, we see the list of available advisors has teacher1.
 
     >>> analyze.printQuery("id('content-body')/form/fieldset[2]//tbody//label", manager.contents)
     <label for="add_item.manager">SchoolTool</label>
-    <label for="add_item.teacher1">Teacher1</label>
     <label for="add_item.student1">Student1</label>
-    <label for="add_item.teacher2">Teacher2</label>
+    <label for="add_item.teacher1">Teacher1</label>
     <label for="add_item.student2">Student2</label>
+    <label for="add_item.teacher2">Teacher2</label>
 
