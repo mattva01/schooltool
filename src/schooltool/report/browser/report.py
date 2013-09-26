@@ -450,6 +450,10 @@ class ProgressReportPage(BrowserPage):
     task_progress = None
     overall_line_id = None
 
+    def __init__(self, context, request):
+        super(ProgressReportPage, self).__init__(context, request)
+        self.makeProgress()
+
     def makeFileName(self, basename):
         if self.render_invariant:
             return '%s.xls' % basename
