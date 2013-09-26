@@ -81,11 +81,11 @@ link for it):
     ...
     Unauthorized: (..., 'schooltool.edit')
 
-Let's make Toad a manager (that should give him the permission to add
+Let's make Toad a clerk (that should give him the permission to add
 events to Frog's calendar):
 
     >>> manager.open('http://localhost/persons/toad/@@groups.html')
-    >>> manager.getControl('Managers').click()
+    >>> manager.getControl('Clerks').click()
     >>> manager.getControl('Add').click()
 
 Now the Toad can add events to Frog's calendar:

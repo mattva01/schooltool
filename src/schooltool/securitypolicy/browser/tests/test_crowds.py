@@ -192,7 +192,6 @@ def doctest_described_interfaces():
         -
         - ISection, schooltool.edit
         - -------------------------
-        -  Sections / Change schedule
         -  Sections / Assign timetables
         -  Sections / Modify
         -
@@ -315,6 +314,10 @@ def doctest_described_interfaces():
         ===============================
         schooltool.timetable.interfaces
         ===============================
+        - IScheduleContainer, schooltool.edit
+        - -----------------------------------
+        -  Sections / Change schedule
+        -
         - ITimetableContainer, schooltool.edit
         - ------------------------------------
         -  School timetables / Create/Delete
@@ -341,6 +344,10 @@ def doctest_described_interfaces():
         schooltool.app.interfaces
         -------------------------
         ISchoolToolApplication, zope.ManageSite
+        ----------------------------
+        schooltool.course.interfaces
+        ----------------------------
+        ICourseContainerContainer, schooltool.edit
         ----------------------------------
         schooltool.relationship.interfaces
         ----------------------------------
@@ -359,12 +366,11 @@ def doctest_described_interfaces():
         -------------------------------
         schooltool.timetable.interfaces
         -------------------------------
-        IScheduleContainer, schooltool.edit
         IScheduleContainer, schooltool.view
 
         >>> print 'Total undescribed interface permissions: %d of %d (%d done)' % (
         ...     len(missing), len(crowds), len(actions))
-        Total undescribed interface permissions: 15 of 56 (41 done)
+        Total undescribed interface permissions: 15 of 57 (42 done)
 
     """
 
