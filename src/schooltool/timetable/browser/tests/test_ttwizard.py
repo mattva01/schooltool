@@ -1280,19 +1280,6 @@ def doctest_wizard_PeriodOrderComplex_weekly_rotating():
         >>> session['period_names'] = ['A', 'B', 'C', 'D']
         >>> session['day_names'] = ['Day One', 'Day Two']
 
-    The number of period dropdowns is the maximum of slots in a day:
-
-        >>> time_slots = [
-        ...     [(datetime.time(9, 30), datetime.timedelta(0, 3300))],
-        ...     [(datetime.time(9, 30), datetime.timedelta(0, 3300))],
-        ...     [(datetime.time(9, 15), datetime.timedelta(0, 3300)),
-        ...      (datetime.time(10, 35), datetime.timedelta(0, 2700)),
-        ...      (datetime.time(11, 35), datetime.timedelta(0, 2700)),],
-        ...     [(datetime.time(9, 30), datetime.timedelta(0, 3300))],
-        ...     [(datetime.time(9, 30), datetime.timedelta(0, 3300))],
-        ... ]
-        >>> view.getSessionData()['time_slots'] = time_slots
-
     Our view lets the template easily access them:
 
         >>> view.periods()
@@ -1301,10 +1288,10 @@ def doctest_wizard_PeriodOrderComplex_weekly_rotating():
         >>> view.days()
         ['Day One', 'Day Two']
 
-    The number of dropdowns for a day is equal to the number of slots:
+    The number of dropdowns for each day is equal to the number of periods:
 
         >>> view.numSlots()
-        [1, 1, 3, 1, 1]
+        [4, 4]
 
     """
 
