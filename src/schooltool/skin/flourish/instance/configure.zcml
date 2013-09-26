@@ -16,7 +16,6 @@
 
   <include package="schooltool.timetable" />
   <include package="schooltool.basicperson" />
-  <includeOverrides package="schooltool.basicperson" file="overrides.zcml" />
 
   <interface
       interface="schooltool.skin.flourish.interfaces.IFlourishBrowserLayer"

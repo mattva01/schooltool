@@ -58,16 +58,6 @@
                      zope.publisher.interfaces.browser.IBrowserRequest"
                 factory=".person.GroupsTerms"/>
 
-  <!-- csv importer -->
-  <page
-      name="person-csvimport.html"
-      for="..interfaces.IPersonContainer"
-      class=".csvimport.PersonCSVImportView"
-      template="person-csvimport.pt"
-      layer="schooltool.skin.ISchoolToolLayer"
-      permission="schooltool.edit"
-      />
-
   <navigationViewlet
       name="Home"
       for="*"
@@ -155,62 +145,6 @@
       for="schooltool.person.interfaces.IPersonContainer
            zope.publisher.interfaces.browser.IBrowserRequest"
       factory=".person.PersonTableFormatter" />
-
-  <configure package="schooltool.skin">
-
-    <page
-        name="index.html"
-        for="schooltool.person.interfaces.IPersonContainer"
-        class="schooltool.person.browser.person.PersonContainerView"
-        template="templates/container.pt"
-        layer="schooltool.skin.ISchoolToolLayer"
-        permission="schooltool.view"
-        />
-
-  </configure>
-
-  <page
-     name="add.html"
-     for="..interfaces.IPersonContainer"
-     class=".person.PersonAddView"
-     template="person_add.pt"
-     permission="schooltool.edit"
-     layer="schooltool.skin.ISchoolToolLayer"
-     menu="schooltool_actions" title="New Person" />
-
-  <navigationViewlet
-    name="add_new_person"
-    for="schooltool.person.interfaces.IPerson"
-    manager="schooltool.skin.IActionMenuManager"
-    template="person_add_person_viewlet.pt"
-    class=".person.PersonAddPersonViewlet"
-    permission="schooltool.view"
-    link="add.html"
-    title="New Person"
-    order="25"
-    />
-
-  <page
-     name="edit.html"
-     for="..interfaces.IPerson"
-     class=".person.PersonEditView"
-     template="person_edit.pt"
-     permission="schooltool.edit"
-     layer="schooltool.skin.ISchoolToolLayer"
-     menu="schooltool_actions"
-     title="Edit"
-     />
-
-  <page
-      name="index.html"
-      for="..interfaces.IPerson"
-      class=".person.PersonView"
-      template="person.pt"
-      permission="schooltool.view"
-      layer="schooltool.skin.ISchoolToolLayer"
-      menu="schooltool_actions"
-      title="View"
-      />
 
   <page
       name="home.html"

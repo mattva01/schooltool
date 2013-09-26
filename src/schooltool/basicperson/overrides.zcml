@@ -4,32 +4,5 @@
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="schooltool">
 
-  <utility factory=".person.PersonFactoryUtility" />
-
-  <adapter factory=".person.PersonCatalog"
-           name="schooltool.person.person.PersonCatalog" />
-
-  <adapter
-      for="schooltool.person.interfaces.IPersonContainer"
-      factory=".person.getPersonCatalog"
-      provides="zope.catalog.interfaces.ICatalog" />
-
-  <configure
-      xmlns:zcml="http://namespaces.zope.org/zcml"
-      zcml:condition="have devmode">
-
-    <utility
-        factory=".sampledata.SampleBasicStudents"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="students"
-        />
-
-    <utility
-        factory=".sampledata.SampleBasicTeachers"
-        provides="schooltool.sampledata.interfaces.ISampleDataPlugin"
-        name="teachers"
-        />
-
-  </configure>
 
 </configure>

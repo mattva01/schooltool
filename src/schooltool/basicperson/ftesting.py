@@ -22,10 +22,10 @@ import os
 
 from schooltool.skin.skin import ISchoolToolSkin
 from schooltool.testing.functional import ZCMLLayer
-from schooltool.basicperson.browser.skin import IBasicPersonLayer
 
 
-class IBasicPersonFtestingSkin(IBasicPersonLayer, ISchoolToolSkin):
+# BBB
+class IBasicPersonFtestingSkin(ISchoolToolSkin):
     """Skin for Basic Person functional tests."""
 
 

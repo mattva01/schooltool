@@ -20,8 +20,8 @@ Prologue
 
 Let's create a person for use in tests:
 
-    >>> from schooltool.app.browser.ftests.setup import addPerson
-    >>> addPerson('Frog', 'frog', 'pwd')
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('The', 'Frog', 'frog', 'pwd')
 
 Add a schoolyear:
 
@@ -236,7 +236,7 @@ Importing timetables
 
 We will need to define a person who will be a learner.
 
-    >>> addPerson('Tadpole', 'tadpole', 'pwd')
+    >>> addPerson('A', 'Tadpole', 'tadpole', 'pwd')
 
 We will also need a course.
 

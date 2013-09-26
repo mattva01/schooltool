@@ -95,7 +95,7 @@ class BasicPersonContainerView(TableContainerView):
     index_title = _("Person index")
 
     def isDeletingHimself(self):
-        person = IBasicPerson(self.request.principal, None)
+        person = IPerson(self.request.principal, None)
         return person in self.itemsToDelete
 
     @property
@@ -103,19 +103,6 @@ class BasicPersonContainerView(TableContainerView):
         app = ISchoolToolApplication(None)
         syc = ISchoolYearContainer(app)
         return syc
-
-
-class DeletePersonCheckboxColumn(table.table.DependableCheckboxColumn):
-
-    def __init__(self, *args, **kw):
-        kw = dict(kw)
-        self.disable_items = kw.pop('disable_items', None)
-        super(DeletePersonCheckboxColumn, self).__init__(*args, **kw)
-
-    def hasDependents(self, item):
-        if self.disable_items and item.__name__ in self.disable_items:
-            return True
-        return table.table.DependableCheckboxColumn.hasDependents(self, item)
 
 
 class FlourishBasicPersonContainerView(flourish.page.Page):

@@ -12,8 +12,8 @@ Set up
 
 We add a person
 
-    >>> from schooltool.app.browser.ftests.setup import addPerson
-    >>> addPerson('person1', 'person', 'pwd')
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('The', 'person1', 'person', 'pwd')
 
 
 Test
@@ -82,8 +82,7 @@ Make sure the note is there when we view it:
 
 # Add a user who won't be able to see the private note:
 
-#     >>> from schooltool.app.browser.ftests.setup import addPerson
-#     >>> addPerson('Frog', 'frog', 'pwd')
+#     >>> addPerson('The', 'Frog', 'frog', 'pwd')
 
 # View the page as our new user and we will only see the first (public) note:
 

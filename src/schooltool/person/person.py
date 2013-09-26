@@ -27,13 +27,11 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.container import btree
 from zope.container.contained import Contained
 from zope.component import adapts, adapter
-from zope.component import getUtility
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.membership import URIMembership, URIMember, URIGroup
 from schooltool.app.overlay import OverlaidCalendarsProperty
-from schooltool.app.catalog import AttributeCatalog
 from schooltool.person import interfaces
 from schooltool.relationship import RelationshipProperty
 from schooltool.securitypolicy.crowds import Crowd, AdministratorsCrowd
@@ -44,7 +42,6 @@ from schooltool.securitypolicy.crowds import ConfigurableCrowd
 from schooltool.person.interfaces import IPersonPreferences
 from schooltool.person.interfaces import IPasswordWriter
 from schooltool.securitypolicy.crowds import OwnerCrowd, AggregateCrowd
-from schooltool.utility.utility import UtilitySetUp
 
 
 class PersonContainer(btree.BTreeContainer):
@@ -207,12 +204,3 @@ class PasswordWriterCrowd(ConfigurableCrowd):
             return True
         return (ConfigurableCrowd.contains(self, principal) and
                 OwnerCrowd(self.context.person).contains(principal))
-
-
-class PersonCatalog(AttributeCatalog):
-
-    version = '1 - replaced catalog utility'
-    interface = IPerson
-    attributes = ('__name__', 'title')
-
-getPersonCatalog = PersonCatalog.get
