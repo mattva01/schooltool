@@ -612,16 +612,17 @@ class PDFForm(PDFPart, form.DisplayForm):
         return form.DisplayForm.render(self, *args, **kw)
 
 
-def text2rml(snippet):
+def text2rml(snippet, para_class=None):
     if not snippet:
         return snippet
-    rml = unicode(snippet)
+    snippet = unicode(snippet)
     paragraphs = filter(None, [p.strip() for p in snippet.splitlines()])
-    if len(paragraphs) > 1:
-        rml = '<para>'+'</para>\n<para>'.join(paragraphs)+'</para>'
-    else:
-        rml = ''.join(paragraphs)
-    return rml
+    if not paragraphs:
+        return ''
+    start_tag = '<para>'
+    if para_class is not None:
+        start_tag = '<para style="%s">' % para_class
+    return start_tag+('</para>\n'+start_tag).join(paragraphs)+'</para>'
 
 
 html_tags_valid_in_rml_re = re.compile(
@@ -630,7 +631,7 @@ html_tags_valid_in_rml_re = re.compile(
 html_p_tag_re = re.compile(r'</?p[^>]*>')
 html_br_tag_re = re.compile(r'</?br[^>]*>')
 
-def html2rml(snippet):
+def html2rml(snippet, para_class=None):
     if not snippet:
         return snippet
     snippet = unicode(snippet)
@@ -650,27 +651,32 @@ def html2rml(snippet):
         valid_text = html_tags_valid_in_rml_re.sub(u'<\g<1>>', fixed_escaping)
         paragraphs.append(valid_text)
     paragraphs = filter(None, [p.strip() for p in paragraphs])
-    if len(paragraphs) > 1:
-        rml = '<para>'+'</para>\n<para>'.join(paragraphs)+'</para>'
-    else:
-        rml = ''.join(paragraphs)
-    return rml
+    if not paragraphs:
+        return ''
+    start_tag = '<para>'
+    if para_class is not None:
+        start_tag = '<para style="%s">' % para_class
+    return start_tag+('</para>\n'+start_tag).join(paragraphs)+'</para>'
 
 
 class Text2RML(BrowserView):
     """Formats the date using the 'full' format"""
+
+    para_class = None
 
     def __call__(self):
         text = self.context
         if not text:
             return text
         snippet = translate(text, context=self.request)
-        rml = text2rml(snippet)
+        rml = text2rml(snippet, self.para_class)
         return rml
 
 
 class HTML2RML(BrowserView):
     """Formats the date using the 'full' format"""
+
+    para_class = None
 
     def unescape_FCKEditor_HTML(self, text):
         text = text.replace(u'&amp;', u'&')
@@ -688,7 +694,7 @@ class HTML2RML(BrowserView):
             return text
         snippet = translate(text, context=self.request)
         unfcked = self.unescape_FCKEditor_HTML(snippet)
-        rml = html2rml(unfcked)
+        rml = html2rml(unfcked, self.para_class)
         return rml
 
 

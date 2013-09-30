@@ -639,6 +639,7 @@ class AutoFitGrid(Grid):
         min_column_width = None,
         max_column_width = None,
         continued_font = Grid.config.header_font,
+        continued_font_size = Grid.config.header_font_size,
         continued_text = _('Continued ...'),
         )
 
@@ -692,6 +693,7 @@ class AutoFitGrid(Grid):
         # Fit as many columns as we can
         continued = [GridColumn(self.config.continued_text,
                                 font_name=self.config.continued_font,
+                                font_size=self.config.continued_font_size,
                                 no_data=True)]
         n = 1
         while n < len(columns):

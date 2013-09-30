@@ -7,19 +7,19 @@
   <color id="text" value="#000000" />
   <color id="background" value="#ffffff" />
 
-  <color id="top_bar.background" value="#636466" />
+  <color id="top_bar.background" value="#5a5758" />
   <color id="top_bar.text" value="#ffffff" />
 
   <color id="bottom_bar.background" value="#ffffff" />
   <color id="bottom_bar.text" value="#000000" />
 
-  <color id="separator" value="#636466" />
+  <color id="separator" value="#5a5758" />
 
   <color id="pagesplit-continued" value="#000000" />
 
-  <color id="table.header.background" value="#636466" />
+  <color id="table.header.background" value="#949292" />
   <color id="table.header.text" value="#ffffff" />
-  <color id="table.subheader.background" value="#939598" />
+  <color id="table.subheader.background" value="#acabab" />
   <color id="table.subheader.text" value="#ffffff" />
   <color id="table.row.background" value="#ffffff" />
   <color id="table.row-alt.background" value="#f5f4f5" />
