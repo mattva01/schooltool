@@ -22,7 +22,7 @@
   <color id="table.subheader.background" value="#acabab" />
   <color id="table.subheader.text" value="#ffffff" />
   <color id="table.row.background" value="#ffffff" />
-  <color id="table.row-alt.background" value="#f5f4f5" />
+  <color id="table.row-alt.background" value="#d5d4d5" />
   <color id="table.text" value="#000000" />
 
   <color id="grade.table.grades-line" value="#000000" />

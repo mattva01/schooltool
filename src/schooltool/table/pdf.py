@@ -484,8 +484,8 @@ class Grid(object):
                     'font_changed': changed,
                     'font_name': col_font,
                     'font_size': col_font_size,
-                    'x': pos + 2,
-                    'y': -pos + 2,
+                    'x': pos - 2,
+                    'y': -pos + 4,
                     'text': column.text,
                     })
             font_name = col_font
