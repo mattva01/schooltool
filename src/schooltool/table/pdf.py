@@ -484,8 +484,8 @@ class Grid(object):
                     'font_changed': changed,
                     'font_name': col_font,
                     'font_size': col_font_size,
-                    'x': pos,
-                    'y': -pos,
+                    'x': pos + 2,
+                    'y': -pos + 2,
                     'text': column.text,
                     })
             font_name = col_font
@@ -520,7 +520,7 @@ class Grid(object):
 
         left = self.config.title_column_width * ang
         self.header_lines = []
-        for n in range(len(self.columns)):
+        for n in range(len(self.columns)+1):
             pos = left + n*self.data_column_width*ang
             self.header_lines.append(
                 '%d %d %d %d' % (pos, -pos, pos+line_len, -pos))
