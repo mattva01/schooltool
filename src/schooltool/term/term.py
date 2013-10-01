@@ -28,6 +28,7 @@ from zope.event import notify
 from zope.proxy import sameProxiedObjects
 from zope.component import adapts
 from zope.component import adapter
+from zope.component import getUtility
 from zope.interface import implements
 from zope.interface import implementer
 from zope.lifecycleevent.interfaces import IObjectRemovedEvent
@@ -254,6 +255,30 @@ class DateManagerUtility(object):
     @property
     def current_term(self):
         return getNextTermForDate(self.today)
+
+
+class TodayDescriptor(object):
+
+    def __init__(self, request):
+        self.request = request
+        app = ISchoolToolApplication(None)
+        self.tzinfo = pytz.timezone(IApplicationPreferences(app).timezone)
+
+    def __get__(self, instance, owner):
+        dt = pytz.utc.localize(datetime.utcnow())
+        return dt.astimezone(self.tzinfo).date()
+
+
+class TimeNowDescriptor(object):
+
+    def __init__(self, request):
+        self.request = request
+        app = ISchoolToolApplication(None)
+        self.tzinfo = pytz.timezone(IApplicationPreferences(app).timezone)
+
+    def __get__(self, instance, owner):
+        dt = pytz.utc.localize(datetime.utcnow())
+        return dt.astimezone(self.tzinfo)
 
 
 @implementer(interfaces.ITermContainer)
