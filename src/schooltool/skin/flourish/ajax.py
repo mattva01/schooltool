@@ -19,6 +19,8 @@
 """
 Schooltool page AJAX parts.
 """
+import zope.contentprovider.interfaces
+import zope.event
 from zope.component import adapts
 from zope.interface import implements
 from zope.location.interfaces import LocationError
@@ -29,6 +31,7 @@ from zope.traversing.interfaces import ITraversable
 
 from schooltool.skin.flourish import interfaces
 from schooltool.skin.flourish import tal
+from schooltool.skin.flourish import form
 from schooltool.skin.flourish.viewlet import Viewlet, ViewletManagerBase
 from schooltool.skin.flourish.viewlet import ManagerViewlet
 
@@ -140,3 +143,25 @@ class ContextTraversable(object):
             next, self.parts.request, self.parts.view, self.parts)
         parts.__name__ = name
         return parts
+
+
+class AJAXDialog(form.Dialog, AJAXPart):
+
+    def update(self):
+        AJAXPart.update(self)
+        form.Dialog.update(self)
+
+    def __call__(self, *args, **kw):
+        if not self._updated:
+            event = zope.contentprovider.interfaces.BeforeUpdateEvent
+            zope.event.notify(event(self, self.request))
+            self.update()
+        return form.Dialog.__call__(self, *args, **kw)
+
+
+class AJAXDialogForm(AJAXDialog, form.DialogForm):
+    pass
+
+
+class AJAXDialogAddForm(AJAXDialog, form.DialogAddForm):
+    pass

@@ -47,10 +47,10 @@ class FlourishRadioBoolTerms(BoolTerms):
     falseLabel = _('No')
 
 
-class Form(z3c.form.form.Form, page.Page):
-    __call__ = page.Page.__call__
+class Form(z3c.form.form.Form, page.PageBase):
+    __call__ = page.PageBase.__call__
     formErrorsMessage = _('Please correct the marked fields below.')
-    template = InheritTemplate(page.Page.template)
+    template = InheritTemplate(page.PageBase.template)
 
     def update(self):
         super(Form, self).update()
@@ -59,9 +59,9 @@ class Form(z3c.form.form.Form, page.Page):
         super(Form, self).updateActions()
 
 
-class DisplayForm(z3c.form.form.DisplayForm, page.Page):
-    template = InheritTemplate(page.Page.template)
-    __call__ = page.Page.__call__
+class DisplayForm(z3c.form.form.DisplayForm, page.PageBase):
+    template = InheritTemplate(page.PageBase.template)
+    __call__ = page.PageBase.__call__
 
     def update(self):
         super(DisplayForm, self).update()
@@ -84,7 +84,7 @@ class AddForm(Form, z3c.form.form.AddForm):
         self.request.response.redirect(self.nextURL())
 
 
-class Dialog(page.Page):
+class Dialog(page.PageBase):
 
     # Set this to False if you don't want the browser to reload the whole
     # page, but display the redirected result in the dialog instead.
