@@ -242,3 +242,7 @@ def buildQueryString(text):
             # insert text inside quotes verbatim
             terms.append('"%s"' % part)
     return ' '.join(terms)
+
+
+def getRequestIntIds(request=None):
+    return getUtility(IIntIds)

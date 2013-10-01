@@ -33,15 +33,19 @@ from zope.annotation.interfaces import IAttributeAnnotatable, IAnnotations
 from zope.app.applicationcontrol.interfaces import IApplicationControl
 from zope.app.applicationcontrol.applicationcontrol import applicationController
 from zope.component.hooks import getSite
+from zope.component import queryAdapter
+from zope.component import getAdapters
 from zope.site import SiteManagerContainer
 from zope.container import sample
 from zope.container.contained import NameChooser
 from zope.container.interfaces import INameChooser
+from zope.site import threadSiteSubscriber
 from zope.traversing.interfaces import IContainmentRoot
 
 from schooltool.app.interfaces import IPluginInit, IPluginStartUp
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences, IApplicationTabs
+from schooltool.app.interfaces import IRequestHelpers, IRequestHelper
 from schooltool.app import relationships
 from schooltool.app.interfaces import IAsset
 from schooltool.relationship.relationship import RelationshipProperty
@@ -245,6 +249,10 @@ def getApplicationPreferences(app):
         return annotations[key]
 
 
+def getRequestApplicationPreferences(request):
+    return getApplicationPreferences(ISchoolToolApplication(None))
+
+
 def getApplicationTabs(app):
     """Adapt a SchoolToolApplication to IApplicationTabs."""
 
@@ -294,3 +302,22 @@ class StartUpBase(ActionBase):
 @implementer(IApplicationControl)
 def getApplicationControl(app=None):
     return LocationProxy(applicationController, app, 'control')
+
+
+class RequestHelpers(object):
+    implements(IRequestHelpers)
+
+    def __new__(cls, request):
+        adapters = getAdapters((request, ), IRequestHelper)
+        Helpers = type(cls.__name__, (cls, ), dict(adapters))
+        return object.__new__(Helpers, request)
+
+    def __init__(self, request):
+        self.request = request
+
+
+def beforeTraverseSchoolToolSite(event, site):
+    threadSiteSubscriber(site, event)
+    util = queryAdapter(event.request, IRequestHelpers)
+    if util is not None:
+        event.request.util = util

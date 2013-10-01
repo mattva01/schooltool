@@ -248,3 +248,10 @@ class ICatalogs(IContainer):
 
     contains(IVersionedCatalog)
 
+
+class IRequestHelpers(Interface):
+    """Easy access to common ST utils."""
+
+
+class IRequestHelper(Interface):
+    """Interface to query a request helper."""

@@ -394,4 +394,33 @@
       permission="zope.Public"
       />
 
+  <adapter
+      for="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.app.interfaces.IRequestHelpers"
+      factory=".app.RequestHelpers"
+      />
+
+  <adapter
+      for="zope.traversing.interfaces.IBeforeTraverseEvent
+           zope.component.interfaces.ISite"
+      provides="schooltool.schoolyear.interfaces.ISubscriber"
+      factory=".app.beforeTraverseSchoolToolSite"
+      name="schooltool.app.app.beforeTraverseSchoolToolSite"
+      />
+
+  <adapter
+      for="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.app.interfaces.IRequestHelper"
+      factory=".app.getRequestApplicationPreferences"
+      name="preferences"
+      />
+
+  <adapter
+      for="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.app.interfaces.IRequestHelper"
+      factory=".catalog.getRequestIntIds"
+      name="int_ids"
+      />
+
+
 </configure>
