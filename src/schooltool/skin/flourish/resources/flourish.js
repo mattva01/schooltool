@@ -79,11 +79,16 @@ ST.dialogs = (function() {
       dialog.empty();
   }
 
-  function modal_form_dialog(form_url, container_sel, title) {
+  function modal_form_dialog(form_url, container_sel, title, data) {
       before_dialog_load(container_sel);
       var container = $(container_sel);
+      method = "GET";
+      if (data) {
+          method = "POST";
+      }
       var request = $.ajax({
               type: "GET",
+              data: data,
               url: form_url
           }).success(function(result, textStatus, jqXHR){
                   after_dialog_load(container);
@@ -138,6 +143,7 @@ ST.dialogs = (function() {
   return {
 
     jquery_id: jq_selector,
+    ensure_container: ensure_container,
 
     open_modal_link: function(link_sel, dialog_container_id)
     {
@@ -154,14 +160,14 @@ ST.dialogs = (function() {
         return false;
     },
 
-    open_modal_form: function(url, dialog_container_id, title)
+    open_modal_form: function(url, dialog_container_id, title, data)
     {
         var container_id = 'default-modal-dialog-container';
         if (dialog_container_id) {
             container_id = dialog_container_id;
         }
         var container = ensure_container(container_id);
-        modal_form_dialog(url, container, title);
+        modal_form_dialog(url, container, title, data);
         return false;
     },
 
