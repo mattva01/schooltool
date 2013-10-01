@@ -43,6 +43,7 @@ from schooltool.app import relationships
 from schooltool.app.security import ConfigurableCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary_titled
+from schooltool.app.states import StateStartUpBase
 from schooltool.course import interfaces, booking
 from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.person.interfaces import IPerson
@@ -473,3 +474,14 @@ def linkedSectionTermsVocabulary(context):
 
 def LinkedSectionTermsVocabularyFactory():
     return linkedSectionTermsVocabulary
+
+
+class SectionMemberStatesStartup(StateStartUpBase):
+
+    states_name = 'section-membership'
+    states_title = _('Section Enrollment')
+
+    def populate(self, states):
+        states.add(_('Pending'), False, 'p')
+        states.add(_('Enrolled'), True, 'a')
+        states.add(_('Withdrawn'), False, 'i')

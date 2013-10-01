@@ -34,6 +34,7 @@ from schooltool.relationship import RelationshipProperty
 from schooltool.basicperson.advisor import URIAdvisor, URIAdvising, URIStudent
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.app.catalog import AttributeCatalog
+from schooltool.app.app import StartUpBase
 from schooltool.common import SchoolToolMessage as _
 
 
