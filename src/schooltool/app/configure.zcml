@@ -1,6 +1,25 @@
 <?xml version="1.0"?>
 <configure xmlns="http://namespaces.zope.org/zope">
 
+  <class class="zope.container.btree.BTreeContainer">
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__ has_key" />
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+  </class>
+
+  <class class="zope.container.ordered.OrderedContainer">
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__ has_key" />
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IOrdered" />
+  </class>
+
+
   <include file="security.zcml" />
 
   <!-- Adapters -->
