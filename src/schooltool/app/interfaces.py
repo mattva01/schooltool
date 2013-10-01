@@ -21,6 +21,7 @@ SchoolTool application interfaces
 """
 
 import zope.schema
+import zope.schema.interfaces
 
 from zope.component.interfaces import ObjectEvent, IObjectEvent
 from zope.container.interfaces import IContainer
@@ -255,3 +256,40 @@ class IRequestHelpers(Interface):
 
 class IRequestHelper(Interface):
     """Interface to query a request helper."""
+
+
+class IRelationshipState(Interface):
+
+    title = zope.schema.TextLine(
+        title=_(u'Title'),
+        required=True)
+
+    code = zope.schema.TextLine(
+        title=_(u'Code'),
+        description=_(u"A short status code, preferably few symbols."),
+        required=True)
+
+    active = zope.schema.Bool(
+        title=_(u'Active'), required=True)
+
+
+class IRelationshipStateContainer(IContainer):
+    contains(IRelationshipState)
+
+
+class IRelationshipStates(IContained):
+
+    title = zope.schema.TextLine(
+        title=_("Title"))
+
+    states = zope.schema.List(
+        title=_(u'Statuses'),
+        description=_(u'Recipient addresses'),
+        value_type=zope.schema.Object(
+            title=_(u"Status"),
+            schema=IRelationshipState),
+        min_length=1)
+
+
+class IRelationshipStateChoice(zope.schema.interfaces.IField):
+    """A choice of temporal relationship states."""

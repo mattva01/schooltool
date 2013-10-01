@@ -422,5 +422,41 @@
       name="int_ids"
       />
 
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".states.StateInit"
+      name="schooltool.app.states" />
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".states.StateStartUp"
+      name="schooltool.app.states" />
+
+  <class class=".states.RelationshipStateContainer">
+    <allow interface="zope.container.interfaces.ISimpleReadContainer" />
+    <require permission="schooltool.view"
+             attributes="keys values items __iter__ __len__ has_key" />
+    <require permission="schooltool.edit"
+             interface="zope.container.interfaces.IWriteContainer" />
+  </class>
+
+  <class class=".states.RelationshipStates">
+    <require permission="schooltool.view"
+             interface="schooltool.app.interfaces.IRelationshipStates" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.app.interfaces.IRelationshipStates" />
+  </class>
+
+  <class class=".states.RelationshipState">
+    <require permission="schooltool.view"
+             interface="schooltool.app.interfaces.IRelationshipState" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.app.interfaces.IRelationshipState" />
+  </class>
+
+  <adapter factory=".states.getStateContainer" />
+
+  <adapter factory=".states.RelationshipStateTerms" />
+  <adapter factory=".states.RelationshipStateFieldWidget" />
 
 </configure>
