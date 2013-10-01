@@ -31,6 +31,7 @@ import re
 
 from zope.interface import Interface, implements
 from zope.schema import Text, TextLine, URI
+from schooltool.relationship.relationship import BoundRelationshipProperty
 
 
 class IURIObject(Interface):
@@ -84,6 +85,13 @@ class URIObject(object):
 
     def __repr__(self):
         return '<URIObject %s>' % (self.name or self.uri)
+
+    def access(self, state):
+        return state
+
+    def bind(self, instance, my_role, rel_type, other_role):
+        return BoundRelationshipProperty(
+            instance, rel_type, my_role, other_role)
 
 
 def looks_like_a_uri(uri):
