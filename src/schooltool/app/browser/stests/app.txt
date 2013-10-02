@@ -45,7 +45,7 @@ Experimental selenium doctest for SchoolTool
       Manage
     </a>
     <a href=...localhost/persons/manager/home.html" id="login-name">
-      SchoolTool Administrator
+      Default Manager
     </a>
     <a href="http://localhost/auth/@@logout.html" id="login-logout">
       Log Out
@@ -58,7 +58,7 @@ Experimental selenium doctest for SchoolTool
     Home
     Calendar
     Manage
-    SchoolTool Administrator
+    Default Manager
     Log Out
     SchoolTool
 
@@ -75,7 +75,7 @@ Experimental selenium doctest for SchoolTool
     [(u'Home', u'http://localhost/persons/manager/home.html'),
      (u'Calendar', u'http://localhost/persons/manager/calendar'),
      (u'Manage', u'http://localhost/manage.html'),
-     (u'SchoolTool Administrator',
+     (u'Default Manager',
       u'http://localhost/persons/manager/home.html'),
      (u'Log Out', u'http://localhost/auth/@@logout.html'),
      (u'SchoolTool', u'http://localhost/@@about.html')]
@@ -85,7 +85,7 @@ Experimental selenium doctest for SchoolTool
     >>> print browsers.manager.query.xpath(
     ...     '//body//div[@class="calcontent"]//h1')
     <h1>
-      Calendar for SchoolTool Administrator - Tuesday, February 1, 2005
+      Calendar for Default Manager - Tuesday, February 1, 2005
     </h1>
 
   Current URL and page contents:
@@ -97,7 +97,7 @@ Experimental selenium doctest for SchoolTool
     <BLANKLINE>
     ...
     <title>
-        Calendar for SchoolTool Administrator - Tuesday, February 1, 2005
+        Calendar for Default Manager - Tuesday, February 1, 2005
     </title>
     ...
 

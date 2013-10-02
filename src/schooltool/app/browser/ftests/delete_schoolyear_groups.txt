@@ -30,7 +30,7 @@ Adds himself to a group
     >>> manager.getLink('Groups').click()
     >>> manager.getLink('Clerks').click()
     >>> manager.getLink('edit members').click()
-    >>> manager.getControl('SchoolTool').click()
+    >>> manager.getControl('Default').click()
     >>> manager.getControl('Add').click()
 
 Let's see if that worked

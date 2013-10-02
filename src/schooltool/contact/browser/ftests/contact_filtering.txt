@@ -4,10 +4,10 @@ Filtering of contacts in contact listing views
     >>> browser = Browser('manager', 'schooltool')
     >>> browser.getLink('Manage').click()
 
-Rename administrator.
+Rename the manager.
 
     >>> browser.getLink('Persons').click()
-    >>> browser.getLink('Administrator').click()
+    >>> browser.getLink('Manager').click()
     >>> browser.getLink('Edit').click()
     >>> browser.getControl('First name').value = "Pedro"
     >>> browser.getControl('Middle name').value = "José Martínez"

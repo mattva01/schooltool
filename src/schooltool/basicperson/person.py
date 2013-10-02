@@ -87,8 +87,8 @@ class PersonFactoryUtility(object):
 
         return [first_name, last_name]
 
-    def createManagerUser(self, username, system_name):
-        return self(username, system_name, "Administrator")
+    def createManagerUser(self, username):
+        return self(username, "Default", "Manager")
 
     def sortOn(self):
         return (("last_name", False),)

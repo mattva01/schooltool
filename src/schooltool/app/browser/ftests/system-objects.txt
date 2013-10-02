@@ -40,10 +40,10 @@ The list of persons should have a disabled checkbox next to the manager user
     <td>
       <input type="checkbox" name="delete.manager" id="delete.manager" disabled="disabled" /></td>
     <td>
-      <a href="http://localhost/persons/manager">SchoolTool</a>
+      <a href="http://localhost/persons/manager">Default</a>
     </td>
     <td>
-      <a href="http://localhost/persons/manager">Administrator</a>
+      <a href="http://localhost/persons/manager">Manager</a>
     </td>
     <td>
       <input type="checkbox" name="delete.srichter" id="delete.srichter" /></td>

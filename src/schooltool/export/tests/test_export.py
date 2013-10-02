@@ -228,9 +228,9 @@ def doctest_format_persons():
          Text('US')]
         [Text(u'manager'),
          Text(None),
-         Text('SchoolTool'),
+         Text('Default'),
          Text(None),
-         Text('Administrator'),
+         Text('Manager'),
          Text(None),
          Text(None),
          Date(None),
