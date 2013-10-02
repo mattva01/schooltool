@@ -139,4 +139,4 @@ Experimental selenium doctest for SchoolTool
   We've logged in:
 
     >>> print browsers.bob.query.xpath('//body//div[@class="calcontent"]//h1').text
-    Calendar for Marley, Bob - Tuesday, February 1, 2005
+    Calendar for Bob Marley - Tuesday, February 1, 2005
