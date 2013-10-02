@@ -641,8 +641,8 @@ class AutoFitGrid(Grid):
     config = Config(
         Grid.config,
         header_min_font_size = 12,
-        min_column_width = None,
-        max_column_width = 1 * units.cm,
+        min_column_width = 1.5 * units.cm,
+        max_column_width = 1.5 * units.cm,
         continued_font = Grid.config.header_font,
         continued_font_size = 8,
         continued_text = _('Continued ...'),
