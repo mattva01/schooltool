@@ -155,7 +155,7 @@ are not required will keep the object's value for that field as None.
     >>> browser.getLink('Persons').click()
     >>> browser.getControl(name="SEARCH_TITLE").value = 'manager'
     >>> browser.getControl('Find Now').click()
-    >>> browser.getLink('Administrator').click()
+    >>> browser.getLink('Manager').click()
     >>> browser.getLink('Edit').click()
     >>> browser.queryHTML('//input[@name="form.widgets.date_demo"]/@value')
     ['2001-01-01']
@@ -415,7 +415,7 @@ Let's confirm the demo re-imports worked.
     >>> browser.getLink('Persons').click()
     >>> browser.getControl(name="SEARCH_TITLE").value = 'manager'
     >>> browser.getControl('Find Now').click()
-    >>> browser.getLink('Administrator').click()
+    >>> browser.getLink('Manager').click()
     >>> browser.getLink('Edit').click()
     >>> browser.queryHTML('//input[@name="form.widgets.date_demo"]/@value')
     ['2001-01-01']

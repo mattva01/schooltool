@@ -97,9 +97,9 @@ def doctest_PersonFactoryUtility_createManagerUser():
 
     The title of the manager user is set to "Administratorius" + system name:
 
-        >>> manager = utility.createManagerUser("manager_username", "SchoolTool")
+        >>> manager = utility.createManagerUser("manager_username")
         >>> manager.title
-        'SchoolTool Administrator'
+        'Default Manager'
         >>> manager.username
         'manager_username'
 

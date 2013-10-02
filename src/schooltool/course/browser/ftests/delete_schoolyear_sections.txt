@@ -36,8 +36,8 @@ A course
 
 And two sections
 
-    >>> setup.addSection("History", "2005-2006", "Term 1", instructors=["SchoolTool"])
-    >>> setup.addSection("History", "2005-2006", "Term 2", instructors=["SchoolTool"])
+    >>> setup.addSection("History", "2005-2006", "Term 1", instructors=["Default"])
+    >>> setup.addSection("History", "2005-2006", "Term 2", instructors=["Default"])
 
 Now let's delete one term:
 

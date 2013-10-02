@@ -101,7 +101,7 @@ Now let's see the report::
         <span>...</span>
       </td>
       <td>
-        <span>unauthenticated, sb.person.manager, SchoolTool Administrator, </span>
+        <span>unauthenticated, sb.person.manager, Default Manager, </span>
       </td>
       <td valign="top">
         <a href="showEntry.html?id=...">

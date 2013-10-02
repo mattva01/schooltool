@@ -103,8 +103,8 @@ class PersonFactoryUtility(object):
             result.append(locals()[column_name])
         return result
 
-    def createManagerUser(self, username, system_name):
-        return self(username, system_name, "Administrator")
+    def createManagerUser(self, username):
+        return self(username, "Default", "Manager")
 
     def sortOn(self):
         result = []
