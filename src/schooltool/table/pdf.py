@@ -368,6 +368,11 @@ class GridCell(object):
 
 class GridColumn(GridCell):
 
+    style = Config(
+        GridCell.style,
+        font_size=8,
+        )
+
     def __cmp__(self, other):
         return cmp((self.__name__, self.item), (other.__name__, other.item))
 
@@ -391,7 +396,7 @@ class Grid(object):
 
     config = Config(
         table_style_name = "grade.table.grades",
-        title_column_width = 7 * units.cm,
+        title_column_width = 5 * units.cm,
         header_font = 'Ubuntu_Regular',
         header_font_size = 12,
         column_padding = 4,
@@ -635,11 +640,11 @@ class AutoFitGrid(Grid):
 
     config = Config(
         Grid.config,
-        header_min_font_size = 8,
+        header_min_font_size = 12,
         min_column_width = None,
-        max_column_width = None,
+        max_column_width = 1 * units.cm,
         continued_font = Grid.config.header_font,
-        continued_font_size = Grid.config.header_font_size,
+        continued_font_size = 8,
         continued_text = _('Continued ...'),
         )
 

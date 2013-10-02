@@ -88,22 +88,23 @@
 
 
   <blockTableStyle id="grade.table.grades">
-    <lineStyle kind="LINEABOVE" colorName="grade.table.grades-line"
+    <lineStyle kind="LINEABOVE" colorName="table.row.background"
                start="0,0" stop="-1,0"/>
-    <lineStyle kind="LINEBEFORE" colorName="grade.table.grades-line"
+    <lineStyle kind="LINEBEFORE" colorName="table.row.background"
                start="1,0" stop="-2,-1"/>
-
-    <blockFont start="0,0" stop="0,-1"
-               name="Ubuntu_Bold" />
-    <blockBackground start="0,0" stop="-1,-1"
-                     colorsByRow="table.row-alt.background,table.row.background" />
-    <blockTextColor  start="0,0" stop="-1,-1"
-                     colorName="table.text" />
-
+    <blockFont start="0,0" stop="-1,-1" name="Ubuntu_Regular" size="8" />
+    <blockBackground
+        start="0,0" stop="-1,-1"
+        colorsByRow="table.row-alt.background,table.row.background" />
+    <blockBackground start="-1,0" stop="-1,-1"
+                     colorName="table.row.background" />
+    <blockTextColor start="0,0" stop="-1,-1" colorName="table.text" />
     <blockAlignment start="1,0" stop="-1,-1" value="center" />
     <blockAlignment start="0,0" stop="0,-1" value="left" />
+    <blockValign start="0,0" stop="-1,-1" value="middle" />
   </blockTableStyle>
 
-  <paraStyle name="grade.table.row-title" fontName="Ubuntu_Regular" fontSize="12" />
+  <paraStyle name="grade.table.row-title" fontName="Ubuntu_Regular"
+             fontSize="8" leading="10" />
 
 </metal:block>
