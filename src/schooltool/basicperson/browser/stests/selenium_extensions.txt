@@ -110,7 +110,7 @@ Used for adding people to the application.
     Teachers
 
     >>> manager.ui.person.add('Nestor', 'Guzman', 'nestor', 'pwd',
-    ...                       advisor='Welsh, David')
+    ...                       advisor='David Welsh')
     >>> manager.open('http://localhost/persons/nestor')
     >>> sel = 'table.person-view-demographics tbody tr'
     >>> for row in manager.query_all.css(sel):
