@@ -24,7 +24,7 @@ from zope.i18n import translate
 from zope.interface import Interface
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.security.proxy import removeSecurityProxy
-from z3c.form import button, field, form
+from z3c.form import button, field, form, widget
 
 from schooltool import table
 from schooltool.skin import flourish
@@ -334,6 +334,24 @@ class StateActionDialog(DialogFormWithScript):
                 })
         return states
 
+    @property
+    def default_state(self):
+        person = self.person
+        if person is None:
+            return []
+        app_states = self.app_states
+        relationships = removeSecurityProxy(self.view.getCollection())
+        person_state = relationships.state(person)
+        if person_state is not None:
+            active, code = person_state
+            return app_states.get(code)
+        for state in app_states.values():
+            if state.active:
+                return state
+        if app_states:
+            app_states.values()[0]
+        return None
+
     @button.buttonAndHandler(_("Apply"), name='apply')
     def handleApply(self, action):
         data, errors = self.extractData()
@@ -364,13 +382,11 @@ class StateActionDialog(DialogFormWithScript):
         params = []
         for name, value in self.request.items():
             if any([name.startswith(prefix) for prefix in prefixes]):
-                if isinstance(value, (tuple, list)):
-                    for part in value:
-                        params.append('%s=%s' % (
-                                urllib.quote(name), urllib.quote_plus(part)))
-                else:
-                    params.append('%s=%s' % (
-                        urllib.quote(name), urllib.quote_plus(value)))
+                if isinstance(value, (list, tuple)):
+                    name += ":tokens"
+                    value = ' '.join(value)
+                params.append('%s=%s' % (
+                    urllib.quote(name), urllib.quote_plus(value)))
         url = absoluteURL(self.view, self.request)
         if params:
             url += '?' + '&'.join(params)
@@ -440,3 +456,16 @@ class RemoveStateActionDialog(StateActionDialog):
     dialog_title_template = _("Enroll ${person}")
     action_prefix = 'remove_item'
     states_source = "section-membership"
+
+
+EditMembership_date = widget.ComputedWidgetAttribute(
+    lambda adapter: adapter.request.util.today,
+    view=StateActionDialog,
+    field=IEditMembership['date']
+    )
+
+EditMembership_state = widget.ComputedWidgetAttribute(
+    lambda adapter: adapter.view.default_state,
+    view=StateActionDialog,
+    field=IEditMembership['state']
+    )

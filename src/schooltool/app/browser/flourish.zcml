@@ -824,4 +824,14 @@
       permission="schooltool.edit"
       />
 
+  <zope:adapter
+       factory=".states.EditMembership_date"
+       name="default"
+       />
+
+  <zope:adapter
+       factory=".states.EditMembership_state"
+       name="default"
+       />
+
 </configure>
