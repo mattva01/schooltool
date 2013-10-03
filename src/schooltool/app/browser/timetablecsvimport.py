@@ -25,7 +25,6 @@ import pprint
 
 from zope.container.interfaces import INameChooser
 from zope.proxy import sameProxiedObjects
-from zope.security.proxy import removeSecurityProxy
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 import schooltool.skin.flourish.page
@@ -37,7 +36,7 @@ from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.section import Section
 from schooltool.app.browser.csvimport import FlourishBaseCSVImportView
 from schooltool.schoolyear.interfaces import ISchoolYear
-from schooltool.term.interfaces import ITerm, ITermContainer
+from schooltool.term.interfaces import ITermContainer
 from schooltool.term.term import getNextTerm
 from schooltool.timetable.interfaces import ITimetableContainer
 from schooltool.timetable.interfaces import IScheduleContainer
@@ -91,8 +90,6 @@ class TimetableCSVImporter(object):
     terms = None
 
     def __init__(self, schoolyear, charset=None):
-        # XXX It appears that our security declarations are inadequate,
-        #     because things break without this removeSecurityProxy.
         self.app = ISchoolToolApplication(None)
         self.schoolyear = schoolyear
         self.persons = self.app['persons']
@@ -530,19 +527,21 @@ class TimetableCSVImportView(BaseCSVImportView):
 
 
 class FlourishTimetableCSVImportView(FlourishBaseCSVImportView,
-                                     TimetableCSVImportView):
-    __init__ = TimetableCSVImportView.__init__
-    update = TimetableCSVImportView.update
+                                     TimetableCSVImportView,
+                                     ActiveSchoolYearContentMixin):
+
+    @property
+    def schoolyear(self):
+        return ISchoolYear(self.context)
 
     def nextURL(self):
-        url = absoluteURL(ISchoolToolApplication(None), self.request)
-        return '%s/sections' % url
+        app = ISchoolToolApplication(None)
+        return self.url_with_schoolyear_id(app, view_name='sections')
 
     @property
     def title(self):
-        schoolyear = ISchoolYear(self.context)
         return _('Sections for ${schoolyear}',
-                 mapping={'schoolyear': schoolyear.title})
+                 mapping={'schoolyear': self.schoolyear.title})
 
 
 class ImportSectionsLinkViewlet(flourish.page.LinkViewlet,

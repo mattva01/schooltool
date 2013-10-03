@@ -123,17 +123,17 @@ class CourseCSVImportView(BaseCSVImportView):
     importer_class = CourseCSVImporter
 
 
-class FlourishCourseCSVImportView(FlourishBaseCSVImportView):
+class FlourishCourseCSVImportView(FlourishBaseCSVImportView, ActiveSchoolYearContentMixin):
 
     importer_class = CourseCSVImporter
 
+    @property
+    def schoolyear(self):
+        return ISchoolYear(self.context)
+
     def nextURL(self):
-        schoolyear = ISchoolYear(self.context)
-        url = '%s/%s?schoolyear_id=%s' % (
-            absoluteURL(ISchoolToolApplication(None), self.request),
-            'courses',
-            schoolyear.__name__)
-        return url
+        app = ISchoolToolApplication(None)
+        return self.url_with_schoolyear_id(app, view_name='courses')
 
 
 class ImportCoursesLinkViewlet(flourish.page.LinkViewlet,

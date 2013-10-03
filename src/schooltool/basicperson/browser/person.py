@@ -112,11 +112,6 @@ class FlourishBasicPersonContainerView(flourish.page.Page):
       <div tal:content="structure context/schooltool:content/ajax/table" />
     ''')
 
-    @property
-    def done_link(self):
-        app = ISchoolToolApplication(None)
-        return absoluteURL(app, self.request) + '/manage'
-
 
 class PersonContainerLinks(flourish.page.RefineLinksViewlet):
     """Person container links viewlet."""
@@ -1352,9 +1347,14 @@ class PhotoView(flourish.widgets.ImageView):
     attribute = "photo"
 
 
-class PersonContainerViewTableFilter(PersonTableFilter):
+class PersonContainerViewTableFilter(PersonTableFilter, ActiveSchoolYearContentMixin):
 
     template = ViewPageTemplateFile('templates/f_container_table_filter.pt')
+
+    @property
+    def done_link(self):
+        app = ISchoolToolApplication(None)
+        return self.url_with_schoolyear_id(app, 'manage')
 
 
 class PersonProfilePDF(flourish.report.PlainPDFPage):

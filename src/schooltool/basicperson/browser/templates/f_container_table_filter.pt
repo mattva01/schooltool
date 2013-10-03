@@ -69,7 +69,7 @@
            tal:attributes="id search_id"
            class="button-ok" i18n:attributes="value" />
     <h3 class="done-link">
-      <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage" i18n:translate="">Done</a>
+      <a tal:attributes="href view/done_link" i18n:translate="">Done</a>
     </h3>
     <tal:script replace="structure scriptlocal: search_id" />
     <script>

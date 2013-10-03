@@ -68,17 +68,17 @@ class GroupCSVImportView(BaseCSVImportView):
     importer_class = GroupCSVImporter
 
 
-class FlourishGroupCSVImportView(FlourishBaseCSVImportView):
+class FlourishGroupCSVImportView(FlourishBaseCSVImportView, ActiveSchoolYearContentMixin):
 
     importer_class = GroupCSVImporter
 
+    @property
+    def schoolyear(self):
+        return ISchoolYear(self.context)
+
     def nextURL(self):
-        schoolyear = ISchoolYear(self.context)
-        url = '%s/%s?schoolyear_id=%s' % (
-            absoluteURL(ISchoolToolApplication(None), self.request),
-            'groups',
-            schoolyear.__name__)
-        return url
+        app = ISchoolToolApplication(None)
+        return self.url_with_schoolyear_id(app, view_name='groups')
 
 
 class ImportGroupsLinkViewlet(flourish.page.LinkViewlet,

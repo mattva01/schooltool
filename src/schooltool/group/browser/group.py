@@ -622,7 +622,7 @@ class FlourishGroupView(flourish.form.DisplayForm):
         return bool(list(self.context.leaders))
 
 
-class FlourishGroupAddView(flourish.form.AddForm):
+class FlourishGroupAddView(flourish.form.AddForm, ActiveSchoolYearContentMixin):
 
     template = InheritTemplate(flourish.page.Page.template)
     label = None
@@ -645,11 +645,8 @@ class FlourishGroupAddView(flourish.form.AddForm):
             url = self.request['camefrom']
             self.request.response.redirect(url)
             return
-        schoolyear = ISchoolYear(self.context)
-        url = '%s/%s?schoolyear_id=%s' % (
-            absoluteURL(ISchoolToolApplication(None), self.request),
-            'groups',
-            schoolyear.__name__)
+        app = ISchoolToolApplication(None)
+        url = self.url_with_schoolyear_id(app, view_name='groups')
         self.request.response.redirect(url)
 
     def create(self, data):
@@ -668,10 +665,13 @@ class FlourishGroupAddView(flourish.form.AddForm):
         return absoluteURL(self._group, self.request)
 
     @property
+    def schoolyear(self):
+        return ISchoolYear(self.context)
+
+    @property
     def title(self):
-        schoolyear = ISchoolYear(self.context)
         return _('Groups for ${schoolyear}',
-                 mapping={'schoolyear': schoolyear.title})
+                 mapping={'schoolyear': self.schoolyear.title})
 
 
 class FlourishGroupEditView(flourish.form.Form, form.EditForm):
