@@ -4013,8 +4013,8 @@ msgid "Add new contact for ${person}"
 msgstr "${person}への新しいコンタクトを追加"
 
 #: /src/schooltool/contact/browser/contact.py:329
-msgid "Change contact information for ${first_name} ${last_name}"
-msgstr "${first_name} ${last_name}のコンタクト情報を変更"
+msgid "Change contact information for ${person}"
+msgstr "${person}のコンタクト情報を変更"
 
 #: /src/schooltool/contact/browser/contact.py:441
 msgid "Contact index"

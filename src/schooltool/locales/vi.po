@@ -4037,8 +4037,8 @@ msgid "Add new contact for ${person}"
 msgstr "Thêm liên lạc cho ${person}"
 
 #: /src/schooltool/contact/browser/contact.py:329
-msgid "Change contact information for ${first_name} ${last_name}"
-msgstr "Thay đổi thông tin liên lạc cho ${first_name} ${last_name}"
+msgid "Change contact information for ${person}"
+msgstr "Thay đổi thông tin liên lạc cho ${person}"
 
 #: /src/schooltool/contact/browser/contact.py:441
 msgid "Contact index"

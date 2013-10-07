@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - Change manager's full name to "Default Manager" (https://launchpad.net/bugs/1227220)
+- Updated translations, removed unsupported ones (less than 25% translated).
 
 
 2.5.3.1 (2013-09-17)

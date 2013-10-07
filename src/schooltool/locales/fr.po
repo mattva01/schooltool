@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-08-22 19:53+0300\n"
-"PO-Revision-Date: 2013-09-09 13:45+0000\n"
-"Last-Translator: Stéphane V <stephane@vergeylen.eu>\n"
+"POT-Creation-Date: 2013-09-12 18:35+0300\n"
+"PO-Revision-Date: 2013-09-20 08:01+0000\n"
+"Last-Translator: benjy80 <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-09-10 05:24+0000\n"
-"X-Generator: Launchpad (build 16761)\n"
+"X-Launchpad-Export-Date: 2013-09-21 06:00+0000\n"
+"X-Generator: Launchpad (build 16765)\n"
 "Language: fr\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -27,15 +27,15 @@ msgstr "Votre École"
 #: /src/schooltool/app/browser/templates/index.pt:11
 #: /src/schooltool/person/browser/configure.zcml:26
 msgid "Persons"
-msgstr "Personnes"
+msgstr "Utilisateur"
 
 #: /src/schooltool/app/browser/__init__.py:311
 msgid "1 person"
-msgstr "1 personne"
+msgstr "1 utilisateur"
 
 #: /src/schooltool/app/browser/__init__.py:313
 msgid "${number} persons"
-msgstr "${number} personnes"
+msgstr "${number} utilisateurs"
 
 #: /src/schooltool/app/browser/app.py:262
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:37
@@ -64,7 +64,7 @@ msgstr "${number} personnes"
 #: /src/schooltool/timetable/browser/templates/f_timetable_container.pt:5
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:16
 msgid "There are none."
-msgstr "Il n'y en a aucun."
+msgstr "il n'y en a pas"
 
 #: /src/schooltool/app/browser/app.py:352
 #: /src/schooltool/app/browser/app.py:531
@@ -116,7 +116,7 @@ msgstr "Effacer"
 #: /src/schooltool/app/browser/app.py:408
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:58
 msgid "Add all displayed"
-msgstr "Ajouter tous les affichés"
+msgstr "Ajouter tout l'affichage actuel"
 
 #: /src/schooltool/app/browser/app.py:677
 msgid "Username or password is incorrect"
@@ -150,7 +150,7 @@ msgstr "Paramètres du calendrier"
 #: /src/schooltool/timetable/browser/calendar.py:94
 #: /src/schooltool/timetable/browser/timetable.py:658
 msgid "Apply"
-msgstr "Appliquer"
+msgstr "Enregistrer"
 
 #: /src/schooltool/app/browser/app.py:536
 #: /src/schooltool/app/browser/app.py:1014
@@ -282,16 +282,16 @@ msgstr "Serveur"
 #: /src/schooltool/app/browser/app.py:1177
 #: /src/schooltool/app/browser/flourish.zcml:611
 msgid "Pack Database"
-msgstr "Compacter la base de données"
+msgstr "Compresser la base de données"
 
 #: /src/schooltool/app/browser/app.py:1198
 msgid "Database successfully packed."
-msgstr "La base de données a été compactée avec succès"
+msgstr "La base de données à été compressée avec succés"
 
 #: /src/schooltool/app/browser/app.py:1200
 msgid "There were errors while packing the database: ${error}"
 msgstr ""
-"Des erreurs sont intervenues lors du compactage de la base de données: "
+"Des erreurs sont intervenues lors de la compression de la base de données: "
 "${error}"
 
 #: /src/schooltool/app/browser/app.py:1226
@@ -313,7 +313,7 @@ msgstr "Erreur ${type}"
 #: /src/schooltool/app/browser/app.py:962
 #: /src/schooltool/app/browser/templates/f_errors.pt:15
 msgid "Number of exceptions to show"
-msgstr "Nombre d'exceptions à afficher"
+msgstr "Nombre d'erreurs à afficher"
 
 #: /src/schooltool/app/browser/app.py:965
 #: /src/schooltool/app/browser/templates/f_errors.pt:21
@@ -4158,8 +4158,8 @@ msgid "Add new contact for ${person}"
 msgstr "Ajouter un nouveau contact de ${person}"
 
 #: /src/schooltool/contact/browser/contact.py:329
-msgid "Change contact information for ${first_name} ${last_name}"
-msgstr "Modifier les détails du contact ${first_name} ${last_name}"
+msgid "Change contact information for ${person}"
+msgstr "Modifier les détails du contact ${person}"
 
 #: /src/schooltool/contact/browser/contact.py:441
 msgid "Contact index"
@@ -5497,7 +5497,17 @@ msgstr "Impossible de lier des sections dans différentes années scolaires"
 msgid "Sections must be in consecutive terms"
 msgstr "Les sections doivent être dans des périodes consécutives"
 
-#: /src/schooltool/course/security.zcml:42
+#: /src/schooltool/course/security.zcml:38
+msgid "Only clerks can modify the section."
+msgstr ""
+
+#: /src/schooltool/course/security.zcml:38
+msgid ""
+"Section instructors can modify section's title, schedule, roster, equipment "
+"and so on."
+msgstr ""
+
+#: /src/schooltool/course/security.zcml:53
 msgid ""
 "Basic information about sections is only visible to instructors and students "
 "in that section, and school administration."
@@ -7999,7 +8009,11 @@ msgstr "Information des ressources"
 msgid "Resource calendars"
 msgstr "Calendrier des ressources"
 
-#: /src/schooltool/securitypolicy/browser/views.py:67
+#: /src/schooltool/securitypolicy/browser/views.py:65
+msgid "Schedules"
+msgstr ""
+
+#: /src/schooltool/securitypolicy/browser/views.py:66
 msgid "Gradebook"
 msgstr "Carnet de notes"
 
@@ -9244,7 +9258,15 @@ msgstr "Type d'Activité"
 msgid "Treat consecutive periods as one meeting"
 msgstr "Traiter des périodes consécutives comme une réunion"
 
-#: /src/schooltool/timetable/security.zcml:36
+#: /src/schooltool/timetable/security.zcml:5
+msgid "Instructors can schedule their own sections."
+msgstr "Les enseignants peuvent plannifier leurs cours"
+
+#: /src/schooltool/timetable/security.zcml:5
+msgid "Only clerks can schedule sections."
+msgstr "Seul les employés peuvent plannifier des cours"
+
+#: /src/schooltool/timetable/security.zcml:56
 msgid "School timetables"
 msgstr "Grilles-horaires de l'école"
 

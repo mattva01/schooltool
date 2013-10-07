@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-22 19:53+0300\n"
-"PO-Revision-Date: 2013-08-29 14:42+0000\n"
-"Last-Translator: Sergio Cuellar Valdes <herrsergio@gmail.com>\n"
+"POT-Creation-Date: 2013-09-12 18:35+0300\n"
+"PO-Revision-Date: 2013-10-04 12:43+0000\n"
+"Last-Translator: Emilio Hidalgo Simon <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-30 05:25+0000\n"
-"X-Generator: Launchpad (build 16750)\n"
+"X-Launchpad-Export-Date: 2013-10-05 06:17+0000\n"
+"X-Generator: Launchpad (build 16791)\n"
 "Language: es\n"
 
 #: /src/schooltool/app/app.py:193
@@ -2743,6 +2743,7 @@ msgstr "El término ${term} no existe."
 #: /src/schooltool/app/browser/timetablecsvimport.py:460
 msgid "First term ${first} starts after last term ${last}."
 msgstr ""
+"El primer término ${first} comienza después del último término ${last}."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:497
 msgid "Error in timetable CSV data, line ${line_no}"
@@ -3486,7 +3487,7 @@ msgstr "Información general"
 
 #: /src/schooltool/basicperson/browser/person.py:1494
 msgid "Received"
-msgstr ""
+msgstr "Recibido"
 
 #: /src/schooltool/basicperson/browser/person.py:1502
 msgid "Message"
@@ -3494,7 +3495,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:1561
 msgid "(${number} new)"
-msgstr ""
+msgstr "(${number} nuevo)"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
@@ -4120,8 +4121,8 @@ msgid "Add new contact for ${person}"
 msgstr "Añadir nuevo contacto para ${person}"
 
 #: /src/schooltool/contact/browser/contact.py:329
-msgid "Change contact information for ${first_name} ${last_name}"
-msgstr "Cambiar información de contacto por ${first_name} ${last_name}"
+msgid "Change contact information for ${person}"
+msgstr "Cambiar información de contacto por ${person}"
 
 #: /src/schooltool/contact/browser/contact.py:441
 msgid "Contact index"
@@ -4807,15 +4808,15 @@ msgstr "Eliminar enlaces de ${section}"
 
 #: /src/schooltool/course/browser/section.py:1435
 msgid "Link ${section} to Section in Other Term"
-msgstr ""
+msgstr "Enlace ${section) a la Sección en Otro Término"
 
 #: /src/schooltool/course/browser/section.py:1833
 msgid "Section Roster"
-msgstr ""
+msgstr "Sección de Registro"
 
 #: /src/schooltool/course/browser/section.py:1832
 msgid "section ${title} roster"
-msgstr ""
+msgstr "sección $ {title} roster"
 
 #: /src/schooltool/course/browser/section.py:1853
 msgid "Instructors: ${instructors}"
@@ -4953,7 +4954,7 @@ msgstr "Secciones Mostradas"
 
 #: /src/schooltool/course/browser/templates/coursesviewlet.pt:37
 msgid "Sections Attended"
-msgstr ""
+msgstr "Secciones de Estudio"
 
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:12
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:24
@@ -4965,7 +4966,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/extend_term.pt:4
 msgid "Extend Section to Term"
-msgstr ""
+msgstr "Extensión de la sección ampliada"
 
 #: /src/schooltool/course/browser/templates/extend_term.pt:18
 #: /src/schooltool/course/browser/templates/f_extend_term.pt:7
@@ -5028,7 +5029,7 @@ msgstr "Este curso no tiene secciones"
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:84
 msgid "Edit responsible parties for this course"
-msgstr ""
+msgstr "Editar los responsables de este curso"
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:92
 msgid "These users can modify the course."
@@ -5036,7 +5037,7 @@ msgstr "Estos usuarios pueden modificar el curso."
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:87
 msgid "This course has no responsible parties"
-msgstr ""
+msgstr "Este curso no tiene responsables"
 
 #: /src/schooltool/course/browser/templates/f_courses_related.pt:6
 msgid "A course in SchoolTool describes the curriculum taught in a section."
@@ -5057,7 +5058,7 @@ msgstr "Secciones impartidas"
 
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:37
 msgid "Sections attended"
-msgstr ""
+msgstr "Secciones atendidas"
 
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:79
 msgid "This person has no sections."
@@ -5066,7 +5067,7 @@ msgstr "Esta persona no tiene secciones."
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:21
 #: /src/schooltool/course/browser/templates/link_existing.pt:21
 msgid "Target Term"
-msgstr ""
+msgstr "Objetivo Alcanzado"
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:26
 #: /src/schooltool/course/browser/templates/link_existing.pt:26
@@ -5114,7 +5115,7 @@ msgstr "Gestionar cursos"
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:17
 msgid "There are ${count} courses defined for ${schoolyear}."
-msgstr ""
+msgstr "Hay $(count) cursos definicios por ${año escolar}"
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:21
 msgid "There are no courses defined for ${schoolyear}."
@@ -5122,11 +5123,11 @@ msgstr "No hay cursos definidos para ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:25
 msgid "Manage sections"
-msgstr ""
+msgstr "Administrar secciones"
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:36
 msgid "There are ${count} sections defined for ${schoolyear}."
-msgstr ""
+msgstr "Hay $ {count} secciones definidas por $ {año escolar}."
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:40
 msgid "There are no sections defined for ${schoolyear}."
@@ -5193,7 +5194,7 @@ msgstr "Esta sección no tiene cursos"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:89
 msgid "Edit terms for this section"
-msgstr ""
+msgstr "Editar los términos para esta sección"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:115
 msgid "Edit instructors for this section"
@@ -5213,11 +5214,11 @@ msgstr "Esta sección no tiene estudiantes"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:149
 msgid "Edit locations for this section"
-msgstr ""
+msgstr "Editar ubicaciones para esta sección"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:160
 msgid "This section has no locations"
-msgstr ""
+msgstr "Esta sección no tiene sitio"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:165
 msgid "Edit equipment for this section"
@@ -5225,13 +5226,16 @@ msgstr "Editar equipo para esta sección"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:176
 msgid "This section has no equipment"
-msgstr ""
+msgstr "Esta sección no tiene equipo"
 
+#: /src/schooltool/course/browser/templates/f_unlink_section.pt:22
 #: /src/schooltool/course/browser/templates/unlink_section.pt:23
 msgid ""
 "Click 'Unlink' if you would like to remove the link this section has to the "
 "following section(s):"
 msgstr ""
+"Haga clic en \"Desvincular\" si desea eliminar el vinculo a esta sección que "
+"tiene las distintas sección (es):"
 
 #. Default: "Unlink"
 #: /src/schooltool/course/browser/templates/f_unlink_section.pt:40
@@ -5243,7 +5247,7 @@ msgstr "Desvincular"
 
 #: /src/schooltool/course/browser/templates/link_existing.pt:4
 msgid "Link Section to Section in Other Term"
-msgstr ""
+msgstr "Enlazar la sección a otra sección con otros términos"
 
 #: /src/schooltool/course/browser/templates/link_section.pt:24
 msgid "Link ${section}, ${term} with a section in ${target_term}"
@@ -5332,15 +5336,15 @@ msgstr "Sección en el período siguiente."
 
 #: /src/schooltool/course/browser/templates/section_linkage.pt:4
 msgid "All Terms for Section"
-msgstr ""
+msgstr "Todos los términos de la sección"
 
 #: /src/schooltool/course/browser/templates/section_linkage.pt:35
 msgid "Unlink this Section"
-msgstr ""
+msgstr "Desvincular esta sección"
 
 #: /src/schooltool/course/browser/templates/unlink_section.pt:4
 msgid "Unlink Section"
-msgstr ""
+msgstr "Desvincular Sección"
 
 #: /src/schooltool/course/interfaces.py:36
 #: /src/schooltool/course/interfaces.py:129
@@ -5357,7 +5361,7 @@ msgstr "Identificador de la escuela de este curso."
 
 #: /src/schooltool/course/interfaces.py:58
 msgid "Alternate ID"
-msgstr ""
+msgstr "ID alternativo"
 
 #: /src/schooltool/course/interfaces.py:52
 msgid "Additional identifier for outside tracking or other purposes."
@@ -5424,7 +5428,19 @@ msgstr "No se pueden vincular secciones en años escolares diferentes"
 msgid "Sections must be in consecutive terms"
 msgstr "Las secciones deben estar en períodos consecutivos"
 
-#: /src/schooltool/course/security.zcml:42
+#: /src/schooltool/course/security.zcml:38
+msgid "Only clerks can modify the section."
+msgstr "Sólo los empleados pueden modificar la sección."
+
+#: /src/schooltool/course/security.zcml:38
+msgid ""
+"Section instructors can modify section's title, schedule, roster, equipment "
+"and so on."
+msgstr ""
+"Los Instructores de la sección pueden modificar el título, el calendario, la "
+"lista, el equipo de la sección y así sucesivamente."
+
+#: /src/schooltool/course/security.zcml:53
 msgid ""
 "Basic information about sections is only visible to instructors and students "
 "in that section, and school administration."
@@ -5525,6 +5541,9 @@ msgid ""
 "Most recent checks last. Red indicates insufficient permissions. \"=>\" "
 "indicates relayed checks, usually to parent object."
 msgstr ""
+"El último chequeo más reciente. El color rojo indica los permisos "
+"insuficientes.\"=>\" Indica chequeos retransmitidos, por lo general al "
+"objeto principal."
 
 #: /src/schooltool/devmode/flourish-overrides.zcml:8
 #: /src/schooltool/skin/flourish/instance/skin.zcml:68
@@ -6026,7 +6045,7 @@ msgstr "es el mismo identificador de período de control que otro en este día"
 
 #: /src/schooltool/export/importer.py:99
 msgid "must be either 'Location', 'Equipment' or 'Resource'"
-msgstr ""
+msgstr "debe ser 'Location', 'Equipment' o 'Resource'"
 
 #: /src/schooltool/export/importer.py:100
 msgid "is not a valid term in the given school year"
@@ -6050,7 +6069,7 @@ msgstr "no es un calendario válido en el año escolar"
 
 #: /src/schooltool/export/importer.py:103
 msgid "is not a valid day id for the given timetable"
-msgstr ""
+msgstr "no es un un identificador del dia válido para el plazo previsto"
 
 #: /src/schooltool/export/importer.py:104
 msgid "is not a valid period id for the given day"
@@ -6058,11 +6077,11 @@ msgstr "no es un id de período valido para el dia dado"
 
 #: /src/schooltool/export/importer.py:105
 msgid "is not a valid username or contact id"
-msgstr ""
+msgstr "no es un nombre de usuario válido o ID de contacto válido"
 
 #: /src/schooltool/export/importer.py:106
 msgid "must be empty when ID is a user id"
-msgstr ""
+msgstr "ID debe estar vacío cuando es un identificador de usuario"
 
 #: /src/schooltool/export/importer.py:107
 msgid "is not a valid resource id"
@@ -6070,7 +6089,7 @@ msgstr "no es un id de recursos válido"
 
 #: /src/schooltool/export/importer.py:110
 msgid "Username cannot contain non-ascii characters"
-msgstr ""
+msgstr "El Nombre de usuario solo puede contener caracteres ASCII"
 
 #: /src/schooltool/export/importer.py:111
 msgid "is not a valid contact relationship"
@@ -7870,7 +7889,11 @@ msgstr ""
 msgid "Resource calendars"
 msgstr ""
 
-#: /src/schooltool/securitypolicy/browser/views.py:67
+#: /src/schooltool/securitypolicy/browser/views.py:65
+msgid "Schedules"
+msgstr ""
+
+#: /src/schooltool/securitypolicy/browser/views.py:66
 msgid "Gradebook"
 msgstr "Libro de notas"
 
@@ -9086,7 +9109,15 @@ msgstr "Tipo de actividad"
 msgid "Treat consecutive periods as one meeting"
 msgstr "Tratar períodos consecutivos como una reunión."
 
-#: /src/schooltool/timetable/security.zcml:36
+#: /src/schooltool/timetable/security.zcml:5
+msgid "Instructors can schedule their own sections."
+msgstr ""
+
+#: /src/schooltool/timetable/security.zcml:5
+msgid "Only clerks can schedule sections."
+msgstr ""
+
+#: /src/schooltool/timetable/security.zcml:56
 msgid "School timetables"
 msgstr "Horarios de clases"
 
