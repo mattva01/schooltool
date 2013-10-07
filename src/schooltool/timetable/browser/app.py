@@ -22,7 +22,7 @@ Timetabling app integration.
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements, directlyProvides
 from zope.intid.interfaces import IIntIds
-from zope.component import adapts, queryAdapter, getUtility, getMultiAdapter
+from zope.component import adapts, getUtility, getMultiAdapter
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -31,13 +31,11 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zc.table.interfaces import ISortableColumn
 
 import schooltool.skin.flourish.page
-import schooltool.skin.flourish.containers
-import schooltool.skin.flourish.content
 from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import TitledContainerItemVocabulary
 from schooltool.common.inlinept import InlineViewPageTemplate
-from schooltool.schoolyear.interfaces import ISchoolYear, ISchoolYearContainer
+from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin.containers import ContainerView
 from schooltool.skin import flourish
 from schooltool.table import table
@@ -225,23 +223,24 @@ class TimetablesLinkViewlet(flourish.page.LinkViewlet,
         return ITimetableContainer(self.schoolyear)
 
 
-class TimetableDoneLink(object):
+class TimetableDoneLink(ActiveSchoolYearContentMixin):
     template = InlineViewPageTemplate('''
-       <a tal:attributes="href view/url"
-          tal:content="view/title" />
+        <h3 class="done-link">
+          <a tal:attributes="href view/url" tal:content="view/title" />
+        </h3>
     ''')
 
     title = _('Done')
 
     @property
-    def url(self):
+    def schoolyear(self):
         container = ITimetableContainer(self.context)
-        schoolyear = ISchoolYear(IHaveTimetables(container))
-        url = '%s/%s?schoolyear_id=%s' % (
-            absoluteURL(ISchoolToolApplication(None), self.request),
-            'timetables',
-            schoolyear.__name__)
-        return url
+        return ISchoolYear(IHaveTimetables(container))
+
+    @property
+    def url(self):
+        app = ISchoolToolApplication(None)
+        return self.url_with_schoolyear_id(app, view_name='timetables')
 
 
 class FlourishManageTimetablesOverview(flourish.page.Content,

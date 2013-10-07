@@ -62,7 +62,7 @@ request adapters are reflected in the report request views.
 
     >>> manager.getLink('Manage').click()
     >>> manager.getLink('Persons').click()
-    >>> manager.getLink('Administrator').click()
+    >>> manager.getLink('Manager').click()
     >>> manager.getLink('Reports').click()
     >>> manager.printQuery('//div[@id="content-body"]//a')
     <a href="http://localhost/persons/manager/request_student_report.html">Mock Student Report</a>

@@ -13,8 +13,56 @@
 
   <h2 i18n:translate="">Traceback</h2>
 
-  <pre class="traceback">
+  <pre id="full_traceback" class="traceback">
 <tal:block tal:replace="structure view/traceback" />
   </pre>
+
+  <h2 i18n:translate="">Modules</h2>
+  <p tal:repeat="entry modules/schooltool/common/get_all_versions"
+        tal:content="entry/__repr__" />
+
+  <h2 i18n:translate="">Runtime</h2>
+  <p tal:repeat="entry view/runtime" tal:content="entry" />
+
+
+<tal:bugreport condition="view/bugreport_url">
+
+  <h2 i18n:translate="">Automatic Bug Report</h2>
+  <p i18n:translate="">To submit automatic bug report you must be logged into <a href="https://launchpad.net/">Launchpad Issue Tracker</a></p>
+
+<form tal:attributes="action view/bugreport_url" method="POST" target="_blank">
+<textarea name="field.comment" style="display: none;">
+=====================================
+<tal:block i18n:translate="">Please fill in steps to reproduce this bug here:</tal:block>
+
+
+
+=====================================
+
+Exception
+
+<tal:block content="python:context.__class__.__name__" />: <tal:block content="context" />
+
+Traceback
+
+<tal:block tal:replace="view/plaintext_traceback" />
+
+Modules
+
+<tal:block repeat="entry modules/schooltool/common/get_all_versions"
+           content="entry/__repr__" />
+
+Runtime
+
+<tal:block repeat="entry view/runtime" content="entry" />
+</textarea>
+
+<input type="hidden" name="field.tags" value="traceback autoreport" />
+  <div class="buttons">
+  <input class="button-ok" type="submit" value="Submit Bug Report" i18n:attributes="value" />
+  </div>
+</form>
+
+</tal:bugreport>
 
 </div>

@@ -23,9 +23,15 @@ import sys
 import linecache
 import cgi
 
+from zope.app.applicationcontrol.interfaces import IApplicationControl
+from zope.app.applicationcontrol.interfaces import IRuntimeInfo
+from zope.cachedescriptors.property import Lazy
 from zope.interface import implements
 from zope.publisher.browser import BrowserView
 from zope.browser.interfaces import ISystemErrorView
+
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.common import HTMLToText, find_launchpad_project
 
 
 class ErrorView(BrowserView):
@@ -40,6 +46,26 @@ class ErrorView(BrowserView):
         self.request.response.setStatus(500)
         return self.index()
 
+    def plaintext_traceback(self):
+        # Not proud of this :)
+        parser = HTMLToText()
+        parser.feed(unicode(self.traceback))
+        plaintext = parser.get_data()
+        return plaintext
+
+    @Lazy
+    def bugreport_package(self):
+        etype, value, tb = sys.exc_info()
+        package = find_launchpad_project(tb)
+        return package
+
+    @Lazy
+    def bugreport_url(self):
+        package = self.bugreport_package
+        url = "https://bugs.launchpad.net/%s/+filebug" % package
+        return url
+
+    @Lazy
     def traceback(self):
         # Note: this function exposes filenames to the web user; some may
         # consider it a security risk.
@@ -85,6 +111,25 @@ class ErrorView(BrowserView):
             else:
                 w('__traceback_supplement__ = %s\n'
                   % q(repr(tb_supplement)))
+
+    @Lazy
+    def runtime(self):
+        app = ISchoolToolApplication(None)
+        application_control = IApplicationControl(app, None)
+        if application_control is None:
+            return None
+        try:
+            ri = IRuntimeInfo(application_control)
+        except TypeError:
+            return None
+        runtime = (
+            'Python %s' % ri.getPythonVersion(),
+            ri.getSystemPlatform(),
+            'Filesystem encoding %s, preferred %s' % (
+                ri.getFileSystemEncoding(), ri.getPreferredEncoding()
+                ),
+            )
+        return runtime
 
 
 def extract_tb(tb, limit=None):

@@ -50,7 +50,7 @@
   <allow
       interface=".interfaces.ISchoolToolCalendar"
       permission="schooltool.view"
-      crowds="authenticated calendar_viewers" />
+      crowds="administrators clerks calendar_viewers" />
 
   <allow
       interface=".interfaces.ISchoolToolCalendar"

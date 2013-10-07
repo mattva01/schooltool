@@ -20,13 +20,7 @@ Functional Testing Utilities for export/import
 """
 import os
 
-from schooltool.skin.skin import ISchoolToolSkin
 from schooltool.testing.functional import ZCMLLayer
-from schooltool.basicperson.browser.skin import IBasicPersonLayer
-
-
-class IExportImportFtestingSkin(IBasicPersonLayer, ISchoolToolSkin):
-    """Skin for Export/Import functional tests."""
 
 
 dir = os.path.abspath(os.path.dirname(__file__))

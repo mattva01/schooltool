@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-"""Unit tests for schooltool.person.sampledata
+"""Unit tests for schooltool.basicperson.sampledata
 """
 
 import unittest
@@ -23,21 +23,19 @@ import doctest
 
 from zope.app.testing import setup
 from zope.component import provideAdapter
-from zope.component import provideUtility
 from zope.interface import Interface
 from zope.interface.verify import verifyObject
 
 from schooltool.group.interfaces import IGroupContainer
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import ISchoolToolCalendar
-from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.testing import setup as stsetup
 
 
 def doctest_SampleStudents():
     """A sample data plugin that generates students
 
-        >>> from schooltool.person.sampledata import SampleStudents
+        >>> from schooltool.basicperson.sampledata import SampleStudents
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> plugin = SampleStudents()
         >>> verifyObject(ISampleDataPlugin, plugin)
@@ -81,7 +79,7 @@ def doctest_SampleStudents():
 def doctest_SampleTeachers():
     """A sample data plugin that generates teachers
 
-        >>> from schooltool.person.sampledata import SampleTeachers
+        >>> from schooltool.basicperson.sampledata import SampleTeachers
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> plugin = SampleTeachers()
         >>> verifyObject(ISampleDataPlugin, plugin)
@@ -129,7 +127,7 @@ def doctest_SampleTeachers():
 def doctest_SamplePersonalEvents():
     """A sample data plugin that generates random personal events.
 
-        >>> from schooltool.person.sampledata import SamplePersonalEvents
+        >>> from schooltool.basicperson.sampledata import SamplePersonalEvents
         >>> from schooltool.sampledata.interfaces import ISampleDataPlugin
         >>> plugin = SamplePersonalEvents()
         >>> verifyObject(ISampleDataPlugin, plugin)
@@ -137,8 +135,8 @@ def doctest_SamplePersonalEvents():
 
         >>> app = stsetup.setUpSchoolToolSite()
 
-        >>> from schooltool.person.sampledata import SampleStudents
-        >>> from schooltool.person.sampledata import SampleTeachers
+        >>> from schooltool.basicperson.sampledata import SampleStudents
+        >>> from schooltool.basicperson.sampledata import SampleTeachers
         >>> from schooltool.term.sampledata import SampleTerms
         >>> plugin_students = SampleStudents()
         >>> plugin_students.power = 20

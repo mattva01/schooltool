@@ -6,7 +6,7 @@ Now we'll try a text import.  Note that the description is not required
     >>> browser = Browser()
     >>> browser.addHeader('Authorization', 'Basic manager:schooltool')
     >>> browser.open('http://localhost/persons/@@person-csvimport.html')
-    >>> csvtext = "aperson, A Person, secret\nanother, A Nother Person With No Password\nchowa, Doña Chowa\n\n"
+    >>> csvtext = "aperson, A, Person, secret\nanother, Another, Person With No Password\nchowa, Doña, Chowa\n\n"
     >>> browser.getControl(name='csvtext').value = csvtext
     >>> browser.getControl(name='charset').value = ['UTF-8']
     >>> browser.getControl(name='UPDATE_SUBMIT').click()
@@ -43,7 +43,7 @@ We also get an error if a line starts with a comma (no title)
 Duplicate usernames are not imported, the error is noted to the user.
 
     >>> browser.open('http://localhost/persons/@@person-csvimport.html')
-    >>> csvtext = "student1, Student 1, secret\nstudent2, Student 2, secret\nstudent1, Student 100"
+    >>> csvtext = "student1, Student 1, Family, secret\nstudent2, Student 2, Family, secret\nstudent1, Student 100, Family"
     >>> browser.getControl(name='csvtext').value = csvtext
     >>> browser.getControl(name='charset').value = ['UTF-8']
     >>> browser.getControl(name='UPDATE_SUBMIT').click()
@@ -54,11 +54,11 @@ Duplicate usernames are not imported, the error is noted to the user.
 
     >>> analyze.printQuery("//div[@class='error']", browser.contents)
     <div class="error">Failed to import CSV text</div>
-    <div class="error">Duplicate username: student1, Student 100</div>
+    <div class="error">Duplicate username: student1, Student 100, Family</div>
     >>> analyze.printQuery("id('csvtext')", browser.contents)
-    <textarea name="csvtext" id="csvtext" cols="50" rows="10">student1, Student 1, secret
-      student2, Student 2, secret
-      student1, Student 100</textarea>
+    <textarea name="csvtext" id="csvtext" cols="50" rows="10">student1, Student 1, Family, secret
+      student2, Student 2, Family, secret
+      student1, Student 100, Family</textarea>
 
 
 Usernames cannot begin with '+' or '@' and cannot contain '/'

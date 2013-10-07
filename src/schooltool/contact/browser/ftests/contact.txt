@@ -4,8 +4,8 @@ Contacts
     >>> browser = Browser('manager', 'schooltool')
     >>> browser.getLink('Manage').click()
 
-    >>> from schooltool.contact.browser.ftests import addPerson
-    >>> addPerson('Bill Student', 'student', 'pwd')
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
+    >>> addPerson('Bill', 'Student', 'student', 'pwd')
 
 Let's try and add a contact:
 
@@ -15,7 +15,7 @@ Let's try and add a contact:
     >>> browser.getControl('Prefix').value = 'Mr'
     >>> browser.getControl('First name').value = 'John'
     >>> browser.getControl('Middle name').value = 'J'
-    >>> browser.getControl('Last name').value = 'Administrator'
+    >>> browser.getControl('Last name').value = 'Manager'
     >>> browser.getControl('Suffix').value = 'Jr'
     >>> browser.getControl('Address line 1').value = 'Frog lane 13'
     >>> browser.getControl('Address line 2').value = ''
@@ -44,26 +44,26 @@ information.  Contacts of existing users have no deletion checkboxes.
         <td>
           <a href="http://localhost/persons/student/contact">Bill</a>
         </td>
-      </tr>
+    </tr>
     <tr class="even"><td>
+        </td>
+        <td>
+          <a href="http://localhost/persons/manager/contact">Manager</a>
+        </td>
+        <td>
+          <a href="http://localhost/persons/manager/contact">Default</a>
+        </td>
+    </tr>
+    <tr class="odd"><td>
           <input type="checkbox" name="delete.contacts.Contact-..."
                                  id="delete.contacts.Contact-..." /></td>
         <td>
-          <a href="http://localhost/contacts/Contact">Administrator</a>
+          <a href="http://localhost/contacts/Contact">Manager</a>
         </td>
         <td>
           <a href="http://localhost/contacts/Contact">John</a>
         </td>
     </tr>
-    <tr class="odd"><td>
-        </td>
-        <td>
-          <a href="http://localhost/persons/manager/contact">Administrator</a>
-        </td>
-        <td>
-          <a href="http://localhost/persons/manager/contact">SchoolTool</a>
-        </td>
-      </tr>
 
 If you click on the contact and click edit - you can change the
 information:
@@ -88,7 +88,7 @@ The "Contacts" action button in "Home" takes us to contacts overview page.
     >>> browser.printQuery("id('content-body')")
     <div id="content-body">
       <h1>Contact information for
-          <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+          <a href="http://localhost/persons/manager">Default Manager</a>
       </h1>
       <div class="info-block">
       </div>
@@ -121,7 +121,7 @@ And attach existing contact entries to a person as well:
     button-neutral
     button-neutral
 
-    >>> browser.getControl('Administrator').click()
+    >>> browser.getControl('Manager').click()
     >>> browser.getControl('Assign').click()
 
 Both contacts should be assigned now:
@@ -136,7 +136,7 @@ Both contacts should be assigned now:
     <tr class="odd"><td>
           <input type="checkbox" name="remove_item.contacts.Contact-..." id="remove_item.contacts.Contact-..." /></td>
         <td>
-          <label for="remove_item.contacts.Contact-...">Administrator</label>
+          <label for="remove_item.contacts.Contact-...">Manager</label>
         </td>
         <td>
           <a href="http://localhost/contacts/Contact">John</a>
@@ -165,7 +165,7 @@ We can see them in the overview page also.
     >>> browser.printQuery("id('content-body')")
     <div id="content-body">
       <h1>Contact information for
-          <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+          <a href="http://localhost/persons/manager">Default Manager</a>
       </h1>
       <div class="info-block">
       </div>
@@ -187,7 +187,7 @@ We can see them in the overview page also.
       <div>
       <div class="person-info">
         <fieldset><div class="person-info">
-          <h2> Mr John J Administrator Jr </h2>
+          <h2> Mr John J Manager Jr </h2>
           <a href="http://localhost/contacts/Contact">(View Details)</a>
           <div class="info-block">
             <h4>Address</h4>
@@ -218,7 +218,7 @@ Contacts can be assigned to multiple persons.
 
     >>> browser.getControl('Clear').click()
 
-    >>> browser.getControl('Administrator', index=0).click()
+    >>> browser.getControl('Manager', index=1).click()
     >>> browser.getControl('Assign').click()
 
 Now we can see two persons when we navigate to contact's view.
@@ -231,15 +231,15 @@ Now we can see two persons when we navigate to contact's view.
     ...First name...
     ...John...
     ...Last name...
-    ...Administrator...
+    ...Manager...
     ...
     <div class="row">
       Contact of
-      <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+      <a href="http://localhost/persons/manager">Default Manager</a>
     </div>
     <div class="row">
       Contact of
-      <a href="http://localhost/persons/student">Student, Bill</a>
+      <a href="http://localhost/persons/student">Bill Student</a>
     </div>
 
 Let's change the relationship with Bill.
@@ -256,11 +256,11 @@ Let's change the relationship with Bill.
     ...
     <div class="row">
       Contact of
-      <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+      <a href="http://localhost/persons/manager">Default Manager</a>
     </div>
     <div class="row">
       Parent of
-      <a href="http://localhost/persons/student">Student, Bill</a>
+      <a href="http://localhost/persons/student">Bill Student</a>
     </div>
 
 Let's test contact deletion.
@@ -284,7 +284,7 @@ Let's test contact deletion.
     <title> Delete items </title>
     <li>
       <span>John</span>
-      <a href="http://localhost/contacts/Contact">Administrator</a>
+      <a href="http://localhost/contacts/Contact">Manager</a>
     </li>
     <li>
       <span>Peter</span>
@@ -325,30 +325,30 @@ Confirm deletion of Peter Peterson.
         <td>
           <a href="http://localhost/persons/student/contact">Bill</a>
         </td>
-      </tr>
+    </tr>
     <tr class="even"><td>
+        </td>
+        <td>
+          <a href="http://localhost/persons/manager/contact">Manager</a>
+        </td>
+        <td>
+          <a href="http://localhost/persons/manager/contact">Default</a>
+        </td>
+    </tr>
+    <tr class="odd"><td>
           <input type="checkbox" name="delete.contacts.Contact-..."
                                  id="delete.contacts.Contact-..." /></td>
         <td>
-          <a href="http://localhost/contacts/Contact">Administrator</a>
+          <a href="http://localhost/contacts/Contact">Manager</a>
         </td>
         <td>
           <a href="http://localhost/contacts/Contact">John</a>
         </td>
     </tr>
-    <tr class="odd"><td>
-        </td>
-        <td>
-          <a href="http://localhost/persons/manager/contact">Administrator</a>
-        </td>
-        <td>
-          <a href="http://localhost/persons/manager/contact">SchoolTool</a>
-        </td>
-      </tr>
 
 
 Let's enter the contact information of an existing system user -
-SchoolTool Administrator.
+Default Manager.
 
     >>> browser.getLink('Home').click()
     >>> browser.getLink('Contacts').click()
@@ -366,7 +366,7 @@ SchoolTool Administrator.
     >>> browser.printQuery("id('content-body')")
     <div id="content-body">
       <h1>Contact information for
-        <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+        <a href="http://localhost/persons/manager">Default Manager</a>
       </h1>
       <div class="info-block">
         <h4>Address</h4>
@@ -379,7 +379,7 @@ SchoolTool Administrator.
       <br /><h1>Contacts</h1>
     ...
 
-And assign SchoolTool Administrator user as contact of a student.
+And assign Default Manager user as contact of a student.
 
     >>> browser.getLink('Manage').click()
     >>> browser.getLink('Persons').click()
@@ -389,21 +389,21 @@ And assign SchoolTool Administrator user as contact of a student.
     >>> browser.getLink('Manage Contacts').click()
 
     >>> browser.getControl('Clear').click()
-    >>> browser.getControl('Administrator', index=1).click()
+    >>> browser.getControl('Manager', index=1).click()
     >>> browser.getControl('Assign').click()
 
     >>> browser.getLink('Contacts').click()
     >>> browser.printQuery("//h1 | //fieldset//h2 | //fieldset//a")
     <h1>Contact information for
-      <a href="http://localhost/persons/student">Student, Bill</a>
+      <a href="http://localhost/persons/student">Bill Student</a>
     </h1>
     <h1>Contacts</h1>
     <h2>
-      Parent, Mr John J Administrator Jr
+      Parent, Mr John J Manager Jr
     </h2>
     <a href="http://localhost/contacts/Contact">(View Details)</a>
     <h2>
-      SchoolTool Administrator
+      Default Manager
     </h2>
     <a href="http://localhost/persons/manager/contact">(View Details)</a>
 
@@ -413,15 +413,15 @@ We can see that manager's contact information is also updated.
     >>> browser.printQuery("id('content-body')")
     <div id="content-body">
     <h1>Contact information for
-      <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+      <a href="http://localhost/persons/manager">Default Manager</a>
     </h1>
     <div>
       Contact of
-      <a href="http://localhost/persons/student">Student, Bill</a>
+      <a href="http://localhost/persons/student">Bill Student</a>
     </div>
     ...
 
-And of course we can change Administrator's relationship with Bill.
+And of course we can change Manager's relationship with Bill.
 
     >>> browser.getLink('Edit').click()
     >>> relationship = browser.getControl('Relationship')
@@ -432,10 +432,10 @@ And of course we can change Administrator's relationship with Bill.
     >>> browser.printQuery("id('content-body')")
     <div id="content-body">
     <h1>Contact information for
-      <a href="http://localhost/persons/manager">Administrator, SchoolTool</a>
+      <a href="http://localhost/persons/manager">Default Manager</a>
     </h1>
     <div>
       Sibling of
-      <a href="http://localhost/persons/student">Student, Bill</a>
+      <a href="http://localhost/persons/student">Bill Student</a>
     </div>
     ...

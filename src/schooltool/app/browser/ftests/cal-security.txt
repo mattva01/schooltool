@@ -21,11 +21,11 @@ Some basic setup:
 Let's create a person so that we can fool around with his calendar:
 
     >>> from schooltool.basicperson.browser.ftests.setup import addPerson
-    >>> addPerson('Frog', 'Frog', 'frog', 'pwd')
+    >>> addPerson('The', 'Frog', 'frog', 'pwd')
 
 Let's create more persons so that we can test access control.
 
-    >>> addPerson('Toad', 'Toad', 'toad', 'doat')
+    >>> addPerson('A', 'Toad', 'toad', 'doat')
 
 
 Adding new events
@@ -81,11 +81,11 @@ link for it):
     ...
     Unauthorized: (..., 'schooltool.edit')
 
-Let's make Toad a manager (that should give him the permission to add
+Let's make Toad a clerk (that should give him the permission to add
 events to Frog's calendar):
 
     >>> manager.open('http://localhost/persons/toad/@@groups.html')
-    >>> manager.getControl('Managers').click()
+    >>> manager.getControl('Clerks').click()
     >>> manager.getControl('Add').click()
 
 Now the Toad can add events to Frog's calendar:

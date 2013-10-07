@@ -23,6 +23,8 @@ from zope.index.text.interfaces import ISearchableText
 from zope.interface import implements
 from zope.component import adapts
 
+from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.person.person import Person
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.course.section import PersonInstructorsCrowd
@@ -53,7 +55,7 @@ class BasicPerson(Person):
 
     @property
     def title(self):
-        return "%s, %s" % (self.last_name, self.first_name)
+        return "%s %s" % (self.first_name, self.last_name)
 
     advisors = RelationshipProperty(rel_type=URIAdvising,
                                     my_role=URIStudent,
@@ -67,6 +69,19 @@ class BasicPerson(Person):
 class PersonFactoryUtility(object):
 
     implements(IPersonFactory)
+
+    @property
+    def name_sorting(self):
+        app = ISchoolToolApplication(None)
+        preferences = IApplicationPreferences(app)
+        return preferences.name_sorting
+
+    @property
+    def columns_order(self):
+        result = ['last_name', 'first_name']
+        if self.name_sorting == 'first_name':
+            result = list(reversed(result))
+        return result
 
     def columns(self):
         first_name = IndexedLocaleAwareGetterColumn(
@@ -83,14 +98,19 @@ class PersonFactoryUtility(object):
             title=_(u'Last Name'),
             getter=lambda i, f: i.last_name,
             subsort=True)
+        result = []
+        for column_name in self.columns_order:
+            result.append(locals()[column_name])
+        return result
 
-        return [first_name, last_name]
-
-    def createManagerUser(self, username, system_name):
-        return self(username, system_name, "Administrator")
+    def createManagerUser(self, username):
+        return self(username, "Default", "Manager")
 
     def sortOn(self):
-        return (("last_name", False),)
+        result = []
+        for column_name in self.columns_order:
+            result.append((column_name, False))
+        return tuple(result)
 
     def groupBy(self):
         return (("grade", False),)
@@ -98,6 +118,13 @@ class PersonFactoryUtility(object):
     def __call__(self, *args, **kw):
         result = BasicPerson(*args, **kw)
         return result
+
+    def getSortingKey(self, person, collator):
+        result = []
+        for column_name in self.columns_order:
+            attr = getattr(person, column_name)
+            result.append(collator.key(attr))
+        return tuple(result)
 
 
 class BasicPersonCalendarCrowd(PersonCalendarCrowd):
@@ -114,7 +141,7 @@ class BasicPersonCalendarCrowd(PersonCalendarCrowd):
 
 class PersonCatalog(AttributeCatalog):
 
-    version = '2 - added text index'
+    version = '3 - updated title'
     interface = IBasicPerson
     attributes = ('__name__', 'title', 'first_name', 'last_name')
 

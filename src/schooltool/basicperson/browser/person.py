@@ -95,7 +95,7 @@ class BasicPersonContainerView(TableContainerView):
     index_title = _("Person index")
 
     def isDeletingHimself(self):
-        person = IBasicPerson(self.request.principal, None)
+        person = IPerson(self.request.principal, None)
         return person in self.itemsToDelete
 
     @property
@@ -105,30 +105,12 @@ class BasicPersonContainerView(TableContainerView):
         return syc
 
 
-class DeletePersonCheckboxColumn(table.table.DependableCheckboxColumn):
-
-    def __init__(self, *args, **kw):
-        kw = dict(kw)
-        self.disable_items = kw.pop('disable_items', None)
-        super(DeletePersonCheckboxColumn, self).__init__(*args, **kw)
-
-    def hasDependents(self, item):
-        if self.disable_items and item.__name__ in self.disable_items:
-            return True
-        return table.table.DependableCheckboxColumn.hasDependents(self, item)
-
-
 class FlourishBasicPersonContainerView(flourish.page.Page):
     """A Person Container view."""
 
     content_template = InlineViewPageTemplate('''
       <div tal:content="structure context/schooltool:content/ajax/table" />
     ''')
-
-    @property
-    def done_link(self):
-        app = ISchoolToolApplication(None)
-        return absoluteURL(app, self.request) + '/manage'
 
 
 class PersonContainerLinks(flourish.page.RefineLinksViewlet):
@@ -140,7 +122,7 @@ class PersonLinks(flourish.page.RefineLinksViewlet):
 
     @property
     def title(self):
-        return "%s %s" % (self.context.first_name, self.context.last_name)
+        return self.context.title
 
 
 class PersonImportLinks(flourish.page.RefineLinksViewlet):
@@ -1060,7 +1042,7 @@ class PersonTitle(ContentProvider):
 
     def title(self):
         person = self.context
-        return "%s %s" % (person.first_name, person.last_name)
+        return person.title
 
 
 class BasicPersonTable(PersonTable):
@@ -1070,7 +1052,7 @@ class BasicPersonTable(PersonTable):
         self.css_classes = {'table': ' data persons-table'}
 
     def columns(self):
-        cols = list(reversed(PersonTable.columns(self)))
+        cols = getUtility(IPersonFactory).columns()
         username = IndexedLocaleAwareGetterColumn(
             index='__name__',
             name='username',
@@ -1215,8 +1197,7 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
         contacts = list(IContactable(person).contacts)
         if contacts:
             contact = contacts[0]
-            contact_title = ' '.join([contact.first_name,
-                                      contact.last_name])
+            contact_title = contact.title
             phones = [
                 contact.home_phone,
                 contact.work_phone,
@@ -1225,7 +1206,7 @@ class FlourishPersonIDCardsViewBase(ReportPDFView):
             if phones:
                 contact_phone = phones[0]
         return {
-            'title': ' '.join([person.first_name, person.last_name]),
+            'title': person.title,
             'username': person.username,
             'ID': demographics.get('ID'),
             'birth_date': person.birth_date,
@@ -1366,9 +1347,14 @@ class PhotoView(flourish.widgets.ImageView):
     attribute = "photo"
 
 
-class PersonContainerViewTableFilter(PersonTableFilter):
+class PersonContainerViewTableFilter(PersonTableFilter, ActiveSchoolYearContentMixin):
 
     template = ViewPageTemplateFile('templates/f_container_table_filter.pt')
+
+    @property
+    def done_link(self):
+        app = ISchoolToolApplication(None)
+        return self.url_with_schoolyear_id(app, 'manage')
 
 
 class PersonProfilePDF(flourish.report.PlainPDFPage):

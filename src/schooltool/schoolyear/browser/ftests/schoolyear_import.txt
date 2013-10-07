@@ -369,8 +369,10 @@ that only groups with members in them can be marked:
     >>> manager.printQuery('//tr[@class="group-row"]/td[3]/'
     ...                    'input[@type="checkbox"]')
     <input type="checkbox" name="members" value="chess-club" />
+    <input type="checkbox" name="members" value="clerks" />
     <input type="checkbox" name="members" value="soccer-players" />
     <input type="checkbox" name="members" value="administrators" />
+    <input type="checkbox" name="members" value="manager" />
     <input type="checkbox" name="members" value="students" />
 
 Let's copy All the Timetable Schemas, the Chess Club group and its

@@ -645,8 +645,7 @@ class SchoolToolServer(SchoolToolMachinery):
         setSite(app)
         if MANAGER_USERNAME not in app['persons']:
             factory = getUtility(IPersonFactory)
-            manager = factory.createManagerUser(MANAGER_USERNAME,
-                                                self.system_name)
+            manager = factory.createManagerUser(MANAGER_USERNAME)
             app['persons'][MANAGER_USERNAME] = manager
             IDependable(manager).addDependent('')
         manager = app['persons'][MANAGER_USERNAME]

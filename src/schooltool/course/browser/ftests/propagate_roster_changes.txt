@@ -68,28 +68,28 @@ the two teachers and the two students in each term.
     >>> manager.getControl("Extend").click()
 
     >>> printRoster(1)
-    Teacher1, Teacher1
-    Teacher2, Teacher2
-    Student1, Student1
-    Student2, Student2
+    Teacher1 Teacher1
+    Teacher2 Teacher2
+    Student1 Student1
+    Student2 Student2
 
     >>> printRoster(2)
-    Teacher1, Teacher1
-    Teacher2, Teacher2
-    Student1, Student1
-    Student2, Student2
+    Teacher1 Teacher1
+    Teacher2 Teacher2
+    Student1 Student1
+    Student2 Student2
 
     >>> printRoster(3)
-    Teacher1, Teacher1
-    Teacher2, Teacher2
-    Student1, Student1
-    Student2, Student2
+    Teacher1 Teacher1
+    Teacher2 Teacher2
+    Student1 Student1
+    Student2 Student2
 
     >>> printRoster(4)
-    Teacher1, Teacher1
-    Teacher2, Teacher2
-    Student1, Student1
-    Student2, Student2
+    Teacher1 Teacher1
+    Teacher2 Teacher2
+    Student1 Student1
+    Student2 Student2
 
 First we'll show that changing the Term4 section does nothing becuase there
 is no term that follows it.  We'll add and remove teachers and students from
@@ -125,28 +125,28 @@ We see that only the Term4 section's roster has changed.
     >>> manager.getLink("Linked sections").click()
 
     >>> printRoster(1)
-    Teacher1, Teacher1
-    Teacher2, Teacher2
-    Student1, Student1
-    Student2, Student2
+    Teacher1 Teacher1
+    Teacher2 Teacher2
+    Student1 Student1
+    Student2 Student2
 
     >>> printRoster(2)
-    Teacher1, Teacher1
-    Teacher2, Teacher2
-    Student1, Student1
-    Student2, Student2
+    Teacher1 Teacher1
+    Teacher2 Teacher2
+    Student1 Student1
+    Student2 Student2
 
     >>> printRoster(3)
-    Teacher1, Teacher1
-    Teacher2, Teacher2
-    Student1, Student1
-    Student2, Student2
+    Teacher1 Teacher1
+    Teacher2 Teacher2
+    Student1 Student1
+    Student2 Student2
 
     >>> printRoster(4)
-    Teacher2, Teacher2
-    Teacher3, Teacher3
-    Student2, Student2
-    Student3, Student3
+    Teacher2 Teacher2
+    Teacher3 Teacher3
+    Student2 Student2
+    Student3 Student3
 
 Now we'll do the same for the Term2 section, adding and removing teachers and
 students.
@@ -186,25 +186,25 @@ exception.
     >>> manager.getLink("Linked sections").click()
 
     >>> printRoster(1)
-    Teacher1, Teacher1
-    Teacher2, Teacher2
-    Student1, Student1
-    Student2, Student2
+    Teacher1 Teacher1
+    Teacher2 Teacher2
+    Student1 Student1
+    Student2 Student2
 
     >>> printRoster(2)
-    Teacher1, Teacher1
-    Teacher3, Teacher3
-    Student2, Student2
-    Student3, Student3
+    Teacher1 Teacher1
+    Teacher3 Teacher3
+    Student2 Student2
+    Student3 Student3
 
     >>> printRoster(3)
-    Teacher1, Teacher1
-    Teacher3, Teacher3
-    Student2, Student2
-    Student3, Student3
+    Teacher1 Teacher1
+    Teacher3 Teacher3
+    Student2 Student2
+    Student3 Student3
 
     >>> printRoster(4)
-    Teacher3, Teacher3
-    Student2, Student2
-    Student3, Student3
+    Teacher3 Teacher3
+    Student2 Student2
+    Student3 Student3
 

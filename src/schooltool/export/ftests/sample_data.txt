@@ -155,7 +155,7 @@ are not required will keep the object's value for that field as None.
     >>> browser.getLink('Persons').click()
     >>> browser.getControl(name="SEARCH_TITLE").value = 'manager'
     >>> browser.getControl('Find Now').click()
-    >>> browser.getLink('Administrator').click()
+    >>> browser.getLink('Manager').click()
     >>> browser.getLink('Edit').click()
     >>> browser.queryHTML('//input[@name="form.widgets.date_demo"]/@value')
     ['2001-01-01']
@@ -238,7 +238,7 @@ Some sections:
       <a href="http://localhost/schoolyears/2006-2008/2006-fall/sections/art_a_2006-fall_teacher010_000">Art A (0)</a>
     </td>
     <td>
-        <a href="http://localhost/persons/teacher010">Walsh, Isabel</a>
+        <a href="http://localhost/persons/teacher010">Isabel Walsh</a>
     </td>
     <td>
       <span class="hint">
@@ -415,7 +415,7 @@ Let's confirm the demo re-imports worked.
     >>> browser.getLink('Persons').click()
     >>> browser.getControl(name="SEARCH_TITLE").value = 'manager'
     >>> browser.getControl('Find Now').click()
-    >>> browser.getLink('Administrator').click()
+    >>> browser.getLink('Manager').click()
     >>> browser.getLink('Edit').click()
     >>> browser.queryHTML('//input[@name="form.widgets.date_demo"]/@value')
     ['2001-01-01']
@@ -498,7 +498,7 @@ Some sections:
       <a href="http://localhost/schoolyears/2006-2008/2006-fall/sections/art_a_2006-fall_teacher010_000">Art A (0)</a>
     </td>
     <td>
-        <a href="http://localhost/persons/teacher010">Walsh, Isabel</a>
+        <a href="http://localhost/persons/teacher010">Isabel Walsh</a>
     </td>
     <td>
       <span class="hint">

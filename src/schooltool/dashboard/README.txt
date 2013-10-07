@@ -13,10 +13,11 @@ To test this we will create a teacher, a student, a course, and a section where
 the teacher and student meet.
 
    >>> from schooltool.app.browser.ftests import setup
+   >>> from schooltool.basicperson.browser.ftests.setup import addPerson
    >>> setup.addSchoolYear('2007', '2007-01-01', '2007-12-31')
    >>> setup.addTerm('Winter', '2007-01-01', '2007-06-01', schoolyear='2007')
-   >>> setup.addPerson(u'Teacher', 'teacher', 'pwd', groups=['teachers'])
-   >>> setup.addPerson(u'Student', 'student', 'pwd', groups=['students'])
+   >>> addPerson(u'Teacher', 'Smith', 'teacher', 'pwd', groups=['teachers'])
+   >>> addPerson(u'Student', 'Blake', 'student', 'pwd', groups=['students'])
    >>> setup.addCourse('course1', '2007')
    >>> setup.addSection('course1', '2007', 'Winter', title='section1', instructors=['Teacher'], members=['Student'])
 

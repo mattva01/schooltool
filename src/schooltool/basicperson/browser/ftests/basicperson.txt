@@ -36,8 +36,8 @@ Both of our users are in there:
     >>> manager.getLink('John')
     <Link text='John' url='http://localhost/persons/john'>
 
-    >>> manager.getLink('Administrator', index=2)
-    <Link text='Administrator' url='http://localhost/persons/manager'>
+    >>> manager.getLink('Manager', index=1)
+    <Link text='Manager' url='http://localhost/persons/manager'>
 
 You can filter the list:
 
@@ -49,7 +49,7 @@ And now we only have John in there:
     >>> manager.getLink('John')
     <Link text='John' url='http://localhost/persons/john'>
 
-    >>> manager.getLink('Administrator', index=2)
+    >>> manager.getLink('Manager', index=1)
     Traceback (most recent call last):
     ...
     LinkNotFoundError
@@ -239,9 +239,8 @@ We can fill the New Person form with Unicode text:
     >>> manager.getControl('Confirm').value = "pwd"
     >>> manager.getControl('Add').click()
 
-    >>> analyze.printQuery("//div[@class='content-nav'][11]/a",
-    ...                    manager.contents)
-    <a href="http://localhost/persons/pedro/contact">Contacts</a>
+    >>> analyze.printQuery("//h3", manager.contents)
+    <h3>Pedro Jos... Mart...nez P...rez</h3>
 
 But we cannot assign non-ascii usernames:
 
@@ -290,11 +289,11 @@ We can also add a batch of persons.
     <fieldset><legend>Added persons</legend>
       <p>
         <span>juan</span>
-        <a href="http://localhost/persons/juan">Perez, Juan</a>
+        <a href="http://localhost/persons/juan">Juan Perez</a>
       </p>
       <p>
         <span>emanuel</span>
-        <a href="http://localhost/persons/emanuel">Perez, Emanuel</a>
+        <a href="http://localhost/persons/emanuel">Emanuel Perez</a>
       </p>
     </fieldset>
 
@@ -309,7 +308,7 @@ this flaw is somewhat acceptable.
     <fieldset><legend>Added persons</legend>
       <p>
         <span>juan</span>
-        <a href="http://localhost/persons/juan">Perez, Juan</a>
+        <a href="http://localhost/persons/juan">Juan Perez</a>
       </p>
     </fieldset>
 

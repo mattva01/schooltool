@@ -337,6 +337,40 @@
       />
 
   <flourish:viewlet
+      name="name_sorting.html"
+      after="hide_unhide_tabs.html"
+      title="Name Sorting"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.ManageSiteLinks"
+      permission="schooltool.edit"
+      />
+
+  <configure package="schooltool.skin.flourish">
+
+    <flourish:page
+        name="name_sorting.html"
+        title="Name Sorting"
+        subtitle="Edit"
+        for="schooltool.app.interfaces.ISchoolToolApplication"
+        class="schooltool.app.browser.app.NameSortingEditView"
+        content_template="templates/z3c_form_edit.pt"
+        permission="schooltool.edit"
+        />
+
+  </configure>
+
+  <flourish:activeViewlet
+      name="manage_site"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      view="schooltool.app.browser.app.NameSortingEditView"
+      />
+
+  <flourish:page_breadcrumbs
+      view="schooltool.app.browser.app.NameSortingEditView"
+      class=".app.NameSortingBreadcrumb"
+      />
+
+  <flourish:viewlet
       name="what-is-this"
       class="schooltool.skin.flourish.page.Related"
       template="templates/f_hide_unhide_tabs_related.pt"

@@ -41,7 +41,7 @@ Let's go to the `new timetable schema` wizard:
 
 We enter a title and press `Next` button:
 
-    >>> manager.getControl('Title').value = 'Default'
+    >>> manager.getControl('Title').value = 'Weekly'
     >>> manager.getControl('Next').click()
 
 You can now choose the general type of the schedule. Let's choose the weekly
@@ -77,12 +77,12 @@ Do we use a homeroom period?  Let's say no:
 The timetable gets created. Now we see the newly created timetable
 schema in the list.
 
-    >>> manager.getLink('Default')
-    <Link text='Default' url='http://localhost/schoolyears/2005-2006/timetables/Timetable'>
+    >>> manager.getLink('Weekly')
+    <Link text='Weekly' url='http://localhost/schoolyears/2005-2006/timetables/Timetable'>
 
 We can examine its composition more easily by looking at it's xml export view.
 
-    >>> manager.getLink('Default').click()
+    >>> manager.getLink('Weekly').click()
 
     >>> manager.printQuery('//table[@class="timetable"]', skip_inner_blank=True)
     <table class="timetable">

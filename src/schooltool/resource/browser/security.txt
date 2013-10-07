@@ -11,10 +11,11 @@ Setup / Create Manager
 
 Let's create several people who have different permissions for resource booking:
 
-    >>> from schooltool.app.browser.ftests.setup import addPerson, setUpBasicSchool
+    >>> from schooltool.app.browser.ftests.setup import setUpBasicSchool
+    >>> from schooltool.basicperson.browser.ftests.setup import addPerson
     >>> setUpBasicSchool()
-    >>> addPerson('Teacher', 'teacher', 'pwd')
-    >>> addPerson('Leader', 'leader', 'pwd')
+    >>> addPerson('Teacher', 'Smith', 'teacher', 'pwd')
+    >>> addPerson('Leader', 'Jones', 'leader', 'pwd')
 
 Now lets create a resources that can be booked:
 

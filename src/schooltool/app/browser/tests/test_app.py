@@ -383,6 +383,7 @@ def doctest_ApplicationPreferencesView():
         >>> request = TestRequest(form={
         ...     'UPDATE_SUBMIT': 'Update',
         ...     'field.title': 'Company Calendars',
+        ...     'field.name_sorting': 'first_name',
         ...     'field.dateformat': '%m/%d/%y',
         ...     'field.timeformat': '%I:%M %p',
         ...     'field.weekstart': '0',
@@ -394,6 +395,9 @@ def doctest_ApplicationPreferencesView():
         >>> prefs = getApplicationPreferences(app)
         >>> prefs.title
         u'Company Calendars'
+
+        >>> prefs.name_sorting
+        'first_name'
 
         >>> prefs.dateformat
         '%m/%d/%y'

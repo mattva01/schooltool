@@ -58,8 +58,8 @@ from schooltool.term.term import validateTermsForOverlap
 from schooltool.term.term import Term
 from schooltool.skin import flourish
 from schooltool.skin.dateformatter import DateFormatterMediumView
-from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.interfaces import TermOverlapError
+from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.common import IDateRange
 from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
@@ -125,6 +125,13 @@ class FlourishTermView(flourish.page.Page, TermView):
         view.update()
         return view
 
+    def done_link(self):
+        schoolyear = ISchoolYear(self.context)
+        url = '%s/%s?schoolyear_id=%s' % (
+            absoluteURL(ISchoolToolApplication(None), self.request),
+            'terms',
+            schoolyear.__name__)
+        return url
 
 class FlourishTermDetails(flourish.form.FormViewlet):
 
@@ -181,13 +188,17 @@ class FlourishTermDeleteView(flourish.form.DialogForm, form.EditForm):
         self.actions['cancel'].addClass('button-cancel')
 
 
-class FlourishTermContainerDeleteView(flourish.containers.ContainerDeleteView):
+class FlourishTermContainerDeleteView(flourish.containers.ContainerDeleteView, ActiveSchoolYearContentMixin):
+
+    @property
+    def schoolyear(self):
+        return ISchoolYear(self.context)
 
     def nextURL(self):
         if 'CONFIRM' in self.request:
             app = ISchoolToolApplication(None)
-            return absoluteURL(app, self.request) + '/terms'
-        return ContainerDeleteView.nextURL(self)
+            return self.url_with_schoolyear_id(app, view_name='terms')
+        return super(flourish.containers.ContainerDeleteView, self).nextURL(self)
 
 
 class TermFormBase(object):
@@ -294,7 +305,7 @@ class TermAddForm(form.AddForm, TermFormBase):
         return term
 
 
-class FlourishTermAddView(flourish.form.AddForm, TermAddForm):
+class FlourishTermAddView(flourish.form.AddForm, TermAddForm, ActiveSchoolYearContentMixin):
 
     template = InheritTemplate(flourish.page.Page.template)
     label = None
@@ -329,9 +340,14 @@ class FlourishTermAddView(flourish.form.AddForm, TermAddForm):
     def nextURL(self):
         return absoluteURL(self._term, self.request)
 
+    @property
+    def schoolyear(self):
+        return ISchoolYear(self.context)
+
     @button.buttonAndHandler(_("Cancel"))
     def handle_cancel_action(self, action):
-        url = absoluteURL(ISchoolToolApplication(None), self.request) + '/terms'
+        app = ISchoolToolApplication(None)
+        url = self.url_with_schoolyear_id(app, view_name='terms')
         self.request.response.redirect(url)
 
     def dateString(self, date):

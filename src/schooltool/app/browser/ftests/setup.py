@@ -40,36 +40,6 @@ def logIn(username, password=None):
     return browser
 
 
-def addPerson(name, username=None, password=None, groups=None, browser=None):
-    """Add a person.
-
-    If username is not specified, it will be taken to be name.lower().
-
-    If password is not specified, it will be taken to be username + 'pwd'.
-    """
-    if not username:
-        username = name.lower()
-    if not password:
-        password = username + 'pwd'
-    if browser is None:
-        browser = logInManager()
-    browser.getLink('Manage').click()
-    browser.getLink('Persons').click()
-    browser.getLink('New Person').click()
-    browser.getControl('Full name').value = name
-    browser.getControl('Username').value = username
-    browser.getControl('Password').value = password
-    browser.getControl('Verify password').value = password
-    browser.getControl('Add').click()
-
-    if groups:
-        browser.open('http://localhost/persons/%s' % username)
-        browser.getLink('edit groups').click()
-        for group in groups:
-            browser.getControl(name='add_item.%s' % group).value = True
-        browser.getControl('Add').click()
-    browser.open('http://localhost/persons')
-
 def addResource(title):
     """Add a resource."""
     manager = logInManager()

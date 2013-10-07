@@ -117,7 +117,7 @@ class IPersonFactory(Interface):
     def __call__(*args, **kw):
         """Create a new Person instance."""
 
-    def createManagerUser(username, system_name):
+    def createManagerUser(username):
         """Create a person that will be the manager user.
 
         As different persons have different required fields and

@@ -153,6 +153,15 @@
       permission="schooltool.view"
       />
 
+  <flourish:content
+      name="details"
+      class=".contact.FlourishBoundContactDetails"
+      for="schooltool.contact.basicperson.IBoundContact"
+      view=".contact.FlourishContactsViewlet"
+      template="templates/f_contact_details.pt"
+      permission="schooltool.view"
+      />
+
   <flourish:viewlet
       name="contact-actions-links"
       title="Actions"

@@ -21,7 +21,6 @@ course browser views.
 
 from urllib import urlencode
 
-import  zc.table.table
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.interface import implements
 from zope.component import adapts
@@ -53,7 +52,6 @@ from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.term.interfaces import ITerm
 from schooltool.schoolyear.interfaces import ISchoolYear
-from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.skin.containers import ContainerView
 from schooltool.course.interfaces import ICourse, ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
@@ -73,7 +71,6 @@ from schooltool.skin.flourish.form import DialogForm
 from schooltool.skin.flourish.form import DisplayForm
 from schooltool.skin.flourish.page import TertiaryNavigationManager
 from schooltool import table
-from schooltool.table.interfaces import ITableFormatter
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -575,7 +572,7 @@ class FlourishCourseViewDoneLink(flourish.viewlet.Viewlet):
     ''')
 
 
-class FlourishCourseAddView(AddForm):
+class FlourishCourseAddView(AddForm, ActiveSchoolYearContentMixin):
 
     template = InheritTemplate(Page.template)
     label = None
@@ -598,11 +595,8 @@ class FlourishCourseAddView(AddForm):
             url = self.request['camefrom']
             self.request.response.redirect(url)
             return
-        schoolyear = ISchoolYear(self.context)
-        url = '%s/%s?schoolyear_id=%s' % (
-            absoluteURL(ISchoolToolApplication(None), self.request),
-            'courses',
-            schoolyear.__name__)
+        app = ISchoolToolApplication(None)
+        url = self.url_with_schoolyear_id(app, view_name='courses')
         self.request.response.redirect(url)
 
     def create(self, data):
@@ -621,10 +615,13 @@ class FlourishCourseAddView(AddForm):
         return absoluteURL(self._course, self.request)
 
     @property
+    def schoolyear(self):
+        return ISchoolYear(self.context)
+
+    @property
     def title(self):
-        schoolyear = ISchoolYear(self.context)
         return _('Courses for ${schoolyear}',
-                 mapping={'schoolyear': schoolyear.title})
+                 mapping={'schoolyear': self.schoolyear.title})
 
 
 class FlourishCourseEditView(Form, form.EditForm):

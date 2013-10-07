@@ -69,9 +69,9 @@ link.
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/1">History (1)</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
-    <a href="http://localhost/persons/student2">Student2, Student2</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
+    <a href="http://localhost/persons/student2">Student2 Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/extend_term.html?term=term2">Extend to This Term</a>
@@ -136,16 +136,16 @@ an 'Unlink ths Section' link under the section link.
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/1">History (1)</a>
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/unlink_section.html">Unlink this Section</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
-    <a href="http://localhost/persons/student2">Student2, Student2</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
+    <a href="http://localhost/persons/student2">Student2 Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
     <a href="http://localhost/schoolyears/2005-2006/term2/sections/1">History (1)</a>
     <a href="http://localhost/schoolyears/2005-2006/term2/sections/1/unlink_section.html">Unlink this Section</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
-    <a href="http://localhost/persons/student2">Student2, Student2</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
+    <a href="http://localhost/persons/student2">Student2 Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[3]//a")
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/extend_term.html?term=term3">Extend to This Term</a>
@@ -198,30 +198,30 @@ the teachers and students.
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/1">History (1)</a>
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/1/unlink_section.html">Unlink this Section</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
-    <a href="http://localhost/persons/student2">Student2, Student2</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
+    <a href="http://localhost/persons/student2">Student2 Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
     <a href="http://localhost/schoolyears/2005-2006/term2/sections/1">History (1)</a>
     <a href="http://localhost/schoolyears/2005-2006/term2/sections/1/unlink_section.html">Unlink this Section</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
-    <a href="http://localhost/persons/student2">Student2, Student2</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
+    <a href="http://localhost/persons/student2">Student2 Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[3]//a")
     <a href="http://localhost/schoolyears/2005-2006/term3/sections/1">History (1)</a>
     <a href="http://localhost/schoolyears/2005-2006/term3/sections/1/unlink_section.html">Unlink this Section</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
-    <a href="http://localhost/persons/student2">Student2, Student2</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
+    <a href="http://localhost/persons/student2">Student2 Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
     <a href="http://localhost/schoolyears/2005-2006/term4/sections/1">History (1)</a>
     <a href="http://localhost/schoolyears/2005-2006/term4/sections/1/unlink_section.html">Unlink this Section</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
-    <a href="http://localhost/persons/student2">Student2, Student2</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
+    <a href="http://localhost/persons/student2">Student2 Student2</a>
 
 
 Extending Backwards
@@ -250,9 +250,9 @@ We see that the section is only found in Term4.
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
     <a href="http://localhost/schoolyears/2005-2006/term4/sections/2">English (2)</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
-    <a href="http://localhost/persons/student2">Student2, Student2</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
+    <a href="http://localhost/persons/student2">Student2 Student2</a>
 
     >>> filled_terms()
     [4]
@@ -301,9 +301,9 @@ not linked to it.
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/3">Math (3)</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
-    <a href="http://localhost/persons/student2">Student2, Student2</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
+    <a href="http://localhost/persons/student2">Student2 Student2</a>
 
     >>> filled_terms()
     [1]
@@ -405,29 +405,29 @@ of the selected section.
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/3">Math (3)</a>
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/3/unlink_section.html">Unlink this Section</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
-    <a href="http://localhost/persons/student2">Student2, Student2</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
+    <a href="http://localhost/persons/student2">Student2 Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
     <a href="http://localhost/schoolyears/2005-2006/term2/sections/3">Math (3)</a>
     <a href="http://localhost/schoolyears/2005-2006/term2/sections/3/unlink_section.html">Unlink this Section</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
-    <a href="http://localhost/persons/student2">Student2, Student2</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
+    <a href="http://localhost/persons/student2">Student2 Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[3]//a")
     <a href="http://localhost/schoolyears/2005-2006/term3/sections/3">Math (3)</a>
     <a href="http://localhost/schoolyears/2005-2006/term3/sections/3/unlink_section.html">Unlink this Section</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
-    <a href="http://localhost/persons/student2">Student2, Student2</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
+    <a href="http://localhost/persons/student2">Student2 Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
     <a href="http://localhost/schoolyears/2005-2006/term4/sections/4">Math (4)</a>
     <a href="http://localhost/schoolyears/2005-2006/term4/sections/4/unlink_section.html">Unlink this Section</a>
-    <a href="http://localhost/persons/teacher2">Doe, John</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/teacher2">John Doe</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
 
 
 Linking Backwards
@@ -463,7 +463,7 @@ Now we'll hit the link for linking to a Term1 section.
 
     >>> manager.printQuery("id('content-body')//td/a")
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/4">Health (4)</a>
-    <a href="http://localhost/persons/teacher2">Doe, John</a>
+    <a href="http://localhost/persons/teacher2">John Doe</a>
 
 We'll choose the section and hit 'Link'.  The section_linkage view now reflects
 the Term4 section being copied and linked to Term3 and Term2, then linked to
@@ -479,27 +479,27 @@ the selected Term1 section.  Again, the rosters reflect this.
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[1]//a")
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/4">Health (4)</a>
     <a href="http://localhost/schoolyears/2005-2006/term1/sections/4/unlink_section.html">Unlink this Section</a>
-    <a href="http://localhost/persons/teacher2">Doe, John</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
-    <a href="http://localhost/persons/student2">Student2, Student2</a>
+    <a href="http://localhost/persons/teacher2">John Doe</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
+    <a href="http://localhost/persons/student2">Student2 Student2</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[2]//a")
     <a href="http://localhost/schoolyears/2005-2006/term2/sections/5">Health (5)</a>
     <a href="http://localhost/schoolyears/2005-2006/term2/sections/5/unlink_section.html">Unlink this Section</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[3]//a")
     <a href="http://localhost/schoolyears/2005-2006/term3/sections/5">Health (5)</a>
     <a href="http://localhost/schoolyears/2005-2006/term3/sections/5/unlink_section.html">Unlink this Section</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
 
     >>> manager.printQuery("id('content-body')//table[@class='all_terms_table']/tbody/tr/td[4]//a")
     <a href="http://localhost/schoolyears/2005-2006/term4/sections/5">Health (5)</a>
     <a href="http://localhost/schoolyears/2005-2006/term4/sections/5/unlink_section.html">Unlink this Section</a>
-    <a href="http://localhost/persons/teacher1">Teacher1, Teacher1</a>
-    <a href="http://localhost/persons/student1">Student1, Student1</a>
+    <a href="http://localhost/persons/teacher1">Teacher1 Teacher1</a>
+    <a href="http://localhost/persons/student1">Student1 Student1</a>
 
 
 Unlinking Sections

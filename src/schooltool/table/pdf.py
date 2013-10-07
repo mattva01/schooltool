@@ -368,6 +368,11 @@ class GridCell(object):
 
 class GridColumn(GridCell):
 
+    style = Config(
+        GridCell.style,
+        font_size=8,
+        )
+
     def __cmp__(self, other):
         return cmp((self.__name__, self.item), (other.__name__, other.item))
 
@@ -391,7 +396,7 @@ class Grid(object):
 
     config = Config(
         table_style_name = "grade.table.grades",
-        title_column_width = 7 * units.cm,
+        title_column_width = 5 * units.cm,
         header_font = 'Ubuntu_Regular',
         header_font_size = 12,
         column_padding = 4,
@@ -484,8 +489,8 @@ class Grid(object):
                     'font_changed': changed,
                     'font_name': col_font,
                     'font_size': col_font_size,
-                    'x': pos,
-                    'y': -pos,
+                    'x': pos - 2,
+                    'y': -pos + 4,
                     'text': column.text,
                     })
             font_name = col_font
@@ -520,7 +525,7 @@ class Grid(object):
 
         left = self.config.title_column_width * ang
         self.header_lines = []
-        for n in range(len(self.columns)):
+        for n in range(len(self.columns)+1):
             pos = left + n*self.data_column_width*ang
             self.header_lines.append(
                 '%d %d %d %d' % (pos, -pos, pos+line_len, -pos))
@@ -635,10 +640,11 @@ class AutoFitGrid(Grid):
 
     config = Config(
         Grid.config,
-        header_min_font_size = 8,
-        min_column_width = None,
-        max_column_width = None,
+        header_min_font_size = 12,
+        min_column_width = 1.5 * units.cm,
+        max_column_width = 1.5 * units.cm,
         continued_font = Grid.config.header_font,
+        continued_font_size = 8,
         continued_text = _('Continued ...'),
         )
 
@@ -692,6 +698,7 @@ class AutoFitGrid(Grid):
         # Fit as many columns as we can
         continued = [GridColumn(self.config.continued_text,
                                 font_name=self.config.continued_font,
+                                font_size=self.config.continued_font_size,
                                 no_data=True)]
         n = 1
         while n < len(columns):

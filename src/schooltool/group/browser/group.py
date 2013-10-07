@@ -54,6 +54,7 @@ from schooltool.app.browser.app import RelationshipAddTableMixin
 from schooltool.app.browser.app import RelationshipRemoveTableMixin
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.person.interfaces import IPerson
+from schooltool.person.interfaces import IPersonFactory
 from schooltool.person.browser.person import PersonTableFilter
 from schooltool.basicperson.browser.person import BasicPersonTable
 from schooltool.basicperson.browser.person import EditPersonRelationships
@@ -621,7 +622,7 @@ class FlourishGroupView(flourish.form.DisplayForm):
         return bool(list(self.context.leaders))
 
 
-class FlourishGroupAddView(flourish.form.AddForm):
+class FlourishGroupAddView(flourish.form.AddForm, ActiveSchoolYearContentMixin):
 
     template = InheritTemplate(flourish.page.Page.template)
     label = None
@@ -644,11 +645,8 @@ class FlourishGroupAddView(flourish.form.AddForm):
             url = self.request['camefrom']
             self.request.response.redirect(url)
             return
-        schoolyear = ISchoolYear(self.context)
-        url = '%s/%s?schoolyear_id=%s' % (
-            absoluteURL(ISchoolToolApplication(None), self.request),
-            'groups',
-            schoolyear.__name__)
+        app = ISchoolToolApplication(None)
+        url = self.url_with_schoolyear_id(app, view_name='groups')
         self.request.response.redirect(url)
 
     def create(self, data):
@@ -667,10 +665,13 @@ class FlourishGroupAddView(flourish.form.AddForm):
         return absoluteURL(self._group, self.request)
 
     @property
+    def schoolyear(self):
+        return ISchoolYear(self.context)
+
+    @property
     def title(self):
-        schoolyear = ISchoolYear(self.context)
         return _('Groups for ${schoolyear}',
-                 mapping={'schoolyear': schoolyear.title})
+                 mapping={'schoolyear': self.schoolyear.title})
 
 
 class FlourishGroupEditView(flourish.form.Form, form.EditForm):
@@ -802,8 +803,12 @@ class FlourishGroupIDCardsView(FlourishPersonIDCardsViewBase):
             self.context.title,  sy.title)
 
     def persons(self):
+        collator = ICollator(self.request.locale)
+        factory = getUtility(IPersonFactory)
+        sorting_key = lambda x: factory.getSortingKey(x, collator)
+        sorted_persons = sorted(self.context.members, key=sorting_key)
         result = [self.getPersonData(person)
-                  for person in self.context.members]
+                  for person in sorted_persons]
         return result
 
 

@@ -19,9 +19,7 @@
 SchoolTool Standard skin.
 """
 from schooltool.skin.skin import ISchoolToolSkin
-from schooltool.basicperson.browser.skin import IBasicPersonLayer
 
 
-class ISchoolToolStandardSkin(IBasicPersonLayer,
-                              ISchoolToolSkin):
+class ISchoolToolStandardSkin(ISchoolToolSkin):
     """The Standard SchoolTool skin"""

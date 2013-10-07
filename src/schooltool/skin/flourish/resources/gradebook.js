@@ -182,8 +182,10 @@ function preloadNamePopup(form) {
     var popup_links = form.find('#students-part').find('thead').find('.popup_link');
     popup_links.each(function(index, element) {
         var link = $(element);
+        var column_id = link.parent().attr('id');
+        var attrs = {'column_id': column_id};
         var url = buildURL(base_url, 'name_popup_menu');
-        loadPopup(link, url, {}, false);
+        loadPopup(link, url, attrs, false);
     });
 }
 

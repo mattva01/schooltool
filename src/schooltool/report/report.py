@@ -296,6 +296,7 @@ class ReportResourceURL(object):
 
 class RemoteRequestParams(PersistentDict):
     locale_id = None
+    cookies = None
 
 
 class RemoteReportRequest(object):
@@ -309,23 +310,31 @@ class RemoteReportRequest(object):
     form = None
     URL = ''
     task = None
+    cookies = None
 
-    def __init__(self, params=None, task=None):
+    def __init__(self, task=None):
         self.task = task
-        if params is None:
-            params = {}
-        self.form = dict(params)
         self.response = RemoteReportResponse()
         self.debug = zope.publisher.base.DebugFlags()
+        self.form = {}
         self.annotations = {}
+        self.cookies = {}
+
+    def initParams(self, params):
+        self.form.update(params)
         locale_id = getattr(params, 'locale_id', None)
         if locale_id is not None:
             self.locale = zope.i18n.locales.Locale(locale_id)
+        cookies = getattr(params, 'cookies', None)
+        if self.cookies is not None:
+            self.cookies.update(cookies)
 
     def clone(self):
-        clone = self.__class__(params=self.form, task=self.task)
+        clone = self.__class__(task=self.task)
+        clone.initParams(self.form)
         if self.locale is not None:
             clone.locale = zope.i18n.locales.Locale(self.locale.id)
+        clone.cookies = dict(self.cookies)
         return clone
 
     @property
@@ -386,18 +395,30 @@ class AbstractReportTask(RemoteTask):
             name in other):
             self.request_params[name] = other[name]
 
+    def getCookies(self, request):
+        cookies = {}
+        for name in request.cookies:
+            # Skip Zope's session cookies
+            if 'zope3_cs' in name.lower():
+                continue
+            cookies[name] = request.cookies[name]
+        return cookies
+
     def update(self, request):
         super(AbstractReportTask, self).update(request)
         if (self.request_params.locale_id is None and
             request.locale is not None):
             self.request_params.locale_id = request.locale.id
         self.default_request_param('HTTP_ACCEPT_LANGUAGE', request)
+        self.request_params.cookies = dict(self.getCookies(request))
 
     def beginRequest(self, params=None):
         # XXX: move begin/end requests to runTransaction level
         if params is None:
             params = self.request_params
-        request = RemoteReportRequest(params, task=self)
+        request = RemoteReportRequest(task=self)
+        if params is not None:
+            request.initParams(params)
         # XXX:
         from schooltool.app.security import Principal
         from zope.security.checker import ProxyFactory
@@ -594,7 +615,8 @@ class OnReportScheduled(TaskScheduledNotification):
     def __init__(self, task, http_request):
         super(TaskScheduledNotification, self).__init__(
             task, http_request)
-        self.request = RemoteReportRequest(task.request_params)
+        self.request = RemoteReportRequest()
+        self.request.initParams(task.request_params)
 
     def send(self):
         renderer = self.task.getRenderer(request=self.request)

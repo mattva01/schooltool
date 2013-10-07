@@ -296,6 +296,7 @@ class CycleStep(ChoiceStep):
                                        context=self.request)
                              for i in range(7)]
             session['day_names'] = weekday_names
+        session['time_model'] = session['cycle']
         return success
 
 

@@ -152,7 +152,7 @@ relevant information
           <a href="http://localhost/schoolyears/2005-2006">2005-2006</a>
     </h1>
 
-    >>> manager.getControl('SchoolTool').click()
+    >>> manager.getControl('Default').click()
     >>> manager.getControl('Add').click()
     >>> # quick css check for the neutral buttons
     >>> manager.printQuery('//input[@value="Invert Selection" or @value="OK"]/@class')
@@ -164,7 +164,7 @@ relevant information
 and a student
 
     >>> manager.getLink('edit individuals').click()
-    >>> manager.getControl('SchoolTool').click()
+    >>> manager.getControl('Default').click()
     >>> manager.getControl('Add').click()
     >>> # quick css check for the neutral buttons
     >>> manager.printQuery('//input[@value="Invert Selection" or @value="OK"]/@class')
