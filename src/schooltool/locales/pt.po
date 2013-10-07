@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-08-22 19:53+0300\n"
-"PO-Revision-Date: 2013-08-23 11:13+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"POT-Creation-Date: 2013-09-12 18:35+0300\n"
+"PO-Revision-Date: 2013-09-22 13:51+0000\n"
+"Last-Translator: Nuno Santos <nunorapososantos@gmail.com>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-24 05:40+0000\n"
-"X-Generator: Launchpad (build 16738)\n"
+"X-Launchpad-Export-Date: 2013-09-23 05:36+0000\n"
+"X-Generator: Launchpad (build 16771)\n"
 "Language: pt\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -3511,7 +3511,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:1502
 msgid "Message"
-msgstr ""
+msgstr "Mensagem"
 
 #: /src/schooltool/basicperson/browser/person.py:1561
 msgid "(${number} new)"
@@ -5471,7 +5471,17 @@ msgstr "Não pode interligar turmas em diferentes anos letivos."
 msgid "Sections must be in consecutive terms"
 msgstr "Turmas têm de estar em períodos consecutivos."
 
-#: /src/schooltool/course/security.zcml:42
+#: /src/schooltool/course/security.zcml:38
+msgid "Only clerks can modify the section."
+msgstr ""
+
+#: /src/schooltool/course/security.zcml:38
+msgid ""
+"Section instructors can modify section's title, schedule, roster, equipment "
+"and so on."
+msgstr ""
+
+#: /src/schooltool/course/security.zcml:53
 msgid ""
 "Basic information about sections is only visible to instructors and students "
 "in that section, and school administration."
@@ -5952,19 +5962,19 @@ msgstr ""
 
 #: /src/schooltool/export/export.py:856
 msgid "Exporting school data"
-msgstr ""
+msgstr "A exportar..."
 
 #: /src/schooltool/export/export.py:871
 msgid "Export complete"
-msgstr ""
+msgstr "Exportação completa"
 
 #: /src/schooltool/export/export.py:892
 msgid "school export"
-msgstr ""
+msgstr "Exportar dados da escola"
 
 #: /src/schooltool/export/export.py:918
 msgid "XLS export"
-msgstr ""
+msgstr "Exportar em XML"
 
 #: /src/schooltool/export/flourish.zcml:32
 msgid "Import XLS"
@@ -6229,7 +6239,7 @@ msgstr "Os seguintes erros ocorreram durante a importação:"
 #: /src/schooltool/export/importer.py:2067
 #: /src/schooltool/export/importer.py:2098
 msgid "Overall"
-msgstr ""
+msgstr "Global"
 
 #: /src/schooltool/export/interfaces.py:34
 #: /src/schooltool/export/templates/f_import.pt:42
@@ -6253,7 +6263,7 @@ msgstr ""
 
 #: /src/schooltool/export/templates/f_import_progress.pt:18
 msgid "Importing"
-msgstr ""
+msgstr "A importar..."
 
 #: /src/schooltool/export/templates/f_import_progress.pt:26
 msgid "Committing to database."
@@ -6280,7 +6290,7 @@ msgstr "Erro do Servidor"
 
 #: /src/schooltool/export/templates/f_import_progress.pt:54
 msgid "Additional Info"
-msgstr ""
+msgstr "Informação Adicional"
 
 #: /src/schooltool/export/templates/f_import_related.pt:9
 #: /src/schooltool/export/templates/import.pt:31
@@ -7072,7 +7082,7 @@ msgstr "Gerar"
 
 #: /src/schooltool/report/browser/report.py:449
 msgid "export"
-msgstr ""
+msgstr "exportar"
 
 #: /src/schooltool/report/browser/report.py:496
 msgid "Collecting (${name})"
@@ -7080,12 +7090,12 @@ msgstr ""
 
 #: /src/schooltool/report/browser/report.py:501
 msgid "Archive"
-msgstr ""
+msgstr "Ficheiro"
 
 #: /src/schooltool/report/browser/report.py:522
 #: /src/schooltool/report/browser/report.py:531
 msgid "files"
-msgstr ""
+msgstr "ficheiros"
 
 #: /src/schooltool/report/browser/report.py:600
 msgid "Preparing archive"
@@ -7120,7 +7130,7 @@ msgstr ""
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:15
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:41
 msgid "home page"
-msgstr ""
+msgstr "página principal"
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:33
 #: /src/schooltool/report/browser/templates/f_short_report_message.pt:17
@@ -7145,13 +7155,13 @@ msgstr ""
 #: /src/schooltool/task/browser/templates/f_short_fail_message.pt:9
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:29
 msgid "Please contact your administrator."
-msgstr ""
+msgstr "Por favor, contate o administrador."
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:64
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:56
 #: /src/schooltool/task/browser/templates/task_dialog.pt:11
 msgid "Close"
-msgstr ""
+msgstr "Fechar"
 
 #: /src/schooltool/report/browser/templates/f_report_reference.pt:5
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
@@ -7178,11 +7188,11 @@ msgstr "Referências do Relatório"
 
 #: /src/schooltool/report/interfaces.py:99
 msgid "Report"
-msgstr ""
+msgstr "Relatório"
 
 #: /src/schooltool/report/interfaces.py:104
 msgid "Filename"
-msgstr ""
+msgstr "Nome do ficheiro"
 
 #: /src/schooltool/report/interfaces.py:108
 msgid "Requested on"
@@ -7192,7 +7202,7 @@ msgstr ""
 #: /src/schooltool/report/report.py:652
 #: /src/schooltool/skin/flourish/report.py:178
 msgid "report"
-msgstr ""
+msgstr "relatório"
 
 #: /src/schooltool/report/security.zcml:21
 msgid "Download reports"
@@ -7960,7 +7970,11 @@ msgstr "Informações de recurso"
 msgid "Resource calendars"
 msgstr "Calendários de recurso"
 
-#: /src/schooltool/securitypolicy/browser/views.py:67
+#: /src/schooltool/securitypolicy/browser/views.py:65
+msgid "Schedules"
+msgstr ""
+
+#: /src/schooltool/securitypolicy/browser/views.py:66
 msgid "Gradebook"
 msgstr "Livro de Notas"
 
@@ -8162,7 +8176,7 @@ msgstr ""
 
 #: /src/schooltool/task/browser/task.py:142
 msgid "Signature"
-msgstr ""
+msgstr "Assinatura"
 
 #: /src/schooltool/task/browser/task.py:148
 #: /src/schooltool/task/browser/templates/task_status.pt:42
@@ -8194,17 +8208,17 @@ msgstr ""
 
 #: /src/schooltool/task/browser/templates/task_status.pt:18
 msgid "In Progress"
-msgstr ""
+msgstr "Em curso"
 
 #: /src/schooltool/task/browser/templates/task_status.pt:22
 #: /src/schooltool/task/interfaces.py:42
 msgid "Failed"
-msgstr ""
+msgstr "Falhou"
 
 #: /src/schooltool/task/browser/templates/task_status.pt:30
 #: /src/schooltool/task/interfaces.py:41
 msgid "Succeeded"
-msgstr ""
+msgstr "Com êxito"
 
 #: /src/schooltool/task/browser/templates/task_status.pt:34
 #: /src/schooltool/task/interfaces.py:46
@@ -8218,7 +8232,7 @@ msgstr ""
 
 #: /src/schooltool/task/security.zcml:24
 msgid "Messages"
-msgstr ""
+msgstr "Mensagens"
 
 #: /src/schooltool/task/security.zcml:29
 msgid "Read messages"
@@ -9198,7 +9212,15 @@ msgstr "Tipo de atividade"
 msgid "Treat consecutive periods as one meeting"
 msgstr "Tratar períodos consecutivos como encontro único"
 
-#: /src/schooltool/timetable/security.zcml:36
+#: /src/schooltool/timetable/security.zcml:5
+msgid "Instructors can schedule their own sections."
+msgstr ""
+
+#: /src/schooltool/timetable/security.zcml:5
+msgid "Only clerks can schedule sections."
+msgstr ""
+
+#: /src/schooltool/timetable/security.zcml:56
 msgid "School timetables"
 msgstr "Horários Escolares"
 

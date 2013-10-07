@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-08-22 19:53+0300\n"
+"POT-Creation-Date: 2013-09-12 18:35+0300\n"
 "PO-Revision-Date: 2013-08-22 23:38+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: English (Canada) <en_CA@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-23 06:01+0000\n"
-"X-Generator: Launchpad (build 16737)\n"
+"X-Launchpad-Export-Date: 2013-09-13 06:33+0000\n"
+"X-Generator: Launchpad (build 16761)\n"
 "Language: \n"
 
 #: /src/schooltool/app/app.py:193
@@ -3917,103 +3917,103 @@ msgstr "Tomorrow"
 
 #: /src/schooltool/calendar/browser/calendar.py:175
 msgid "Yesterday"
-msgstr ""
+msgstr "Yesterday"
 
 #: /src/schooltool/calendar/browser/calendar.py:195
 msgid "This Week"
-msgstr ""
+msgstr "This Week"
 
 #: /src/schooltool/calendar/browser/calendar.py:197
 msgid "Last Week"
-msgstr ""
+msgstr "Last Week"
 
 #: /src/schooltool/calendar/browser/calendar.py:199
 msgid "Next Week"
-msgstr ""
+msgstr "Next Week"
 
 #: /src/schooltool/calendar/browser/calendar.py:236
 msgid "Jump To"
-msgstr ""
+msgstr "Jump To"
 
 #: /src/schooltool/calendar/browser/event.py:129
 #: /src/schooltool/calendar/browser/event.py:156
 msgid "Reserved by others"
-msgstr ""
+msgstr "Reserved by others"
 
 #: /src/schooltool/calendar/browser/event.py:132
 msgid "Release resource"
-msgstr ""
+msgstr "Release resource"
 
 #: /src/schooltool/calendar/browser/event.py:159
 msgid "Reserve resource"
-msgstr ""
+msgstr "Reserve resource"
 
 #: /src/schooltool/calendar/browser/event.py:187
 msgid "All occurrences of this event"
-msgstr ""
+msgstr "All occurrences of this event"
 
 #: /src/schooltool/calendar/browser/event.py:188
 msgid "Only current occurrence"
-msgstr ""
+msgstr "Only current occurrence"
 
 #: /src/schooltool/calendar/browser/event.py:189
 msgid "This and all future occurrences"
-msgstr ""
+msgstr "This and all future occurrences"
 
 #: /src/schooltool/calendar/browser/event.py:222
 msgid "Delete event ${event}"
-msgstr ""
+msgstr "Delete event ${event}"
 
 #: /src/schooltool/calendar/browser/flourish.zcml:81
 msgid "Event"
-msgstr ""
+msgstr "Event"
 
 #: /src/schooltool/calendar/browser/flourish.zcml:166
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:392
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:181
 msgid "Reserve resources"
-msgstr ""
+msgstr "Reserve resources"
 
 #: /src/schooltool/calendar/browser/overlay.py:33
 msgid "Show"
-msgstr ""
+msgstr "Show"
 
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:35
 msgid "Select"
-msgstr ""
+msgstr "Select"
 
 #: /src/schooltool/calendar/browser/templates/event.pt:52
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:53
 msgid "Reserved resources"
-msgstr ""
+msgstr "Reserved resources"
 
 #: /src/schooltool/calendar/browser/templates/event.pt:54
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:55
 msgid "Change the resources reserved for this event"
-msgstr ""
+msgstr "Change the resources reserved for this event"
 
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:27
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:369
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:160
 msgid "Reserved Resources"
-msgstr ""
+msgstr "Reserved Resources"
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:4
 msgid "Deleting an event on ${day}."
-msgstr ""
+msgstr "Deleting an event on ${day}."
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:8
 msgid "This is an all day event."
-msgstr ""
+msgstr "This is an all day event."
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:12
 msgid "You are deleting a repeating event."
-msgstr ""
+msgstr "You are deleting a repeating event."
 
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:202
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:146
 msgid "Reserve Resources"
-msgstr ""
+msgstr "Reserve Resources"
 
 #: /src/schooltool/common/fields.py:38
 msgid "Image size"
@@ -4062,7 +4062,7 @@ msgstr "Address"
 #: /src/schooltool/contact/browser/contact.py:387
 #: /src/schooltool/contact/browser/flourish.zcml:155
 msgid "Contact Information"
-msgstr ""
+msgstr "Contact Information"
 
 #: /src/schooltool/contact/browser/configure.zcml:41
 msgid "View Person"
@@ -4122,7 +4122,7 @@ msgstr "Contact index"
 #: /src/schooltool/contact/browser/contact.py:618
 #: /src/schooltool/contact/browser/templates/f_contact_filter.pt:6
 msgid "First name and/or last name"
-msgstr ""
+msgstr "First name and/or last name"
 
 #: /src/schooltool/contact/browser/contact.py:654
 #: /src/schooltool/email/browser/email.py:301
@@ -4169,15 +4169,15 @@ msgstr "There were some errors."
 
 #: /src/schooltool/contact/browser/contact.py:819
 msgid "${person_full_name} as Contact"
-msgstr ""
+msgstr "${person_full_name} as Contact"
 
 #: /src/schooltool/contact/browser/contact.py:867
 msgid "Delete ${contact_full_name}"
-msgstr ""
+msgstr "Delete ${contact_full_name}"
 
 #: /src/schooltool/contact/browser/flourish.zcml:206
 msgid "Edit Contact Information"
-msgstr ""
+msgstr "Edit Contact Information"
 
 #: /src/schooltool/contact/browser/relationship.py:78
 #: /src/schooltool/contact/browser/templates/contactperson_subform.pt:8
@@ -4199,11 +4199,11 @@ msgstr "Manage contacts of ${person}"
 
 #: /src/schooltool/contact/browser/relationship.py:186
 msgid "Current contacts"
-msgstr ""
+msgstr "Current contacts"
 
 #: /src/schooltool/contact/browser/relationship.py:187
 msgid "Available contacts"
-msgstr ""
+msgstr "Available contacts"
 
 #: /src/schooltool/contact/browser/templates/contact_view.pt:16
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:18
@@ -4218,17 +4218,17 @@ msgstr "Contact of ${person}"
 
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:3
 msgid "Deleting a contact is permanent and irreversible."
-msgstr ""
+msgstr "Deleting a contact is permanent and irreversible."
 
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:12
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:46
 msgid "${relationship} of"
-msgstr ""
+msgstr "${relationship} of"
 
 #: /src/schooltool/contact/browser/templates/f_confirm_delete_contact.pt:16
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:49
 msgid "Contact of"
-msgstr ""
+msgstr "Contact of"
 
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
 msgid "Contact information"
@@ -4237,32 +4237,36 @@ msgstr "Contact information"
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:6
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:9
 msgid "Edit this contact"
-msgstr ""
+msgstr "Edit this contact"
 
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:27
 msgid "This person has no contacts."
-msgstr ""
+msgstr "This person has no contacts."
 
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:31
 #: /src/schooltool/contact/browser/templates/f_manage_contacts_overview.pt:4
 msgid "Manage contacts"
-msgstr ""
+msgstr "Manage contacts"
 
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:6
 msgid ""
 "A student may have one or more \"contacts\", people who may need to recieve "
 "notifications and information about the student or the school as a whole."
 msgstr ""
+"A student may have one or more \"contacts\", people who may need to recieve "
+"notifications and information about the student or the school as a whole."
 
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:11
 msgid ""
 "A user may also be a contact for him or herself, particularly in the case of "
 "older students and adults."
 msgstr ""
+"A user may also be a contact for him or herself, particularly in the case of "
+"older students and adults."
 
 #: /src/schooltool/contact/browser/templates/f_manage_contacts_overview.pt:12
 msgid "The school has ${total} contact persons."
-msgstr ""
+msgstr "The school has ${total} contact persons."
 
 #: /src/schooltool/contact/browser/templates/filter.pt:21
 #: /src/schooltool/person/browser/person_filter.pt:11
@@ -4402,11 +4406,11 @@ msgstr "Mobile phone"
 
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Other 1"
-msgstr ""
+msgstr "Other 1"
 
 #: /src/schooltool/contact/interfaces.py:84
 msgid "Other 2"
-msgstr ""
+msgstr "Other 2"
 
 #: /src/schooltool/contact/interfaces.py:109
 msgid "Contact's relationship with the person"
@@ -4479,7 +4483,7 @@ msgstr "The user himself."
 #: /src/schooltool/course/browser/configure.zcml:96
 #: /src/schooltool/course/browser/flourish.zcml:270
 msgid "Add Course"
-msgstr ""
+msgstr "Add Course"
 
 #: /src/schooltool/course/browser/configure.zcml:25
 msgid "Edit Course Information"
@@ -4494,7 +4498,7 @@ msgstr "Import Courses"
 #: /src/schooltool/course/browser/configure.zcml:193
 #: /src/schooltool/course/browser/flourish.zcml:394
 msgid "Add Section"
-msgstr ""
+msgstr "Add Section"
 
 #: /src/schooltool/course/browser/configure.zcml:203
 msgid "Edit Section Information"
@@ -4526,7 +4530,7 @@ msgstr "Course index"
 
 #: /src/schooltool/course/browser/course.py:368
 msgid "Delete ${course}"
-msgstr ""
+msgstr "Delete ${course}"
 
 #: /src/schooltool/course/browser/course.py:416
 #: /src/schooltool/course/browser/course.py:430
@@ -4545,12 +4549,12 @@ msgstr "Course ID"
 #: /src/schooltool/course/browser/course.py:545
 #: /src/schooltool/course/browser/course.py:597
 msgid "Course Information"
-msgstr ""
+msgstr "Course Information"
 
 #: /src/schooltool/course/browser/course.py:669
 #: /src/schooltool/course/browser/templates/f_course_filter.pt:6
 msgid "Title or course ID"
-msgstr ""
+msgstr "Title or course ID"
 
 #: /src/schooltool/course/browser/csvimport.py:57
 #: /src/schooltool/group/browser/csvimport.py:54
@@ -4563,6 +4567,8 @@ msgid ""
 "Course \"${course_title}\" credits \"${invalid_credits}\" value must be a "
 "number."
 msgstr ""
+"Course \"${course_title}\" credits \"${invalid_credits}\" value must be a "
+"number."
 
 #: /src/schooltool/course/browser/csvimport.py:103
 msgid ""
@@ -4610,7 +4616,7 @@ msgstr "Section"
 #: /src/schooltool/course/browser/flourish.zcml:440
 #: /src/schooltool/course/browser/templates/f_section_view.pt:141
 msgid "Locations"
-msgstr ""
+msgstr "Locations"
 
 #: /src/schooltool/course/browser/flourish.zcml:411
 #: /src/schooltool/course/browser/templates/f_section_view.pt:164
@@ -4633,11 +4639,11 @@ msgstr "Terms"
 
 #: /src/schooltool/course/browser/flourish.zcml:467
 msgid "Import Students CSV"
-msgstr ""
+msgstr "Import Students CSV"
 
 #: /src/schooltool/course/browser/flourish.zcml:476
 msgid "Import Students"
-msgstr ""
+msgstr "Import Students"
 
 #: /src/schooltool/course/browser/flourish.zcml:644
 msgid "Roster"
@@ -4704,7 +4710,7 @@ msgstr "Available Students"
 
 #: /src/schooltool/course/browser/section.py:934
 msgid "Delete ${section}"
-msgstr ""
+msgstr "Delete ${section}"
 
 #: /src/schooltool/course/browser/section.py:985
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:11
@@ -4722,7 +4728,7 @@ msgstr "Term"
 #: /src/schooltool/course/browser/section.py:1077
 #: /src/schooltool/course/browser/templates/f_section_filter.pt:6
 msgid "Section title"
-msgstr ""
+msgstr "Section title"
 
 #: /src/schooltool/course/browser/section.py:1287
 msgid ""
@@ -4732,15 +4738,15 @@ msgstr ""
 #: /src/schooltool/course/browser/section.py:1295
 #: /src/schooltool/course/browser/section.py:1517
 msgid "Section Information"
-msgstr ""
+msgstr "Section Information"
 
 #: /src/schooltool/course/browser/section.py:1206
 msgid "Starting term is later than ending term"
-msgstr ""
+msgstr "Starting term is later than ending term"
 
 #: /src/schooltool/course/browser/section.py:1232
 msgid "Select a course"
-msgstr ""
+msgstr "Select a course"
 
 #: /src/schooltool/course/browser/section.py:1470
 msgid "Additional locations can be added via the section view."
@@ -4748,47 +4754,47 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1580
 msgid "Current instructors"
-msgstr ""
+msgstr "Current instructors"
 
 #: /src/schooltool/course/browser/section.py:1310
 msgid "Add instructors"
-msgstr ""
+msgstr "Add instructors"
 
 #: /src/schooltool/course/browser/section.py:1329
 msgid "Current students"
-msgstr ""
+msgstr "Current students"
 
 #: /src/schooltool/course/browser/section.py:1330
 msgid "Add students"
-msgstr ""
+msgstr "Add students"
 
 #: /src/schooltool/course/browser/section.py:1380
 msgid "Current locations"
-msgstr ""
+msgstr "Current locations"
 
 #: /src/schooltool/course/browser/section.py:1381
 msgid "Add locations"
-msgstr ""
+msgstr "Add locations"
 
 #: /src/schooltool/course/browser/section.py:1404
 msgid "Current equipment"
-msgstr ""
+msgstr "Current equipment"
 
 #: /src/schooltool/course/browser/section.py:1405
 msgid "Add equipment"
-msgstr ""
+msgstr "Add equipment"
 
 #: /src/schooltool/course/browser/section.py:1469
 msgid "Extend ${section} to ${term}"
-msgstr ""
+msgstr "Extend ${section} to ${term}"
 
 #: /src/schooltool/course/browser/section.py:1430
 msgid "Remove links of ${section}"
-msgstr ""
+msgstr "Remove links of ${section}"
 
 #: /src/schooltool/course/browser/section.py:1435
 msgid "Link ${section} to Section in Other Term"
-msgstr ""
+msgstr "Link ${section} to Section in Other Term"
 
 #: /src/schooltool/course/browser/section.py:1833
 msgid "Section Roster"
@@ -4817,15 +4823,15 @@ msgstr "There is no (previous) term in ${schoolyear} to copy sections from."
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:66
 msgid "Select All Visible"
-msgstr ""
+msgstr "Select All Visible"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:70
 msgid "Select None"
-msgstr ""
+msgstr "Select None"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:74
 msgid "Invert Selection"
-msgstr ""
+msgstr "Invert Selection"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:91
 #: /src/schooltool/course/browser/templates/link_section.pt:67
@@ -4844,7 +4850,7 @@ msgstr "Copied"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:149
 msgid "Copy"
-msgstr ""
+msgstr "Copy"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
 msgid "Upload schooltool courses as CSV"
@@ -4932,7 +4938,7 @@ msgstr "Sections Taught"
 
 #: /src/schooltool/course/browser/templates/coursesviewlet.pt:37
 msgid "Sections Attended"
-msgstr ""
+msgstr "Sections Attended"
 
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:12
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:24
@@ -4967,6 +4973,9 @@ msgid ""
 "associated with the course. It is strongly recommended that you only delete "
 "a course that has been created in error or has no data associated with it."
 msgstr ""
+"Deleting a course is permanent, irreversible, and destroys all data "
+"associated with the course. It is strongly recommended that you only delete "
+"a course that has been created in error or has no data associated with it."
 
 #: /src/schooltool/course/browser/templates/f_confirm_delete_section.pt:1
 msgid ""
@@ -4974,6 +4983,9 @@ msgid ""
 "associated with the section. It is strongly recommended that you only delete "
 "a section that has been created in error or has no data associated with it."
 msgstr ""
+"Deleting a section is permanent, irreversible, and destroys all data "
+"associated with the section. It is strongly recommended that you only delete "
+"a section that has been created in error or has no data associated with it."
 
 #: /src/schooltool/course/browser/templates/f_course_csvimport_description.pt:3
 msgid ""
@@ -4982,6 +4994,10 @@ msgid ""
 "optional course SchoolTool ID, <strong>may</strong> include an optional "
 "Alternate ID and <strong>may</strong> include an optional credits value."
 msgstr ""
+"CSV data <strong>must</strong> include a course title,<strong>may</strong> "
+"include an optional course description, <strong>may</strong> include an "
+"optional course SchoolTool ID, <strong>may</strong> include an optional "
+"Alternate ID and <strong>may</strong> include an optional credits value."
 
 #: /src/schooltool/course/browser/templates/f_course_csvimport_description.pt:19
 msgid ""
@@ -4996,10 +5012,20 @@ msgid ""
 "database, existing courses will be updated. Course Ids take precedence when "
 "determining which course should be updated."
 msgstr ""
+"The above example will create 4 courses titled 'Ancient History', 'US "
+"History', 'World History' and 'Spanish'. The first and third courses will "
+"have the descriptions 'Pre-history through 1000 A.D.' and '1000 A.D. through "
+"the 20th century' respectively. The second and forth courses will have no "
+"description. The second, third and forth courses will have their SchoolTool "
+"IDs set to us-history and history-world. The forth course will have its "
+"Alternate ID set to spanish-gov and its credits value set to 5. If you will "
+"upload a CSV with titles or course ids that are already present in the "
+"database, existing courses will be updated. Course Ids take precedence when "
+"determining which course should be updated."
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:4
 msgid "Edit this course"
-msgstr ""
+msgstr "Edit this course"
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:78
 msgid "This course has no sections"
@@ -5007,37 +5033,39 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:84
 msgid "Edit responsible parties for this course"
-msgstr ""
+msgstr "Edit responsible parties for this course"
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:92
 msgid "These users can modify the course."
-msgstr ""
+msgstr "These users can modify the course."
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:87
 msgid "This course has no responsible parties"
-msgstr ""
+msgstr "This course has no responsible parties"
 
 #: /src/schooltool/course/browser/templates/f_courses_related.pt:6
 msgid "A course in SchoolTool describes the curriculum taught in a section."
-msgstr ""
+msgstr "A course in SchoolTool describes the curriculum taught in a section."
 
 #: /src/schooltool/course/browser/templates/f_courses_related.pt:10
 msgid ""
 "For example, Algebra I, American History, 3rd Grade Reading, and Advanced "
 "Physics are all courses."
 msgstr ""
+"For example, Algebra I, American History, 3rd Grade Reading, and Advanced "
+"Physics are all courses."
 
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:6
 msgid "Sections taught"
-msgstr ""
+msgstr "Sections taught"
 
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:37
 msgid "Sections attended"
-msgstr ""
+msgstr "Sections attended"
 
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:79
 msgid "This person has no sections."
-msgstr ""
+msgstr "This person has no sections."
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:21
 #: /src/schooltool/course/browser/templates/link_existing.pt:21
@@ -5055,7 +5083,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:33
 msgid "Instructor"
-msgstr ""
+msgstr "Instructor"
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:37
 #: /src/schooltool/course/browser/templates/link_existing.pt:30
@@ -5085,36 +5113,36 @@ msgstr "Link"
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:6
 msgid "Manage courses"
-msgstr ""
+msgstr "Manage courses"
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:17
 msgid "There are ${count} courses defined for ${schoolyear}."
-msgstr ""
+msgstr "There are ${count} courses defined for ${schoolyear}."
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:21
 msgid "There are no courses defined for ${schoolyear}."
-msgstr ""
+msgstr "There are no courses defined for ${schoolyear}."
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:25
 msgid "Manage sections"
-msgstr ""
+msgstr "Manage sections"
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:36
 msgid "There are ${count} sections defined for ${schoolyear}."
-msgstr ""
+msgstr "There are ${count} sections defined for ${schoolyear}."
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:40
 msgid "There are no sections defined for ${schoolyear}."
-msgstr ""
+msgstr "There are no sections defined for ${schoolyear}."
 
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:25
 #: /src/schooltool/course/browser/templates/f_section_view.pt:104
 msgid "(currently viewing)"
-msgstr ""
+msgstr "(currently viewing)"
 
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:43
 msgid "Unlink"
-msgstr ""
+msgstr "Unlink"
 
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:92
 #: /src/schooltool/course/browser/templates/section_linkage.pt:55
@@ -5133,7 +5161,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/f_section_member_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:3
 msgid "CSV data should contain a SchoolTool username in each line."
-msgstr ""
+msgstr "CSV data should contain a SchoolTool username in each line."
 
 #. Default: "john_b peter_j"
 #: /src/schooltool/course/browser/templates/f_section_member_csvimport_description.pt:8
@@ -5148,6 +5176,8 @@ msgid ""
 "The above example will add users 'john_b' and 'peter_j' as students of this "
 "section."
 msgstr ""
+"The above example will add users 'john_b' and 'peter_j' as students of this "
+"section."
 
 #: /src/schooltool/course/browser/templates/f_section_table_filter.pt:41
 msgid "All courses"
@@ -5155,47 +5185,47 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:4
 msgid "Edit this section"
-msgstr ""
+msgstr "Edit this section"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:83
 msgid "This section has no courses"
-msgstr ""
+msgstr "This section has no courses"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:89
 msgid "Edit terms for this section"
-msgstr ""
+msgstr "Edit terms for this section"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:115
 msgid "Edit instructors for this section"
-msgstr ""
+msgstr "Edit instructors for this section"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:125
 msgid "This section has no instructors"
-msgstr ""
+msgstr "This section has no instructors"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:130
 msgid "Edit students for this section"
-msgstr ""
+msgstr "Edit students for this section"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:140
 msgid "This section has no students"
-msgstr ""
+msgstr "This section has no students"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:149
 msgid "Edit locations for this section"
-msgstr ""
+msgstr "Edit locations for this section"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:160
 msgid "This section has no locations"
-msgstr ""
+msgstr "This section has no locations"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:165
 msgid "Edit equipment for this section"
-msgstr ""
+msgstr "Edit equipment for this section"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:176
 msgid "This section has no equipment"
-msgstr ""
+msgstr "This section has no equipment"
 
 #: /src/schooltool/course/browser/templates/f_unlink_section.pt:22
 #: /src/schooltool/course/browser/templates/unlink_section.pt:23
@@ -5317,7 +5347,7 @@ msgstr "Unlink Section"
 #: /src/schooltool/course/interfaces.py:36
 #: /src/schooltool/course/interfaces.py:129
 msgid "SchoolTool ID"
-msgstr ""
+msgstr "SchoolTool ID"
 
 #: /src/schooltool/course/interfaces.py:37
 msgid "An internal identifier of this course."
@@ -5395,7 +5425,17 @@ msgstr "Cannot link sections in different school years"
 msgid "Sections must be in consecutive terms"
 msgstr "Sections must be in consecutive terms"
 
-#: /src/schooltool/course/security.zcml:42
+#: /src/schooltool/course/security.zcml:38
+msgid "Only clerks can modify the section."
+msgstr ""
+
+#: /src/schooltool/course/security.zcml:38
+msgid ""
+"Section instructors can modify section's title, schedule, roster, equipment "
+"and so on."
+msgstr ""
+
+#: /src/schooltool/course/security.zcml:53
 msgid ""
 "Basic information about sections is only visible to instructors and students "
 "in that section, and school administration."
@@ -7814,7 +7854,11 @@ msgstr ""
 msgid "Resource calendars"
 msgstr ""
 
-#: /src/schooltool/securitypolicy/browser/views.py:67
+#: /src/schooltool/securitypolicy/browser/views.py:65
+msgid "Schedules"
+msgstr ""
+
+#: /src/schooltool/securitypolicy/browser/views.py:66
 msgid "Gradebook"
 msgstr "Gradebook"
 
@@ -9018,7 +9062,15 @@ msgstr ""
 msgid "Treat consecutive periods as one meeting"
 msgstr ""
 
-#: /src/schooltool/timetable/security.zcml:36
+#: /src/schooltool/timetable/security.zcml:5
+msgid "Instructors can schedule their own sections."
+msgstr ""
+
+#: /src/schooltool/timetable/security.zcml:5
+msgid "Only clerks can schedule sections."
+msgstr ""
+
+#: /src/schooltool/timetable/security.zcml:56
 msgid "School timetables"
 msgstr "School timetables"
 

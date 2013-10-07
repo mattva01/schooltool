@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-08-22 19:53+0300\n"
-"PO-Revision-Date: 2013-08-22 23:41+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"POT-Creation-Date: 2013-09-12 18:35+0300\n"
+"PO-Revision-Date: 2013-09-13 16:27+0000\n"
+"Last-Translator: Paulo Márcio da Hora <paulohora@ufba.br>\n"
 "Language-Team: Portuguese (Brazil) <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-08-24 05:43+0000\n"
-"X-Generator: Launchpad (build 16738)\n"
+"X-Launchpad-Export-Date: 2013-09-14 05:53+0000\n"
+"X-Generator: Launchpad (build 16761)\n"
 "Language: \n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -5468,7 +5468,17 @@ msgstr "Não pode vincular turmas em diferentes anos escolares."
 msgid "Sections must be in consecutive terms"
 msgstr "Seleções não podem ser período consecutivos."
 
-#: /src/schooltool/course/security.zcml:42
+#: /src/schooltool/course/security.zcml:38
+msgid "Only clerks can modify the section."
+msgstr ""
+
+#: /src/schooltool/course/security.zcml:38
+msgid ""
+"Section instructors can modify section's title, schedule, roster, equipment "
+"and so on."
+msgstr ""
+
+#: /src/schooltool/course/security.zcml:53
 msgid ""
 "Basic information about sections is only visible to instructors and students "
 "in that section, and school administration."
@@ -5942,15 +5952,15 @@ msgstr ""
 
 #: /src/schooltool/export/export.py:841
 msgid "School Data"
-msgstr ""
+msgstr "Dados da Escola"
 
 #: /src/schooltool/export/export.py:856
 msgid "Exporting school data"
-msgstr ""
+msgstr "Exportando dados da escola"
 
 #: /src/schooltool/export/export.py:871
 msgid "Export complete"
-msgstr ""
+msgstr "Exportação completa"
 
 #: /src/schooltool/export/export.py:892
 msgid "school export"
@@ -6243,7 +6253,7 @@ msgstr "Carregar Arquivo XLS"
 
 #: /src/schooltool/export/templates/f_import_progress.pt:13
 msgid "Import scheduled."
-msgstr ""
+msgstr "Importação agendada."
 
 #: /src/schooltool/export/templates/f_import_progress.pt:18
 msgid "Importing"
@@ -6251,19 +6261,19 @@ msgstr ""
 
 #: /src/schooltool/export/templates/f_import_progress.pt:26
 msgid "Committing to database."
-msgstr ""
+msgstr "Enviando ao banco de dados."
 
 #: /src/schooltool/export/templates/f_import_progress.pt:31
 msgid "Finished importing."
-msgstr ""
+msgstr "Importação finalizada."
 
 #: /src/schooltool/export/templates/f_import_progress.pt:34
 msgid "Data not saved due to these errors:"
-msgstr ""
+msgstr "Dados não salvos devido à estes erros:"
 
 #: /src/schooltool/export/templates/f_import_progress.pt:46
 msgid "Download ${filename}"
-msgstr ""
+msgstr "Download ${filename}"
 
 #: /src/schooltool/export/templates/f_import_progress.pt:52
 #: /src/schooltool/skin/flourish/instance/skin.zcml:36
@@ -7088,15 +7098,15 @@ msgstr ""
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:3
 msgid "Building the report"
-msgstr ""
+msgstr "Construindo o relatório"
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:4
 msgid "Failed to build the report"
-msgstr ""
+msgstr "Falha na construção do relatório"
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:7
 msgid "Download report"
-msgstr ""
+msgstr "Baixar relatório"
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:15
 msgid ""
@@ -7112,13 +7122,13 @@ msgstr ""
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:33
 #: /src/schooltool/report/browser/templates/f_short_report_message.pt:17
 msgid "Generating ${report}..."
-msgstr ""
+msgstr "Gerando ${report}..."
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:41
 #: /src/schooltool/task/browser/templates/f_short_fail_message.pt:3
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:19
 msgid "System failure."
-msgstr ""
+msgstr "Falha no sistema."
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:45
 #: /src/schooltool/report/browser/templates/f_short_report_message.pt:31
@@ -7947,7 +7957,11 @@ msgstr "Informações de recurso"
 msgid "Resource calendars"
 msgstr "Calendários de recurso"
 
-#: /src/schooltool/securitypolicy/browser/views.py:67
+#: /src/schooltool/securitypolicy/browser/views.py:65
+msgid "Schedules"
+msgstr ""
+
+#: /src/schooltool/securitypolicy/browser/views.py:66
 msgid "Gradebook"
 msgstr "Livro de Notas"
 
@@ -9186,7 +9200,15 @@ msgstr "Tipo de atividade"
 msgid "Treat consecutive periods as one meeting"
 msgstr "Tratar períodos consecutivos como encontro único"
 
-#: /src/schooltool/timetable/security.zcml:36
+#: /src/schooltool/timetable/security.zcml:5
+msgid "Instructors can schedule their own sections."
+msgstr ""
+
+#: /src/schooltool/timetable/security.zcml:5
+msgid "Only clerks can schedule sections."
+msgstr ""
+
+#: /src/schooltool/timetable/security.zcml:56
 msgid "School timetables"
 msgstr "Horários da Escola"
 

@@ -5,7 +5,7 @@ CHANGES
 2.5.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Updated translations, removed unsupported ones (less than 25% translated).
 
 
 2.5.3 (2013-09-12)
