@@ -85,7 +85,10 @@ class DayTemplatesTable(ContentProvider):
         max_rows = max([len(cells) for cells in cols])
         cols = [cells + [{}]*(max_rows-len(cells)) for cells in cols]
 
-        table['rows'] = map(None, *cols)
+        if len(cols) == 1:
+            table['rows'] = [(col,) for col in cols[0]]
+        else:
+            table['rows'] = map(None, *cols)
         ncols = len(cols) or 1
         table['col_width'] ='%d%%' % (100 / ncols);
         table['th_width'] = '%d%%' % (10 / ncols);
