@@ -4131,8 +4131,8 @@ msgid "Add new contact for ${person}"
 msgstr "${person} için yeni kişi ekle"
 
 #: /src/schooltool/contact/browser/contact.py:329
-msgid "Change contact information for ${first_name} ${last_name}"
-msgstr "${first_name} ${last_name} için kişi bilgilerini değiştir"
+msgid "Change contact information for ${person}"
+msgstr "${person} için kişi bilgilerini değiştir"
 
 #: /src/schooltool/contact/browser/contact.py:441
 msgid "Contact index"

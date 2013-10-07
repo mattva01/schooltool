@@ -4067,8 +4067,8 @@ msgid "Add new contact for ${person}"
 msgstr "បន្ថែម​ទំនាក់ទំនង​ថ្មី​សម្រាប់ ${person}"
 
 #: /src/schooltool/contact/browser/contact.py:329
-msgid "Change contact information for ${first_name} ${last_name}"
-msgstr "ផ្លាស់ប្ដូរ​ព័ត៌មាន​ទំនាក់ទំនង​សម្រាប់ ${first_name} ${last_name}"
+msgid "Change contact information for ${person}"
+msgstr "ផ្លាស់ប្ដូរ​ព័ត៌មាន​ទំនាក់ទំនង​សម្រាប់ ${person}"
 
 #: /src/schooltool/contact/browser/contact.py:441
 msgid "Contact index"

@@ -4008,8 +4008,8 @@ msgid "Add new contact for ${person}"
 msgstr "${person} नयाँ सम्पर्क थप्नुहोस्"
 
 #: /src/schooltool/contact/browser/contact.py:329
-msgid "Change contact information for ${first_name} ${last_name}"
-msgstr "${first_name} ${last_name} को लागि सम्पर्क सूची परिवर्तन गर्नुहोस्"
+msgid "Change contact information for ${person}"
+msgstr "${person} को लागि सम्पर्क सूची परिवर्तन गर्नुहोस्"
 
 #: /src/schooltool/contact/browser/contact.py:441
 msgid "Contact index"

@@ -4007,8 +4007,8 @@ msgid "Add new contact for ${person}"
 msgstr "為 ${person} 添加新的聯繫人"
 
 #: /src/schooltool/contact/browser/contact.py:329
-msgid "Change contact information for ${first_name} ${last_name}"
-msgstr "改變 ${first_name} ${last_name} 的聯繫資訊"
+msgid "Change contact information for ${person}"
+msgstr "改變 ${person} 的聯繫資訊"
 
 #: /src/schooltool/contact/browser/contact.py:441
 msgid "Contact index"

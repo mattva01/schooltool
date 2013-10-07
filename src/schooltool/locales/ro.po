@@ -3964,7 +3964,7 @@ msgid "Add new contact for ${person}"
 msgstr "Adaugă contact nou pentru ${person}"
 
 #: /src/schooltool/contact/browser/contact.py:329
-msgid "Change contact information for ${first_name} ${last_name}"
+msgid "Change contact information for ${person}"
 msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:441
