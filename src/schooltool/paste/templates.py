@@ -43,7 +43,7 @@ class SchoolToolDeploy(Template):
     vars = [
         var('instance_type', """SchoolTool instance type to use. Available types -
   %s""" % "\n  ".join([t[0] for t in available_types]),
-            default=available_types[-1][0])]
+            default='schooltool')]
 
     def check_vars(self, vars, cmd):
         vars = super(SchoolToolDeploy, self).check_vars(vars, cmd)
