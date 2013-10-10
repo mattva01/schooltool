@@ -2,15 +2,32 @@
 CHANGES
 =======
 
-2.5.4 (unreleased)
+2.6.1 (unreleased)
 ------------------
 
+- Nothing changed yet.
+
+
+2.6.0 (2013-10-10)
+------------------
+
+- Don't reverse name order (https://launchpad.net/bugs/1201887)
+- Add "Name sorting" option to Server settings, display the selected name
+  column first in person tables.
+- Person search does not find by full name (https://launchpad.net/bugs/894798)
 - Change manager's full name to "Default Manager" (https://launchpad.net/bugs/1227220)
+- Fix timetable wizard for weekly timetables with different periods order.
+- Fix crash when displaying timetables with only one day (https://launchpad.net/bugs/1235150)
+- Fix navigation inside the School tab if a non-active school year is selected,
+  or school years title contains accented characters (https://launchpad.net/bugs/1234690)
+- Setting multiple languages in schooltool.conf breaks remote reports (https://launchpad.net/bugs/1229013)
+- Improvements to PDF grid and table style.
+- Extra info in traceback page and submit to launchpad button
 - Updated translations, removed unsupported ones (less than 25% translated).
 
 
-2.5.3.1 (2013-09-17)
---------------------
+2.5.3 (2013-09-17)
+------------------
 
 Bugfixes
 ++++++++
@@ -20,7 +37,8 @@ Bugfixes
 - Fix links and Done buttons inside School tab when a different school year is selected
 - Add manager to Site Managers and Clerks groups (https://launchpad.net/bugs/1216915)
 - Access setting: allow instructor to add students to their section (https://launchpad.net/bugs/637759)
-- Access setting: allow instructor to modify section
+- Access setting: allow instructor to modify their section (https://launchpad.net/bugs/683313)
+- Access setting: instructors can schedule their own sections (https://launchpad.net/bugs/604643)
 - Display contact information of a person in profile.
 - Updated translations
 

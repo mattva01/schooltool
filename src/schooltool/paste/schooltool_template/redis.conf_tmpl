@@ -64,7 +64,7 @@ logfile ${log_dir}/redis.log
 # Set the number of databases. The default database is DB 0, you can select
 # a different one on a per-connection basis using SELECT <dbid> where
 # dbid is a number between 0 and 'databases'-1
-databases 16
+databases 4
 
 ################################ SNAPSHOTTING  #################################
 #
@@ -82,7 +82,9 @@ databases 16
 #
 #   Note: you can disable saving at all commenting all the "save" lines.
 
-save 1 1
+save 900 1
+save 300 10
+save 60 10000
 
 # Compress string objects using LZF when dump .rdb databases?
 # For default that's set to 'yes' as it's almost always a win.
