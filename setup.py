@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # SchoolTool - common information systems platform for school administration
-# Copyright (c) 2003-2011 Shuttleworth Foundation
+# Copyright (c) 2003-2013 Shuttleworth Foundation
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -153,7 +153,6 @@ Javascript will be usable, although perhaps not very nice or convenient.""",
                              'selenium'],
                     'docs': ['Sphinx',
                              'z3c.recipe.sphinxdoc'],
-                    'apidoc': [],
                    },
     include_package_data=True,
     zip_safe=False,
