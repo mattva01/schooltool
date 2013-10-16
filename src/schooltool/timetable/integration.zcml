@@ -76,4 +76,14 @@
 
   <adapter factory=".app.SchooldaysForTimetable" />
 
+  <adapter factory=".app.SynchronizeScheduleTimezones"
+           permission="zope.Public"
+           trusted="true"
+           name="schooltool.timetable.app:synchronize-schedule-timezones"/>
+
+  <adapter factory=".app.SynchronizeTimetableTimezones"
+           permission="zope.Public"
+           trusted="true"
+           name="schooltool.timetable.app:synchronize-timetable-timezones"/>
+
 </configure>

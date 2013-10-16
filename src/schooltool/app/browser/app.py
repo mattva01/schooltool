@@ -880,6 +880,9 @@ class FlourishApplicationPreferencesView(Form, form.EditForm):
     label = None
     legend = _('Calendar settings')
 
+    def getContent(self):
+        return IApplicationPreferences(self.context)
+
     def update(self):
         form.EditForm.update(self)
 

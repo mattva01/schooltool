@@ -30,6 +30,7 @@ from zope.intid.interfaces import IIntIds
 
 from schooltool.app.app import InitBase, StartUpBase
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common import DateRange
 from schooltool.course.section import InstructorsCrowd, LearnersCrowd
 from schooltool.course.interfaces import ISection
@@ -262,3 +263,32 @@ class SectionScheduleEditors(AggregateCrowd):
 
     def crowdFactories(self):
         return [ConfigurableScheduleEditors]
+
+
+class SynchronizeScheduleTimezones(ObjectEventAdapterSubscriber):
+    adapts(zope.lifecycleevent.interfaces.IObjectModifiedEvent,
+           IApplicationPreferences)
+
+    def __call__(self):
+        prefs = self.object
+        app = prefs.__parent__
+        schedule_containers = app[SCHEDULES_KEY]
+        for container in schedule_containers.values():
+            if container.timezone != prefs.timezone:
+                container.timezone = prefs.timezone
+                zope.lifecycleevent.modified(container)
+
+
+class SynchronizeTimetableTimezones(ObjectEventAdapterSubscriber):
+    adapts(zope.lifecycleevent.interfaces.IObjectModifiedEvent,
+           IApplicationPreferences)
+
+    def __call__(self):
+        prefs = self.object
+        app = prefs.__parent__
+        schedule_containers = app[TIMETABLES_KEY]
+        for container in schedule_containers.values():
+            for timetable in container.values():
+                if timetable.timezone != prefs.timezone:
+                    timetable.timezone = prefs.timezone
+                    zope.lifecycleevent.modified(timetable)
