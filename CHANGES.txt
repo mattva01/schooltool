@@ -2,6 +2,14 @@
 CHANGES
 =======
 
+2.6.0.1 (2013-10-17)
+--------------------
+
+- Synchronize timezone set in preferences with timetables and schedules (https://launchpad.net/bugs/1239468)
+- Set initial timezone from ``/etc/timezone`` (https://launchpad.net/bugs/1030211)
+- Update Spanish translation.
+
+
 2.6.0 (2013-10-10)
 ------------------
 
@@ -12,8 +20,6 @@ CHANGES
 - Change manager's full name to "Default Manager" (https://launchpad.net/bugs/1227220)
 - Fix timetable wizard for weekly timetables with different periods order.
 - Fix crash when displaying timetables with only one day (https://launchpad.net/bugs/1235150)
-- Synchronize timezone set in preferences with timetables and schedules (https://launchpad.net/bugs/1239468)
-- Set initial timezone from ``/etc/timezone`` (https://launchpad.net/bugs/1030211)
 - Fix navigation inside the School tab if a non-active school year is selected,
   or school years title contains accented characters (https://launchpad.net/bugs/1234690)
 - Setting multiple languages in schooltool.conf breaks remote reports (https://launchpad.net/bugs/1229013)
