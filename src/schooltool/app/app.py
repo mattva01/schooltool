@@ -19,6 +19,8 @@
 SchoolTool application
 """
 import calendar
+import os
+import pytz
 
 from persistent import Persistent
 from persistent.dict import PersistentDict
@@ -199,10 +201,9 @@ class ApplicationPreferences(Persistent):
 
     timezone = 'UTC'
 
+    # XXX: initialize from locale
     dateformat = '%Y-%m-%d'
-
     timeformat = '%H:%M'
-
     weekstart = calendar.MONDAY
 
     frontPageCalendar = True
@@ -210,6 +211,34 @@ class ApplicationPreferences(Persistent):
     logo = None
 
     name_sorting = 'last_name'
+
+    def __init__(self):
+        self.timezone = self._get_localzone()
+
+    def _get_localzone(self):
+        """Tries to find the local timezone configuration.
+
+        Taken from https://github.com/regebro/tzlocal/
+        only the part needed for Ubuntu.
+        """
+        tzpath = '/etc/timezone'
+        if os.path.exists(tzpath):
+            with open(tzpath, 'rb') as tzfile:
+                data = tzfile.read()
+                if data[:5] != 'TZif2':
+                    etctz = data.strip().decode()
+                    # Get rid of host definitions and comments:
+                    if ' ' in etctz:
+                        etctz, dummy = etctz.split(' ', 1)
+                    if '#' in etctz:
+                        etctz, dummy = etctz.split('#', 1)
+                    try:
+                        pytz.timezone(etctz)
+                        return etctz
+                    except pytz.UnknownTimeZoneError:
+                        pass
+
+        return 'UTC'
 
 
 class ApplicationTabs(PersistentDict):
