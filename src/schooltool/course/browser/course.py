@@ -226,7 +226,6 @@ class FlourishCoursesViewlet(Viewlet):
     """A flourish viewlet showing the courses a person is in."""
 
     template = ViewPageTemplateFile('templates/f_coursesviewlet.pt')
-    body_template = None
     render = lambda self, *a, **kw: self.template(*a, **kw)
 
     def __init__(self, *args, **kw):

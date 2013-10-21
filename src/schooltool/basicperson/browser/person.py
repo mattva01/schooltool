@@ -755,7 +755,6 @@ class FlourishAdvisoryViewlet(Viewlet):
     """A viewlet showing the advisors/advisees of a person."""
 
     template = ViewPageTemplateFile('templates/f_advisoryViewlet.pt')
-    body_template = None
 
     @property
     def canModify(self):
@@ -766,7 +765,6 @@ class FlourishGeneralViewlet(FormViewlet):
     """A viewlet showing the core attributes of a person."""
 
     template = ViewPageTemplateFile('templates/f_generalViewlet.pt')
-    body_template = None
     mode = DISPLAY_MODE
 
     def getFields(self):

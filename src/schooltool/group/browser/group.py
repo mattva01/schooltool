@@ -214,7 +214,6 @@ class FlourishGroupsViewlet(Viewlet):
     """A flourish viewlet showing the groups a person is in."""
 
     template = ViewPageTemplateFile('templates/f_groupsviewlet.pt')
-    body_template = None
     render = lambda self, *a, **kw: self.template(*a, **kw)
 
     def update(self):
