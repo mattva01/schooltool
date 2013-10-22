@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-08-22 19:53+0300\n"
-"PO-Revision-Date: 2013-08-22 23:32+0000\n"
+"PO-Revision-Date: 2013-10-21 17:30+0300\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3399,15 +3399,15 @@ msgstr "Bendra informacija"
 
 #: /src/schooltool/basicperson/browser/person.py:1494
 msgid "Received"
-msgstr ""
+msgstr "Gauta"
 
 #: /src/schooltool/basicperson/browser/person.py:1502
 msgid "Message"
-msgstr ""
+msgstr "Žinutė"
 
 #: /src/schooltool/basicperson/browser/person.py:1561
 msgid "(${number} new)"
-msgstr ""
+msgstr "(${number} žin.)"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:18
 msgid ""
@@ -6516,16 +6516,16 @@ msgstr "nenurodytas pilnas vardas ir pavardė"
 #: /src/schooltool/person/browser/f_password_changed.pt:1
 #: /src/schooltool/person/browser/person.py:362
 msgid "Password changed successfully"
-msgstr ""
+msgstr "Slaptažodis pakeistas sėkmingai"
 
 #: /src/schooltool/person/browser/f_person_filter.pt:7
 #: /src/schooltool/person/browser/person.py:543
 msgid "First name, last name or username"
-msgstr ""
+msgstr "Vardas, pavardė, arba naudotojas"
 
 #: /src/schooltool/person/browser/flourish.zcml:7
 msgid "Preferences"
-msgstr ""
+msgstr "Nustatymai"
 
 #: /src/schooltool/person/browser/home.pt:24
 #: /src/schooltool/person/browser/person.pt:15
@@ -6570,11 +6570,11 @@ msgstr "Rodyti pamokas"
 
 #: /src/schooltool/person/browser/person.py:93
 msgid "Show hours"
-msgstr ""
+msgstr "Rodyti valandas"
 
 #: /src/schooltool/person/browser/person.py:98
 msgid "the public"
-msgstr ""
+msgstr "viešai"
 
 #: /src/schooltool/person/browser/person.py:105
 msgid "${person_full_name} and school administration"
@@ -6587,15 +6587,15 @@ msgstr ""
 #: /src/schooltool/person/browser/person.py:158
 #: /src/schooltool/person/browser/person.py:236
 msgid "Change preferences for ${person_full_name}"
-msgstr ""
+msgstr "Keisti ${person_full_name} nustatymus"
 
 #: /src/schooltool/person/browser/person.py:273
 msgid "Delete ${person_full_name}"
-msgstr ""
+msgstr "Ištrinti ${person_full_name}"
 
 #: /src/schooltool/person/browser/person.py:297
 msgid "Current password"
-msgstr ""
+msgstr "Esamas slaptažodis"
 
 #: /src/schooltool/person/browser/person.py:301
 #: /src/schooltool/person/browser/person.py:601
@@ -6604,7 +6604,7 @@ msgstr "Naujas slaptažodis"
 
 #: /src/schooltool/person/browser/person.py:305
 msgid "Verify new password"
-msgstr ""
+msgstr "Pakartokite naują slaptažodį"
 
 #: /src/schooltool/person/browser/person.py:311
 msgid "Edit password"
@@ -6617,7 +6617,7 @@ msgstr "Pakeisti slaptažodį"
 
 #: /src/schooltool/person/browser/person.py:362
 msgid "Wrong password supplied"
-msgstr ""
+msgstr "Neteisingas slaptažodis"
 
 #: /src/schooltool/person/browser/person.py:595
 #: /src/schooltool/person/browser/person.py:684
@@ -6776,11 +6776,11 @@ msgstr "Ataskaitos"
 
 #: /src/schooltool/report/browser/flourish.zcml:25
 msgid "Overview"
-msgstr ""
+msgstr "Apžvalga"
 
 #: /src/schooltool/report/browser/flourish.zcml:85
 msgid "Report Overview"
-msgstr ""
+msgstr "Ataskaitų apžvalga"
 
 #: /src/schooltool/report/browser/report.py:56
 msgid "Student Reports"
@@ -6813,7 +6813,7 @@ msgstr "Generuoti"
 
 #: /src/schooltool/report/browser/report.py:449
 msgid "export"
-msgstr ""
+msgstr "eksportuoti"
 
 #: /src/schooltool/report/browser/report.py:496
 msgid "Collecting (${name})"
@@ -7909,7 +7909,7 @@ msgstr ""
 
 #: /src/schooltool/task/security.zcml:24
 msgid "Messages"
-msgstr ""
+msgstr "Žinutės"
 
 #: /src/schooltool/task/security.zcml:29
 msgid "Read messages"

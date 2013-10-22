@@ -1,3 +1,4 @@
+<tal:block i18n:domain="schooltool">
 <div class="person-info">
   <tal:block tal:replace="structure context/schooltool:content/schooltool.person.FlourishInfo"/>
 </div>
@@ -18,3 +19,4 @@ $(document).ready(function() {
     });
 });
 </script>
+</tal:block>
