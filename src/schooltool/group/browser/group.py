@@ -579,7 +579,7 @@ class FlourishGroupContainerDeleteView(flourish.containers.ContainerDeleteView):
         return flourish.containers.ContainerDeleteView.nextURL(self)
 
 
-class FlourishGroupView(flourish.form.DisplayForm):
+class FlourishGroupView(flourish.form.DisplayForm, ActiveSchoolYearContentMixin):
 
     template = InheritTemplate(flourish.page.Page.template)
     content_template = ViewPageTemplateFile('templates/f_group_view.pt')
@@ -591,22 +591,24 @@ class FlourishGroupView(flourish.form.DisplayForm):
         return checkPermission('schooltool.edit', self.context)
 
     @property
+    def schoolyear(self):
+        return ISchoolYear(self.context.__parent__)
+
+    @property
     def title(self):
-        schoolyear = ISchoolYear(self.context.__parent__)
         return _('Groups for ${schoolyear}',
-                 mapping={'schoolyear': schoolyear.title})
+                 mapping={'schoolyear': self.schoolyear.title})
 
     @property
     def subtitle(self):
         return self.context.title
 
     def done_link(self):
-        schoolyear = ISchoolYear(self.context.__parent__)
-        url = '%s/%s?schoolyear_id=%s' % (
-            absoluteURL(ISchoolToolApplication(None), self.request),
-            'groups',
-            schoolyear.__name__)
-        return url
+        url = self.request.get('done_link', None)
+        if url is not None:
+            return url
+        app = ISchoolToolApplication(None)
+        return self.url_with_schoolyear_id(app, view_name='groups')
 
     def updateWidgets(self):
         super(FlourishGroupView, self).updateWidgets()

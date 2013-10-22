@@ -20,7 +20,8 @@
              tal:content="schoolyear/obj/title"></a>
           <ul>
             <li tal:repeat="group schoolyear/groups" class="group">
-              <a tal:attributes="href group/@@absolute_url;
+              <a tal:attributes="href
+                                 string:${group/@@absolute_url}?done_link=${request/URL};
                                title group/title"
                  tal:content="group/title"
                  class="leaf_url"></a>
