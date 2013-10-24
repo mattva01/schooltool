@@ -1253,6 +1253,12 @@ class FlourishServerSettingsOverview(flourish.page.Content,
         return formatted
 
 
+class PackageVersionsOverview(flourish.page.Content):
+
+    body_template = ViewPageTemplateFile(
+        'templates/package_versions.pt')
+
+
 class FlourishCalendarSettingsOverview(flourish.form.FormViewlet):
 
     fields = field.Fields(IApplicationPreferences)

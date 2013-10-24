@@ -1,0 +1,13 @@
+<div i18n:domain="schooltool">
+  <h3 i18n:translate="">
+    SchoolTool versions
+  </h3>
+  <table class="form-fields">
+    <tbody>
+      <tr tal:repeat="dist modules/schooltool/common/get_all_versions">
+        <td class="label" tal:content="dist/project_name">Project</td>
+        <td tal:content="dist/version">Version</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

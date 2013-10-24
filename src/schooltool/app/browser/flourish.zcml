@@ -147,6 +147,8 @@
       view="schooltool.app.browser.app.LoginView"
       />
 
+  <!-- Server page -->
+
   <flourish:viewlet
       name="calendar-settings-overview"
       after="email-settings-overview"
@@ -156,14 +158,21 @@
       class=".app.FlourishCalendarSettingsOverview"
       />
 
-  <!-- Site control page -->
-
   <flourish:viewlet
       name="server-settings-overview"
       view="schooltool.app.browser.app.ManageSite"
       permission="schooltool.edit"
       manager="schooltool.skin.flourish.page.IPageContentManager"
       class=".app.FlourishServerSettingsOverview"
+      />
+
+  <flourish:viewlet
+      name="package-versions-overview"
+      after="server-settings-overview"
+      view="schooltool.app.browser.app.ManageSite"
+      permission="schooltool.edit"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".app.PackageVersionsOverview"
       />
 
   <flourish:page
