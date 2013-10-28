@@ -1,0 +1,18 @@
+<script>
+  ST.state.push();
+</script>
+<tal:script tal:replace="structure scriptlocal:container_id view/manager/html_id;
+                                               selector view/selector;
+                                               url view/@@absolute_url" />
+<script>
+  $(ST.local.selector).click(
+    function(){
+      var container_id = ST.local.container_id;
+      var url = ST.local.url;
+      return function() {
+        return ST.table.on_form_submit_modal(container_id, this, {}, url);
+      }}());
+
+
+  ST.state.pop();
+</script>

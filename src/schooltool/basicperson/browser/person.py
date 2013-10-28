@@ -51,6 +51,9 @@ from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import EditRelationships
 from schooltool.app.browser.app import RelationshipAddTableMixin
 from schooltool.app.browser.app import RelationshipRemoveTableMixin
+from schooltool.app.browser.states import TemporalRelationshipAddTableMixin
+from schooltool.app.browser.states import TemporalRelationshipRemoveTableMixin
+from schooltool.app.browser.states import EditTemporalRelationships
 from schooltool.app.browser.report import ReportPDFView
 from schooltool.app.browser.report import DefaultPageTemplate
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -695,6 +698,12 @@ class EditPersonRelationships(EditRelationships):
         return ISchoolToolApplication(None)['persons']
 
 
+class EditPersonTemporalRelationships(EditTemporalRelationships):
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+
 class FlourishPersonAdvisorView(EditPersonRelationships):
 
     current_title = _('Current advisors')
@@ -1078,6 +1087,26 @@ class BasicPersonAddRelationshipTable(RelationshipAddTableMixin,
 
 
 class BasicPersonRemoveRelationshipTable(RelationshipRemoveTableMixin,
+                                         BasicPersonTable):
+    pass
+
+
+class BasicPersonAddRelationshipTable(RelationshipAddTableMixin,
+                                      BasicPersonTable):
+    pass
+
+
+class BasicPersonRemoveRelationshipTable(RelationshipRemoveTableMixin,
+                                         BasicPersonTable):
+    pass
+
+
+class BasicPersonAddTemporalRelationshipTable(TemporalRelationshipAddTableMixin,
+                                      BasicPersonTable):
+    pass
+
+
+class BasicPersonRemoveTemporalRelationshipTable(TemporalRelationshipRemoveTableMixin,
                                          BasicPersonTable):
     pass
 

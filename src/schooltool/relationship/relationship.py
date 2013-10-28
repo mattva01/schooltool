@@ -23,10 +23,12 @@ half of a relationship.  The storage of links on an object is determined by
 an IRelationshipLinks adapter.  There is a default adapter registered for
 all IAnnotatable objects that uses Zope 3 annotations.
 """
+import datetime
 
 from BTrees.OOBTree import OOBTree
 from persistent import Persistent
 from persistent.list import PersistentList
+from persistent.dict import PersistentDict
 from zope.container.contained import Contained
 from zope.interface import implements
 import zope.event
@@ -44,6 +46,18 @@ from schooltool.relationship.interfaces import NoSuchRelationship
 from schooltool.relationship.interfaces import IRelationshipSchema
 
 
+def share_state(link_a, link_b):
+    if (link_a.shared_state is not None and
+        link_a.shared_state is link_b.shared_state):
+        return
+    if link_a.shared_state is not None:
+        link_b.shared_state = link_a.shared_state
+    elif link_b.shared_state is not None:
+        link_a.shared_state = link_b.shared_state
+    else:
+        link_a.shared_state = link_b.shared_state = PersistentDict()
+
+
 def relate(rel_type, (a, role_of_a), (b, role_of_b), extra_info=None):
     """Establish a relationship between objects `a` and `b`."""
     for link in IRelationshipLinks(a):
@@ -54,10 +68,11 @@ def relate(rel_type, (a, role_of_a), (b, role_of_b), extra_info=None):
                                               (a, role_of_a),
                                               (b, role_of_b),
                                               extra_info))
-    IRelationshipLinks(a).add(Link(role_of_a, b, role_of_b, rel_type,
-                                   extra_info))
-    IRelationshipLinks(b).add(Link(role_of_b, a, role_of_a, rel_type,
-                                   extra_info))
+    link_a = Link(role_of_a, b, role_of_b, rel_type, extra_info)
+    IRelationshipLinks(a).add(link_a)
+    link_b = Link(role_of_b, a, role_of_a, rel_type, extra_info)
+    IRelationshipLinks(b).add(link_b)
+    share_state(link_a, link_b)
     zope.event.notify(RelationshipAddedEvent(rel_type,
                                              (a, role_of_a),
                                              (b, role_of_b),
@@ -365,8 +380,9 @@ class RelationshipProperty(object):
         if instance is None:
             return self
         else:
-            return BoundRelationshipProperty(instance, self.rel_type,
-                                             self.my_role, self.other_role)
+            return self.rel_type.bind(
+                instance,
+                self.my_role, self.rel_type, self.other_role)
 
 
 class BoundRelationshipProperty(object):
@@ -485,6 +501,10 @@ class RelationshipInfo(object):
         return self._link.target
 
     @property
+    def state(self):
+        return self._link.state
+
+    @property
     def extra_info(self):
         return self._link.extra_info
 
@@ -532,12 +552,18 @@ class Link(Persistent, Contained):
 
     implements(IRelationshipLink)
 
+    shared_state = None
+
     def __init__(self, my_role, target, role, rel_type, extra_info=None):
         self.my_role = my_role
         self.target = target
         self.role = role
         self.rel_type = rel_type
         self.extra_info = extra_info
+
+    @property
+    def state(self):
+        return self.rel_type.access(self.shared_state)
 
 
 class LinkSet(Persistent, Contained):

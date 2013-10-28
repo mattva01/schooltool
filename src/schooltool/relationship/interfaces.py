@@ -76,6 +76,7 @@ class IRelationshipLink(Interface):
         Be careful to keep extra info in sync on both links of the
         relationship.
         """)
+    state = Attribute("""State of a relationship.""")
 
 
 class IRelationshipLinks(Interface):

@@ -53,6 +53,20 @@
   <!-- XXX: disable timetable support for refactoring -->
   <!--include file="timetable-integration.zcml" /-->
 
+  <adapter
+      for="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.app.interfaces.IRequestHelper"
+      factory=".term.TodayDescriptor"
+      name="today"
+      />
+
+  <adapter
+      for="zope.publisher.interfaces.http.IHTTPRequest"
+      provides="schooltool.app.interfaces.IRequestHelper"
+      factory=".term.TimeNowDescriptor"
+      name="time_now"
+      />
+
   <include package=".browser" />
 
 </configure>

@@ -832,6 +832,22 @@
       permission="schooltool.view"
       />
 
+  <flourish:viewlet
+      name="available_table"
+      class="schooltool.basicperson.browser.person.BasicPersonAddTemporalRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".person.EditPersonTemporalRelationships"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="current_table"
+      class="schooltool.basicperson.browser.person.BasicPersonRemoveTemporalRelationshipTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      view=".person.EditPersonTemporalRelationships"
+      permission="schooltool.view"
+      />
+
   <zope:adapter
       for="*
            schooltool.skin.flourish.IFlourishLayer

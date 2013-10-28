@@ -20,10 +20,11 @@ BasicPerson advisor relationship.
 """
 from schooltool.relationship.relationship import RelationshipSchema
 from schooltool.relationship.uri import URIObject
+from schooltool.relationship.temporal import TemporalURIObject
 
 
-URIAdvising = URIObject('http://schooltool.org/ns/advising',
-                        'Advising', 'The advising relationship.')
+URIAdvising = TemporalURIObject('http://schooltool.org/ns/advising',
+                                'Advising', 'The advising relationship.')
 URIStudent = URIObject('http://schooltool.org/ns/advising/student',
                        'Student', 'An advising relationship student role.')
 URIAdvisor = URIObject('http://schooltool.org/ns/advising/advisor',

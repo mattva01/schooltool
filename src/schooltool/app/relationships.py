@@ -25,6 +25,7 @@ from schooltool.group.interfaces import IGroup
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.membership import URIMembership, URIMember, URIGroup
 from schooltool.relationship import URIObject, RelationshipSchema
+from schooltool.relationship.temporal import TemporalURIObject
 from schooltool.relationship.interfaces import IBeforeRelationshipEvent
 from schooltool.relationship.interfaces import IRelationshipAddedEvent
 from schooltool.relationship.interfaces import IRelationshipRemovedEvent
@@ -35,8 +36,8 @@ from schooltool.relationship.interfaces import InvalidRelationship
 # The Instruction relationship
 #
 
-URIInstruction = URIObject('http://schooltool.org/ns/instruction',
-                           'Instruction', 'The instruction relationship.')
+URIInstruction = TemporalURIObject('http://schooltool.org/ns/instruction',
+                                   'Instruction', 'The instruction relationship.')
 URISection = URIObject('http://schooltool.org/ns/instruction/section',
                        'Section', 'A role of a containing section.')
 URIInstructor = URIObject('http://schooltool.org/ns/instruction/instructor',
@@ -175,8 +176,8 @@ def updateStudentCalendars(event):
 # The leadership relationship
 #
 
-URILeadership = URIObject('http://schooltool.org/ns/leadership',
-                          'Leadership', 'The leadership relationship.')
+URILeadership = TemporalURIObject('http://schooltool.org/ns/leadership',
+                                  'Leadership', 'The leadership relationship.')
 URILeader = URIObject('http://schooltool.org/ns/leadership/leader',
                       'Leader', 'A role of a leader of an asset.')
 URIAsset = URIObject('http://schooltool.org/ns/leadership/asset',

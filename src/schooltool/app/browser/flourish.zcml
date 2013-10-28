@@ -589,6 +589,22 @@
       />
 
   <flourish:viewlet
+      name="action_dialog_script"
+      after="table"
+      manager=".states.TemporalRelationshipAddTableMixin"
+      class="schooltool.app.browser.states.AddStateActionDialog"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="action_dialog_script"
+      after="table"
+      manager=".states.TemporalRelationshipRemoveTableMixin"
+      class="schooltool.app.browser.states.RemoveStateActionDialog"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
       name="filter"
       manager=".app.RelationshipRemoveTableMixin"
       class="schooltool.table.table.DoNotFilter"
@@ -820,5 +836,42 @@
       name="default"
       factory=".report.FlourishDefaultPageTemplate"
       />
+
+  <flourish:page
+      name="index.html"
+      title="Membership States"
+      subtitle="Customize"
+      for="schooltool.app.interfaces.IRelationshipStateContainer"
+      class="schooltool.app.browser.states.RelationshipStateContainerView"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+      name="index.html"
+      subtitle="Edit"
+      for="schooltool.app.interfaces.IRelationshipStates"
+      class="schooltool.app.browser.states.RelationshipStatesEditView"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="relationship-states"
+      link="schooltool.app.relationships-states"
+      after="*"
+      title="Membership States"
+      class="schooltool.skin.flourish.page.LinkViewlet"
+      manager="schooltool.app.browser.app.CustomizeSchoolLinks"
+      permission="schooltool.edit"
+      />
+
+  <zope:adapter
+       factory=".states.EditMembership_date"
+       name="default"
+       />
+
+  <zope:adapter
+       factory=".states.EditMembership_state"
+       name="default"
+       />
 
 </configure>

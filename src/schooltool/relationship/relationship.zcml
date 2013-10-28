@@ -8,6 +8,12 @@
     <allow attributes="__iter__ __contains__ relationships" />
   </class>
 
+
+  <class
+      class="schooltool.relationship.temporal.BoundTemporalRelationshipProperty">
+    <allow attributes="__iter__ __contains__ relationships any on all state states" />
+  </class>
+
   <class
       class="schooltool.relationship.relationship.RelationshipInfo">
     <allow attributes="source target extra_info" />
