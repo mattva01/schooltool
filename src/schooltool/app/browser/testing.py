@@ -167,8 +167,7 @@ def setUp(test=None):
 
     for name in ['layout.css', 'schooltool.css', 'schooltool.js',
                  'next.png', 'prev.png', 'favicon.ico',
-                 'calwidget-calendar.js', 'calwidget-calendar.css',
-                 'calwidget-icon.gif', 'print.css', 'jquery.js',
+                 'print.css', 'jquery.js',
                  'zonki-regular.png']:
         ztapi.browserResource(name, ResourceStub)
 

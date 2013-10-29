@@ -98,6 +98,7 @@ class EmergencyDayView(BrowserView):
                 self.replacement = parse_date(self.request['replacement'])
             except ValueError:
                 self.error = _("The replacement date you entered is invalid.")
+                self.template = self.replacement_template
                 return
 
         if self.date and self.replacement:
