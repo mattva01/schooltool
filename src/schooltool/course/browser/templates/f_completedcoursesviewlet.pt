@@ -1,0 +1,42 @@
+<div i18n:domain="schooltool">
+<h2 i18n:translate="">Courses</h2>
+<div>
+
+<div tal:define="schoolyears view/courses" class="info-block">
+  <h3 i18n:translate="">Completed Courses</h3>
+  <div class="tree_list" tal:condition="schoolyears">
+    <ul>
+      <li tal:repeat="schoolyear schoolyears">
+        <a tal:attributes="href schoolyear/obj/@@absolute_url;
+                           title schoolyear/obj/title"
+           tal:content="schoolyear/obj/title"></a>
+        <ul>
+          <li tal:repeat="term schoolyear/terms">
+            <a tal:attributes="href term/obj/@@absolute_url;
+                               title term/obj/title"
+               tal:content="term/obj/title"></a>
+            <ul>
+              <li tal:repeat="course_data term/courses">
+                <tal:block define="course course_data/obj">
+                  <a tal:attributes="href course/@@absolute_url;
+                                     title course/title"
+                     class="leaf_url"
+                     tal:content="course_data/title"></a>
+                  <span tal:condition="python: course.credits is not None"
+                        i18n:translate="">
+                    <tal:block i18n:name="amount" tal:content="course/credits"/>
+                    credits
+                  </span>
+                </tal:block>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+</div>
+</div>
+

@@ -304,16 +304,28 @@ class RelationshipSchema(object):
         """Break a relationship."""
         self._doit(unrelate, **parties)
 
-    def query(self, **party):
-        """Retrieve relationship targets."""
+    def getPartyRole(self, **party):
         if len(party) != 1:
             raise TypeError("A single party must be provided.")
         roles = list(self.roles.keys())
         my_role_key = party.keys()[0]
         roles.remove(my_role_key)
-        other_role = self.roles[roles[0]]
+        party_role = self.roles[roles[0]]
+        return party_role
+
+    def query(self, **party):
+        """Retrieve relationship targets."""
+        other_role = self.getPartyRole(**party)
         obj = party.values()[0]
         return getRelatedObjects(obj, other_role, rel_type=self.rel_type)
+
+    def relationships(self, **party):
+        other_role = self.getPartyRole(**party)
+        obj = party.values()[0]
+        linkset = IRelationshipLinks(obj).getLinksByRole(other_role)
+        return [RelationshipInfo(obj, link)
+                for link in linkset
+                if link.rel_type == self.rel_type]
 
     def _doit(self, fn, **parties):
         """Extract and validate parties from keyword arguments and call fn."""

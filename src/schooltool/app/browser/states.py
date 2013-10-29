@@ -19,6 +19,7 @@
 import urllib
 
 import zope.schema
+import z3c.form.interfaces
 from zope.cachedescriptors.property import Lazy
 from zope.i18n import translate
 from zope.interface import Interface
@@ -52,135 +53,6 @@ class RelationshipStateContainerView(table.table.TableContainerView):
     def container(self):
         app = ISchoolToolApplication(None)
         return IRelationshipStateContainer(app)
-
-
-class RelationshipStatesEditView(flourish.page.Page):
-
-    content_template = flourish.templates.File('templates/f_states_edit.pt')
-
-    @property
-    def title(self):
-        return self.target.title
-
-    def update(self):
-        self.message = ''
-
-        if 'form-submitted' in self.request:
-            if 'CANCEL' in self.request:
-                self.request.response.redirect(self.nextURL())
-
-            self.buildRequestStateRows()
-
-            if 'UPDATE_SUBMIT' in self.request:
-                if not self.validateStates():
-                    return
-                self.updateStates()
-                self.request.response.redirect(self.nextURL())
-        else:
-            self.buildStateRows()
-
-    @property
-    def target(self):
-        return self.context
-
-    def nextURL(self):
-        return absoluteURL(self.context.__parent__, self.request)
-
-    def buildRequestStateRows(self):
-        results = []
-        rownum = -1
-        for rownum, (title, code, active) in enumerate(self.getRequestStates()):
-            results.append(self.buildStateRow(rownum+1, title, code, active))
-        results.append(self.buildStateRow(rownum+2, '', '', True))
-        self.states = results
-
-    def buildStateRows(self):
-        results = []
-        rownum = -1
-        for rownum, state in enumerate(self.target.states.values()):
-            results.append(
-                self.buildStateRow(
-                    rownum+1, state.title, state.code, state.active))
-        results.append(self.buildStateRow(rownum+2, '', '', True))
-        self.states = results
-
-    def buildStateRow(self, rownum, title, code, active):
-        return {
-            'title_name': u'title_%d' % rownum,
-            'title_value': title,
-            'code_name': u'code_%d' % rownum,
-            'code_value': code,
-            'active_name': u'active_%d' % rownum,
-            'active_checked': active and 'checked' or None,
-            }
-
-    def getRequestStates(self):
-        rownum = 0
-        results = []
-        while True:
-            rownum += 1
-            title_name = u'title_%d' % rownum
-            code_name = u'code_%d' % rownum
-            active_name = u'active_%d' % rownum
-            if code_name not in self.request:
-                break
-            if (not len(self.request.get(code_name, '')) or
-                not len(self.request.get(title_name, ''))):
-                continue
-            result = (self.request.get(title_name, ''),
-                      self.request.get(code_name, ''),
-                      bool(self.request.get(active_name, '')))
-            results.append(result)
-        return results
-
-    def validateStates(self):
-        states = []
-        unique = set()
-        for rownum, (code, title, active) in enumerate(self.getRequestStates()):
-            if code in unique:
-                return self.setMessage(
-                    _('Duplicate code ${code} in ${row}.',
-                      mapping={'code': code, 'row': rownum+1}))
-            if not len(code):
-                return self.setMessage(
-                    _('Code field must not be empty in row ${row}.',
-                      mapping={'row': rownum+1}))
-            if not len(title):
-                return self.setMessage(
-                    _('Title field must not be empty in row ${row}.',
-                      mapping={'row': rownum+1}))
-            states.append(RelationshipState(title, active, code))
-            unique.add(code)
-
-        if not any([state.active for state in states]):
-            return self.setMessage(_('Must have at least one active state.'))
-
-        if not any([not state.active for state in states]):
-            return self.setMessage(_('Must have at least one inactive state.'))
-
-        self.validStates = states
-        return True
-
-    def setMessage(self, message):
-        self.message = message
-        return False
-
-    def updateStates(self):
-        target = self.target
-        codes = set([state.code for state in self.validStates])
-        for code in set(target.states).difference(codes):
-            del target.states[code]
-        for state in self.validStates:
-            target.states[state.code] = state
-        target.states.updateOrder([state.code for state in self.validStates])
-
-    @property
-    def title_value(self):
-        if 'form-submitted' in self.request:
-            return self.request['title']
-        else:
-            return ''
-
 
 
 class EditTemporalRelationships(EditRelationships):
@@ -469,3 +341,148 @@ EditMembership_state = widget.ComputedWidgetAttribute(
     view=StateActionDialog,
     field=IEditMembership['state']
     )
+
+
+class RelationshipStatesEditView(flourish.page.Page):
+
+    content_template = flourish.templates.File('templates/f_states_edit.pt')
+
+    @property
+    def title(self):
+        return self.target.title
+
+    def update(self):
+        self.message = ''
+
+        if 'form-submitted' in self.request:
+            if 'CANCEL' in self.request:
+                self.request.response.redirect(self.nextURL())
+
+            self.buildRequestStateRows()
+
+            if 'UPDATE_SUBMIT' in self.request:
+                data = self.getRequestStates()
+                if not self.extractStates(data):
+                    return
+                self.updateStates()
+                self.request.response.redirect(self.nextURL())
+        else:
+            self.buildStateRows()
+
+    @property
+    def target(self):
+        return self.context
+
+    def nextURL(self):
+        return absoluteURL(self.context.__parent__, self.request)
+
+    def buildRequestStateRows(self):
+        results = []
+        rownum = -1
+        for rownum, values in enumerate(self.getRequestStates()):
+            results.append(self.buildStateRow(rownum+1, *values))
+        results.append(self.buildStateRow(rownum+2, *self.unpack(None)))
+        self.states = results
+
+    def buildStateRows(self):
+        results = []
+        rownum = -1
+        for rownum, state in enumerate(self.target.states.values()):
+            results.append(
+                self.buildStateRow(rownum+1, *self.unpack(state)))
+        results.append(self.buildStateRow(rownum+2, *self.unpack(None)))
+        self.states = results
+
+    def setMessage(self, message):
+        self.message = message
+        return False
+
+    def updateStates(self):
+        target = self.target
+        codes = set([state.code for state in self.validStates])
+        for code in set(target.states).difference(codes):
+            del target.states[code]
+        for state in self.validStates:
+            target.states[state.code] = state
+        target.states.updateOrder([state.code for state in self.validStates])
+
+    def getRequestStates(self):
+        rownum = 0
+        results = []
+        while True:
+            rownum += 1
+            values = self.extract(rownum)
+            if values is None:
+                break
+            if self.isEmpty(*values):
+                continue
+            results.append(values)
+        return results
+
+    def extractStates(self, data):
+        states = []
+        unique = set()
+        for rownum, values in enumerate(data):
+            code, title, active = values[:3]
+            if code in unique:
+                return self.setMessage(
+                    _('Duplicate code ${code} in ${row}.',
+                      mapping={'code': code, 'row': rownum+1}))
+            if not len(code):
+                return self.setMessage(
+                    _('Code field must not be empty in row ${row}.',
+                      mapping={'row': rownum+1}))
+            if not len(title):
+                return self.setMessage(
+                    _('Title field must not be empty in row ${row}.',
+                      mapping={'row': rownum+1}))
+            state = self.createState(*values)
+            states.append(state)
+            unique.add(code)
+
+        if not any([state.active for state in states]):
+            return self.setMessage(_('Must have at least one active state.'))
+        if not any([not state.active for state in states]):
+            return self.setMessage(_('Must have at least one inactive state.'))
+
+        self.validStates = states
+        return True
+
+    @property
+    def title_value(self):
+        if 'form-submitted' in self.request:
+            return self.request['title']
+        else:
+            return ''
+
+    def isEmpty(self, title, code, active, *values):
+        return not (len(title) and len(code))
+
+    def unpack(self, state):
+        if state is None:
+            return '', '', True
+        return state.title, state.code, state.active
+
+    def buildStateRow(self, rownum, title, code, active, *values):
+        return {
+            'title_name': u'title_%d' % rownum,
+            'title_value': title,
+            'code_name': u'code_%d' % rownum,
+            'code_value': code,
+            'active_name': u'active_%d' % rownum,
+            'active_checked': active and 'checked' or None,
+            }
+
+    def extract(self, rownum):
+        code_name = u'code_%d' % rownum
+        if code_name not in self.request:
+            return None
+        values = (
+            self.request.get(u'title_%d' % rownum, ''),
+            self.request.get(code_name, ''),
+            bool(self.request.get(u'active_%d' % rownum, '')),
+            )
+        return values
+
+    def createState(self, title, code, active, *values):
+        return removeSecurityProxy(self.context).factory(title, active, code)

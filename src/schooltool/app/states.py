@@ -77,14 +77,19 @@ class RelationshipStates(Persistent, Contained):
 
     title = None
     states = None
+    factory = RelationshipState
 
     def __init__(self, title):
         self.title = title
         self.states = OrderedContainer()
         locate(self.states, self, 'states')
 
-    def add(self, title, active, code):
-        self.states[code] = RelationshipState(title, active, code=code)
+    def __iter__(self):
+        return iter(self.states.values())
+
+    def add(self, *args, **kw):
+        state = self.factory(*args, **kw)
+        self.states[state.code] = state
 
 
 class RelationshipStateContainer(BTreeContainer):
@@ -115,13 +120,16 @@ class StateStartUpBase(StartUpBase):
     def populate(self, states):
         raise NotImplementedError()
 
+    def create(self, title):
+        return RelationshipStates(title)
+
     def __call__(self):
         if self.states_name is None:
             raise NotImplementedError()
         container = IRelationshipStateContainer(self.app)
         if self.states_name not in container:
             try:
-                container[self.states_name] = RelationshipStates(self.states_title)
+                container[self.states_name] = self.create(self.states_title)
                 self.populate(container[self.states_name])
             except Exception, e:
                 try:

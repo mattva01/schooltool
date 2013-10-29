@@ -839,18 +839,17 @@
 
   <flourish:page
       name="index.html"
-      title="Membership States"
-      subtitle="Customize"
-      for="schooltool.app.interfaces.IRelationshipStateContainer"
-      class="schooltool.app.browser.states.RelationshipStateContainerView"
+      subtitle="Edit"
+      for="schooltool.app.interfaces.IRelationshipStates"
+      class="schooltool.app.browser.states.RelationshipStatesEditView"
       permission="schooltool.edit"
       />
 
   <flourish:page
       name="index.html"
       subtitle="Edit"
-      for="schooltool.app.interfaces.IRelationshipStates"
-      class="schooltool.app.browser.states.RelationshipStatesEditView"
+      for="schooltool.app.interfaces.IRelationshipStateContainer"
+      class="schooltool.app.browser.states.RelationshipStateContainerView"
       permission="schooltool.edit"
       />
 

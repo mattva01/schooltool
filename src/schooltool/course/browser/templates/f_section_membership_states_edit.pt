@@ -1,0 +1,68 @@
+<div i18n:domain="schooltool">
+  <form method="post"
+        tal:attributes="action string:${context/@@absolute_url}/index.html">
+    <input type="hidden" name="form-submitted" value="" />
+    <div class="status"
+         tal:condition="view/message">
+      <div class="summary ui-state-error ui-corner-all">
+        <span class="ui-icon ui-icon-alert">icon</span>
+        <tal:block content="view/message" />
+      </div>
+    </div>
+    <table class="scoresystem-scores">
+      <thead>
+        <tr>
+          <th i18n:translate="">Title</th>
+          <th i18n:translate="">Code</th>
+          <th i18n:translate="">Active</th>
+          <th i18n:translate="">Completed</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tal:block repeat="state view/states">
+          <tr>
+            <td>
+              <input type="text"
+                     tal:attributes="name state/title_name;
+                                     value state/title_value" />
+            </td>
+            <td>
+              <input type="text"
+                     tal:attributes="name state/code_name;
+                                     value state/code_value" />
+            </td>
+            <td>
+              <input type="checkbox"
+                     value="yes"
+                     tal:attributes="name state/active_name;
+                                     checked state/active_checked" />
+              <label tal:attributes="for state/active_name"
+                     i18n:translate="">active</label>
+            </td>
+            <td>
+              <input type="checkbox"
+                     value="yes"
+                     tal:attributes="name state/completed_name;
+                                     checked state/completed_checked" />
+              <label tal:attributes="for state/completed_name"
+                     i18n:translate="">completed</label>
+            </td>
+            <td class="buttons">
+              <tal:block tal:condition="repeat/state/end">
+                <input type="submit" class="button-ok" name="SAVE" value="Add"
+                       i18n:attributes="value" />
+              </tal:block>
+            </td>
+          </tr>
+        </tal:block>
+      </tbody>
+    </table>
+    <div class="buttons">
+      <input type="submit" class="button-ok" name="UPDATE_SUBMIT" value="Save"
+             i18n:attributes="value" />
+      <input type="submit" class="button-cancel" name="CANCEL" value="Cancel"
+             i18n:attributes="value" />
+    </div>
+  </form>
+</div>

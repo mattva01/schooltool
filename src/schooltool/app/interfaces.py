@@ -287,13 +287,19 @@ class IRelationshipStates(IContained):
     title = zope.schema.TextLine(
         title=_("Title"))
 
-    states = zope.schema.List(
+    states = zope.schema.Dict(
         title=_(u'Statuses'),
         description=_(u'Recipient addresses'),
+        key_type=zope.schema.TextLine(title=u"Key"),
         value_type=zope.schema.Object(
             title=_(u"Status"),
             schema=IRelationshipState),
         min_length=1)
+
+    factory = Attribute(u'State factory')
+
+    def __iter__():
+        """Iterate through self.states values."""
 
 
 class IRelationshipStateChoice(zope.schema.interfaces.IField):

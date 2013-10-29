@@ -43,6 +43,7 @@ from schooltool.app.security import ConfigurableCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary_titled
 from schooltool.app.states import StateStartUpBase
+from schooltool.app.states import RelationshipStates, RelationshipState
 from schooltool.course import interfaces, booking
 from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.person.interfaces import IPerson
@@ -484,12 +485,31 @@ def LinkedSectionTermsVocabularyFactory():
     return linkedSectionTermsVocabulary
 
 
+class StudentRelationshipState(RelationshipState):
+    implements(interfaces.IStudentRelationshipState)
+
+    completed = False
+
+    def __init__(self, title, active, code=None, completed=False):
+        RelationshipState.__init__(self, title, active, code=code)
+        self.completed = completed
+
+
+class StudentRelationshipStates(RelationshipStates):
+
+    factory = StudentRelationshipState
+
+
 class SectionMemberStatesStartup(StateStartUpBase):
 
     states_name = 'section-membership'
     states_title = _('Section Enrollment')
 
+    def create(self, title):
+        return StudentRelationshipStates(title)
+
     def populate(self, states):
         states.add(_('Pending'), False, 'p')
         states.add(_('Enrolled'), True, 'a')
         states.add(_('Withdrawn'), False, 'i')
+        states.add(_('Completed'), True, 'c', completed=True)

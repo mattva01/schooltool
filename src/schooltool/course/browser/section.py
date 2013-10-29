@@ -56,6 +56,7 @@ from zc.table.interfaces import ISortableColumn
 from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.browser.app import BaseEditView
 from schooltool.app.browser.app import RelationshipViewBase
+from schooltool.app.browser.states import RelationshipStatesEditView
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary_titled
 from schooltool.basicperson.browser.person import EditPersonRelationships
@@ -1912,3 +1913,41 @@ class SectionRosterPDFView(flourish.report.PlainPDFPage):
 class FlourishRequestSectionRosterView(RequestRemoteReportDialog):
 
     report_builder = SectionRosterPDFView
+
+
+class StudentStatesEditView(RelationshipStatesEditView):
+
+    content_template = flourish.templates.File('templates/f_section_membership_states_edit.pt')
+
+    def unpack(self, state):
+        if state is None:
+            return '', '', True, False
+        return state.title, state.code, state.active, state.completed
+
+    def buildStateRow(self, rownum, title, code, active, completed, *values):
+        return {
+            'title_name': u'title_%d' % rownum,
+            'title_value': title,
+            'code_name': u'code_%d' % rownum,
+            'code_value': code,
+            'active_name': u'active_%d' % rownum,
+            'active_checked': active and 'checked' or None,
+            'completed_name': u'completed_%d' % rownum,
+            'completed_checked': completed and 'checked' or None,
+            }
+
+    def extract(self, rownum):
+        code_name = u'code_%d' % rownum
+        if code_name not in self.request:
+            return None
+        values = (
+            self.request.get(u'title_%d' % rownum, ''),
+            self.request.get(code_name, ''),
+            bool(self.request.get(u'active_%d' % rownum, '')),
+            bool(self.request.get(u'completed_%d' % rownum, '')),
+            )
+        return values
+
+    def createState(self, title, code, active, completed, *values):
+        return removeSecurityProxy(self.context).factory(
+            title, active, code=code, completed=completed)

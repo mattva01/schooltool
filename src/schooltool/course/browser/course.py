@@ -46,8 +46,10 @@ from z3c.form import field, button, form
 from z3c.form.interfaces import HIDDEN_MODE
 
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IRelationshipStateContainer
 from schooltool.app.browser.app import ContentTitle
 from schooltool.app.browser.app import ActiveSchoolYearContentMixin
+from schooltool.app.membership import Membership
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.term.interfaces import ITerm
@@ -293,6 +295,72 @@ class FlourishCoursesViewlet(Viewlet):
             return self.collator.cmp(this['section_title'],
                                      other['section_title'])
         return self.collator.cmp(this['course'], other['course'])
+
+
+class FlourishCompletedCoursesViewlet(Viewlet):
+    """A flourish viewlet showing the courses a person completed."""
+
+    template = ViewPageTemplateFile('templates/f_completedcoursesviewlet.pt')
+    body_template = None
+
+    def __init__(self, *args, **kw):
+        Viewlet.__init__(self, *args, **kw)
+        self.collator = ICollator(self.request.locale)
+
+    def render(self, *args, **kw):
+        if not self.courses:
+            return ''
+        return self.template(*args, **kw)
+
+    def update(self):
+        self.courses = self.collectCourses()
+
+    @property
+    def completed_state_codes(self):
+        app = ISchoolToolApplication(None)
+        states = IRelationshipStateContainer(app)['section-membership']
+        codes = [state.code for state in states
+                 if state.completed]
+        return codes
+
+    def collectCourses(self):
+        today = self.request.util.today
+        student=removeSecurityProxy(self.context)
+        codes = self.completed_state_codes
+        completed_sections = [
+            relationship.target
+            for relationship in Membership.relationships(member=student)
+            if relationship.state.has(today, codes)
+            ]
+
+        schoolyears_data = {}
+        for section in completed_sections:
+            section = removeSecurityProxy(section)
+            sy = ISchoolYear(section)
+            if sy not in schoolyears_data:
+                schoolyears_data[sy] = {}
+            term = ITerm(section)
+            if term not in schoolyears_data[sy]:
+                schoolyears_data[sy][term] = []
+            schoolyears_data[sy][term].extend(section.courses)
+        result = []
+        for sy in sorted(schoolyears_data, key=lambda x:x.first, reverse=True):
+            sy_info = {'obj': sy, 'terms': []}
+            for term in sorted(schoolyears_data[sy],
+                               key=lambda x:x.first,
+                               reverse=True):
+                term_info = {'obj': term, 'courses': []}
+                sortingKey = lambda course: self.collator.key(course.title)
+                for course in sorted(schoolyears_data[sy][term],
+                                     key=sortingKey):
+                    course_info = {
+                        'obj': course,
+                        'title': course.title,
+                        }
+                    term_info['courses'].append(course_info)
+                sy_info['terms'].append(term_info)
+            result.append(sy_info)
+        return result
 
 
 class CoursesTertiaryNavigationManager(TertiaryNavigationManager,
