@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-10-08 02:19+0300\n"
-"PO-Revision-Date: 2013-10-12 20:40+0000\n"
-"Last-Translator: Martin P <M.Picalek@gmail.com>\n"
+"PO-Revision-Date: 2013-11-01 14:29+0000\n"
+"Last-Translator: Konki <pavel.konkol@seznam.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-10-13 05:39+0000\n"
-"X-Generator: Launchpad (build 16799)\n"
+"X-Launchpad-Export-Date: 2013-11-02 06:25+0000\n"
+"X-Generator: Launchpad (build 16820)\n"
 "Language: cs\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -272,11 +272,11 @@ msgstr "Záložky"
 #: /src/schooltool/app/browser/flourish.zcml:339
 #: /src/schooltool/app/browser/flourish.zcml:350
 msgid "Name Sorting"
-msgstr ""
+msgstr "Řazení podle názvu"
 
 #: /src/schooltool/app/browser/app.py:1562
 msgid "Sort by"
-msgstr ""
+msgstr "Seřadit podle"
 
 #: /src/schooltool/app/browser/cal.py:111
 msgid "January"
