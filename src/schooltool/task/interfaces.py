@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 """
-Group interfaces
+Task interfaces
 """
 
 from zope.interface import Interface, Attribute
