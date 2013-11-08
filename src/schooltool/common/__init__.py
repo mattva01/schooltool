@@ -685,6 +685,8 @@ def getResourceURL(library_name, resource_name, request):
         getter = zope.component.queryAdapter(
             request, IResourceURIGetter,
             default=None)
+    if getter is None:
+        return None
     resource = getter(library_name, resource_name)
     return resource
 
