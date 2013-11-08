@@ -624,7 +624,10 @@ def get_all_versions():
         if (entry.name == 'target' and
             entry.module_name == 'schooltool'):
             versions.append(entry.dist)
-    return versions
+    for entry in pkg_resources.iter_entry_points('schooltool.plugin_configuration'):
+        if entry.dist not in versions:
+            versions.append(entry.dist)
+    return sorted(versions, key=lambda dist: dist.project_name)
 
 
 def getRequestFromInteraction(request_type=IApplicationRequest):
@@ -682,6 +685,8 @@ def getResourceURL(library_name, resource_name, request):
         getter = zope.component.queryAdapter(
             request, IResourceURIGetter,
             default=None)
+    if getter is None:
+        return None
     resource = getter(library_name, resource_name)
     return resource
 

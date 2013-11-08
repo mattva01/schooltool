@@ -759,7 +759,6 @@ class FlourishContactsViewlet(flourish.viewlet.Viewlet):
     """A viewlet showing contacts of a person"""
 
     template = ViewPageTemplateFile('templates/f_contactsViewlet.pt')
-    body_template = None
 
     @property
     def bound_contact(self):

@@ -236,6 +236,13 @@ class FlourishPersonPreferencesLink(flourish.page.ModalFormLinkViewlet):
                   mapping={'person_full_name': person.title})
         return translate(title, context=self.request)
 
+    @property
+    def enabled(self):
+        prefs = IPersonPreferences(self.context)
+        if not flourish.canEdit(prefs):
+            return False
+        return super(FlourishPersonPreferencesLink, self).enabled
+
 
 class FlourishPersonDeleteView(flourish.form.DialogForm, form.EditForm):
     """View used for editing person preferences."""

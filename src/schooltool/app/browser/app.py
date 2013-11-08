@@ -880,6 +880,9 @@ class FlourishApplicationPreferencesView(Form, form.EditForm):
     label = None
     legend = _('Calendar settings')
 
+    def getContent(self):
+        return IApplicationPreferences(self.context)
+
     def update(self):
         form.EditForm.update(self)
 
@@ -1248,6 +1251,12 @@ class FlourishServerSettingsOverview(flourish.page.Content,
         else:
             formatted = self._getInfo(ri)
         return formatted
+
+
+class PackageVersionsOverview(flourish.page.Content):
+
+    body_template = ViewPageTemplateFile(
+        'templates/package_versions.pt')
 
 
 class FlourishCalendarSettingsOverview(flourish.form.FormViewlet):
