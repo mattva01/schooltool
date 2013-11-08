@@ -9,6 +9,7 @@ PYTHON=python
 
 INSTANCE_TYPE=schooltool
 BUILDOUT_FLAGS=
+REDIS_PORT:=$$(grep ^port instance/redis.conf | cut -d' ' -f 2)
 
 .PHONY: all
 all: build
@@ -52,7 +53,7 @@ run: build instance instance/run/supervisord.pid
 	@bin/supervisorctl start "services:*"
 	@bin/supervisorctl status schooltool | grep RUNNING && bin/supervisorctl stop schooltool || exit 0
 	@bin/supervisorctl status
-	bin/start-schooltool-instance instance
+	REDIS_PORT=$(REDIS_PORT) bin/start-schooltool-instance instance
 
 .PHONY: start
 start: build instance instance/run/supervisord.pid
@@ -77,7 +78,7 @@ rerun: build instance instance/run/supervisord.pid
 	@bin/supervisorctl start "services:*"
 	@bin/supervisorctl status schooltool | grep RUNNING && bin/supervisorctl stop schooltool || exit 0
 	@bin/supervisorctl status
-	bin/start-schooltool-instance instance
+	REDIS_PORT=$(REDIS_PORT) bin/start-schooltool-instance instance
 
 .PHONY: stop
 stop:
