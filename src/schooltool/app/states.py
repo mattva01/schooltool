@@ -41,6 +41,9 @@ from schooltool.app.interfaces import IRelationshipStateChoice
 from schooltool.app.interfaces import IRelationshipStates
 from schooltool.app.interfaces import IRelationshipStateContainer
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.relationship.temporal import ACTIVE, INACTIVE
+
+from schooltool.common import SchoolToolMessage as _
 
 
 RELATIONSHIP_STATES_APP_KEY = 'schooltool.app.relationships-states'
@@ -50,7 +53,7 @@ class RelationshipState(Persistent, Contained):
     implements(IRelationshipState)
 
     title = None
-    active = True
+    active = ACTIVE
 
     def __init__(self, title, active, code=None):
         self.title = title
@@ -77,19 +80,32 @@ class RelationshipStates(Persistent, Contained):
 
     title = None
     states = None
+    system_titles = None
     factory = RelationshipState
 
     def __init__(self, title):
         self.title = title
         self.states = OrderedContainer()
         locate(self.states, self, 'states')
+        self.system_titles = OrderedContainer()
+        locate(self.system_titles, self, 'system_titles')
 
     def __iter__(self):
         return iter(self.states.values())
 
+    @classmethod
+    def overlap(cls, codes, other):
+        for code in codes:
+            if code in other:
+                return True
+        return False
+
     def add(self, *args, **kw):
         state = self.factory(*args, **kw)
         self.states[state.code] = state
+
+    def describe(self, active, title):
+        self.system_titles[active] = title
 
 
 class RelationshipStateContainer(BTreeContainer):
@@ -118,7 +134,8 @@ class StateStartUpBase(StartUpBase):
     states_title = u''
 
     def populate(self, states):
-        raise NotImplementedError()
+        states.describe(ACTIVE, _('Active'))
+        states.describe(INACTIVE, _('Inactive'))
 
     def create(self, title):
         return RelationshipStates(title)
@@ -185,3 +202,49 @@ class RelationshipStateChoice(zope.schema.Field):
 @implementer(z3c.form.interfaces.IFieldWidget)
 def RelationshipStateFieldWidget(field, request):
     return z3c.form.widget.FieldWidget(field, SelectWidget(request))
+
+
+class GroupMembershipStatesStartup(StateStartUpBase):
+
+    states_name = 'group-membership'
+    states_title = _('Group Membership')
+
+    def populate(self, states):
+        super(GroupMembershipStatesStartup, self).populate(states)
+        states.add(_('Pending'), INACTIVE, 'i')
+        states.add(_('Member'), ACTIVE, 'a')
+        states.add(_('Suspended'), INACTIVE, 's')
+        states.add(_('Removed'), INACTIVE, 'r')
+
+
+GRADUATED = 'c'
+PREENROLLED = 'p'
+
+
+class StudentMembershipStatesStartup(StateStartUpBase):
+
+    states_name = 'student-enrollment'
+    states_title = _('Student Enrollment')
+
+    def populate(self, states):
+        super(StudentMembershipStatesStartup, self).populate(states)
+        states.add(_('Pending'), INACTIVE, 'i')
+        states.add(_('Pre-enrolled'), INACTIVE+PREENROLLED, 'p')
+        states.add(_('Enrolled'), ACTIVE, 'a')
+        states.add(_('Graduated/Active'), ACTIVE+GRADUATED, 'c')
+        states.add(_('Graduated/Inactive'), INACTIVE+GRADUATED, 'r')
+        states.add(_('Withdrawn'), INACTIVE, 'w')
+        states.describe(INACTIVE+PREENROLLED, _('Pre-enrolled'))
+        states.describe(ACTIVE+GRADUATED, _('Graduated/Active'))
+        states.describe(INACTIVE+GRADUATED, _('Graduated/Inactive'))
+
+
+class LeadershipStatesStartUp(StateStartUpBase):
+
+    states_name = 'asset-leaders'
+    states_title = _('Leaders')
+
+    def populate(self, states):
+        super(LeadershipStatesStartUp, self).populate(states)
+        states.add(_('Active'), ACTIVE, 'a')
+        states.add(_('Inactive'), INACTIVE, 'i')

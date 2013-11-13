@@ -57,6 +57,7 @@ from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.browser.app import BaseEditView
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.states import RelationshipStatesEditView
+from schooltool.app.browser.states import AddStateActionDialog, RemoveStateActionDialog
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary_titled
 from schooltool.basicperson.browser.person import EditPersonRelationships
@@ -1590,8 +1591,10 @@ class FlourishSectionDeleteView(DialogForm, form.EditForm):
         self.actions['cancel'].addClass('button-cancel')
 
 
-class FlourishSectionInstructorView(EditPersonRelationships):
+class FlourishSectionInstructorView(EditPersonTemporalRelationships):
     """View for adding instructors to a Section."""
+
+    app_states_name = "section-instruction"
 
     @property
     def title(self):
@@ -1601,7 +1604,8 @@ class FlourishSectionInstructorView(EditPersonRelationships):
     available_title = _("Add instructors")
 
     def getSelectedItems(self):
-        return filter(IPerson.providedBy, self.context.instructors)
+        members = EditPersonTemporalRelationships.getSelectedItems(self)
+        return filter(IPerson.providedBy, members)
 
     def getCollection(self):
         return self.context.instructors
@@ -1611,6 +1615,7 @@ class FlourishSectionLearnerView(EditPersonTemporalRelationships):
     """View for adding learners to a Section."""
 
     app_states_name = "section-membership"
+    dialog_title_template = _("Enroll ${target}")
 
     @property
     def title(self):
@@ -1913,41 +1918,3 @@ class SectionRosterPDFView(flourish.report.PlainPDFPage):
 class FlourishRequestSectionRosterView(RequestRemoteReportDialog):
 
     report_builder = SectionRosterPDFView
-
-
-class StudentStatesEditView(RelationshipStatesEditView):
-
-    content_template = flourish.templates.File('templates/f_section_membership_states_edit.pt')
-
-    def unpack(self, state):
-        if state is None:
-            return '', '', True, False
-        return state.title, state.code, state.active, state.completed
-
-    def buildStateRow(self, rownum, title, code, active, completed, *values):
-        return {
-            'title_name': u'title_%d' % rownum,
-            'title_value': title,
-            'code_name': u'code_%d' % rownum,
-            'code_value': code,
-            'active_name': u'active_%d' % rownum,
-            'active_checked': active and 'checked' or None,
-            'completed_name': u'completed_%d' % rownum,
-            'completed_checked': completed and 'checked' or None,
-            }
-
-    def extract(self, rownum):
-        code_name = u'code_%d' % rownum
-        if code_name not in self.request:
-            return None
-        values = (
-            self.request.get(u'title_%d' % rownum, ''),
-            self.request.get(code_name, ''),
-            bool(self.request.get(u'active_%d' % rownum, '')),
-            bool(self.request.get(u'completed_%d' % rownum, '')),
-            )
-        return values
-
-    def createState(self, title, code, active, completed, *values):
-        return removeSecurityProxy(self.context).factory(
-            title, active, code=code, completed=completed)

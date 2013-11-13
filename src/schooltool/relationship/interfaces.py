@@ -142,6 +142,9 @@ class IRelationshipEvent(Interface):
     def match(schema):
         """Return an accessor object if this event matches the schema."""
 
+    def getLinks():
+        """Return links of participants."""
+
 
 class IBeforeRelationshipEvent(IRelationshipEvent):
     """A relationship is about to be established.

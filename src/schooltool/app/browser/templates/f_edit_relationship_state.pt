@@ -6,7 +6,7 @@
       <tr>
         <td i18n:translate="">Status</td>
         <td i18n:translate="">Date</td>
-        <td i18n:translate="">Active</td>
+        <td i18n:translate="">Meaning</td>
         <td i18n:translate="">Code</td>
       </tr>
     </head>
@@ -15,8 +15,7 @@
     <tr tal:repeat="state view/current_states">
       <td tal:content="state/title" />
       <td tal:content="state/date/@@mediumDate" />
-      <td><span class="ui-icon ui-icon-check ui-icon-center"
-                tal:condition="state/active"></span></td>
+      <td tal:content="state/active"></td>
       <td tal:content="state/code" />
     </tr>
   </table>

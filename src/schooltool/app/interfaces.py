@@ -274,7 +274,7 @@ class IRelationshipState(Interface):
         description=_(u"A short status code, preferably few symbols."),
         required=True)
 
-    active = zope.schema.Bool(
+    active = zope.schema.TextLine(
         title=_(u'Active'), required=True)
 
 
@@ -294,6 +294,13 @@ class IRelationshipStates(IContained):
         value_type=zope.schema.Object(
             title=_(u"Status"),
             schema=IRelationshipState),
+        min_length=1)
+
+    system_titles = zope.schema.Dict(
+        title=_(u'System state value descriptions'),
+        description=_(u'Descriptions of state "active" values'),
+        key_type=zope.schema.TextLine(title=u"Key"),
+        value_type=zope.schema.TextLine(title=u"Description"),
         min_length=1)
 
     factory = Attribute(u'State factory')

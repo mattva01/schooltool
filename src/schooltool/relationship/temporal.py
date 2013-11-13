@@ -1,3 +1,20 @@
+#
+# SchoolTool - common information systems platform for school administration
+# Copyright (c) 2013 Shuttleworth Foundation
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 
 import datetime
 
@@ -7,11 +24,13 @@ from schooltool.term.interfaces import IDateManager
 from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.relationship import RelationshipInfo
 from schooltool.relationship.relationship import BoundRelationshipProperty
-from schooltool.relationship.relationship import relate, unrelate
+from schooltool.relationship.relationship import relate, unrelate, share_state
 from schooltool.relationship.uri import URIObject
 
-RELATIONSHIP_ACTIVE = 'a'
-RELATIONSHIP_INACTIVE = 'i'
+ACTIVE = 'a'
+INACTIVE = 'i'
+ACTIVE_CODE = 'a'
+INACTIVE_CODE = 'i'
 
 
 class TemporalStateAccessor(object):
@@ -20,11 +39,11 @@ class TemporalStateAccessor(object):
         self.data = data
 
     def all(self):
-        return [(date, active, code)
-                for date, (active, code) in sorted(self.data.items())]
+        return [(date, meaning, code)
+                for date, (meaning, code) in sorted(self.data.items())]
 
-    def set(self, date, active=True, code=RELATIONSHIP_ACTIVE):
-        self.data[date] = active, code
+    def set(self, date, meaning=ACTIVE, code=ACTIVE_CODE):
+        self.data[date] = meaning, code
 
     def get(self, date):
         if not self.data:
@@ -37,19 +56,27 @@ class TemporalStateAccessor(object):
     def __contains__(self, date):
         return date in self.data
 
-    def has(self, date, states):
+    def has(self, date=None, states=(), meanings=''):
         if not self.data:
-            return RELATIONSHIP_ACTIVE in states
-        state = self.get(date)
+            if meanings == ACTIVE:
+                return ACTIVE_CODE in states
+            else:
+                return False
+        if date is not None:
+            state = self.get(date)
+        else:
+            state = self.latest
         if state is None:
             return False
+        meaning = state[0]
         code = state[1]
-        return code in states
+        return ((not states or code in states) and
+                (not meanings or any([v in meaning for v in meanings])))
 
     @property
     def latest(self):
         if not self.data:
-            return True, RELATIONSHIP_ACTIVE
+            return ACTIVE, ACTIVE_CODE
         day, state = sorted(self.data.items())[-1]
         return state
 
@@ -60,7 +87,8 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
     """Temporal relationship property bound to an object."""
 
     def __init__(self, this, rel_type, my_role, other_role,
-                 filter_date=_today, filter_codes=(RELATIONSHIP_ACTIVE,)):
+                 filter_meanings=ACTIVE, filter_date=_today,
+                 filter_codes=(ACTIVE_CODE,)):
         BoundRelationshipProperty.__init__(
             self, this, rel_type, my_role, other_role)
         if filter_date is _today:
@@ -68,6 +96,7 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
         else:
             self.filter_date = filter_date
         self.filter_codes = set(filter_codes)
+        self.filter_meanings = filter_meanings
 
     @property
     def today(self):
@@ -79,12 +108,16 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
     def filter(self, links):
         on_date = self.filter_date
         any_code = self.filter_codes
+        is_active = self.filter_meanings
+
         if not any_code and on_date is None:
-            filter = lambda link: True
-        elif on_date is None:
-            filter = lambda link: link.state.latest[1] in any_code
+            if not is_active:
+                filter = lambda link: True
+            else:
+                filter = lambda link: any([v in is_active for v in link.state.latest[0]])
         else:
-            filter = lambda link: link.state.has(on_date, any_code)
+            filter = lambda link: link.state.has(
+                date=on_date, states=any_code, meanings=is_active)
         for link in links:
             if (link.rel_type == self.rel_type and filter(link)):
                 yield link
@@ -103,19 +136,29 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
     def on(self, date):
         return self.__class__(
             self.this, self.rel_type, self.my_role, self.other_role,
-            filter_date=date, filter_codes=self.filter_codes)
+            filter_meanings=self.filter_meanings,
+            filter_date=date,
+            filter_codes=self.filter_codes)
 
-    def any(self):
+    def any(self, meanings=ACTIVE):
         return self.__class__(
             self.this, self.rel_type, self.my_role, self.other_role,
-            filter_date=None, filter_codes=())
+            filter_meanings=meanings, filter_date=self.filter_date,
+            filter_codes=self.filter_codes)
 
-    def all(self, *codes):
+    def coded(self, *codes):
         return self.__class__(
             self.this, self.rel_type, self.my_role, self.other_role,
-            filter_date=self.filter_date, filter_codes=self.filter_codes)
+            filter_meanings=self.filter_meanings, filter_date=self.filter_date,
+            filter_codes=codes)
 
-    def relate(self, other, active=True, code=RELATIONSHIP_ACTIVE):
+    def all(self):
+        return self.__class__(
+            self.this, self.rel_type, self.my_role, self.other_role,
+            filter_meanings='', filter_date=None,
+            filter_codes=())
+
+    def relate(self, other, meaning=ACTIVE, code=ACTIVE_CODE):
         links = IRelationshipLinks(self.this)
         try:
             link = links.find(self.my_role, other, self.other_role, self.rel_type)
@@ -124,13 +167,13 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
                    (self.this, self.my_role),
                    (other, self.other_role))
             link = links.find(self.my_role, other, self.other_role, self.rel_type)
-        link.state.set(self.filter_date, active=active, code=code)
+        link.state.set(self.filter_date, meaning=meaning, code=code)
 
-    def add(self, other, code=RELATIONSHIP_ACTIVE):
-        self.relate(other, active=True, code=code)
+    def add(self, other, code=ACTIVE_CODE):
+        self.relate(other, meaning=ACTIVE, code=code)
 
-    def remove(self, other, code=RELATIONSHIP_INACTIVE):
-        self.relate(other, active=False, code=code)
+    def remove(self, other, code=INACTIVE_CODE):
+        self.relate(other, meaning=INACTIVE, code=code)
 
     def states(self, other):
         links = IRelationshipLinks(self.this)
@@ -163,3 +206,10 @@ class TemporalURIObject(URIObject):
     def bind(self, instance, my_role, rel_type, other_role):
         return BoundTemporalRelationshipProperty(
             instance, rel_type, my_role, other_role)
+
+
+def shareTemporalState(event):
+    if not isinstance(event.rel_type, TemporalURIObject):
+        return
+    links = event.getLinks()
+    share_state(*links)

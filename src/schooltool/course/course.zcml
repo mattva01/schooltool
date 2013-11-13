@@ -162,19 +162,16 @@
       provides="schooltool.app.interfaces.IPluginStartUp"
       name="schooltool.course.section-membership" />
 
-  <class class=".section.StudentRelationshipStates">
-    <require permission="schooltool.view"
-             interface="schooltool.app.interfaces.IRelationshipStates" />
-    <require permission="schooltool.edit"
-             set_schema="schooltool.app.interfaces.IRelationshipStates" />
-  </class>
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".section.SectionInstructorStatesStartup"
+      provides="schooltool.app.interfaces.IPluginInit"
+      name="schooltool.course.section-instruction" />
 
-  <class class=".section.StudentRelationshipState">
-    <require permission="schooltool.view"
-             interface="schooltool.course.interfaces.IStudentRelationshipState" />
-    <require permission="schooltool.edit"
-             set_schema="schooltool.course.interfaces.IStudentRelationshipState" />
-  </class>
-
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".section.SectionInstructorStatesStartup"
+      provides="schooltool.app.interfaces.IPluginStartUp"
+      name="schooltool.course.section-instruction" />
 
 </configure>

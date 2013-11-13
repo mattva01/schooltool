@@ -72,7 +72,6 @@ def relate(rel_type, (a, role_of_a), (b, role_of_b), extra_info=None):
     IRelationshipLinks(a).add(link_a)
     link_b = Link(role_of_b, a, role_of_a, rel_type, extra_info)
     IRelationshipLinks(b).add(link_b)
-    share_state(link_a, link_b)
     zope.event.notify(RelationshipAddedEvent(rel_type,
                                              (a, role_of_a),
                                              (b, role_of_b),
@@ -154,6 +153,23 @@ class RelationshipEvent(object):
         if role == self.role2:
             return self.participant2
         raise KeyError(role)
+
+    def getLinks(self):
+        links_1 = IRelationshipLinks(self.participant1)
+        links_2 = IRelationshipLinks(self.participant2)
+        try:
+            link_1_to_2 = links_1.find(
+                self.role1, self.participant2, self.role2,
+                self.rel_type)
+        except ValueError:
+            raise NoSuchRelationship
+        try:
+            link_2_to_1 = links_2.find(
+                self.role2, self.participant1, self.role1,
+                self.rel_type)
+        except ValueError:
+            raise NoSuchRelationship
+        return link_1_to_2, link_2_to_1
 
     def match(self, schema):
         if self.rel_type != schema.rel_type:

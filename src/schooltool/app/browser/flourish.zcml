@@ -566,17 +566,17 @@
   <flourish:page
       name="leaders.html"
       for="schooltool.app.interfaces.IAsset"
-      class=".app.FlourishLeaderView"
+      class="schooltool.basicperson.browser.person.FlourishLeaderView"
       permission="schooltool.edit"
       subtitle="Responsible parties"
       />
 
   <flourish:viewlet
       name="available_table"
-      class="schooltool.basicperson.browser.person.BasicPersonAddRelationshipTable"
+      class="schooltool.basicperson.browser.person.BasicPersonAddTemporalRelationshipTable"
       for="schooltool.app.interfaces.IAsset"
       manager="schooltool.skin.flourish.interfaces.IAJAXParts"
-      view=".app.FlourishLeaderView"
+      view="schooltool.basicperson.browser.person.FlourishLeaderView"
       permission="schooltool.view"
       />
 
@@ -613,10 +613,10 @@
 
   <flourish:viewlet
       name="current_table"
-      class="schooltool.basicperson.browser.person.BasicPersonRemoveRelationshipTable"
+      class="schooltool.basicperson.browser.person.BasicPersonRemoveTemporalRelationshipTable"
       for="schooltool.app.interfaces.IAsset"
       manager="schooltool.skin.flourish.interfaces.IAJAXParts"
-      view=".app.FlourishLeaderView"
+      view="schooltool.basicperson.browser.person.FlourishLeaderView"
       permission="schooltool.view"
       />
 
@@ -845,12 +845,59 @@
       permission="schooltool.edit"
       />
 
+  <flourish:activeViewlet
+      name="manage_school"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.app.interfaces.IRelationshipStateContainer"
+      />
+
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      title="Membership States"
+      view="schooltool.app.browser.states.RelationshipStateContainerView"
+      />
+
+  <flourish:breadcrumb
+      title="Membership States"
+      for="schooltool.app.interfaces.IRelationshipStateContainer"
+      />
+
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      view="schooltool.app.browser.states.RelationshipStatesEditView"
+      />
+
+  <flourish:breadcrumb
+      for="schooltool.app.interfaces.IRelationshipStates"
+      />
+
   <flourish:page
       name="index.html"
-      subtitle="Edit"
+      title="Membership States"
+      subtitle=""
       for="schooltool.app.interfaces.IRelationshipStateContainer"
       class="schooltool.app.browser.states.RelationshipStateContainerView"
       permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="filter"
+      class="schooltool.table.table.DoNotFilter"
+      for="schooltool.app.interfaces.IRelationshipStateContainer"
+      manager="schooltool.table.ajax.Table"
+      view="schooltool.app.browser.states.RelationshipStateContainerView"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="done"
+      after="*"
+      for="schooltool.app.interfaces.IRelationshipStateContainer"
+      manager="schooltool.table.ajax.Table"
+      view="schooltool.app.browser.states.RelationshipStateContainerView"
+      class="schooltool.app.browser.app.ManageItemDoneLink"
+      render="template"
+      permission="schooltool.view"
       />
 
   <flourish:viewlet

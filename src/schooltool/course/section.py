@@ -47,8 +47,9 @@ from schooltool.app.states import RelationshipStates, RelationshipState
 from schooltool.course import interfaces, booking
 from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.person.interfaces import IPerson
-from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.relationship import RelationshipProperty
+from schooltool.relationship.relationship import getRelatedObjects
+from schooltool.relationship.temporal import ACTIVE, INACTIVE
 from schooltool.schoolyear.subscriber import EventAdapterSubscriber
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.schoolyear.interfaces import ISubscriber
@@ -59,6 +60,9 @@ from schooltool.term.term import getNextTerm
 from schooltool.term.interfaces import ITerm
 
 from schooltool.common import SchoolToolMessage as _
+
+
+COMPLETED = 'c'
 
 
 class InvalidSectionLinkException(Exception):
@@ -485,31 +489,30 @@ def LinkedSectionTermsVocabularyFactory():
     return linkedSectionTermsVocabulary
 
 
-class StudentRelationshipState(RelationshipState):
-    implements(interfaces.IStudentRelationshipState)
-
-    completed = False
-
-    def __init__(self, title, active, code=None, completed=False):
-        RelationshipState.__init__(self, title, active, code=code)
-        self.completed = completed
-
-
-class StudentRelationshipStates(RelationshipStates):
-
-    factory = StudentRelationshipState
-
-
 class SectionMemberStatesStartup(StateStartUpBase):
 
     states_name = 'section-membership'
     states_title = _('Section Enrollment')
 
-    def create(self, title):
-        return StudentRelationshipStates(title)
+    def populate(self, states):
+        states.add(_('Pending'), INACTIVE, 'p')
+        states.add(_('Enrolled'), ACTIVE, 'a')
+        states.add(_('Withdrawn'), INACTIVE, 'i')
+        states.add(_('Completed'), ACTIVE+COMPLETED, 'c')
+        states.describe(ACTIVE, _('Member'))
+        states.describe(ACTIVE+COMPLETED, _('Completed/Active'))
+        states.describe(INACTIVE+COMPLETED, _('Completed/Inactive'))
+        states.describe(INACTIVE, _('Inactive'))
+
+
+class SectionInstructorStatesStartup(StateStartUpBase):
+
+    states_name = 'section-instruction'
+    states_title = _('Section Instruction')
 
     def populate(self, states):
-        states.add(_('Pending'), False, 'p')
-        states.add(_('Enrolled'), True, 'a')
-        states.add(_('Withdrawn'), False, 'i')
-        states.add(_('Completed'), True, 'c', completed=True)
+        states.add(_('Instructor'), ACTIVE, 'a')
+        states.add(_('Substitute'), ACTIVE, 's')
+        states.add(_('Withdrawn'), INACTIVE, 'i')
+        states.describe(ACTIVE, _('Instructing'))
+        states.describe(INACTIVE, _('Removed'))

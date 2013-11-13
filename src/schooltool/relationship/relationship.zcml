@@ -36,4 +36,9 @@
       handler="schooltool.relationship.objectevents.unrelateOnCopy"
       />
 
+  <subscriber
+      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
+      handler=".temporal.shareTemporalState"
+      />
+
 </configure>

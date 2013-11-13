@@ -478,4 +478,40 @@
   <adapter factory=".states.RelationshipStateTerms" />
   <adapter factory=".states.RelationshipStateFieldWidget" />
 
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".states.LeadershipStatesStartUp"
+      provides="schooltool.app.interfaces.IPluginInit"
+      name="schooltool.app.states-leadership" />
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".states.LeadershipStatesStartUp"
+      provides="schooltool.app.interfaces.IPluginStartUp"
+      name="schooltool.app.states-leadership" />
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".states.GroupMembershipStatesStartup"
+      provides="schooltool.app.interfaces.IPluginInit"
+      name="schooltool.app.states-groups" />
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".states.GroupMembershipStatesStartup"
+      provides="schooltool.app.interfaces.IPluginStartUp"
+      name="schooltool.app.states-groups" />
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".states.StudentMembershipStatesStartup"
+      provides="schooltool.app.interfaces.IPluginInit"
+      name="schooltool.app.states-student" />
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".states.StudentMembershipStatesStartup"
+      provides="schooltool.app.interfaces.IPluginStartUp"
+      name="schooltool.app.states-student" />
+
 </configure>

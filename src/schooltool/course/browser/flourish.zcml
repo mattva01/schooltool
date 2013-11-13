@@ -722,13 +722,4 @@
       permission="schooltool.edit"
       />
 
-  <flourish:page
-      name="index.html"
-      title="Membership States"
-      subtitle="Customize"
-      for="schooltool.course.section.StudentRelationshipStates"
-      class=".section.StudentStatesEditView"
-      permission="schooltool.edit"
-      />
-
 </configure>

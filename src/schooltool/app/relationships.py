@@ -153,7 +153,7 @@ def updateStudentCalendars(event):
                 # we don't handle nested groups any more so there
                 # shouldn't be more than one layer of groups
                 if IPerson.providedBy(person) and \
-                        calendar not in person.overlaid_calendars:
+                       calendar not in person.overlaid_calendars:
                     person.overlaid_calendars.add(calendar)
 
     elif IRelationshipRemovedEvent.providedBy(event):

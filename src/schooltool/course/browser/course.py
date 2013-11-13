@@ -72,6 +72,7 @@ from schooltool.skin.flourish.form import AddForm
 from schooltool.skin.flourish.form import DialogForm
 from schooltool.skin.flourish.form import DisplayForm
 from schooltool.skin.flourish.page import TertiaryNavigationManager
+from schooltool.course.section import COMPLETED
 from schooltool import table
 from schooltool.common import SchoolToolMessage as _
 
@@ -320,7 +321,7 @@ class FlourishCompletedCoursesViewlet(Viewlet):
         app = ISchoolToolApplication(None)
         states = IRelationshipStateContainer(app)['section-membership']
         codes = [state.code for state in states
-                 if state.completed]
+                 if states.overlap(COMPLETED, state.active)]
         return codes
 
     def collectCourses(self):
@@ -332,7 +333,6 @@ class FlourishCompletedCoursesViewlet(Viewlet):
             for relationship in Membership.relationships(member=student)
             if relationship.state.has(today, codes)
             ]
-
         schoolyears_data = {}
         for section in completed_sections:
             section = removeSecurityProxy(section)

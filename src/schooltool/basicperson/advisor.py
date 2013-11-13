@@ -21,6 +21,10 @@ BasicPerson advisor relationship.
 from schooltool.relationship.relationship import RelationshipSchema
 from schooltool.relationship.uri import URIObject
 from schooltool.relationship.temporal import TemporalURIObject
+from schooltool.relationship.temporal import ACTIVE, INACTIVE
+from schooltool.app.states import StateStartUpBase
+
+from schooltool.common import SchoolToolMessage as _
 
 
 URIAdvising = TemporalURIObject('http://schooltool.org/ns/advising',
@@ -33,3 +37,15 @@ URIAdvisor = URIObject('http://schooltool.org/ns/advising/advisor',
 Advising = RelationshipSchema(URIAdvising,
                               advisor=URIAdvisor,
                               student=URIStudent)
+
+
+
+class AdvisorStatesStartUp(StateStartUpBase):
+
+    states_name = 'person-advisors'
+    states_title = _('Advisors')
+
+    def populate(self, states):
+        super(AdvisorStatesStartUp, self).populate(states)
+        states.add(_('Advising'), ACTIVE, 'a')
+        states.add(_('Removed'), INACTIVE, 'i')

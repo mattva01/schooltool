@@ -49,13 +49,14 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.skin.containers import TableContainerView
 from schooltool.app.browser.app import BaseAddView, BaseEditView
 from schooltool.app.browser.app import ContentTitle
-from schooltool.app.browser.app import EditRelationships
-from schooltool.app.browser.app import RelationshipAddTableMixin
-from schooltool.app.browser.app import RelationshipRemoveTableMixin
+from schooltool.app.browser.states import EditTemporalRelationships
+from schooltool.app.browser.states import TemporalRelationshipAddTableMixin
+from schooltool.app.browser.states import TemporalRelationshipRemoveTableMixin
 from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.person.browser.person import PersonTableFilter
+from schooltool.basicperson.browser.person import EditPersonTemporalRelationships
 from schooltool.basicperson.browser.person import BasicPersonTable
 from schooltool.basicperson.browser.person import EditPersonRelationships
 from schooltool.course.interfaces import ISection
@@ -277,7 +278,10 @@ class FlourishGroupTableFormatter(table.table.SchoolToolTableFormatter):
         return formatter
 
 
-class FlourishGroupListView(EditRelationships):
+class FlourishGroupListView(EditTemporalRelationships):
+
+    app_states_name = "group-membership"
+    dialog_title_template = _("Assign to ${target}")
 
     current_title = _('Current groups')
     available_title = _('Available groups')
@@ -291,7 +295,8 @@ class FlourishGroupListView(EditRelationships):
                 if schoolyear.first >= active_schoolyear.first]
 
     def getSelectedItems(self):
-        return [group for group in self.getCollection()
+        groups = EditTemporalRelationships.getSelectedItems(self)
+        return [group for group in groups
                 if not ISection.providedBy(group) and
                 ISchoolYear(group.__parent__) in self.schoolyears]
 
@@ -340,6 +345,24 @@ class FlourishGroupListView(EditRelationships):
     def getKey(self, item):
         schoolyear = ISchoolYear(item.__parent__)
         return "%s.%s" % (schoolyear.__name__, item.__name__)
+
+    def getTargets(self, keys):
+        if not keys:
+            return []
+        result = []
+        sy_groups = {}
+        app = ISchoolToolApplication(None)
+        schoolyears = ISchoolYearContainer(app)
+        for key in keys:
+            for sy_name, schoolyear in schoolyears.items():
+                if not key.startswith(sy_name+'.'):
+                    continue
+                if sy_name not in sy_groups:
+                    sy_groups[sy_name] = IGroupContainer(schoolyear)
+                group = sy_groups[sy_name].get(key[len(sy_name)+1:])
+                if group is not None:
+                    result.append(group)
+        return result
 
 
 class GroupsTertiaryNavigationManager(flourish.page.TertiaryNavigationManager,
@@ -545,7 +568,7 @@ class GroupsWithSYTable(GroupsTable):
         return (('schoolyear', True), ("title", False))
 
 
-class GroupListAddRelationshipTable(RelationshipAddTableMixin,
+class GroupListAddRelationshipTable(TemporalRelationshipAddTableMixin,
                                     GroupsWithSYTable):
 
     def updateFormatter(self):
@@ -562,7 +585,7 @@ class GroupListAddRelationshipTable(RelationshipAddTableMixin,
                    css_classes={'table': 'data relationships-table'})
 
 
-class GroupListRemoveRelationshipTable(RelationshipRemoveTableMixin,
+class GroupListRemoveRelationshipTable(TemporalRelationshipRemoveTableMixin,
                                        GroupsWithSYTable):
     pass
 
@@ -751,8 +774,14 @@ class GroupLeadersTable(BasicPersonTable):
         return self.indexItems(self.context.leaders)
 
 
-class FlourishMemberViewPersons(EditPersonRelationships):
+class FlourishMemberViewPersons(EditPersonTemporalRelationships):
     """View class for adding / removing members to / from a group."""
+
+    @property
+    def app_states_name(self):
+        if self.context.__name__ == 'students':
+            return 'student-enrollment'
+        return 'group-membership'
 
     @property
     def title(self):
@@ -762,8 +791,8 @@ class FlourishMemberViewPersons(EditPersonRelationships):
     available_title = _("Add Members")
 
     def getSelectedItems(self):
-        """Return a list of current group memebers."""
-        return filter(IPerson.providedBy, self.context.members)
+        members = EditPersonTemporalRelationships.getSelectedItems(self)
+        return filter(IPerson.providedBy, members)
 
     def getCollection(self):
         return self.context.members

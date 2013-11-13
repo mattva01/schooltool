@@ -21,6 +21,7 @@ import urllib
 import zope.schema
 import z3c.form.interfaces
 from zope.cachedescriptors.property import Lazy
+from zope.component import getMultiAdapter
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -79,8 +80,12 @@ class EditTemporalRelationships(EditRelationships):
 
     def getSelectedItems(self):
         collection = self.getCollection()
-        for person in collection.any():
+        for person in collection.all():
             yield person
+
+    @property
+    def dialog_target(self):
+        raise NotImplementedError()
 
 
 class TemporalRelationshipAddTableMixin(RelationshipAddTableMixin):
@@ -98,7 +103,7 @@ class TemporalRelationshipRemoveTableMixin(RelationshipRemoveTableMixin):
             return None
         collection = self.view.getCollection()
         def text(item):
-            state = collection.state(item)
+            state = collection.state(removeSecurityProxy(item))
             if state is None:
                 return ''
             active, code = state
@@ -167,7 +172,7 @@ class StateActionDialog(DialogFormWithScript):
     fields = field.Fields(IEditMembership)
 
     # Dialog settings
-    dialog_title_template = _("${person}")
+    dialog_title_template = _("${target}")
     action_prefix = None
     states_source = None
 
@@ -185,22 +190,22 @@ class StateActionDialog(DialogFormWithScript):
         states = container.get(self.states_source, None)
         if states is None:
             return {}
-        return states.states
+        return states
 
     @Lazy
     def current_states(self):
-        person = self.person
-        if person is None:
+        target = self.target
+        if target is None:
             return []
         app_states = self.app_states
         relationships = removeSecurityProxy(self.view.getCollection())
         states = []
-        for date, active, code in relationships.states(person) or ():
-            state = app_states.get(code)
+        for date, active, code in relationships.states(target) or ():
+            state = app_states.states.get(code)
             title = state.title if state is not None else ''
             states.append({
                 'date': date,
-                'active': active,
+                'active': app_states.system_titles.get(active, active),
                 'code': code,
                 'title': title,
                 })
@@ -208,20 +213,20 @@ class StateActionDialog(DialogFormWithScript):
 
     @property
     def default_state(self):
-        person = self.person
-        if person is None:
-            return []
+        target = self.target
+        if target is None:
+            return None
         app_states = self.app_states
         relationships = removeSecurityProxy(self.view.getCollection())
-        person_state = relationships.state(person)
-        if person_state is not None:
-            active, code = person_state
-            return app_states.get(code)
-        for state in app_states.values():
+        target_state = relationships.state(target)
+        if target_state is not None:
+            active, code = target_state
+            return app_states.states.get(code)
+        for state in app_states.states.values():
             if state.active:
                 return state
-        if app_states:
-            app_states.values()[0]
+        if app_states.states:
+            app_states.states.values()[0]
         return None
 
     @button.buttonAndHandler(_("Apply"), name='apply')
@@ -230,8 +235,8 @@ class StateActionDialog(DialogFormWithScript):
         if errors:
             self.status = self.formErrorsMessage
             return
-        person = self.person
-        if person is None:
+        target = self.target
+        if target is None:
             self.status = self.formErrorsMessage
             # XXX: silently close the dialog and pretend that nothing happened
             self.ajax_settings['dialog'] = 'close'
@@ -239,7 +244,7 @@ class StateActionDialog(DialogFormWithScript):
         date = data['date']
         state = data['state']
         relationships = removeSecurityProxy(self.view.getCollection())
-        relationships.on(date).relate(person, state.active, state.code)
+        relationships.on(date).relate(target, state.active, state.code)
         self.request.response.redirect(self.nextURL())
 
     @button.buttonAndHandler(_("Cancel"))
@@ -264,6 +269,10 @@ class StateActionDialog(DialogFormWithScript):
             url += '?' + '&'.join(params)
         return url
 
+    def updateWidgets(self, prefix=None):
+        self.fields['state'].field.source = self.states_source
+        super(StateActionDialog, self).updateWidgets(prefix=prefix)
+
     def updateActions(self):
         super(StateActionDialog, self).updateActions()
         self.actions['apply'].addClass('button-ok')
@@ -274,25 +283,26 @@ class StateActionDialog(DialogFormWithScript):
         super(StateActionDialog, self).initDialog()
 
     @property
-    def person(self):
-        entries = [key for key in self.request if key.startswith(self.action_prefix)]
-        if not entries:
-            return None
-        username = sorted(entries)[0][len(self.action_prefix)+1:]
-        app = ISchoolToolApplication(None)
-        person = app['persons'].get(username)
-        return person
+    def target(self):
+        keys = [key[len(self.action_prefix)+1:]
+                for key in self.request
+                if key.startswith(self.action_prefix+'.')]
+        targets = self.view.getTargets(keys)
+        if targets:
+            return targets[0]
+        return None
 
     def updateDialog(self):
         if self.ajax_settings['dialog'] == 'close':
             return
-        person = self.person
-        if person is not None:
-            title = translate(
+        target = self.target
+        if target is not None:
+            target_title = getMultiAdapter((target, self.request), name='title')
+            dialog_title = translate(
                 format_message(
-                    self.dialog_title_template, mapping={'person': person.title}),
+                    self.dialog_title_template, mapping={'target': target_title()}),
                 context=self.request)
-            self.ajax_settings['dialog']['title'] = title
+            self.ajax_settings['dialog']['title'] = dialog_title
 
     def postback_form(self):
         prefixes = [
@@ -318,16 +328,36 @@ class StateActionDialog(DialogFormWithScript):
 
 
 class AddStateActionDialog(StateActionDialog):
-    dialog_title_template = _("Enroll ${person}")
     action_prefix = 'add_item'
-    states_source = "section-membership"
+
+    @property
+    def dialog_title_template(self):
+        template = (getattr(self.view, 'add_dialog_title_template', None) or
+                    getattr(self.view, 'dialog_title_template', None) or
+                    _("Assign ${target}"))
+        return template
+
+    @property
+    def states_source(self):
+        source = getattr(self.view, 'app_states_name', None)
+        return source
 
 
 class RemoveStateActionDialog(StateActionDialog):
 
-    dialog_title_template = _("Enroll ${person}")
     action_prefix = 'remove_item'
-    states_source = "section-membership"
+
+    @property
+    def dialog_title_template(self):
+        template = (getattr(self.view, 'add_dialog_title_template', None) or
+                    getattr(self.view, 'dialog_title_template', None) or
+                    _("Assign ${target}"))
+        return template
+
+    @property
+    def states_source(self):
+        source = getattr(self.view, 'app_states_name', None)
+        return source
 
 
 EditMembership_date = widget.ComputedWidgetAttribute(
@@ -403,6 +433,8 @@ class RelationshipStatesEditView(flourish.page.Page):
         for code in set(target.states).difference(codes):
             del target.states[code]
         for state in self.validStates:
+            if state.code in target.states:
+                del target.states[state.code]
             target.states[state.code] = state
         target.states.updateOrder([state.code for state in self.validStates])
 
@@ -440,10 +472,18 @@ class RelationshipStatesEditView(flourish.page.Page):
             states.append(state)
             unique.add(code)
 
-        if not any([state.active for state in states]):
-            return self.setMessage(_('Must have at least one active state.'))
-        if not any([not state.active for state in states]):
-            return self.setMessage(_('Must have at least one inactive state.'))
+
+        used_active = set([state.active for state in states])
+        available_active = set(self.target.system_titles.keys())
+        missing_active = sorted(available_active.difference(used_active))
+        if missing_active:
+            return self.setMessage(
+                    _('Must have at least one ${title} state.',
+                      mapping={'title':
+                               translate(removeSecurityProxy(
+                                    self.target.system_titles[missing_active[0]]),
+                                         context=self.request)
+                               }))
 
         self.validStates = states
         return True
@@ -470,7 +510,11 @@ class RelationshipStatesEditView(flourish.page.Page):
             'code_name': u'code_%d' % rownum,
             'code_value': code,
             'active_name': u'active_%d' % rownum,
-            'active_checked': active and 'checked' or None,
+            'active_items': [
+                {'syscode': syscode,
+                 'selected': 'selected' if syscode == active else None,
+                 'title': systitle}
+                for syscode, systitle in removeSecurityProxy(self.target.system_titles).items()]
             }
 
     def extract(self, rownum):
@@ -480,7 +524,7 @@ class RelationshipStatesEditView(flourish.page.Page):
         values = (
             self.request.get(u'title_%d' % rownum, ''),
             self.request.get(code_name, ''),
-            bool(self.request.get(u'active_%d' % rownum, '')),
+            self.request.get(u'active_%d' % rownum, ''),
             )
         return values
 

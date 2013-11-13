@@ -703,8 +703,21 @@ class EditPersonTemporalRelationships(EditTemporalRelationships):
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['persons']
 
+    def getTargets(self, keys):
+        if not keys:
+            return None
+        app = ISchoolToolApplication(None)
+        persons = [
+            app['persons'].get(username)
+            for username in keys
+            ]
+        return persons
 
-class FlourishPersonAdvisorView(EditPersonRelationships):
+
+class FlourishPersonAdvisorView(EditPersonTemporalRelationships):
+
+    app_states_name = 'person-advisors'
+    dialog_title_template = _("Assign advisor ${target}")
 
     current_title = _('Current advisors')
     available_title = _('Available advisors')
@@ -740,7 +753,10 @@ class PersonAdviseeView(RelationshipViewBase):
         return self.context.advisees
 
 
-class FlourishPersonAdviseeView(EditPersonRelationships):
+class FlourishPersonAdviseeView(EditPersonTemporalRelationships):
+
+    app_states_name = 'person-advisors'
+    dialog_title_template = _("Assign advisee ${target}")
 
     current_title = _("Current advisees")
     available_title = _("Available advisees")
@@ -1575,3 +1591,16 @@ class NewMessageIndicatorViewlet(flourish.page.LinkViewlet):
             return None
         url = absoluteURL(person, self.request) + '#messages'
         return url
+
+
+class FlourishLeaderView(EditPersonTemporalRelationships):
+
+    app_states_name = 'asset-leaders'
+    current_title = _("Current responsible parties")
+    available_title = _("Available responsible parties")
+
+    def getCollection(self):
+        return self.context.leaders
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']

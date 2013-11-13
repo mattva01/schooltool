@@ -263,3 +263,4 @@ class GroupMemberCrowd(Crowd):
 
     def contains(self, principal):
         return IPerson(principal, None) in self.context.members
+

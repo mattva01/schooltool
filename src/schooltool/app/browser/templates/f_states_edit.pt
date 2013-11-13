@@ -14,7 +14,7 @@
         <tr>
           <th i18n:translate="">Title</th>
           <th i18n:translate="">Code</th>
-          <th i18n:translate="">Active</th>
+          <th i18n:translate="">Meaning</th>
           <th>&nbsp;</th>
         </tr>
       </thead>
@@ -32,12 +32,12 @@
                                      value state/code_value" />
             </td>
             <td>
-              <input type="checkbox"
-                     value="yes"
-                     tal:attributes="name state/active_name;
-                                     checked state/active_checked" />
-              <label tal:attributes="for state/active_name"
-                     i18n:translate="">active</label>
+              <select tal:attributes="name state/active_name">
+                <option tal:repeat="option state/active_items"
+                        tal:attributes="value option/syscode;
+                                        selected option/selected"
+                        tal:content="option/title" />
+              </select>
             </td>
             <td class="buttons">
               <tal:block tal:condition="repeat/state/end">
