@@ -187,6 +187,8 @@ class ApplicationPreferences(Persistent):
 
     implements(IApplicationPreferences)
 
+    __name__ = 'preferences'
+
     def getTitle(self):
         title = self.__dict__.get('title', None)
         if title:

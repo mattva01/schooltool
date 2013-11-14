@@ -189,6 +189,13 @@
       permission="zope.Public"
       />
 
+  <zope:adapterTraverserPlugin
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      name="preferences"
+      adapter="schooltool.app.interfaces.IApplicationPreferences"
+      />
+
   <!-- Views for the application -->
 
   <page
