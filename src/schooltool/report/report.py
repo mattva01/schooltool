@@ -27,7 +27,6 @@ import celery.utils
 import zope.i18n.locales
 import zope.component
 import zope.interface
-import zope.location
 import zope.publisher.base
 import zope.file.file
 from persistent.dict import PersistentDict
@@ -57,7 +56,6 @@ from schooltool.report.interfaces import IRemoteReportLayer
 from schooltool.report.interfaces import IReportFile
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.skin import flourish
-from schooltool.skin.skin import OrderedViewletManager
 from schooltool.task.tasks import RemoteTask
 from schooltool.task.tasks import query_messages
 from schooltool.task.tasks import Message
@@ -75,7 +73,7 @@ class ReportFile(zope.file.file.File):
     implements(IReportFile)
 
 
-class ReportLinkViewletManager(OrderedViewletManager):
+class ReportLinkViewletManager(flourish.viewlet.ViewletManager):
     implements(IReportLinkViewletManager)
 
 
