@@ -234,6 +234,8 @@ class ApplicationPreferences(Persistent):
                         etctz, dummy = etctz.split(' ', 1)
                     if '#' in etctz:
                         etctz, dummy = etctz.split('#', 1)
+                    if 'Etc/UTC' == etctz:
+                        etctz = 'UTC'
                     try:
                         pytz.timezone(etctz)
                         return etctz
