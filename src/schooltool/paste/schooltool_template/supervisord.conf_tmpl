@@ -31,7 +31,7 @@ environment=CELERY_CONFIG_MODULE=schooltool.task.config.zope,REDIS_HOST=127.0.0.
 process_name=%(program_name)s
 numprocs=1
 autostart=false
-autorestart=false
+autorestart=unexpected
 startsecs=1
 startretries=0
 exitcodes=0,2
