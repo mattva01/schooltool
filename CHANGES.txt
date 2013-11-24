@@ -2,12 +2,6 @@
 CHANGES
 =======
 
-2.6.2 (unreleased)
-------------------
-
-- Nothing changed yet.
-
-
 2.6.1 (2013-11-21)
 ------------------
 
@@ -17,6 +11,8 @@ CHANGES
 - Person cannot see his own preferences (https://launchpad.net/bugs/1247825)
 - Do not escape extra spaces in comments (https://launchpad.net/bugs/1241022)
 - Fix error when trying to replace existing school logo (https://launchpad.net/bugs/1250733)
+- Restore the warning about unsaved changes in gradebook, broken after adding
+  autocompletion (https://launchpad.net/bugs/1253070)
 - Updated translations
 
 
