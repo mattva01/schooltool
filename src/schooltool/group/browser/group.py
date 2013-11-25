@@ -639,10 +639,10 @@ class FlourishGroupView(flourish.form.DisplayForm):
                 widget.mode = HIDDEN_MODE
 
     def has_members(self):
-        return bool(list(self.context.members))
+        return bool(self.context.members)
 
     def has_leaders(self):
-        return bool(list(self.context.leaders))
+        return bool(self.context.leaders)
 
 
 class FlourishGroupAddView(flourish.form.AddForm, ActiveSchoolYearContentMixin):
@@ -763,7 +763,7 @@ class GroupMembersTable(BasicPersonTable):
     prefix = "members"
 
     def items(self):
-        return self.indexItems(self.context.members)
+        return self.makeItems(self.context.members.int_ids)
 
 
 class GroupLeadersTable(BasicPersonTable):
@@ -771,7 +771,7 @@ class GroupLeadersTable(BasicPersonTable):
     prefix = "leaders"
 
     def items(self):
-        return self.indexItems(self.context.leaders)
+        return self.makeItems(self.context.leaders.int_ids)
 
 
 class FlourishMemberViewPersons(EditPersonTemporalRelationships):
@@ -862,7 +862,7 @@ class GroupAwarePersonTable(BasicPersonTable):
                    css_classes={'table': 'data'})
 
     def items(self):
-        return self.indexItems(self.context)
+        return self.makeItems(self.context.int_ids)
 
 
 class GroupAwarePersonTableFilter(PersonTableFilter):

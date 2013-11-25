@@ -162,6 +162,14 @@ class IndexedTableFormatter(SchoolToolTableFormatter):
                     'catalog': catalog})
         return results
 
+    def makeItems(self, intids):
+        catalog = self.catalog
+        results = [
+            {'id': iid,
+             'catalog': catalog}
+            for iid in intids]
+        return results
+
     def getItem(self, indexed):
         int_ids = getUtility(IIntIds)
         return int_ids.queryObject(indexed['id'])

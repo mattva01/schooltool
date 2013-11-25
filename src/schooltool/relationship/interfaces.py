@@ -45,6 +45,9 @@ class IRelationshipProperty(Interface):
     def __iter__():
         """Iterate over all related objects."""
 
+    def iter_refs():
+        """Iterate over all related objects."""
+
     def add(other, extra_info=None):
         """Establish a relationship with `other`."""
 

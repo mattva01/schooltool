@@ -26,11 +26,17 @@ all IAnnotatable objects that uses Zope 3 annotations.
 import datetime
 
 from BTrees.OOBTree import OOBTree
+from BTrees.IOBTree import IOBTree
 from persistent import Persistent
 from persistent.list import PersistentList
 from persistent.dict import PersistentDict
 from zope.container.contained import Contained
+from zope.component import getUtility
 from zope.interface import implements
+from zope.intid.interfaces import IIntIds
+from zope.keyreference.interfaces import IKeyReference
+from zope.security.proxy import removeSecurityProxy
+from ZODB.interfaces import IConnection
 import zope.event
 
 from schooltool.relationship.interfaces import IRelationshipLinks
@@ -263,6 +269,11 @@ def getRelatedObjects(obj, role, rel_type=None):
     return IRelationshipLinks(obj).getTargetsByRole(role, rel_type)
 
 
+def iterRelatedObjects(obj, role, rel_type=None):
+    """Return all objects related to `obj` with a given role."""
+    return IRelationshipLinks(obj).iterTargetsByRole(role, rel_type)
+
+
 class RelationshipSchema(object):
     """Relationship schema.
 
@@ -413,6 +424,68 @@ class RelationshipProperty(object):
                 self.my_role, self.rel_type, self.other_role)
 
 
+class ObjectProxy(object):
+    """Holder of ZODB id and connection.
+
+    Useful as a replacement of real object in key reference comparisons.
+    """
+    __slots__ = '_p_oid', '_p_jar'
+
+    def __init__(self, oid, connection):
+        self._p_oid = oid
+        self._p_jar = connection
+
+    def __conform__(self, iface):
+        if iface == IConnection:
+            return self._p_jar
+
+    def __reduce__(self):
+        raise Exception('unpicklable')
+
+    def __reduce_ex__(self, protocol):
+        raise Exception('unpicklable')
+
+
+class LinkTargetKeyReference(object):
+    """Key reference for relationship link targets.
+
+    Does not cause an object to fully load (unghostify) while comparing to other
+    key references.  Useful for obtaining int ids.
+    """
+
+    implements(IKeyReference)
+
+    __slots__ = 'link', 'object'
+    key_type_id = 'zope.app.keyreference.persistent'
+
+    def __init__(self, link):
+        self.link = link
+        self.object = ObjectProxy(link.target._p_oid, link.target._p_jar)
+
+    def __call__(self):
+        return self.link.target
+
+    def __reduce__(self):
+        raise Exception('unpicklable')
+
+    def __reduce_ex__(self, protocol):
+        raise Exception('unpicklable')
+
+    def __hash__(self):
+        database_name = self.object._p_jar.db().database_name
+        oid = self.object._p_oid
+        return hash((database_name, oid))
+
+    def __cmp__(self, other):
+        if self.key_type_id == other.key_type_id:
+            self_name = self.object._p_jar.db().database_name
+            self_oid = self.object._p_oid
+            other_name = other.object._p_jar.db().database_name
+            other_oid = other.object._p_oid
+            return cmp((self_name, self_oid), (other_name, other_oid))
+        return cmp(self.key_type_id, other.key_type_id)
+
+
 class BoundRelationshipProperty(object):
     """Relationship property bound to an object."""
 
@@ -425,8 +498,10 @@ class BoundRelationshipProperty(object):
         self.other_role = other_role
 
     def __nonzero__(self):
+        linkset = IRelationshipLinks(self.this)
+        iterator = iter(linkset.iterLinksByRole(self.other_role, self.rel_type))
         try:
-            iter(self).next()
+            iterator.next()
         except StopIteration:
             return False
         else:
@@ -434,13 +509,31 @@ class BoundRelationshipProperty(object):
 
     def __len__(self):
         count = 0
-        for i in self:
+        linkset = IRelationshipLinks(self.this)
+        for i in linkset.iterLinksByRole(self.other_role, self.rel_type):
             count += 1
         return count
 
     def __iter__(self):
-        return iter(getRelatedObjects(self.this, self.other_role,
-                                      self.rel_type))
+        return iter(iterRelatedObjects(self.this, self.other_role,
+                                       self.rel_type))
+
+    @property
+    def int_ids(self):
+        int_ids = getUtility(IIntIds)
+        linkset = IRelationshipLinks(self.this)
+        for link in linkset.iterLinksByRole(self.other_role, self.rel_type):
+            yield int_ids.getId(LinkTargetKeyReference(link))
+
+    def __contains__(self, other):
+        other = removeSecurityProxy(other)
+        linkset = IRelationshipLinks(self.this)
+        for link in linkset.getLinksByTarget(other):
+            if (link.rel_type == self.rel_type and
+                link.my_role == self.my_role and
+                link.role == self.other_role):
+                return True
+        return False
 
     @property
     def relationships(self):
@@ -722,6 +815,23 @@ class LinkSet(Persistent, Contained):
     def __init__(self):
         self._links = OOBTree()
         self._byrole = OOBTree() # role -> list of links
+        self._bytarget = IOBTree() # target -> list of links
+
+    def _hash_link_target(self, link):
+        oid = link.target._p_oid
+        connection = link.target._p_jar
+        if oid is None or connection is None:
+            raise zope.keyreference.interfaces.NotYet(link.target)
+        database_name = connection.db().database_name
+        return hash((database_name, oid))
+
+    def _hash_target(self, target):
+        oid = target._p_oid
+        connection = target._p_jar
+        if oid is None or connection is None:
+            raise zope.keyreference.interfaces.NotYet(target)
+        database_name = connection.db().database_name
+        return hash((database_name, oid))
 
     def getLinksByRole(self, role):
         """Get a set of links by role."""
@@ -735,6 +845,16 @@ class LinkSet(Persistent, Contained):
 
         return cache.get(role.uri, [])
 
+    def getLinksByTarget(self, target):
+        try:
+            cache = self._bytarget
+        except AttributeError:
+            cache = OOBTree()
+            for link in self:
+                cache.setdefault(self._hash_link_target(link), PersistentList()).append(link)
+            self._bytarget = cache
+        return cache.get(self._hash_target(target), [])
+
     def add(self, link):
         if link.__parent__ == self:
             raise ValueError("You are adding same link twice.")
@@ -747,6 +867,7 @@ class LinkSet(Persistent, Contained):
         link.__parent__ = self
 
         self._byrole.setdefault(link.role.uri, PersistentList()).append(link)
+        self._bytarget.setdefault(self._hash_link_target(link), PersistentList()).append(link)
 
     def remove(self, link):
         if link is self._links.get(link.__name__):
@@ -781,9 +902,19 @@ class LinkSet(Persistent, Contained):
         return self._links.get(key, default)
 
     def getTargetsByRole(self, role, rel_type=None):
+        links = self.iterLinksByRole(role, rel_type=rel_type)
+        return [link.target for link in links]
+
+    def iterLinksByRole(self, role, rel_type=None):
         links = self.getLinksByRole(role)
         if rel_type is None:
-            return [link.target for link in links]
+            for link in links:
+                yield link
         else:
-            return [link.target for link in links
-                    if link.rel_type == rel_type]
+            for link in links:
+                if link.rel_type == rel_type:
+                    yield link
+
+    def iterTargetsByRole(self, role, rel_type=None):
+        for link in self.iterLinksByRole(role, rel_type=rel_type):
+            yield link.target

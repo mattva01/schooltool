@@ -5,13 +5,13 @@
 
   <class
       class="schooltool.relationship.relationship.BoundRelationshipProperty">
-    <allow attributes="__iter__ __contains__ relationships" />
+    <allow attributes="__iter__ __contains__ int_ids relationships" />
   </class>
 
 
   <class
       class="schooltool.relationship.temporal.BoundTemporalRelationshipProperty">
-    <allow attributes="__iter__ __contains__ relationships any on all state states" />
+    <allow attributes="__iter__ __contains__ int_ids relationships any on all state states" />
   </class>
 
   <class

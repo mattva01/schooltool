@@ -70,8 +70,12 @@ class TemporalStateAccessor(object):
             return False
         meaning = state[0]
         code = state[1]
-        return ((not states or code in states) and
-                (not meanings or any([v in meaning for v in meanings])))
+        if states and code not in states:
+            return False
+        for val in meanings:
+            if val in meaning:
+                return True
+        return False
 
     @property
     def latest(self):
@@ -83,12 +87,13 @@ class TemporalStateAccessor(object):
 
 _today = object()
 
+
 class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
     """Temporal relationship property bound to an object."""
 
     def __init__(self, this, rel_type, my_role, other_role,
                  filter_meanings=ACTIVE, filter_date=_today,
-                 filter_codes=(ACTIVE_CODE,)):
+                 filter_codes=()):
         BoundRelationshipProperty.__init__(
             self, this, rel_type, my_role, other_role)
         if filter_date is _today:
@@ -97,6 +102,7 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
             self.filter_date = filter_date
         self.filter_codes = set(filter_codes)
         self.filter_meanings = filter_meanings
+        self.init_filter()
 
     @property
     def today(self):
@@ -105,21 +111,36 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
             return dateman.today
         return datetime.date.today()
 
-    def filter(self, links):
+    def _filter_nothing(self, link):
+        return True
+
+    def _filter_latest_meanings(self, link):
+        for v in link.state.latest[0]:
+            if v in self.filter_meanings:
+                return True
+        return False
+
+    def _filter_everything(self, link):
+        return link.state.has(
+            date=self.filter_date, states=self.filter_codes,
+            meanings=self.filter_meanings)
+
+    def init_filter(self):
         on_date = self.filter_date
         any_code = self.filter_codes
         is_active = self.filter_meanings
-
         if not any_code and on_date is None:
             if not is_active:
-                filter = lambda link: True
+                self._filter = self._filter_nothing
             else:
-                filter = lambda link: any([v in is_active for v in link.state.latest[0]])
+                self._filter = self._filter_latest_meanings
         else:
-            filter = lambda link: link.state.has(
-                date=on_date, states=any_code, meanings=is_active)
+            self._filter = self._filter_everything
+
+
+    def filter(self, links):
         for link in links:
-            if (link.rel_type == self.rel_type and filter(link)):
+            if (link.rel_type == self.rel_type and self._filter(link)):
                 yield link
 
     def __iter__(self):
