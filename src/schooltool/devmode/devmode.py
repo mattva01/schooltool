@@ -129,3 +129,85 @@ class DebugSecurityPolicy(CachingSecurityPolicy):
 class DevmodeSchoolToolAPI(SchoolToolAPI):
 
     devmode = True
+
+
+class ZODBObjectLoadStats(object):
+
+    _setstate = None
+    stopper = None # ("part of class name", enter pdb on nth loaded object)
+
+    def __init__(self):
+        self.LOADED = {}
+        self.UNIQUE = {}
+        self.IDS = {}
+
+    def patch_setstate(self):
+        if self._setstate is not None:
+            return
+        from ZODB.Connection import Connection
+        old_setstate = self._setstate = Connection._setstate
+        stopper = self.stopper
+        def setstate(*args, **kw):
+            obj = args[1]
+            classname = str(obj.__class__)
+            ids = self.IDS.setdefault(obj._p_oid, [])
+            if (stopper is not None and
+                stopper[0] in classname and
+                (self.LOADED.get(classname, 0) + 1) == stopper[1]):
+                import ipdb; ipdb.set_trace()
+            res = old_setstate(*args, **kw)
+            self.LOADED[classname] = self.LOADED.get(classname, 0) + 1
+            ids.append((id(obj), obj))
+            all = self.UNIQUE.setdefault(classname, set())
+            oid = args[1]._p_oid
+            if oid not in all:
+                all.add(oid)
+            return res
+        Connection._setstate = setstate
+
+    def unpatch_setstate(self):
+        if self._setstate is None:
+            return
+        from ZODB.Connection import Connection
+        Connection._setstate = self._setstate
+        self._setstate = None
+
+    def start(self):
+        self.LOADED.clear()
+        self.UNIQUE.clear()
+        self.IDS.clear()
+        self.patch_setstate()
+
+    def stop(self):
+        self.unpatch_setstate()
+
+    def print_stats(self):
+        res = ['-'*40]
+        for key in sorted(self.LOADED):
+            total = self.LOADED.get(key, 0)
+            unique = len(self.UNIQUE.get(key, ()))
+            res.append('%s total %s unique %s' % (key, total, unique))
+        res.append('%d objects in total' % len(self.IDS))
+        est_size = 0
+        for objs in self.IDS.values():
+            for obj in objs:
+                est_size += obj[1]._p_estimated_size
+
+        res.append('Estimated %.3f megs' % (est_size/1000000.))
+        res.append('-'*40)
+        print '\n'.join(res)
+
+
+def patch_publisher():
+    import zope.app.wsgi
+    old_publisher = zope.app.wsgi.publish
+    def publish(*args, **kw):
+        stats = ZODBObjectLoadStats()
+        stats.start()
+        result = old_publisher(*args, **kw)
+        stats.stop()
+        if stats.IDS:
+            stats.print_stats()
+        return result
+    zope.app.wsgi.publish = publish
+    return old_publisher
