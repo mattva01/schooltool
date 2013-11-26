@@ -121,7 +121,13 @@ class IRelationshipLinks(Interface):
         The default is returned if there is no value for the key.
         """
 
+    def iterLinksByRole(self, role, rel_type=None):
+        """Iterate over all links from this object with a given role."""
+
     def getTargetsByRole(role, rel_type=None):
+        """Return all objects related to this object with a given role."""
+
+    def iterTargetsByRole(role, rel_type=None):
         """Return all objects related to this object with a given role."""
 
 

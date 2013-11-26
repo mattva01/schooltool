@@ -19,6 +19,7 @@
 import datetime
 
 from zope.component import queryUtility
+from zope.security.proxy import removeSecurityProxy
 
 from schooltool.term.interfaces import IDateManager
 from schooltool.relationship.interfaces import IRelationshipLinks
@@ -72,6 +73,8 @@ class TemporalStateAccessor(object):
         code = state[1]
         if states and code not in states:
             return False
+        if not meanings:
+            return True
         for val in meanings:
             if val in meaning:
                 return True
@@ -112,15 +115,19 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
         return datetime.date.today()
 
     def _filter_nothing(self, link):
-        return True
+        return link.rel_type == self.rel_type
 
     def _filter_latest_meanings(self, link):
+        if link.rel_type != self.rel_type:
+            return False
         for v in link.state.latest[0]:
             if v in self.filter_meanings:
                 return True
         return False
 
     def _filter_everything(self, link):
+        if link.rel_type != self.rel_type:
+            return False
         return link.state.has(
             date=self.filter_date, states=self.filter_codes,
             meanings=self.filter_meanings)
@@ -137,22 +144,29 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
         else:
             self._filter = self._filter_everything
 
-
     def filter(self, links):
         for link in links:
             if (link.rel_type == self.rel_type and self._filter(link)):
                 yield link
 
-    def __iter__(self):
-        linkset = IRelationshipLinks(self.this).getLinksByRole(self.other_role)
-        for link in self.filter(linkset):
-            yield link.target
+    def __contains__(self, other):
+        if other is None:
+            return False
+        other = removeSecurityProxy(other)
+        linkset = IRelationshipLinks(self.this)
+        for link in linkset.getCachedLinksByTarget(other):
+            if (link.rel_type == self.rel_type and
+                link.my_role == self.my_role and
+                link.role == self.other_role and
+                self._filter(link)):
+                return True
+        return False
 
-    @property
-    def relationships(self):
-        linkset = IRelationshipLinks(self.this).getLinksByRole(self.other_role)
-        return [RelationshipInfo(self.this, link)
-                for link in self.filter(linkset)]
+    def __iter__(self):
+        links = IRelationshipLinks(self.this).getCachedLinksByRole(self.other_role)
+        for link in links:
+            if self._filter(link):
+                yield link.target
 
     def on(self, date):
         return self.__class__(
@@ -227,6 +241,20 @@ class TemporalURIObject(URIObject):
     def bind(self, instance, my_role, rel_type, other_role):
         return BoundTemporalRelationshipProperty(
             instance, rel_type, my_role, other_role)
+
+    @property
+    def filter(self):
+        dateman = queryUtility(IDateManager)
+        if dateman is not None:
+            today = dateman.today
+        else:
+            today = datetime.date.today()
+        def filter(link):
+            if link.rel_type != self:
+                return False
+            state = self.access(link.shared_state)
+            return state.has(date=today, meanings=ACTIVE)
+        return filter
 
 
 def shareTemporalState(event):

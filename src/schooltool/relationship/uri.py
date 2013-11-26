@@ -92,6 +92,9 @@ class URIObject(object):
         return BoundRelationshipProperty(
             instance, rel_type, my_role, other_role)
 
+    def filter(self, link):
+        return link.rel_type == self
+
 
 def looks_like_a_uri(uri):
     r"""Check if the argument looks like a URI string.

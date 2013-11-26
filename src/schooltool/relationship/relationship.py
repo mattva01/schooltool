@@ -26,7 +26,7 @@ all IAnnotatable objects that uses Zope 3 annotations.
 import datetime
 
 from BTrees.OOBTree import OOBTree
-from BTrees.IOBTree import IOBTree
+from BTrees.LOBTree import LOBTree
 from persistent import Persistent
 from persistent.list import PersistentList
 from persistent.dict import PersistentDict
@@ -349,10 +349,10 @@ class RelationshipSchema(object):
     def relationships(self, **party):
         other_role = self.getPartyRole(**party)
         obj = party.values()[0]
-        linkset = IRelationshipLinks(obj).getLinksByRole(other_role)
-        return [RelationshipInfo(obj, link)
-                for link in linkset
-                if link.rel_type == self.rel_type]
+        links = IRelationshipLinks(obj).iterLinksByRole(
+            other_role, rel_type=self.rel_type)
+        for link in links:
+            yield RelationshipInfo(obj, link)
 
     def _doit(self, fn, **parties):
         """Extract and validate parties from keyword arguments and call fn."""
@@ -526,21 +526,24 @@ class BoundRelationshipProperty(object):
             yield int_ids.getId(LinkTargetKeyReference(link))
 
     def __contains__(self, other):
+        if other is None:
+            return False
         other = removeSecurityProxy(other)
         linkset = IRelationshipLinks(self.this)
-        for link in linkset.getLinksByTarget(other):
-            if (link.rel_type == self.rel_type and
-                link.my_role == self.my_role and
-                link.role == self.other_role):
+        filter = self.rel_type.filter
+        for link in linkset.getCachedLinksByTarget(other):
+            if (link.my_role == self.my_role and
+                link.role == self.other_role and
+                filter(link)):
                 return True
         return False
 
     @property
     def relationships(self):
-        linkset = IRelationshipLinks(self.this).getLinksByRole(self.other_role)
-        return [RelationshipInfo(self.this, link)
-                for link in linkset
-                if link.rel_type == self.rel_type]
+        links = IRelationshipLinks(self.this).iterLinksByRole(
+            self.other_role, rel_type=self.rel_type)
+        for link in links:
+            yield RelationshipInfo(self.this, link)
 
     def add(self, other, extra_info=None):
         """Establish a relationship between `self.this` and `other`."""
@@ -715,10 +718,10 @@ class LinkSet(Persistent, Contained):
         >>> dict(linkset._byrole.items()) == expected
         True
 
-    Let's zap the cache and call getLinksByRole(), which should restore it:
+    Let's zap the cache and call getCachedLinksByRole(), which should restore it:
 
         >>> del linkset._byrole
-        >>> linkset.getLinksByRole(URIStub('something'))
+        >>> linkset.getCachedLinksByRole(URIStub('something'))
         []
 
         >>> dict(linkset._byrole.items()) == expected
@@ -815,13 +818,17 @@ class LinkSet(Persistent, Contained):
     def __init__(self):
         self._links = OOBTree()
         self._byrole = OOBTree() # role -> list of links
-        self._bytarget = IOBTree() # target -> list of links
+        self._bytarget = LOBTree() # target -> list of links
 
     def _hash_link_target(self, link):
         oid = link.target._p_oid
         connection = link.target._p_jar
-        if oid is None or connection is None:
-            raise zope.keyreference.interfaces.NotYet(link.target)
+        if (oid is None or connection is None):
+            connection = IConnection(link.target, None)
+            if connection is None:
+                raise zope.keyreference.interfaces.NotYet(link.target)
+            connection.add(link.target)
+            oid = link.target._p_oid
         database_name = connection.db().database_name
         return hash((database_name, oid))
 
@@ -829,11 +836,15 @@ class LinkSet(Persistent, Contained):
         oid = target._p_oid
         connection = target._p_jar
         if oid is None or connection is None:
-            raise zope.keyreference.interfaces.NotYet(target)
+            connection = IConnection(target, None)
+            if connection is None:
+                raise zope.keyreference.interfaces.NotYet(target)
+            connection.add(target)
+            oid = target._p_oid
         database_name = connection.db().database_name
         return hash((database_name, oid))
 
-    def getLinksByRole(self, role):
+    def getCachedLinksByRole(self, role):
         """Get a set of links by role."""
         try:
             cache = self._byrole
@@ -845,11 +856,11 @@ class LinkSet(Persistent, Contained):
 
         return cache.get(role.uri, [])
 
-    def getLinksByTarget(self, target):
+    def getCachedLinksByTarget(self, target):
         try:
             cache = self._bytarget
         except AttributeError:
-            cache = OOBTree()
+            cache = LOBTree()
             for link in self:
                 cache.setdefault(self._hash_link_target(link), PersistentList()).append(link)
             self._bytarget = cache
@@ -887,10 +898,11 @@ class LinkSet(Persistent, Contained):
         return iter(self._links.values())
 
     def find(self, my_role, target, role, rel_type):
-        links = self.getLinksByRole(role)
+        links = self.getCachedLinksByRole(role)
         for link in links:
-            if (link.rel_type == rel_type and link.target is target
-                and link.my_role == my_role):
+            if (link.target is target and
+                link.rel_type == rel_type and
+                link.my_role == my_role):
                 return link
         else:
             raise ValueError(my_role, target, role, rel_type)
@@ -901,19 +913,24 @@ class LinkSet(Persistent, Contained):
     def get(self, key, default=None):
         return self._links.get(key, default)
 
+    def iterLinksByRole(self, role, rel_type=None):
+        links = self.getCachedLinksByRole(role)
+        if rel_type is None:
+            filters = {}
+            for link in links:
+                if link.rel_type not in filters:
+                    filters[link.rel_type] = link.rel_type.filter
+                if filters[link.rel_type](link):
+                    yield link
+        else:
+            filter = rel_type.filter
+            for link in links:
+                if filter(link):
+                    yield link
+
     def getTargetsByRole(self, role, rel_type=None):
         links = self.iterLinksByRole(role, rel_type=rel_type)
         return [link.target for link in links]
-
-    def iterLinksByRole(self, role, rel_type=None):
-        links = self.getLinksByRole(role)
-        if rel_type is None:
-            for link in links:
-                yield link
-        else:
-            for link in links:
-                if link.rel_type == rel_type:
-                    yield link
 
     def iterTargetsByRole(self, role, rel_type=None):
         for link in self.iterLinksByRole(role, rel_type=rel_type):
