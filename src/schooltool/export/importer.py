@@ -67,6 +67,8 @@ from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.common import DateRange
 from schooltool.common import parse_time_range
+from schooltool.level.interfaces import ILevelContainer
+from schooltool.level.level import Level
 from schooltool.task.progress import Timer
 from schooltool.task.tasks import RemoteTask
 from schooltool.task.state import TaskWriteState, TaskReadState
@@ -791,6 +793,42 @@ class ResourceImporter(ImporterBase):
                 continue
             resource = self.createResource(data)
             self.addResource(resource, data)
+
+
+class LevelImporter(ImporterBase):
+
+    title = _("Grade Levels")
+
+    sheet_name = 'Grade Levels'
+
+    def createLevel(self, data):
+        level = Level(data['title'])
+        level.__name__ = data['__name__']
+        return level
+
+    def addLevel(self, level, data):
+        container = ILevelContainer(self.context)
+        if level.__name__ in container:
+            level = container[level.__name__]
+            level.title = data['title']
+        else:
+            if not level.__name__:
+                level.__name__ = INameChooser(container).chooseName('', level)
+            container[level.__name__] = level
+
+    def process(self):
+        sh = self.sheet
+        for row in range(1, sh.nrows):
+            if self.isEmptyRow(sh, row):
+                continue
+            num_errors = len(self.errors)
+            data = {}
+            data['__name__'] = self.getRequiredIdFromCell(sh, row, 0)
+            data['title'] = self.getRequiredTextFromCell(sh, row, 1)
+            if num_errors < len(self.errors):
+                continue
+            level = self.createLevel(data)
+            self.addLevel(level, data)
 
 
 class PersonImporter(ImporterBase):
@@ -1891,6 +1929,7 @@ class MegaImporter(BrowserView):
                 TermImporter,
                 SchoolTimetableImporter,
                 ResourceImporter,
+                LevelImporter,
                 PersonImporter,
                 TeacherImporter,
                 StudentImporter,

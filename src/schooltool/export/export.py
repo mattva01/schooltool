@@ -48,6 +48,7 @@ from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.term.interfaces import ITermContainer
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
+from schooltool.level.interfaces import ILevelContainer
 from schooltool.report.browser.report import RequestRemoteReportDialog
 from schooltool.report.browser.report import ProgressReportPage
 from schooltool.report.report import ReportLinkViewlet
@@ -295,7 +296,8 @@ class MegaExporter(SchoolTimetableExportView):
                 self.write(ws, x, y, cell.data, **cell.style)
         return len(table)
 
-    def format_table(self, fields, items, importer=None, major_progress=()):
+    def format_table(self, fields, items, importer=None, major_progress=(),
+                     sort=True):
         headers = [Header(header)
                    for header, style, getter in fields]
         rows = []
@@ -307,7 +309,8 @@ class MegaExporter(SchoolTimetableExportView):
             if importer is not None:
                 self.progress(importer, normalized_progress(
                         *(major_progress + (n, total_items))))
-        rows.sort()
+        if sort:
+            rows.sort()
         return [headers] + rows
 
     def format_school_years(self):
@@ -552,6 +555,20 @@ class MegaExporter(SchoolTimetableExportView):
         ws = wb.add_sheet("Resources")
         self.print_table(self.format_resources(), ws)
         self.finish('export_resources')
+
+    def format_levels(self):
+        fields = [('ID', Text, attrgetter('__name__')),
+                  ('Title', Text, attrgetter('title'))]
+        levels = ILevelContainer(self.context)
+        items = levels.values()
+        return self.format_table(fields, items, importer='export_levels',
+                                 sort=False)
+
+    def export_levels(self, wb):
+        self.task_progress.force('export_levels', active=True)
+        ws = wb.add_sheet("Grade Levels")
+        self.print_table(self.format_levels(), ws)
+        self.finish('export_levels')
 
     def format_courses(self):
         fields = [('School Year', Text, lambda c: ISchoolYear(c).__name__),
@@ -823,6 +840,8 @@ class MegaExporter(SchoolTimetableExportView):
                      title=_('School Timetables'), progress=0.0)
         progress.add('export_resources', active=False,
                      title=_('Resources'), progress=0.0)
+        progress.add('export_levels', active=False,
+                     title=_('Grade Levels'), progress=0.0)
         progress.add('export_persons', active=False,
                      title=_('Persons'), progress=0.0)
         progress.add('export_contacts', active=False,
@@ -861,6 +880,7 @@ class MegaExporter(SchoolTimetableExportView):
         self.export_terms(wb)
         self.export_school_timetables(wb)
         self.export_resources(wb)
+        self.export_levels(wb)
         self.export_persons(wb)
         self.export_contacts(wb)
         self.export_courses(wb)
