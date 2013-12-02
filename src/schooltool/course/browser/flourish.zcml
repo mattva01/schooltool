@@ -713,4 +713,7 @@
       permission="schooltool.edit"
       />
 
+  <zope:adapter
+      factory=".course.CourseLevelFormAdapter" />
+
 </configure>
