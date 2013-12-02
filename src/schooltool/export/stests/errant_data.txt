@@ -190,6 +190,8 @@ This file has examples of bad data for the Courses sheet:
     G3
     invalid school year:
     A4
+    is not a valid grade level id:
+    H6
     missing required text:
     B2, C2
 

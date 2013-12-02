@@ -533,24 +533,22 @@ class CourseLevelFormAdapter(object):
     def __init__(self, context):
         self.__dict__['context'] = removeSecurityProxy(context)
 
-    def get_current_level(self):
-        levels = LevelCourses.query(course=self.context)
-        if levels:
-            return removeSecurityProxy(levels[0])
-
     def __getattr__(self, name):
         if name == 'level':
-            return self.get_current_level()
+            if self.context.levels:
+                return list(self.context.levels)[0]
 
     def __setattr__(self, name, value):
         if name == 'level':
             value = removeSecurityProxy(value)
-            current = self.get_current_level()
+            current = None
+            if self.context.levels:
+                current = list(self.context.levels)[0]
             if value != current:
                 if current is not None:
-                    current.courses.remove(self.context)
+                    self.context.levels.remove(current)
                 if value is not None:
-                    value.courses.add(self.context)
+                    self.context.levels.add(value)
 
 
 class FlourishCourseView(DisplayForm):
