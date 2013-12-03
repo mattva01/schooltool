@@ -121,8 +121,8 @@ class Course(Persistent, Contained, Asset):
                                     relationships.URISectionOfCourse)
 
     levels = RelationshipProperty(level.URILevelCourses,
-                                  level.URILevel,
-                                  level.URICourse)
+                                  level.URICourse,
+                                  level.URILevel)
 
     course_id = None
     government_id = None
