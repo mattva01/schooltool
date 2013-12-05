@@ -26,6 +26,7 @@ from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
 
 from schooltool.basicperson.interfaces import IBasicPerson
+from schooltool.generations import linkcatalogs
 from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.relationship import relate, unrelate
 from schooltool.contact.contact import URIContactRelationship
@@ -34,6 +35,7 @@ from schooltool.contact.contact import ContactPersonInfo
 
 
 def evolve(context):
+    linkcatalogs.ensureEvolved(context)
     root = context.connection.root().get(ZopePublication.root_name, None)
 
     persons = findObjectsProviding(root, IBasicPerson)

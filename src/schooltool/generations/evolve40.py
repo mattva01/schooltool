@@ -21,11 +21,11 @@ Upgrade SchoolTool to generation 40.
 After permissions remap, update person groups.
 """
 
-from zope.app.generations.utility import getRootFolder, findObjectsProviding
+from zope.app.generations.utility import getRootFolder
 from zope.component.hooks import getSite, setSite
 
+from schooltool.generations import linkcatalogs
 from schooltool.app.membership import Membership
-from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.group.interfaces import IGroupContainer
 
@@ -47,19 +47,19 @@ def evolvePerson(app, schoolyear, person):
 
 
 def evolve(context):
+    linkcatalogs.ensureEvolved(context)
     root = getRootFolder(context)
-
     old_site = getSite()
-    apps = list(findObjectsProviding(root, ISchoolToolApplication))
-    for app in apps:
-        setSite(app)
-        syc = ISchoolYearContainer(app)
-        if not syc.values():
-            continue
-        sy = syc.getActiveSchoolYear()
-        if sy is None:
-            sy = syc.values()[-1]
-        for person in app['persons'].values():
-            evolvePerson(app, sy, person)
+
+    app = root
+    setSite(app)
+    syc = ISchoolYearContainer(app)
+    if not syc.values():
+        continue
+    sy = syc.getActiveSchoolYear()
+    if sy is None:
+        sy = syc.values()[-1]
+    for person in app['persons'].values():
+        evolvePerson(app, sy, person)
 
     setSite(old_site)

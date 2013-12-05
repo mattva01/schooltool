@@ -41,4 +41,17 @@
       handler=".temporal.shareTemporalState"
       />
 
+  <subscriber
+      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
+      handler=".catalog.indexLinks"
+      />
+
+  <adapter factory="schooltool.relationship.catalog.LinkCatalog"
+           name="schooltool.relationship.catalog.LinkCatalog" />
+
+  <adapter
+      for="schooltool.relationship.interfaces.IRelationshipLinks"
+      factory=".catalog.getLinkCatalog"
+      provides="zope.catalog.interfaces.ICatalog" />
+
 </configure>

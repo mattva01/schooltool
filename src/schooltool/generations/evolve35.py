@@ -31,6 +31,7 @@ from zope.component import queryUtility, getUtility
 from zope.component.hooks import getSite, setSite
 from zope.traversing.api import traverse
 
+from schooltool.generations import linkcatalogs
 from schooltool.testing.mock import ModulesSnapshot
 from schooltool.app.interfaces import ISchoolToolApplication
 from zope.catalog.interfaces import ICatalog
@@ -44,6 +45,7 @@ CATALOG_KEYS = [
 
 
 def evolve(context):
+    linkcatalogs.ensureEvolved(context)
     root = context.connection.root().get(ZopePublication.root_name, None)
 
     # Mock the renaming of zope.app.catalog and zope.app.intid to

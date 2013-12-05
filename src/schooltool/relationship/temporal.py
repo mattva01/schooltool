@@ -23,9 +23,8 @@ from zope.security.proxy import removeSecurityProxy
 
 from schooltool.term.interfaces import IDateManager
 from schooltool.relationship.interfaces import IRelationshipLinks
-from schooltool.relationship.relationship import RelationshipInfo
 from schooltool.relationship.relationship import BoundRelationshipProperty
-from schooltool.relationship.relationship import relate, unrelate, share_state
+from schooltool.relationship.relationship import relate, unrelate
 from schooltool.relationship.uri import URIObject
 
 ACTIVE = 'a'
@@ -36,31 +35,35 @@ INACTIVE_CODE = 'i'
 
 class TemporalStateAccessor(object):
 
-    def __init__(self, data):
-        self.data = data
+    def __init__(self, state):
+        self.state = state
+        if 'tmp' not in state:
+            state['tmp'] = ()
 
     def all(self):
+        all = self.state['tmp']
         return [(date, meaning, code)
-                for date, (meaning, code) in sorted(self.data.items())]
+                for date, (meaning, code) in reversed(all)]
 
     def set(self, date, meaning=ACTIVE, code=ACTIVE_CODE):
-        self.data[date] = meaning, code
+        data = dict(self.state['tmp'])
+        data[date] = meaning, code
+        self.state['tmp'] = tuple(reversed(data.items()))
 
     def get(self, date):
-        if not self.data:
+        data = self.state['tmp']
+        if not data:
             return None
-        for sd in sorted(self.data.keys(), reverse=True):
+        for sd, result in data:
             if sd <= date:
-                return self.data[sd]
+                return result
         return None
 
-    def __contains__(self, date):
-        return date in self.data
-
     def has(self, date=None, states=(), meanings=''):
-        if not self.data:
+        if not self.state['tmp']:
             if meanings == ACTIVE:
-                return ACTIVE_CODE in states
+                return (ACTIVE_CODE in states or
+                        not states)
             else:
                 return False
         if date is not None:
@@ -82,9 +85,10 @@ class TemporalStateAccessor(object):
 
     @property
     def latest(self):
-        if not self.data:
+        data = self.state['tmp']
+        if not data:
             return ACTIVE, ACTIVE_CODE
-        day, state = sorted(self.data.items())[-1]
+        day, state = sorted(data.items())[-1]
         return state
 
 
@@ -115,10 +119,10 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
         return datetime.date.today()
 
     def _filter_nothing(self, link):
-        return link.rel_type == self.rel_type
+        return link.rel_type_hash == hash(self.rel_type)
 
     def _filter_latest_meanings(self, link):
-        if link.rel_type != self.rel_type:
+        if link.rel_type_hash != hash(self.rel_type):
             return False
         for v in link.state.latest[0]:
             if v in self.filter_meanings:
@@ -126,7 +130,7 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
         return False
 
     def _filter_everything(self, link):
-        if link.rel_type != self.rel_type:
+        if link.rel_type_hash != hash(self.rel_type):
             return False
         return link.state.has(
             date=self.filter_date, states=self.filter_codes,
@@ -146,7 +150,7 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
 
     def filter(self, links):
         for link in links:
-            if (link.rel_type == self.rel_type and self._filter(link)):
+            if (link.rel_type_hash == hash(self.rel_type) and self._filter(link)):
                 yield link
 
     def __contains__(self, other):
@@ -155,9 +159,9 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
         other = removeSecurityProxy(other)
         linkset = IRelationshipLinks(self.this)
         for link in linkset.getCachedLinksByTarget(other):
-            if (link.rel_type == self.rel_type and
-                link.my_role == self.my_role and
-                link.role == self.other_role and
+            if (link.rel_type_hash == hash(self.rel_type) and
+                link.my_role_hash == hash(self.my_role) and
+                link.role_hash == hash(self.other_role) and
                 self._filter(link)):
                 return True
         return False
@@ -250,7 +254,7 @@ class TemporalURIObject(URIObject):
         else:
             today = datetime.date.today()
         def filter(link):
-            if link.rel_type != self:
+            if link.rel_type_hash != hash(self):
                 return False
             state = self.access(link.shared_state)
             return state.has(date=today, meanings=ACTIVE)
@@ -260,5 +264,4 @@ class TemporalURIObject(URIObject):
 def shareTemporalState(event):
     if not isinstance(event.rel_type, TemporalURIObject):
         return
-    links = event.getLinks()
-    share_state(*links)
+    event.shared['tmp'] = ()

@@ -26,6 +26,7 @@ from zope.component import getUtility
 from zope.component.hooks import getSite, setSite
 from zope.intid.interfaces import IIntIds
 
+from schooltool.generations import linkcatalogs
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.level.level import LevelContainerContainer
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
@@ -56,6 +57,7 @@ def guessMostRecentLevels(app):
 
 
 def evolve(context):
+    linkcatalogs.ensureEvolved(context)
     root = context.connection.root().get(ZopePublication.root_name, None)
     old_site = getSite()
 

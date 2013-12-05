@@ -24,6 +24,7 @@ Update person photos from File to schooltool.skin.flourish.fields.ImageFile.
 from zope.app.generations.utility import getRootFolder, findObjectsProviding
 from zope.component.hooks import getSite, setSite
 
+from schooltool.generations import linkcatalogs
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.fields import ImageFile
 
@@ -45,6 +46,7 @@ def evolvePerson(person):
 
 
 def evolve(context):
+    linkcatalogs.ensureEvolved(context)
     root = getRootFolder(context)
 
     old_site = getSite()

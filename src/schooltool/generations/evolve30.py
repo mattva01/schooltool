@@ -33,9 +33,11 @@ from schooltool.course.interfaces import ICourse
 from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.relationship.relationship import relate, unrelate
 from schooltool.app.membership import URIMember, URIGroup, URIMembership
+from schooltool.generations import linkcatalogs
 
 
 def evolve(context):
+    linkcatalogs.ensureEvolved(context)
     root = context.connection.root().get(ZopePublication.root_name, None)
 
     savepoint_counter = 0
