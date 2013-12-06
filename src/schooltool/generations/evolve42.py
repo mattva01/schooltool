@@ -26,15 +26,15 @@ from zope.annotation.interfaces import IAnnotations
 from zope.component.hooks import getSite, setSite
 
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.app import getApplicationPreferences
 
 SCHEDULES_KEY = 'schooltool.timetable.schedules'
 TIMETABLES_KEY = 'schooltool.timetable.timetables'
-APP_PREFERENCES_KEY = 'schooltool.app.ApplicationPreferences'
 
 
 def evolveScheduleContainers(app):
     annotations = IAnnotations(app)
-    prefs = annotations[APP_PREFERENCES_KEY]
+    prefs = getApplicationPreferences(app)
     schedule_containers = app[SCHEDULES_KEY]
     for container in schedule_containers.values():
         if container.timezone != prefs.timezone:
@@ -44,7 +44,7 @@ def evolveScheduleContainers(app):
 
 def evolveTimetableContainers(app):
     annotations = IAnnotations(app)
-    prefs = annotations[APP_PREFERENCES_KEY]
+    prefs = getApplicationPreferences(app)
     schedule_containers = app[TIMETABLES_KEY]
     for container in schedule_containers.values():
         for timetable in container.values():
