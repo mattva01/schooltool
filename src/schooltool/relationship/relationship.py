@@ -717,8 +717,14 @@ class Link(Persistent, Contained):
         return self.shared['X']
 
     @property
+    def shared_state(self):
+        return SharedState(
+            getLinkCatalog(),
+            getUtility(IIntIds).getId(self))
+
+    @property
     def state(self):
-        return self.rel_type.access(self.shared)
+        return self.rel_type.access(self.shared_state)
 
 
 class CLink(object):

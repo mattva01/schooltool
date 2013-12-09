@@ -21,6 +21,7 @@ Contact browser views.
 """
 import urllib
 
+import zope.schema
 from zope.security.checker import canAccess
 from zope.schema import getFieldsInOrder
 from zope.interface import implements, Interface
@@ -47,10 +48,8 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.catalog import buildQueryString
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContactContainer
-from schooltool.contact.interfaces import IContactPersonInfo
 from schooltool.contact.interfaces import IAddress, IPhoto
 from schooltool.contact.interfaces import IUniqueFormKey
-from schooltool.contact.contact import ContactPersonInfo
 from schooltool.contact.interfaces import IContact
 from schooltool.contact.contact import Contact
 from schooltool.person.interfaces import IPerson
@@ -63,11 +62,21 @@ from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.contact.contact import URIPerson, URIContact
 from schooltool.contact.contact import URIContactRelationship
+from schooltool.contact.contact import getAppContactStates
 from schooltool.contact.interfaces import IContactPerson
 from schooltool.contact.interfaces import IEmails, IPhones, ILanguages
 from schooltool import table
 
 from schooltool.common import SchoolToolMessage as _
+
+
+def get_relationship_title(person, contact):
+    state = IContactable(person).contacts.state(contact)
+    if state is None:
+        return u''
+    app_states = getAppContactStates()
+    title = app_states.getTitle(state.today)
+    return title or u''
 
 
 class ContactContainerAbsoluteURLAdapter(BrowserView):
@@ -209,33 +218,82 @@ SubmitLabel = button.StaticButtonActionAttribute(
     button=FlourishContactAddView.buttons['add'])
 
 
+class IContactPersonSubForm(Interface):
+    """Information about a contact - person relationship."""
+
+    relationship = zope.schema.Choice(
+        title=_(u"Relationship"),
+        description=_("Contact's relationship with the person"),
+        vocabulary='schooltool.contact.contact.relationship_states',
+        required=False)
+
+
 class ContactPersonInfoSubForm(subform.EditSubForm):
     """Form for editing additional person's contact information."""
 
     template = ViewPageTemplateFile('templates/contactperson_subform.pt')
-    fields = field.Fields(IContactPersonInfo)
+    fields = field.Fields(IContactPersonSubForm)
     prefix = 'person_contact'
 
+    view = None
+
     changed = False
+    data = None
+    relationship = None
+
+    def __init__(self, context, request, view, relationship_info):
+        subform.EditSubForm.__init__(self, context, request, view)
+        self.view = view
+        self.relationship = relationship_info
+        self.data = {}
 
     @property
     def person(self):
-        return self.context.__parent__
+        if self.relationship is None:
+            return self.context
+        return self.relationship.target
+
+    def getContent(self):
+        return self.data
+
+    def updateData(self):
+        if self.relationship is not None:
+            app_states = getAppContactStates()
+            state_tuple = self.relationship.state.today
+            self.data['relationship'] = app_states.getState(state_tuple)
+
+    def update(self):
+        self.updateData()
+        return subform.EditSubForm.update(self)
 
     @button.handler(form.EditForm.buttons['apply'])
     def handleApply(self, action):
         data, errors = self.widgets.extract()
         if errors:
             # XXX: we don't handle errors for now
-            pass
+            return
         content = self.getContent()
         changed = form.applyChanges(self, content, data)
         self.changed = bool(changed)
+        if self.changed and self.relationship is not None:
+            self.relationship.state.set(
+                self.request.util.today,
+                meaning=self.data['relationship'].active,
+                code=self.data['relationship'].code)
 
     @button.handler(ContactAddView.buttons['add'])
     def handleAdd(self, action):
-        # Pretty, isn't it?
         self.handleApply.func(self, action)
+        if (self.view.added is None or
+            self.data['relationship'] is None):
+            # XXX: we don't handle errors for now
+            return
+        contacts = IContactable(removeSecurityProxy(self.context)).contacts
+        contacts.on(self.request.util.today).relate(
+            self.view.added,
+            meaning=self.data['relationship'].active,
+            code=self.data['relationship'].code,
+            )
 
 
 class PersonContactAddView(ContactAddView):
@@ -243,19 +301,17 @@ class PersonContactAddView(ContactAddView):
 
     form.extends(ContactAddView)
 
+    added = None
+
     @property
     def label(self):
         return _("Add new contact for ${person}",
                  mapping={'person': self.context.title})
 
     def update(self):
-        # Create contact_info object for adding
-        self.contact_info = ContactPersonInfo()
-        # Add person contact.
         super(PersonContactAddView, self).update()
-        # Update contact info.
         self.subforms = [
-            ContactPersonInfoSubForm(self.contact_info, self.request, self),
+            ContactPersonInfoSubForm(self.context, self.request, self, None),
             ]
         for subform in self.subforms:
             subform.update()
@@ -265,10 +321,7 @@ class PersonContactAddView(ContactAddView):
         contact_container = IContactContainer(ISchoolToolApplication(None))
         name = INameChooser(contact_container).chooseName('', contact)
         contact_container[name] = contact
-
-        context = removeSecurityProxy(self.context)
-        self.contact_info.__parent__ = context
-        IContactable(context).contacts.add(contact, self.contact_info)
+        self.added = contact
         return contact
 
 
@@ -307,9 +360,9 @@ class ContactEditView(form.EditForm):
     def update(self):
         super(ContactEditView, self).update()
         self.subforms = []
-        for relationship_info in self.context.persons.relationships:
+        for relationship_info in self.context.persons.all().relationships:
             subform = ContactPersonInfoSubForm(
-                relationship_info.extra_info, self.request, self)
+                self.context, self.request, self, relationship_info)
             # XXX: should also apply at least urllib.quote here:
             prefix = unicode(relationship_info.target.__name__).encode('punycode')
             subform.prefix += '.%s' % prefix
@@ -413,9 +466,18 @@ class ContactView(form.DisplayForm):
     template = ViewPageTemplateFile('templates/contact_view.pt')
     fields = field.Fields(IContact)
 
+    @property
+    def app_states(self):
+        return getAppContactStates()
+
     def relationships(self):
-        return [relationship_info.extra_info
-                for relationship_info in self.context.persons.relationships]
+        app_states = self.app_states
+        for info in self.context.persons.relationships:
+            title = app_states.getTitle(info.state.today) or u''
+            yield {
+                'person': info.target,
+                'title': title,
+                }
 
     def __call__(self):
         self.update()
@@ -439,9 +501,18 @@ class FlourishBoundContactDetails(flourish.form.FormContent):
     def has_data(self):
         return any([widget.value for widget in self.widgets.values()])
 
+    @property
+    def app_states(self):
+        return getAppContactStates()
+
     def relationships(self):
-        return [relationship_info.extra_info
-                for relationship_info in self.context.persons.relationships]
+        app_states = self.app_states
+        for info in self.context.persons.relationships:
+            title = app_states.getTitle(info.state.today) or u''
+            yield {
+                'person': info.target,
+                'title': title,
+                }
 
     @property
     def canModify(self):
@@ -454,9 +525,18 @@ class FlourishContactDetails(flourish.form.FormViewlet):
     fields = field.Fields(IContact).omit('photo')
     mode = DISPLAY_MODE
 
+    @property
+    def app_states(self):
+        return getAppContactStates()
+
     def relationships(self):
-        return [relationship_info.extra_info
-                for relationship_info in self.context.persons.relationships]
+        app_states = self.app_states
+        for info in self.context.persons.relationships:
+            title = app_states.getTitle(info.state.today) or u''
+            yield {
+                'person': info.target,
+                'title': title,
+                }
 
     @property
     def canModify(self):
@@ -766,24 +846,22 @@ class FlourishContactsViewlet(flourish.viewlet.Viewlet):
         return IContact(self.context)
 
     @property
+    def contactable(self):
+        return IContactable(removeSecurityProxy(self.context))
+
+    @property
     def getContacts(self):
-        contacts = IContactable(removeSecurityProxy(self.context)).contacts
+        contacts = self.contactable.contacts
         return [self.buildInfo(contact) for contact in contacts]
 
-    # XXX: copied from relationship.py to avoid circular dependency
-    def get_relationship_title(self, contact):
-        try:
-            links = IRelationshipLinks(self.context)
-            link = links.find(
-                URIPerson, contact, URIContact, URIContactRelationship)
-        except ValueError:
-            return u''
-        return link.extra_info.getRelationshipTitle()
+    @property
+    def app_states(self):
+        return getAppContactStates()
 
     def buildInfo(self, contact):
         return {
             'link': absoluteURL(contact, self.request),
-            'relationship': self.get_relationship_title(contact),
+            'relationship': get_relationship_title(self.contactable, contact),
             'name': " ".join(self._extract_attrs(
                 contact, IContactPerson)),
             'address': ", ".join(self._extract_attrs(contact, IAddress)),

@@ -308,6 +308,15 @@ class IRelationshipStates(IContained):
     def __iter__():
         """Iterate through self.states values."""
 
+    def getState(state_tuple):
+        """Return app state given (meaning, code) tuple."""
+
+    def getTitle(state_tuple):
+        """Return state title given (meaning, code) tuple."""
+
+    def getDescription(state_tuple):
+        """Return state description given (meaning, code) tuple."""
+
 
 class IRelationshipStateChoice(zope.schema.interfaces.IField):
     """A choice of temporal relationship states."""

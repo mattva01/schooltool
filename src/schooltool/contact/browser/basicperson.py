@@ -42,7 +42,7 @@ from schooltool.contact.interfaces import IAddress, IEmails, IPhones, ILanguages
 from schooltool.contact.browser.contact import ContactEditView
 from schooltool.contact.browser.contact import FlourishContactEditView
 from schooltool.contact.browser.contact import FlourishContactDetails
-from schooltool.contact.browser.relationship import get_relationship_title
+from schooltool.contact.browser.contact import get_relationship_title
 from schooltool.skin.flourish.page import Page
 from schooltool.common import SchoolToolMessage as _
 
@@ -88,8 +88,8 @@ class ContactOverviewView(BrowserView):
 
     def getRelationships(self):
         bound = IContact(self.person)
-        return [relationship_info.extra_info
-                for relationship_info in bound.persons.relationships]
+        contacts = bound.contacts
+        return [self.buildInfo(contact) for contact in contacts]
 
     def getPerson(self):
         bound = IContact(self.person)

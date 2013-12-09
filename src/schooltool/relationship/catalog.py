@@ -9,6 +9,7 @@ from zope.intid.interfaces import IIntIds
 from zope.intid import addIntIdSubscriber
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.keyreference.interfaces import IKeyReference
+from zope.security.proxy import removeSecurityProxy
 from schooltool.relationship.interfaces import IRelationshipLink
 from schooltool.app.catalog import AttributeCatalog
 from schooltool.table.catalog import ConvertingIndex
@@ -116,6 +117,7 @@ getLinkCatalog = LinkCatalog.get
 def indexLinks(event):
     iids = getUtility(IIntIds)
     for link in event.getLinks():
+        link = removeSecurityProxy(link)
         addIntIdSubscriber(link, ObjectAddedEvent(link))
         lid = iids.getId(link)
         getLinkCatalog().index_doc(lid, link)

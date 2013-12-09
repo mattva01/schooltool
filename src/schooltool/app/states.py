@@ -93,6 +93,26 @@ class RelationshipStates(Persistent, Contained):
     def __iter__(self):
         return iter(self.states.values())
 
+    def getState(self, state_tuple):
+        if state_tuple is None:
+            return None
+        meaning, code = state_tuple
+        state = self.states.get(code)
+        return state
+
+    def getTitle(self, state_tuple):
+        state = self.getState(state_tuple)
+        if state is None:
+            return None
+        return state.title
+
+    def getDescription(self, state_tuple):
+        if state_tuple is None:
+            return None
+        meaning, code = state_tuple
+        state = self.system_titles.get(meaning)
+        return state
+
     @classmethod
     def overlap(cls, codes, other):
         for code in codes:

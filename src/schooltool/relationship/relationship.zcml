@@ -16,7 +16,12 @@
 
   <class
       class="schooltool.relationship.relationship.RelationshipInfo">
-    <allow attributes="source target extra_info" />
+    <allow attributes="source target state extra_info" />
+  </class>
+
+  <class
+      class="schooltool.relationship.temporal.TemporalStateAccessor">
+    <allow attributes="state all set get has latest today" />
   </class>
 
   <adapter

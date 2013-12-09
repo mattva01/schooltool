@@ -32,8 +32,10 @@ from zope.container.btree import BTreeContainer
 from zope.component import getUtility
 
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IRelationshipStateContainer
 from schooltool.app.app import InitBase, StartUpBase
 from schooltool.app.catalog import AttributeCatalog
+from schooltool.app.states import StateStartUpBase
 from schooltool.utility.utility import UtilitySetUp
 from schooltool.contact.interfaces import IContactPersonInfo
 from schooltool.contact.interfaces import IContactable
@@ -41,7 +43,8 @@ from schooltool.contact.interfaces import IContact, IContactContained
 from schooltool.contact.interfaces import IContactContainer
 from schooltool.contact.interfaces import IUniqueFormKey
 from schooltool.relationship.uri import URIObject
-from schooltool.relationship.relationship import BoundRelationshipProperty
+from schooltool.relationship.temporal import ACTIVE, INACTIVE
+from schooltool.relationship.temporal import TemporalURIObject
 from schooltool.relationship.relationship import RelationshipProperty
 from schooltool.relationship.relationship import RelationshipSchema
 from schooltool.securitypolicy import crowds
@@ -49,13 +52,14 @@ from schooltool.table.catalog import ConvertingIndex
 from schooltool.common import simple_form_key
 from schooltool.person.interfaces import IPerson
 from schooltool.course.section import PersonInstructorsCrowd
+from schooltool.app.utils import vocabulary_titled
 
 from schooltool.common import SchoolToolMessage as _
 
 
-URIContactRelationship = URIObject('http://schooltool.org/ns/contact',
-                                   'Contact relationship',
-                                   'The contact relationship.')
+URIContactRelationship = TemporalURIObject('http://schooltool.org/ns/contact',
+                                           'Contact relationship',
+                                           'The contact relationship.')
 
 URIContact = URIObject('http://schooltool.org/ns/contact/contact',
                        'Contact', 'A contact relationship contact record role.')
@@ -65,6 +69,9 @@ URIPerson = URIObject('http://schooltool.org/ns/contact/person',
 
 Contact = RelationshipSchema(URIContactRelationship,
                              contact=URIContact, person=URIPerson)
+
+
+PARENT = 'p'
 
 
 class ContactGroup(crowds.DescriptionGroup):
@@ -137,18 +144,15 @@ class ContactPersonInfo(Persistent, Contained):
         return term.title
 
 
+
 class ContextRelationshipProperty(RelationshipProperty):
     """Context relationship property."""
 
     def __get__(self, instance, owner):
-        """Bind the property to the context of an instance."""
         if instance is None:
             return self
         else:
-            return BoundRelationshipProperty(instance.context,
-                                             self.rel_type,
-                                             self.my_role,
-                                             self.other_role)
+            return RelationshipProperty.__get__(self, instance.context, owner)
 
 
 class Contactable(object):
@@ -160,6 +164,9 @@ class Contactable(object):
 
     def __init__(self, context):
         self.context = context
+
+    def __conform__(self, iface):
+        return iface(self.context)
 
 
 class ContactAppStartup(StartUpBase):
@@ -227,3 +234,37 @@ class ContactPersonInstructorsCrowd(PersonInstructorsCrowd):
                 if user in section.instructors:
                     return True
         return False
+
+
+class ContactStatesStartup(StateStartUpBase):
+
+    states_name = 'contact-relationship'
+    states_title = _('Contact Relationships')
+
+    def populate(self, states):
+        states.add(_('Contact'), ACTIVE, 'a')
+        states.add(_('Parent'), ACTIVE+PARENT, 'p')
+        states.add(_('Step-parent'), ACTIVE+PARENT, 'sp')
+        states.add(_('Foster parent'), ACTIVE+PARENT, 'fp')
+        states.add(_('Guardian'), ACTIVE+PARENT, 'g')
+        states.add(_('Sibling'), ACTIVE, 's')
+        states.add(_('Inactive'), INACTIVE, 'i')
+        states.describe(ACTIVE, _('A contact'))
+        states.describe(ACTIVE+PARENT, _('A parent'))
+        states.describe(INACTIVE, _('Inactive'))
+
+
+def getAppContactStates():
+    app = ISchoolToolApplication(None)
+    container = IRelationshipStateContainer(app)
+    app_states = container['contact-relationship']
+    return app_states
+
+
+def contactStatesVocabulary(context):
+    app_states = getAppContactStates()
+    return vocabulary_titled(app_states.states.values())
+
+
+def ContactStatesVocabularyFactory():
+    return contactStatesVocabulary

@@ -60,6 +60,7 @@ class IRelationshipInfo(Interface):
 
     source = Attribute("""Source object of the relationship.""")
     target = Attribute("""Target object of the relationship.""")
+    state = Attribute("""State of the relationship.""")
     extra_info = Attribute("""Extra information that was passed to `relate`.""")
 
 
@@ -71,9 +72,12 @@ class IRelationshipLink(Interface):
     """
 
     rel_type = Attribute("""Relationship type.""")
+    rel_type_hash = Attribute("""Hash of relationship type URI.""")
     target = Attribute("""The other member of the relationship.""")
     role = Attribute("""Role of `target`.""")
+    role_hash = Attribute("""hash of `target` role URI.""")
     my_role = Attribute("""Role of the object that has this link.""")
+    my_role_hash = Attribute("""Hash of role URI of this object.""")
     extra_info = Attribute("""Extra information that was passed to `relate`.
 
         Be careful to keep extra info in sync on both links of the

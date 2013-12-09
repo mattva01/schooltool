@@ -118,13 +118,7 @@ class IContactPersonInfo(Interface):
     relationship = zope.schema.Choice(
         title=_(u"Relationship"),
         description=_("Contact's relationship with the person"),
-        vocabulary=vocabulary([
-            ('parent', _("Parent")),
-            ('step_parent', _("Step-parent")),
-            ('foster_parent', _("Foster parent")),
-            ('guardian', _("Guardian")),
-            ('sibling', _("Sibling")),
-            ]),
+        vocabulary='schooltool.contact.contact.relationship_states',
         required=False)
 
     def getRelationshipTitle():

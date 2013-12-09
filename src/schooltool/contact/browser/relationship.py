@@ -46,6 +46,7 @@ from schooltool.contact.contact import URIContactRelationship
 from schooltool.contact.contact import ContactPersonInfo
 from schooltool.contact.browser.contact import ContactTable
 from schooltool.contact.browser.contact import contact_table_columns
+from schooltool.contact.browser.contact import get_relationship_title
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.interfaces import ITableFormatter
@@ -53,16 +54,6 @@ from schooltool.app.browser.app import EditRelationships
 from schooltool.skin.flourish.page import Page
 
 from schooltool.common import SchoolToolMessage as _
-
-
-def get_relationship_title(person, contact):
-    try:
-        links = IRelationshipLinks(person)
-        link = links.find(
-            URIPerson, contact, URIContact, URIContactRelationship)
-    except ValueError:
-        return u''
-    return link.extra_info.getRelationshipTitle()
 
 
 def make_relationship_column_getter(person=None):
@@ -100,9 +91,7 @@ class ContactManagementView(BrowserView):
     def add(self, item):
         """Add an item to the list of selected items."""
         collection = removeSecurityProxy(self.getCollection())
-        info = ContactPersonInfo()
-        info.__parent__ = removeSecurityProxy(self.context)
-        collection.add(item, info)
+        collection.add(item)
 
     def remove(self, item):
         """Remove an item from selected items."""
@@ -240,9 +229,7 @@ class FlourishContactManagementView(EditContactRelationships):
     def add(self, item):
         """Add an item to the list of selected items."""
         collection = removeSecurityProxy(self.getCollection())
-        info = ContactPersonInfo()
-        info.__parent__ = removeSecurityProxy(self.context)
-        collection.add(item, info)
+        collection.add(item)
 
     def remove(self, item):
         """Remove an item from selected items."""

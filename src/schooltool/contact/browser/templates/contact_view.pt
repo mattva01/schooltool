@@ -10,16 +10,11 @@
                     tal:condition="relationships">
             <tal:block repeat="info relationships">
 
-<div class="row" tal:condition="info/relationship" i18n:translate="">
-  <span tal:replace="info/getRelationshipTitle" i18n:name="relationship" />
+<div class="row" i18n:translate="">
+  <span tal:replace="info/title" i18n:name="relationship" />
   of
-  <a tal:replace="structure info/__parent__/@@link" i18n:name="person" />
+  <a tal:replace="structure info/person/@@link" i18n:name="person" />
 </div>
-<div class="row" tal:condition="not:info/relationship" i18n:translate="">
-  Contact of
-  <a tal:replace="structure info/__parent__/@@link" i18n:name="person" />
-</div>
-
             </tal:block>
           </fieldset>
           </div>
