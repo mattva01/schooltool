@@ -40,15 +40,18 @@ class TemporalStateAccessor(object):
         if 'tmp' not in state:
             state['tmp'] = ()
 
-    def all(self):
+    def __iter__(self):
         all = self.state['tmp']
-        return [(date, meaning, code)
-                for date, (meaning, code) in reversed(all)]
+        for date, (meaning, code) in reversed(all):
+            yield date, meaning, code
+
+    def all(self):
+        return list(self)
 
     def set(self, date, meaning=ACTIVE, code=ACTIVE_CODE):
         data = dict(self.state['tmp'])
         data[date] = meaning, code
-        self.state['tmp'] = tuple(reversed(data.items()))
+        self.state['tmp'] = tuple(sorted(data.items(), reverse=True))
 
     def get(self, date):
         data = self.state['tmp']
@@ -194,7 +197,7 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
             filter_date=date,
             filter_codes=self.filter_codes)
 
-    def any(self, meanings=ACTIVE):
+    def any(self, meanings=''):
         return self.__class__(
             self.this, self.rel_type, self.my_role, self.other_role,
             filter_meanings=meanings, filter_date=self.filter_date,

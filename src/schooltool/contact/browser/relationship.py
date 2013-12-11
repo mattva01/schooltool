@@ -32,8 +32,8 @@ from zc.table.column import GetterColumn
 
 from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.basicperson.interfaces import IBasicPerson
-from schooltool.app.browser.app import RelationshipAddTableMixin
-from schooltool.app.browser.app import RelationshipRemoveTableMixin
+from schooltool.app.browser.states import TemporalRelationshipAddTableMixin
+from schooltool.app.browser.states import TemporalRelationshipRemoveTableMixin
 from schooltool.app.browser.app import AddAllResultsButton
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.inlinept import InheritTemplate
@@ -50,7 +50,7 @@ from schooltool.contact.browser.contact import get_relationship_title
 from schooltool.table.table import CheckboxColumn
 from schooltool.table.table import label_cell_formatter_factory
 from schooltool.table.interfaces import ITableFormatter
-from schooltool.app.browser.app import EditRelationships
+from schooltool.app.browser.states import EditTemporalRelationships
 from schooltool.skin.flourish.page import Page
 
 from schooltool.common import SchoolToolMessage as _
@@ -171,11 +171,34 @@ class ContactManagementView(BrowserView):
         self.setUpTables()
 
 
-class EditContactRelationships(EditRelationships):
-    pass
+class EditContactRelationships(EditTemporalRelationships):
+
+    app_states_name = 'contact-relationship'
+
+    def getOmmitedItems(self):
+        for item in EditTemporalRelationships.getOmmitedItems(self):
+            yield item
+        self_contact = IContact(self.context)
+        yield self_contact
+
+    def getTargets(self, keys):
+        if not keys:
+            return None
+        catalog = self.getCatalog()
+        ids = []
+        for key in keys:
+            for iid in catalog['form_keys'].values_to_documents.get(key, ()):
+                if iid not in ids:
+                    ids.append(iid)
+        int_ids = getUtility(IIntIds)
+        targets = [
+            int_ids.getObject(iid)
+            for iid in ids
+            ]
+        return targets
 
 
-class ContactAddRelationshipTable(RelationshipAddTableMixin, ContactTable):
+class ContactAddRelationshipTable(TemporalRelationshipAddTableMixin, ContactTable):
 
     def submitItems(self):
         int_ids = getUtility(IIntIds)
@@ -187,7 +210,7 @@ class ContactAddRelationshipTable(RelationshipAddTableMixin, ContactTable):
                 self.view.add(IContact(int_ids.getObject(intid)))
 
 
-class ContactRemoveRelationshipTable(RelationshipRemoveTableMixin, ContactTable):
+class ContactRemoveRelationshipTable(TemporalRelationshipRemoveTableMixin, ContactTable):
 
     def submitItems(self):
         int_ids = getUtility(IIntIds)
@@ -226,22 +249,12 @@ class FlourishContactManagementView(EditContactRelationships):
     current_title = _('Current contacts')
     available_title = _('Available contacts')
 
-    def add(self, item):
-        """Add an item to the list of selected items."""
-        collection = removeSecurityProxy(self.getCollection())
-        collection.add(item)
-
-    def remove(self, item):
-        """Remove an item from selected items."""
-        collection = removeSecurityProxy(self.getCollection())
-        collection.remove(item)
-
     def getCollection(self):
         return IContactable(removeSecurityProxy(self.context)).contacts
 
     def getSelectedItemIds(self):
-        int_ids = getUtility(IIntIds)
-        return [int_ids.getId(item) for item in self.getCollection()]
+        collection = self.getCollection()
+        return list(collection.all().int_ids)
 
     def getAvailableItemsContainer(self):
         return IContactContainer(ISchoolToolApplication(None))

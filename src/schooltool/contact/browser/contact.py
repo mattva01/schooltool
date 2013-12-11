@@ -507,7 +507,7 @@ class FlourishBoundContactDetails(flourish.form.FormContent):
 
     def relationships(self):
         app_states = self.app_states
-        for info in self.context.persons.relationships:
+        for info in self.context.persons.any().relationships:
             title = app_states.getTitle(info.state.today) or u''
             yield {
                 'person': info.target,
@@ -531,7 +531,7 @@ class FlourishContactDetails(flourish.form.FormViewlet):
 
     def relationships(self):
         app_states = self.app_states
-        for info in self.context.persons.relationships:
+        for info in self.context.persons.any().relationships:
             title = app_states.getTitle(info.state.today) or u''
             yield {
                 'person': info.target,
@@ -986,6 +986,19 @@ class FlourishContactDeleteView(flourish.form.DialogForm, form.EditForm):
         super(FlourishContactDeleteView, self).updateActions()
         self.actions['apply'].addClass('button-ok')
         self.actions['cancel'].addClass('button-cancel')
+
+    @property
+    def app_states(self):
+        return getAppContactStates()
+
+    def relationships(self):
+        app_states = self.app_states
+        for info in self.context.persons.any().relationships:
+            title = app_states.getTitle(info.state.today) or u''
+            yield {
+                'person': info.target,
+                'title': title,
+                }
 
 
 class PhotoView(flourish.widgets.ImageView):

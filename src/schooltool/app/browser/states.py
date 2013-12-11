@@ -63,7 +63,7 @@ class EditTemporalRelationships(EditRelationships):
     @Lazy
     def states(self):
         if self.app_states_name is None:
-            return {}
+            return None
         app = ISchoolToolApplication(None)
         container = IRelationshipStateContainer(app)
         return container.get(self.app_states_name, None)
@@ -106,7 +106,10 @@ class TemporalRelationshipRemoveTableMixin(RelationshipRemoveTableMixin):
             state = collection.state(removeSecurityProxy(item))
             if state is None:
                 return ''
-            active, code = state
+            state_today = state.today
+            if state_today is None:
+                return ''
+            active, code = state_today
             description = settings.states.get(code)
             if description is None:
                 return ''
@@ -200,7 +203,7 @@ class StateActionDialog(DialogFormWithScript):
         app_states = self.app_states
         relationships = removeSecurityProxy(self.view.getCollection())
         states = []
-        for date, active, code in relationships.states(target) or ():
+        for date, active, code in relationships.state(target) or ():
             state = app_states.states.get(code)
             title = state.title if state is not None else ''
             states.append({
@@ -220,13 +223,14 @@ class StateActionDialog(DialogFormWithScript):
         relationships = removeSecurityProxy(self.view.getCollection())
         target_state = relationships.state(target)
         if target_state is not None:
-            active, code = target_state
-            return app_states.states.get(code)
+            app_state = app_states.getState(target_state.today)
+            if app_state is not None:
+                return app_state
         for state in app_states.states.values():
             if state.active:
                 return state
         if app_states.states:
-            app_states.states.values()[0]
+            return app_states.states.values()[0]
         return None
 
     @button.buttonAndHandler(_("Apply"), name='apply')

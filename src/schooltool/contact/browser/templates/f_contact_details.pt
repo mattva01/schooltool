@@ -17,7 +17,6 @@
           <label>
             <span i18n:translate="">
               <tal:block tal:replace="info/title" i18n:name="relationship" />
-              of
             </span>
           </label>
         </td>

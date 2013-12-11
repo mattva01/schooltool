@@ -33,6 +33,8 @@ from zope.interface import implements
 from zope.intid.interfaces import IIntIds
 from zope.keyreference.interfaces import IKeyReference
 from zope.lifecycleevent import ObjectModifiedEvent
+from zope.lifecycleevent import ObjectRemovedEvent
+from zope.lifecycleevent import ObjectAddedEvent
 from zope.security.proxy import removeSecurityProxy
 from ZODB.interfaces import IConnection
 import zope.event
@@ -952,17 +954,23 @@ class LinkSet(Persistent, Contained):
         link.__name__ = "%s" % i
         self._links[link.__name__] = link
         link.__parent__ = self
+        notify(ObjectAddedEvent(link, self._links, link.__name__))
 
     def remove(self, link):
         if link is self._links.get(link.__name__):
-            del self._lids[getUtility(IIntIds).getId(link)]
+            link_name = link.__name__
+            self._lids.remove(getUtility(IIntIds).getId(link))
             del self._links[link.__name__]
+            notify(ObjectRemovedEvent(link, self._links, link_name))
         else:
             raise ValueError("This link does not belong to this container!")
 
     def clear(self):
+        deleted = list(self._links.items())
         self._links.clear()
         self._byrole.clear()
+        for name, link in deleted:
+            notify(ObjectRemovedEvent(link, self._links, name))
 
     def __iter__(self):
         return iter(self._links.values())
