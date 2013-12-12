@@ -25,6 +25,7 @@ import transaction
 
 from BTrees import IFBTree
 from BTrees.OOBTree import OOBTree
+from zope.annotation.interfaces import IAnnotations
 from zope.app.generations.utility import getRootFolder
 from zope.component.hooks import getSite, setSite
 from zope.event import notify
@@ -39,10 +40,24 @@ from schooltool.app.catalog import VersionedCatalog
 from schooltool.app.membership import Membership
 from schooltool.app.relationships import Leadership, Instruction
 from schooltool.basicperson.advisor import Advising
+from schooltool.contact.contact import Contactable
+from schooltool.contact.contact import URIContactRelationship
+from schooltool.relationship.relationship import getLinkCatalog
+from schooltool.relationship.relationship import SharedState
 from schooltool.relationship.catalog import LinkCatalog
 from schooltool.relationship.temporal import TemporalURIObject
 from schooltool.relationship.interfaces import IRelationshipLinks
 
+
+PERSON_CONTACT_KEY = 'schooltool.contact.basicperson'
+
+CONTACT_RELATIONSHIPS_MAP = {
+    'parent': ('ap', 'p'),
+    'step_parent': ('ap', 'sp'),
+    'foster_parent': ('ap', 'fp'),
+    'guardian': ('ap', 'g'),
+    'sibling': ('a', 's'),
+}
 
 def addLinkCatalog(app):
     catalogs = app['schooltool.app.catalog:Catalogs']
@@ -223,6 +238,48 @@ def evolveAdvisorRelationships(app):
             Advising.rel_type)
 
 
+def evolveContactRelationships(app):
+    if app['schooltool.schoolyear']:
+        date = min([year.first for year in app['schooltool.schoolyear'].values()])
+    else:
+        date = datetime.datetime.today().date()
+
+    contacts = app['schooltool.contact'].values()
+    for contact in contacts:
+        relationship = Contactable(contact).contacts
+        evolveRelationships(
+            date, contact, relationship.rel_type, relationship.my_role,
+            URIContactRelationship)
+
+    persons = app['persons'].values()
+    for person in persons:
+        annotations = IAnnotations(person)
+        bound = annotations.get(PERSON_CONTACT_KEY, None)
+        if bound is None:
+            continue
+        relationship = Contactable(bound).contacts
+        evolveRelationships(
+            date, bound, relationship.rel_type, relationship.my_role,
+            URIContactRelationship)
+
+    catalog = getLinkCatalog()
+    int_ids = getUtility(IIntIds)
+
+    for rel_type, iids in catalog['rel_type'].values_to_documents.items():
+        if rel_type != URIContactRelationship:
+            continue
+        for iid in iids:
+            link = int_ids.getObject(iid)
+            shared = link.shared_state
+            extra_info = shared['X']
+            if extra_info is None:
+                continue
+            meaning, code = CONTACT_RELATIONSHIPS_MAP.get(
+                extra_info.relationship, ('a', 'a'))
+            link.state.set(date, meaning=meaning, code=code)
+            shared['X'] = None
+
+
 def evolve(context):
     root = getRootFolder(context)
     old_site = getSite()
@@ -248,6 +305,7 @@ def evolve(context):
     evolveResourceRelationships(root)
     evolveAdvisorRelationships(root)
     evolveSectionsRelationships(root)
+    evolveContactRelationships(root)
 
     setSite(old_site)
 
