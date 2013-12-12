@@ -109,20 +109,14 @@ class IContact(IContactPerson, IContactInformation, IAttributeAnnotatable):
     persons = Attribute("Persons attached to this contact (see IRelationshipProperty)")
 
 
-# XXX: naming is becoming confusing.  Rename to IContactRelationshipInfo.
+# BBB
 class IContactPersonInfo(Interface):
-    """Information about a contact - person relationship."""
-
     __parent__ = Attribute("""The person.""")
-
     relationship = zope.schema.Choice(
         title=_(u"Relationship"),
         description=_("Contact's relationship with the person"),
         vocabulary='schooltool.contact.contact.relationship_states',
         required=False)
-
-    def getRelationshipTitle():
-        """Return a title from the vocabulary for the selected relationship."""
 
 
 class IContactContainer(IContainer):

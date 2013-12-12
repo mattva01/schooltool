@@ -40,10 +40,8 @@ from schooltool.app.catalog import VersionedCatalog
 from schooltool.app.membership import Membership
 from schooltool.app.relationships import Leadership, Instruction
 from schooltool.basicperson.advisor import Advising
-from schooltool.contact.contact import Contactable
-from schooltool.contact.contact import URIContactRelationship
+from schooltool.contact.contact import URIContactRelationship, URIContact, URIPerson
 from schooltool.relationship.relationship import getLinkCatalog
-from schooltool.relationship.relationship import SharedState
 from schooltool.relationship.catalog import LinkCatalog
 from schooltool.relationship.temporal import TemporalURIObject
 from schooltool.relationship.interfaces import IRelationshipLinks
@@ -246,9 +244,12 @@ def evolveContactRelationships(app):
 
     contacts = app['schooltool.contact'].values()
     for contact in contacts:
-        relationship = Contactable(contact).contacts
         evolveRelationships(
-            date, contact, relationship.rel_type, relationship.my_role,
+            date, contact, URIContactRelationship, URIPerson,
+            URIContactRelationship)
+        # Also evolve pre gen-31 relationships
+        evolveRelationships(
+            date, contact, URIContact, URIPerson,
             URIContactRelationship)
 
     persons = app['persons'].values()
@@ -257,9 +258,12 @@ def evolveContactRelationships(app):
         bound = annotations.get(PERSON_CONTACT_KEY, None)
         if bound is None:
             continue
-        relationship = Contactable(bound).contacts
         evolveRelationships(
-            date, bound, relationship.rel_type, relationship.my_role,
+            date, bound, URIContactRelationship, URIPerson,
+            URIContactRelationship)
+        # Also evolve pre gen-31 relationships
+        evolveRelationships(
+            date, bound, URIContact, URIPerson,
             URIContactRelationship)
 
     catalog = getLinkCatalog()

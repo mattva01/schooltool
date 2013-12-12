@@ -127,22 +127,11 @@ class Contact(Persistent, Contained):
         return "%s %s" % (self.first_name, self.last_name)
 
 
+# BBB
 class ContactPersonInfo(Persistent, Contained):
-    """Additional information about contact of a specific person."""
-
     implements(IContactPersonInfo)
-
     __parent__ = None
     relationship = None
-
-    def getRelationshipTitle(self):
-        vocabulary = IContactPersonInfo['relationship'].vocabulary
-        try:
-            term = vocabulary.getTerm(self.relationship)
-        except LookupError:
-            return u''
-        return term.title
-
 
 
 class ContextRelationshipProperty(RelationshipProperty):

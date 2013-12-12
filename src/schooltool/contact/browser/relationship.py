@@ -41,9 +41,6 @@ from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContact
 from schooltool.contact.interfaces import IContactContainer
 from schooltool.contact.interfaces import IUniqueFormKey
-from schooltool.contact.contact import URIPerson, URIContact
-from schooltool.contact.contact import URIContactRelationship
-from schooltool.contact.contact import ContactPersonInfo
 from schooltool.contact.browser.contact import ContactTable
 from schooltool.contact.browser.contact import contact_table_columns
 from schooltool.contact.browser.contact import get_relationship_title
