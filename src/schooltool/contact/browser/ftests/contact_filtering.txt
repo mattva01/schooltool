@@ -2,6 +2,8 @@ Filtering of contacts in contact listing views
 ==============================================
 
     >>> browser = Browser('manager', 'schooltool')
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.setUpBasicSchool()
     >>> browser.getLink('Manage').click()
 
 Rename the manager.
