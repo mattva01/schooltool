@@ -209,6 +209,12 @@
       for="schooltool.basicperson.interfaces.IBasicPerson"
       />
 
+  <flourish:page_breadcrumbs
+      show_page_title="false"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      view="schooltool.basicperson.browser.person.FlourishPersonView"
+      />
+
   <flourish:page
       name="index.html"
       for="schooltool.basicperson.interfaces.IBasicPerson"

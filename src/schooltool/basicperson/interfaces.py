@@ -79,6 +79,8 @@ class IBasicPerson(Interface):
 
     advisees = Attribute("""Advisees of the person""")
 
+    levels = Attribute("""Levels of the student""")
+
 
 class IBasicPersonVocabulary(IVocabularyTokenized):
     """Marker interface for vocabularies that list basic persons."""

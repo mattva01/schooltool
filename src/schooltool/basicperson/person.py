@@ -28,15 +28,29 @@ from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.person.person import Person
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.course.section import PersonInstructorsCrowd
+from schooltool.level.level import URILevel
 from schooltool.person.person import PersonCalendarCrowd
 from schooltool.table.catalog import IndexedLocaleAwareGetterColumn
 from schooltool.table.table import url_cell_formatter
 from schooltool.relationship import RelationshipProperty
+from schooltool.relationship import RelationshipSchema
+from schooltool.relationship.temporal import TemporalURIObject
 from schooltool.basicperson.advisor import URIAdvisor, URIAdvising, URIStudent
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.app.catalog import AttributeCatalog
 from schooltool.app.app import StartUpBase
 from schooltool.common import SchoolToolMessage as _
+
+
+URIStudentLevels = TemporalURIObject(
+    'http://schooltool.org/ns/studentlevels',
+    'Student levels',
+    'Levels of the student')
+
+
+StudentLevels = RelationshipSchema(URIStudentLevels,
+                                   student=URIStudent,
+                                   level=URILevel)
 
 
 class BasicPerson(Person):
@@ -65,6 +79,10 @@ class BasicPerson(Person):
     advisees = RelationshipProperty(rel_type=URIAdvising,
                                     my_role=URIAdvisor,
                                     other_role=URIStudent)
+
+    levels = RelationshipProperty(rel_type=URIStudentLevels,
+                                  my_role=URIStudent,
+                                  other_role=URILevel)
 
 
 class PersonFactoryUtility(object):
