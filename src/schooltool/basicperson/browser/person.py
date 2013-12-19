@@ -358,6 +358,9 @@ class FlourishPersonInfo(flourish.page.Content):
 class PersonAddFormBase(PersonForm, form.AddForm):
     """Person add form for basic persons."""
 
+    _groups = None
+    _advisors = None
+
     def update(self):
         self.fields = field.Fields(IPersonAddForm)
         self.fields += self.generateExtraFields()
@@ -378,10 +381,12 @@ class PersonAddFormBase(PersonForm, form.AddForm):
         group = data.pop('group')
         advisor = data.pop('advisor')
         form.applyChanges(self, person, data)
+        self._groups = []
         if group is not None:
-            person.groups.add(group)
+            self._groups.append(group)
+        self._advisors = []
         if advisor is not None:
-            person.advisors.add(advisor)
+            self._advisors.append(advisor)
         self._person = person
         return person
 
@@ -399,6 +404,10 @@ class PersonAddFormBase(PersonForm, form.AddForm):
         """
         name = person.username
         self.context[name] = person
+        for group in self._groups:
+            person.groups.add(group)
+        for advisor in self._advisors:
+            person.advisors.add(advisor)
         return person
 
 
@@ -941,6 +950,8 @@ class PersonAddViewBase(PersonAddFormBase):
         person = self._factory(username, first_name, last_name)
         data.pop('confirm')
         form.applyChanges(self, person, data)
+
+        self._groups = []
         group = None
         syc = ISchoolYearContainer(ISchoolToolApplication(None))
         active_schoolyear = syc.getActiveSchoolYear()
@@ -950,10 +961,13 @@ class PersonAddViewBase(PersonAddFormBase):
             else:
                 group = data.get('group')
         if group is not None:
-            person.groups.add(group)
+            self._groups.append(group)
+
+        self._advisors = []
         advisor = data.get('advisor')
         if advisor is not None:
-            person.advisors.add(advisor)
+            self._advisors.append(advisor)
+
         self._person = person
         return person
 
