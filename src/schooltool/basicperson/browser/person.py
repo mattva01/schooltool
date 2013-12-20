@@ -324,8 +324,9 @@ class FlourishPersonView(flourish.page.Page):
         levels = self.context.levels
         for level in levels.on(self.request.util.today).any(ACTIVE):
             result.append(level)
-        level = ', '.join([level.title for level in levels])
-        return _('Grade Level: ${level}', mapping={'level': level})
+        if result:
+            level = ', '.join([level.title for level in levels])
+            return '(%s)' % level
 
 
 class FlourishPersonInfo(flourish.page.Content):
