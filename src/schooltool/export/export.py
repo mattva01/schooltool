@@ -82,13 +82,19 @@ class ExcelExportView(ProgressReportPage):
         response.setHeader('Content-Type', 'application/vnd.ms-excel')
         response.setHeader('Content-Length', len(data))
 
-    def listIds(self, header, items, ws, offset, last=False):
+    def listRelationships(self, header, relationships, ws, offset, last=False):
+        items = sorted(relationships.all(), key=lambda i: i.__name__)
         if not items:
             return offset - 1
         self.write_header(ws, offset + 1, 0,  header, merge=1)
-        for n, item in enumerate(sorted(items, key=lambda i: i.__name__)):
+        for n, item in enumerate(items):
             self.write(ws, offset + 2 + n, 0,  item.__name__)
             self.write(ws, offset + 2 + n, 1,  "")
+            state = relationships.state(item)
+            for x, (date, meaning, code) in enumerate(state):
+                self.write(ws, offset + 2 + n, 2+x*2,
+                           Date(date))
+                self.write(ws, offset + 2 + n, 2+x*2+1, code)
         return 1 + offset + len(items)
 
     def skipRow(self, ws, offset):
@@ -113,12 +119,15 @@ class ExcelExportView(ProgressReportPage):
             self._font_cache[font_key] = font = self._makeFont(font_key)
         return font
 
-    def write(self, ws, row, col, data,
-              bold=False,
-              color=None,
-              format_str=None,
-              borders=None,
-              merge=None):
+    def write(self, ws, row, col, data, **kw):
+        if isinstance(data, Text):
+            kw.update(data.style)
+            data = data.data
+        bold = kw.get('bold', False)
+        color = kw.get('color', None)
+        format_str = kw.get('format_str', None)
+        borders = kw.get('borders', None)
+        merge = kw.get('merge', None)
         if borders is None:
             borders = []
         if data is None:
@@ -255,7 +264,10 @@ class Text(object):
         self.data = data
 
     def __cmp__(self, other):
-        return cmp(self.data, other.data)
+        try:
+            return cmp(self.data, other.data)
+        except TypeError:
+            return cmp(unicode(self.data), unicode(other.data))
 
     def __repr__(self):
         return 'Text(%r)' % self.data
@@ -289,11 +301,14 @@ class MegaExporter(SchoolTimetableExportView):
 
     overall_line_id = 'overall'
 
-    def print_table(self, table, ws):
-        for x, row in enumerate(table):
-            for y, cell in enumerate(row):
-                self.write(ws, x, y, cell.data, **cell.style)
+    def print_table(self, table, ws, row=0, col=0):
+        for y, cells in enumerate(table):
+            self.print_row(cells, ws, row=(row+y), col=col)
         return len(table)
+
+    def print_row(self, cells, ws, row=0, col=0):
+        for x, cell in enumerate(cells):
+            self.write(ws, row, col+x, cell.data, **cell.style)
 
     def format_table(self, fields, items, importer=None, major_progress=()):
         headers = [Header(header)
@@ -505,32 +520,40 @@ class MegaExporter(SchoolTimetableExportView):
         return self.format_table(fields, items, importer='export_contacts',
                                  major_progress=(0,2))
 
+    def format_person_contacts(self, person, major_progress=()):
+        contacts = IContactable(person).contacts
+        rows = []
+        for contact in contacts.all():
+            row = []
+            row.append(Text(person.username))
+            target_person = IBasicPerson(contact.__parent__, None)
+            if target_person is None:
+                row.append(Text(contact.__name__))
+            else:
+                row.append(Text(target_person.username))
+
+            state = contacts.state(contact)
+            for x, (date, meaning, code) in enumerate(state):
+                row.append(Date(date))
+                row.append(Text(code))
+            rows.append(row)
+        return rows
+
     def format_contact_relationships(self):
-        fields = [('Person ID', Text, attrgetter('person')),
-                  ('Contact ID', Text, attrgetter('contact')),
-                  ('Relationship', Text, attrgetter('relationship'))]
-
-        items = []
-        for person in self.context['persons'].values():
+        rows = []
+        persons = self.context['persons']
+        total = len(persons)
+        for nperson, person in enumerate(persons.values()):
             person = removeSecurityProxy(person)
-            for contact in IContactable(person).contacts:
-                try:
-                    links = IRelationshipLinks(person)
-                    link = links.find(
-                        URIPerson, contact, URIContact, URIContactRelationship)
-                except ValueError:
-                    continue
-                target_person = IBasicPerson(contact.__parent__, None)
-                if target_person is None:
-                    name = contact.__name__
-                else:
-                    name = target_person.username
-                item = ContactRelationship(person.username,
-                    name, link.extra_info.relationship)
-                items.append(item)
+            person_rows = self.format_person_contacts(
+                person, major_progress=(1, 2, nperson, total))
+            rows.extend(person_rows)
+        rows.sort()
 
-        return self.format_table(fields, items, importer='export_contacts',
-                                 major_progress=(1,2))
+        headers = [Header('Person ID'), Header('Contact ID'), Header('Relationship')]
+        rows.insert(0, headers)
+
+        return rows
 
     def export_contacts(self, wb):
         self.task_progress.force('export_contacts', active=True)
@@ -605,7 +628,6 @@ class MegaExporter(SchoolTimetableExportView):
         return offset
 
     def format_section(self, year, courses, term, section, ws, row):
-        teachers = [t.__name__ for t in section.instructors]
         resources = [r.__name__ for r in section.resources]
         self.write(ws, row, 0, year.__name__)
         self.write(ws, row, 1, courses)
@@ -618,15 +640,14 @@ class MegaExporter(SchoolTimetableExportView):
         self.write(ws, row, 6, section.title)
         if section.description:
             self.write(ws, row, 7, section.description)
-        self.write(ws, row, 8, ', '.join(teachers))
-        self.write(ws, row, 9, ', '.join(resources))
+        self.write(ws, row, 8, ', '.join(resources))
 
     def export_sections(self, wb):
         self.task_progress.force('export_sections', active=True)
         ws = wb.add_sheet("Sections")
         headers = ["School Year", "Courses", "Term", "Section ID",
                    "Previous ID", "Next ID", "Title", "Description",
-                   "Instructors", "Resources"]
+                   "Resources"]
         for index, header in enumerate(headers):
             self.write_header(ws, 0, index, header)
 
@@ -650,63 +671,64 @@ class MegaExporter(SchoolTimetableExportView):
             row += 1
         self.finish('export_sections')
 
-    def format_student_sections(self, year, student_sections, ws, row):
-        headers = ["School Year", "Term", "Section ID"]
-        for index, header in enumerate(headers):
-            self.write_header(ws, row, index, header)
-        row += 1
+    def format_membership_block(self, relationship, headers):
+        items = sorted(relationship.all(),
+                       key=lambda item: item.__name__)
+        if not items:
+            return []
+        table = [headers]
+        for item in items:
+            cells = [Text(item.__name__), Text('')]
+            state = relationship.state(item)
+            for x, (date, meaning, code) in enumerate(state):
+                cells.append(Date(date))
+                cells.append(Text(code))
+            table.append(cells)
+        table.append([])
+        return table
 
-        for first, term, section_id, section in sorted(student_sections):
-            self.write(ws, row, 0, year.__name__)
-            self.write(ws, row, 1, term.__name__)
-            self.write(ws, row, 2, section.__name__)
-            row += 1
-        return row + 1
+    def export_section_enrollment(self, ws, year, term, section, row=0):
+        row += self.print_table([
+            [Header('School Year'), Header('Term'), Header('Section ID')],
+            [Text(year.__name__), Text(term.__name__), Text(section.__name__)],
+            [],
+            ], ws, row=row)
 
-    def format_students_block(self, students, ws, row):
-        self.write_header(ws, row, 0, "Students")
-        row += 1
+        row += self.print_table(
+            self.format_membership_block(section.instructors, [Header('Instructors')]),
+            ws, row=row, col=0)
 
-        for student in students.split(','):
-            self.write(ws, row, 0, student)
-            row += 1
-        return row + 1
+        row += self.print_table(
+            self.format_membership_block(section.members, [Header('Students')]),
+            ws, row=row, col=0)
 
-    def export_section_enrollment(self, wb):
-        self.task_progress.force('export_section_enrollment', active=True)
+        return row
+
+    def export_sections_enrollment(self, wb):
+        self.task_progress.force('export_sections_enrollment', active=True)
         ws = wb.add_sheet("SectionEnrollment")
 
-        year_sections = {}
-        years = ISchoolYearContainer(self.context)
-        for ny, year in enumerate(years.values()):
-            sections = year_sections[year] = {}
-            for nt, term in enumerate(year.values()):
-                term_sections = ISectionContainer(term)
-                for ns, section in enumerate(term_sections.values()):
-                    if not list(section.courses):
-                        continue
-                    student_ids = [s.username for s in section.members]
-                    students = ','.join(sorted(student_ids))
-                    student_sections = sections.setdefault(students, [])
-                    student_sections.append((term.first, term, section.__name__,
-                                             section))
-                    self.progress('export_section_enrollment', normalized_progress(
-                        ny, len(years),
-                        nt, len(year),
-                        ns, len(term_sections),
-                        ) * 0.9)
-
         row = 0
-        for ny, (year, sections) in enumerate(sorted(year_sections.items())):
-            for ns, (students, student_sections) in enumerate(sorted(sections.items())):
-                row = self.format_student_sections(year, student_sections, ws,
-                                                   row)
-                row = self.format_students_block(students, ws, row)
-                self.progress('export_section_enrollment', normalized_progress(
-                        ny, len(year_sections),
-                        ns, len(sections),
-                        ) * 0.1 + 0.9)
-        self.finish('export_section_enrollment')
+        years = ISchoolYearContainer(self.context)
+        total_years = len(years)
+        for ny, year in enumerate(sorted(years.values(), key=lambda year: year.first)):
+            total_terms = len(year)
+            for nt, term in enumerate(sorted(year.values(), key=lambda term: term.first)):
+                sections = ISectionContainer(term)
+                total_sections = len(sections)
+                for ns, section in enumerate(sorted(sections.values(),
+                                                    key=lambda section: section.__name__)):
+                    row = self.export_section_enrollment(
+                        ws, year, term, section, row=row)
+                    self.progress(
+                        'export_sections_enrollment',
+                        normalized_progress(
+                            ny, total_years,
+                            nt, total_terms,
+                            ns, total_sections,
+                            ))
+
+        self.finish('export_sections_enrollment')
 
     def format_timetable_sections(self, year, timetable_sections, ws, row):
         headers = ["School Year", "Term", "Section ID"]
@@ -791,9 +813,18 @@ class MegaExporter(SchoolTimetableExportView):
                   lambda i: ("Description", i.description, None)]
 
         offset = self.listFields(group, fields, ws, offset)
-        offset = self.listIds("Members", group.members, ws, offset) + 1
-        offset = self.listIds("Leaders", IAsset(group).leaders, ws, offset,
-                              last=True) + 1
+
+        offset += self.print_table(
+            self.format_membership_block(group.members, [Header('Members')]),
+            ws, row=offset, col=0)
+
+        offset += 1
+
+        leaders = IAsset(group).leaders
+        offset += self.print_table(
+            self.format_membership_block(leaders, [Header('Leaders')]),
+            ws, row=offset, col=0)
+
         return offset
 
     def export_groups(self, wb):
@@ -831,7 +862,7 @@ class MegaExporter(SchoolTimetableExportView):
                      title=_('Courses'), progress=0.0)
         progress.add('export_sections', active=False,
                      title=_('Sections'), progress=0.0)
-        progress.add('export_section_enrollment', active=False,
+        progress.add('export_sections_enrollment', active=False,
                      title=_('Section Enrollment'), progress=0.0)
         progress.add('export_section_timetables', active=False,
                      title=_('Section Schedules'), progress=0.0)
@@ -865,7 +896,7 @@ class MegaExporter(SchoolTimetableExportView):
         self.export_contacts(wb)
         self.export_courses(wb)
         self.export_sections(wb)
-        self.export_section_enrollment(wb)
+        self.export_sections_enrollment(wb)
         self.export_section_timetables(wb)
         self.export_groups(wb)
         self.task_progress.title = _("Export complete")

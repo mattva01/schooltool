@@ -46,6 +46,7 @@ from schooltool.basicperson.person import BasicPerson
 from schooltool.contact.contact import Contact, ContactPersonInfo
 from schooltool.contact.interfaces import IContact, IContactContainer
 from schooltool.contact.interfaces import IContactPersonInfo, IContactable
+from schooltool.contact.contact import getAppContactStates
 from schooltool.export.interfaces import IImporterTask
 from schooltool.resource.resource import Resource
 from schooltool.resource.resource import Location
@@ -56,6 +57,7 @@ from schooltool.term.interfaces import ITerm
 from schooltool.term.term import Term, getNextTerm, getPreviousTerm
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.interfaces import IRelationshipStateContainer
 from schooltool.app.app import SimpleNameChooser
 from schooltool.schoolyear.schoolyear import SchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYear
@@ -118,7 +120,7 @@ ERROR_INVALID_CONTACT_ID = _('is not a valid username or contact id')
 ERROR_UNWANTED_CONTACT_DATA = _('must be empty when ID is a user id')
 ERROR_INVALID_RESOURCE_ID = _('is not a valid resource id')
 ERROR_UNICODE_CONVERSION = _("Username cannot contain non-ascii characters")
-ERROR_CONTACT_RELATIONSHIP = _("is not a valid contact relationship")
+ERROR_RELATIONSHIP_CODE = _("is not a valid relationship code")
 ERROR_NOT_BOOLEAN = _("must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all valid)")
 ERROR_MISSING_YEAR_ID = _("must have a school year")
 ERROR_MISSING_COURSES = _("must have a course")
@@ -252,6 +254,34 @@ class ImporterBase(object):
                 value = default
         return value, found, valid
 
+    def iterRelationships(self, sheet, row, startcol):
+        col = startcol
+        while True:
+            raw_date = None
+            try:
+                raw_date = sheet.cell_value(rowx=row, colx=col)
+            except IndexError:
+                raw_date = None
+            if not raw_date:
+                break
+
+            try:
+                date_tuple = xlrd.xldate_as_tuple(raw_date, self.wb.datemode)
+                date = datetime.datetime(*date_tuple).date()
+            except ValueError:
+                self.error(row, col, ERROR_NO_DATE)
+                continue
+
+            code_text = sheet.cell_value(rowx=row, colx=col+1)
+            try:
+                code_text = unicode(code_text)
+            except UnicodeError:
+                self.error(row, col, ERROR_NOT_UNICODE_OR_ASCII)
+
+            yield date, code_text
+
+            col += 2
+
     def getTextFromCell(self, sheet, row, col, default=u''):
         value, found, valid = self.getTextFoundValid(sheet, row, col, default)
         return value
@@ -371,14 +401,14 @@ class ImporterBase(object):
             section = sc[data['__name__']]
             section.title = data['title']
             section.description = data['description']
-            for course in section.courses:
-                section.courses.remove(course)
-            for resource in section.resources:
-                section.resources.remove(resource)
-            for student in section.members:
-                section.members.remove(student)
-            for teacher in section.instructors:
-                section.instructors.remove(teacher)
+            for course in list(section.courses):
+                section.courses.remove(removeSecurityProxy(course))
+            for resource in list(section.resources):
+                section.resources.remove(removeSecurityProxy(resource))
+            for student in list(section.members):
+                section.members.all().unrelate(removeSecurityProxy(student))
+            for teacher in list(section.instructors):
+                section.instructors.all().unrelate(removeSecurityProxy(teacher))
         else:
             section = Section(data['title'], data['description'])
             section.__name__ = data['__name__']
@@ -386,6 +416,18 @@ class ImporterBase(object):
         for course in courses:
             section.courses.add(removeSecurityProxy(course))
         return section
+
+    def updateRelationships(self, relationship, target, app_states, codes):
+        target = removeSecurityProxy(target)
+        existing = relationship.state(target)
+        if existing is not None:
+            for date, _m, _c in list(existing):
+                if date not in codes:
+                    del existing[date]
+        for rel_date, rel_code in codes.items():
+            rel_meaning = app_states.states.get(rel_code).active
+            relationship.on(rel_date).relate(
+                target, meaning=rel_meaning, code=rel_code)
 
 
 class SchoolYearImporter(ImporterBase):
@@ -1032,9 +1074,10 @@ class ContactRelationshipImporter(ImporterBase):
     def process(self):
         sh = self.sheet
         app = ISchoolToolApplication(None)
+        app_states = getAppContactStates()
+        app_codes = list(app_states.states)
         persons = app['persons']
         contacts = IContactContainer(app)
-        vocab = IContactPersonInfo['relationship'].vocabulary
         nrows = sh.nrows
         for row in range(1, nrows):
             if self.isEmptyRow(sh, row):
@@ -1064,18 +1107,16 @@ class ContactRelationshipImporter(ImporterBase):
                 else:
                     self.error(row, 1, ERROR_INVALID_CONTACT_ID)
 
-            data['relationship'] = self.getTextFromCell(sh, row, 2)
-            relationship = data['relationship']
-            if relationship and relationship not in vocab:
-                self.error(row, 2, ERROR_CONTACT_RELATIONSHIP)
+            relationships = {}
+            for rel_date, rel_code in self.iterRelationships(sh, row, 2):
+                if rel_code not in app_codes:
+                    self.error(row, 2, ERROR_RELATIONSHIP_CODE)
+                else:
+                    relationships[rel_date] = rel_code
 
             if num_errors == len(self.errors):
-                info = ContactPersonInfo()
-                info.__parent__ = person
-                if relationship:
-                    info.relationship = relationship
-                if contact not in IContactable(person).contacts:
-                    IContactable(person).contacts.add(contact, info)
+                self.updateRelationships(
+                    IContactable(person).contacts, contact, app_states, relationships)
             self.progress(row, nrows)
 
 
@@ -1404,7 +1445,6 @@ class SectionsImporter(ImporterBase):
     def process(self):
         sh = self.sheet
         schoolyears = ISchoolYearContainer(self.context)
-        persons = self.context['persons']
         resources = self.context['resources']
         prev_links, next_links = {}, {}
 
@@ -1423,19 +1463,13 @@ class SectionsImporter(ImporterBase):
             data['link_next'] = self.getIdFromCell(sh, row, 5)
             data['title'] = self.getRequiredTextFromCell(sh, row, 6)
             data['description'] = self.getTextFromCell(sh, row, 7)
-            data['instructors'] = self.getIdsFromCell(sh, row, 8)
-            data['resources'] = self.getIdsFromCell(sh, row, 9)
+            data['resources'] = self.getIdsFromCell(sh, row, 8)
             if num_errors < len(self.errors):
                 continue
 
-            for person_id in data['instructors']:
-                if person_id not in persons:
-                    self.error(row, 8, ERROR_INVALID_PERSON_ID_LIST)
-                    break
-
             for resource_id in data['resources']:
                 if resource_id not in resources:
-                    self.error(row, 9, ERROR_INVALID_RESOURCE_ID_LIST)
+                    self.error(row, 8, ERROR_INVALID_RESOURCE_ID_LIST)
                     break
 
             if data['year'] not in schoolyears:
@@ -1443,7 +1477,6 @@ class SectionsImporter(ImporterBase):
                 continue
 
             year = schoolyears[data['year']]
-            teachers = self.ensure_teachers_group(year)
             course_container = ICourseContainer(year)
 
             courses = []
@@ -1469,13 +1502,6 @@ class SectionsImporter(ImporterBase):
 
             if data['link_next']:
                 next_links[row] = (section, data['link_next'])
-
-            for person_id in data['instructors']:
-                teacher = persons[person_id]
-                if teacher not in section.instructors:
-                    section.instructors.add(removeSecurityProxy(teacher))
-                if teacher not in teachers.members:
-                    teachers.members.add(removeSecurityProxy(teacher))
 
             for resource_id in data['resources']:
                 resource = resources[resource_id]
@@ -1537,32 +1563,56 @@ class SectionEnrollmentImporter(ImporterBase, SectionMixin):
 
     sheet_name = 'SectionEnrollment'
 
-    def get_students(self, sh, row):
+    @Lazy
+    def student_app_states(self):
+        app = ISchoolToolApplication(None)
+        container = IRelationshipStateContainer(app)
+        app_states = container['section-membership']
+        return app_states
+
+    @Lazy
+    def instructor_app_states(self):
+        app = ISchoolToolApplication(None)
+        container = IRelationshipStateContainer(app)
+        app_states = container['section-instruction']
+        return app_states
+
+    def get_persons(self, sh, row, header, app_states):
+        app_codes = list(app_states.states)
         persons = self.context['persons']
         for row in range(row + 1, sh.nrows):
-            if sh.cell_value(rowx=row, colx=0) == 'Students':
+            if sh.cell_value(rowx=row, colx=0) == header:
                 break
         else:
             return []
 
-        students = []
+        result = []
         nrows = sh.nrows
         for row in range(row + 1, nrows):
             if self.isEmptyRow(sh, row):
                 break
 
-            student_id = self.getRequiredIdFromCell(sh, row, 0)
-            if student_id is None:
+            person_id = self.getRequiredIdFromCell(sh, row, 0)
+            if person_id is None:
                 continue
 
-            if student_id not in persons:
+            if person_id not in persons:
                 self.error(row, 0, ERROR_INVALID_PERSON_ID)
-            else:
-                students.append(persons[student_id])
+                self.progress(row, nrows)
+                continue
+
+            relationships = {}
+            for rel_date, rel_code in self.iterRelationships(sh, row, 2):
+                if rel_code not in app_codes:
+                    self.error(row, 2, ERROR_RELATIONSHIP_CODE)
+                else:
+                    relationships[rel_date] = rel_code
+
+            result.append((persons[person_id], relationships))
 
             self.progress(row, nrows)
 
-        return students
+        return result
 
     def process(self):
         sh = self.sheet
@@ -1573,21 +1623,38 @@ class SectionEnrollmentImporter(ImporterBase, SectionMixin):
 
             num_errors = len(self.errors)
             sections = self.get_sections(sh, row)
-            students = self.get_students(sh, row)
+
+            instructors = self.get_persons(
+                sh, row, 'Instructors', self.instructor_app_states)
+            students = self.get_persons(
+                sh, row, 'Students', self.student_app_states)
             if num_errors < len(self.errors):
                 continue
             if not sections or not students:
                 continue
 
             year = ISchoolYear(sections[0])
+
             students_group = self.ensure_students_group(year)
+            all_student_members = students_group.members.all()
+            student_states = self.student_app_states
+
+            teachers_group = self.ensure_teachers_group(year)
+            instructor_states = self.instructor_app_states
+            all_teacher_members = teachers_group.members.all()
 
             for section in sections:
-                for student in students:
-                    if student not in section.members:
-                        section.members.add(removeSecurityProxy(student))
-                    if student not in students_group.members:
+                for student, codes in students:
+                    self.updateRelationships(
+                        section.members, student, student_states, codes)
+                    if student not in all_student_members:
                         students_group.members.add(removeSecurityProxy(student))
+
+                for instructor, codes in instructors:
+                    self.updateRelationships(
+                        section.instructors, instructor, instructor_states, codes)
+                    if instructor not in all_teacher_members:
+                        teachers_group.members.add(removeSecurityProxy(instructor))
 
             self.progress(row, nrows)
 
@@ -1831,6 +1898,13 @@ class GroupImporter(ImporterBase):
         if group.__name__ not in gc:
             gc[group.__name__] = group
 
+    @Lazy
+    def group_app_states(self):
+        app = ISchoolToolApplication(None)
+        container = IRelationshipStateContainer(app)
+        app_states = container['group-membership']
+        return app_states
+
     def import_group(self, sh, row):
         num_errors = len(self.errors)
         data = {}
@@ -1849,7 +1923,9 @@ class GroupImporter(ImporterBase):
         self.progress(row, sh.nrows)
 
         row += 5
-        pc = self.context['persons']
+
+        app_states = self.group_app_states
+        persons = self.context['persons']
         if self.getCellValue(sh, row, 0, '') == 'Members':
             row += 1
             nrows = sh.nrows
@@ -1857,15 +1933,26 @@ class GroupImporter(ImporterBase):
                 if self.isEmptyRow(sh, row):
                     break
                 num_errors = len(self.errors)
+
                 username = self.getRequiredIdFromCell(sh, row, 0)
                 if num_errors < len(self.errors):
                     continue
-                if username not in pc:
+                if username not in persons:
                     self.error(row, 0, ERROR_INVALID_PERSON_ID)
                     continue
-                member = pc[username]
-                if member not in group.members:
-                    group.members.add(removeSecurityProxy(member))
+                member = persons[username]
+
+                relationships = {}
+                for rel_date, rel_code in self.iterRelationships(sh, row, 2):
+                    if rel_code not in app_codes:
+                        self.error(row, 2, ERROR_RELATIONSHIP_CODE)
+                    else:
+                        relationships[rel_date] = rel_code
+
+                self.updateRelationships(
+                    group.members, removeSecurityProxy(member),
+                    app_states, relationships)
+
                 self.progress(row, nrows)
 
     def process(self):
