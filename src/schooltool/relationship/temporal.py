@@ -18,7 +18,9 @@
 
 import datetime
 
+from persistent import Persistent
 from zope.component import queryUtility
+from zope.container.contained import Contained
 
 from schooltool.term.interfaces import IDateManager
 from schooltool.relationship.interfaces import IRelationshipLinks
@@ -45,6 +47,11 @@ class TemporalStateAccessor(object):
         for date, (meaning, code) in reversed(all):
             yield date, meaning, code
 
+    def __delitem__(self, date):
+        data = dict(self.state['tmp'])
+        del data[date]
+        self.state['tmp'] = tuple(sorted(data.items(), reverse=True))
+
     def all(self):
         return list(self)
 
@@ -52,6 +59,15 @@ class TemporalStateAccessor(object):
         data = dict(self.state['tmp'])
         data[date] = meaning, code
         self.state['tmp'] = tuple(sorted(data.items(), reverse=True))
+
+    def closest(self, date):
+        data = self.state['tmp']
+        if not data:
+            return ACTIVE, ACTIVE_CODE
+        for sd, result in data:
+            if sd <= date:
+                return sd
+        return None
 
     def get(self, date):
         data = self.state['tmp']
@@ -226,6 +242,29 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
             link = links.find(self.my_role, other, self.other_role, self.rel_type)
         link.state.set(self.filter_date, meaning=meaning, code=code)
 
+    def unrelate(self, other):
+        """Delete state on filtered date or unrelate completely if
+        no states left or filtered date is .all()
+        """
+        links = IRelationshipLinks(self.this)
+        link = links.find(self.my_role, other, self.other_role, self.rel_type)
+        if self.filter_date is None:
+            unrelate(self.rel_type,
+                     (self.this, self.my_role),
+                     (other, self.other_role))
+            return
+        state = link.state
+        date = state.closest(self.filter_date)
+        if date is None:
+            raise KeyError(self.filter_date)
+        del state[date]
+        try:
+            iter(state).next()
+        except StopIteration:
+            unrelate(self.rel_type,
+                     (self.this, self.my_role),
+                     (other, self.other_role))
+
     def add(self, other, code=ACTIVE_CODE):
         self.relate(other, meaning=ACTIVE, code=code)
 
@@ -240,12 +279,12 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
             return None
         return link.state
 
-    def unrelate(self, other):
-        unrelate(self.rel_type, (self.this, self.my_role),
-                                (other, self.other_role))
-
 
 class TemporalURIObject(URIObject):
+
+    def persist(self):
+        return PersistentTemporalURIObject(
+            self, self._uri, name=self._name, description=self._description)
 
     def access(self, state):
         return TemporalStateAccessor(state)
@@ -267,6 +306,12 @@ class TemporalURIObject(URIObject):
             state = self.access(link.shared_state)
             return state.has(date=today, meanings=ACTIVE)
         return filter
+
+
+class PersistentTemporalURIObject(Persistent, Contained, TemporalURIObject):
+
+    __name__ = None
+    __parent__ = None
 
 
 def shareTemporalState(event):

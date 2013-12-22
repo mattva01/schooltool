@@ -4,6 +4,7 @@ from zope.container.contained import Contained
 import zope.catalog.interfaces
 from BTrees.OOBTree import OOBTree
 from zope.interface import implements
+from zope.container.btree import BTreeContainer
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 from zope.intid import addIntIdSubscriber
@@ -11,7 +12,9 @@ from zope.lifecycleevent import ObjectAddedEvent
 from zope.keyreference.interfaces import IKeyReference
 from zope.security.proxy import removeSecurityProxy
 from schooltool.relationship.interfaces import IRelationshipLink
+from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.catalog import AttributeCatalog
+from schooltool.app.app import StartUpBase
 from schooltool.table.catalog import ConvertingIndex
 
 
@@ -25,7 +28,7 @@ def link_this_keyref(link):
 
 
 def hash_this_target(link):
-    return link_target_keyref(link), hash(link_this_keyref)
+    return link_target_keyref(link), hash(link_this_keyref(link))
 
 
 def hash_this_my_role(link):
@@ -38,6 +41,13 @@ def hash_this_role(link):
 
 def hash_this_rel_type(link):
     return hash(link.rel_type), hash(link_this_keyref(link))
+
+
+def cache_rel_type(link):
+    app = ISchoolToolApplication(None)
+    uris = app['schooltool.relationship.uri']
+    cached = uris.cache(link.rel_type)
+    return cached
 
 
 def get_link_shared_uid(link):
@@ -96,11 +106,29 @@ class SharedIndex(Persistent, Contained):
         raise NotImplemented('querying this index is not supported')
 
 
+class URICache(BTreeContainer):
+
+    def cache(self, uri):
+        hashed = str(hash(uri))
+        if hashed not in self:
+            self[hashed] = uri
+        return hashed
+
+
+class URICacheStartUp(StartUpBase):
+
+    before = ('prepare-catalog-container', )
+
+    def __call__(self):
+        if 'schooltool.relationship.uri' not in self.app:
+            self.app['schooltool.relationship.uri'] = URICache()
+
+
 class LinkCatalog(AttributeCatalog):
 
-    version = '1.0 - initial'
+    version = '1.1 - uri cache'
     interface = IRelationshipLink
-    attributes = ('rel_type', )
+    attributes = ()
 
     def setIndexes(self, catalog):
         super(LinkCatalog, self).setIndexes(catalog)

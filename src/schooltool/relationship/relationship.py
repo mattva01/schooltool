@@ -84,6 +84,10 @@ def relate(rel_type, (a, role_of_a), (b, role_of_b), extra_info=None):
                                               (a, role_of_a),
                                               (b, role_of_b),
                                               shared))
+    uri_cache = getURICache()
+    uri_cache.cache(rel_type)
+    uri_cache.cache(role_of_a)
+    uri_cache.cache(role_of_b)
     link_a = Link(role_of_a, b, role_of_b, rel_type, shared)
     IRelationshipLinks(a).add(link_a)
     link_b = Link(role_of_b, a, role_of_a, rel_type, shared)
@@ -769,7 +773,9 @@ class CLink(object):
 
     @property
     def rel_type(self):
-        return self.catalog['rel_type'].documents_to_values[self.lid]
+        cache = getURICache()
+        hashed = self.catalog['rel_type_hash'].documents_to_values[self.lid][0]
+        return cache[str(hashed)]
 
     @property
     def target(self):
@@ -794,6 +800,12 @@ def getLinkCatalog():
     catalogs = app['schooltool.app.catalog:Catalogs']
     versioned = catalogs['catalog:schooltool.relationship.catalog.LinkCatalog']
     return versioned.catalog
+
+
+def getURICache():
+    # XXX: hard-coded for speed
+    app = getSite()
+    return app['schooltool.relationship.uri']
 
 
 class LinkSet(Persistent, Contained):

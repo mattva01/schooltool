@@ -238,6 +238,24 @@
        />
   </class>
 
+  <class class="schooltool.relationship.uri.PersistentURIObject">
+    <allow
+       interface="schooltool.relationship.uri.IURIObject"
+       />
+  </class>
+
+  <class class="schooltool.relationship.temporal.TemporalURIObject">
+    <allow
+       interface="schooltool.relationship.uri.IURIObject"
+       />
+  </class>
+
+  <class class="schooltool.relationship.temporal.PersistentTemporalURIObject">
+    <allow
+       interface="schooltool.relationship.uri.IURIObject"
+       />
+  </class>
+
   <!-- Views -->
 
   <include package=".browser" />

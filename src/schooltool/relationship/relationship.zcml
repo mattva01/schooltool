@@ -8,7 +8,6 @@
     <allow attributes="__iter__ __contains__ int_ids relationships" />
   </class>
 
-
   <class
       class="schooltool.relationship.temporal.BoundTemporalRelationshipProperty">
     <allow attributes="__iter__ __contains__ int_ids relationships any on all state states" />
@@ -58,5 +57,20 @@
       for="schooltool.relationship.interfaces.IRelationshipLinks"
       factory=".catalog.getLinkCatalog"
       provides="zope.catalog.interfaces.ICatalog" />
+
+  <adapter
+      factory=".catalog.URICacheStartUp"
+      provides="schooltool.app.interfaces.IPluginInit"
+      name="schooltool.relationship.uri" />
+
+  <adapter
+      factory=".catalog.URICacheStartUp"
+      provides="schooltool.app.interfaces.IPluginStartUp"
+      name="schooltool.relationship.uri" />
+
+  <class
+      class="schooltool.relationship.catalog.URICache">
+    <allow attributes="cache" />
+  </class>
 
 </configure>
