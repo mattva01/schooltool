@@ -2,6 +2,12 @@
 CHANGES
 =======
 
+2.7.0 (unreleased)
+------------------
+
+- Switch to CKEditor (https://bugs.launchpad.net/bugs/485898)
+
+
 2.6.2 (unreleased)
 ------------------
 
