@@ -101,7 +101,7 @@ class CustomDateDataConverter(BaseDataConverter):
         return value
 
 
-class IFCKConfig(Interface):
+class ICkeditorConfig(Interface):
 
     width = zope.schema.Int(
         title=u"Width",
@@ -117,12 +117,12 @@ class IFCKConfig(Interface):
 
     path = zope.schema.TextLine(
         title=u"Relative configuration path",
-        description=u"Path to the FCKconfiguration javascript file.")
+        description=u"Path to the CKEditor configuration javascript file.")
 
 
-class FCKConfig(object):
-    """Configuration of the FCK editor widget."""
-    implements(IFCKConfig)
+class CkeditorConfig(object):
+    """Configuration of the CKEditor widget."""
+    implements(ICkeditorConfig)
 
     toolbar = u"schooltool"
     path = u"/@@/editor_config.js"
@@ -139,17 +139,17 @@ class FCKConfig(object):
             self.toolbar, self.path)
 
 
-class IFckeditorWidget(z3c.form.interfaces.IWidget):
+class ICkeditorWidget(z3c.form.interfaces.IWidget):
 
     config = zope.schema.Object(
         title=u"Configuration",
         description=u"CKeditor configuration.",
-        schema=IFCKConfig)
+        schema=ICkeditorConfig)
 
 
-class FckeditorWidgetBase(object):
+class CkeditorWidgetBase(object):
 
-    config = None # IFCKConfig
+    config = None # ICkeditorConfig
 
     @property
     def editor_var_name(self):
@@ -165,8 +165,7 @@ class FckeditorWidgetBase(object):
         config = self.config
 
         app_url = absoluteURL(ISchoolToolApplication(None), self.request)
-        fck_config_path = '%s%s' % (
-            app_url, config.path)
+        config_path = '%s%s' % (app_url, config.path)
 
         # XXX: using some values that may be not JS safe
         return '''
@@ -185,16 +184,16 @@ class FckeditorWidgetBase(object):
             'width': config.width,
             'height': config.height,
             'toolbar': config.toolbar,
-            'customConfigPath': fck_config_path,
+            'customConfigPath': config_path,
             }
 
 
-class FckeditorFormlibWidget(zope.app.form.browser.TextAreaWidget,
-                             FckeditorWidgetBase):
+class CkeditorFormlibWidget(zope.app.form.browser.TextAreaWidget,
+                             CkeditorWidgetBase):
 
     def __init__(self, *args, **kw):
         zope.app.form.browser.TextAreaWidget.__init__(self, *args, **kw)
-        self.config = FCKConfig()
+        self.config = CkeditorConfig()
 
     @property
     def editor_var_name(self):
@@ -227,11 +226,11 @@ class HTMLFragmentWidget(object):
     id = FieldProperty(IHTMLFragmentWidget['id'])
 
 
-class FckeditorZ3CFormWidget(TextAreaWidget,
+class CkeditorZ3CFormWidget(TextAreaWidget,
                              HTMLFragmentWidget,
-                             FckeditorWidgetBase):
-    """FCK editor z3c.form widget implementation."""
-    implementsOnly(IFckeditorWidget)
+                             CkeditorWidgetBase):
+    """CKEditor z3c.form widget implementation."""
+    implementsOnly(ICkeditorWidget)
 
     config = None
     value = u''
@@ -241,39 +240,39 @@ class FckeditorZ3CFormWidget(TextAreaWidget,
 
 @adapter(IField, z3c.form.interfaces.IFormLayer)
 @implementer(z3c.form.interfaces.IFieldWidget)
-def FckeditorFieldWidget(field, request):
+def CkeditorFieldWidget(field, request):
     """Editor widget bound to a field."""
-    return FieldWidget(field, FckeditorZ3CFormWidget(request))
+    return FieldWidget(field, CkeditorZ3CFormWidget(request))
 
 
-# The default configuration for FckeditorZ3CFormWidget
-Fckeditor_config = ComputedWidgetAttribute(
-    lambda a: FCKConfig(),
+# The default configuration for CkeditorZ3CFormWidget
+Ckeditor_config = ComputedWidgetAttribute(
+    lambda a: CkeditorConfig(),
     request=IBrowserRequest,
-    widget=IFckeditorWidget,
+    widget=ICkeditorWidget,
     )
 
 
-# XXX: EditFormFCKConfig will now be applied to all add and edit forms.
+# XXX: EditFormCkeditorConfig will now be applied to all add and edit forms.
 #      This is wrong, but we do not have standard SchoolTool add/edit
 #      z3c.forms yet, like we do with formlib; as a result, we do not have
 #      standard interfaces (for example ISchooltoolAddForm) that we could
 #      hook the config on.
-Fckeditor_addform_config = ComputedWidgetAttribute(
-    lambda a: FCKConfig(306, 200),
+Ckeditor_addform_config = ComputedWidgetAttribute(
+    lambda a: CkeditorConfig(306, 200),
     context=None,
     request=IBrowserRequest,
     view=z3c.form.interfaces.IAddForm,
     field=IHtmlFragmentField,
-    widget=IFckeditorWidget,
+    widget=ICkeditorWidget,
     )
 
-Fckeditor_editform_config = ComputedWidgetAttribute(
-    lambda a: FCKConfig(306, 200),
+Ckeditor_editform_config = ComputedWidgetAttribute(
+    lambda a: CkeditorConfig(306, 200),
     context=None,
     request=IBrowserRequest,
     view=z3c.form.interfaces.IEditForm,
     field=IHtmlFragmentField,
-    widget=IFckeditorWidget,
+    widget=ICkeditorWidget,
     )
 

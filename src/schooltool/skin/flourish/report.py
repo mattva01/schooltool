@@ -678,7 +678,7 @@ class HTML2RML(BrowserView):
 
     para_class = None
 
-    def unescape_FCKEditor_HTML(self, text):
+    def unescape_Ckeditor_HTML(self, text):
         text = text.replace(u'&amp;', u'&')
         text = text.replace(u'&lt;', u'<')
         text = text.replace(u'&gt;', u'>')
@@ -693,8 +693,8 @@ class HTML2RML(BrowserView):
         if not text:
             return text
         snippet = translate(text, context=self.request)
-        unfcked = self.unescape_FCKEditor_HTML(snippet)
-        rml = html2rml(unfcked, self.para_class)
+        unescaped = self.unescape_Ckeditor_HTML(snippet)
+        rml = html2rml(unescaped, self.para_class)
         return rml
 
 
