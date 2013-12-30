@@ -956,3 +956,8 @@ class ExportLinkVielwet(ReportLinkViewlet):
 
 class ImportLinkViewlet(flourish.page.LinkViewlet):
     pass
+
+
+class RemoteImportLinkViewlet(flourish.page.ModalFormLinkViewlet):
+
+    dialog_title = _('Upload XLS File')

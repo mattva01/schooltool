@@ -89,6 +89,31 @@
       permission="schooltool.view"
       />
 
+  <page
+      name="long"
+      for="schooltool.task.interfaces.IMessage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".task.MessageLong"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="index.html"
+      for="schooltool.task.interfaces.IMessage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".task.MessagePage"
+      content_template="templates/f_message_page.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:content
+      name="long"
+      for="schooltool.task.interfaces.IMessage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".task.MessageContent"
+      permission="schooltool.view"
+      />
+
   <flourish:content
       name="short"
       for="schooltool.task.tasks.TaskFailedMessage"
@@ -102,6 +127,22 @@
       for="schooltool.task.interfaces.IProgressMessage"
       layer="schooltool.skin.flourish.IFlourishLayer"
       class=".task.TaskProgressDialog"
+      permission="schooltool.view"
+      />
+
+  <flourish:content
+      name="long"
+      for="schooltool.task.interfaces.IProgressMessage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".task.TaskDialogHTMLContent"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="long"
+      for="schooltool.task.interfaces.IProgressMessage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".task.TaskDialogHTML"
       permission="schooltool.view"
       />
 

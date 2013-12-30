@@ -16,10 +16,21 @@
     Completed.
   </h3>
 
-  <h3 tal:attributes="id string:${progress_id}-progress-title"
-      tal:condition="view/failed" i18n:translate="">
-    System failure.
-  </h3>
+  <tal:block condition="view/failed" tal:define="xls_file view/task/xls_file|nothing">
+
+    <h3 tal:attributes="id string:${progress_id}-progress-title"
+        tal:condition="not:xls_file" i18n:translate="">
+      System failure.
+    </h3>
+    <h3 tal:attributes="id string:${progress_id}-progress-title"
+        tal:condition="xls_file" i18n:translate="">
+      System failure importing
+      <a tal:attributes="href string:${view/task/@@absolute_url}/import.xls"
+         tal:content="xls_file/__name__"
+         i18n:name="file_link">filename</a>
+   </h3>
+
+  </tal:block>
 
   <tal:block condition="view/failed">
     <p i18n:translate="">

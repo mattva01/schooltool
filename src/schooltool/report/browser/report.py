@@ -396,6 +396,7 @@ class ReportMessageDownloadsPlugin(schooltool.traverser.traverser.TraverserPlugi
 class DownloadReportDialog(MessageDialog):
 
     template = flourish.templates.File('templates/f_download_report_dialog.pt')
+    show_cancel = True
 
     @property
     def report(self):
@@ -425,6 +426,14 @@ class DownloadReportDialog(MessageDialog):
             sender.failed):
             return sender.__name__
         return None
+
+    @Lazy
+    def failed_task(self):
+        sender = self.context.sender
+        if not (IRemoteTask.providedBy(sender) and
+                sender.failed):
+            return None
+        return sender
 
 
 class ShortReportMessage(flourish.content.ContentProvider):

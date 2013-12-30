@@ -26,17 +26,21 @@ from decimal import Decimal, InvalidOperation
 
 import zope.file.upload
 import zope.file.file
+import zope.schema
 import zope.lifecycleevent
-from zope.interface import implements
+import z3c.form.button, z3c.form.field
+from zope.interface import implements, Interface
 from zope.cachedescriptors.property import Lazy
 from zope.container.contained import containedEvent
 from zope.container.interfaces import INameChooser
+from zope.component import queryMultiAdapter
 from zope.event import notify
 from zope.i18n import translate
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
 from zope.traversing.browser.absoluteurl import absoluteURL
 
+from schooltool.person.interfaces import IPerson
 from schooltool.basicperson.interfaces import IDemographicsFields
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.basicperson.demographics import DateFieldDescription
@@ -47,7 +51,7 @@ from schooltool.contact.contact import Contact, ContactPersonInfo
 from schooltool.contact.interfaces import IContact, IContactContainer
 from schooltool.contact.interfaces import IContactPersonInfo, IContactable
 from schooltool.contact.contact import getAppContactStates
-from schooltool.export.interfaces import IImporterTask
+from schooltool.export.interfaces import IImporterTask, IImportFile
 from schooltool.resource.resource import Resource
 from schooltool.resource.resource import Location
 from schooltool.resource.resource import Equipment
@@ -69,9 +73,20 @@ from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.course import Course
 from schooltool.common import DateRange
 from schooltool.common import parse_time_range
+from schooltool.task.interfaces import IRemoteTask
 from schooltool.task.progress import Timer
 from schooltool.task.tasks import RemoteTask
 from schooltool.task.state import TaskWriteState, TaskReadState
+from schooltool.task.tasks import get_message_by_id, query_message
+from schooltool.task.tasks import TaskScheduledNotification
+from schooltool.task.progress import TaskProgress
+from schooltool.report.interfaces import IReportTask
+from schooltool.report.report import AbstractReportTask
+from schooltool.report.report import NoReportException
+from schooltool.report.report import ReportFile, ReportProgressMessage
+from schooltool.report.report import GeneratedReportMessage
+from schooltool.report.report import OnReportGenerated
+from schooltool.report.browser.report import RequestRemoteReportDialog
 from schooltool.timetable.daytemplates import CalendarDayTemplates
 from schooltool.timetable.daytemplates import WeekDayTemplates
 from schooltool.timetable.daytemplates import SchoolDayTemplates
@@ -255,8 +270,9 @@ class ImporterBase(object):
         return value, found, valid
 
     def iterRelationships(self, sheet, row, startcol):
-        col = startcol
+        col = startcol - 2
         while True:
+            col += 2
             raw_date = None
             try:
                 raw_date = sheet.cell_value(rowx=row, colx=col)
@@ -279,8 +295,6 @@ class ImporterBase(object):
                 self.error(row, col, ERROR_NOT_UNICODE_OR_ASCII)
 
             yield date, code_text
-
-            col += 2
 
     def getTextFromCell(self, sheet, row, col, default=u''):
         value, found, valid = self.getTextFoundValid(sheet, row, col, default)
@@ -2119,36 +2133,82 @@ def createFile(file_upload):
 class FlourishRemoteMegaImporter(flourish.page.Page):
 
     task = None
+    message_b64 = None
+    form_params = None
+    render_invariant = False
 
     def __init__(self, context, request):
         flourish.page.Page.__init__(self, context, request)
         self.errors = []
         self.success = []
 
+    @property
+    def message(self):
+        if not self.message_b64:
+            return None
+        message = get_message_by_id(self.message_b64.decode('base64').decode('utf-8'))
+        return message
+
     def nextURL(self):
+        message = self.message
+        if message is not None:
+            return absoluteURL(message, self.request)
         url = absoluteURL(self.context, self.request)
         return '%s/manage' % url
 
     def update(self):
-        if "UPDATE_CANCEL" in self.request:
+        self.form_params = {}
+
+        if not self.message_b64:
+            self.message_b64 = self.request.get('message_id', '')
+
+        if ("UPDATE_CANCEL" in self.request or
+            "UPDATE_DONE" in self.request):
             self.request.response.redirect(self.nextURL())
             return
 
-        if "UPDATE_SUBMIT" not in self.request:
+        if "UPDATE_SUBMIT" in self.request:
+            self.scheduleImport()
+            self.request.response.redirect(self.nextURL())
             return
 
-        xls_upload = self.request.get('xlsfile', '')
+    @property
+    def message_dialog(self):
+        message = self.message
+        if message is None:
+            return None
+        content = queryMultiAdapter(
+            (message, self.request, self), name='long')
+        return content
+
+    def scheduleImport(self):
+        xls_upload = self.request.get('xls_file', '')
         if not xls_upload:
             self.errors.append(_('No data provided'))
             return
-        if not self.errors:
-            xlsfile = createFile(xls_upload)
-            self.task = ImporterTask(xlsfile)
-            self.task.schedule(self.request)
-            #self.request.response.redirect(self.nextURL())
+
+        app = ISchoolToolApplication(None)
+        task = ImportTask(RemoteMegaImporter, app)
+        task.request_params.update(self.form_params)
+        task.schedule(self.request)
+        message = query_message(task)
+        self.message_b64 = message.__name__.encode('utf-8').encode('base64').strip()
 
 
-class ImportProgress(Timer):
+class ImportProgress(TaskProgress):
+
+    def __init__(self, importers, task_id):
+        self.importers = importers
+        TaskProgress.__init__(self, task_id)
+
+    def reset(self):
+        TaskProgress.reset(self)
+        for n, importer in enumerate(self.importers):
+            self.add(str(n), title=importer.title, active=False)
+        self.add('overall', title=_('Overall'), active=True)
+
+
+class OldeImportProgress(Timer):
 
     importers = None
     value = None
@@ -2192,46 +2252,58 @@ class ImportProgress(Timer):
 
 class RemoteMegaImporter(MegaImporter):
 
+    message_title = _('import spreadsheet')
+
     def update(self):
-        remote_task = self.request.remote_task
+        remote_task = self.request.task
 
+        total_importers = len(self.importers)
         importers = self.importers
-        status = dict([
-                (n, {'title': importer.title, 'progress': 0.0})
-                for n, importer in enumerate(importers)])
 
-        status['overall'] = {'title': _('Overall'), 'progress': 0.0, 'active': True}
-
-        progress = ImportProgress(self.importers, self.request.request.id)
+        progress = ImportProgress(self.importers, self.request.task_id)
 
         xls = remote_task.xls_file.open()
         wb = xlrd.open_workbook(file_contents=xls.read())
         xls.close()
 
         if wb is None:
-            progress.finish()
-            return progress.value
+            progress.finish('overall')
+            return progress.lines
 
+        progress('overall', active=True)
         savepoint = transaction.savepoint(optimistic=True)
         for importer_n, importer in enumerate(importers):
-            for record in progress.value.values():
-                record['active'] = False
-            progress.value['overall']['active'] = True
-            progress.value[importer_n]['active'] = True
+            importer_lid = str(importer_n)
+            for lid in progress.lines:
+                if lid == importer_lid:
+                    progress(lid, active=True, progress=0.0)
+                elif lid == 'overall':
+                    progress(lid, active=True)
+                else:
+                    progress(lid, active=False)
 
-            imp = importer(self.context, self.request,
-                           progress_callback=lambda v: progress(importer_n, v))
+            def import_progress(value):
+                progress(importer_lid, progress=value, active=True)
+                progress('overall', progress=normalized_progress(
+                    importer_n, total_importers, value, 1.0), active=True)
+
+            imp = importer(
+                self.context, self.request,
+                progress_callback=import_progress)
             imp.import_data(wb)
 
-            progress.value[importer_n]['errors'].extend(imp.errors)
-            progress.value['overall']['errors'].extend(imp.errors)
-            progress.force(importer_n, 1.0)
+            for error in imp.errors:
+                progress.error(importer_lid, error)
+                progress.error('overall', error)
+                self.errors.append(error)
 
-        if progress.value['overall']['errors']:
+            progress.finish(importer_lid)
+
+        if progress['overall']['errors']:
             savepoint.rollback()
 
-        progress.finish()
-        return progress.value
+        progress.finish('overall')
+        return progress.lines
 
     def __call__(self):
         return self.update()
@@ -2240,7 +2312,7 @@ class RemoteMegaImporter(MegaImporter):
 class ImporterTask(RemoteTask):
     implements(IImporterTask)
 
-    routing_key = "zodb.import"
+    routing_key = "zodb.report"
 
     xls_file = None
 
@@ -2255,7 +2327,115 @@ class ImporterTask(RemoteTask):
         return result
 
 
-class ImportProgressContent(flourish.page.Content):
+class ImportFile(ReportFile):
+    implements(IImportFile)
+
+    errors = None
+
+
+class ImportTask(AbstractReportTask):
+    implements(IImporterTask, IReportTask)
+
+    default_mimetype = "application/xls"
+    default_filename = "import.xls"
+
+    xls_file = None
+    errors = None
+
+    def update(self, request):
+        file_upload = request['xls_file']
+        self.xls_file = ImportFile()
+        self.xls_file.mimeType = self.default_mimetype
+        filename = file_upload.filename or self.default_filename
+        self.request_params['filename'] = filename
+        self.xls_file.__name__ = filename
+        stream = self.xls_file.open('w')
+        stream.write(file_upload.read())
+        stream.close()
+        AbstractReportTask.update(self, request)
+
+    def renderReport(self, renderer, stream, *args, **kw):
+        return renderer()
+
+    def renderToFile(self, renderer, *args, **kw):
+        report = self.xls_file
+        try:
+            stream = None
+            self.renderReport(renderer, stream, *args, **kw)
+        except NoReportException:
+            return None
+        self.updateReport(renderer, report)
+        report.errors = renderer.errors
+        return report
+
+
+class ImportProgressMessage(ReportProgressMessage):
+
+    group = _('Import')
+    default_filename = "import.xls"
+
+
+class OnImportScheduled(TaskScheduledNotification):
+
+    view = None
+    message_factory = ImportProgressMessage
+
+    def __init__(self, task, request, view):
+        super(OnImportScheduled, self).__init__(task, request)
+        self.view = view
+
+    @property
+    def filename(self):
+        xls_file = self.task.xls_file
+        if xls_file is None:
+            return None
+        return xls_file.__name__
+
+    def makeReportTitle(self):
+        title = getattr(self.view, 'message_title', None)
+        if not title:
+            self.title = self.filename
+        if not title:
+            title = _(u'XLS import')
+        return title
+
+    def send(self):
+        view = self.view
+        view.render_invariant = True
+        task = self.task
+        title = self.makeReportTitle()
+        msg = self.message_factory(
+            title=title,
+            requested_on=task.scheduled,
+            filename=self.filename,
+            )
+        msg.send(sender=task, recipients=[self.task.creator])
+
+
+class IImportForm(Interface):
+
+    xls_file = zope.schema.Bytes(
+        title=_('Photo'),
+        description=_('An image file that will be converted to a JPEG no larger than 99x132 pixels (3:4 aspect ratio). Uploaded images must be JPEG or PNG files smaller than 10 MB'),
+        )
+
+
+class RequestImportDialog(RequestRemoteReportDialog):
+
+    task_factory = ImportTask
+
+    fields = z3c.form.field.Fields(IImportForm)
+
+    @z3c.form.button.buttonAndHandler(_("Import"), name='download')
+    def handle_import(self, action):
+        RequestRemoteReportDialog.handleDownload.func(self, action)
+
+    @z3c.form.button.buttonAndHandler(_("Cancel"))
+    def handle_cancel_action(self, action):
+        pass
+
+
+class ImportProgressPage(flourish.page.PageBase):
 
     @Lazy
     def status(self):
@@ -2285,6 +2465,10 @@ class ImportProgressContent(flourish.page.Content):
     @property
     def task_id(self):
         return self.context.task_id
+
+
+class ImportProgressContent(flourish.page.Content, ImportProgressPage):
+    pass
 
 
 class DownloadFile(BrowserView):
@@ -2326,3 +2510,108 @@ class DownloadImportXLS(DownloadFile):
 
     attribute = "xls_file"
     inline = False
+
+
+class ImportFinishedMessage(GeneratedReportMessage):
+
+    group = _('Import')
+    default_filename = "import.xls"
+
+
+class OnImportFinished(OnReportGenerated):
+
+    message_factory = ImportFinishedMessage
+
+
+class ImportFinishedLong(flourish.page.PageBase):
+
+    template = flourish.templates.File('templates/f_import_finished_long.pt')
+    refresh_delay = 10000
+
+    @Lazy
+    def form_id(self):
+        return flourish.page.obj_random_html_id(self)
+
+    @property
+    def report(self):
+        return getattr(self.context, 'report', None)
+
+    @property
+    def report_generated(self):
+        return bool(self.report)
+
+    @property
+    def main_recipient(self):
+        person = IPerson(self.request, None)
+        if self.context.recipients is None:
+            return None
+        recipients = sorted(self.context.recipients, key=lambda r: r.__name__)
+        if person in recipients:
+            return person
+        for recipient in recipients:
+            if flourish.canView(recipient):
+                return recipient
+        return None
+
+    @Lazy
+    def failure_ticket_id(self):
+        sender = self.context.sender
+        if (IRemoteTask.providedBy(sender) and
+            sender.failed):
+            return sender.__name__
+        return None
+
+    @Lazy
+    def failed_task(self):
+        sender = self.context.sender
+        if (IRemoteTask.providedBy(sender) and
+            sender.failed):
+            return sender
+        return None
+
+    @Lazy
+    def errors(self):
+        error_lines = []
+        if (self.report is None or
+            not self.report.errors):
+            return error_lines
+        errors = {}
+        for sheet_name, row, col, message in self.report.errors:
+            sheet_errors = errors.setdefault(sheet_name, {})
+            sheet_errors.setdefault(message, []).append((col, row))
+        for sheet_name, message_errors in sorted(errors.items()):
+            error_lines.append({'sheetname': sheet_name})
+            for message, cells in sorted(message_errors.items()):
+                col_rows = []
+                current_col, start, end = -1, 0, 0
+                for col, row in sorted(cells):
+                    if col != current_col or row > end + 1:
+                        if current_col > -1:
+                            col_rows.append((current_col, start, end))
+                        current_col, start = col, row
+                    end = row
+                col_rows.append((current_col, start, end))
+                error_cells = []
+                for col, start, end in col_rows:
+                    cell = chr(col + ord('A'))
+                    if start == end:
+                        cell += '%s' % (start + 1)
+                    else:
+                        cell += '%s-%s' % (start + 1, end + 1)
+                    error_cells.append(cell)
+                error_lines.append({
+                    'message': translate(message),
+                    'cells': ', '.join(error_cells),
+                    })
+        return error_lines
+
+
+class ImportMessageShort(flourish.content.ContentProvider):
+
+    @Lazy
+    def failure_ticket_id(self):
+        sender = self.context.sender
+        if (IRemoteTask.providedBy(sender) and
+            sender.failed):
+            return sender.__name__
+        return None

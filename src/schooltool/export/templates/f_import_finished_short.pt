@@ -1,0 +1,49 @@
+<div i18n:domain="schooltool">
+  <tal:block condition="not:view/failure_ticket_id">
+
+    <p tal:condition="not: context/report/errors" i18n:translate="">
+      Import successful.
+    </p>
+
+    <p tal:condition="context/report/errors" class="ui-state-error">
+      <span class="ui-icon ui-icon-alert">error</span>
+      <tal:block i18n:translate="">
+        Import failed with
+        <tal:block i18n:name="errors">
+          <tal:block i18n:translate="">
+            <tal:block tal:content="python: len(context.report.errors)" i18n:name="amount" />
+            errors
+          </tal:block>
+        </tal:block>
+      </tal:block>
+    </p>
+
+  </tal:block>
+
+  <tal:block condition="view/failure_ticket_id">
+    <p>
+      <span class="error" i18n:translate="">
+        System failure while importing.
+      </span>
+      <span i18n:translate="">
+        Ticket nr.
+        <tal:block i18n:name="ticket_id" tal:content="view/failure_ticket_id" />.
+      </span>
+    </p>
+    <p i18n:translate="">
+      Please contact your administrator.
+    </p>
+  </tal:block>
+
+  <p>
+    <tal:block i18n:translate="">
+      Download <span i18n:name="report" tal:content="context/title" />
+      <a i18n:name="link"
+         tal:attributes="href context/report/@@absolute_url"
+         tal:content="context/filename">filename</a>.
+    </tal:block>
+  </p>
+
+  <a tal:attributes="href context/@@absolute_url" i18n:translate="">Details...</a>
+
+</div>

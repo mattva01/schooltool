@@ -135,11 +135,17 @@ class TaskProgress(Timer):
         self.order = {}
         Timer.reset(self)
 
+    def get(self, line_id, **kw):
+        return self.lines.get(line_id, **kw)
+
+    def __getitem__(self, line_id):
+        return self.lines[line_id]
+
     def add(self, line_id, **kw):
         if line_id not in self.lines:
             self.lines[line_id] = ProgressLine(**kw)
             self.order[line_id] = max(self.order.values())+1 if self.order else 1
-        return self.lines[line_id]
+        return self.get(line_id)
 
     def remove(self, line_id):
         del self.lines[line_id]

@@ -1,7 +1,8 @@
 <div i18n:domain="schooltool">
+
   <form method="POST" enctype="multipart/form-data" class="standalone"
         tal:attributes="action request/URL"
-        tal:condition="not:nocall:view/task">
+        tal:condition="not:view/message_b64">
     <div class="status"
          tal:condition="view/errors"
          tal:repeat="error view/displayErrors">
@@ -24,15 +25,18 @@
       <legend><span i18n:translate="">Upload XLS File</span></legend>
       <div class="row">
         <div class="label">
-          <label for="xlsfile">
+          <label for="xls_file">
             <span i18n:translate="">XLS File</span>
           </label>
         </div>
         <div class="widget">
-          <input id="xlsfile" type="file" name="xlsfile"/>
+          <input id="xls_file" type="file" name="xls_file"/>
         </div>
       </div>
     </fieldset>
+
+    <input id="message_id" type="hidden" name="message_id"
+           tal:attributes="value view/message_b64" />
 
     <div class="buttons">
       <input name="UPDATE_SUBMIT" class="button-ok" type="submit"
@@ -42,11 +46,8 @@
     </div>
   </form>
 
-  <tal:block condition="nocall:view/task">
-    <div>
-      <tal:block content="structure view/task/schooltool:content/progress" />
-    </div>
-    
+  <tal:block condition="view/message_b64">
+    <div class="ui-dialog-content" tal:content="structure view/message_dialog" />
     <h3 tal:define="can_manage context/schooltool:app/schooltool:can_edit">
       <tal:block condition="can_manage">
         <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/manage"

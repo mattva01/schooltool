@@ -34,5 +34,6 @@
     <p i18n:translate="">
       Please contact your administrator.
     </p>
+    <a tal:attributes="href context/@@absolute_url" i18n:translate="">Details...</a>
   </tal:block>
 </div>
