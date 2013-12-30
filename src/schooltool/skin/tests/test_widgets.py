@@ -124,12 +124,13 @@ def doctest_CkeditorZ3CFormWidget_CkeditorConfig():
 
         >>> print widget.script
         <script type="text/javascript" language="JavaScript">
-            var oFCKeditor... = new FCKeditor(
-                "html", 430, 300, "schooltool");
-            oFCKeditor...BasePath = "http://127.0.0.1/@@/fckeditor/2.6.4.1/fckeditor/";
-            oFCKeditor...Config["CustomConfigurationsPath"] =
-                "http://127.0.0.1/@@/editor_config.js";
-            oFCKeditor....ReplaceTextarea();
+            var CKeditor... = new CKEDITOR.replace("html",
+                {
+                    height: 300,
+                    width: 430,
+                    customConfig : "http://127.0.0.1/@@/editor_config.js",
+                }
+            );
         </script>
 
     Let's set the widget value.
@@ -216,11 +217,12 @@ def doctest_CkeditorZ3CWidget_compatibility():
         >>> print editor()
         <textarea cols="60" id="field.html" name="field.html" rows="15" ></textarea>
         <script type="text/javascript" language="JavaScript">
-        var oFCKeditor_html = new FCKeditor(
-                "field.html", 600, 400, "zope");
-            oFCKeditor_html.BasePath = "/@@/fckeditor/2.6.4.1/fckeditor/";
-            oFCKeditor_html.Config["CustomConfigurationsPath"] = "/@@/zope_fckconfig.js";
-            oFCKeditor_html.ReplaceTextarea();
+        var CKeditor_html = new CKEDITOR.replace("field.html",
+            {
+                height: 400,
+                customConfig : "/@@/zope_ckconfig.js",
+            }
+        );
         </script>
 
     We can also modify the configuration of the zope.html widget.
@@ -233,18 +235,19 @@ def doctest_CkeditorZ3CWidget_compatibility():
         >>> print editor()
         <textarea cols="60" id="field.html" name="field.html" rows="15" ></textarea>
         <script type="text/javascript" language="JavaScript">
-        var oFCKeditor_html = new FCKeditor(
-                "field.html", 430, 300, "schooltool");
-            oFCKeditor_html.BasePath = "/@@/fckeditor/2.6.4.1/fckeditor/";
-            oFCKeditor_html.Config["CustomConfigurationsPath"] = "/@@/editor_config.js";
-            oFCKeditor_html.ReplaceTextarea();
+        var CKeditor_html = new CKEDITOR.replace("field.html",
+            {
+                height: 300,
+                customConfig : "/@@/editor_config.js",
+            }
+        );
         </script>
 
     You can notice zope.html widget uses relative paths for configuration;
     this brakes the widget if admins start fiddling with Apache's mod-rewrite
     (to put schooltool in http://example.com/schooltool for example).
 
-    Our widget also uses a different mechanisma to generate oFCKeditor
+    Our widget also uses a different mechanism to generate the CKeditor
     variable name.
 
         >>> import difflib
@@ -256,22 +259,22 @@ def doctest_CkeditorZ3CWidget_compatibility():
         >>> widget_text = widget.script
         >>> widget_text = widget_text.replace(
         ...     widget.editor_var_name,
-        ...     'oFCKeditor_html').strip()
+        ...     'CKeditor_html').strip()
 
         >>> print_diff(editor(), widget_text)
         - <textarea cols="60" id="field.html" name="field.html" rows="15" ></textarea>
         <script type="text/javascript" language="JavaScript">
-        var oFCKeditor_html = new FCKeditor(
-        - "field.html", 430, 300, "schooltool");
-        ?  ------
-        + "html", 430, 300, "schooltool");
-        - oFCKeditor_html.BasePath = "/@@/fckeditor/2.6.4.1/fckeditor/";
-        + oFCKeditor_html.BasePath = "http://127.0.0.1/@@/fckeditor/2.6.4.1/fckeditor/";
-        ?                             ++++++++++++++++
-        - oFCKeditor_html.Config["CustomConfigurationsPath"] = "/@@/editor_config.js";
-        + oFCKeditor_html.Config["CustomConfigurationsPath"] = "http://127.0.0.1/@@/editor_config.js";
-        ?                                                       ++++++++++++++++
-        oFCKeditor_html.ReplaceTextarea();
+        - var CKeditor_html = new CKEDITOR.replace("field.html",
+        ?                                           ------
+        + var CKeditor_html = new CKEDITOR.replace("html",
+        {
+        height: 300,
+        + width: 430,
+        - customConfig : "/@@/editor_config.js",
+        + customConfig : "http://127.0.0.1/@@/editor_config.js",
+        ?                 ++++++++++++++++
+        }
+        );
         </script>
 
     """
