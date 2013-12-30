@@ -39,7 +39,6 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.publisher.interfaces import NotFound
 from zope.publisher.browser import BrowserPage
 from zope.publisher.browser import BrowserView
-from zope.security.proxy import removeSecurityProxy
 from zope.schema.interfaces import IField
 
 import z3c.form.interfaces
@@ -51,7 +50,6 @@ import zc.resourcelibrary
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.demographics import IDemographicsForm
-from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.skin.widgets import FCKConfig
 from schooltool.skin.widgets import IFckeditorWidget
 from schooltool.skin.widgets import FckeditorFormlibWidget
@@ -120,39 +118,37 @@ class FlourishFckeditorScriptBase(object):
 
     @property
     def script(self):
-        zc.resourcelibrary.need("fckeditor")
+        zc.resourcelibrary.need("ckeditor")
         config = self.config
 
         app_url = absoluteURL(ISchoolToolApplication(None), self.request)
         fck_config_path = '%s%s' % (
             app_url, config.path)
-        fck_editor_path = '%s/@@/fckeditor/%s/fckeditor/' % (
-            app_url, self.fckversion)
         fck_skin_path = '%s/@@/schooltool.skin.flourish-fckeditor/' % (
             app_url)
-        fck_editor_css_path = '%s%s' % (fck_skin_path, 'fck_editorarea.css')
+        contents_css_path = '%s%s' % (fck_skin_path, 'contents.css')
 
         # XXX: using some values that may be not JS safe
         return '''
             <script type="text/javascript" language="JavaScript">
-                var %(variable)s = new FCKeditor(
-                    "%(id)s", %(width)d, %(height)d, "%(toolbar)s");
-                %(variable)s.BasePath = "%(fckBasePath)s";
-                %(variable)s.Config["CustomConfigurationsPath"] = "%(customConfigPath)s";
-                %(variable)s.Config["SkinPath"] = "%(fckSkinPath)s";
-                %(variable)s.Config["EditorAreaCSS"] = "%(fckEditorAreaCSS)s";
-                %(variable)s.ReplaceTextarea();
+                var %(variable)s = new CKEDITOR.replace("%(id)s",
+                    {
+                        height: %(height)s,
+                        width: %(width)s,
+                        customConfig: "%(customConfigPath)s",
+                        skin: "v2"
+                        contentsCss: "%(contentsCss)s",
+                    }
+                );
             </script>
             ''' % {
             'id': self.element_id,
             'variable': self.editor_var_name,
             'width': config.width,
             'height': config.height,
-            'toolbar': config.toolbar,
             'customConfigPath': fck_config_path,
-            'fckBasePath': fck_editor_path,
             'fckSkinPath': fck_skin_path,
-            'fckEditorAreaCSS': fck_editor_css_path,
+            'contentsCss': contents_css_path,
             }
 
 

@@ -1,43 +1,19 @@
+CKEDITOR.editorConfig = function( config )
+{
+    config.toolbar = [
+      ['Bold','Italic','RemoveFormat'], // ,'Underline','Strike','-','Subscript','Superscript'
+      ['Cut','Copy','PasteText'], // ,'Paste','PasteFromWord','-','Undo','Redo'
+      //['NumberedList','BulletedList','-','Outdent','Indent']
+      //['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+      ['Link'] // ,'Unlink','Anchor'],
+      //['Styles','Format','Font','FontSize'],
+      //['TextColor','BGColor'],
+    ];
 
-// Base path screws up editor for sites using mod rewrite, like
-// http://example.com/something/schoooltool/...
-// See https://bugs.edge.launchpad.net/schooltool/+bug/258951
-//FCKConfig.BasePath = '/@@/fckeditor/editor/';
+    config.removeDialogTabs = 'link:target;link:advanced';
 
-FCKConfig.EditorAreaCSS = FCKConfig.BasePath + 'css/fck_editorarea.css' ;
-FCKConfig.CustomConfigurationsPath = "/@@/zope_fckconfig.js";
-
-FCKConfig.ToolbarSets["schooltool"] = [
-  ['Bold','Italic','RemoveFormat'], // 'Underline','StrikeThrough','-','Subscript','Superscript'
-  //['Source'],
-  ['Cut','Copy','PasteText'], // ,'Paste','PasteWord'],
-  // ['SelectAll'], // , // for IE JS, unlike Python, never end a list with a comma!
-  //['OrderedList','UnorderedList','-','Outdent','Indent'],
-  //['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-  //['Image','Link','Unlink','Anchor','Table','Rule'],
-  ['Link']
-  //'/',
-  //['Style','FontFormat','FontName','FontSize'],
-  //['TextColor','BGColor'],
-  //['About']
-  ];
-
-// set faked table borders on table with border="0"
-FCKConfig.ShowBorders   = true ;
-
-// The contextURL is set in the javascript template and used in the explorer
-// implementation
-FCKConfig.contextURL = window.top.top.contextURL;
-
-FCKConfig.LinkBrowser = false ;
-FCKConfig.LinkUpload = false ;
-FCKConfig.LinkDlgHideAdvanced = true;
-FCKConfig.LinkDlgHideTarget = true ;
-
-FCKConfig.ImageBrowser = false ;
-
-FCKConfig.ForcePasteAsPlainText = true ;
-// Once we update to CK editor 3.x, figure out a good combination of these
-// and maybe re-enable paste from Word
-//FCKConfig.pasteFromWordRemoveFontStyles
-//FCKConfig.pasteFromWordRemoveStyles
+    config.forcePasteAsPlainText = true;
+    config.entities = false;
+    config.entities_latin = false;
+    config.entities_greek = false;
+};

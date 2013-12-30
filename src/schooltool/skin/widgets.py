@@ -143,18 +143,17 @@ class IFckeditorWidget(z3c.form.interfaces.IWidget):
 
     config = zope.schema.Object(
         title=u"Configuration",
-        description=u"FCK editor configuration.",
+        description=u"CKeditor configuration.",
         schema=IFCKConfig)
 
 
 class FckeditorWidgetBase(object):
-    fckversion = zope.html.widget.FckeditorWidget.fckVersion
 
     config = None # IFCKConfig
 
     @property
     def editor_var_name(self):
-        return 'oFCKeditor_%s' % str(hash(self.name)).replace('-', 'u')
+        return 'CKeditor_%s' % str(hash(self.name)).replace('-', 'u')
 
     @property
     def element_id(self):
@@ -162,23 +161,23 @@ class FckeditorWidgetBase(object):
 
     @property
     def script(self):
-        zc.resourcelibrary.need("fckeditor")
+        zc.resourcelibrary.need("ckeditor")
         config = self.config
 
         app_url = absoluteURL(ISchoolToolApplication(None), self.request)
         fck_config_path = '%s%s' % (
             app_url, config.path)
-        fck_editor_path = '%s/@@/fckeditor/%s/fckeditor/' % (
-            app_url, self.fckversion)
 
         # XXX: using some values that may be not JS safe
         return '''
             <script type="text/javascript" language="JavaScript">
-                var %(variable)s = new FCKeditor(
-                    "%(id)s", %(width)d, %(height)d, "%(toolbar)s");
-                %(variable)s.BasePath = "%(fckBasePath)s";
-                %(variable)s.Config["CustomConfigurationsPath"] = "%(customConfigPath)s";
-                %(variable)s.ReplaceTextarea();
+                var %(variable)s = new CKEDITOR.replace("%(id)s",
+                    {
+                        height: %(height)s,
+                        width: %(width)s,
+                        customConfig: "%(customConfigPath)s",
+                    }
+                );
             </script>
             ''' % {
             'id': self.element_id,
@@ -187,7 +186,6 @@ class FckeditorWidgetBase(object):
             'height': config.height,
             'toolbar': config.toolbar,
             'customConfigPath': fck_config_path,
-            'fckBasePath': fck_editor_path,
             }
 
 
@@ -200,14 +198,14 @@ class FckeditorFormlibWidget(zope.app.form.browser.TextAreaWidget,
 
     @property
     def editor_var_name(self):
-        return 'oFCKeditor_%s' % self.name.split('.', 1)[-1]
+        return 'CKeditor_%s' % self.name.split('.', 1)[-1]
 
     @property
     def element_id(self):
         return self.name
 
     def __call__(self):
-        zc.resourcelibrary.need("fckeditor")
+        zc.resourcelibrary.need("ckeditor")
         textarea = zope.app.form.browser.TextAreaWidget.__call__(self)
         script = self.script
         return '%s\n%s' % (textarea, script)
