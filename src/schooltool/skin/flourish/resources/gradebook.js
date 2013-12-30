@@ -580,9 +580,9 @@ function initComments(form) {
         container.find('#comment-student-id').val(student_id);
         container.find('#comment-activity-id').val(activity_id);
         container.find('#form-widgets-value').val(value);
-        FCKeditorAPI.Instances['form-widgets-value'].SetHTML(value)
-        container.find('span').html(popup_link.attr('title'));
-        container.find('p').html(description.html());
+        CKEDITOR.instances['form-widgets-value'].setData(value)
+        container.find('label span').html(popup_link.attr('title'));
+        container.find('p.hint').html(description.html());
         container.dialog({
             'title': dialog_title,
             'resizable': false,
@@ -591,8 +591,7 @@ function initComments(form) {
             'dialogClass': 'narrow-dialog',
             'modal': true
         });
-        // XXX - this should have worked but doesn't
-        //FCKeditorAPI.Instances['form-widgets-value'].EditorDocument.body.focus()
+        CKEDITOR.instances['form-widgets-value'].focus()
         return false;
     });
     $('body').on('click', '.comment-cell-cancel', function() {
@@ -607,7 +606,7 @@ function initComments(form) {
         var form = $('#grid-form');
         form.append($('<input type="hidden"/>').attr({
             'name': activity_id + '_' + student_id,
-            'value': FCKeditorAPI.Instances['form-widgets-value'].GetHTML()
+            'value': CKEDITOR.instances['form-widgets-value'].getData()
         }));
         removeSavingWarning();
         form.submit();
