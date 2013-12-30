@@ -48,7 +48,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 {
 	font-size: 10px;
 	font-weight: bold;
-	font-family: Arial;
+	font-family: Ubuntu, Arial;
 	display: inline;
 }
 
@@ -209,7 +209,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 .cke_skin_v2 .cke_button a:active,
 .cke_skin_v2 .cke_button a.cke_off
 {
-	border: solid 1px #efefde;
+	border: solid 1px #E6E5E5;
 	display: inline-block;
 	border-radius: 3px;
 	outline: none;
@@ -224,7 +224,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 .cke_skin_v2 .cke_button a,
 .cke_skin_v2 .cke_button a.cke_off
 {
-	background-color: #efefde;
+	background-color: #E6E5E5;
 	filter: alpha(opacity=70); /* IE */
 	opacity: 0.70; /* Safari, Opera and Mozilla */
 	-moz-border-radius: 3px;

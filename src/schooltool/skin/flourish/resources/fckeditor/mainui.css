@@ -38,33 +38,24 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 .cke_skin_v2 .cke_bottom,
  .cke_shared .cke_skin_v2
 {
-	background-color: #efefde;
+	background-color: #E6E5E5;
 }
 
 .cke_skin_v2 .cke_top
 {
-    border-top: solid 1px #fafaf5;
-    border-left: solid 1px #fafaf5;
-    border-right: solid 1px #696969;
-    border-bottom: solid 2px #696969;
-}
-
-.cke_skin_v2 .cke_rtl .cke_top
-{
-    border-left: solid 1px #696969;
-    border-right: solid 1px #fafaf5;
+    border: solid 1px #CCC1C1;
 }
 
 .cke_skin_v2 .cke_bottom
 {
-    border-left: solid 1px #696969;
-    border-right: solid 1px #696969;
-    border-bottom: solid 1px #696969;
+    border-left: solid 1px #CCC1C1;
+    border-right: solid 1px #CCC1C1;
+    border-bottom: solid 1px #CCC1C1;
 }
 
 .cke_skin_v2 .cke_contents
 {
-	border: solid 1px #696969;
+	border: solid 1px #CCC1C1;
 	/* Prevent background content from penetrate through when switching between editing modes. (#4918) */
 	background-color: white;
 }
@@ -76,7 +67,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 
 .cke_skin_v2 textarea.cke_source
 {
-	font-family: 'Courier New' , Monospace;
+	font-family: 'Ubuntu Mono', 'Courier New' , Monospace;
 	font-size: small;
 	background-color: #fff;
 	white-space: pre;

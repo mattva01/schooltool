@@ -17,6 +17,8 @@ body .cke_dialog
 
 .cke_skin_v2 .cke_dialog_body
 {
+	border: 1px solid #aaaaaa;
+	border-radius: 4px;
 	margin-left: 16px;
 	margin-right: 16px;
 	margin-top: 2px;
@@ -30,149 +32,12 @@ body .cke_dialog
 
 }
 
-.cke_skin_v2 .cke_dialog_tl,
-.cke_skin_v2 .cke_dialog_tr,
-.cke_skin_v2 .cke_dialog_tc,
-.cke_skin_v2 .cke_dialog_bl,
-.cke_skin_v2 .cke_dialog_br,
-.cke_skin_v2 .cke_dialog_bc
-{
-	background-image: url(images/sprites.png);
-	background-repeat: no-repeat;
-	position: absolute;
-
-	/* IE6 does not support full color transparent PNG. */
-	_background-image: url(images/sprites_ie6.png);
-	/* Dialog corner parts require a negative z-index to avoid covering dialog body. (#4954) */
-	_z-index: -1;
-}
-
-.cke_skin_v2 .cke_dialog_tl
-{
-	background-position: -16px -16px;
-	height: 16px;
-	width: 16px;
-	top: 0;
-	left: 0;
-}
-
-.cke_skin_v2 .cke_rtl .cke_dialog_tl
-{
-	background-position: -16px -397px;
-}
-
-.cke_skin_v2 .cke_dialog_tr
-{
-	background-position: -16px -76px;
-	height: 16px;
-	width: 16px;
-	top: 0;
-	right: 0;
-}
-
-.cke_skin_v2 .cke_rtl .cke_dialog_tr
-{
-	background-position: -16px -457px;
-}
-
-.cke_skin_v2 .cke_dialog_tc
-{
-	background-position: 0 -136px;
-	background-repeat: repeat-x;
-	height: 16px;
-	top: 0;
-	left: 16px;
-	right: 16px;
-}
-
-.cke_skin_v2 .cke_dialog_bl
-{
-	background-position: -16px -196px;
-	height: 51px;
-	width: 30px;
-	bottom: 0;
-	left: 0;
-}
-
-.cke_skin_v2 .cke_rtl .cke_dialog_bl
-{
-	background-position: -16px -517px;
-}
-
-.cke_skin_v2 .cke_dialog_br
-{
-	background-position: -16px -263px;
-	height: 51px;
-	width: 30px;
-	bottom: 0;
-	right: 0;
-}
-
-.cke_skin_v2 .cke_rtl .cke_dialog_br
-{
-	background-position: -16px -584px;
-}
-
-.cke_skin_v2 .cke_dialog_bc
-{
-	background-position: 0 -330px;
-	background-repeat: repeat-x;
-	height: 51px;
-	bottom: 0;
-	left: 30px;
-	right: 30px;
-}
-
-.cke_skin_v2 .cke_dialog_ml,
-.cke_skin_v2 .cke_dialog_mr
-{
-	background-image: url(images/dialog_sides.png);
-	background-repeat: repeat-y;
-	position: absolute;
-	width: 16px;
-	top: 16px;
-	bottom: 51px;
-
-	/* IE6 does not support full color transparent PNG. */
-	_background-image: url(images/dialog_sides.gif);
-
-	/* IE quirks gets confused when we have both top and bottom. */
-	_top: auto;
-}
-
-.cke_skin_v2 .cke_rtl .cke_dialog_ml,
-.cke_skin_v2 .cke_rtl .cke_dialog_mr
-{
-	background-image: url(images/dialog_sides_rtl.png);
-
-	/* IE6 does not support full color transparent PNG. */
-	_background-image: url(images/dialog_sides.gif);
-}
-
-.cke_skin_v2 .cke_dialog_ml
-{
-	background-position: 0 0;
-	left: 0;
-}
-
-.cke_skin_v2 .cke_dialog_mr
-{
-	background-position: -16px 0;
-	right: 0;
-}
-
-.cke_skin_v2 .cke_browser_iequirks .cke_dialog_ml,
-.cke_skin_v2 .cke_browser_iequirks .cke_dialog_mr
-{
-	margin-top: 3px;
-}
-
 .cke_skin_v2 .cke_dialog_title
 {
 	font-weight: bold;
 	font-size: 14pt;
-	color: #737357;
-	background-color: #e3e3c7;
+	color: #ffffff;
+	background-color: #008C93;
 	padding: 3px 10px 26px 10px;
 	cursor: move;
 	position: relative;
@@ -185,15 +50,15 @@ body .cke_dialog
 
 .cke_skin_v2 .cke_dialog_contents
 {
-	background-color: #f1f1e3;
-	border: #d5d59d 1px solid;
+	background-color: #ffffff;
 	overflow: auto;
 	padding: 5px 10px;
 }
 
 .cke_skin_v2 .cke_dialog_footer
 {
-	background-color: #e3e3c7;
+	background-color: #ffffff;
+	border-radius: 4px;
 	text-align: right;
 }
 
@@ -203,7 +68,7 @@ body .cke_dialog
 }
 
 .cke_skin_v2 .cke_dialog_footer .cke_resizer {
-	margin-top: 21px;
+	display: none;
 }
 
 /* tabs */
@@ -211,7 +76,7 @@ body .cke_dialog
 .cke_skin_v2 .cke_dialog_tabs
 {
 	height: 23px;
-	background-color: #e3e3c7;
+	background-color: #008C93;
 	display: inline-block;
 	margin-left:10px;
 	margin-right:10px;
@@ -231,7 +96,7 @@ body .cke_dialog
 .cke_skin_v2 a:hover.cke_dialog_tab,
 .cke_skin_v2 a:visited.cke_dialog_tab
 {
-	color: #737357;
+	color: #ffffff;
 	border-left: 1px solid #d5d59d;
 	border-right: 1px solid #d5d59d;
 	border-top: 1px solid #d5d59d;
@@ -255,7 +120,7 @@ body .cke_dialog
 
 .cke_skin_v2 a:hover.cke_dialog_tab
 {
-	background-color: #f1f1e3;
+	background-color: #ffffff;
 }
 
 .cke_skin_v2 .cke_hc a:hover.cke_dialog_tab
@@ -270,8 +135,8 @@ body .cke_dialog
 .cke_skin_v2 a:hover.cke_dialog_tab_selected,
 .cke_skin_v2 a:visited.cke_dialog_tab_selected
 {
-	border-bottom: 1px solid #f1f1e3;
-	background-color: #f1f1e3;
+	border-bottom: 1px solid #ffffff;
+	background-color: #ffffff;
 	font-weight: bold;
 	cursor: default;
 }
@@ -369,7 +234,8 @@ body .cke_dialog
 .cke_skin_v2 div.cke_dialog_ui_input_password
 {
 	background-color: white;
-	border: 1px solid #a0a0a0;
+	border: 1px solid #ccc1c1;
+	color: #333333;
 	padding: 1px 0px;
 	/* IE6/Quirks - make sure the content does not overflow (#7321) */
 	_width: 99.9%;
@@ -445,19 +311,16 @@ body .cke_dialog
 	cursor: default;
 }
 
-.cke_skin_v2 a.cke_dialog_ui_button_ok span,
-.cke_skin_v2 a.cke_dialog_ui_button_cancel span
-{
-	width:60px;
-}
-
 .cke_skin_v2 span.cke_dialog_ui_button
 {
-	border: #737357 1px solid;
-	padding: 2px 10px;
+	padding: 1px 6px;
 	text-align: center;
-	color: #3b3b1f;
-	background-color: #c7c78f;
+	font-size: 14px;
+	border-radius: 4px;
+	background-color: #6C7B7C;
+	border: 1px solid #6C7B7C;
+	box-shadow: 0px 1px 6px #bbbbbb;
+	color: #ffffff;
 	display: inline-block;
 	cursor: default;
 }
@@ -475,10 +338,23 @@ body .cke_dialog
 	background-color: #c5c5b3;
 }
 
+.cke_skin_v2 a.cke_dialog_ui_button_ok span.cke_dialog_ui_button {
+	background-color: #009499;
+	border: 1px solid #009499;
+}
+
+.cke_skin_v2 a:hover span.cke_dialog_ui_button
+{
+	background-color: #026B6E;
+	border: 1px solid #026B6E;
+}
+
 .cke_skin_v2 a:focus span.cke_dialog_ui_button,
 .cke_skin_v2 a:active span.cke_dialog_ui_button
 {
-	background-color: #e3e3c7;
+	background-color: #056163;
+	border: 1px solid #056163;
+	color: #aea79f;
 }
 
 .cke_skin_v2 .cke_hc a:focus span.cke_dialog_ui_button,
@@ -870,7 +746,7 @@ body .cke_dialog
 .cke_skin_v2 .cke_browser_opera .cke_btn_over,
 .cke_skin_v2 .cke_browser_ie .cke_btn_over
 {
-	outline: 1px dotted #696969;
+	outline: 1px dotted #CCC1C1;
 }
 
 /* IE<8 instead doesn't support CSS outline property, emulated with dotted border. */
@@ -891,7 +767,7 @@ body .cke_dialog
 .cke_skin_v2 .cke_browser_ie .cke_dialog_ui_focused,
 .cke_skin_v2 .cke_browser_ie .cke_btn_over
 {
-	*border: 1px dotted #696969 !important;
+	*border: 1px dotted #CCC1C1 !important;
 }
 
 .cke_skin_v2 .cke_iframe_shim

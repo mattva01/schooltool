@@ -136,7 +136,7 @@ class FlourishFckeditorScriptBase(object):
                         height: %(height)s,
                         width: %(width)s,
                         customConfig: "%(customConfigPath)s",
-                        skin: "v2"
+                        skin: "v2,%(fckSkinPath)s"
                         contentsCss: "%(contentsCss)s",
                     }
                 );
