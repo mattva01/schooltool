@@ -174,7 +174,7 @@ class CkeditorWidgetBase(object):
                     {
                         height: %(height)s,
                         width: %(width)s,
-                        customConfig: "%(customConfigPath)s",
+                        customConfig: "%(customConfigPath)s"
                     }
                 );
             </script>
