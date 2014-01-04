@@ -98,6 +98,36 @@ def relate(rel_type, (a, role_of_a), (b, role_of_b), extra_info=None):
                                              shared))
 
 
+def duplicate(link, obj):
+    """Create duplicate link from obj to link.target."""
+    obj_links = IRelationshipLinks(obj)
+
+    for olink in obj_links:
+        if (olink.target is link.target and olink.role_hash == link.role_hash
+            and olink.rel_type_hash == link.rel_type_hash):
+            raise DuplicateRelationship
+
+    shared = OOBTree()
+    for key, val in link.shared.items():
+        shared[key] = val
+    zope.event.notify(BeforeRelationshipEvent(link.rel_type,
+                                              (obj, link.my_role),
+                                              (link.target, link.role),
+                                              shared))
+    uri_cache = getURICache()
+    uri_cache.cache(link.rel_type)
+    uri_cache.cache(link.my_role)
+    uri_cache.cache(link.role)
+    link_a = Link(link.my_role, link.target, link.role, link.rel_type, shared)
+    IRelationshipLinks(obj).add(link_a)
+    link_b = Link(link.role, obj, link.my_role, link.rel_type, shared)
+    IRelationshipLinks(link.target).add(link_b)
+    zope.event.notify(RelationshipAddedEvent(link.rel_type,
+                                             (obj, link.my_role),
+                                             (link.target, link.role),
+                                             shared))
+
+
 def unrelate(rel_type, (a, role_of_a), (b, role_of_b)):
     """Break a relationship between objects `a` and `b`."""
     links_of_a = IRelationshipLinks(a)
@@ -196,26 +226,34 @@ class RelationshipEvent(object):
         return link_1_to_2, link_2_to_1
 
     def match(self, schema):
-        if self.rel_type != schema.rel_type:
+        match = RelationshipMatch(
+            self.role1, self.participant1,
+            self.rel_type,
+            self.role2, self.participant2,
+            schema)
+        if not match:
             return None
-        schema_roles = tuple(schema.roles.values())
-        if ((self.role1, self.role2) != schema_roles and
-            (self.role2, self.role1) != schema_roles):
-            return None
-        return RelationshipMatch(self, schema)
+        return match
 
 
 class RelationshipMatch(object):
 
-    def __init__(self, event, schema):
-        self._event = event
+    matched = True
+
+    def __init__(self, role1, participant1, rel_type, role2, participant2, schema):
         self._schema = schema
-        self.extra_info = event.extra_info
+        if rel_type != schema.rel_type:
+            self.matched = False
         for name, role in schema.roles.items():
-            if role == event.role1:
-                setattr(self, name, event.participant1)
-            elif role == event.role2:
-                setattr(self, name, event.participant2)
+            if role == role1:
+                setattr(self, name, participant1)
+            elif role == role2:
+                setattr(self, name, participant2)
+            else:
+                self.matched = False
+
+    def __nonzero__(self):
+        return self.matched
 
 
 class BeforeRelationshipEvent(RelationshipEvent):
@@ -357,6 +395,22 @@ class RelationshipSchema(object):
         roles.remove(my_role_key)
         party_role = self.roles[roles[0]]
         return party_role
+
+    def getSortedPartyRoles(self, **party):
+        if len(party) != 1:
+            raise TypeError("A single party must be provided.")
+        roles = list(self.roles.items())
+        if roles[0][0] == party.keys()[0]:
+            return roles[0][1], roles[1][1]
+        return roles[1][1], roles[0][1]
+
+    def bind(self, **party):
+        for name in list(party):
+            party[name] = removeSecurityProxy(party[name])
+        my_role, other_role = self.getSortedPartyRoles(**party)
+        prop = self.rel_type.bind(
+            party.values()[0], my_role, self.rel_type, other_role)
+        return prop
 
     def query(self, **party):
         """Retrieve relationship targets."""
@@ -731,6 +785,17 @@ class Link(Persistent, Contained):
     @property
     def state(self):
         return self.rel_type.access(self.shared_state)
+
+    def match(self, schema):
+        this = self.__parent__.__parent__
+        match = RelationshipMatch(
+            self.my_role, this,
+            self.rel_type,
+            self.role, self.target,
+            schema)
+        if not match:
+            return None
+        return match
 
 
 class CLink(object):

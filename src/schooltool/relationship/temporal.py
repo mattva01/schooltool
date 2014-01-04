@@ -56,8 +56,13 @@ class TemporalStateAccessor(object):
         return list(self)
 
     def set(self, date, meaning=ACTIVE, code=ACTIVE_CODE):
+        meaning = ''.join(sorted(set(meaning)))
         data = dict(self.state['tmp'])
         data[date] = meaning, code
+        self.state['tmp'] = tuple(sorted(data.items(), reverse=True))
+
+    def replace(self, states):
+        data = dict(states)
         self.state['tmp'] = tuple(sorted(data.items(), reverse=True))
 
     def closest(self, date):
@@ -78,9 +83,9 @@ class TemporalStateAccessor(object):
                 return result
         return None
 
-    def has(self, date=None, states=(), meanings=''):
+    def has(self, date=None, states=(), meanings=()):
         if not self.state['tmp']:
-            if meanings == ACTIVE:
+            if ACTIVE in meanings:
                 return (ACTIVE_CODE in states or
                         not states)
             else:
@@ -127,7 +132,7 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
     """Temporal relationship property bound to an object."""
 
     def __init__(self, this, rel_type, my_role, other_role,
-                 filter_meanings=ACTIVE, filter_date=_today,
+                 filter_meanings=(ACTIVE,), filter_date=_today,
                  filter_codes=()):
         BoundRelationshipProperty.__init__(
             self, this, rel_type, my_role, other_role)
@@ -152,9 +157,10 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
     def _filter_latest_meanings(self, link):
         if link.rel_type_hash != hash(self.rel_type):
             return False
-        for v in link.state.latest[0]:
-            if v in self.filter_meanings:
-                return True
+        for meaning in link.state.latest[0]:
+            for val in self.filter_meanings:
+                if val in meaning:
+                    return True
         return False
 
     def _filter_everything(self, link):
@@ -193,18 +199,32 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
                 return True
         return False
 
-    def __iter__(self):
+    def _iter_filtered_links(self):
         links = IRelationshipLinks(self.this).getCachedLinksByRole(self.other_role)
         for link in links:
+            if self._filter(link):
+                yield link
+
+    def __nonzero__(self):
+        for link in self._iter_filtered_links():
+            return True
+        return False
+
+    def __len__(self):
+        n = 0
+        for link in self._iter_filtered_links():
+            n += 1
+        return n
+
+    def __iter__(self):
+        for link in self._iter_filtered_links():
             if self._filter(link):
                 yield link.target
 
     @property
     def relationships(self):
-        links = IRelationshipLinks(self.this).getCachedLinksByRole(self.other_role)
-        for link in links:
-            if self._filter(link):
-                yield RelationshipInfo(self.this, link)
+        for link in self._iter_filtered_links():
+            yield RelationshipInfo(self.this, link)
 
     def on(self, date):
         return self.__class__(
@@ -213,7 +233,11 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
             filter_date=date,
             filter_codes=self.filter_codes)
 
-    def any(self, meanings=''):
+    def any(self, *args, **kw):
+        meanings = tuple(
+            [''.join(sorted(set(meaning))) for meaning in args] +
+            [''.join(sorted(set(meaning))) for meaning in kw.values()]
+            )
         return self.__class__(
             self.this, self.rel_type, self.my_role, self.other_role,
             filter_meanings=meanings, filter_date=self.filter_date,
@@ -228,7 +252,7 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
     def all(self):
         return self.__class__(
             self.this, self.rel_type, self.my_role, self.other_role,
-            filter_meanings='', filter_date=None,
+            filter_meanings=(), filter_date=None,
             filter_codes=())
 
     def relate(self, other, meaning=ACTIVE, code=ACTIVE_CODE):
@@ -304,7 +328,7 @@ class TemporalURIObject(URIObject):
             if link.rel_type_hash != hash(self):
                 return False
             state = self.access(link.shared_state)
-            return state.has(date=today, meanings=ACTIVE)
+            return state.has(date=today, meanings=(ACTIVE,))
         return filter
 
 
@@ -317,4 +341,5 @@ class PersistentTemporalURIObject(Persistent, Contained, TemporalURIObject):
 def shareTemporalState(event):
     if not isinstance(event.rel_type, TemporalURIObject):
         return
-    event.shared['tmp'] = ()
+    if 'tmp' not in event.shared:
+        event.shared['tmp'] = ()
