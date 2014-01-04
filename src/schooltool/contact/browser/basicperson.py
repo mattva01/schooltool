@@ -27,7 +27,6 @@ from zope.schema import getFieldsInOrder
 from zope.security.proxy import removeSecurityProxy
 from zope.security import checkPermission
 from zope.publisher.browser import BrowserView
-from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from z3c.form import field
@@ -153,4 +152,3 @@ class ManageContactsActionViewlet(object):
             base_url,
             urllib.urlencode([('SEARCH_LAST_NAME',
                                self.context.last_name.encode("utf-8"))]))
-

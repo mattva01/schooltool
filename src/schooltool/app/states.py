@@ -57,7 +57,7 @@ class RelationshipState(Persistent, Contained):
 
     def __init__(self, title, active, code=None):
         self.title = title
-        self.active = active
+        self.active = ''.join(sorted(set(active)))
         self.__name__ = code
 
     @property
@@ -125,6 +125,7 @@ class RelationshipStates(Persistent, Contained):
         self.states[state.code] = state
 
     def describe(self, active, title):
+        active = ''.join(sorted(set(active)))
         self.system_titles[active] = title
 
 

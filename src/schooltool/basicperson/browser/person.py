@@ -231,13 +231,17 @@ class UsernameNonASCII(ValidationError):
 
 class UsernameValidator(SimpleFieldValidator):
 
+    @property
+    def container(self):
+        return self.context
+
     def validate(self, username):
         super(UsernameValidator, self).validate(username)
         if username is not None:
-            if username in self.context:
+            if username in self.container:
                 raise UsernameAlreadyUsed(username)
             try:
-                INameChooser(self.context).checkName(username, None)
+                INameChooser(self.container).checkName(username, None)
             except ValueError:
                 raise UsernameBadName(username)
         # XXX: this has to be fixed

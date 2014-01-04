@@ -199,8 +199,35 @@
       />
 
   <flourish:viewlet
+      name="activate.html"
+      title="Activate Parent Access"
+      for="schooltool.contact.interfaces.IContact"
+      manager="schooltool.contact.browser.contact.ContactActionsLinks"
+      class="schooltool.skin.flourish.page.LinkIdViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:page
+     name="activate.html"
+     subtitle="Activate Parent Access"
+     for="schooltool.contact.interfaces.IContact"
+     class="schooltool.contact.browser.parent.EnableParentAccess"
+     permission="schooltool.edit"
+     content_template="templates/f_activate_parent_form.pt"
+     />
+
+  <flourish:viewlet
       name="delete.html"
       title="Delete"
+      for="schooltool.contact.basicperson.IBoundContact"
+      manager="schooltool.contact.browser.contact.ContactActionsLinks"
+      class="schooltool.skin.flourish.page.DisabledViewlet"
+      permission="schooltool.edit"
+      />
+
+  <flourish:viewlet
+      name="activate.html"
+      title="Acivate Parent Access"
       for="schooltool.contact.basicperson.IBoundContact"
       manager="schooltool.contact.browser.contact.ContactActionsLinks"
       class="schooltool.skin.flourish.page.DisabledViewlet"
@@ -322,6 +349,41 @@
       for="schooltool.contact.interfaces.IContact"
       class="schooltool.contact.browser.contact.PhotoView"
       permission="schooltool.view"
+      />
+
+  <zope:adapter factory=".parent.ContactUsernameValidator" />
+  <zope:adapter factory=".parent.ContactPasswordValidator" />
+
+  <flourish:viewlet
+      name="parent_tab"
+      after="manage_school"
+      title="Parent"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      class=".parent.ParentNavViewlet"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="parent_tab"
+      for="schooltool.person.interfaces.IPerson"
+      class=".parent.ParentHome"
+      permission="schooltool.view"
+      />
+
+  <flourish:activeViewlet
+      name="parent_tab"
+      manager="schooltool.skin.flourish.page.IHeaderNavigationManager"
+      for="schooltool.basicperson.interfaces.IBasicPerson"
+      view=".parent.ParentHome"
+      />
+
+  <flourish:viewlet
+      name="children-overview"
+      view="schooltool.contact.browser.parent.ParentHome"
+      permission="schooltool.view"
+      template="templates/f_children_overview.pt"
+      manager="schooltool.skin.flourish.page.IPageContentManager"
+      class=".parent.ChildrenOverview"
       />
 
 </configure>

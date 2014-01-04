@@ -21,6 +21,7 @@ Contact objects
 """
 from persistent import Persistent
 
+import zope.lifecycleevent.interfaces
 from zope.catalog.text import TextIndex
 from zope.component import adapter, adapts
 from zope.index.text.interfaces import ISearchableText
@@ -30,6 +31,7 @@ from zope.intid.interfaces import IIntIds
 from zope.container.contained import Contained
 from zope.container.btree import BTreeContainer
 from zope.component import getUtility
+from zope.security.proxy import removeSecurityProxy
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IRelationshipStateContainer
@@ -44,12 +46,16 @@ from schooltool.contact.interfaces import IContactContainer
 from schooltool.contact.interfaces import IUniqueFormKey
 from schooltool.relationship.uri import URIObject
 from schooltool.relationship.temporal import ACTIVE, INACTIVE
+from schooltool.relationship.temporal import ACTIVE_CODE, INACTIVE_CODE
 from schooltool.relationship.temporal import TemporalURIObject
 from schooltool.relationship.relationship import RelationshipProperty
 from schooltool.relationship.relationship import RelationshipSchema
+from schooltool.relationship.interfaces import IRelationshipLink
+from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.securitypolicy import crowds
 from schooltool.table.catalog import ConvertingIndex
 from schooltool.common import simple_form_key
+from schooltool.common import DateRange
 from schooltool.person.interfaces import IPerson
 from schooltool.course.section import PersonInstructorsCrowd
 from schooltool.app.utils import vocabulary_titled
@@ -67,8 +73,8 @@ URIContact = URIObject('http://schooltool.org/ns/contact/contact',
 URIPerson = URIObject('http://schooltool.org/ns/contact/person',
                       'Person', 'A contact relationship person role.')
 
-Contact = RelationshipSchema(URIContactRelationship,
-                             contact=URIContact, person=URIPerson)
+ContactRelationship = RelationshipSchema(URIContactRelationship,
+                                         contact=URIContact, person=URIPerson)
 
 
 PARENT = 'p'
@@ -241,6 +247,36 @@ class ContactStatesStartup(StateStartUpBase):
         states.describe(ACTIVE, _('A contact'))
         states.describe(ACTIVE+PARENT, _('A parent'))
         states.describe(INACTIVE, _('Inactive'))
+        states.describe(INACTIVE+PARENT, _('Inactive parent'))
+
+
+class ParentCrowd(crowds.Crowd):
+
+    def contains(self, principal):
+        person = IPerson(principal, None)
+        if person is None:
+            return False
+        relationships = ContactRelationship.bind(contact=IContact(person))
+        is_parent = bool(relationships.any(ACTIVE+PARENT))
+        return is_parent
+
+
+class ParentOfCrowd(crowds.Crowd):
+
+    def contains(self, principal):
+        person = IPerson(principal, None)
+        if person is None:
+            return False
+        target = None
+        obj = self.context
+        while (target is None and obj is not None):
+            target = IPerson(obj, None)
+            obj = obj.__parent__
+        if target is None:
+            return False
+        relationships = ContactRelationship.bind(contact=IContact(person))
+        is_parent = target in relationships.any(ACTIVE+PARENT)
+        return is_parent
 
 
 def getAppContactStates():
