@@ -42,21 +42,26 @@ from schooltool.app import relationships
 from schooltool.app.security import ConfigurableCrowd
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary_titled
+from schooltool.app.states import StateStartUpBase
+from schooltool.app.states import RelationshipStates, RelationshipState
 from schooltool.course import interfaces, booking
 from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.person.interfaces import IPerson
-from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.relationship import RelationshipProperty
+from schooltool.relationship.relationship import getRelatedObjects
+from schooltool.relationship.temporal import ACTIVE, INACTIVE
+from schooltool.securitypolicy.crowds import Crowd
 from schooltool.schoolyear.subscriber import EventAdapterSubscriber
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.schoolyear.interfaces import ISubscriber
 from schooltool.schoolyear.interfaces import ISchoolYear
-from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
-from schooltool.securitypolicy.crowds import ClerksCrowd, AdministratorsCrowd
 from schooltool.term.term import getNextTerm
 from schooltool.term.interfaces import ITerm
 
 from schooltool.common import SchoolToolMessage as _
+
+
+COMPLETED = 'c'
 
 
 class InvalidSectionLinkException(Exception):
@@ -328,15 +333,6 @@ class SectionEditorSettingCrowd(ConfigurableCrowd):
                 InstructorsCrowd(self.context).contains(principal))
 
 
-class SectionCalendarViewers(AggregateCrowd):
-    """Crowd of those who can see the section calendar."""
-    adapts(interfaces.ISection)
-
-    def crowdFactories(self):
-        return [ClerksCrowd, AdministratorsCrowd,
-                InstructorsCrowd, LearnersCrowd, SectionCalendarSettingCrowd]
-
-
 class PersonLearnerAdapter(object):
     implements(interfaces.ILearner)
     adapts(IPerson)
@@ -481,3 +477,32 @@ def linkedSectionTermsVocabulary(context):
 
 def LinkedSectionTermsVocabularyFactory():
     return linkedSectionTermsVocabulary
+
+
+class SectionMemberStatesStartup(StateStartUpBase):
+
+    states_name = 'section-membership'
+    states_title = _('Section Enrollment')
+
+    def populate(self, states):
+        states.add(_('Pending'), INACTIVE, 'p')
+        states.add(_('Enrolled'), ACTIVE, 'a')
+        states.add(_('Withdrawn'), INACTIVE, 'i')
+        states.add(_('Completed'), ACTIVE+COMPLETED, 'c')
+        states.describe(ACTIVE, _('Member'))
+        states.describe(ACTIVE+COMPLETED, _('Completed/Active'))
+        states.describe(INACTIVE+COMPLETED, _('Completed/Inactive'))
+        states.describe(INACTIVE, _('Inactive'))
+
+
+class SectionInstructorStatesStartup(StateStartUpBase):
+
+    states_name = 'section-instruction'
+    states_title = _('Section Instruction')
+
+    def populate(self, states):
+        states.add(_('Instructor'), ACTIVE, 'a')
+        states.add(_('Substitute'), ACTIVE, 's')
+        states.add(_('Withdrawn'), INACTIVE, 'i')
+        states.describe(ACTIVE, _('Instructing'))
+        states.describe(INACTIVE, _('Removed'))

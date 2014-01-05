@@ -550,6 +550,10 @@ class Message(Persistent, Contained):
     def utcnow(self):
         return pytz.UTC.localize(datetime.datetime.utcnow())
 
+    @property
+    def id(self):
+        return self.__name__
+
     def send(self, sender=None, recipients=None):
         self.sender = sender
         if recipients is not None:
@@ -751,6 +755,12 @@ def query_message(sender, recipient=None):
         if recipient_id in message.recipient_ids:
             return message
     return None
+
+
+def get_message_by_id(message_id):
+    app = ISchoolToolApplication(None)
+    messages = IMessageContainer(app)
+    return messages.get(message_id)
 
 
 class MessageReaders(Crowd):

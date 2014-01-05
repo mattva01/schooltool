@@ -414,6 +414,10 @@ class LinkViewlet(Viewlet):
     css_class = None
 
     @property
+    def target(self):
+        return self.context
+
+    @property
     def enabled(self):
         return bool(self.title)
 
@@ -428,7 +432,7 @@ class LinkViewlet(Viewlet):
         link = self.link
         if not link:
             return None
-        return "%s/%s" % (absoluteURL(self.context, self.request),
+        return "%s/%s" % (absoluteURL(self.target, self.request),
                           self.link)
 
     def render(self, *args, **kw):

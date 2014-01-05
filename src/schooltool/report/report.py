@@ -589,23 +589,27 @@ class ReportDetails(object):
 class ReportProgressMessage(ProgressMessage, ReportDetails):
     implements(IReportProgressMessage)
 
+    default_filename = "report.pdf"
+
     def __init__(self, title=None,
                  requested_on=None, filename=None):
         ProgressMessage.__init__(self, title=title)
         ReportDetails.__init__(
             self, requested_on=requested_on,
-            filename=(filename or 'report.pdf'))
+            filename=(filename or self.default_filename))
 
 
 class ReportMessage(Message, ReportDetails):
     implements(IReportMessage)
+
+    default_filename = "report.pdf"
 
     def __init__(self, title=None,
                  requested_on=None, filename=None):
         Message.__init__(self, title=title)
         ReportDetails.__init__(
             self, requested_on=requested_on,
-            filename=(filename or 'report.pdf'))
+            filename=(filename or self.default_filename))
 
 
 class OnReportScheduled(TaskScheduledNotification):

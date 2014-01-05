@@ -53,12 +53,25 @@
       crowds="managers clerks"
       permission="schooltool.edit" />
 
+  <security:allow
+      interface=".export.RemoteImportLinkViewlet"
+      crowds="managers clerks"
+      permission="schooltool.edit" />
+
   <flourish:page
      name="import.html"
      subtitle="Import Data"
      for="schooltool.app.interfaces.ISchoolToolApplication"
-     content_template="templates/f_import.pt"
-     class=".importer.FlourishMegaImporter"
+     content_template="templates/f_import_remote.pt"
+     class=".importer.FlourishRemoteMegaImporter"
+     permission="schooltool.edit" />
+
+  <flourish:page
+     name="request_import.html"
+     subtitle="Import Data"
+     for="schooltool.app.interfaces.ISchoolToolApplication"
+     template="templates/f_import_remote.pt"
+     class=".importer.RequestImportDialog"
      permission="schooltool.edit" />
 
   <security:allow
@@ -77,6 +90,40 @@
       for=".importer.ImporterTask"
       class=".importer.ImportProgressContent"
       template="templates/f_import_progress.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:content
+      name="long"
+      for=".importer.ImportTask"
+      class=".importer.ImportProgressContent"
+      template="templates/f_import_progress.pt"
+      permission="schooltool.view"
+      />
+
+  <page
+      name="long"
+      for="schooltool.export.importer.ImportProgressMessage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".importer.ImportFinishedLong"
+      permission="schooltool.view"
+      />
+
+  <flourish:page
+      name="dialog"
+      for="schooltool.export.importer.ImportProgressMessage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class="schooltool.task.browser.task.TaskProgressDialog"
+      template="templates/f_import_task_progress.pt"
+      permission="schooltool.view"
+      />
+
+  <flourish:content
+      name="short"
+      for="schooltool.export.importer.ImportProgressMessage"
+      view="zope.interface.Interface"
+      template="templates/f_import_generating_short.pt"
+      class=".importer.ImportMessageShort"
       permission="schooltool.view"
       />
 
@@ -127,5 +174,31 @@
     <require permission="schooltool.edit"
              set_schema="schooltool.export.interfaces.IXLSProgressMessage" />
   </zope:class>
+
+  <page
+      name="long"
+      for="schooltool.export.importer.ImportFinishedMessage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class=".importer.ImportFinishedLong"
+      permission="schooltool.view"
+      />
+
+  <flourish:content
+      name="short"
+      for="schooltool.export.importer.ImportFinishedMessage"
+      view="zope.interface.Interface"
+      template="templates/f_import_finished_short.pt"
+      class=".importer.ImportMessageShort"
+      permission="schooltool.view"
+      />
+
+  <zope:adapter
+      name="schooltool.export.importer.OnImportFinished"
+      for="schooltool.export.interfaces.IImporterTask
+           *
+           *"
+      provides="schooltool.task.interfaces.ITaskCompletedNotification"
+      factory="schooltool.export.importer.OnImportFinished"
+      />
 
 </configure>

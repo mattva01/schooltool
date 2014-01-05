@@ -3,6 +3,36 @@
            xmlns:zope="http://namespaces.zope.org/zope"
            i18n_domain="schooltool">
 
+  <zope:class class=".importer.ImportTask">
+    <require permission="schooltool.view"
+             interface="schooltool.export.interfaces.IImporterTask" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.export.interfaces.IImporterTask" />
+  </zope:class>
+
+  <zope:class class=".importer.ImportProgressMessage">
+    <require permission="schooltool.view"
+             interface="schooltool.report.interfaces.IReportProgressMessage" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.report.interfaces.IReportProgressMessage" />
+  </zope:class>
+
+  <zope:class class=".importer.ImportFinishedMessage">
+    <require permission="schooltool.view"
+             interface="schooltool.report.interfaces.IReportMessage" />
+    <require permission="schooltool.edit"
+             set_schema="schooltool.report.interfaces.IReportMessage" />
+  </zope:class>
+
+  <zope:adapter
+      name="schooltool.report.report.OnReportArchiveScheduled"
+      for="schooltool.task.interfaces.IRemoteTask
+           *
+           schooltool.export.importer.RemoteMegaImporter"
+      provides="schooltool.task.interfaces.ITaskScheduledNotification"
+      factory=".importer.OnImportScheduled"
+      />
+
   <page
      name="import.html"
      for="schooltool.app.interfaces.ISchoolToolApplication"
@@ -82,5 +112,29 @@
      layer="zope.publisher.interfaces.http.IHTTPRequest"
      class=".importer.DownloadImportXLS"
      permission="schooltool.view" />
+
+  <zope:class class=".importer.ImportFile">
+    <require
+        permission="zope.View"
+        interface="zope.mimetype.interfaces.IContentTypeAware"
+        attributes="size openDetached"
+        />
+    <require
+        permission="zope.ManageContent"
+        set_attributes="mimeType parameters"
+        />
+    <require
+        permission="zope.ManageContent"
+        attributes="open"
+        />
+    <allow
+        attributes="errors"
+        />
+    <implements
+        interface="
+          zope.annotation.interfaces.IAttributeAnnotatable
+          "
+        />
+  </zope:class>
 
 </configure>

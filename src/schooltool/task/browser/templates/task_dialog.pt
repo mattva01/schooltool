@@ -8,7 +8,7 @@
     <div class="buttons">
       <input class="button-ok" name="REFRESH" onclick="return ST.dialogs.submit(this, this);" value="Refresh" type="submit" i18n:attributes="value">
 
-      <input class="button-cancel" name="CANCEL" onclick="return ST.dialogs.close(this);" value="Close" type="submit" i18n:attributes="value">
+      <input tal:condition="view/show_cancel" class="button-cancel" name="CANCEL" onclick="return ST.dialogs.close(this);" value="Close" type="submit" i18n:attributes="value">
     </div>
   </form>
 

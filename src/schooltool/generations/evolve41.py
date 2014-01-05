@@ -24,6 +24,7 @@ After permissions remap, add superuser to managers and clerks in all years.
 from zope.app.generations.utility import getRootFolder, findObjectsProviding
 from zope.component.hooks import getSite, setSite
 
+from schooltool.generations import linkcatalogs
 from schooltool.app.membership import Membership
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
@@ -47,16 +48,15 @@ def makeManager(app, schoolyear, person):
 
 
 def evolve(context):
+    linkcatalogs.ensureEvolved(context)
     root = getRootFolder(context)
 
     old_site = getSite()
-    apps = list(findObjectsProviding(root, ISchoolToolApplication))
-    for app in apps:
-        setSite(app)
-        persons = ISchoolToolApplication(None)['persons']
-        manager = persons.super_user
-        if manager is None:
-            continue
+    app = root
+    setSite(app)
+    persons = ISchoolToolApplication(None)['persons']
+    manager = persons.super_user
+    if manager is not None:
         syc = ISchoolYearContainer(app)
         for sy in syc.values():
             makeManager(app, sy, manager)

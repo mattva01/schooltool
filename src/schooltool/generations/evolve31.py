@@ -22,37 +22,33 @@ Contact relationships are expected to have extra_info now.
 
 Also, fix relationship type: change URIContact to URIContactRelationship.
 """
-from zope.app.generations.utility import findObjectsProviding
-from zope.app.publication.zopepublication import ZopePublication
-
-from schooltool.basicperson.interfaces import IBasicPerson
-from schooltool.relationship.interfaces import IRelationshipLinks
-from schooltool.relationship.relationship import relate, unrelate
-from schooltool.contact.contact import URIContactRelationship
-from schooltool.contact.contact import URIContact, URIPerson
-from schooltool.contact.contact import ContactPersonInfo
+from schooltool.generations import linkcatalogs
 
 
 def evolve(context):
-    root = context.connection.root().get(ZopePublication.root_name, None)
+    linkcatalogs.ensureEvolved(context)
 
-    persons = findObjectsProviding(root, IBasicPerson)
-    for person in persons:
-        linkset = IRelationshipLinks(person)
-        links = linkset.getLinksByRole(URIContact)
-        for link in links[:]:
-            if link.rel_type != URIContact:
-                continue
-            contact = link.target
-
-            unrelate(URIContact,
-                     (person, URIPerson),
-                     (contact, URIContact))
-
-            info = ContactPersonInfo()
-            info.__parent__ = person
-            relate(URIContactRelationship,
-                   (person, URIPerson),
-                   (contact, URIContact),
-                   extra_info=info)
+    # Rest of evolution made obsolete by temporal link relationships
+    #
+    # root = context.connection.root().get(ZopePublication.root_name, None)
+    #
+    # persons = findObjectsProviding(root, IBasicPerson)
+    # for person in persons:
+    #     linkset = IRelationshipLinks(person)
+    #     links = linkset.getLinksByRole(URIContact)
+    #     for link in links[:]:
+    #         if link.rel_type != URIContact:
+    #             continue
+    #         contact = link.target
+    #
+    #         unrelate(URIContact,
+    #                  (person, URIPerson),
+    #                  (contact, URIContact))
+    #
+    #         info = ContactPersonInfo()
+    #         info.__parent__ = person
+    #         relate(URIContactRelationship,
+    #                (person, URIPerson),
+    #                (contact, URIContact),
+    #                extra_info=info)
 

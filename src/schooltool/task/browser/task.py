@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from zope.component import queryMultiAdapter
 from zope.cachedescriptors.property import Lazy
 from zope.interface import directlyProvides
 from zope.traversing.browser.absoluteurl import absoluteURL
@@ -185,15 +186,48 @@ class MessageDialog(flourish.form.Dialog):
 
     template = flourish.templates.File('templates/task_dialog.pt')
     refresh_delay = 10000
+    show_cancel = True
 
     @Lazy
     def form_id(self):
         return flourish.page.obj_random_html_id(self)
 
 
+class MessagePage(flourish.page.WideContainerPage):
+
+    def done_link(self):
+        person = IPerson(self.request.principal, None)
+        if person is None:
+            return None
+        return absoluteURL(person, self.request)
+
+
+class MessageLong(flourish.page.PageBase):
+
+    template = flourish.templates.File('templates/task_long.pt')
+
+    @Lazy
+    def form_id(self):
+        return flourish.page.obj_random_html_id(self)
+
+
+class MessageContent(flourish.content.ContentProvider):
+
+    content = None
+
+    def update(self):
+        self.content = queryMultiAdapter(
+            (self.context, self.request), name="long")
+        self.content.update()
+
+    def render(self, *args, **kw):
+        return self.content.render(*args, **kw)
+
+
 class TaskProgressDialog(flourish.form.Dialog):
 
     template = flourish.templates.File('templates/f_task_progress.pt')
+    show_cancel = True
 
     @property
     def main_recipient(self):
@@ -242,3 +276,30 @@ class TaskProgressDialog(flourish.form.Dialog):
         if IRemoteTask.providedBy(sender):
             return not sender.finished
         return False
+
+
+class TaskDialogHTML(flourish.page.PageBase):
+
+    dialog = None
+
+    def update(self):
+        super(TaskDialogHTML, self).update()
+        self.dialog = queryMultiAdapter(
+            (self.context, self.request), name='dialog')
+        self.dialog.__name__ = self.__name__
+        if hasattr(self.dialog, 'show_cancel'):
+            self.dialog.show_cancel = False
+        self.dialog.update()
+
+    def render(self):
+        html = self.dialog.render()
+        if self.dialog.ajax_settings.get('html'):
+            html = self.dialog.ajax_settings['html']
+        return html
+
+
+class TaskDialogHTMLContent(TaskDialogHTML, flourish.content.ContentProvider):
+
+    def __init__(self, context, request, view):
+        flourish.content.ContentProvider.__init__(self, context, request, view)
+        TaskDialogHTML.__init__(self, context, request)

@@ -5,12 +5,22 @@
 
   <class
       class="schooltool.relationship.relationship.BoundRelationshipProperty">
-    <allow attributes="__iter__ __contains__ relationships" />
+    <allow attributes="__iter__ __contains__ int_ids relationships" />
+  </class>
+
+  <class
+      class="schooltool.relationship.temporal.BoundTemporalRelationshipProperty">
+    <allow attributes="__iter__ __contains__ int_ids relationships any on all state states" />
   </class>
 
   <class
       class="schooltool.relationship.relationship.RelationshipInfo">
-    <allow attributes="source target extra_info" />
+    <allow attributes="source target state extra_info" />
+  </class>
+
+  <class
+      class="schooltool.relationship.temporal.TemporalStateAccessor">
+    <allow attributes="state all set get has latest today" />
   </class>
 
   <adapter
@@ -29,5 +39,38 @@
       for="zope.lifecycleevent.interfaces.IObjectCopiedEvent"
       handler="schooltool.relationship.objectevents.unrelateOnCopy"
       />
+
+  <subscriber
+      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
+      handler=".temporal.shareTemporalState"
+      />
+
+  <subscriber
+      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
+      handler=".catalog.indexLinks"
+      />
+
+  <adapter factory="schooltool.relationship.catalog.LinkCatalog"
+           name="schooltool.relationship.catalog.LinkCatalog" />
+
+  <adapter
+      for="schooltool.relationship.interfaces.IRelationshipLinks"
+      factory=".catalog.getLinkCatalog"
+      provides="zope.catalog.interfaces.ICatalog" />
+
+  <adapter
+      factory=".catalog.URICacheStartUp"
+      provides="schooltool.app.interfaces.IPluginInit"
+      name="schooltool.relationship.uri" />
+
+  <adapter
+      factory=".catalog.URICacheStartUp"
+      provides="schooltool.app.interfaces.IPluginStartUp"
+      name="schooltool.relationship.uri" />
+
+  <class
+      class="schooltool.relationship.catalog.URICache">
+    <allow attributes="cache" />
+  </class>
 
 </configure>

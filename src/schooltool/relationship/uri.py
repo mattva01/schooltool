@@ -28,8 +28,12 @@ By convention, names of global URI object constants start with 'URI'.
 
 import re
 
+from persistent import Persistent
+
 from zope.interface import Interface, implements
 from zope.schema import Text, TextLine, URI
+from zope.container.contained import Contained
+from schooltool.relationship.relationship import BoundRelationshipProperty
 
 
 class IURIObject(Interface):
@@ -53,6 +57,27 @@ class IURIObject(Interface):
     description = Text(title=u"Description",
             description=u"Human-readable description.")
 
+    def persist():
+        """Return persistent version of self to store in DB."""
+
+    def __eq__(other):
+        """self == other"""
+
+    def __ne__(other):
+        """self != other"""
+
+    def __sh__(self):
+        """Hash self (for example, return hash of uri)"""
+
+    def access(state):
+        """Access relevant portion of shared state."""
+
+    def bind(instance, my_role, rel_type, other_role):
+        """Return a relationship property bound to given instance."""
+
+    def filter(link):
+        """Default filter."""
+
 
 class URIObject(object):
     """See IURIObject."""
@@ -65,6 +90,10 @@ class URIObject(object):
         self._uri = uri
         self._name = name
         self._description = description
+
+    def persist(self):
+        return PersistentURIObject(
+            self, self._uri, name=self._name, description=self._description)
 
     uri = property(lambda self: self._uri)
     name = property(lambda self: self._name)
@@ -79,10 +108,34 @@ class URIObject(object):
         return not self.__eq__(other)
 
     def __hash__(self):
-        return hash(self.uri)
+        return hash(self._uri)
+
+    def __unicode__(self):
+        return unicode(self._uri)
+
+    def __str__(self):
+        if isinstance(self._uri, str):
+            return self._uri
+        return self._uri.encode('UTF-8')
 
     def __repr__(self):
         return '<URIObject %s>' % (self.name or self.uri)
+
+    def access(self, state):
+        return state
+
+    def bind(self, instance, my_role, rel_type, other_role):
+        return BoundRelationshipProperty(
+            instance, rel_type, my_role, other_role)
+
+    def filter(self, link):
+        return link.rel_type == self
+
+
+class PersistentURIObject(Persistent, Contained, URIObject):
+
+    __name__ = None
+    __parent__ = None
 
 
 def looks_like_a_uri(uri):

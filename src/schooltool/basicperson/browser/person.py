@@ -51,6 +51,9 @@ from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.app.browser.app import EditRelationships
 from schooltool.app.browser.app import RelationshipAddTableMixin
 from schooltool.app.browser.app import RelationshipRemoveTableMixin
+from schooltool.app.browser.states import TemporalRelationshipAddTableMixin
+from schooltool.app.browser.states import TemporalRelationshipRemoveTableMixin
+from schooltool.app.browser.states import EditTemporalRelationships
 from schooltool.app.browser.report import ReportPDFView
 from schooltool.app.browser.report import DefaultPageTemplate
 from schooltool.app.interfaces import ISchoolToolApplication
@@ -228,13 +231,17 @@ class UsernameNonASCII(ValidationError):
 
 class UsernameValidator(SimpleFieldValidator):
 
+    @property
+    def container(self):
+        return self.context
+
     def validate(self, username):
         super(UsernameValidator, self).validate(username)
         if username is not None:
-            if username in self.context:
+            if username in self.container:
                 raise UsernameAlreadyUsed(username)
             try:
-                INameChooser(self.context).checkName(username, None)
+                INameChooser(self.container).checkName(username, None)
             except ValueError:
                 raise UsernameBadName(username)
         # XXX: this has to be fixed
@@ -336,6 +343,9 @@ class FlourishPersonInfo(flourish.page.Content):
 class PersonAddFormBase(PersonForm, form.AddForm):
     """Person add form for basic persons."""
 
+    _groups = None
+    _advisors = None
+
     def update(self):
         self.fields = field.Fields(IPersonAddForm)
         self.fields += self.generateExtraFields()
@@ -356,10 +366,12 @@ class PersonAddFormBase(PersonForm, form.AddForm):
         group = data.pop('group')
         advisor = data.pop('advisor')
         form.applyChanges(self, person, data)
+        self._groups = []
         if group is not None:
-            person.groups.add(group)
+            self._groups.append(group)
+        self._advisors = []
         if advisor is not None:
-            person.advisors.add(advisor)
+            self._advisors.append(advisor)
         self._person = person
         return person
 
@@ -377,6 +389,10 @@ class PersonAddFormBase(PersonForm, form.AddForm):
         """
         name = person.username
         self.context[name] = person
+        for group in self._groups:
+            person.groups.add(group)
+        for advisor in self._advisors:
+            person.advisors.add(advisor)
         return person
 
 
@@ -695,7 +711,26 @@ class EditPersonRelationships(EditRelationships):
         return ISchoolToolApplication(None)['persons']
 
 
-class FlourishPersonAdvisorView(EditPersonRelationships):
+class EditPersonTemporalRelationships(EditTemporalRelationships):
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']
+
+    def getTargets(self, keys):
+        if not keys:
+            return None
+        app = ISchoolToolApplication(None)
+        persons = [
+            app['persons'].get(username)
+            for username in keys
+            ]
+        return persons
+
+
+class FlourishPersonAdvisorView(EditPersonTemporalRelationships):
+
+    app_states_name = 'person-advisors'
+    dialog_title_template = _("Assign advisor ${target}")
 
     current_title = _('Current advisors')
     available_title = _('Available advisors')
@@ -731,7 +766,10 @@ class PersonAdviseeView(RelationshipViewBase):
         return self.context.advisees
 
 
-class FlourishPersonAdviseeView(EditPersonRelationships):
+class FlourishPersonAdviseeView(EditPersonTemporalRelationships):
+
+    app_states_name = 'person-advisors'
+    dialog_title_template = _("Assign advisee ${target}")
 
     current_title = _("Current advisees")
     available_title = _("Available advisees")
@@ -895,6 +933,8 @@ class PersonAddViewBase(PersonAddFormBase):
         person = self._factory(username, first_name, last_name)
         data.pop('confirm')
         form.applyChanges(self, person, data)
+
+        self._groups = []
         group = None
         syc = ISchoolYearContainer(ISchoolToolApplication(None))
         active_schoolyear = syc.getActiveSchoolYear()
@@ -904,10 +944,13 @@ class PersonAddViewBase(PersonAddFormBase):
             else:
                 group = data.get('group')
         if group is not None:
-            person.groups.add(group)
+            self._groups.append(group)
+
+        self._advisors = []
         advisor = data.get('advisor')
         if advisor is not None:
-            person.advisors.add(advisor)
+            self._advisors.append(advisor)
+
         self._person = person
         return person
 
@@ -1076,6 +1119,26 @@ class BasicPersonAddRelationshipTable(RelationshipAddTableMixin,
 
 
 class BasicPersonRemoveRelationshipTable(RelationshipRemoveTableMixin,
+                                         BasicPersonTable):
+    pass
+
+
+class BasicPersonAddRelationshipTable(RelationshipAddTableMixin,
+                                      BasicPersonTable):
+    pass
+
+
+class BasicPersonRemoveRelationshipTable(RelationshipRemoveTableMixin,
+                                         BasicPersonTable):
+    pass
+
+
+class BasicPersonAddTemporalRelationshipTable(TemporalRelationshipAddTableMixin,
+                                      BasicPersonTable):
+    pass
+
+
+class BasicPersonRemoveTemporalRelationshipTable(TemporalRelationshipRemoveTableMixin,
                                          BasicPersonTable):
     pass
 
@@ -1544,3 +1607,16 @@ class NewMessageIndicatorViewlet(flourish.page.LinkViewlet):
             return None
         url = absoluteURL(person, self.request) + '#messages'
         return url
+
+
+class FlourishLeaderView(EditPersonTemporalRelationships):
+
+    app_states_name = 'asset-leaders'
+    current_title = _("Current responsible parties")
+    available_title = _("Available responsible parties")
+
+    def getCollection(self):
+        return self.context.leaders
+
+    def getAvailableItemsContainer(self):
+        return ISchoolToolApplication(None)['persons']

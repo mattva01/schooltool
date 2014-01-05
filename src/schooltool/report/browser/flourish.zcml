@@ -254,6 +254,14 @@
       permission="schooltool.view"
       />
 
+  <page
+      name="long"
+      for="schooltool.report.interfaces.IReportMessage"
+      layer="schooltool.skin.flourish.IFlourishLayer"
+      class="schooltool.task.browser.task.TaskDialogHTML"
+      permission="schooltool.view"
+      />
+
   <flourish:viewletManager
       name="file_manager"
       view="schooltool.report.browser.report.ReportArchivePage"

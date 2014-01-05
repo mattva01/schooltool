@@ -1,0 +1,5 @@
+<div i18n:domain="schooltool">
+  <p>
+    <tal:block content="context/title" />
+  </p>
+</div>

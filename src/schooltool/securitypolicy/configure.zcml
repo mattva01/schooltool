@@ -31,6 +31,10 @@
       factory=".crowds.AuthenticatedCrowd" />
 
   <security:crowd
+      name="logged_in"
+      factory=".crowds.LoggedInCrowd" />
+
+  <security:crowd
       name="owner"
       factory=".crowds.OwnerCrowd" />
 

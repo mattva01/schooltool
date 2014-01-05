@@ -154,4 +154,16 @@
 
   </configure>
 
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".advisor.AdvisorStatesStartUp"
+      provides="schooltool.app.interfaces.IPluginInit"
+      name="schooltool.basicperson.advisor-states" />
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".advisor.AdvisorStatesStartUp"
+      provides="schooltool.app.interfaces.IPluginStartUp"
+      name="schooltool.basicperson.advisor-states" />
+
 </configure>

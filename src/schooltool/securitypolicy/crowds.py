@@ -244,6 +244,17 @@ class AnonymousCrowd(_GroupCrowd):
     group = 'zope.Anybody'
 
 
+class LoggedInCrowd(Crowd):
+
+    title = _(u'Logged In')
+    description = _(u'All logged in users.')
+
+    def contains(self, principal):
+        from schooltool.person.interfaces import IPerson
+        person = IPerson(principal, None)
+        return person is not None
+
+
 class SuperUserCrowd(Crowd):
 
     title = _(u'Super user')

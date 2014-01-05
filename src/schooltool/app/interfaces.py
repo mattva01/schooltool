@@ -20,6 +20,7 @@ SchoolTool application interfaces
 """
 
 import zope.schema
+import zope.schema.interfaces
 
 from zope.component.interfaces import ObjectEvent, IObjectEvent
 from zope.container.interfaces import IContainer
@@ -253,3 +254,69 @@ class ICatalogs(IContainer):
 
     contains(IVersionedCatalog)
 
+
+class IRequestHelpers(Interface):
+    """Easy access to common ST utils."""
+
+
+class IRequestHelper(Interface):
+    """Interface to query a request helper."""
+
+
+class IRelationshipState(Interface):
+
+    title = zope.schema.TextLine(
+        title=_(u'Title'),
+        required=True)
+
+    code = zope.schema.TextLine(
+        title=_(u'Code'),
+        description=_(u"A short status code, preferably few symbols."),
+        required=True)
+
+    active = zope.schema.TextLine(
+        title=_(u'Active'), required=True)
+
+
+class IRelationshipStateContainer(IContainer):
+    contains(IRelationshipState)
+
+
+class IRelationshipStates(IContained):
+
+    title = zope.schema.TextLine(
+        title=_("Title"))
+
+    states = zope.schema.Dict(
+        title=_(u'Statuses'),
+        description=_(u'Recipient addresses'),
+        key_type=zope.schema.TextLine(title=u"Key"),
+        value_type=zope.schema.Object(
+            title=_(u"Status"),
+            schema=IRelationshipState),
+        min_length=1)
+
+    system_titles = zope.schema.Dict(
+        title=_(u'System state value descriptions'),
+        description=_(u'Descriptions of state "active" values'),
+        key_type=zope.schema.TextLine(title=u"Key"),
+        value_type=zope.schema.TextLine(title=u"Description"),
+        min_length=1)
+
+    factory = Attribute(u'State factory')
+
+    def __iter__():
+        """Iterate through self.states values."""
+
+    def getState(state_tuple):
+        """Return app state given (meaning, code) tuple."""
+
+    def getTitle(state_tuple):
+        """Return state title given (meaning, code) tuple."""
+
+    def getDescription(state_tuple):
+        """Return state description given (meaning, code) tuple."""
+
+
+class IRelationshipStateChoice(zope.schema.interfaces.IField):
+    """A choice of temporal relationship states."""

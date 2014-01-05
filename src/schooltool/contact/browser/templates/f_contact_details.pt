@@ -15,19 +15,15 @@
       <tr tal:repeat="info view/relationships">
         <td class="label">
           <label>
-            <span tal:condition="info/relationship" i18n:translate="">
-              <tal:block tal:replace="info/getRelationshipTitle" i18n:name="relationship" />
-              of
-            </span>
-            <span tal:condition="not:info/relationship" i18n:translate="">
-              Contact of
+            <span i18n:translate="">
+              <tal:block tal:replace="info/title" i18n:name="relationship" />
             </span>
           </label>
         </td>
         <td>
           <div class="widget">
             <span>
-              <a tal:replace="structure info/__parent__/schooltool:content/link" />
+              <a tal:replace="structure info/person/schooltool:content/link" />
             </span>
           </div>
         </td>

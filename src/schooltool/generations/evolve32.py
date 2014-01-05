@@ -24,6 +24,7 @@ from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
 
 from schooltool.basicperson.interfaces import IEnumFieldDescription
+from schooltool.generations import linkcatalogs
 from schooltool.app.interfaces import ISchoolToolApplication
 
 
@@ -31,6 +32,7 @@ DEMOGRAPHICS_FIELDS_KEY = 'schooltool.basicperson.demographics_fields'
 
 
 def evolve(context):
+    linkcatalogs.ensureEvolved(context)
     root = context.connection.root().get(ZopePublication.root_name, None)
 
     apps = findObjectsProviding(root, ISchoolToolApplication)

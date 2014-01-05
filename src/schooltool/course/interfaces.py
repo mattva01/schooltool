@@ -24,6 +24,7 @@ from zope.container.interfaces import IContainer, IContained
 from zope.container.constraints import contains, containers
 from zope.interface import Interface, Attribute
 
+from schooltool.app.interfaces import IRelationshipState
 from schooltool.group.interfaces import IBaseGroup as IGroup
 from schooltool.common import SchoolToolMessage as _
 
@@ -159,3 +160,9 @@ class IInstructor(Interface):
 
     def sections():
         """List of all the sections this instructor is teaching to."""
+
+
+class IStudentRelationshipState(IRelationshipState):
+
+    completed = zope.schema.Bool(
+        title=_(u'Completed'), required=True)

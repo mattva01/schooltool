@@ -21,17 +21,11 @@ import zope.file.interfaces
 from zope.publisher.interfaces.browser import IBrowserPage
 
 from schooltool.report.interfaces import IReportMessage
+from schooltool.report.interfaces import IReportFile
 from schooltool.task.interfaces import IProgressMessage
 from schooltool.task.interfaces import IRemoteTask
 
 from schooltool.common import SchoolToolMessage as _
-
-
-class IImporterTask(IRemoteTask):
-
-    xls_file = zope.schema.Object(
-        title=_("XLS File"),
-        schema=zope.file.interfaces.IFile)
 
 
 class IXLSExportView(IBrowserPage):
@@ -52,3 +46,14 @@ class IXLSExportView(IBrowserPage):
 
 class IXLSProgressMessage(IProgressMessage, IReportMessage):
     pass
+
+
+class IImportFile(IReportFile):
+    pass
+
+
+class IImporterTask(IRemoteTask):
+
+    xls_file = zope.schema.Object(
+        title=_("XLS File"),
+        schema=IImportFile)

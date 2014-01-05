@@ -29,6 +29,14 @@
     <p i18n:translate="">
       Please contact your administrator.
     </p>
+
+    <tal:block condition="nocall:view/task">
+      <div tal:condition="not:view/show_cancel"
+           tal:content="structure view/task/permanent_traceback"></div>
+      <div tal:condition="view/show_cancel">
+        <a i18n:translate="" tal:attributes="href context/@@absolute_url">Failure details...</a>
+      </div>
+    </tal:block>
   </tal:block>
 
   <div tal:attributes="id string:${progress_id}-progress">
@@ -53,7 +61,7 @@
 
     <div class="buttons">
       <input style="display: none;" class="button-ok" name="REFRESH" onclick="return ST.dialogs.submit(this, this);" value="Refresh" type="submit" i18n:attributes="value" tal:attributes="id string:${progress_id}-refresh-button">
-      <input class="button-cancel" name="CANCEL" onclick="return ST.dialogs.close(this);" value="Close" type="submit" i18n:attributes="value">
+      <input tal:condition="view/show_cancel" class="button-cancel" name="CANCEL" onclick="return ST.dialogs.close(this);" value="Close" type="submit" i18n:attributes="value">
     </div>
   </form>
 

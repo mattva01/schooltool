@@ -23,14 +23,24 @@ half of a relationship.  The storage of links on an object is determined by
 an IRelationshipLinks adapter.  There is a default adapter registered for
 all IAnnotatable objects that uses Zope 3 annotations.
 """
-
+from BTrees import IFBTree
 from BTrees.OOBTree import OOBTree
 from persistent import Persistent
-from persistent.list import PersistentList
 from zope.container.contained import Contained
+from zope.component import getUtility
+from zope.event import notify
 from zope.interface import implements
+from zope.intid.interfaces import IIntIds
+from zope.keyreference.interfaces import IKeyReference
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.lifecycleevent import ObjectRemovedEvent
+from zope.lifecycleevent import ObjectAddedEvent
+from zope.security.proxy import removeSecurityProxy
+from ZODB.interfaces import IConnection
 import zope.event
 
+from zope.cachedescriptors.property import Lazy
+from zope.component.hooks import getSite
 from schooltool.relationship.interfaces import IRelationshipLinks
 from schooltool.relationship.interfaces import IRelationshipInfo
 from schooltool.relationship.interfaces import IRelationshipLink
@@ -44,24 +54,78 @@ from schooltool.relationship.interfaces import NoSuchRelationship
 from schooltool.relationship.interfaces import IRelationshipSchema
 
 
+class SharedState(object):
+
+    def __init__(self, catalog, lid):
+        self.catalog = catalog
+        self.lid = lid
+
+    def __contains__(self, key):
+        return (self.lid, key) in self.catalog['shared']
+
+    def __getitem__(self, key):
+        return self.catalog['shared'].get(self.lid, key)
+
+    def __setitem__(self, key, value):
+        link = getUtility(IIntIds).getObject(self.lid)
+        link.shared[key] = value
+        notify(ObjectModifiedEvent(link))
+
+
 def relate(rel_type, (a, role_of_a), (b, role_of_b), extra_info=None):
     """Establish a relationship between objects `a` and `b`."""
     for link in IRelationshipLinks(a):
-        if (link.target is b and link.role == role_of_b
-            and link.rel_type == rel_type):
+        if (link.target is b and link.role_hash == hash(role_of_b)
+            and link.rel_type_hash == hash(rel_type)):
             raise DuplicateRelationship
+    shared = OOBTree()
+    shared['X'] = extra_info
     zope.event.notify(BeforeRelationshipEvent(rel_type,
                                               (a, role_of_a),
                                               (b, role_of_b),
-                                              extra_info))
-    IRelationshipLinks(a).add(Link(role_of_a, b, role_of_b, rel_type,
-                                   extra_info))
-    IRelationshipLinks(b).add(Link(role_of_b, a, role_of_a, rel_type,
-                                   extra_info))
+                                              shared))
+    uri_cache = getURICache()
+    uri_cache.cache(rel_type)
+    uri_cache.cache(role_of_a)
+    uri_cache.cache(role_of_b)
+    link_a = Link(role_of_a, b, role_of_b, rel_type, shared)
+    IRelationshipLinks(a).add(link_a)
+    link_b = Link(role_of_b, a, role_of_a, rel_type, shared)
+    IRelationshipLinks(b).add(link_b)
     zope.event.notify(RelationshipAddedEvent(rel_type,
                                              (a, role_of_a),
                                              (b, role_of_b),
-                                             extra_info))
+                                             shared))
+
+
+def duplicate(link, obj):
+    """Create duplicate link from obj to link.target."""
+    obj_links = IRelationshipLinks(obj)
+
+    for olink in obj_links:
+        if (olink.target is link.target and olink.role_hash == link.role_hash
+            and olink.rel_type_hash == link.rel_type_hash):
+            raise DuplicateRelationship
+
+    shared = OOBTree()
+    for key, val in link.shared.items():
+        shared[key] = val
+    zope.event.notify(BeforeRelationshipEvent(link.rel_type,
+                                              (obj, link.my_role),
+                                              (link.target, link.role),
+                                              shared))
+    uri_cache = getURICache()
+    uri_cache.cache(link.rel_type)
+    uri_cache.cache(link.my_role)
+    uri_cache.cache(link.role)
+    link_a = Link(link.my_role, link.target, link.role, link.rel_type, shared)
+    IRelationshipLinks(obj).add(link_a)
+    link_b = Link(link.role, obj, link.my_role, link.rel_type, shared)
+    IRelationshipLinks(link.target).add(link_b)
+    zope.event.notify(RelationshipAddedEvent(link.rel_type,
+                                             (obj, link.my_role),
+                                             (link.target, link.role),
+                                             shared))
 
 
 def unrelate(rel_type, (a, role_of_a), (b, role_of_b)):
@@ -124,13 +188,17 @@ class RelationshipEvent(object):
 
     """
 
-    def __init__(self, rel_type, (a, role_of_a), (b, role_of_b), extra_info):
+    def __init__(self, rel_type, (a, role_of_a), (b, role_of_b), shared):
         self.rel_type = rel_type
         self.participant1 = a
         self.role1 = role_of_a
         self.participant2 = b
         self.role2 = role_of_b
-        self.extra_info = extra_info
+        self.shared = shared
+
+    @property
+    def extra_info(self):
+        return self.shared['X']
 
     def __getitem__(self, role):
         """Return the participant with a given role."""
@@ -140,27 +208,52 @@ class RelationshipEvent(object):
             return self.participant2
         raise KeyError(role)
 
+    def getLinks(self):
+        links_1 = IRelationshipLinks(self.participant1)
+        links_2 = IRelationshipLinks(self.participant2)
+        try:
+            link_1_to_2 = links_1.find(
+                self.role1, self.participant2, self.role2,
+                self.rel_type)
+        except ValueError:
+            raise NoSuchRelationship
+        try:
+            link_2_to_1 = links_2.find(
+                self.role2, self.participant1, self.role1,
+                self.rel_type)
+        except ValueError:
+            raise NoSuchRelationship
+        return link_1_to_2, link_2_to_1
+
     def match(self, schema):
-        if self.rel_type != schema.rel_type:
+        match = RelationshipMatch(
+            self.role1, self.participant1,
+            self.rel_type,
+            self.role2, self.participant2,
+            schema)
+        if not match:
             return None
-        schema_roles = tuple(schema.roles.values())
-        if ((self.role1, self.role2) != schema_roles and
-            (self.role2, self.role1) != schema_roles):
-            return None
-        return RelationshipMatch(self, schema)
+        return match
 
 
 class RelationshipMatch(object):
 
-    def __init__(self, event, schema):
-        self._event = event
+    matched = True
+
+    def __init__(self, role1, participant1, rel_type, role2, participant2, schema):
         self._schema = schema
-        self.extra_info = event.extra_info
+        if rel_type != schema.rel_type:
+            self.matched = False
         for name, role in schema.roles.items():
-            if role == event.role1:
-                setattr(self, name, event.participant1)
-            elif role == event.role2:
-                setattr(self, name, event.participant2)
+            if role == role1:
+                setattr(self, name, participant1)
+            elif role == role2:
+                setattr(self, name, participant2)
+            else:
+                self.matched = False
+
+    def __nonzero__(self):
+        return self.matched
 
 
 class BeforeRelationshipEvent(RelationshipEvent):
@@ -227,9 +320,14 @@ class RelationshipRemovedEvent(RelationshipEvent):
     implements(IRelationshipRemovedEvent)
 
 
-def getRelatedObjects(obj, role, rel_type=None):
+def getRelatedObjects(obj, role, rel_type=None, catalog=None):
     """Return all objects related to `obj` with a given role."""
-    return IRelationshipLinks(obj).getTargetsByRole(role, rel_type)
+    return IRelationshipLinks(obj).getTargetsByRole(role, rel_type, catalog=catalog)
+
+
+def iterRelatedObjects(obj, role, rel_type=None, catalog=None):
+    """Return all objects related to `obj` with a given role."""
+    return IRelationshipLinks(obj).iterTargetsByRole(role, rel_type, catalog=catalog)
 
 
 class RelationshipSchema(object):
@@ -289,16 +387,44 @@ class RelationshipSchema(object):
         """Break a relationship."""
         self._doit(unrelate, **parties)
 
-    def query(self, **party):
-        """Retrieve relationship targets."""
+    def getPartyRole(self, **party):
         if len(party) != 1:
             raise TypeError("A single party must be provided.")
         roles = list(self.roles.keys())
         my_role_key = party.keys()[0]
         roles.remove(my_role_key)
-        other_role = self.roles[roles[0]]
+        party_role = self.roles[roles[0]]
+        return party_role
+
+    def getSortedPartyRoles(self, **party):
+        if len(party) != 1:
+            raise TypeError("A single party must be provided.")
+        roles = list(self.roles.items())
+        if roles[0][0] == party.keys()[0]:
+            return roles[0][1], roles[1][1]
+        return roles[1][1], roles[0][1]
+
+    def bind(self, **party):
+        for name in list(party):
+            party[name] = removeSecurityProxy(party[name])
+        my_role, other_role = self.getSortedPartyRoles(**party)
+        prop = self.rel_type.bind(
+            party.values()[0], my_role, self.rel_type, other_role)
+        return prop
+
+    def query(self, **party):
+        """Retrieve relationship targets."""
+        other_role = self.getPartyRole(**party)
         obj = party.values()[0]
         return getRelatedObjects(obj, other_role, rel_type=self.rel_type)
+
+    def relationships(self, **party):
+        other_role = self.getPartyRole(**party)
+        obj = party.values()[0]
+        links = IRelationshipLinks(obj).iterLinksByRole(
+            other_role, rel_type=self.rel_type)
+        for link in links:
+            yield RelationshipInfo(obj, link)
 
     def _doit(self, fn, **parties):
         """Extract and validate parties from keyword arguments and call fn."""
@@ -365,8 +491,82 @@ class RelationshipProperty(object):
         if instance is None:
             return self
         else:
-            return BoundRelationshipProperty(instance, self.rel_type,
-                                             self.my_role, self.other_role)
+            return self.rel_type.bind(
+                instance,
+                self.my_role, self.rel_type, self.other_role)
+
+
+def hash_persistent(obj):
+    oid = obj._p_oid
+    connection = obj._p_jar
+    if oid is None or connection is None:
+        connection = IConnection(obj, None)
+        if connection is None:
+            raise zope.keyreference.interfaces.NotYet(obj)
+        connection.add(obj)
+        oid = obj._p_oid
+    database_name = connection.db().database_name
+    return hash((database_name, oid))
+
+
+class ObjectProxy(object):
+    """Holder of ZODB id and connection.
+
+    Useful as a replacement of real object in key reference comparisons.
+    """
+    __slots__ = '_p_oid', '_p_jar'
+
+    def __init__(self, oid, connection):
+        self._p_oid = oid
+        self._p_jar = connection
+
+    def __conform__(self, iface):
+        if iface == IConnection:
+            return self._p_jar
+
+    def __reduce__(self):
+        raise Exception('unpicklable')
+
+    def __reduce_ex__(self, protocol):
+        raise Exception('unpicklable')
+
+
+class LinkTargetKeyReference(object):
+    """Key reference for relationship link targets.
+
+    Does not cause an object to fully load (unghostify) while comparing to other
+    key references.  Useful for obtaining int ids.
+    """
+
+    implements(IKeyReference)
+
+    __slots__ = 'link', 'object'
+    key_type_id = 'zope.app.keyreference.persistent'
+
+    def __init__(self, link):
+        self.link = link
+        self.object = ObjectProxy(link.target._p_oid, link.target._p_jar)
+
+    def __call__(self):
+        return self.link.target
+
+    def __reduce__(self):
+        raise Exception('unpicklable')
+
+    def __reduce_ex__(self, protocol):
+        raise Exception('unpicklable')
+
+    def __hash__(self):
+        return hash_persistent(self.object)
+
+    def __cmp__(self, other):
+        if self.key_type_id == other.key_type_id:
+            self_name = self.object._p_jar.db().database_name
+            self_oid = self.object._p_oid
+            other_name = other.object._p_jar.db().database_name
+            other_oid = other.object._p_oid
+            return cmp((self_name, self_oid), (other_name, other_oid))
+        return cmp(self.key_type_id, other.key_type_id)
 
 
 class BoundRelationshipProperty(object):
@@ -381,8 +581,10 @@ class BoundRelationshipProperty(object):
         self.other_role = other_role
 
     def __nonzero__(self):
+        linkset = IRelationshipLinks(self.this)
+        iterator = iter(linkset.iterLinksByRole(self.other_role, self.rel_type))
         try:
-            iter(self).next()
+            iterator.next()
         except StopIteration:
             return False
         else:
@@ -390,20 +592,41 @@ class BoundRelationshipProperty(object):
 
     def __len__(self):
         count = 0
-        for i in self:
+        linkset = IRelationshipLinks(self.this)
+        for i in linkset.iterLinksByRole(self.other_role, self.rel_type):
             count += 1
         return count
 
     def __iter__(self):
-        return iter(getRelatedObjects(self.this, self.other_role,
-                                      self.rel_type))
+        return iter(iterRelatedObjects(self.this, self.other_role,
+                                       self.rel_type))
+
+    @property
+    def int_ids(self):
+        int_ids = getUtility(IIntIds)
+        linkset = IRelationshipLinks(self.this)
+        for link in linkset.iterLinksByRole(self.other_role, self.rel_type):
+            yield int_ids.getId(LinkTargetKeyReference(link))
+
+    def __contains__(self, other):
+        if other is None:
+            return False
+        other = removeSecurityProxy(other)
+        linkset = IRelationshipLinks(self.this)
+        filter = self.rel_type.filter
+        for link in linkset.getCachedLinksByTarget(other):
+            if (link.my_role_hash == hash(self.my_role) and
+                link.role_hash == hash(self.other_role) and
+                filter(link)):
+                return True
+        return False
 
     @property
     def relationships(self):
-        linkset = IRelationshipLinks(self.this).getLinksByRole(self.other_role)
-        return [RelationshipInfo(self.this, link)
-                for link in linkset
-                if link.rel_type == self.rel_type]
+        links = IRelationshipLinks(self.this).iterLinksByRole(
+            self.other_role, rel_type=self.rel_type)
+        for link in links:
+            yield RelationshipInfo(self.this, link)
 
     def add(self, other, extra_info=None):
         """Establish a relationship between `self.this` and `other`."""
@@ -485,21 +708,17 @@ class RelationshipInfo(object):
         return self._link.target
 
     @property
+    def state(self):
+        return self._link.state
+
+    @property
     def extra_info(self):
         return self._link.extra_info
 
     @extra_info.setter
     def extra_info(self, value):
         this_link = self._link
-
-        links_of_target = IRelationshipLinks(self._link.target)
-        # If links_of_target.find raises a ValueError, our data structures are
-        # out of sync.
-        other_link = links_of_target.find(
-            this_link.role, self._this, this_link.my_role, this_link.rel_type)
-
-        this_link.extra_info = value
-        other_link.extra_info = value
+        this_link.shared['X'] = value
 
 
 class Link(Persistent, Contained):
@@ -532,12 +751,126 @@ class Link(Persistent, Contained):
 
     implements(IRelationshipLink)
 
-    def __init__(self, my_role, target, role, rel_type, extra_info=None):
+    shared = None
+
+    def __init__(self, my_role, target, role, rel_type, shared):
         self.my_role = my_role
         self.target = target
         self.role = role
         self.rel_type = rel_type
-        self.extra_info = extra_info
+        self.shared = shared
+
+    @property
+    def my_role_hash(self):
+        return hash(self.my_role)
+
+    @property
+    def role_hash(self):
+        return hash(self.role)
+
+    @property
+    def rel_type_hash(self):
+        return hash(self.rel_type)
+
+    @property
+    def extra_info(self):
+        return self.shared['X']
+
+    @property
+    def shared_state(self):
+        return SharedState(
+            getLinkCatalog(),
+            getUtility(IIntIds).getId(self))
+
+    @property
+    def state(self):
+        return self.rel_type.access(self.shared_state)
+
+    def match(self, schema):
+        this = self.__parent__.__parent__
+        match = RelationshipMatch(
+            self.my_role, this,
+            self.rel_type,
+            self.role, self.target,
+            schema)
+        if not match:
+            return None
+        return match
+
+
+class CLink(object):
+
+    def __init__(self, catalog, lid):
+        self.catalog = catalog
+        self.lid = lid
+
+    @Lazy
+    def link(self):
+        return getUtility(IIntIds).getObject(self.lid)
+
+    @property
+    def __name__(self):
+        return self.link.__name__
+
+    @property
+    def __parent__(self):
+        return self.link.__parent__
+
+    @property
+    def my_role_hash(self):
+        return self.catalog['my_role_hash'].documents_to_values[self.lid][0]
+
+    @property
+    def role_hash(self):
+        return self.catalog['role_hash'].documents_to_values[self.lid][0]
+
+    @property
+    def rel_type_hash(self):
+        return self.catalog['rel_type_hash'].documents_to_values[self.lid][0]
+
+    @property
+    def my_role(self):
+        return self.link.my_role
+
+    @property
+    def role(self):
+        return self.link.role
+
+    @property
+    def rel_type(self):
+        cache = getURICache()
+        hashed = self.catalog['rel_type_hash'].documents_to_values[self.lid][0]
+        return cache[str(hashed)]
+
+    @property
+    def target(self):
+        return self.catalog['target'].documents_to_values[self.lid][0]()
+
+    @property
+    def shared_state(self):
+        return SharedState(self.catalog, self.lid)
+
+    @property
+    def state(self):
+        return self.rel_type.access(self.shared_state)
+
+    @property
+    def extra_info(self):
+        return self.shared_state['X']
+
+
+def getLinkCatalog():
+    # XXX: hard-coded for speed
+    app = getSite()
+    catalogs = app['schooltool.app.catalog:Catalogs']
+    versioned = catalogs['catalog:schooltool.relationship.catalog.LinkCatalog']
+    return versioned.catalog
+
+
+def getURICache():
+    # XXX: hard-coded for speed
+    app = getSite()
+    return app['schooltool.relationship.uri']
 
 
 class LinkSet(Persistent, Contained):
@@ -568,10 +901,10 @@ class LinkSet(Persistent, Contained):
         >>> dict(linkset._byrole.items()) == expected
         True
 
-    Let's zap the cache and call getLinksByRole(), which should restore it:
+    Let's zap the cache and call getCachedLinksByRole(), which should restore it:
 
         >>> del linkset._byrole
-        >>> linkset.getLinksByRole(URIStub('something'))
+        >>> linkset.getCachedLinksByRole(URIStub('something'))
         []
 
         >>> dict(linkset._byrole.items()) == expected
@@ -665,21 +998,28 @@ class LinkSet(Persistent, Contained):
 
     implements(IRelationshipLinks)
 
+    _lids = None
+
     def __init__(self):
+        self._lids = IFBTree.TreeSet()
         self._links = OOBTree()
-        self._byrole = OOBTree() # role -> list of links
 
-    def getLinksByRole(self, role):
+    @property
+    def catalog(self):
+        return getLinkCatalog()
+
+    def getCachedLinksByRole(self, role, catalog=None):
         """Get a set of links by role."""
-        try:
-            cache = self._byrole
-        except AttributeError:
-            cache = OOBTree()
-            for link in self:
-                cache.setdefault(link.role.uri, PersistentList()).append(link)
-            self._byrole = cache
+        if catalog is None:
+            catalog = self.catalog
+        lids = self.query(role=role, catalog=catalog)
+        return [CLink(catalog, lid) for lid in lids]
 
-        return cache.get(role.uri, [])
+    def getCachedLinksByTarget(self, target, catalog=None):
+        if catalog is None:
+            catalog = self.catalog
+        lids = self.query(target=target, catalog=catalog)
+        return [CLink(catalog, lid) for lid in lids]
 
     def add(self, link):
         if link.__parent__ == self:
@@ -691,31 +1031,33 @@ class LinkSet(Persistent, Contained):
         link.__name__ = "%s" % i
         self._links[link.__name__] = link
         link.__parent__ = self
-
-        self._byrole.setdefault(link.role.uri, PersistentList()).append(link)
+        notify(ObjectAddedEvent(link, self._links, link.__name__))
 
     def remove(self, link):
         if link is self._links.get(link.__name__):
+            link_name = link.__name__
+            self._lids.remove(getUtility(IIntIds).getId(link))
             del self._links[link.__name__]
-            uri = link.role.uri
-            self._byrole[uri].remove(link)
-            if not self._byrole[uri]:
-                del self._byrole[uri]
+            notify(ObjectRemovedEvent(link, self._links, link_name))
         else:
             raise ValueError("This link does not belong to this container!")
 
     def clear(self):
+        deleted = list(self._links.items())
         self._links.clear()
         self._byrole.clear()
+        for name, link in deleted:
+            notify(ObjectRemovedEvent(link, self._links, name))
 
     def __iter__(self):
         return iter(self._links.values())
 
     def find(self, my_role, target, role, rel_type):
-        links = self.getLinksByRole(role)
-        for link in links:
-            if (link.rel_type == rel_type and link.target is target
-                and link.my_role == my_role):
+        for link in self._links.values():
+            if (link.role_hash == hash(role) and
+                link.target is target and
+                link.rel_type_hash == hash(rel_type) and
+                link.my_role_hash == hash(my_role)):
                 return link
         else:
             raise ValueError(my_role, target, role, rel_type)
@@ -726,10 +1068,71 @@ class LinkSet(Persistent, Contained):
     def get(self, key, default=None):
         return self._links.get(key, default)
 
-    def getTargetsByRole(self, role, rel_type=None):
-        links = self.getLinksByRole(role)
+    def query(self, my_role=None, target=None, role=None, rel_type=None, catalog=None):
+        if catalog is None:
+            catalog = self.catalog
+        empty = IFBTree.TreeSet()
+        this_hash = hash_persistent(self.__parent__)
+        result = None
+        if my_role is not None:
+            ids = catalog['my_role_hash'].values_to_documents.get(
+                (hash(my_role), this_hash), empty)
+            if result is None:
+                result = ids
+            else:
+                result = IFBTree.intersection(result, ids)
+            if not result:
+                return result
+        if target is not None:
+            ids = catalog['target'].values_to_documents.get(
+                (IKeyReference(target), this_hash), empty)
+            if result is None:
+                result = ids
+            else:
+                result = IFBTree.intersection(result, ids)
+            if not result:
+                return result
+        if role is not None:
+            ids = catalog['role_hash'].values_to_documents.get(
+                (hash(role), this_hash), empty)
+            if result is None:
+                result = ids
+            else:
+                result = IFBTree.intersection(result, ids)
+            if not result:
+                return result
+        if rel_type is not None:
+            ids = catalog['rel_type_hash'].values_to_documents.get(
+                (hash(rel_type), this_hash), empty)
+            if result is None:
+                result = ids
+            else:
+                result = IFBTree.intersection(result, ids)
+        return result
+
+    def iterLinksByRole(self, role, rel_type=None, catalog=None):
+        if catalog is None:
+            catalog = self.catalog
+        lids = self.query(role=role, rel_type=rel_type, catalog=catalog)
         if rel_type is None:
-            return [link.target for link in links]
+            filters = {}
+            for lid in lids:
+                link = CLink(catalog, lid)
+                if link.rel_type_hash not in filters:
+                    filters[link.rel_type_hash] = link.rel_type.filter
+                if filters[link.rel_type_hash](link):
+                    yield link
         else:
-            return [link.target for link in links
-                    if link.rel_type == rel_type]
+            filter = rel_type.filter
+            for lid in lids:
+                link = CLink(catalog, lid)
+                if filter(link):
+                    yield link
+
+    def getTargetsByRole(self, role, rel_type=None, catalog=None):
+        links = self.iterLinksByRole(role, rel_type=rel_type, catalog=catalog)
+        return [link.target for link in links]
+
+    def iterTargetsByRole(self, role, rel_type=None, catalog=None):
+        for link in self.iterLinksByRole(role, rel_type=rel_type, catalog=catalog):
+            yield link.target

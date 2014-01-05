@@ -1,0 +1,12 @@
+<div class="manage-view" i18n:domain="schooltool">
+  <h3 i18n:translate="">
+    Children
+  </h3>
+  <tal:block tal:repeat="child view/children">
+    <p>
+      <a tal:attributes="href child/@@absolute_url"
+         tal:content="child/@@title" />
+      <span i18n:translate="">overview.</span>
+    </p>
+  </tal:block>
+</div>

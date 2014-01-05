@@ -1,0 +1,103 @@
+<tal:block i18n:domain="schooltool">
+  <tal:block condition="not:nocall:context/report">
+    <h3 tal:condition="not:view/failure_ticket_id" i18n:translate="">Importing...</h3>
+    <h3 tal:condition="view/failure_ticket_id" i18n:translate="">System failure during import</h3>
+  </tal:block>
+  <tal:block condition="nocall:context/report">
+    <h3 tal:condition="context/report/errors" i18n:translate="">Import failed due to errors</h3>
+    <h3 tal:condition="not:context/report/errors" i18n:translate="">Import completed</h3>
+  </tal:block>
+  <table class="report-dialog-message">
+    <tbody>
+
+      <tr tal:repeat="line view/errors">
+        <td tal:condition="line/sheetname|nothing"
+            tal:content="line/sheetname" colspan="2"
+            class="ui-priority-primary">
+        </td>
+        <td tal:condition="line/cells|nothing" class="ui-state-error">
+          <span class="ui-icon ui-icon-alert">error</span>
+          <tal:block  tal:content="line/cells" />
+        </td>
+        <td tal:condition="line/message|nothing"
+            tal:content="line/message">
+        </td>
+      </tr>
+
+
+      <tal:block condition="not:view/failure_ticket_id">
+        <tr tal:condition="view/main_recipient">
+          <td colspan="2" i18n:translate="">
+            You can also download the spreadsheet at any time from your
+            <a tal:attributes="href view/main_recipient/@@absolute_url"
+               i18n:name="home-link" i18n:translate="">home page</a>.
+          </td>
+        </tr>
+      </tal:block>
+
+      <tr tal:condition="nocall:context/report">
+        <td i18n:translate="">Download</td>
+        <td>
+          <a tal:attributes="href context/report/@@absolute_url"
+             tal:content="context/filename">filename</a>
+        </td>
+      </tr>
+
+      <tal:block condition="not:view/failure_ticket_id">
+      <tr tal:condition="not:nocall:context/report">
+        <td i18n:translate="" colspan="2">
+          Generating
+          <tal:block i18n:name="report" content="context/title" />...
+        </td>
+      </tr>
+      </tal:block>
+
+      <tal:block condition="view/failure_ticket_id">
+        <tr>
+          <td>
+            <span class="error" i18n:translate="">System failure.</span>
+          </td>
+          <td i18n:translate="">
+              Ticket nr.
+              <span i18n:name="ticket_id" tal:content="view/failure_ticket_id" />.
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" i18n:translate="">
+              Please contact your administrator.
+          </td>
+        </tr>
+        <tr tal:condition="view/failed_task">
+          <td colspan="2">
+              <a i18n:translate="" tal:attributes="href context/@@absolute_url">Failure details...</a>
+          </td>
+        </tr>
+      </tal:block>
+    </tbody>
+  </table>
+  <form method="post" class="standalone" action=""
+        tal:attributes="action view/@@absolute_url;
+                        id view/form_id">
+
+    <div class="buttons">
+    <tal:block condition="not:nocall:context/report">
+      <tal:block condition="not:view/failure_ticket_id">
+        <input class="button-ok" name="REFRESH" onclick="return ST.dialogs.submit(this, this);" value="Refresh" type="submit" i18n:attributes="value">
+      </tal:block>
+    </tal:block>
+    </div>
+  </form>
+
+  <script>ST.state.push()</script>
+  <tal:script
+      tal:replace="structure scriptlocal:delay view/refresh_delay;
+                                         form_id view/form_id;
+                                         generated view/report_generated" />
+  <script>
+    if (!ST.local.generated) {
+        var form = $(ST.dialogs.jquery_id(ST.local.form_id));
+        setTimeout(function(){ST.dialogs.submit(form);}, ST.local.delay);
+    }
+  </script>
+  <script>ST.state.pop()</script>
+</tal:block>

@@ -56,9 +56,12 @@ from zc.table.interfaces import ISortableColumn
 from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.browser.app import BaseEditView
 from schooltool.app.browser.app import RelationshipViewBase
+from schooltool.app.browser.states import RelationshipStatesEditView
+from schooltool.app.browser.states import AddStateActionDialog, RemoveStateActionDialog
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary_titled
 from schooltool.basicperson.browser.person import EditPersonRelationships
+from schooltool.basicperson.browser.person import EditPersonTemporalRelationships
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.common import SchoolToolMessage as _
 from schooltool.common.inlinept import InheritTemplate
@@ -1588,8 +1591,10 @@ class FlourishSectionDeleteView(DialogForm, form.EditForm):
         self.actions['cancel'].addClass('button-cancel')
 
 
-class FlourishSectionInstructorView(EditPersonRelationships):
+class FlourishSectionInstructorView(EditPersonTemporalRelationships):
     """View for adding instructors to a Section."""
+
+    app_states_name = "section-instruction"
 
     @property
     def title(self):
@@ -1599,14 +1604,18 @@ class FlourishSectionInstructorView(EditPersonRelationships):
     available_title = _("Add instructors")
 
     def getSelectedItems(self):
-        return filter(IPerson.providedBy, self.context.instructors)
+        members = EditPersonTemporalRelationships.getSelectedItems(self)
+        return filter(IPerson.providedBy, members)
 
     def getCollection(self):
         return self.context.instructors
 
 
-class FlourishSectionLearnerView(EditPersonRelationships):
+class FlourishSectionLearnerView(EditPersonTemporalRelationships):
     """View for adding learners to a Section."""
+
+    app_states_name = "section-membership"
+    dialog_title_template = _("Enroll ${target}")
 
     @property
     def title(self):
@@ -1616,7 +1625,8 @@ class FlourishSectionLearnerView(EditPersonRelationships):
     available_title = _("Add students")
 
     def getSelectedItems(self):
-        return filter(IPerson.providedBy, self.context.members)
+        members = EditPersonTemporalRelationships.getSelectedItems(self)
+        return filter(IPerson.providedBy, members)
 
     def getCollection(self):
         return self.context.members

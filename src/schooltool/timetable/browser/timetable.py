@@ -405,7 +405,7 @@ TimetableAdd_default_last = widget.ComputedWidgetAttribute(
 
 class FlourishSelectedPeriodsAddView(flourish.form.AddForm,
                                      SelectedPeriodsAddView):
-
+    template = flourish.templates.Inherit(flourish.page.Page.template)
     legend = _("Schedule a school timetable")
 
 
@@ -881,6 +881,7 @@ class FlourishTimetableDeleteView(FlourishConfirmDeleteView):
 
 
 class FlourishTimetableMakeDefaultView(flourish.form.DialogForm, form.EditForm):
+    template = flourish.templates.Inherit(flourish.page.Page.template)
     dialog_submit_actions = ('apply',)
     dialog_close_actions = ('cancel',)
     label = None

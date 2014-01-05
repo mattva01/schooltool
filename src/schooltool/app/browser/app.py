@@ -18,6 +18,7 @@
 """
 SchoolTool application views.
 """
+import re
 import urllib
 
 from zope.cachedescriptors.property import Lazy
@@ -225,22 +226,45 @@ class CSSFormatter(table.table.SortUIHeaderMixin, FormFullFormatter):
 
 class RelationshipButton(ImageInputColumn):
 
+    onclick = None
+    button_class = None
+    text_getter = None
+
+    def __init__(self, prefix, title=None, name=None,
+                 alt=None, library=None, image=None, id_getter=None,
+                 onclick=None, text_getter=None):
+        ImageInputColumn.__init__(self, prefix, title=title, name=name,
+                                  alt=alt, library=library, image=image,
+                                  id_getter=id_getter)
+        self.text_getter = text_getter
+        self.onclick = onclick
+        classname = '-'.join(filter(None, (prefix, name))).lower()
+        self.button_class = re.sub('[\W]+', '-', classname)
+
     def params(self, item, formatter):
         params = ImageInputColumn.params(self, item, formatter)
         params['tokens_name'] = ".".join(
             filter(None, ["displayed", self.prefix, "tokens"]))
         params['tokens_value'] = self.id_getter(item)
+        params['onclick'] = self.onclick
+        params['css_class'] = self.button_class
+        if self.text_getter is not None:
+            params['text'] = self.text_getter(item)
         return params
 
     def template(self):
-        return '\n'.join([
+        template = '\n'.join([
                 '<input name="%(tokens_name)s" value="%(tokens_value)s"'
                 ' type="hidden" />',
-                '<button class="image" type="submit" name="%(name)s"'
+                '<button class="image %(css_class)s" type="submit" name="%(name)s"'
+                ' onclick="%(onclick)s"'
                 ' title="%(title)s" value="1">',
                 '<img src="%(src)s" alt="%(alt)s" />',
                 '</button>'
                 ])
+        if self.text_getter is not None:
+            template = '<span>%(text)s</span>\n' + template
+        return template
 
 
 class RelationshipButtonTableMixin(object):
@@ -249,6 +273,7 @@ class RelationshipButtonTableMixin(object):
     extras_prefix = ""
     button_title = u""
     button_image = ''
+    onclick = None
     empty_message = _('There are none.')
 
     ignoreRequest = False
@@ -279,6 +304,9 @@ class RelationshipButtonTableMixin(object):
     def source(self):
         return self.view.getAvailableItemsContainer()
 
+    def makeTextGetter(self):
+        return None
+
     def columns(self):
         # XXX: evil!
         default = super(RelationshipButtonTableMixin, self).columns()
@@ -287,7 +315,10 @@ class RelationshipButtonTableMixin(object):
             self.button_prefix, name='action',
             title=self.button_title, alt=self.button_title,
             library='schooltool.skin.flourish',
-            image=self.button_image, id_getter=self.view.getKey)
+            image=self.button_image,
+            onclick=self.onclick,
+            id_getter=self.view.getKey,
+            text_getter=self.makeTextGetter())
         return default + [action]
 
     def update(self):
@@ -952,18 +983,6 @@ class LeaderView(RelationshipViewBase):
     title = _("Leaders")
     current_title = _("Current leaders")
     available_title = _("Available leaders")
-
-    def getCollection(self):
-        return self.context.leaders
-
-    def getAvailableItemsContainer(self):
-        return ISchoolToolApplication(None)['persons']
-
-
-class FlourishLeaderView(EditRelationships):
-
-    current_title = _("Current responsible parties")
-    available_title = _("Available responsible parties")
 
     def getCollection(self):
         return self.context.leaders

@@ -45,6 +45,9 @@ class IRelationshipProperty(Interface):
     def __iter__():
         """Iterate over all related objects."""
 
+    def iter_refs():
+        """Iterate over all related objects."""
+
     def add(other, extra_info=None):
         """Establish a relationship with `other`."""
 
@@ -57,6 +60,7 @@ class IRelationshipInfo(Interface):
 
     source = Attribute("""Source object of the relationship.""")
     target = Attribute("""Target object of the relationship.""")
+    state = Attribute("""State of the relationship.""")
     extra_info = Attribute("""Extra information that was passed to `relate`.""")
 
 
@@ -68,14 +72,18 @@ class IRelationshipLink(Interface):
     """
 
     rel_type = Attribute("""Relationship type.""")
+    rel_type_hash = Attribute("""Hash of relationship type URI.""")
     target = Attribute("""The other member of the relationship.""")
     role = Attribute("""Role of `target`.""")
+    role_hash = Attribute("""hash of `target` role URI.""")
     my_role = Attribute("""Role of the object that has this link.""")
+    my_role_hash = Attribute("""Hash of role URI of this object.""")
     extra_info = Attribute("""Extra information that was passed to `relate`.
 
         Be careful to keep extra info in sync on both links of the
         relationship.
         """)
+    state = Attribute("""State of a relationship.""")
 
 
 class IRelationshipLinks(Interface):
@@ -117,7 +125,13 @@ class IRelationshipLinks(Interface):
         The default is returned if there is no value for the key.
         """
 
+    def iterLinksByRole(self, role, rel_type=None):
+        """Iterate over all links from this object with a given role."""
+
     def getTargetsByRole(role, rel_type=None):
+        """Return all objects related to this object with a given role."""
+
+    def iterTargetsByRole(role, rel_type=None):
         """Return all objects related to this object with a given role."""
 
 
@@ -140,6 +154,9 @@ class IRelationshipEvent(Interface):
 
     def match(schema):
         """Return an accessor object if this event matches the schema."""
+
+    def getLinks():
+        """Return links of participants."""
 
 
 class IBeforeRelationshipEvent(IRelationshipEvent):

@@ -150,4 +150,28 @@
      provides="zope.schema.interfaces.IVocabularyFactory"
      name="schooltool.course.section.linked_section_terms" />
 
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".section.SectionMemberStatesStartup"
+      provides="schooltool.app.interfaces.IPluginInit"
+      name="schooltool.course.section-membership" />
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".section.SectionMemberStatesStartup"
+      provides="schooltool.app.interfaces.IPluginStartUp"
+      name="schooltool.course.section-membership" />
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".section.SectionInstructorStatesStartup"
+      provides="schooltool.app.interfaces.IPluginInit"
+      name="schooltool.course.section-instruction" />
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".section.SectionInstructorStatesStartup"
+      provides="schooltool.app.interfaces.IPluginStartUp"
+      name="schooltool.course.section-instruction" />
+
 </configure>

@@ -21,6 +21,7 @@ SchoolTool catalogs.
 from zope.interface import implementer, implements, implementsOnly
 from zope.intid.interfaces import IIntIds, IIntIdAddedEvent, IIntIdRemovedEvent
 from zope.component import adapter, queryUtility, getUtility
+from zope.component.hooks import getSite
 from zope.container import btree
 from zope.container.contained import Contained
 from zope.lifecycleevent import IObjectModifiedEvent
@@ -104,12 +105,10 @@ class CatalogFactory(CatalogStartupBase):
 
     @classmethod
     def get(cls, ignored=None):
-        app = ISchoolToolApplication(None)
-        catalogs = ICatalogs(app)
-        entry = catalogs.get(cls.key())
-        if entry is None:
-            return None
-        return entry.catalog
+        app = getSite()
+        catalogs = app[APP_CATALOGS_KEY]
+        versioned = catalogs[cls.key()]
+        return versioned.catalog
 
     def getVersion(self):
         return unicode(self.version)
@@ -241,3 +240,7 @@ def buildQueryString(text):
             # insert text inside quotes verbatim
             terms.append('"%s"' % part)
     return ' '.join(terms)
+
+
+def getRequestIntIds(request=None):
+    return getUtility(IIntIds)

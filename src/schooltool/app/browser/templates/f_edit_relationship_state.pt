@@ -1,0 +1,34 @@
+<div i18n:domain="schooltool" name="edit-relationship-state">
+
+<div>
+  <table>
+    <head>
+      <tr>
+        <td i18n:translate="">Status</td>
+        <td i18n:translate="">Date</td>
+        <td i18n:translate="">Meaning</td>
+        <td i18n:translate="">Code</td>
+      </tr>
+    </head>
+    <body>
+    </body>
+    <tr tal:repeat="state view/current_states">
+      <td tal:content="state/title" />
+      <td tal:content="state/date/@@mediumDate" />
+      <td tal:content="state/active"></td>
+      <td tal:content="state/code" />
+    </tr>
+  </table>
+</div>
+
+<div metal:use-macro="macro:form">
+  <metal:block fill-slot="above-buttons">
+    <tal:block repeat="entry view/postback_form">
+      <input type="hidden"
+             tal:attributes="name entry/name;
+                             value entry/value" />
+    </tal:block>
+  </metal:block>
+</div>
+
+</div>

@@ -16,8 +16,10 @@
     <implements interface="schooltool.app.interfaces.IHaveCalendar" />
 
     <allow attributes="__cmp__" />
+    <require permission="zope.Public"
+             attributes="title description" />
     <require permission="schooltool.view"
-             attributes="title type description notes groups leaders" />
+             attributes="type notes groups leaders" />
     <require permission="schooltool.edit"
              set_schema=".interfaces.IResource" />
   </class>

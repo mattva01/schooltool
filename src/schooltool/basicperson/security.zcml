@@ -19,7 +19,7 @@
 
   <allow
      interface="schooltool.basicperson.interfaces.IBasicPerson"
-     crowds="owner person_instructors person_advisors managers administrators clerks superuser"
+     crowds="owner person_instructors person_advisors managers administrators clerks superuser parent_of"
      permission="schooltool.view" />
 
   <!-- Security descriptions -->

@@ -23,11 +23,13 @@ Evolution script to set the 'enabled' attribute in existing EmailContainers.
 from zope.app.generations.utility import findObjectsProviding
 from zope.app.publication.zopepublication import ZopePublication
 
+from schooltool.generations import linkcatalogs
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.email.interfaces import IEmailContainer
 
 
 def evolve(context):
+    linkcatalogs.ensureEvolved(context)
     root = context.connection.root().get(ZopePublication.root_name, None)
 
     apps = findObjectsProviding(root, ISchoolToolApplication)

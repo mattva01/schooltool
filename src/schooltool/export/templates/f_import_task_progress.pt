@@ -1,0 +1,94 @@
+<tal:block i18n:domain="schooltool"
+           tal:define="progress_id view/progress_id">
+
+  <tal:block replace="resource_library:schooltool.export" />
+
+  <h3 tal:attributes="id string:${progress_id}-progress-title"
+      tal:condition="view/pending">
+    <span i18n:translate="">
+      Scheduled.
+    </span>
+    <img tal:attributes="src context/++resource++schooltool.skin.flourish/spinner.gif" />
+  </h3>
+
+  <h3 tal:attributes="id string:${progress_id}-progress-title"
+      tal:condition="view/completed" i18n:translate="">
+    Completed.
+  </h3>
+
+  <tal:block condition="view/failed" tal:define="xls_file view/task/xls_file|nothing">
+
+    <h3 tal:attributes="id string:${progress_id}-progress-title"
+        tal:condition="not:xls_file" i18n:translate="">
+      System failure.
+    </h3>
+    <h3 tal:attributes="id string:${progress_id}-progress-title"
+        tal:condition="xls_file" i18n:translate="">
+      System failure importing
+      <a tal:attributes="href string:${view/task/@@absolute_url}/import.xls"
+         tal:content="xls_file/__name__"
+         i18n:name="file_link">filename</a>
+   </h3>
+
+  </tal:block>
+
+  <tal:block condition="view/failed">
+    <p i18n:translate="">
+      Ticket nr.
+      <span i18n:name="ticket_id" tal:content="view/task_id" />.
+    </p>
+    <p i18n:translate="">
+      Please contact your administrator.
+    </p>
+
+    <tal:block condition="nocall:view/task">
+      <div tal:condition="not:view/show_cancel"
+           tal:content="structure view/task/permanent_traceback"></div>
+      <div tal:condition="view/show_cancel">
+        <a i18n:translate="" tal:attributes="href context/@@absolute_url">Failure details...</a>
+      </div>
+    </tal:block>
+  </tal:block>
+
+  <div tal:attributes="id string:${progress_id}-progress">
+  <table class="report-dialog-message">
+    <tbody>
+      <tal:block condition="not: view/failed">
+        <tr tal:condition="view/main_recipient">
+          <td colspan="2" i18n:translate="">
+            You can close this dialog and download the exported data later from your
+            <a tal:attributes="href view/main_recipient/@@absolute_url"
+               i18n:name="home-link" i18n:translate="">home page</a>.
+          </td>
+        </tr>
+      </tal:block>
+    </tbody>
+  </table>
+  </div>
+
+  <form method="post" class="standalone" action=""
+        tal:attributes="action view/@@absolute_url;
+                        id string:${progress_id}-progress-form">
+
+    <div class="buttons">
+      <input style="display: none;" class="button-ok" name="REFRESH" onclick="return ST.dialogs.submit(this, this);" value="Refresh" type="submit" i18n:attributes="value" tal:attributes="id string:${progress_id}-refresh-button">
+      <input tal:condition="view/show_cancel" class="button-cancel" name="CANCEL" onclick="return ST.dialogs.close(this);" value="Close" type="submit" i18n:attributes="value">
+    </div>
+  </form>
+
+  <script>ST.state.push()</script>
+  <tal:script tal:replace="structure scriptlocal:progress_id;
+                             should_reload view/should_reload;
+                             task_id view/task_id" />
+  <script type="text/javascript">
+    $(document).ready(function(){
+       var progress_id = ST.local.progress_id;
+       var task_id = ST.local.task_id;
+       var should_reload = ST.local.should_reload;
+       return function(){ ST.task.progress.show_progress(progress_id, task_id, should_reload) };
+       }());
+  </script>
+  <script>ST.state.pop()</script>
+
+</tal:block>
+

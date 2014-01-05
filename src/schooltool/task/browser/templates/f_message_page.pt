@@ -1,0 +1,9 @@
+<div i18n:domain="schooltool">
+  <div class="ui-dialog-content"
+       tal:content="structure context/schooltool:content/long" />
+  <h3 class="done-link"
+      tal:condition="view/done_link">
+    <a tal:attributes="href view/done_link"
+       i18n:translate="">Done</a>
+  </h3>
+</div>

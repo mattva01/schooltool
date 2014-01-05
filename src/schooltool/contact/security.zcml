@@ -32,6 +32,14 @@
       crowds="clerks contact_person_instructors"
       permission="schooltool.edit" />
 
+  <crowd
+      name="parent_of"
+      factory="schooltool.contact.contact.ParentOfCrowd" />
+
+  <crowd
+      name="parent"
+      factory="schooltool.contact.contact.ParentCrowd" />
+
   <!-- Security descriptions -->
 
   <describe_group name="schooltool.contact" klass=".contact.ContactGroup" />

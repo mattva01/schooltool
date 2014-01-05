@@ -1,0 +1,26 @@
+<div i18n:domain="schooltool">
+
+  <tal:block condition="not:view/failure_ticket_id">
+    <p i18n:translate="">
+      Import scheduled.
+    </p>
+  </tal:block>
+
+  <tal:block condition="view/failure_ticket_id">
+    <p>
+      <span class="error" i18n:translate="">
+        System failure while importing.
+      </span>
+      <span i18n:translate="">
+        Ticket nr.
+        <tal:block i18n:name="ticket_id" tal:content="view/failure_ticket_id" />.
+      </span>
+    </p>
+    <p i18n:translate="">
+      Please contact your administrator.
+    </p>
+  </tal:block>
+
+  <a tal:attributes="href context/@@absolute_url" i18n:translate="">Details...</a>
+
+</div>

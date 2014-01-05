@@ -111,6 +111,7 @@ That's all.
 from zope.component import adapts
 
 from schooltool.relationship import URIObject, RelationshipSchema
+from schooltool.relationship.temporal import TemporalURIObject
 from schooltool.relationship import getRelatedObjects
 from schooltool.relationship.interfaces import IBeforeRelationshipEvent
 from schooltool.relationship.interfaces import InvalidRelationship
@@ -122,8 +123,8 @@ from schooltool.securitypolicy.crowds import Crowd
 from schooltool.common import SchoolToolMessage as _
 
 
-URIMembership = URIObject('http://schooltool.org/ns/membership',
-                          'Membership', 'The membership relationship.')
+URIMembership = TemporalURIObject('http://schooltool.org/ns/membership',
+                                  'Membership', 'The membership relationship.')
 URIGroup = URIObject('http://schooltool.org/ns/membership/group',
                      'Group', 'A role of a containing group.')
 URIMember = URIObject('http://schooltool.org/ns/membership/member',
@@ -262,3 +263,4 @@ class GroupMemberCrowd(Crowd):
 
     def contains(self, principal):
         return IPerson(principal, None) in self.context.members
+

@@ -50,6 +50,11 @@
               Please contact your administrator.
           </td>
         </tr>
+        <tr tal:condition="view/failed_task">
+          <td colspan="2">
+             <a i18n:translate="" tal:attributes="href context/@@absolute_url">Failure details...</a>
+          </td>
+        </tr>
       </tal:block>
     </tbody>
   </table>
@@ -59,9 +64,13 @@
 
     <div class="buttons">
     <tal:block condition="not:nocall:context/report">
-      <input class="button-ok" name="REFRESH" onclick="return ST.dialogs.submit(this, this);" value="Refresh" type="submit" i18n:attributes="value">
+      <tal:block condition="not:view/failure_ticket_id">
+        <input class="button-ok" name="REFRESH" onclick="return ST.dialogs.submit(this, this);" value="Refresh" type="submit" i18n:attributes="value">
+      </tal:block>
     </tal:block>
+    <tal:block condition="view/show_cancel">
       <input class="button-cancel" name="CANCEL" onclick="return ST.dialogs.close(this);" value="Close" type="submit" i18n:attributes="value">
+    </tal:block>
     </div>
   </form>
 

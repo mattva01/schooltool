@@ -25,6 +25,7 @@ from zope.app.generations.utility import getRootFolder, findObjectsProviding
 from zope.annotation.interfaces import IAnnotations
 from zope.component.hooks import getSite, setSite
 
+from schooltool.generations import linkcatalogs
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.app import getApplicationPreferences
 
@@ -54,13 +55,14 @@ def evolveTimetableContainers(app):
 
 
 def evolve(context):
+    linkcatalogs.ensureEvolved(context)
     root = getRootFolder(context)
 
     old_site = getSite()
-    apps = list(findObjectsProviding(root, ISchoolToolApplication))
-    for app in apps:
-        setSite(app)
-        evolveScheduleContainers(app)
-        evolveTimetableContainers(app)
+
+    app = root
+    setSite(app)
+    evolveScheduleContainers(app)
+    evolveTimetableContainers(app)
 
     setSite(old_site)

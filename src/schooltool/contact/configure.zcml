@@ -101,4 +101,21 @@
 
   <adapter factory=".contact.SearchableTextContact" />
 
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".contact.ContactStatesStartup"
+      provides="schooltool.app.interfaces.IPluginInit"
+      name="schooltool.contact.contact-relationship" />
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".contact.ContactStatesStartup"
+      provides="schooltool.app.interfaces.IPluginStartUp"
+      name="schooltool.contact.contact-relationship" />
+
+  <utility
+     factory=".contact.ContactStatesVocabularyFactory"
+     provides="zope.schema.interfaces.IVocabularyFactory"
+     name="schooltool.contact.contact.relationship_states" />
+
 </configure>

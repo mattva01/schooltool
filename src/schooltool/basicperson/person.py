@@ -35,6 +35,8 @@ from schooltool.relationship import RelationshipProperty
 from schooltool.basicperson.advisor import URIAdvisor, URIAdvising, URIStudent
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.app.catalog import AttributeCatalog
+from schooltool.app.app import StartUpBase
+from schooltool.contact.contact import ParentCrowd
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -136,7 +138,8 @@ class BasicPersonCalendarCrowd(PersonCalendarCrowd):
 
     def contains(self, principal):
         return (PersonCalendarCrowd.contains(self, principal) or
-                PersonInstructorsCrowd(self.context).contains(principal))
+                PersonInstructorsCrowd(self.context).contains(principal) or
+                ParentCrowd(self.context).contains(principal))
 
 
 class PersonCatalog(AttributeCatalog):

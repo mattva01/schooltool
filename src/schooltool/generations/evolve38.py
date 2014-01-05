@@ -26,12 +26,14 @@ from zope.app.publication.zopepublication import ZopePublication
 from zope.component.hooks import getSite, setSite
 from zope.lifecycleevent import ObjectModifiedEvent
 
+from schooltool.generations import linkcatalogs
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.timetable.interfaces import ITimetable
 from schooltool.timetable.app import UpdateSelectedPeriodsSchedules
 
 
 def evolve(context):
+    linkcatalogs.ensureEvolved(context)
     root = context.connection.root().get(ZopePublication.root_name, None)
     old_site = getSite()
 
