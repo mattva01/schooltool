@@ -220,6 +220,7 @@ class FlourishLevelsView(flourish.page.Page):
 
 
 class FlourishLevelAddView(flourish.form.AddForm, LevelAddForm):
+    template = flourish.templates.Inherit(flourish.page.Page.template)
     label = None
     legend = _('Level information')
 

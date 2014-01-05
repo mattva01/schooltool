@@ -21,6 +21,7 @@ Devmode view support.
 from zope.app.exception.browser.unauthorized import Unauthorized
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.viewlet import viewlet
+from zope.security.proxy import removeSecurityProxy
 
 from schooltool.skin import flourish
 from schooltool.securitypolicy.policy import CachingSecurityPolicy
@@ -41,17 +42,22 @@ class DebugUnauthorized(Unauthorized):
             return
         for key, info in cache['debug_order']:
             obj, level = info
+            unproxied = removeSecurityProxy(obj)
             permission = key[0]
-            value = cache['perm'].get(key)
             try:
                 text = repr(obj)
             except:
                 text = '<object>'
+            if getattr(unproxied, '_p_jar', None) is None:
+                value = None
+                text += ' (freshly created object, not in DB yet)'
+            else:
+                value = cache['perm'].get(key)
 
             # XXX: quite hacky indeed, but will do for now.
-            path = str(getattr(obj, '__name__', ''))
-            parent = getattr(obj, '__parent__', None)
-            seen = set([id(obj)])
+            path = str(getattr(unproxied, '__name__', ''))
+            parent = getattr(unproxied, '__parent__', None)
+            seen = set([id(unproxied)])
             while parent is not None and id(parent) not in seen:
                 seen.add(id(parent))
                 path = str(getattr(parent, '__name__', '')) + '/' + path

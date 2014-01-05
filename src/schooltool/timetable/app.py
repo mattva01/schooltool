@@ -33,6 +33,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common import DateRange
 from schooltool.course.section import InstructorsCrowd, LearnersCrowd
+from schooltool.course.parent import ParentsOfLearnersCrowd
 from schooltool.course.interfaces import ISection
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.schoolyear.interfaces import ISchoolYear
@@ -240,7 +241,7 @@ class SectionScheduleViewers(AggregateCrowd):
     adapts(ISection)
 
     def crowdFactories(self):
-        return [InstructorsCrowd, LearnersCrowd]
+        return [InstructorsCrowd, LearnersCrowd, ParentsOfLearnersCrowd]
 
 
 class ConfigurableScheduleEditors(ConfigurableCrowd):

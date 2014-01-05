@@ -50,12 +50,11 @@ from schooltool.person.interfaces import IPerson
 from schooltool.relationship import RelationshipProperty
 from schooltool.relationship.relationship import getRelatedObjects
 from schooltool.relationship.temporal import ACTIVE, INACTIVE
+from schooltool.securitypolicy.crowds import Crowd
 from schooltool.schoolyear.subscriber import EventAdapterSubscriber
 from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.schoolyear.interfaces import ISubscriber
 from schooltool.schoolyear.interfaces import ISchoolYear
-from schooltool.securitypolicy.crowds import Crowd, AggregateCrowd
-from schooltool.securitypolicy.crowds import ClerksCrowd, AdministratorsCrowd
 from schooltool.term.term import getNextTerm
 from schooltool.term.interfaces import ITerm
 
@@ -332,15 +331,6 @@ class SectionEditorSettingCrowd(ConfigurableCrowd):
     def contains(self, principal):
         return (ConfigurableCrowd.contains(self, principal) and
                 InstructorsCrowd(self.context).contains(principal))
-
-
-class SectionCalendarViewers(AggregateCrowd):
-    """Crowd of those who can see the section calendar."""
-    adapts(interfaces.ISection)
-
-    def crowdFactories(self):
-        return [ClerksCrowd, AdministratorsCrowd,
-                InstructorsCrowd, LearnersCrowd, SectionCalendarSettingCrowd]
 
 
 class PersonLearnerAdapter(object):

@@ -263,15 +263,22 @@ class ParentCrowd(crowds.Crowd):
 
 class ParentOfCrowd(crowds.Crowd):
 
-    def contains(self, principal):
-        person = IPerson(principal, None)
-        if person is None:
-            return False
+    @property
+    def child(self):
         target = None
         obj = self.context
         while (target is None and obj is not None):
             target = IPerson(obj, None)
+            if target is not None:
+                return target
             obj = obj.__parent__
+        return target
+
+    def contains(self, principal):
+        person = IPerson(principal, None)
+        if person is None:
+            return False
+        target = self.child
         if target is None:
             return False
         relationships = ContactRelationship.bind(contact=IContact(person))
