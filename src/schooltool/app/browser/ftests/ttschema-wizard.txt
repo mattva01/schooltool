@@ -80,7 +80,7 @@ schema in the list.
     >>> manager.getLink('Weekly')
     <Link text='Weekly' url='http://localhost/schoolyears/2005-2006/timetables/Timetable'>
 
-We can examine its composition more easily by looking at it's xml export view.
+Let's look at it.
 
     >>> manager.getLink('Weekly').click()
 
@@ -300,7 +300,7 @@ Now we see the newly created timetable schema in the list.
     >>> manager.getLink('Rotating')
     <Link text='Rotating' url='http://localhost/schoolyears/2005-2006/timetables/Timetable-2'>
 
-We can examine its composition more easily by looking at it's xml export view.
+Let's look at it.
 
     >>> manager.getLink('Rotating').click()
 
