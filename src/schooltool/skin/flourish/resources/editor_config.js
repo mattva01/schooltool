@@ -11,7 +11,7 @@ CKEDITOR.editorConfig = function( config )
     ];
 
     config.removeDialogTabs = 'link:target;link:advanced';
-    config.removePlugins = 'colorbutton,colordialog,elementspath,flash,newpage,resizer,stylescombo';
+    config.removePlugins = 'colorbutton,colordialog,elementspath,flash,newpage,resize,stylescombo';
     config.toolbarCanCollapse = false;
 
     config.forcePasteAsPlainText = true;

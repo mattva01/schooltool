@@ -580,7 +580,6 @@ function initComments(form) {
         container.find('#comment-student-id').val(student_id);
         container.find('#comment-activity-id').val(activity_id);
         container.find('#form-widgets-value').val(value);
-        CKEDITOR.instances['form-widgets-value'].setData(value)
         container.find('label span').html(popup_link.attr('title'));
         container.find('p.hint').html(description.html());
         container.dialog({
@@ -591,6 +590,7 @@ function initComments(form) {
             'dialogClass': 'narrow-dialog',
             'modal': true
         });
+        CKEDITOR.instances['form-widgets-value'].setData(value)
         CKEDITOR.instances['form-widgets-value'].focus()
         return false;
     });
