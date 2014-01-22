@@ -22,6 +22,7 @@ course browser views.
 from urllib import urlencode
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.cachedescriptors.property import Lazy
 from zope.interface import implements
 from zope.component import adapts
 from zope.component import getMultiAdapter
@@ -281,9 +282,11 @@ class FlourishCoursesViewlet(Viewlet):
                 for section in sorted(schoolyears_data[sy][term],
                                       cmp=self.sortByCourseAndSection,
                                       key=sortingKey):
+                    states = self.section_current_states(section)
                     section_info = {
                         'obj': section,
                         'title': section.title,
+                        'states': states,
                         }
                     term_info['sections'].append(section_info)
                 sy_info['terms'].append(term_info)
@@ -295,6 +298,28 @@ class FlourishCoursesViewlet(Viewlet):
             return self.collator.cmp(this['section_title'],
                                      other['section_title'])
         return self.collator.cmp(this['course'], other['course'])
+
+    @Lazy
+    def app_states(self):
+        app = ISchoolToolApplication(None)
+        states = IRelationshipStateContainer(app)['section-membership']
+        return states
+
+    def section_current_states(self, section):
+        target = removeSecurityProxy(self.context)
+        app_states = self.app_states
+        relationships = section.members
+        states = []
+        for date, active, code in relationships.state(target) or ():
+            state = app_states.states.get(code)
+            title = state.title if state is not None else ''
+            states.append({
+                'date': date,
+                'active': app_states.system_titles.get(active, active),
+                'code': code,
+                'title': title,
+                })
+        return states
 
 
 class FlourishCompletedCoursesViewlet(Viewlet):

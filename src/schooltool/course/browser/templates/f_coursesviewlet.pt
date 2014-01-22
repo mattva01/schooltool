@@ -22,6 +22,12 @@
                                    title section_data/title"
                    class="leaf_url"
                    tal:content="section_data/title"></a>
+                <ul>
+                  <li tal:repeat="state section_data/states">
+                    <tal:block replace="state/title" />
+                    (<tal:block replace="state/date/@@mediumDate" />)
+                  </li>
+                </ul>
               </li>
             </ul>
           </li>
@@ -52,6 +58,12 @@
                                    title section_data/title"
                    class="leaf_url"
                    tal:content="section_data/title"></a>
+                <ul>
+                  <li tal:repeat="state section_data/states">
+                    <tal:block replace="state/title" />
+                    (<tal:block replace="state/date/@@mediumDate" />)
+                  </li>
+                </ul>
               </li>
             </ul>
           </li>
