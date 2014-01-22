@@ -62,6 +62,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary_titled
 from schooltool.basicperson.browser.person import EditPersonRelationships
 from schooltool.basicperson.browser.person import EditPersonTemporalRelationships
+from schooltool.basicperson.browser.person import StatusPersonListTable
 from schooltool.basicperson.interfaces import IDemographics
 from schooltool.common import SchoolToolMessage as _
 from schooltool.common.inlinept import InheritTemplate
@@ -1918,3 +1919,13 @@ class SectionRosterPDFView(flourish.report.PlainPDFPage):
 class FlourishRequestSectionRosterView(RequestRemoteReportDialog):
 
     report_builder = SectionRosterPDFView
+
+
+class SectionMembershipPersonListTable(StatusPersonListTable):
+
+    app_states_name = 'section-membership'
+
+
+class SectionInstructionPersonListTable(StatusPersonListTable):
+
+    app_states_name = 'section-instruction'

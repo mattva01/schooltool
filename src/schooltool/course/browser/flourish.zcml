@@ -722,4 +722,20 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="section_membership_person_table"
+      for="*"
+      class=".section.SectionMembershipPersonListTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
+      name="section_instruction_person_table"
+      for="*"
+      class=".section.SectionInstructionPersonListTable"
+      manager="schooltool.skin.flourish.interfaces.IAJAXParts"
+      permission="schooltool.view"
+      />
+
 </configure>

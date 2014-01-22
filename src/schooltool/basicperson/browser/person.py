@@ -38,6 +38,7 @@ from zope.schema import ValidationError
 from zope.schema.interfaces import ITitledTokenizedTerm
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.security.checker import canAccess
+from zope.security.proxy import removeSecurityProxy
 from zope.proxy import sameProxiedObjects
 
 from reportlab.lib import units
@@ -58,6 +59,7 @@ from schooltool.app.browser.report import ReportPDFView
 from schooltool.app.browser.report import DefaultPageTemplate
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IApplicationPreferences
+from schooltool.app.interfaces import IRelationshipStateContainer
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.basicperson.interfaces import IDemographics
@@ -1620,3 +1622,48 @@ class FlourishLeaderView(EditPersonTemporalRelationships):
 
     def getAvailableItemsContainer(self):
         return ISchoolToolApplication(None)['persons']
+
+
+class StatusPersonListTable(PersonListTable):
+
+    app_states_name = None
+
+    def columns(self):
+        default = super(StatusPersonListTable, self).columns()
+        status = zc.table.column.GetterColumn(
+            name='status',
+            title=_('Status'),
+            getter=self.makeStatusGetter())
+        return default + [status]
+
+    def getCollection(self):
+        return self.context.all()
+
+    def items(self):
+        return self.indexItems(self.getCollection())
+
+    def makeStatusGetter(self):
+        if self.app_states is None:
+            return None
+        collection = self.getCollection()
+        def getter(item, formatter):
+            state = collection.state(removeSecurityProxy(item))
+            if state is None:
+                return ''
+            state_today = state.today
+            if state_today is None:
+                return ''
+            active, code = state_today
+            description = self.app_states.states.get(code)
+            if description is None:
+                return ''
+            return description.title
+        return getter
+
+    @Lazy
+    def app_states(self):
+        if self.app_states_name is None:
+            return None
+        app = ISchoolToolApplication(None)
+        container = IRelationshipStateContainer(app)
+        return container.get(self.app_states_name, None)

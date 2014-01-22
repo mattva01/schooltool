@@ -122,7 +122,7 @@
       </tal:block>
       <tal:block
           condition="view/show_extended_roster"
-          content="structure context/schooltool:content/ajax/view/context/instructors/person_table" />
+          content="structure context/schooltool:content/ajax/view/context/instructors/section_instruction_person_table" />
     </tal:block>
     <p tal:condition="not:view/has_instructors" i18n:translate="">
       This section has no instructors
@@ -145,7 +145,7 @@
       </tal:block>
       <tal:block
           condition="view/show_extended_roster"
-          content="structure context/schooltool:content/ajax/view/context/members/person_table" />
+          content="structure context/schooltool:content/ajax/view/context/members/section_membership_person_table" />
     </tal:block>
     <p tal:condition="not:view/has_learners" i18n:translate="">
       This section has no students

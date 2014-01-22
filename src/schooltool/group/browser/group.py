@@ -56,6 +56,7 @@ from schooltool.app.browser.app import RelationshipViewBase
 from schooltool.person.interfaces import IPerson
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.person.browser.person import PersonTableFilter
+from schooltool.basicperson.browser.person import StatusPersonListTable
 from schooltool.basicperson.browser.person import EditPersonTemporalRelationships
 from schooltool.basicperson.browser.person import BasicPersonTable
 from schooltool.basicperson.browser.person import EditPersonRelationships
@@ -851,7 +852,13 @@ def done_link_url_cell_formatter(group):
     return cell_formatter
 
 
-class GroupAwarePersonTable(BasicPersonTable):
+class GroupAwarePersonTable(StatusPersonListTable):
+
+    @property
+    def app_states_name(self):
+        if self.view.context.__name__ == 'students':
+            return 'student-enrollment'
+        return 'group-membership'
 
     def updateFormatter(self):
         group = self.view.context
@@ -861,9 +868,6 @@ class GroupAwarePersonTable(BasicPersonTable):
                    batch_size=self.batch_size,
                    prefix=self.__name__,
                    css_classes={'table': 'data'})
-
-    def items(self):
-        return self.makeItems(self.context.int_ids)
 
 
 class GroupAwarePersonTableFilter(PersonTableFilter):
