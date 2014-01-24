@@ -34,7 +34,8 @@ from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.app.browser.states import TemporalRelationshipAddTableMixin
 from schooltool.app.browser.states import TemporalRelationshipRemoveTableMixin
-from schooltool.app.browser.app import AddAllResultsButton
+from schooltool.app.browser.states import TemporalAddAllResultsButton
+from schooltool.app.browser.states import TemporalRemoveAllResultsButton
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.contact.interfaces import IContactable
@@ -219,9 +220,9 @@ class ContactRemoveRelationshipTable(TemporalRelationshipRemoveTableMixin, Conta
                 self.view.remove(IContact(int_ids.getObject(intid)))
 
 
-class AddAllContactResultsButton(AddAllResultsButton):
+class AddAllContactResultsButton(TemporalAddAllResultsButton):
 
-    def addSearchResults(self):
+    def processSearchResults(self):
         if (self.button_name not in self.request or
             self.token_key not in self.request):
             return False
@@ -234,7 +235,27 @@ class AddAllContactResultsButton(AddAllResultsButton):
         for item_id in relationship_view.getAvailableItemIds():
             item = int_ids.getObject(item_id)
             if relationship_view.getKey(item) in add_ids:
-                relationship_view.add(removeSecurityProxy(item))
+                self.process_item(relationship_view, item)
+                changed = True
+        return changed
+
+
+class RemoveAllContactResultsButton(TemporalRemoveAllResultsButton):
+
+    def processSearchResults(self):
+        if (self.button_name not in self.request or
+            self.token_key not in self.request):
+            return False
+        add_ids = self.request[self.token_key]
+        if not isinstance(add_ids, list):
+            add_ids = [add_ids]
+        changed = False
+        relationship_view = self.manager.view
+        int_ids = getUtility(IIntIds)
+        for item_id in relationship_view.getSelectedItemIds():
+            item = int_ids.getObject(item_id)
+            if relationship_view.getKey(item) in add_ids:
+                self.process_item(relationship_view, item)
                 changed = True
         return changed
 

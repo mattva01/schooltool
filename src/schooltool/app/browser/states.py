@@ -34,11 +34,16 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IRelationshipStateContainer
 from schooltool.app.states import RelationshipStateChoice
 from schooltool.app.states import RelationshipState
+from schooltool.app.states import ACTIVE
+from schooltool.app.states import INACTIVE
 from schooltool.app.browser.app import EditRelationships
 from schooltool.app.browser.app import RelationshipAddTableMixin
 from schooltool.app.browser.app import RelationshipRemoveTableMixin
+from schooltool.app.browser.app import AddAllResultsButton
+from schooltool.app.browser.app import RemoveAllResultsButton
 
-from schooltool.common import format_message
+from schooltool.common.inlinept import InlineViewPageTemplate
+from schooltool.common import format_message, parse_date
 from schooltool.common import SchoolToolMessage as _
 
 
@@ -68,15 +73,21 @@ class EditTemporalRelationships(EditRelationships):
         container = IRelationshipStateContainer(app)
         return container.get(self.app_states_name, None)
 
-    def relate(self, item, code=None, date=None):
+    def add(self, item, state=None, code=None, date=None):
         collection = removeSecurityProxy(self.getCollection())
         if item not in collection:
-            collection.add(item)
+            if date is not None:
+                collection.on(date).relate(item, state.active, code)
+            else:
+                collection.add(item)
 
-    def remove(self, item, code=None, date=None):
+    def remove(self, item, state=None, code=None, date=None):
         collection = removeSecurityProxy(self.getCollection())
         if item in collection:
-            collection.remove(item)
+            if date is not None:
+                collection.on(date).relate(item, state.active, code)
+            else:
+                collection.remove(item)
 
     def getSelectedItems(self):
         collection = self.getCollection()
@@ -534,3 +545,116 @@ class RelationshipStatesEditView(flourish.page.Page):
 
     def createState(self, title, code, active, *values):
         return removeSecurityProxy(self.context).factory(title, active, code)
+
+
+class TemporalResultsButton(object):
+
+    states = ()
+    default_state = None
+
+    template = InlineViewPageTemplate('''
+      <div i18n:domain="schooltool">
+        <p>
+          <a href="#" onclick="return ST.table.select_all(event);" i18n:translate="">Select All</a> |
+          <a href="#" onclick="return ST.table.select_none(event);" i18n:translate="">Select None</a>
+        </p>
+      </div>
+      <div class="temporal-relationship-button-options">
+        <select tal:attributes="name view/state_name">
+          <option tal:repeat="option view/states"
+                  tal:attributes="value option/value;
+                                  selected option/selected"
+                  tal:content="option/title" />
+        </select>
+        <input type="text" class="date-field"
+               tal:attributes="name view/date_name;
+                               value view/date" />
+      </div>
+      <div class="buttons">
+        <input class="submit-widget button-field button-ok" type="submit"
+               tal:attributes="name view/button_name;
+                               value view/title" />
+      </div>
+    ''')
+
+    @property
+    def state_name(self):
+        return self.manager.html_id + '-state'
+
+    @property
+    def date_name(self):
+        return self.manager.html_id + '-date'
+
+    @property
+    def date(self):
+        try:
+            return parse_date(self.request.get(self.date_name))
+        except (ValueError, AttributeError):
+            pass
+        return self.request.util.today
+
+    @property
+    def state(self):
+        if self.state_name not in self.request:
+            return self.default_state
+        for state in self.app_states:
+            if state.code ==self.request[self.state_name]:
+                return state
+
+    @Lazy
+    def app_states(self):
+        app = ISchoolToolApplication(None)
+        container = IRelationshipStateContainer(app)
+        states = container.get(self.view.app_states_name, None)
+        if states is None:
+            return {}
+        return states
+
+    @property
+    def states(self):
+        result = []
+        for state in self.app_states:
+            is_selected = state.code == self.request.get(self.state_name)
+            is_default = state == self.default_state
+            result.append({
+                    'title': state.title,
+                    'selected': is_selected or is_default,
+                    'value': state.code,
+                    })
+        return result
+
+
+class TemporalAddAllResultsButton(TemporalResultsButton,
+                                  AddAllResultsButton):
+
+    @property
+    def default_state(self):
+        app_states = self.app_states
+        for state in app_states.states.values():
+            if state.active == ACTIVE:
+                return state
+        if app_states.states:
+            return app_states.states.values()[0]
+
+    def process_item(self, relationship_view, item):
+        item = removeSecurityProxy(item)
+        relationship_view.add(item, self.state, self.state.code, self.date)
+
+
+class TemporalRemoveAllResultsButton(TemporalResultsButton,
+                                     RemoveAllResultsButton):
+
+    title = _('Update')
+
+    @property
+    def default_state(self):
+        app_states = self.app_states
+        for state in app_states.states.values():
+            if state.active == INACTIVE:
+                return state
+        if app_states.states:
+            return app_states.states.values()[0]
+
+    def process_item(self, relationship_view, item):
+        item = removeSecurityProxy(item)
+        relationship_view.remove(item, self.state, self.state.code, self.date)

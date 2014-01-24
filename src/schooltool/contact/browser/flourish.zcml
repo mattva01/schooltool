@@ -57,6 +57,14 @@
       />
 
   <flourish:viewlet
+      name="remove_all_button"
+      after="table"
+      manager=".relationship.ContactRemoveRelationshipTable"
+      class=".relationship.RemoveAllContactResultsButton"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
       name="current_table"
       class="schooltool.contact.browser.relationship.ContactRemoveRelationshipTable"
       manager="schooltool.skin.flourish.interfaces.IAJAXParts"

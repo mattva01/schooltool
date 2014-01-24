@@ -189,3 +189,7 @@ img.st-table-button-spinner {
 table.report-dialog-message td:first-child {
     width: 20%;
 }
+
+.temporal-relationship-button-options {
+    margin-bottom: 8px;
+}
