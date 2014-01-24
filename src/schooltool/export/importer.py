@@ -74,6 +74,8 @@ from schooltool.course.course import Course
 from schooltool.common import DateRange
 from schooltool.common import parse_time_range
 from schooltool.task.interfaces import IRemoteTask
+from schooltool.level.interfaces import ILevelContainer
+from schooltool.level.level import Level
 from schooltool.task.progress import Timer
 from schooltool.task.tasks import RemoteTask
 from schooltool.task.state import TaskWriteState, TaskReadState
@@ -134,6 +136,7 @@ ERROR_INVALID_PERIOD_ID = _('is not a valid period id for the given day')
 ERROR_INVALID_CONTACT_ID = _('is not a valid username or contact id')
 ERROR_UNWANTED_CONTACT_DATA = _('must be empty when ID is a user id')
 ERROR_INVALID_RESOURCE_ID = _('is not a valid resource id')
+ERROR_INVALID_LEVEL_ID = _('is not a valid grade level id')
 ERROR_UNICODE_CONVERSION = _("Username cannot contain non-ascii characters")
 ERROR_RELATIONSHIP_CODE = _("is not a valid relationship code")
 ERROR_NOT_BOOLEAN = _("must be either TRUE, FALSE, YES or NO (upper, lower and mixed case are all valid)")
@@ -849,6 +852,42 @@ class ResourceImporter(ImporterBase):
             self.addResource(resource, data)
 
 
+class LevelImporter(ImporterBase):
+
+    title = _("Grade Levels")
+
+    sheet_name = 'Grade Levels'
+
+    def createLevel(self, data):
+        level = Level(data['title'])
+        level.__name__ = data['__name__']
+        return level
+
+    def addLevel(self, level, data):
+        container = ILevelContainer(self.context)
+        if level.__name__ in container:
+            level = container[level.__name__]
+            level.title = data['title']
+        else:
+            if not level.__name__:
+                level.__name__ = INameChooser(container).chooseName('', level)
+            container[level.__name__] = level
+
+    def process(self):
+        sh = self.sheet
+        for row in range(1, sh.nrows):
+            if self.isEmptyRow(sh, row):
+                continue
+            num_errors = len(self.errors)
+            data = {}
+            data['__name__'] = self.getRequiredIdFromCell(sh, row, 0)
+            data['title'] = self.getRequiredTextFromCell(sh, row, 1)
+            if num_errors < len(self.errors):
+                continue
+            level = self.createLevel(data)
+            self.addLevel(level, data)
+
+
 class PersonImporter(ImporterBase):
 
     title = _("Persons")
@@ -1140,33 +1179,42 @@ class CourseImporter(ImporterBase):
 
     sheet_name = 'Courses'
 
-    def createCourse(self, data):
-        syc = ISchoolYearContainer(self.context)
-        cc = ICourseContainer(syc[data['school_year']])
-        name = data['__name__']
-        if name in cc:
-            course = cc[name]
-            course.title = data['title']
-            course.description = data['description']
-        else:
-            course = Course(data['title'], data['description'])
-            course.__name__ = data['__name__']
+    def updateCourse(self, course, data):
+        levels = ILevelContainer(self.context)
+        course.title = data['title']
+        course.description = data['description'] or None
         course.course_id = data['course_id'] or None
         course.government_id = data['government_id'] or None
         course.credits = data['credits'] or None
+        level = levels.get(data['level_id'])
+        current = None
+        if course.levels:
+            current = list(course.levels)[0]
+        if level != current:
+            if current is not None:
+                course.levels.remove(current)
+            if level is not None:
+                course.levels.add(level)
+
+    def createCourse(self, data):
+        course = Course()
+        course.__name__ = data['__name__']
         return course
 
     def addCourse(self, course, data):
         syc = ISchoolYearContainer(self.context)
         cc = ICourseContainer(syc[data['school_year']])
         if course.__name__ in cc:
-            return
-        if course.__name__ is None:
-            course.__name__ = SimpleNameChooser(cc).chooseName('', course)
-        cc[course.__name__] = course
+            course = cc[course.__name__]
+        else:
+            if not course.__name__:
+                course.__name__ = SimpleNameChooser(cc).chooseName('', course)
+            cc[course.__name__] = course
+        self.updateCourse(course, data)
 
     def process(self):
         sh = self.sheet
+        levels = ILevelContainer(self.context)
         nrows = sh.nrows
         for row in range(1, nrows):
             if self.isEmptyRow(sh, row):
@@ -1180,11 +1228,14 @@ class CourseImporter(ImporterBase):
             data['course_id'] = self.getIdFromCell(sh, row, 4)
             data['government_id'] = self.getIdFromCell(sh, row, 5)
             data['credits'] = self.getTextFromCell(sh, row, 6)
+            data['level_id'] = self.getIdFromCell(sh, row, 7)
             try:
                 if data['credits']:
                     data['credits'] = Decimal(data['credits'])
             except InvalidOperation:
                 self.error(row, 6, ERROR_INVALID_COURSE_CREDITS)
+            if data['level_id'] and data['level_id'] not in levels:
+                self.error(row, 7, ERROR_INVALID_LEVEL_ID)
             if num_errors < len(self.errors):
                 continue
             if data['school_year'] not in ISchoolYearContainer(self.context):
@@ -1992,6 +2043,7 @@ class MegaImporter(BrowserView):
                 TermImporter,
                 SchoolTimetableImporter,
                 ResourceImporter,
+                LevelImporter,
                 PersonImporter,
                 TeacherImporter,
                 StudentImporter,

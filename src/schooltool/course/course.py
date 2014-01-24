@@ -43,6 +43,7 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.app import InitBase
 from schooltool.app import relationships
 from schooltool.app.app import Asset
+from schooltool.level import level
 from schooltool.course.interfaces import ICourse
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course import interfaces
@@ -118,6 +119,10 @@ class Course(Persistent, Contained, Asset):
     sections = RelationshipProperty(relationships.URICourseSections,
                                     relationships.URICourse,
                                     relationships.URISectionOfCourse)
+
+    levels = RelationshipProperty(level.URILevelCourses,
+                                  level.URICourse,
+                                  level.URILevel)
 
     course_id = None
     government_id = None

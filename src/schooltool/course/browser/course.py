@@ -29,10 +29,12 @@ from zope.component import queryMultiAdapter
 from zope.component import getUtility
 from zope.container.interfaces import INameChooser
 from zope.interface import directlyProvides
+from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 from zope.app.form.browser.add import AddView
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.browser import BrowserView
+from zope.schema import Choice
 from zope.security.checker import canAccess
 from zope.security import checkPermission
 from zope.security.proxy import removeSecurityProxy
@@ -59,6 +61,7 @@ from schooltool.course.interfaces import ICourse, ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.interfaces import ILearner, IInstructor
 from schooltool.course.course import Course
+from schooltool.level.level import LevelCourses
 from schooltool.skin import flourish
 from schooltool.skin.flourish.viewlet import Viewlet
 from schooltool.skin.flourish.containers import ContainerDeleteView
@@ -607,12 +610,51 @@ class FlourishCourseContainerDeleteView(ContainerDeleteView):
         return ContainerDeleteView.nextURL(self)
 
 
+class ICourseLevel(Interface):
+
+    level = Choice(
+        title=_('Grade Level'),
+        vocabulary='schooltool.level.level.levelvocabulary',
+        required=False)
+
+
+class CourseLevelFormAdapter(object):
+
+    adapts(ICourse)
+    implements(ICourseLevel)
+
+    def __init__(self, context):
+        self.__dict__['context'] = removeSecurityProxy(context)
+
+    def __getattr__(self, name):
+        if name == 'level':
+            if self.context.levels:
+                return list(self.context.levels)[0]
+
+    def __setattr__(self, name, value):
+        if name == 'level':
+            value = removeSecurityProxy(value)
+            current = None
+            if self.context.levels:
+                current = list(self.context.levels)[0]
+            if value != current:
+                if current is not None:
+                    self.context.levels.remove(current)
+                if value is not None:
+                    self.context.levels.add(value)
+
+
 class FlourishCourseView(DisplayForm):
 
     template = InheritTemplate(Page.template)
     content_template = ViewPageTemplateFile('templates/f_course_view.pt')
-    fields = field.Fields(ICourse)
-    fields = fields.select('__name__', 'title', 'description', 'course_id', 'government_id', 'credits')
+
+    @property
+    def fields(self):
+        fields = field.Fields(ICourse)
+        fields += field.Fields(ICourseLevel)
+        fields = fields.select('__name__', 'title', 'description', 'course_id', 'government_id', 'credits', 'level')
+        return fields
 
     @property
     def sections(self):
@@ -669,8 +711,13 @@ class FlourishCourseAddView(AddForm, ActiveSchoolYearContentMixin):
     template = InheritTemplate(Page.template)
     label = None
     legend = _('Course Information')
-    fields = field.Fields(ICourse)
-    fields = fields.select('title', 'description', 'course_id', 'government_id', 'credits')
+
+    @property
+    def fields(self):
+        fields = field.Fields(ICourse)
+        fields += field.Fields(ICourseLevel)
+        fields = fields.select('title', 'description', 'course_id', 'government_id', 'credits', 'level')
+        return fields
 
     def updateActions(self):
         super(FlourishCourseAddView, self).updateActions()
@@ -693,6 +740,7 @@ class FlourishCourseAddView(AddForm, ActiveSchoolYearContentMixin):
 
     def create(self, data):
         course = Course(data['title'], data.get('description'))
+        self._level = removeSecurityProxy(data.pop('level'))
         form.applyChanges(self, course, data)
         return course
 
@@ -701,6 +749,8 @@ class FlourishCourseAddView(AddForm, ActiveSchoolYearContentMixin):
         name = chooser.chooseName(u'', course)
         self.context[name] = course
         self._course = course
+        if self._level is not None:
+            self._level.courses.add(course)
         return course
 
     def nextURL(self):
@@ -721,8 +771,13 @@ class FlourishCourseEditView(Form, form.EditForm):
     template = InheritTemplate(Page.template)
     label = None
     legend = _('Course Information')
-    fields = field.Fields(ICourse)
-    fields = fields.select('title', 'description', 'course_id', 'government_id', 'credits')
+
+    @property
+    def fields(self):
+        fields = field.Fields(ICourse)
+        fields += field.Fields(ICourseLevel)
+        fields = fields.select('title', 'description', 'course_id', 'government_id', 'credits', 'level')
+        return fields
 
     @property
     def title(self):

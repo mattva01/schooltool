@@ -43,6 +43,7 @@ def registerSeleniumSetup():
             'course_id',
             'government_id',
             'credits',
+            'level',
             )
         browser.query.link('School').click()
         browser.query.link('Courses').click()
