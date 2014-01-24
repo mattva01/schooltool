@@ -22,7 +22,6 @@ course browser views.
 from urllib import urlencode
 
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-from zope.cachedescriptors.property import Lazy
 from zope.interface import implements
 from zope.component import adapts
 from zope.component import getMultiAdapter
@@ -250,13 +249,17 @@ class FlourishCoursesViewlet(Viewlet):
 
     def sectionsAsTeacher(self):
         """Get the sections the person instructs."""
-        return self.sectionsAs(IInstructor)
+        app_states = self.app_states('section-instruction')
+        relationships_getter = lambda s: s.instructors
+        return self.sectionsAs(IInstructor, app_states, relationships_getter)
 
     def sectionsAsLearner(self):
         """Get the sections the person is a member of."""
-        return self.sectionsAs(ILearner)
+        app_states = self.app_states('section-membership')
+        relationships_getter = lambda s: s.members
+        return self.sectionsAs(ILearner, app_states, relationships_getter)
 
-    def sectionsAs(self, role_interface):
+    def sectionsAs(self, role_interface, app_states, relationships_getter):
         schoolyears_data = {}
         for section in role_interface(self.context).sections():
             section = removeSecurityProxy(section)
@@ -282,7 +285,9 @@ class FlourishCoursesViewlet(Viewlet):
                 for section in sorted(schoolyears_data[sy][term],
                                       cmp=self.sortByCourseAndSection,
                                       key=sortingKey):
-                    states = self.section_current_states(section)
+                    relationships = relationships_getter(section)
+                    states = self.section_current_states(
+                        section, app_states, relationships)
                     section_info = {
                         'obj': section,
                         'title': section.title,
@@ -299,24 +304,19 @@ class FlourishCoursesViewlet(Viewlet):
                                      other['section_title'])
         return self.collator.cmp(this['course'], other['course'])
 
-    @Lazy
-    def app_states(self):
+    def app_states(self, key):
         app = ISchoolToolApplication(None)
-        states = IRelationshipStateContainer(app)['section-membership']
+        states = IRelationshipStateContainer(app)[key]
         return states
 
-    def section_current_states(self, section):
+    def section_current_states(self, section, app_states, relationships):
         target = removeSecurityProxy(self.context)
-        app_states = self.app_states
-        relationships = section.members
         states = []
         for date, active, code in relationships.state(target) or ():
             state = app_states.states.get(code)
             title = state.title if state is not None else ''
             states.append({
                 'date': date,
-                'active': app_states.system_titles.get(active, active),
-                'code': code,
                 'title': title,
                 })
         return states
