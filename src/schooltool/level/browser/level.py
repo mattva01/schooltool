@@ -35,6 +35,7 @@ import schooltool.skin.flourish.page
 import schooltool.skin.flourish.form
 import schooltool.skin.flourish.content
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.common.inlinept import InheritTemplate
 from schooltool.table.table import simple_form_key
 from schooltool.level.interfaces import ILevel, ILevelContainer
 from schooltool.level.level import Level
@@ -229,6 +230,7 @@ class FlourishLevelAddView(flourish.form.AddForm, LevelAddForm):
         self.actions['cancel'].addClass('button-cancel')
 
 class FlourishLevelEditView(flourish.form.Form, LevelEditView):
+    template = InheritTemplate(flourish.page.Page.template)
     label = None
     legend = _('Level information')
 

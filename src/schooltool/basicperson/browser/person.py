@@ -71,6 +71,7 @@ from schooltool.person.interfaces import IPerson, IPersonFactory
 from schooltool.person.browser.person import PersonTable, PersonTableFormatter
 from schooltool.person.browser.person import PersonTableFilter
 from schooltool.schoolyear.interfaces import ISchoolYearContainer
+from schooltool.relationship.temporal import ACTIVE
 from schooltool.report.report import OldReportTask
 from schooltool.report.browser.report import RequestRemoteReportDialog
 from schooltool.skin.containers import TableContainerView
@@ -182,6 +183,14 @@ class IPhotoField(Interface):
         description=_('An image file that will be converted to a JPEG no larger than 99x132 pixels (3:4 aspect ratio). Uploaded images must be JPEG or PNG files smaller than 10 MB'),
         size=(99,132),
         format='JPEG',
+        required=False)
+
+
+class ILevelField(Interface):
+
+    level = Choice(
+        title=_('Grade Level'),
+        vocabulary='schooltool.level.level.levelvocabulary',
         required=False)
 
 
@@ -313,6 +322,16 @@ class PersonView(PersonForm, form.DisplayForm):
 
 class FlourishPersonView(flourish.page.Page):
     """Person index.html view."""
+
+    @property
+    def subtitle(self):
+        result = []
+        levels = self.context.levels
+        for level in levels.on(self.request.util.today).any(ACTIVE):
+            result.append(level)
+        if result:
+            level = ', '.join([level.title for level in levels])
+            return '(%s)' % level
 
 
 class FlourishPersonInfo(flourish.page.Content):
@@ -986,6 +1005,7 @@ class FlourishPersonAddView(PersonAddViewBase):
         if self.group_id:
             result = result.omit('group')
         result += field.Fields(IPhotoField)
+        result += field.Fields(ILevelField)
         return result
 
     def buildFieldsetGroups(self):
@@ -1001,13 +1021,15 @@ class FlourishPersonAddView(PersonAddViewBase):
                 _('User'), ['username', 'password', 'confirm']),
             'details': (
                 _('Details'), ['gender', 'birth_date', 'photo']),
+            'level': (
+                _('Level'), ['level']),
             'demographics': (
                 _('Demographics'), list(self.getDemoFields())),
             'relationships': (
                 _('Relationships'), relationship_fields),
             }
         self.fieldset_order = (
-            'full_name', 'details', 'demographics',
+            'full_name', 'details', 'demographics', 'level',
             'relationships', 'user')
 
     def fieldsets(self):
@@ -1036,6 +1058,19 @@ class FlourishPersonAddView(PersonAddViewBase):
     def updateActions(self):
         super(FlourishPersonAddView, self).updateActions()
         self.actions['submitadd'].addClass('button-neutral')
+
+    def create(self, data):
+        self._level = data.pop('level')
+        return super(FlourishPersonAddView, self).create(data)
+
+    def add(self, person):
+        person = super(FlourishPersonAddView, self).add(person)
+        if self._level is not None:
+            self.set_person_level(person, self._level)
+        return person
+
+    def set_person_level(self, person, level):
+        person.levels.on(self.request.util.today).relate(level)
 
 
 ###############  Group-aware add views ################

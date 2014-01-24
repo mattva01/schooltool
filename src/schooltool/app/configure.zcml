@@ -532,4 +532,16 @@
       provides="schooltool.app.interfaces.IPluginStartUp"
       name="schooltool.app.states-student" />
 
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".states.StudentLevelsStatesStartup"
+      provides="schooltool.app.interfaces.IPluginInit"
+      name="schooltool.app.states-student-levels" />
+
+  <adapter
+      for="schooltool.app.interfaces.ISchoolToolApplication"
+      factory=".states.StudentLevelsStatesStartup"
+      provides="schooltool.app.interfaces.IPluginStartUp"
+      name="schooltool.app.states-student-levels" />
+
 </configure>

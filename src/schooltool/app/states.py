@@ -269,3 +269,18 @@ class LeadershipStatesStartUp(StateStartUpBase):
         super(LeadershipStatesStartUp, self).populate(states)
         states.add(_('Active'), ACTIVE, 'a')
         states.add(_('Inactive'), INACTIVE, 'i')
+
+
+class StudentLevelsStatesStartup(StateStartUpBase):
+
+    states_name = 'student-levels'
+    states_title = _('Student Levels')
+
+    def populate(self, states):
+        super(StudentLevelsStatesStartup, self).populate(states)
+        states.add(_('Pre-enrolled'), INACTIVE+PREENROLLED, 'p')
+        states.add(_('Enrolled'), ACTIVE, 'a')
+        states.add(_('Graduated'), INACTIVE+GRADUATED, 'c')
+        states.add(_('Inactive'), INACTIVE, 'i')
+        states.describe(INACTIVE+PREENROLLED, _('Pre-enrolled'))
+        states.describe(INACTIVE+GRADUATED, _('Graduated'))
