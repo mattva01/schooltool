@@ -288,6 +288,7 @@ form fieldset .row > .error .error {
 }
 
 form fieldset .row .widget input.text-widget,
+input.text-widget,
 form fieldset .row .widget input[type="text"],
 form fieldset .row .widget input.password-widget,
 form fieldset .row .widget input[type="password"] {
@@ -297,6 +298,7 @@ form fieldset .row .widget input[type="password"] {
 }
 
 form fieldset .row .widget input.text-widget:focus,
+input.text-widget:focus,
 form fieldset .row .widget input[type="text"]:focus,
 form fieldset .row .widget input.password-widget:focus,
 form fieldset .row .widget input[type="password"]:focus {

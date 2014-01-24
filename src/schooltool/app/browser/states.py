@@ -588,7 +588,7 @@ class TemporalResultsButton(object):
                                   selected option/selected"
                   tal:content="option/title" />
         </select>
-        <input type="text" class="date-field"
+        <input type="text" class="text-widget date-field"
                tal:attributes="name view/date_name;
                                value view/date" />
       </div>
