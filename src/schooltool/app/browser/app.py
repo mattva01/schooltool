@@ -246,7 +246,7 @@ class RelationshipButton(ImageInputColumn):
         params['tokens_name'] = ".".join(
             filter(None, ["displayed", self.prefix, "tokens"]))
         params['tokens_value'] = self.id_getter(item)
-        params['onclick'] = self.onclick
+        params['onclick'] = self.onclick or ''
         params['css_class'] = self.button_class
         if self.text_getter is not None:
             params['text'] = self.text_getter(item)
@@ -265,6 +265,19 @@ class RelationshipButton(ImageInputColumn):
         if self.text_getter is not None:
             template = '<span>%(text)s</span>\n' + template
         return template
+
+
+class RelationshipCheckboxColumn(CheckboxColumn):
+
+    def template(self):
+        return '<input type="checkbox" name="%(tokens_name)s" value="%(tokens_value)s" />'
+
+    def params(self, item, formatter):
+        params = CheckboxColumn.params(self, item, formatter)
+        params['tokens_name'] = ".".join(
+            filter(None, ["displayed", self.prefix, "tokens"]))
+        params['tokens_value'] = self.id_getter(item)
+        return params
 
 
 class RelationshipButtonTableMixin(object):
@@ -311,15 +324,11 @@ class RelationshipButtonTableMixin(object):
         # XXX: evil!
         default = super(RelationshipButtonTableMixin, self).columns()
 
-        action = RelationshipButton(
+        action = RelationshipCheckboxColumn(
             self.button_prefix, name='action',
-            title=self.button_title, alt=self.button_title,
-            library='schooltool.skin.flourish',
-            image=self.button_image,
-            onclick=self.onclick,
-            id_getter=self.view.getKey,
-            text_getter=self.makeTextGetter())
-        return default + [action]
+            title=self.button_title,
+            id_getter=self.view.getKey)
+        return [action] + default
 
     def update(self):
         super(RelationshipButtonTableMixin, self).update()
@@ -414,46 +423,72 @@ class RelationshipRemoveTableMixin(RelationshipButtonTableMixin):
                    css_classes={'table': 'data relationships-table'})
 
 
-class AddAllResultsButton(flourish.viewlet.Viewlet):
+class ResultsButton(flourish.viewlet.Viewlet):
 
     template = InlineViewPageTemplate('''
+      <div i18n:domain="schooltool">
+        <p>
+          <a href="#" onclick="return ST.table.select_all(event);" i18n:translate="">Select All</a> |
+          <a href="#" onclick="return ST.table.select_none(event);" i18n:translate="">Select None</a>
+        </p>
+      </div>
       <div class="buttons">
-        <input id="form-buttons-add" name="ADD_DISPLAYED_RESULTS"
-               class="submit-widget button-field button-ok"
-               value="Add all displayed" type="submit"
+        <input class="submit-widget button-field button-ok" type="submit"
                tal:attributes="name view/button_name;
                                value view/title" />
       </div>
     ''')
 
-    title = _('Add all displayed')
-    button_name = 'ADD_DISPLAYED_RESULTS'
-    token_key = 'displayed.add_item.tokens'
-
-    def addSearchResults(self):
+    def processSearchResults(self):
         if (self.button_name not in self.request or
             self.token_key not in self.request):
             return False
-        add_ids = self.request[self.token_key]
-        if not isinstance(add_ids, list):
-            add_ids = [add_ids]
+        item_ids = self.request[self.token_key]
+        if not isinstance(item_ids, list):
+            item_ids = [item_ids]
         changed = False
         relationship_view = self.manager.view
-        for item in relationship_view.getAvailableItems():
-            if relationship_view.getKey(item) in add_ids:
-                relationship_view.add(removeSecurityProxy(item))
+        for item in self.view_items(relationship_view):
+            if relationship_view.getKey(item) in item_ids:
+                self.process_item(relationship_view, item)
                 changed = True
         return changed
 
     def update(self):
-        changed = self.addSearchResults()
-        if changed:
+        self.processSearchResults()
+        if self.button_name in self.request:
             self.manager.changed = True
 
     def render(self, *args, **kw):
         if not self.manager._items:
             return ''
         return self.template(*args, **kw)
+
+
+class AddAllResultsButton(ResultsButton):
+
+    title = _('Add')
+    button_name = 'ADD_DISPLAYED_RESULTS'
+    token_key = 'displayed.add_item.tokens'
+
+    def view_items(self, relationship_view):
+        return relationship_view.getAvailableItems()
+
+    def process_item(self, relationship_view, item):
+        relationship_view.add(removeSecurityProxy(item))
+
+
+class RemoveAllResultsButton(ResultsButton):
+
+    title = _('Remove')
+    button_name = 'REMOVE_DISPLAYED_RESULTS'
+    token_key = 'displayed.remove_item.tokens'
+
+    def view_items(self, relationship_view):
+        return relationship_view.getSelectedItems()
+
+    def process_item(self, relationship_view, item):
+        relationship_view.remove(removeSecurityProxy(item))
 
 
 class EditRelationships(flourish.page.Page):

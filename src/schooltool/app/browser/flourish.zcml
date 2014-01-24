@@ -603,6 +603,14 @@
       />
 
   <flourish:viewlet
+      name="remove_all_button"
+      after="table"
+      manager=".app.RelationshipRemoveTableMixin"
+      class="schooltool.app.browser.app.RemoveAllResultsButton"
+      permission="schooltool.view"
+      />
+
+  <flourish:viewlet
       name="action_dialog_script"
       after="table"
       manager=".states.TemporalRelationshipAddTableMixin"

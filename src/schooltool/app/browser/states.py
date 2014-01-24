@@ -68,12 +68,12 @@ class EditTemporalRelationships(EditRelationships):
         container = IRelationshipStateContainer(app)
         return container.get(self.app_states_name, None)
 
-    def relate(self, item, code, date=None):
+    def relate(self, item, code=None, date=None):
         collection = removeSecurityProxy(self.getCollection())
         if item not in collection:
             collection.add(item)
 
-    def remove(self, item, code, date=None):
+    def remove(self, item, code=None, date=None):
         collection = removeSecurityProxy(self.getCollection())
         if item in collection:
             collection.remove(item)
@@ -94,7 +94,7 @@ class TemporalRelationshipAddTableMixin(RelationshipAddTableMixin):
 
 class TemporalRelationshipRemoveTableMixin(RelationshipRemoveTableMixin):
 
-    button_title = _('Status')
+    button_title = _('Update')
     button_image = 'edit-icon.png'
 
     def makeTextGetter(self):

@@ -265,6 +265,18 @@ ST.table = function() {
           var elements = $(element).closest('table').find('tbody input[type="checkbox"]')
           elements.attr('checked', value);
           return true;
+      },
+
+      select_all: function(event) {
+          var element = event.target;
+          $(element).closest('form').find('tbody input[type="checkbox"]').attr('checked', true);
+          event.preventDefault();
+      },
+
+      select_none: function(event) {
+          var element = event.target;
+          $(element).closest('form').find('tbody input[type="checkbox"]').attr('checked', false);
+          event.preventDefault();
       }
 
   };

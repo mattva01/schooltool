@@ -64,17 +64,25 @@ class CheckboxColumn(zc.table.column.Column):
     def isDisabled(self, item):
         return False
 
+    def template(self):
+        return '<input type="checkbox" name="%(name)s" id="%(id)s"%(checked)s />'
+
+    def params(self, item, formatter):
+        checked = False
+        if self.value_getter is not None:
+            checked = bool(self.value_getter(item))
+        form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
+        return {
+            'name': form_id,
+            'id': form_id,
+            'checked': checked and ' checked="checked"' or '',
+            }
+
     def renderCell(self, item, formatter):
         if not self.isDisabled(item):
-            checked = False
-            if self.value_getter is not None:
-                checked = bool(self.value_getter(item))
-            form_id = ".".join(filter(None, [self.prefix, self.id_getter(item)]))
-            return '<input type="checkbox" name="%s" id="%s"%s />' % (
-                form_id, form_id,
-                checked and ' checked="checked"' or '')
-        else:
-            return ''
+            params = self.params(item, formatter)
+            return self.template() % params
+        return ''
 
 
 class DependableCheckboxColumn(CheckboxColumn):
