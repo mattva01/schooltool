@@ -27,6 +27,7 @@ from zope.interface import Interface
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.security.proxy import removeSecurityProxy
 from z3c.form import button, field, form, widget
+from zc.table.column import GetterColumn
 
 from schooltool import table
 from schooltool.skin import flourish
@@ -103,6 +104,17 @@ class TemporalRelationshipAddTableMixin(RelationshipAddTableMixin):
     pass
 
 
+def get_state_column_formatter(table):
+    def cell_formatter(value, item, formatter):
+        params = {
+            'value': value,
+            'name': '%s.%s' % (table.button_prefix, table.view.getKey(item)),
+            'prefix': table.button_prefix,
+            }
+        return '<a class="%(prefix)s-action" name="%(name)s" href="#">%(value)s</a>' % params
+    return cell_formatter
+
+
 class TemporalRelationshipRemoveTableMixin(RelationshipRemoveTableMixin):
 
     button_title = _('Update')
@@ -113,7 +125,7 @@ class TemporalRelationshipRemoveTableMixin(RelationshipRemoveTableMixin):
         if settings is None:
             return None
         collection = self.view.getCollection()
-        def text(item):
+        def text(item, formatter=None):
             state = collection.state(removeSecurityProxy(item))
             if state is None:
                 return ''
@@ -126,6 +138,16 @@ class TemporalRelationshipRemoveTableMixin(RelationshipRemoveTableMixin):
                 return ''
             return description.title
         return text
+
+    def columns(self):
+        default = super(TemporalRelationshipRemoveTableMixin, self).columns()
+        state = GetterColumn(
+            name='state',
+            title=_('State'),
+            getter=self.makeTextGetter(),
+            cell_formatter=get_state_column_formatter(self),
+            )
+        return default + [state]
 
 
 class TemporalRelationshipTableEditDialog(flourish.ajax.AJAXDialogForm):
@@ -192,7 +214,7 @@ class StateActionDialog(DialogFormWithScript):
 
     @property
     def selector(self):
-        return 'button.%s' % (self.manager.button_prefix + '-action');
+        return 'a.%s' % (self.manager.button_prefix + '-action');
 
     def getContent(self):
         return self.settings

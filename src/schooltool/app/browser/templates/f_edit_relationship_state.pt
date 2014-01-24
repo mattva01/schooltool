@@ -21,14 +21,4 @@
   </table>
 </div>
 
-<div metal:use-macro="macro:form">
-  <metal:block fill-slot="above-buttons">
-    <tal:block repeat="entry view/postback_form">
-      <input type="hidden"
-             tal:attributes="name entry/name;
-                             value entry/value" />
-    </tal:block>
-  </metal:block>
-</div>
-
 </div>
