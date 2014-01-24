@@ -55,7 +55,9 @@ def evolve(context):
     setSite(app)
     syc = ISchoolYearContainer(app)
     if not syc.values():
-        continue
+        setSite(old_site)
+        return
+
     sy = syc.getActiveSchoolYear()
     if sy is None:
         sy = syc.values()[-1]
