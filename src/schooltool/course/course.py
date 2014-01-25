@@ -27,9 +27,7 @@ from zope.component import adapts
 from zope.component import adapter
 from zope.component import getUtility
 from zope.annotation.interfaces import IAttributeAnnotatable
-from zope.intid import addIntIdSubscriber
 from zope.intid.interfaces import IIntIds
-from zope.lifecycleevent import ObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectRemovedEvent
 from zope.container.contained import Contained
 from zope.container.btree import BTreeContainer
@@ -74,7 +72,6 @@ def getCourseContainerForApp(app):
 @adapter(ISchoolYear)
 @implementer(ICourseContainer)
 def getCourseContainer(sy):
-    addIntIdSubscriber(sy, ObjectAddedEvent(sy))
     int_ids = getUtility(IIntIds)
     sy_id = str(int_ids.getId(sy))
     app = ISchoolToolApplication(None)
