@@ -61,6 +61,7 @@ from schooltool.term.interfaces import ITerm
 from schooltool.common import SchoolToolMessage as _
 
 
+SECTION_CONTAINERS_KEY = 'schooltool.course.section'
 COMPLETED = 'c'
 
 
@@ -211,9 +212,9 @@ def getSectionContainer(term):
     int_ids = getUtility(IIntIds)
     term_id = str(int_ids.getId(term))
     app = ISchoolToolApplication(None)
-    sc = app['schooltool.course.section'].get(term_id, None)
+    sc = app[SECTION_CONTAINERS_KEY].get(term_id, None)
     if sc is None:
-        sc = app['schooltool.course.section'][term_id] = SectionContainer()
+        sc = app[SECTION_CONTAINERS_KEY][term_id] = SectionContainer()
     return sc
 
 
@@ -271,7 +272,7 @@ class SectionContainer(BTreeContainer):
 class SectionInit(InitBase):
 
     def __call__(self):
-        self.app['schooltool.course.section'] = SectionContainerContainer()
+        self.app[SECTION_CONTAINERS_KEY] = SectionContainerContainer()
 
 
 class InstructorsCrowd(Crowd):
@@ -369,6 +370,7 @@ class RemoveSectionsWhenTermIsDeleted(ObjectEventAdapterSubscriber):
         section_container = interfaces.ISectionContainer(self.object)
         for section_id in list(section_container.keys()):
             del section_container[section_id]
+        del section_container.__parent__[section_container.__name__]
 
 
 class UnlinkSectionWhenDeleted(ObjectEventAdapterSubscriber):
