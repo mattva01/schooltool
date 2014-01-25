@@ -575,28 +575,38 @@ class TemporalResultsButton(object):
     default_state = None
 
     template = InlineViewPageTemplate('''
-      <div i18n:domain="schooltool">
-        <p>
-          <a href="#" onclick="return ST.table.select_all(event);" i18n:translate="">Select All</a> |
-          <a href="#" onclick="return ST.table.select_none(event);" i18n:translate="">Select None</a>
-        </p>
-      </div>
-      <div class="temporal-relationship-button-options">
-        <select tal:attributes="name view/state_name">
-          <option tal:repeat="option view/states"
-                  tal:attributes="value option/value;
-                                  selected option/selected"
-                  tal:content="option/title" />
-        </select>
-        <input type="text" class="text-widget date-field"
-               tal:attributes="name view/date_name;
-                               value view/date" />
-      </div>
-      <div class="buttons">
-        <input class="submit-widget button-field button-ok" type="submit"
-               tal:attributes="name view/button_name;
-                               value view/title" />
-      </div>
+      <tal:block i18n:domain="schooltool">
+        <div>
+          <p>
+            <a href="#" onclick="return ST.table.select_all(event);" i18n:translate="">Select All</a> |
+            <a href="#" onclick="return ST.table.select_none(event);" i18n:translate="">Select None</a>
+          </p>
+        </div>
+        <div class="temporal-relationship-button-options">
+          <p>
+            <span i18n:translate="">
+              Set selected to:
+            </span>
+            <select tal:attributes="name view/state_name">
+              <option tal:repeat="option view/states"
+                      tal:attributes="value option/value;
+                                      selected option/selected"
+                      tal:content="option/title" />
+            </select>
+          </p>
+          <p>
+            <span i18n:translate="">Effective date:</span>
+            <input type="text" class="text-widget date-field"
+                   tal:attributes="name view/date_name;
+                                   value view/date" />
+          </p>
+        </div>
+        <div class="buttons">
+          <input class="submit-widget button-field button-ok" type="submit"
+                 tal:attributes="name view/button_name;
+                                 value view/title" />
+        </div>
+      </tal:block>
     ''')
 
     @property
