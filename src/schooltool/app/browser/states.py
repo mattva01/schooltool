@@ -318,6 +318,8 @@ class StateActionDialog(DialogFormWithScript):
     def initDialog(self):
         self.settings = {}
         super(StateActionDialog, self).initDialog()
+        self.ajax_settings['dialog']['modal'] = False
+        self.ajax_settings['dialog']['draggable'] = True
 
     @property
     def target(self):
