@@ -9,7 +9,8 @@
     <ul>
       <li tal:repeat="schoolyear schoolyears">
         <a tal:attributes="href schoolyear/obj/@@absolute_url;
-                           title schoolyear/obj/title"
+                           title schoolyear/obj/title;
+                           class schoolyear/css_class;"
            tal:content="schoolyear/obj/title"></a>
         <ul>
           <li tal:repeat="term schoolyear/terms">
@@ -45,7 +46,8 @@
     <ul>
       <li tal:repeat="schoolyear schoolyears">
         <a tal:attributes="href schoolyear/obj/@@absolute_url;
-                           title schoolyear/obj/title"
+                           title schoolyear/obj/title;
+                           class schoolyear/css_class"
            tal:content="schoolyear/obj/title"></a>
         <ul>
           <li tal:repeat="term schoolyear/terms">

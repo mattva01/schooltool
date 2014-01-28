@@ -229,7 +229,7 @@ class CoursesViewlet(ViewletBase):
         return self.collator.cmp(this['course'], other['course'])
 
 
-class FlourishCoursesViewlet(Viewlet):
+class FlourishCoursesViewlet(Viewlet, ActiveSchoolYearContentMixin):
     """A flourish viewlet showing the courses a person is in."""
 
     template = ViewPageTemplateFile('templates/f_coursesviewlet.pt')
@@ -278,7 +278,11 @@ class FlourishCoursesViewlet(Viewlet):
             schoolyears_data[sy][term].append((section, link_info))
         result = []
         for sy in sorted(schoolyears_data, key=lambda x:x.first, reverse=True):
-            sy_info = {'obj': sy, 'terms': []}
+            sy_info = {
+                'obj': sy,
+                'css_class': 'active' if sy is self.schoolyear else 'inactive',
+                'terms': [],
+                }
             for term in sorted(schoolyears_data[sy],
                                key=lambda x:x.first,
                                reverse=True):
@@ -320,7 +324,7 @@ class FlourishCoursesViewlet(Viewlet):
         return states
 
 
-class FlourishCompletedCoursesViewlet(Viewlet):
+class FlourishCompletedCoursesViewlet(Viewlet, ActiveSchoolYearContentMixin):
     """A flourish viewlet showing the courses a person completed."""
 
     template = ViewPageTemplateFile('templates/f_completedcoursesviewlet.pt')
@@ -368,7 +372,11 @@ class FlourishCompletedCoursesViewlet(Viewlet):
         result = []
         sortingKey = lambda course: self.collator.key(course.title)
         for sy in sorted(schoolyears_data, key=lambda x:x.first, reverse=True):
-            sy_info = {'obj': sy, 'terms': []}
+            sy_info = {
+                'obj': sy,
+                'css_class': 'active' if sy is self.schoolyear else 'inactive',
+                'terms': [],
+                }
             for term in sorted(schoolyears_data[sy],
                                key=lambda x:x.first,
                                reverse=True):
