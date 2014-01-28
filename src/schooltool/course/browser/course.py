@@ -52,6 +52,7 @@ from schooltool.app.interfaces import IRelationshipStateContainer
 from schooltool.app.browser.app import ContentTitle
 from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.membership import Membership
+from schooltool.app.relationships import Instruction
 from schooltool.common.inlinept import InheritTemplate
 from schooltool.common.inlinept import InlineViewPageTemplate
 from schooltool.term.interfaces import ITerm
@@ -60,8 +61,8 @@ from schooltool.skin.containers import ContainerView
 from schooltool.course.interfaces import ICourse, ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.interfaces import ILearner, IInstructor
+from schooltool.course.interfaces import ISection
 from schooltool.course.course import Course
-from schooltool.level.level import LevelCourses
 from schooltool.skin import flourish
 from schooltool.skin.flourish.viewlet import Viewlet
 from schooltool.skin.flourish.containers import ContainerDeleteView
@@ -253,44 +254,39 @@ class FlourishCoursesViewlet(Viewlet):
     def sectionsAsTeacher(self):
         """Get the sections the person instructs."""
         app_states = self.app_states('section-instruction')
-        relationships_getter = lambda s: s.instructors
-        return self.sectionsAs(IInstructor, app_states, relationships_getter)
+        relationships = Instruction.bind(instructor=self.context).all().relationships
+        return self.sectionsAs(app_states, relationships)
 
     def sectionsAsLearner(self):
         """Get the sections the person is a member of."""
         app_states = self.app_states('section-membership')
-        relationships_getter = lambda s: s.members
-        return self.sectionsAs(ILearner, app_states, relationships_getter)
+        relationships = Membership.bind(member=self.context).all().relationships
+        return self.sectionsAs(app_states, relationships)
 
-    def sectionsAs(self, role_interface, app_states, relationships_getter):
+    def sectionsAs(self, app_states, relationships):
         schoolyears_data = {}
-        for section in role_interface(self.context).sections():
-            section = removeSecurityProxy(section)
+        for link_info in relationships:
+            if not ISection.providedBy(link_info.target):
+                continue
+            section = removeSecurityProxy(link_info.target)
             sy = ISchoolYear(section)
             if sy not in schoolyears_data:
                 schoolyears_data[sy] = {}
             term = ITerm(section)
             if term not in schoolyears_data[sy]:
                 schoolyears_data[sy][term] = []
-            schoolyears_data[sy][term].append(section)
+            schoolyears_data[sy][term].append((section, link_info))
         result = []
         for sy in sorted(schoolyears_data, key=lambda x:x.first, reverse=True):
             sy_info = {'obj': sy, 'terms': []}
             for term in sorted(schoolyears_data[sy],
                                key=lambda x:x.first,
                                reverse=True):
-                sortingKey = lambda section:{'course':
-                                             ', '.join([course.title
-                                                        for course in
-                                                        section.courses]),
-                                             'section_title': section.title}
                 term_info = {'obj': term, 'sections': []}
-                for section in sorted(schoolyears_data[sy][term],
-                                      cmp=self.sortByCourseAndSection,
-                                      key=sortingKey):
-                    relationships = relationships_getter(section)
+                for section, link_info in sorted(schoolyears_data[sy][term],
+                                                 key=self.sortingKey):
                     states = self.section_current_states(
-                        section, app_states, relationships)
+                        section, app_states, link_info)
                     section_info = {
                         'obj': section,
                         'title': section.title,
@@ -301,21 +297,20 @@ class FlourishCoursesViewlet(Viewlet):
             result.append(sy_info)
         return result
 
-    def sortByCourseAndSection(self, this, other):
-        if this['course'] is other['course']:
-            return self.collator.cmp(this['section_title'],
-                                     other['section_title'])
-        return self.collator.cmp(this['course'], other['course'])
+    def sortingKey(self, t):
+        section, link = t
+        course_title = ', '.join([c.title for c in section.courses])
+        return (self.collator.key(course_title),
+                self.collator.key(section.title))
 
     def app_states(self, key):
         app = ISchoolToolApplication(None)
         states = IRelationshipStateContainer(app)[key]
         return states
 
-    def section_current_states(self, section, app_states, relationships):
-        target = removeSecurityProxy(self.context)
+    def section_current_states(self, section, app_states, link_info):
         states = []
-        for date, active, code in relationships.state(target) or ():
+        for date, active, code in link_info.state.all():
             state = app_states.states.get(code)
             title = state.title if state is not None else ''
             states.append({
@@ -371,13 +366,13 @@ class FlourishCompletedCoursesViewlet(Viewlet):
                 schoolyears_data[sy][term] = []
             schoolyears_data[sy][term].extend(section.courses)
         result = []
+        sortingKey = lambda course: self.collator.key(course.title)
         for sy in sorted(schoolyears_data, key=lambda x:x.first, reverse=True):
             sy_info = {'obj': sy, 'terms': []}
             for term in sorted(schoolyears_data[sy],
                                key=lambda x:x.first,
                                reverse=True):
                 term_info = {'obj': term, 'courses': []}
-                sortingKey = lambda course: self.collator.key(course.title)
                 for course in sorted(schoolyears_data[sy][term],
                                      key=sortingKey):
                     course_info = {
