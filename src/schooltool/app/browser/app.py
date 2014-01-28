@@ -937,6 +937,7 @@ class ApplicationPreferencesView(BrowserView):
 
 class FlourishApplicationPreferencesView(Form, form.EditForm):
 
+    template = flourish.templates.Inherit(flourish.page.Page.template)
     fields = field.Fields(IApplicationPreferences)
     fields = fields.select('frontPageCalendar',
                            'timezone',
@@ -1437,6 +1438,7 @@ class ErrorsSettingsAdapter(object):
 
 class FlourishErrorsConfigureView(Form, FlourishErrorsViewBase):
 
+    template = flourish.templates.Inherit(flourish.page.Page.template)
     legend = _('Errors Settings')
     fields = field.Fields(IErrorsSettings)
     fields['ignored_exceptions'].widgetFactory = CheckBoxFieldWidget
