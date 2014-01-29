@@ -236,3 +236,9 @@ form fieldset.course-sections-list {
     padding: 0 8px;
     background: none;
 }
+
+/* XXX: used in temporal relationship tables */
+
+form .temporal-relationship-button-options fieldset {
+    padding: 8px;
+}

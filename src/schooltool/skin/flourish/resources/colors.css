@@ -257,6 +257,7 @@ h3.done-link a:active {
       + widget
     - required information
     - buttons
+    - custom forms
 
 */
 
@@ -366,6 +367,10 @@ form span.required {
 
 form pre.csv-text {
     border-color: #888;
+}
+
+form .temporal-relationship-button-options fieldset {
+    background-color: transparent;
 }
 
 /*

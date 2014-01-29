@@ -1,0 +1,52 @@
+<tal:block i18n:domain="schooltool">
+  <div>
+    <p>
+      <a href="#" onclick="return ST.table.select_all(event);" i18n:translate="">Select All</a> |
+      <a href="#" onclick="return ST.table.select_none(event);" i18n:translate="">Select None</a>
+    </p>
+  </div>
+  <div class="temporal-relationship-button-options">
+    <fieldset>
+      <div class="row">
+        <div class="label">
+          <label tal:attributes="for view/state_name">
+            <span i18n:translate="">
+              Set selected to
+            </span>
+          </label>
+        </div>
+        <div class="widget">
+          <select tal:attributes="name view/state_name;
+                                  id view/state_name"
+                  class="select-widget">
+            <option tal:repeat="option view/states"
+                    tal:attributes="value option/value;
+                                    selected option/selected"
+                    tal:content="option/title" />
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="label">
+          <label tal:attributes="for view/date_name">
+            <span i18n:translate="">
+              Effective date
+            </span>
+          </label>
+        </div>
+        <p class="hint" i18n:translate="">(yyyy-mm-dd)</p>
+        <div class="widget">
+          <input type="text" class="text-widget date-field"
+                 tal:attributes="name view/date_name;
+                                 value view/date;
+                                 id view/date_name;" />
+        </div>
+      </div>
+    </fieldset>
+  </div>
+  <div class="buttons">
+    <input class="submit-widget button-field button-ok" type="submit"
+           tal:attributes="name view/button_name;
+                           value view/title" />
+  </div>
+</tal:block>
