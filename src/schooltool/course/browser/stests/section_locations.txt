@@ -96,17 +96,21 @@ location type resources show up.
     >>> manager.query.xpath('//a[@title="Edit locations for this section"]').click()
     >>> manager.query.xpath('//div[@id="current_table-ajax-current_table-"]//h3').text
     u'There are none.'
-    >>> manager.query_all.xpath('//div[@id="available_table-ajax-available_table-"]//a').text
+    >>> manager.query_all.xpath('//div[@id="available_table-ajax-available_table-"]//table//a').text
     [u'Room 100', u'Room 101']
 
-    >>> manager.query.xpath('//button[@name="add_item.room-100"]').click()
-    >>> manager.query_all.xpath('//div[@id="current_table-ajax-current_table-"]//a').text
+    >>> manager.query.xpath('//input[@value="room-100"]').click()
+    >>> manager.query.name('ADD_DISPLAYED_RESULTS').click()
+
+    >>> manager.query_all.xpath('//div[@id="current_table-ajax-current_table-"]//table//a').text
     [u'Room 100']
-    >>> manager.query_all.xpath('//div[@id="available_table-ajax-available_table-"]//a').text
+    >>> manager.query_all.xpath('//div[@id="available_table-ajax-available_table-"]//table//a').text
     [u'Room 101']
 
-    >>> manager.query.xpath('//button[@name="add_item.room-101"]').click()
-    >>> manager.query_all.xpath('//div[@id="current_table-ajax-current_table-"]//a').text
+    >>> manager.query.xpath('//input[@value="room-101"]').click()
+    >>> manager.query.name('ADD_DISPLAYED_RESULTS').click()
+
+    >>> manager.query_all.xpath('//div[@id="current_table-ajax-current_table-"]//table//a').text
     [u'Room 100', u'Room 101']
     >>> manager.query.xpath('//div[@id="available_table-ajax-available_table-"]//h3').text
     u'There are none.'
@@ -123,17 +127,21 @@ resources appear in the add/remove view.
     >>> manager.query.xpath('//a[@title="Edit equipment for this section"]').click()
     >>> manager.query.xpath('//div[@id="current_table-ajax-current_table-"]//h3').text
     u'There are none.'
-    >>> manager.query_all.xpath('//div[@id="available_table-ajax-available_table-"]//a').text
+    >>> manager.query_all.xpath('//div[@id="available_table-ajax-available_table-"]//table//a').text
     [u'More equipment', u'Some equipment']
 
-    >>> manager.query.xpath('//button[@name="add_item.more-equipment"]').click()
-    >>> manager.query_all.xpath('//div[@id="current_table-ajax-current_table-"]//a').text
+    >>> manager.query.xpath('//input[@value="more-equipment"]').click()
+    >>> manager.query.name('ADD_DISPLAYED_RESULTS').click()
+
+    >>> manager.query_all.xpath('//div[@id="current_table-ajax-current_table-"]//table//a').text
     [u'More equipment']
-    >>> manager.query_all.xpath('//div[@id="available_table-ajax-available_table-"]//a').text
+    >>> manager.query_all.xpath('//div[@id="available_table-ajax-available_table-"]//table//a').text
     [u'Some equipment']
 
-    >>> manager.query.xpath('//button[@name="add_item.some-equipment"]').click()
-    >>> manager.query_all.xpath('//div[@id="current_table-ajax-current_table-"]//a').text
+    >>> manager.query.xpath('//input[@value="some-equipment"]').click()
+    >>> manager.query.name('ADD_DISPLAYED_RESULTS').click()
+
+    >>> manager.query_all.xpath('//div[@id="current_table-ajax-current_table-"]//table//a').text
     [u'More equipment', u'Some equipment']
     >>> manager.query.xpath('//div[@id="available_table-ajax-available_table-"]//h3').text
     u'There are none.'
@@ -142,7 +150,7 @@ resources appear in the add/remove view.
 Now, back in the section view, we see that the section equipment resources
 are there.
 
-    >>> manager.query_all.xpath('//div[@id="equipment_table-ajax-view-context-resources-equipment_table-"]//a').text
+    >>> manager.query_all.xpath('//div[@id="equipment_table-ajax-view-context-resources-equipment_table-"]//table//a').text
     [u'More equipment', u'Some equipment']
 
 
@@ -162,5 +170,5 @@ have the location we passed.
     >>> headers = manager.query_all.css(sel).text
     >>> 'This section has no equipment' in headers
     True
-    >>> manager.query_all.xpath('//div[@id="location_table-ajax-view-context-resources-location_table-"]//a').text
+    >>> manager.query_all.xpath('//div[@id="location_table-ajax-view-context-resources-location_table-"]//table//a').text
     [u'Room 100']

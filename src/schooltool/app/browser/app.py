@@ -428,8 +428,8 @@ class ResultsButton(flourish.viewlet.Viewlet):
     template = InlineViewPageTemplate('''
       <div i18n:domain="schooltool">
         <p>
-          <a href="#" onclick="return ST.table.select_all(event);" i18n:translate="">Select All</a> |
-          <a href="#" onclick="return ST.table.select_none(event);" i18n:translate="">Select None</a>
+          <a href="#" onclick="return ST.table.select_all(event);" i18n:translate="" tal:attributes="id view/select_all_name">Select All</a> |
+          <a href="#" onclick="return ST.table.select_none(event);" i18n:translate="" tal:attributes="id view/select_none_name">Select None</a>
         </p>
       </div>
       <div class="buttons">
@@ -438,6 +438,14 @@ class ResultsButton(flourish.viewlet.Viewlet):
                                value view/title" />
       </div>
     ''')
+
+    @property
+    def select_all_name(self):
+        return self.manager.html_id + '-select-all'
+
+    @property
+    def select_none_name(self):
+        return self.manager.html_id + '-select-none'
 
     def processSearchResults(self):
         if (self.button_name not in self.request or

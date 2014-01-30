@@ -1,8 +1,8 @@
 <tal:block i18n:domain="schooltool">
   <div>
     <p>
-      <a href="#" onclick="return ST.table.select_all(event);" i18n:translate="">Select All</a> |
-      <a href="#" onclick="return ST.table.select_none(event);" i18n:translate="">Select None</a>
+      <a href="#" onclick="return ST.table.select_all(event);" i18n:translate="" tal:attributes="id view/select_all_name">Select All</a> |
+      <a href="#" onclick="return ST.table.select_none(event);" i18n:translate="" tal:attributes="id view/select_none_name">Select None</a>
     </p>
   </div>
   <div class="temporal-relationship-button-options">

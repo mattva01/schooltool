@@ -308,8 +308,7 @@ Used for adding instructors to a section.
     >>> manager.ui.section.instructors.add('2012', 'Single Year', 'Math (1)',
     ...                                    ['tom', 'david'])
     >>> manager.ui.section.go('2012', 'Single Year', 'Math (1)')
-    >>> sel = ('#person_table-ajax-view-context-instructors-person_table- '
-    ...        'table tbody tr')
+    >>> sel = ('#section_instruction_person_table-ajax-view-context-instructors-section_instruction_person_table- table tbody tr')
     >>> for row in manager.query_all.css(sel):
     ...     print format_person_row(row)
     Hoffman, Tom, tom
@@ -321,8 +320,7 @@ section:
     >>> manager.ui.section.instructors.add('2012', 'Single Year', 'Math (1)',
     ...                                    ['tom', 'jeffrey'])
     >>> manager.ui.section.go('2012', 'Single Year', 'Math (1)')
-    >>> sel = ('#person_table-ajax-view-context-instructors-person_table- '
-    ...        'table tbody tr')
+    >>> sel = ('#section_instruction_person_table-ajax-view-context-instructors-section_instruction_person_table- table tbody tr')
     >>> for row in manager.query_all.css(sel):
     ...     print format_person_row(row)
     Elkner, Jeffrey, jeffrey
@@ -338,8 +336,7 @@ Used for adding students to a section.
     >>> manager.ui.section.students.add('2012', 'Single Year', 'Math (2)',
     ...                                 ['camila', 'mario'])
     >>> manager.ui.section.go('2012', 'Single Year', 'Math (2)')
-    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
-    ...        'table tbody tr')
+    >>> sel = ('#section_membership_person_table-ajax-view-context-members-section_membership_person_table- table tbody tr')
     >>> for row in manager.query_all.css(sel):
     ...     print format_person_row(row)
     Cerna, Camila, camila
@@ -351,8 +348,7 @@ section:
     >>> manager.ui.section.students.add('2012', 'Single Year', 'Math (2)',
     ...                                    ['mario', 'nestor'])
     >>> manager.ui.section.go('2012', 'Single Year', 'Math (2)')
-    >>> sel = ('#person_table-ajax-view-context-members-person_table- '
-    ...        'table tbody tr')
+    >>> sel = ('#section_membership_person_table-ajax-view-context-members-section_membership_person_table- table tbody tr')
     >>> for row in manager.query_all.css(sel):
     ...     print format_person_row(row)
     Cerna, Camila, camila

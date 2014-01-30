@@ -22,6 +22,7 @@ Selenium functional tests setup for schooltool.basicperson
 import os
 
 from schooltool.testing.selenium import SeleniumLayer
+from schooltool.testing.selenium import add_temporal_relationship
 
 dir = os.path.abspath(os.path.dirname(__file__))
 filename = os.path.join(dir, 'stesting.zcml')
@@ -89,37 +90,17 @@ def registerSeleniumSetup():
         lambda: schooltool.testing.selenium.registerBrowserUI(
             'person.add', addPerson))
 
-    def addAdvisors(browser, username, advisors):
+    def addAdvisors(browser, username, advisors, state=None, date=None):
         browser.open('http://localhost/persons/%s/advisors.html' % username)
-        selector = 'available_table-ajax-available_table--title'
-        browser.query.id(selector).type(', '.join(advisors))
-        selector = '#available_table-ajax-available_table- table'
-        table = browser.query.css(selector)
-        browser.query.name('SEARCH_BUTTON').click()
-        browser.wait(lambda: table.expired)
-        # XXX: Click Show All here in case there are lots of people
-        selector = '#available_table-ajax-available_table- table'
-        table = browser.query.css(selector)
-        browser.query.name('ADD_DISPLAYED_RESULTS').click()
-        browser.wait(lambda: table.expired)
+        add_temporal_relationship(browser, advisors, state, date)
 
     registry.register('SeleniumHelpers',
         lambda: schooltool.testing.selenium.registerBrowserUI(
             'person.advisors.add', addAdvisors))
 
-    def addAdvisees(browser, username, advisees):
+    def addAdvisees(browser, username, advisees, state=None, date=None):
         browser.open('http://localhost/persons/%s/advisees.html' % username)
-        selector = 'available_table-ajax-available_table--title'
-        browser.query.id(selector).type(', '.join(advisees))
-        selector = '#available_table-ajax-available_table- table'
-        table = browser.query.css(selector)
-        browser.query.name('SEARCH_BUTTON').click()
-        browser.wait(lambda: table.expired)
-        # XXX: Click Show All here in case there are lots of people
-        selector = '#available_table-ajax-available_table- table'
-        table = browser.query.css(selector)
-        browser.query.name('ADD_DISPLAYED_RESULTS').click()
-        browser.wait(lambda: table.expired)
+        add_temporal_relationship(browser, advisees, state, date)
 
     registry.register('SeleniumHelpers',
         lambda: schooltool.testing.selenium.registerBrowserUI(

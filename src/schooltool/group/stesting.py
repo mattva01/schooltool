@@ -22,6 +22,8 @@ Selenium Functional Testing Utilities for groups.
 import os
 
 from schooltool.testing.selenium import SeleniumLayer
+from schooltool.testing.selenium import add_temporal_relationship
+from schooltool.testing.selenium import remove_temporal_relationship
 
 dir = os.path.abspath(os.path.dirname(__file__))
 filename = os.path.join(dir, 'stesting.zcml')
@@ -60,36 +62,25 @@ def registerSeleniumSetup():
         lambda: schooltool.testing.selenium.registerBrowserUI(
             'group.add', addGroup))
 
-    def addMembers(browser, schoolyear, group, members):
+    def addMembers(browser, schoolyear, group, members,
+                   state=None, date=None):
         browser.ui.group.go(schoolyear, group)
         selector = '//a[@title="Edit members for this group"]'
         browser.query.xpath(selector).click()
-        selector = 'available_table-ajax-available_table--title'
-        browser.query.id(selector).type(', '.join(members))
-        selector = '#available_table-ajax-available_table- table'
-        table = browser.query.css(selector)
-        browser.query.name('SEARCH_BUTTON').click()
-        browser.wait(lambda: table.expired)
-        # XXX: Click Show All here in case there are lots of people
-        table = browser.query.tag('table')
-        browser.query.name('ADD_DISPLAYED_RESULTS').click()
-        browser.wait(lambda: table.expired)
+        add_temporal_relationship(browser, members, state, date)
 
     registry.register('SeleniumHelpers',
         lambda: schooltool.testing.selenium.registerBrowserUI(
             'group.members.add', addMembers))
 
-    def removeMembers(browser, schoolyear, group, members):
+    def removeMembers(browser, schoolyear, group, members,
+                      state=None, date=None):
         browser.ui.group.go(schoolyear, group)
         selector = '//a[@title="Edit members for this group"]'
         browser.query.xpath(selector).click()
-        # XXX: Click Show All here in case there are lots of people
-        for member in members:
-            selector = '#current_table-ajax-current_table- table'
-            table = browser.query.css(selector)
-            selector = '//button[@name="remove_item.%s"]' % member
-            browser.query.xpath(selector).click()
-            browser.wait(lambda: table.expired)
+        if state is None:
+            state = 'Removed'
+        remove_temporal_relationship(browser, members, state, date)
 
     registry.register('SeleniumHelpers',
         lambda: schooltool.testing.selenium.registerBrowserUI(
