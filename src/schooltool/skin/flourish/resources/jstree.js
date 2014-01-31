@@ -19,4 +19,7 @@ $(document).ready(function () {
             }
         }
     });
+    $('a.leaf_url').click(function() {
+        document.location.href = $(this).attr("href");
+    });
 });
