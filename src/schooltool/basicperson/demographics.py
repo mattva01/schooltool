@@ -185,12 +185,16 @@ def getDemographicsFields(app):
 class FieldDescription(Persistent, Location):
     implements(IFieldDescription)
     limit_keys = []
+    description = None
 
-    def __init__(self, name, title, required=False, limit_keys=[]):
+    def __init__(self, name, title, required=False, limit_keys=[],
+                 description=None):
         self.name, self.title, self.required, self.limit_keys = (name,
             title, required, limit_keys)
+        self.description = description
 
     def setUpField(self, form_field):
+        form_field.description = self.description
         form_field.required = self.required
         form_field.__name__ = str(self.__name__)
         form_field.interface = IDemographicsForm

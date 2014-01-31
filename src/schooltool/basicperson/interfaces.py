@@ -138,6 +138,11 @@ class IFieldDescription(Interface):
         title = _(u"ID"),
         description = _(u"A unique one word alphanumeric identifier."))
 
+    description = TextLine(
+        title = _(u"Description"),
+        description = _(u"As it should appear on forms and reports."),
+        required=False)
+
     required = Bool(
         title = _(u"Required"))
 
