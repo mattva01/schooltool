@@ -15,8 +15,8 @@
       <tr tal:repeat="info view/relationships">
         <td class="label">
           <label>
-            <span i18n:translate="">
-              <tal:block tal:replace="info/title" i18n:name="relationship" />
+            <span>
+              <tal:block tal:replace="info/title" />
             </span>
           </label>
         </td>

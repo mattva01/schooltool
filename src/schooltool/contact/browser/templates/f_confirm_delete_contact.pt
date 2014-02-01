@@ -7,7 +7,7 @@
       <ul>
         <li tal:repeat="info relationships">
           <span i18n:translate="">
-            <tal:block tal:replace="info/title" />
+            <tal:block tal:replace="info/title" i18n:name="relationship" />
             of
           </span>
           <a tal:replace="structure info/person/schooltool:content/link" />
