@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - Fix upgrade from a fresh install of version 2.6.0 (https://launchpad.net/bugs/1258529)
+- Updated translations
 
 
 2.6.1 (2013-11-21)
