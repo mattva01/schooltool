@@ -47,9 +47,9 @@ from schooltool.basicperson.demographics import DateFieldDescription
 from schooltool.basicperson.demographics import BoolFieldDescription
 from schooltool.basicperson.demographics import IntFieldDescription
 from schooltool.basicperson.person import BasicPerson
-from schooltool.contact.contact import Contact, ContactPersonInfo
+from schooltool.contact.contact import Contact
 from schooltool.contact.interfaces import IContact, IContactContainer
-from schooltool.contact.interfaces import IContactPersonInfo, IContactable
+from schooltool.contact.interfaces import IContactable
 from schooltool.contact.contact import getAppContactStates
 from schooltool.export.interfaces import IImporterTask, IImportFile
 from schooltool.resource.resource import Resource
@@ -1990,6 +1990,7 @@ class GroupImporter(ImporterBase):
         row += 5
 
         app_states = self.group_app_states
+        app_codes = list(app_states.states)
         persons = self.context['persons']
         if self.getCellValue(sh, row, 0, '') == 'Members':
             row += 1

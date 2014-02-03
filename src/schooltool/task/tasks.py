@@ -786,4 +786,8 @@ def load_plugin_tasks():
     for entry in task_entries:
         entry.load()
 
-load_plugin_tasks()
+# The only entry point was `schooltool.export.importer`
+# Now it is removed, but if .egg-info is not updated, the following call causes
+# test and startup to fail with
+# ImportError: cannot import name AbstractReportTask
+#load_plugin_tasks()
