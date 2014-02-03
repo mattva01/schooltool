@@ -125,14 +125,20 @@ class IRelationshipLinks(Interface):
         The default is returned if there is no value for the key.
         """
 
-    def iterLinksByRole(self, role, rel_type=None):
+    def iterLinksByRole(role, rel_type=None, catalog=None):
         """Iterate over all links from this object with a given role."""
 
-    def getTargetsByRole(role, rel_type=None):
+    def getTargetsByRole(role, rel_type=None, catalog=None):
         """Return all objects related to this object with a given role."""
 
-    def iterTargetsByRole(role, rel_type=None):
+    def iterTargetsByRole(role, rel_type=None, catalog=None):
         """Return all objects related to this object with a given role."""
+
+    def getCachedLinksByRole(role, catalog=None):
+        """Get a set of links by role."""
+
+    def getCachedLinksByTarget(target, catalog=None):
+        """Get a set of links by target."""
 
 
 class IRelationshipEvent(Interface):

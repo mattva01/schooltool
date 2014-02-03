@@ -23,6 +23,16 @@
     <allow attributes="state all set get has latest today" />
   </class>
 
+  <class
+      class="schooltool.relationship.relationship.CLink">
+    <require
+        permission="schooltool.edit"
+        set_schema=".interfaces.IRelationshipLink" />
+    <require
+        permission="schooltool.view"
+        interface=".interfaces.IRelationshipLink" />
+  </class>
+
   <adapter
       for="zope.annotation.interfaces.IAnnotatable"
       provides="schooltool.relationship.interfaces.IRelationshipLinks"

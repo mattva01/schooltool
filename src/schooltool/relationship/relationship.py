@@ -799,6 +799,7 @@ class Link(Persistent, Contained):
 
 
 class CLink(object):
+    implements(IRelationshipLink)
 
     def __init__(self, catalog, lid):
         self.catalog = catalog
