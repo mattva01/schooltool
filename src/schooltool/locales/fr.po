@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-10-08 02:19+0300\n"
-"PO-Revision-Date: 2013-11-05 21:45+0000\n"
-"Last-Translator: Augustin <augustin.pioffet37@gmail.com>\n"
+"PO-Revision-Date: 2013-11-09 07:01+0000\n"
+"Last-Translator: Stéphane V <stephane@vergeylen.eu>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-11-06 05:52+0000\n"
-"X-Generator: Launchpad (build 16820)\n"
+"X-Launchpad-Export-Date: 2013-11-25 06:04+0000\n"
+"X-Generator: Launchpad (build 16831)\n"
 "Language: fr\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -3447,7 +3447,7 @@ msgstr "Carte d'identité : ${person}"
 
 #: /src/schooltool/basicperson/browser/person.py:1386
 msgid "profile report"
-msgstr ""
+msgstr "Rapport du profil"
 
 #: /src/schooltool/basicperson/browser/person.py:1402
 msgid "Username: ${username}"
@@ -3460,7 +3460,7 @@ msgstr "Information Générale"
 
 #: /src/schooltool/basicperson/browser/person.py:1494
 msgid "Received"
-msgstr ""
+msgstr "Reçu"
 
 #: /src/schooltool/basicperson/browser/person.py:1502
 msgid "Message"
