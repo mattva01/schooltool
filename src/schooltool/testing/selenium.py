@@ -1640,7 +1640,9 @@ def set_temporal_relationship(
         browser.query.id('%s-state' % container_id).ui.set_value(state)
 
     if date is not None:
-        browser.query.id('%s-date' % container_id).ui.set_value(date)
+        field = browser.query.id('%s-date' % container_id)
+        field.clear()
+        field.ui.set_value(date)
 
     browser.query.name(action_button).click()
 

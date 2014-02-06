@@ -152,12 +152,18 @@ Adding instructors to a section
     term: title of the term
     section: title of the section
     instructors: list with person usernames
+  Optional keyword parameters:
+    state: title of the state
+    date: YYYY-MM-DD date
 
     NOTE: it doesn't matter if some of the usernames are already
           instructors of the section
 
 Removing instructors from a section
 -----------------------------------
+
+With the new temporal relationship implementation, remove really
+becomes an updating action.
 
 * browser.ui.section.instructors.remove()
 
@@ -166,6 +172,9 @@ Removing instructors from a section
     term: title of the term
     section: title of the section
     instructors: list with person usernames
+  Optional keyword parameters:
+    state: title of the state
+    date: YYYY-MM-DD date
 
 Adding students to a section
 ----------------------------
@@ -177,12 +186,18 @@ Adding students to a section
     term: title of the term
     section: title of the section
     students: list with person usernames
+  Optional keyword parameters:
+    state: title of the state
+    date: YYYY-MM-DD date
 
     NOTE: it doesn't matter if some of the usernames are already
           students of the section
 
 Removing students from a section
 --------------------------------
+
+With the new temporal relationship implementation, remove really
+becomes an updating action.
 
 * browser.ui.section.students.remove()
 
@@ -191,6 +206,9 @@ Removing students from a section
     term: title of the term
     section: title of the section
     students: list with person usernames
+  Optional keyword parameters:
+    state: title of the state
+    date: YYYY-MM-DD date
 
 Adding groups
 -------------
@@ -221,6 +239,9 @@ Adding members to a group
     schoolyear: title of the school year
     group: title of the group
     members: list with person usernames
+  Optional keyword parameters:
+    state: title of the state
+    date: YYYY-MM-DD date
 
     NOTE: it doesn't matter if some of the usernames are already
           members of the group
@@ -230,10 +251,16 @@ Removing members from a group
 
 * browser.ui.group.members.remove()
 
+With the new temporal relationship implementation, remove really
+becomes an updating action.
+
   Required parameters:
     schoolyear: title of the school year
     group: title of the group
     members: list with person usernames
+  Optional keyword parameters:
+    state: title of the state
+    date: YYYY-MM-DD date
 
 Element extensions
 ==================

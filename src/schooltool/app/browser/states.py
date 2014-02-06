@@ -76,17 +76,13 @@ class EditTemporalRelationships(EditRelationships):
 
     def add(self, item, state=None, code=None, date=None):
         collection = removeSecurityProxy(self.getCollection())
-        if date is not None:
-            collection.on(date).relate(item, state.active, code)
-        else:
-            collection.add(item)
+        active = state.active if state is not None else ACTIVE
+        collection.on(date).relate(item, active, code)
 
     def remove(self, item, state=None, code=None, date=None):
         collection = removeSecurityProxy(self.getCollection())
-        if date is not None:
-            collection.on(date).relate(item, state.active, code)
-        else:
-            collection.remove(item)
+        active = state.active if state is not None else INACTIVE
+        collection.on(date).relate(item, active, code)
 
     def getSelectedItems(self):
         collection = self.getCollection()

@@ -21,6 +21,9 @@ import datetime
 from persistent import Persistent
 from zope.component import queryUtility
 from zope.container.contained import Contained
+from zope.event import notify
+from zope.interface import implementer
+from zope.interface import Interface
 
 from schooltool.term.interfaces import IDateManager
 from schooltool.relationship.interfaces import IRelationshipLinks
@@ -126,6 +129,23 @@ class TemporalStateAccessor(object):
 
 
 _today = object()
+
+
+class ILinkStateModifiedEvent(Interface):
+
+    pass
+
+
+@implementer(ILinkStateModifiedEvent)
+class LinkStateModifiedEvent(object):
+
+    def __init__(self, link, this, other, date, meaning, code):
+        self.link = link
+        self.this = this
+        self.other = other
+        self.date = date
+        self.meaning = meaning
+        self.code = code
 
 
 class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
@@ -265,6 +285,8 @@ class BoundTemporalRelationshipProperty(BoundRelationshipProperty):
                    (other, self.other_role))
             link = links.find(self.my_role, other, self.other_role, self.rel_type)
         link.state.set(self.filter_date, meaning=meaning, code=code)
+        notify(LinkStateModifiedEvent(
+                link, self.this, other, self.filter_date, meaning, code))
 
     def unrelate(self, other):
         """Delete state on filtered date or unrelate completely if

@@ -129,20 +129,13 @@
   <!-- Propagation of roster changes -->
 
   <subscriber
-      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
-      handler=".section.propagateSectionInstructorAdded"
+      for="schooltool.relationship.temporal.ILinkStateModifiedEvent"
+      handler=".section.propagateSectionInstructorsChange"
       />
+
   <subscriber
-      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
-      handler=".section.propagateSectionInstructorRemoved"
-      />
-  <subscriber
-      for="schooltool.relationship.interfaces.IRelationshipAddedEvent"
-      handler=".section.propagateSectionStudentAdded"
-      />
-  <subscriber
-      for="schooltool.relationship.interfaces.IRelationshipRemovedEvent"
-      handler=".section.propagateSectionStudentRemoved"
+      for="schooltool.relationship.temporal.ILinkStateModifiedEvent"
+      handler=".section.propagateSectionStudentsChange"
       />
 
   <utility

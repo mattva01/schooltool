@@ -406,51 +406,28 @@ class SectionLinkContinuinityValidationSubscriber(EventAdapterSubscriber):
                 _("Sections must be in consecutive terms"))
 
 
-def getSectionRosterEventParticipants(event, rel_type):
-    if rel_type != event.rel_type:
-        return None, None
-    if interfaces.ISection.providedBy(event.participant1):
-        return event.participant1, event.participant2
-    elif interfaces.ISection.providedBy(event.participant2):
-        return event.participant2, event.participant1
-    else:
-        return None, None
-
-
-def propagateSectionInstructorAdded(event):
-    section, teacher = getSectionRosterEventParticipants(event,
-        relationships.URIInstruction)
-    if section is None:
+def propagateSectionInstructorsChange(event):
+    link = event.link
+    if not (link.rel_type == relationships.URIInstruction and
+            interfaces.ISection.providedBy(event.this)):
         return
-    if section.next and teacher not in section.next.instructors:
-        section.next.instructors.add(teacher)
+    section = event.this
+    person = event.other
+    if section.next:
+        collection = section.next.instructors.all()
+        collection.on(event.date).relate(person, event.meaning, event.code)
 
 
-def propagateSectionInstructorRemoved(event):
-    section, teacher = getSectionRosterEventParticipants(event,
-        relationships.URIInstruction)
-    if section is None:
+def propagateSectionStudentsChange(event):
+    link = event.link
+    if not (link.rel_type == relationships.URIMembership and
+            interfaces.ISection.providedBy(event.this)):
         return
-    if section.next and teacher in section.next.instructors:
-        section.next.instructors.remove(teacher)
-
-
-def propagateSectionStudentAdded(event):
-    section, student = getSectionRosterEventParticipants(event,
-        relationships.URIMembership)
-    if section is None:
-        return
-    if section.next and student not in section.next.members:
-        section.next.members.add(student)
-
-
-def propagateSectionStudentRemoved(event):
-    section, student = getSectionRosterEventParticipants(event,
-        relationships.URIMembership)
-    if section is None:
-        return
-    if section.next and student in section.next.members:
-        section.next.members.remove(student)
+    section = event.this
+    person = event.other
+    if section.next:
+        collection = section.next.members.all()
+        collection.on(event.date).relate(person, event.meaning, event.code)
 
 
 def copySection(section, target_term):

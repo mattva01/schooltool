@@ -1,0 +1,272 @@
+Test for section instructor/student propagation to linked sections
+==================================================================
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+Set today's date:
+
+    >>> manager.open('http://localhost/time?value=2014-01-01')
+
+Create a year with four terms:
+
+    >>> manager.ui.schoolyear.add('2014', '2014-01-01', '2014-12-31')
+
+    >>> manager.ui.term.add('2014', 'Q1', '2014-01-01', '2014-03-31')
+    >>> manager.ui.term.add('2014', 'Q2', '2014-04-01', '2014-06-30')
+    >>> manager.ui.term.add('2014', 'Q3', '2014-07-01', '2014-09-30')
+    >>> manager.ui.term.add('2014', 'Q4', '2014-10-01', '2014-12-31')
+
+Create some people:
+
+    >>> manager.ui.person.add('Jeffrey', 'Elkner', 'jeffrey', 'schooltool')
+    >>> manager.ui.person.add('David', 'Welsh', 'david', 'schooltool')
+    >>> manager.ui.person.add('Camila', 'Cerna', 'camila', 'schooltool')
+    >>> manager.ui.person.add('Mario', 'Tejada', 'mario', 'schooltool')
+
+Add a course with a multi-term section:
+
+    >>> manager.ui.course.add('2014', 'Math')
+
+    >>> manager.ui.section.add('2014', 'Q1', 'Math', ends='Q4')
+
+Add instructors and students to the Q1 section:
+
+    >>> manager.ui.section.instructors.add(
+    ...     '2014', 'Q1', 'Math (1)', instructors=['jeffrey'])
+    >>> manager.ui.section.instructors.add(
+    ...     '2014', 'Q1', 'Math (1)', instructors=['david'],
+    ...     state='Substitute')
+
+    >>> manager.ui.section.students.add(
+    ...     '2014', 'Q1', 'Math (1)', students=['camila', 'mario'])
+
+Visit the four linked sections and print their instructors and
+students:
+
+    >>> manager.ui.section.instructors.print_table('2014', 'Q1', 'Math (1)')
+    +-----------+------------+----------+------------+
+    | Last Name | First Name | Username | Status     |
+    +-----------+------------+----------+------------+
+    | Elkner    | Jeffrey    | jeffrey  | Instructor |
+    | Welsh     | David      | david    | Substitute |
+    +-----------+------------+----------+------------+
+    >>> manager.ui.section.students.print_table('2014', 'Q1', 'Math (1)')
+    +-----------+------------+----------+----------+
+    | Last Name | First Name | Username | Status   |
+    +-----------+------------+----------+----------+
+    | Cerna     | Camila     | camila   | Enrolled |
+    | Tejada    | Mario      | mario    | Enrolled |
+    +-----------+------------+----------+----------+
+
+    >>> manager.ui.section.instructors.print_table('2014', 'Q2', 'Math (1)')
+    +-----------+------------+----------+------------+
+    | Last Name | First Name | Username | Status     |
+    +-----------+------------+----------+------------+
+    | Elkner    | Jeffrey    | jeffrey  | Instructor |
+    | Welsh     | David      | david    | Substitute |
+    +-----------+------------+----------+------------+
+    >>> manager.ui.section.students.print_table('2014', 'Q2', 'Math (1)')
+    +-----------+------------+----------+----------+
+    | Last Name | First Name | Username | Status   |
+    +-----------+------------+----------+----------+
+    | Cerna     | Camila     | camila   | Enrolled |
+    | Tejada    | Mario      | mario    | Enrolled |
+    +-----------+------------+----------+----------+
+
+    >>> manager.ui.section.instructors.print_table('2014', 'Q3', 'Math (1)')
+    +-----------+------------+----------+------------+
+    | Last Name | First Name | Username | Status     |
+    +-----------+------------+----------+------------+
+    | Elkner    | Jeffrey    | jeffrey  | Instructor |
+    | Welsh     | David      | david    | Substitute |
+    +-----------+------------+----------+------------+
+    >>> manager.ui.section.students.print_table('2014', 'Q3', 'Math (1)')
+    +-----------+------------+----------+----------+
+    | Last Name | First Name | Username | Status   |
+    +-----------+------------+----------+----------+
+    | Cerna     | Camila     | camila   | Enrolled |
+    | Tejada    | Mario      | mario    | Enrolled |
+    +-----------+------------+----------+----------+
+
+    >>> manager.ui.section.instructors.print_table('2014', 'Q4', 'Math (1)')
+    +-----------+------------+----------+------------+
+    | Last Name | First Name | Username | Status     |
+    +-----------+------------+----------+------------+
+    | Elkner    | Jeffrey    | jeffrey  | Instructor |
+    | Welsh     | David      | david    | Substitute |
+    +-----------+------------+----------+------------+
+    >>> manager.ui.section.students.print_table('2014', 'Q4', 'Math (1)')
+    +-----------+------------+----------+----------+
+    | Last Name | First Name | Username | Status   |
+    +-----------+------------+----------+----------+
+    | Cerna     | Camila     | camila   | Enrolled |
+    | Tejada    | Mario      | mario    | Enrolled |
+    +-----------+------------+----------+----------+
+
+Let's modify today's date:
+
+    >>> manager.open('http://localhost/time?value=2014-01-02')
+
+Now, let's remove an instructor from the Q2 section and a student from
+the Q3 section:
+
+    >>> manager.ui.section.instructors.remove(
+    ...     '2014', 'Q2', 'Math (1)', instructors=['david'])
+
+    >>> manager.ui.section.students.remove(
+    ...     '2014', 'Q3', 'Math (1)', students=['camila'])
+
+Let's print all the tables again to see the changes propagated:
+
+    >>> manager.ui.section.instructors.print_table('2014', 'Q1', 'Math (1)')
+    +-----------+------------+----------+------------+
+    | Last Name | First Name | Username | Status     |
+    +-----------+------------+----------+------------+
+    | Elkner    | Jeffrey    | jeffrey  | Instructor |
+    | Welsh     | David      | david    | Substitute |
+    +-----------+------------+----------+------------+
+    >>> manager.ui.section.students.print_table('2014', 'Q1', 'Math (1)')
+    +-----------+------------+----------+----------+
+    | Last Name | First Name | Username | Status   |
+    +-----------+------------+----------+----------+
+    | Cerna     | Camila     | camila   | Enrolled |
+    | Tejada    | Mario      | mario    | Enrolled |
+    +-----------+------------+----------+----------+
+
+    >>> manager.ui.section.instructors.print_table('2014', 'Q2', 'Math (1)')
+    +-----------+------------+----------+------------+
+    | Last Name | First Name | Username | Status     |
+    +-----------+------------+----------+------------+
+    | Elkner    | Jeffrey    | jeffrey  | Instructor |
+    | Welsh     | David      | david    | Withdrawn  |
+    +-----------+------------+----------+------------+
+    >>> manager.ui.section.students.print_table('2014', 'Q2', 'Math (1)')
+    +-----------+------------+----------+----------+
+    | Last Name | First Name | Username | Status   |
+    +-----------+------------+----------+----------+
+    | Cerna     | Camila     | camila   | Enrolled |
+    | Tejada    | Mario      | mario    | Enrolled |
+    +-----------+------------+----------+----------+
+
+    >>> manager.ui.section.instructors.print_table('2014', 'Q3', 'Math (1)')
+    +-----------+------------+----------+------------+
+    | Last Name | First Name | Username | Status     |
+    +-----------+------------+----------+------------+
+    | Elkner    | Jeffrey    | jeffrey  | Instructor |
+    | Welsh     | David      | david    | Withdrawn  |
+    +-----------+------------+----------+------------+
+    >>> manager.ui.section.students.print_table('2014', 'Q3', 'Math (1)')
+    +-----------+------------+----------+-----------+
+    | Last Name | First Name | Username | Status    |
+    +-----------+------------+----------+-----------+
+    | Cerna     | Camila     | camila   | Withdrawn |
+    | Tejada    | Mario      | mario    | Enrolled  |
+    +-----------+------------+----------+-----------+
+
+    >>> manager.ui.section.instructors.print_table('2014', 'Q4', 'Math (1)')
+    +-----------+------------+----------+------------+
+    | Last Name | First Name | Username | Status     |
+    +-----------+------------+----------+------------+
+    | Elkner    | Jeffrey    | jeffrey  | Instructor |
+    | Welsh     | David      | david    | Withdrawn  |
+    +-----------+------------+----------+------------+
+    >>> manager.ui.section.students.print_table('2014', 'Q4', 'Math (1)')
+    +-----------+------------+----------+-----------+
+    | Last Name | First Name | Username | Status    |
+    +-----------+------------+----------+-----------+
+    | Cerna     | Camila     | camila   | Withdrawn |
+    | Tejada    | Mario      | mario    | Enrolled  |
+    +-----------+------------+----------+-----------+
+
+Now, let's add a new student to the Q1 section as Pending today but
+who becomes Enrolled next week for section Q3:
+
+    >>> manager.ui.person.add('Nestor', 'Guzman', 'nestor', 'schooltool')
+    >>> manager.ui.section.students.add(
+    ...     '2014', 'Q1', 'Math (1)', students=['nestor'], state='Pending')
+    >>> manager.ui.section.students.remove(
+    ...     '2014', 'Q3', 'Math (1)', ['nestor'], 'Enrolled', '2014-01-07')
+
+Let's print all the student tables again:
+
+    >>> manager.ui.section.students.print_table('2014', 'Q1', 'Math (1)')
+    +-----------+------------+----------+----------+
+    | Last Name | First Name | Username | Status   |
+    +-----------+------------+----------+----------+
+    | Cerna     | Camila     | camila   | Enrolled |
+    | Guzman    | Nestor     | nestor   | Pending  |
+    | Tejada    | Mario      | mario    | Enrolled |
+    +-----------+------------+----------+----------+
+
+    >>> manager.ui.section.students.print_table('2014', 'Q2', 'Math (1)')
+    +-----------+------------+----------+----------+
+    | Last Name | First Name | Username | Status   |
+    +-----------+------------+----------+----------+
+    | Cerna     | Camila     | camila   | Enrolled |
+    | Guzman    | Nestor     | nestor   | Pending  |
+    | Tejada    | Mario      | mario    | Enrolled |
+    +-----------+------------+----------+----------+
+
+    >>> manager.ui.section.students.print_table('2014', 'Q3', 'Math (1)')
+    +-----------+------------+----------+-----------+
+    | Last Name | First Name | Username | Status    |
+    +-----------+------------+----------+-----------+
+    | Cerna     | Camila     | camila   | Withdrawn |
+    | Guzman    | Nestor     | nestor   | Pending   |
+    | Tejada    | Mario      | mario    | Enrolled  |
+    +-----------+------------+----------+-----------+
+
+    >>> manager.ui.section.students.print_table('2014', 'Q4', 'Math (1)')
+    +-----------+------------+----------+-----------+
+    | Last Name | First Name | Username | Status    |
+    +-----------+------------+----------+-----------+
+    | Cerna     | Camila     | camila   | Withdrawn |
+    | Guzman    | Nestor     | nestor   | Pending   |
+    | Tejada    | Mario      | mario    | Enrolled  |
+    +-----------+------------+----------+-----------+
+
+Let's change today's date again:
+
+    >>> manager.open('http://localhost/time?value=2014-01-07')
+
+If we print the tables we'll see that Nestor became enrolled in the Q3
+and Q4 sections:
+
+    >>> manager.ui.section.students.print_table('2014', 'Q1', 'Math (1)')
+    +-----------+------------+----------+----------+
+    | Last Name | First Name | Username | Status   |
+    +-----------+------------+----------+----------+
+    | Cerna     | Camila     | camila   | Enrolled |
+    | Guzman    | Nestor     | nestor   | Pending  |
+    | Tejada    | Mario      | mario    | Enrolled |
+    +-----------+------------+----------+----------+
+
+    >>> manager.ui.section.students.print_table('2014', 'Q2', 'Math (1)')
+    +-----------+------------+----------+----------+
+    | Last Name | First Name | Username | Status   |
+    +-----------+------------+----------+----------+
+    | Cerna     | Camila     | camila   | Enrolled |
+    | Guzman    | Nestor     | nestor   | Pending  |
+    | Tejada    | Mario      | mario    | Enrolled |
+    +-----------+------------+----------+----------+
+
+    >>> manager.ui.section.students.print_table('2014', 'Q3', 'Math (1)')
+    +-----------+------------+----------+-----------+
+    | Last Name | First Name | Username | Status    |
+    +-----------+------------+----------+-----------+
+    | Cerna     | Camila     | camila   | Withdrawn |
+    | Guzman    | Nestor     | nestor   | Enrolled  |
+    | Tejada    | Mario      | mario    | Enrolled  |
+    +-----------+------------+----------+-----------+
+
+    >>> manager.ui.section.students.print_table('2014', 'Q4', 'Math (1)')
+    +-----------+------------+----------+-----------+
+    | Last Name | First Name | Username | Status    |
+    +-----------+------------+----------+-----------+
+    | Cerna     | Camila     | camila   | Withdrawn |
+    | Guzman    | Nestor     | nestor   | Enrolled  |
+    | Tejada    | Mario      | mario    | Enrolled  |
+    +-----------+------------+----------+-----------+
