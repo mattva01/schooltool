@@ -1621,19 +1621,20 @@ def set_temporal_relationship(
     browser, container_id, action_button, items, state, date):
 
     table_selector = '#%s table' % container_id
-    browser.query.id('%s-title' % container_id).type(', '.join(items))
-    table = browser.query.css(table_selector)
-    browser.query.name('SEARCH_BUTTON').click()
-    browser.wait(lambda: table.expired)
 
-    script = 'return $(".batch-extra-navigation").length'
-    if browser.driver.execute_script(script):
+    script = 'return $(arguments[0]).find(".batch-extra-navigation").length'
+    if browser.driver.execute_script(script, container_id):
         table = browser.query.css(table_selector)
         container = browser.query.id(container_id)
         container.query.link('Show All').click()
         browser.wait(lambda: table.expired)
 
-    browser.query.id('%s-select-all' % container_id).click()
+    table = browser.query.css(table_selector)
+    script = 'return $(arguments[0]).find(arguments[1]).length'
+    for item in items:
+        sel = 'input[type="checkbox"][value="%s"]' % item
+        if browser.driver.execute_script(script, table_selector, sel):
+            table.query.css(sel).click()
 
     if state is not None:
         browser.query.id('%s-state' % container_id).ui.set_value(state)
@@ -1649,7 +1650,8 @@ def add_temporal_relationship(browser, items, state=None, date=None):
     container_id = 'available_table-ajax-available_table-'
     action_button = 'ADD_DISPLAYED_RESULTS'
 
-    set_temporal_relationship(browser, container_id, action_button, items, state, date)
+    set_temporal_relationship(
+        browser, container_id, action_button, items, state, date)
 
 
 def remove_temporal_relationship(browser, items, state=None, date=None):
@@ -1657,4 +1659,5 @@ def remove_temporal_relationship(browser, items, state=None, date=None):
     container_id = 'current_table-ajax-current_table-'
     action_button = 'REMOVE_DISPLAYED_RESULTS'
 
-    set_temporal_relationship(browser, container_id, action_button, items, state, date)
+    set_temporal_relationship(
+        browser, container_id, action_button, items, state, date)

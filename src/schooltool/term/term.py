@@ -264,6 +264,9 @@ class TodayDescriptor(object):
         self.tzinfo = pytz.timezone(IApplicationPreferences(app).timezone)
 
     def __get__(self, instance, owner):
+        dateman = getUtility(interfaces.IDateManager)
+        if dateman is not None:
+            return dateman.today
         dt = pytz.utc.localize(datetime.utcnow())
         return dt.astimezone(self.tzinfo).date()
 
