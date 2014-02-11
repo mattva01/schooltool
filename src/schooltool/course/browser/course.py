@@ -63,6 +63,7 @@ from schooltool.course.interfaces import ISectionContainer
 from schooltool.course.interfaces import ILearner, IInstructor
 from schooltool.course.interfaces import ISection
 from schooltool.course.course import Course
+from schooltool.level.interfaces import ILevelContainer
 from schooltool.skin import flourish
 from schooltool.skin.flourish.viewlet import Viewlet
 from schooltool.skin.flourish.containers import ContainerDeleteView
@@ -850,12 +851,49 @@ class FlourishCourseFilterWidget(table.table.FilterWidget):
 
 class CoursesTableFilter(table.ajax.TableFilter, FlourishCourseFilterWidget):
 
+    template = ViewPageTemplateFile('templates/f_course_table_filter.pt')
+
     title = _("Title or course ID")
 
-    def filter(self, results):
+    @property
+    def search_id(self):
+        return self.manager.html_id+'-search'
+
+    @property
+    def search_title_id(self):
+        return self.manager.html_id+"-title"
+
+    @property
+    def search_level_id(self):
+        return self.manager.html_id+"-level"
+
+    def levelContainer(self):
+        app = ISchoolToolApplication(None)
+        return ILevelContainer(app)
+
+    def levels(self):
+        result = []
+        container = self.levelContainer()
+        for level_id, level in container.items():
+            result.append({'id': level_id,
+                           'title': level.title})
+        return result
+
+    def filter(self, items):
         if self.ignoreRequest:
-            return results
-        return FlourishCourseFilterWidget.filter(self, results)
+            return items
+        if self.search_level_id in self.request:
+            level_id = self.request[self.search_level_id]
+            level = self.levelContainer().get(level_id)
+            if level:
+                items = [item for item in items
+                         if level in item.levels]
+        if self.search_title_id in self.request:
+            searchstr = self.request[self.search_title_id].lower()
+            items = [item for item in items
+                     if searchstr in item.title.lower() or
+                     (item.course_id and searchstr in item.course_id.lower())]
+        return items
 
 
 class FlourishCourseTableFormatter(table.table.SchoolToolTableFormatter):

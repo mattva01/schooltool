@@ -115,6 +115,7 @@ Adding courses
     course_id
     government_id
     credits
+    level: title of the level
 
 Adding sections
 ---------------
