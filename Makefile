@@ -4,7 +4,7 @@ PACKAGE=schooltool
 LOCALES=src/schooltool/locales
 TRANSLATIONS_ZCML=schooltool/common/translations.zcml
 
-DIST=/home/ftp/pub/schooltool/trunk
+DIST=/home/ftp/pub/schooltool/2.6
 PYTHON=python
 
 INSTANCE_TYPE=schooltool
