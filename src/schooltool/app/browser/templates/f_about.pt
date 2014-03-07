@@ -1,21 +1,20 @@
 <div i18n:domain="schooltool">
   <p i18n:translate="">
-    SchoolTool is free administrative software for schools around the
-    world.  The goals of the project are to create a simple turnkey
-    student information system or managment information system for
-    primary and secondary schools, as well as a framework for building
-    customized applications and configurations for individual schools
-    or states.
+    SchoolTool is an open source, web based student information system
+    designed for schools in the developing world, with strong support
+    for translation, localization and automated deployment and updates
+    via the Ubuntu Linux installer and package management system.
   </p>
   <p i18n:translate="">
-    SchoolTool is built on a 100% open source software stack,
-    written in <a href="http://python.org">Python</a> using the 
-    <a href="http://zope.org">Zope 3</a> framework.
+    SchoolTool is built on a 100% open source software stack, written
+    in <a href="http://python.org" i18n:name="python">Python</a> using
+    the <a href="http://zope.org" i18n:name="zope">Zope 3</a>
+    framework.
   </p>
   <p i18n:translate="">
-    SchoolTool is licensed under the
-    <a href="http://www.gnu.org/licenses/gpl-2.0.html">GNU General Public
-    License, Version 2</a>.
+    SchoolTool is licensed under the <a
+    href="http://www.gnu.org/licenses/gpl-2.0.html"
+    i18n:name="gpl2">GNU General Public License, Version 2.</a>
   </p>
   <p>
     <strong i18n:translate="">Founder and funder:</strong>
@@ -27,14 +26,15 @@
   </p>
   <p>
     <strong i18n:translate="">Lead Developer:</strong>
-    Justas Sadzevičius
-  </p>
-  <p>
-    <strong i18n:translate="">Core Developers:</strong>
-      Douglas Cerna, Alan Elkner
+    Douglas Cerna
   </p>
   <p>
     <strong i18n:translate="">Release Manager:</strong>
     Gediminas Paulauskas
+  </p>
+  <p i18n:translate="">
+    <a href="http://sielibre.com" i18n:name="sielibre">SIELibre,
+    LLC</a> offers commerical support, customization, hosting and
+    other services for SchoolTool.
   </p>
 </div>
