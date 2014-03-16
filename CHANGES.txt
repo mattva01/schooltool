@@ -5,6 +5,16 @@ CHANGES
 2.7.0 (unreleased)
 ------------------
 
+New features
+++++++++++++
+
+- Temporal relationships
+- Levels for courses and persons
+- Parent access
+- Background import
+- Switch to CKEditor
+
+- Added descriptions for demographic fields
 
 
 2.6.2 (2014-02-15)
