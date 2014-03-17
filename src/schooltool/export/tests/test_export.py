@@ -30,13 +30,15 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.testing import format_table
 from schooltool.term.term import Term
 from schooltool.common import DateRange
-from schooltool.contact.contact import Contact, ContactPersonInfo
+from schooltool.contact.contact import Contact
+from schooltool.contact.contact import PARENT
 from schooltool.contact.interfaces import IContact, IContactable
 from schooltool.contact.interfaces import IContactContainer
 from schooltool.course.course import Course
 from schooltool.course.section import Section
 from schooltool.course.interfaces import ICourseContainer
 from schooltool.course.interfaces import ISectionContainer
+from schooltool.relationship.temporal import ACTIVE
 from schooltool.schoolyear.schoolyear import SchoolYear
 from schooltool.schoolyear.testing import provideStubUtility
 from schooltool.schoolyear.testing import provideStubAdapter
@@ -86,15 +88,8 @@ def setUpSchool(app):
     contact.language = 'English'
     contacts['pete_parent'] = contact
 
-    info = ContactPersonInfo()
-    info.__parent__ = s2
-    info.relationship = 'parent'
-    IContactable(s2).contacts.add(contact, info)
-
-    info = ContactPersonInfo()
-    info.__parent__ = s2
-    info.relationship = 'parent'
-    IContactable(s2).contacts.add(IContact(teacher), info)
+    IContactable(s2).contacts.relate(contact, ACTIVE+PARENT, 'p')
+    IContactable(s2).contacts.relate(IContact(teacher), ACTIVE+PARENT, 'p')
 
     d1 = IDemographics(s1)
     d1['ID'] = "112323"
@@ -393,8 +388,8 @@ def doctest_format_contact_relationships():
         >>> from pprint import pprint
         >>> for row in exporter.format_contact_relationships(): pprint(row)
         [Header('Person ID'), Header('Contact ID'), Header('Relationship')]
-        [Text('pete'), Text(u'pete_parent'), Text('parent')]
-        [Text('pete'), Text('teacher'), Text('parent')]
+        [Text('pete'), Text(u'pete_parent'), Date(datetime.date(2005, 2, 1)), Text('p')]
+        [Text('pete'), Text('teacher'), Date(datetime.date(2005, 2, 1)), Text('p')]
     """
 
 
