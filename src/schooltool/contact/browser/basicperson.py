@@ -86,7 +86,7 @@ class ContactOverviewView(BrowserView):
         return [self.buildInfo(contact) for contact in contacts]
 
     def getRelationships(self):
-        bound = IContact(self.person)
+        bound = IContactable(self.person)
         contacts = bound.contacts
         return [self.buildInfo(contact) for contact in contacts]
 
