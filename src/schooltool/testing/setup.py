@@ -71,6 +71,11 @@ def setUpSchoolToolSite():
     provideUtility(plugin)
     provideAdapter(getSchoolToolApplication, (Interface,), ISchoolToolApplication)
 
+    from schooltool.app.catalog import getAppCatalogs
+    getAppCatalogs(app)
+    from schooltool.relationship.catalog import URICacheStartUp
+    URICacheStartUp(app)()
+
     setSite(app)
     return app
 
