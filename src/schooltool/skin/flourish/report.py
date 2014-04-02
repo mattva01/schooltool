@@ -625,16 +625,28 @@ def text2rml(snippet, para_class=None):
     return start_tag+('</para>\n'+start_tag).join(paragraphs)+'</para>'
 
 
+def unescapeHTMLEntities(text):
+    text = text.replace(u'&amp;', u'&')
+    text = text.replace(u'&lt;', u'<')
+    text = text.replace(u'&gt;', u'>')
+    text = text.replace(u'&quot;', u'"')
+    text = text.replace(u'&#39;', u"'")
+    text = text.replace(u'&rsquo;', u"'")
+    text = text.replace(u'&nbsp;', u' ')
+    return text
+
+
 html_tags_valid_in_rml_re = re.compile(
     r'&lt;(/?((strong)|(b)|(em)|(i)))&gt;')
 
 html_p_tag_re = re.compile(r'</?p[^>]*>')
 html_br_tag_re = re.compile(r'</?br[^>]*>')
 
-def html2rml(snippet, para_class=None):
+
+def buildHTMLParagraphs(snippet):
+    """Build a list of paragraphs from an HTML snippet."""
     if not snippet:
-        return snippet
-    snippet = unicode(snippet)
+        return []
     paragraphs = []
     tokens = []
     for token in html_p_tag_re.split(snippet):
@@ -646,11 +658,15 @@ def html2rml(snippet, para_class=None):
             continue
         # Reportlab is very sensitive to unknown tags and escaped symbols.
         # In case of invalid HTML, try to provide correct escaping.
-        fixed_escaping = cgi.escape(token)
+        fixed_escaping = cgi.escape(unescapeHTMLEntities(unicode(token)))
         # Unescape some of the tags which are also valid in Reportlab
         valid_text = html_tags_valid_in_rml_re.sub(u'<\g<1>>', fixed_escaping)
         paragraphs.append(valid_text)
-    paragraphs = filter(None, [p.strip() for p in paragraphs])
+    return paragraphs
+
+
+def html2rml(snippet, para_class=None):
+    paragraphs = buildHTMLParagraphs(snippet)
     if not paragraphs:
         return ''
     start_tag = '<para>'
@@ -660,7 +676,6 @@ def html2rml(snippet, para_class=None):
 
 
 class Text2RML(BrowserView):
-    """Formats the date using the 'full' format"""
 
     para_class = None
 
@@ -674,27 +689,15 @@ class Text2RML(BrowserView):
 
 
 class HTML2RML(BrowserView):
-    """Formats the date using the 'full' format"""
 
     para_class = None
-
-    def unescape_FCKEditor_HTML(self, text):
-        text = text.replace(u'&amp;', u'&')
-        text = text.replace(u'&lt;', u'<')
-        text = text.replace(u'&gt;', u'>')
-        text = text.replace(u'&quot;', u'"')
-        text = text.replace(u'&#39;', u"'")
-        text = text.replace(u'&rsquo;', u"'")
-        text = text.replace(u'&nbsp;', u' ')
-        return text
 
     def __call__(self):
         text = self.context
         if not text:
             return text
         snippet = translate(text, context=self.request)
-        unfcked = self.unescape_FCKEditor_HTML(snippet)
-        rml = html2rml(unfcked, self.para_class)
+        rml = html2rml(snippet, self.para_class)
         return rml
 
 

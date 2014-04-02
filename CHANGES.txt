@@ -5,7 +5,7 @@ CHANGES
 2.6.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Switch to CKEditor (https://bugs.launchpad.net/bugs/485898)
 
 
 2.6.2 (2014-02-15)

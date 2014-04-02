@@ -26,7 +26,6 @@ import zope.interface
 from zope.interface.verify import verifyObject
 from zope.publisher.browser import TestRequest
 
-import z3c.form.interfaces
 from z3c import form
 
 from schooltool.schoolyear.ftesting import schoolyear_functional_layer
@@ -63,8 +62,8 @@ def doctest_HTMLFragmentWidget():
     """
 
 
-def doctest_FckeditorZ3CFormWidget_FCKConfig():
-    """Tests for FckeditorZ3CFormWidget and FCKConfig.
+def doctest_CkeditorZ3CFormWidget_CkeditorConfig():
+    """Tests for CkeditorZ3CFormWidget and CkeditorConfig.
 
         >>> setUpAppAbsoluteURL()
 
@@ -75,19 +74,19 @@ def doctest_FckeditorZ3CFormWidget_FCKConfig():
 
     Let's build a widget bound to the field.
 
-        >>> zope.component.provideAdapter(skin.widgets.FckeditorFieldWidget)
+        >>> zope.component.provideAdapter(skin.widgets.CkeditorFieldWidget)
 
         >>> request = FormRequest()
         >>> widget = zope.component.getMultiAdapter(
         ...     (schema_field, request), form.interfaces.IFieldWidget)
 
         >>> print widget
-        <FckeditorZ3CFormWidget 'html'>
+        <CkeditorZ3CFormWidget 'html'>
 
-        >>> verifyObject(skin.widgets.IFckeditorWidget, widget)
+        >>> verifyObject(skin.widgets.ICkeditorWidget, widget)
         True
 
-    Widget initially has no config set, so it cannot render the FCK editor
+    Widget initially has no config set, so it cannot render the CKEditor
     javascript setup.
 
         >>> print widget.config
@@ -101,7 +100,7 @@ def doctest_FckeditorZ3CFormWidget_FCKConfig():
     Config will be set during widget update, as a computed widget value.
 
         >>> zope.component.provideAdapter(
-        ...     skin.widgets.Fckeditor_config, name='config')
+        ...     skin.widgets.Ckeditor_config, name='config')
 
         >>> value = zope.component.getMultiAdapter(
         ...     (widget.context, widget.request,
@@ -109,28 +108,29 @@ def doctest_FckeditorZ3CFormWidget_FCKConfig():
         ...     form.interfaces.IValue, name='config')
 
         >>> print value
-        <ComputedValue <schooltool.skin.widgets.FCKConfig
+        <ComputedValue <schooltool.skin.widgets.CkeditorConfig
           (430 x 300, u'schooltool' toolbar, u'/@@/editor_config.js')>>
 
-        >>> verifyObject(skin.widgets.IFCKConfig, value.get())
+        >>> verifyObject(skin.widgets.ICkeditorConfig, value.get())
         True
 
         >>> widget.update()
 
         >>> print widget.config
-        <schooltool.skin.widgets.FCKConfig
+        <schooltool.skin.widgets.CkeditorConfig
           (430 x 300, u'schooltool' toolbar, u'/@@/editor_config.js')>
 
     Now we can render the javascript.
 
         >>> print widget.script
         <script type="text/javascript" language="JavaScript">
-            var oFCKeditor... = new FCKeditor(
-                "html", 430, 300, "schooltool");
-            oFCKeditor...BasePath = "http://127.0.0.1/@@/fckeditor/2.6.4.1/fckeditor/";
-            oFCKeditor...Config["CustomConfigurationsPath"] =
-                "http://127.0.0.1/@@/editor_config.js";
-            oFCKeditor....ReplaceTextarea();
+            var CKeditor... = new CKEDITOR.replace("html",
+                {
+                    height: 300,
+                    width: 430,
+                    customConfig : "http://127.0.0.1/@@/editor_config.js",
+                }
+            );
         </script>
 
     Let's set the widget value.
@@ -153,30 +153,30 @@ def doctest_FckeditorZ3CFormWidget_FCKConfig():
     We also have a different configuration for add and edit forms.
 
         >>> zope.component.provideAdapter(
-        ...     skin.widgets.Fckeditor_addform_config, name='config')
+        ...     skin.widgets.Ckeditor_addform_config, name='config')
         >>> zope.component.provideAdapter(
-        ...     skin.widgets.Fckeditor_editform_config, name='config')
+        ...     skin.widgets.Ckeditor_editform_config, name='config')
 
         >>> widget.form = form.form.AddForm(None, request)
         >>> widget.update()
         >>> print widget.config
-        <schooltool.skin.widgets.FCKConfig
+        <schooltool.skin.widgets.CkeditorConfig
           (306 x 200, u'schooltool' toolbar, u'/@@/editor_config.js')>
 
-        >>> verifyObject(skin.widgets.IFCKConfig, widget.config)
+        >>> verifyObject(skin.widgets.ICkeditorConfig, widget.config)
         True
 
         >>> widget.form = form.form.EditForm(None, request)
         >>> widget.update()
         >>> print widget.config
-        <schooltool.skin.widgets.FCKConfig
+        <schooltool.skin.widgets.CkeditorConfig
           (306 x 200, u'schooltool' toolbar, u'/@@/editor_config.js')>
 
     """
 
 
-def doctest_FckeditorZ3CWidget_compatibility():
-    r"""Tests for FckeditorZ3CFormWidget compatibility with zope.html.
+def doctest_CkeditorZ3CWidget_compatibility():
+    r"""Tests for CkeditorZ3CFormWidget compatibility with zope.html.
 
         >>> setUpAppAbsoluteURL()
 
@@ -187,19 +187,19 @@ def doctest_FckeditorZ3CWidget_compatibility():
 
     Let's build a widget bound to the field.
 
-        >>> zope.component.provideAdapter(skin.widgets.FckeditorFieldWidget)
+        >>> zope.component.provideAdapter(skin.widgets.CkeditorFieldWidget)
 
         >>> request = FormRequest()
         >>> widget = zope.component.getMultiAdapter(
         ...     (schema_field, request), form.interfaces.IFieldWidget)
 
-        >>> verifyObject(skin.widgets.IFckeditorWidget, widget)
+        >>> verifyObject(skin.widgets.ICkeditorWidget, widget)
         True
 
-    Specify the FCKConfig.
+    Specify the CkeditorConfig.
 
         >>> zope.component.provideAdapter(
-        ...     skin.widgets.Fckeditor_config, name='config')
+        ...     skin.widgets.Ckeditor_config, name='config')
 
     Now we can render the javascript.
 
@@ -211,17 +211,18 @@ def doctest_FckeditorZ3CWidget_compatibility():
 
     Let's now look at a fully rendered zope.html widget.
 
-        >>> from zope.html.widget import FckeditorWidget
-        >>> editor = FckeditorWidget(schema_field, request)
+        >>> from zope.html.widget import CkeditorWidget
+        >>> editor = CkeditorWidget(schema_field, request)
 
         >>> print editor()
         <textarea cols="60" id="field.html" name="field.html" rows="15" ></textarea>
         <script type="text/javascript" language="JavaScript">
-        var oFCKeditor_html = new FCKeditor(
-                "field.html", 600, 400, "zope");
-            oFCKeditor_html.BasePath = "/@@/fckeditor/2.6.4.1/fckeditor/";
-            oFCKeditor_html.Config["CustomConfigurationsPath"] = "/@@/zope_fckconfig.js";
-            oFCKeditor_html.ReplaceTextarea();
+        var CKeditor_html = new CKEDITOR.replace("field.html",
+            {
+                height: 400,
+                customConfig : "/@@/zope_ckconfig.js",
+            }
+        );
         </script>
 
     We can also modify the configuration of the zope.html widget.
@@ -234,18 +235,19 @@ def doctest_FckeditorZ3CWidget_compatibility():
         >>> print editor()
         <textarea cols="60" id="field.html" name="field.html" rows="15" ></textarea>
         <script type="text/javascript" language="JavaScript">
-        var oFCKeditor_html = new FCKeditor(
-                "field.html", 430, 300, "schooltool");
-            oFCKeditor_html.BasePath = "/@@/fckeditor/2.6.4.1/fckeditor/";
-            oFCKeditor_html.Config["CustomConfigurationsPath"] = "/@@/editor_config.js";
-            oFCKeditor_html.ReplaceTextarea();
+        var CKeditor_html = new CKEDITOR.replace("field.html",
+            {
+                height: 300,
+                customConfig : "/@@/editor_config.js",
+            }
+        );
         </script>
 
     You can notice zope.html widget uses relative paths for configuration;
     this brakes the widget if admins start fiddling with Apache's mod-rewrite
     (to put schooltool in http://example.com/schooltool for example).
 
-    Our widget also uses a different mechanisma to generate oFCKeditor
+    Our widget also uses a different mechanism to generate the CKeditor
     variable name.
 
         >>> import difflib
@@ -257,22 +259,22 @@ def doctest_FckeditorZ3CWidget_compatibility():
         >>> widget_text = widget.script
         >>> widget_text = widget_text.replace(
         ...     widget.editor_var_name,
-        ...     'oFCKeditor_html').strip()
+        ...     'CKeditor_html').strip()
 
         >>> print_diff(editor(), widget_text)
         - <textarea cols="60" id="field.html" name="field.html" rows="15" ></textarea>
         <script type="text/javascript" language="JavaScript">
-        var oFCKeditor_html = new FCKeditor(
-        - "field.html", 430, 300, "schooltool");
-        ?  ------
-        + "html", 430, 300, "schooltool");
-        - oFCKeditor_html.BasePath = "/@@/fckeditor/2.6.4.1/fckeditor/";
-        + oFCKeditor_html.BasePath = "http://127.0.0.1/@@/fckeditor/2.6.4.1/fckeditor/";
-        ?                             ++++++++++++++++
-        - oFCKeditor_html.Config["CustomConfigurationsPath"] = "/@@/editor_config.js";
-        + oFCKeditor_html.Config["CustomConfigurationsPath"] = "http://127.0.0.1/@@/editor_config.js";
-        ?                                                       ++++++++++++++++
-        oFCKeditor_html.ReplaceTextarea();
+        - var CKeditor_html = new CKEDITOR.replace("field.html",
+        ?                                           ------
+        + var CKeditor_html = new CKEDITOR.replace("html",
+        {
+        height: 300,
+        + width: 430,
+        - customConfig : "/@@/editor_config.js",
+        + customConfig : "http://127.0.0.1/@@/editor_config.js",
+        ?                 ++++++++++++++++
+        }
+        );
         </script>
 
     """
