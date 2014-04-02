@@ -301,16 +301,9 @@
             <input type="radio" name="field.range" value="until" id="field.range_u"
                    tal:attributes="checked python:range_value == 'until'"/>
             <label for="field.range_u" class="plain" i18n:translate="">Repeat until</label>
-            <input type="text" name="field.until" id="field.until"
-                   tal:attributes="value view/until_widget/_getFormValue"/>
-            <img class="CalIcon" onClick="clickWidgetIcon('field.until');"
-                 id="field.untilIcon" alt="[popup calendar]"
-                 i18n:attributes="alt"
-                 tal:attributes="src context/++resource++calwidget-icon.gif"/>
-            <div id="field.untilDiv"
-                 style="background: #fff; position: absolute; display: none;">
-            </div>
 
+            <input type="text" style="width:100%"
+                   tal:replace="structure view/until_widget" />
             <tal:block tal:define="widget nocall:view/until_widget">
               <div class="error" tal:define="error widget/error"
                    tal:condition="error" tal:content="structure error">
@@ -332,7 +325,7 @@
           </tal:block>
         </fieldset>
         <div class="row" tal:define="widget nocall:view/exceptions_widget">
-          <div metal:use-macro="context/@@form_macros/datepicker_widget" />
+          <div metal:use-macro="context/@@form_macros/widget_row" />
         </div>
       </div>
       <input type="hidden" tal:condition="request/cancel_url|nothing"
