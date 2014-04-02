@@ -8,8 +8,6 @@
           tal:attributes="href context/++resource++favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="layout.css" media="screen"
           tal:attributes="href context/++resource++layout.css"/>
-    <link type="text/css" rel="stylesheet" href="calwidget-calendar.css"
-          tal:attributes="href context/++resource++calwidget-calendar.css" />
     <link rel="stylesheet" type="text/css" media="print"
           tal:attributes="href context/++resource++print.css" />
     <metal:block use-macro="view/@@schooltool_macros/generic/stylesheets" />
@@ -18,9 +16,6 @@
     </script>
     <script type="text/javascript" src="schooltool.js"
             tal:attributes="src context/++resource++schooltool.js">
-    </script>
-    <script type="text/javascript" src=""
-            tal:attributes="src context/++resource++calwidget-calendar.js">
     </script>
     <tal:block replace="structure provider:schooltool.CSS" />
     <tal:block replace="structure provider:schooltool.JavaScript" />

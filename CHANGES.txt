@@ -12,7 +12,7 @@ New features
 - Levels for courses and persons
 - Parent access
 - Background import
-- Switch to CKEditor
+- Switch to CKEditor (https://bugs.launchpad.net/bugs/485898)
 
 - Added descriptions for demographic fields
 

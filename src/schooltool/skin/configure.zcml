@@ -313,17 +313,17 @@
 
   <!-- HTML fragment widget -->
 
-  <zope:class class=".widgets.FckeditorZ3CFormWidget">
+  <zope:class class=".widgets.CkeditorZ3CFormWidget">
     <require
         permission="zope.Public"
-        interface=".widgets.IFckeditorWidget"
+        interface=".widgets.ICkeditorWidget"
         />
   </zope:class>
 
-  <zope:class class=".widgets.FCKConfig">
+  <zope:class class=".widgets.CkeditorConfig">
     <require
         permission="zope.Public"
-        interface=".widgets.IFCKConfig"
+        interface=".widgets.ICkeditorConfig"
         />
   </zope:class>
 
@@ -331,7 +331,7 @@
       type="schooltool.skin.ISchoolToolLayer"
       for="zope.html.field.IHtmlFragmentField"
       provides="zope.app.form.interfaces.IInputWidget"
-      factory=".widgets.FckeditorFormlibWidget"
+      factory=".widgets.CkeditorFormlibWidget"
       permission="zope.Public"
       />
 
@@ -339,49 +339,49 @@
       type="schooltool.skin.ISchoolToolLayer"
       for="zope.html.field.IXhtmlFragmentField"
       provides="zope.app.form.interfaces.IInputWidget"
-      factory=".widgets.FckeditorFormlibWidget"
+      factory=".widgets.CkeditorFormlibWidget"
       permission="zope.Public"
       />
 
   <zope:adapter
-      factory=".widgets.FckeditorFieldWidget"
+      factory=".widgets.CkeditorFieldWidget"
       for="zope.html.field.IHtmlFragmentField
            z3c.form.interfaces.IFormLayer"
       />
 
   <z3c:widgetTemplate
       mode="display"
-      widget=".widgets.IFckeditorWidget"
+      widget=".widgets.ICkeditorWidget"
       layer="z3c.form.interfaces.IFormLayer"
-      template="templates/fckwidget_display.pt"
+      template="templates/ckeditor_widget_display.pt"
       />
 
   <z3c:widgetTemplate
       mode="input"
-      widget=".widgets.IFckeditorWidget"
+      widget=".widgets.ICkeditorWidget"
       layer="z3c.form.interfaces.IFormLayer"
-      template="templates/fckwidget_input.pt"
+      template="templates/ckeditor_widget_input.pt"
       />
 
   <z3c:widgetTemplate
       mode="hidden"
-      widget=".widgets.IFckeditorWidget"
+      widget=".widgets.ICkeditorWidget"
       layer="z3c.form.interfaces.IFormLayer"
-      template="templates/fckwidget_hidden.pt"
+      template="templates/ckeditor_widget_hidden.pt"
       />
 
   <zope:adapter
-      factory=".widgets.Fckeditor_config"
+      factory=".widgets.Ckeditor_config"
       name="config"
       />
 
   <zope:adapter
-      factory=".widgets.Fckeditor_addform_config"
+      factory=".widgets.Ckeditor_addform_config"
       name="config"
       />
 
   <zope:adapter
-      factory=".widgets.Fckeditor_editform_config"
+      factory=".widgets.Ckeditor_editform_config"
       name="config"
       />
 

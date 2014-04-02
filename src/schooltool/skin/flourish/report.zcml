@@ -206,7 +206,7 @@
 
   <z3c:widgetTemplate
       mode="display"
-      widget="schooltool.skin.flourish.widgets.FlourishFckeditorZ3CFormWidget"
+      widget="schooltool.skin.flourish.widgets.FlourishCkeditorZ3CFormWidget"
       layer="z3c.form.interfaces.IFormLayer"
       view="schooltool.skin.flourish.interfaces.IRMLTemplated"
       template="rml/z3c-html-widget.pt"
