@@ -16,6 +16,12 @@ New features
 
 - Added descriptions for demographic fields
 
+Bugfixes
+++++++++
+
+- Fixed exception dates format in calendar widget of recurring events (https://launchpad.net/bugs/372889)
+- Updated copyright (https://launchpad.net/bugs/1289277)
+
 
 2.6.2 (2014-02-15)
 ------------------

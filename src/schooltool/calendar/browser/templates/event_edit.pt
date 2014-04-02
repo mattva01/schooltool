@@ -343,6 +343,9 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $('#field\\.exceptions_trigger').datepicker({
+      dateFormat: 'yy-mm-dd',
+      changeMonth: true,
+      changeYear: true,
       onSelect: function(dateText, inst) {
         var p = $('#field\\.exceptions');
         p['0'].value = (p['0'].value+'\n'+dateText+'\n').replace(/\s+/g, "\n").replace(/(^\s+)|(\s+$)/g,"")+'\n';
