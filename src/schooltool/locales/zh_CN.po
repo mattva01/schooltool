@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-11-25 06:11+0000\n"
-"X-Generator: Launchpad (build 16831)\n"
+"X-Launchpad-Export-Date: 2014-02-04 07:00+0000\n"
+"X-Generator: Launchpad (build 16916)\n"
 "Language: \n"
 
 #: /src/schooltool/app/app.py:193
@@ -2750,11 +2750,11 @@ msgstr ""
 msgid "Reading configuration from %s"
 msgstr "从 %s 读入配置"
 
-#: /src/schooltool/app/main.py:574
+#: /src/schooltool/app/main.py:513
 msgid "No storage defined in the configuration file."
 msgstr "配置文件中未定义储存。"
 
-#: /src/schooltool/app/main.py:672
+#: /src/schooltool/app/main.py:633
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2794,7 +2794,7 @@ msgstr "${group} 组。"
 msgid "${group} group and the super user."
 msgstr "${group} 组和超级用户。"
 
-#: /src/schooltool/app/security.zcml:71
+#: /src/schooltool/app/security.zcml:62
 msgid "SchoolTool application"
 msgstr "SchoolTool 应用"
 
@@ -3945,7 +3945,7 @@ msgstr "为 ${person} 添加新的联系人"
 msgid "Change contact information for ${person}"
 msgstr "改变 ${person} 的联系信息"
 
-#: /src/schooltool/contact/browser/contact.py:441
+#: /src/schooltool/contact/browser/contact.py:472
 msgid "Contact index"
 msgstr "联系人索引"
 
@@ -6008,7 +6008,7 @@ msgid ""
 "of sample data: ${link-to-sample-data-file}."
 msgstr ""
 
-#: /src/schooltool/export/templates/f_import_related.pt:24
+#: /src/schooltool/export/templates/f_import_related.pt:28
 msgid ""
 "We also provide a large data set: ${link-to-sample-data-file} -- 1000 "
 "students over multiple years -- for performance testing. This set can take a "
@@ -8733,3 +8733,51 @@ msgstr ""
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "输入的密码不相同"
+
+#~ msgid "Edit person"
+#~ msgstr "编辑人员"
+
+#~ msgid "Edit site preferences"
+#~ msgstr "编辑站点参数"
+
+#~ msgid "Verify password"
+#~ msgstr "检验密码"
+
+#~ msgid "Calendar Preferences"
+#~ msgstr "日程表参数"
+
+#~ msgid "Photo (in JPEG format)"
+#~ msgstr "照片 （JPEG格式）"
+
+#~ msgid "New photo"
+#~ msgstr "新照片"
+
+#~ msgid "A small picture (about 48x48 pixels in JPEG format)"
+#~ msgstr "一个小的图片 (大约 48x48 象素 JPEG 格式)"
+
+#~ msgid "Clear photo"
+#~ msgstr "清除照片"
+
+#~ msgid "Check this to clear the photo"
+#~ msgstr "单击清除照片"
+
+#~ msgid "Change contact information for ${first_name} ${last_name}"
+#~ msgstr "改变 ${first_name} ${last_name} 的联系信息"
+
+#~ msgid ""
+#~ "CSV data <strong>must</strong> contain a user name and a full name. An "
+#~ "optional password <strong>may</strong> be included as well."
+#~ msgstr "CSV 数据 <strong>必须</strong> 包含用户名和全名。<strong>也可以</strong> 包含一个可选的密码。"
+
+#~ msgid ""
+#~ "\n"
+#~ "jjones, Jimmy Jones\n"
+#~ "jbjones, Jim Bob Jones, r2m45J\n"
+#~ "howard, Howard\n"
+#~ msgstr ""
+#~ "\n"
+#~ "jjones, Jimmy Jones\n"
+#~ "\n"
+#~ "jbjones, Jim Bob Jones, r2m45J\n"
+#~ "\n"
+#~ "howard, Howard\n"

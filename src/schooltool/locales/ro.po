@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-11-25 06:08+0000\n"
-"X-Generator: Launchpad (build 16831)\n"
+"X-Launchpad-Export-Date: 2014-02-04 06:56+0000\n"
+"X-Generator: Launchpad (build 16916)\n"
 "Language: ro\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -66,23 +66,50 @@ msgstr "${număr} persoane"
 msgid "There are none."
 msgstr "Nu există niciunul."
 
-#: /src/schooltool/app/browser/cal.py:2077
+#: /src/schooltool/app/browser/app.py:352
+#: /src/schooltool/app/browser/app.py:531
+#: /src/schooltool/app/browser/cal.py:2069
+#: /src/schooltool/app/browser/flourish.zcml:460
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
-#: /src/schooltool/basicperson/browser/person.py:162
-#: /src/schooltool/contact/browser/contact.py:92
-#: /src/schooltool/course/browser/section.py:331
+#: /src/schooltool/basicperson/browser/flourish.zcml:39
+#: /src/schooltool/basicperson/browser/flourish.zcml:274
+#: /src/schooltool/basicperson/browser/person.py:340
+#: /src/schooltool/basicperson/browser/person.py:385
+#: /src/schooltool/basicperson/browser/person.py:877
+#: /src/schooltool/calendar/browser/flourish.zcml:88
+#: /src/schooltool/contact/browser/contact.py:117
+#: /src/schooltool/contact/browser/flourish.zcml:106
+#: /src/schooltool/contact/browser/flourish.zcml:236
+#: /src/schooltool/course/browser/flourish.zcml:79
+#: /src/schooltool/course/browser/flourish.zcml:88
+#: /src/schooltool/course/browser/flourish.zcml:107
+#: /src/schooltool/course/browser/flourish.zcml:124
+#: /src/schooltool/course/browser/section.py:362
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:67
-#: /src/schooltool/level/browser.py:55
-#: /src/schooltool/schoolyear/browser/schoolyear.py:308
-#: /src/schooltool/timetable/browser/__init__.py:704
-#: /src/schooltool/timetable/browser/templates/timetable-add.pt:25
+#: /src/schooltool/group/browser/flourish.zcml:32
+#: /src/schooltool/group/browser/flourish.zcml:49
+#: /src/schooltool/group/browser/group.py:649
+#: /src/schooltool/level/browser/flourish.zcml:43
+#: /src/schooltool/level/browser/level.py:59
+#: /src/schooltool/resource/browser/flourish.zcml:98
+#: /src/schooltool/resource/browser/resource.py:595
+#: /src/schooltool/schoolyear/browser/flourish.zcml:34
+#: /src/schooltool/schoolyear/browser/schoolyear.py:447
+#: /src/schooltool/skin/flourish/form.py:77
+#: /src/schooltool/term/browser/flourish.zcml:61
+#: /src/schooltool/timetable/browser/calendar.py:163
+#: /src/schooltool/timetable/browser/flourish.zcml:48
+#: /src/schooltool/timetable/browser/flourish.zcml:372
+#: /src/schooltool/timetable/browser/flourish.zcml:503
+#: /src/schooltool/timetable/browser/timetable.py:342
 msgid "Add"
 msgstr "Adăugați"
 
+#: /src/schooltool/app/browser/app.py:276
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
-#: /src/schooltool/timetable/browser/templates/section-timetable-view.pt:103
+#: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:56
 msgid "Remove"
 msgstr "Eliminaţi"
 
@@ -91,7 +118,7 @@ msgstr "Eliminaţi"
 msgid "Add all displayed"
 msgstr "Adăugați toate afișate"
 
-#: /src/schooltool/app/browser/app.py:226
+#: /src/schooltool/app/browser/app.py:677
 msgid "Username or password is incorrect"
 msgstr "Numele de utilizator sau parola sunt incorecte"
 
@@ -2745,7 +2772,7 @@ msgstr ""
 msgid "${group} group and the super user."
 msgstr ""
 
-#: /src/schooltool/app/security.zcml:71
+#: /src/schooltool/app/security.zcml:62
 msgid "SchoolTool application"
 msgstr ""
 
@@ -3897,7 +3924,7 @@ msgstr "Adaugă contact nou pentru ${person}"
 msgid "Change contact information for ${person}"
 msgstr ""
 
-#: /src/schooltool/contact/browser/contact.py:441
+#: /src/schooltool/contact/browser/contact.py:472
 msgid "Contact index"
 msgstr ""
 
@@ -4947,6 +4974,7 @@ msgstr ""
 msgid "This section has no equipment"
 msgstr ""
 
+#: /src/schooltool/course/browser/templates/f_unlink_section.pt:22
 #: /src/schooltool/course/browser/templates/unlink_section.pt:23
 msgid ""
 "Click 'Unlink' if you would like to remove the link this section has to the "
@@ -5703,7 +5731,7 @@ msgstr ""
 msgid "has no day templates"
 msgstr ""
 
-#: /src/schooltool/export/importer.py:83
+#: /src/schooltool/export/importer.py:93
 msgid "is not a valid time range"
 msgstr ""
 
@@ -5743,7 +5771,7 @@ msgstr ""
 msgid "has no courses"
 msgstr ""
 
-#: /src/schooltool/export/importer.py:93
+#: /src/schooltool/export/importer.py:101
 msgid "is not a valid username"
 msgstr ""
 
@@ -5961,7 +5989,7 @@ msgid ""
 "of sample data: ${link-to-sample-data-file}."
 msgstr ""
 
-#: /src/schooltool/export/templates/f_import_related.pt:24
+#: /src/schooltool/export/templates/f_import_related.pt:28
 msgid ""
 "We also provide a large data set: ${link-to-sample-data-file} -- 1000 "
 "students over multiple years -- for performance testing. This set can take a "
@@ -6058,7 +6086,14 @@ msgstr ""
 msgid "Available groups"
 msgstr ""
 
-#: /src/schooltool/schoolyear/browser/schoolyear.py:449
+#: /src/schooltool/group/browser/group.py:322
+#: /src/schooltool/group/browser/group.py:550
+#: /src/schooltool/schoolyear/browser/flourish.zcml:65
+#: /src/schooltool/schoolyear/browser/flourish.zcml:109
+#: /src/schooltool/schoolyear/browser/flourish.zcml:146
+#: /src/schooltool/schoolyear/browser/flourish.zcml:198
+#: /src/schooltool/schoolyear/browser/schoolyear.py:711
+#: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:8
 msgid "School Year"
 msgstr ""
 
@@ -7994,7 +8029,7 @@ msgstr ""
 msgid "An internal identifier of this term."
 msgstr ""
 
-#: /src/schooltool/term/term.py:306
+#: /src/schooltool/term/term.py:313
 msgid "Term date is not in the school year."
 msgstr ""
 
@@ -8663,3 +8698,12 @@ msgstr ""
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Parolele introduse nu sunt identice"
+
+#~ msgid "Photo (in JPEG format)"
+#~ msgstr "Poză (în format JPG)"
+
+#~ msgid "Edit site preferences"
+#~ msgstr "Editare preferințe site"
+
+#~ msgid "Calendar Preferences"
+#~ msgstr "Preferințe calendar"

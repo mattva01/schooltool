@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-11-25 06:06+0000\n"
-"X-Generator: Launchpad (build 16831)\n"
+"X-Launchpad-Export-Date: 2014-02-04 06:54+0000\n"
+"X-Generator: Launchpad (build 16916)\n"
 "Language: id\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -2763,11 +2763,11 @@ msgstr ""
 msgid "Reading configuration from %s"
 msgstr "Pembacaan Konfigurasi dari %s"
 
-#: /src/schooltool/app/main.py:574
+#: /src/schooltool/app/main.py:513
 msgid "No storage defined in the configuration file."
 msgstr "Tidak dijelaskan media penyimpan dalam berkas konfigurasi ini."
 
-#: /src/schooltool/app/main.py:672
+#: /src/schooltool/app/main.py:633
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2807,7 +2807,7 @@ msgstr "${group} kelompok."
 msgid "${group} group and the super user."
 msgstr "${group} kelompok dan pengguna super."
 
-#: /src/schooltool/app/security.zcml:71
+#: /src/schooltool/app/security.zcml:62
 msgid "SchoolTool application"
 msgstr "aplikasi SchoolTool"
 
@@ -3965,7 +3965,7 @@ msgstr "Tambahkan kontak baru untuk ${person}"
 msgid "Change contact information for ${person}"
 msgstr "Ubah informasi kontak untuk ${person}"
 
-#: /src/schooltool/contact/browser/contact.py:441
+#: /src/schooltool/contact/browser/contact.py:472
 msgid "Contact index"
 msgstr "Indeks Kontak"
 
@@ -4291,7 +4291,7 @@ msgstr ""
 "Tetapkan / menghapus kontak dari pengguna, mendefinisikan hubungan pengguna "
 "dengan kontak."
 
-#: /src/schooltool/contact/security.zcml:36
+#: /src/schooltool/contact/security.zcml:41
 msgid "Manage user's contacts"
 msgstr "Pengaturan kontak dari user"
 
@@ -6064,7 +6064,7 @@ msgstr ""
 "Untuk orang yang tertarik dalam menguji dan menjelajahi SchoolTool, kami "
 "menyediakan contoh data: ${link-to-sample-data-file}."
 
-#: /src/schooltool/export/templates/f_import_related.pt:24
+#: /src/schooltool/export/templates/f_import_related.pt:28
 msgid ""
 "We also provide a large data set: ${link-to-sample-data-file} -- 1000 "
 "students over multiple years -- for performance testing. This set can take a "
@@ -8811,3 +8811,51 @@ msgstr ""
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Kata kunci yang diberikan tidak sama"
+
+#~ msgid ""
+#~ "\n"
+#~ "jjones, Jimmy Jones\n"
+#~ "jbjones, Jim Bob Jones, r2m45J\n"
+#~ "howard, Howard\n"
+#~ msgstr ""
+#~ "\n"
+#~ "jjones, Jimmy Jones\n"
+#~ "jbjones, Jim Bob Jones, r2m45j\n"
+#~ "howard, Howard\n"
+
+#~ msgid "Edit site preferences"
+#~ msgstr "Ubah preferensi situs"
+
+#~ msgid "Photo (in JPEG format)"
+#~ msgstr "Foto (dalam format JPEG)"
+
+#~ msgid "Verify password"
+#~ msgstr "Verifikasi password"
+
+#~ msgid "New photo"
+#~ msgstr "Foto baru"
+
+#~ msgid "A small picture (about 48x48 pixels in JPEG format)"
+#~ msgstr "Foto kecil (sekitar 48x48 piksel dalam format JPEG)"
+
+#~ msgid "Clear photo"
+#~ msgstr "Bersihkan foto"
+
+#~ msgid "Check this to clear the photo"
+#~ msgstr "Pilih ini untuk menghapus foto"
+
+#~ msgid "Edit person"
+#~ msgstr "Ubah personal"
+
+#~ msgid "Calendar Preferences"
+#~ msgstr "Preferensi Kalender"
+
+#~ msgid "Change contact information for ${first_name} ${last_name}"
+#~ msgstr "Ubah informasi kontak untuk ${first_name} ${last_name}"
+
+#~ msgid ""
+#~ "CSV data <strong>must</strong> contain a user name and a full name. An "
+#~ "optional password <strong>may</strong> be included as well."
+#~ msgstr ""
+#~ "Data CSV <strong>harus</strong> memuat nama pengguna dan nama lengkapnya. "
+#~ "Kata kunci sebagai pilihan  <strong>boleh</strong> dimasukkan juga."

@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-11-25 06:08+0000\n"
-"X-Generator: Launchpad (build 16831)\n"
+"X-Launchpad-Export-Date: 2014-02-04 06:57+0000\n"
+"X-Generator: Launchpad (build 16916)\n"
 
 #: /src/schooltool/app/app.py:193
 msgid "Your School"
@@ -2678,8 +2678,8 @@ msgstr "වලංගු නොවන දශමස්ථාන දත්තයක
 msgid "Invalid datetime data"
 msgstr "වලංගු නැති දිනකාල දත්ත"
 
-#: /src/schooltool/app/interfaces.py:119
-#: /src/schooltool/app/interfaces.py:130
+#: /src/schooltool/app/interfaces.py:120
+#: /src/schooltool/app/interfaces.py:132
 msgid ""
 "The name for the school or organization running this server.  This will be "
 "displayed on the public calendar, the bottom of all pages and in the page "
@@ -2814,7 +2814,7 @@ msgstr "${group} කණ්ඩායම"
 msgid "${group} group and the super user."
 msgstr "${group} කණ්ඩායම සහ සුපිරි පරිශීලක"
 
-#: /src/schooltool/app/security.zcml:71
+#: /src/schooltool/app/security.zcml:62
 msgid "SchoolTool application"
 msgstr "SchoolTool වැඩසටහන"
 
@@ -3972,7 +3972,7 @@ msgstr "${person} සඳහා අලුතෙන් සබඳතාවක් �
 msgid "Change contact information for ${person}"
 msgstr "${person} ගේ සබඳතා තොරතුරු වෙනස් කිරීම"
 
-#: /src/schooltool/contact/browser/contact.py:441
+#: /src/schooltool/contact/browser/contact.py:472
 msgid "Contact index"
 msgstr "සබඳතා දර්ශකය"
 
@@ -4840,7 +4840,7 @@ msgstr ""
 msgid "Edit responsible parties for this course"
 msgstr "මෙම පාඨමාලාව සදහා වගකිවයුතු පාර්ශව සංස්කරණය කරන්න"
 
-#: /src/schooltool/course/browser/templates/f_course_view.pt:84
+#: /src/schooltool/course/browser/templates/f_course_view.pt:92
 msgid "These users can modify the course."
 msgstr "මෙම පරිශ්‍රීලකයන් හට පාඨමාලාව විකරණය කල හැක"
 
@@ -6045,7 +6045,7 @@ msgstr ""
 "ස්කූල් ටූල් පරීක්ෂා කිරීමට හා ගවේෂණය කිරීමට උනන්දුව ඇති අය සඳහා අපි ආදර්ශ "
 "දත්ත: ${link-to-sample-data-file} සපයන්නෙමු."
 
-#: /src/schooltool/export/templates/f_import_related.pt:24
+#: /src/schooltool/export/templates/f_import_related.pt:28
 msgid ""
 "We also provide a large data set: ${link-to-sample-data-file} -- 1000 "
 "students over multiple years -- for performance testing. This set can take a "
@@ -7667,7 +7667,7 @@ msgstr ""
 msgid "server running"
 msgstr "සේවාදායකය ධාවනය වේ"
 
-#: /src/schooltool/skin/flourish/templates/main.pt:91
+#: /src/schooltool/skin/flourish/templates/main.pt:98
 msgid "Supporting exceptional people to change the world."
 msgstr "ලෝකය වෙනස් කිරීමට විශේෂිත ජනයාට උපකාර කිරීම."
 
@@ -8874,3 +8874,51 @@ msgstr "පාසල් කාලසටහන්"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "සපයා ඇති මුර පද අනන්‍ය නොවේ"
+
+#~ msgid "New photo"
+#~ msgstr "නව ජායාරූපය"
+
+#~ msgid "Verify password"
+#~ msgstr "මුරපදය තහවුරු කරන්න"
+
+#~ msgid "Edit site preferences"
+#~ msgstr "අභිරුචිය පරිදි පිහිටීම සංස්කරණය කරන්න"
+
+#~ msgid "Calendar Preferences"
+#~ msgstr "දිනදර්ශන අභිරුචි"
+
+#~ msgid "Clear photo"
+#~ msgstr "සේයාව නිරවුල් කරන්න"
+
+#~ msgid "Edit person"
+#~ msgstr "පුද්ගලයා සංස්කරණය කරන්න"
+
+#~ msgid "Change contact information for ${first_name} ${last_name}"
+#~ msgstr "${first_name} ${last_name} ගේ සබඳතා තොරතුරු වෙනස් කිරීම"
+
+#~ msgid "A small picture (about 48x48 pixels in JPEG format)"
+#~ msgstr "කුඩා ඡායාරූපයක් (පික්සල 48x48 JPEG ආකෘතියෙන්)"
+
+#~ msgid "Check this to clear the photo"
+#~ msgstr "ඡායාරූපය හිස් කිරීමට මෙය පිරික්සන්න"
+
+#~ msgid "Photo (in JPEG format)"
+#~ msgstr "ඡායාරූපය  (JPEG ආකෘතියෙන්)"
+
+#~ msgid ""
+#~ "CSV data <strong>must</strong> contain a user name and a full name. An "
+#~ "optional password <strong>may</strong> be included as well."
+#~ msgstr ""
+#~ "CSV දත්ත වල සම්පූර්ණ නම, පරිශීලක නම <strong>අනිවාර්යයෙන්ම</strong> අඩංගු විය "
+#~ "යුතුය. විකල්ප මුරපදයක් ද <strong>ඇතැම් විට</strong> අඩංගු විය හැක."
+
+#~ msgid ""
+#~ "\n"
+#~ "jjones, Jimmy Jones\n"
+#~ "jbjones, Jim Bob Jones, r2m45J\n"
+#~ "howard, Howard\n"
+#~ msgstr ""
+#~ "\n"
+#~ "jජෝන්ස්, ජිමී ජෝන්ස්\n"
+#~ "jbජෝන්ස්, ජිම් බොබ් ජෝන්ස්, r2m45J\n"
+#~ "හොවාර්ඩ්, හොවාර්ඩ්\n"

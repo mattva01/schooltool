@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-12-11 06:29+0000\n"
-"X-Generator: Launchpad (build 16869)\n"
+"X-Launchpad-Export-Date: 2014-02-04 06:52+0000\n"
+"X-Generator: Launchpad (build 16916)\n"
 "Language: nl\n"
 
 #: /src/schooltool/app/app.py:193
@@ -1277,10 +1277,12 @@ msgid "Founder and funder:"
 msgstr "Oprichter en financier:"
 
 #: /src/schooltool/app/browser/templates/about.pt:38
+#: /src/schooltool/app/browser/templates/f_about.pt:25
 msgid "Project Manager:"
 msgstr "Projectbeheerder:"
 
 #: /src/schooltool/app/browser/templates/about.pt:41
+#: /src/schooltool/app/browser/templates/f_about.pt:29
 msgid "Lead Developer:"
 msgstr "Hoofdontwikkelaar:"
 
@@ -2857,15 +2859,15 @@ msgstr "Beheerderswoord: "
 msgid "No configuration file given"
 msgstr "Geen configuratiebstand aangegeven"
 
-#: /src/schooltool/app/main.py:575
+#: /src/schooltool/app/main.py:505
 msgid "Reading configuration from %s"
 msgstr "Configuratie wordt gelezen uit %s"
 
-#: /src/schooltool/app/main.py:574
+#: /src/schooltool/app/main.py:513
 msgid "No storage defined in the configuration file."
 msgstr "Geen opslag ingesteld in het configuratiebestand"
 
-#: /src/schooltool/app/main.py:672
+#: /src/schooltool/app/main.py:633
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2905,7 +2907,7 @@ msgstr "${group} groep."
 msgid "${group} group and the super user."
 msgstr "${group} groep en de supergebruiker."
 
-#: /src/schooltool/app/security.zcml:71
+#: /src/schooltool/app/security.zcml:62
 msgid "SchoolTool application"
 msgstr "SchoolTool applicatie"
 
@@ -4055,12 +4057,12 @@ msgstr "Nieuw contact"
 msgid "Contacts"
 msgstr "Contacten"
 
-#: /src/schooltool/contact/browser/configure.zcml:100
+#: /src/schooltool/contact/browser/configure.zcml:110
 msgid "Manage Contacts"
 msgstr "Contacten beheren"
 
-#: /src/schooltool/contact/browser/configure.zcml:111
-#: /src/schooltool/contact/browser/configure.zcml:123
+#: /src/schooltool/contact/browser/configure.zcml:121
+#: /src/schooltool/contact/browser/configure.zcml:133
 msgid "Other Contacts"
 msgstr "Andere contacten"
 
@@ -4082,7 +4084,7 @@ msgstr "Voeg nieuwe contacten toe voor ${person}"
 msgid "Change contact information for ${person}"
 msgstr "Contactinformatie wijzigen voor ${person}"
 
-#: /src/schooltool/contact/browser/contact.py:441
+#: /src/schooltool/contact/browser/contact.py:472
 msgid "Contact index"
 msgstr "Contactenindex"
 
@@ -4317,9 +4319,9 @@ msgstr ""
 "geen SchoolTool gebruiken maar wel notificaties en informatie dienen te "
 "ontvangen over de leerling of over de school zelf."
 
-#: /src/schooltool/contact/contact.py:202
-#: /src/schooltool/course/browser/flourish.zcml:293
-#: /src/schooltool/course/browser/section.py:555
+#: /src/schooltool/contact/contact.py:220
+#: /src/schooltool/course/browser/flourish.zcml:424
+#: /src/schooltool/course/browser/section.py:561
 #: /src/schooltool/course/browser/templates/copy_sections.pt:93
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:72
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:66
@@ -4420,7 +4422,7 @@ msgstr ""
 "Contacten van een gebruiker aanmaken / verwijderen, bepalen relatie van "
 "gebruiker met een contact."
 
-#: /src/schooltool/contact/security.zcml:36
+#: /src/schooltool/contact/security.zcml:41
 msgid "Manage user's contacts"
 msgstr "Gebruikerscontacten beheren"
 
@@ -4634,9 +4636,11 @@ msgstr "Leerlingen (vervolg)"
 msgid "Continued on next page &gt;"
 msgstr "Vervolg zie volgende pagina &gt;"
 
-#: /src/schooltool/person/browser/person.py:285
-#: /src/schooltool/person/browser/person.py:374
-#: /src/schooltool/person/interfaces.py:51
+#: /src/schooltool/course/browser/rml/section_roster.pt:23
+#: /src/schooltool/course/browser/templates/f_section_roster_rml.pt:15
+#: /src/schooltool/person/browser/person.py:594
+#: /src/schooltool/person/browser/person.py:683
+#: /src/schooltool/person/interfaces.py:52
 msgid "Full name"
 msgstr "Volledige naam"
 
@@ -5935,7 +5939,7 @@ msgstr "School-export"
 msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
 msgstr "SchoolTool kan dit bestand niet lezen. Is het een XLS-rekenblad?"
 
-#: /src/schooltool/export/importer.py:69
+#: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
 msgstr "is geen geldig geheel getal"
 
@@ -5983,15 +5987,15 @@ msgstr "startdatum overlapt een andere termijn"
 msgid "end date overlaps another term"
 msgstr "einddatum overlapt een andere termijn"
 
-#: /src/schooltool/export/importer.py:89
+#: /src/schooltool/export/importer.py:91
 msgid "has no days"
 msgstr "heeft geen dagen"
 
-#: /src/schooltool/export/importer.py:90
+#: /src/schooltool/export/importer.py:92
 msgid "has no day templates"
 msgstr "heeft geen dagsjablonen"
 
-#: /src/schooltool/export/importer.py:91
+#: /src/schooltool/export/importer.py:93
 msgid "is not a valid time range"
 msgstr "is geen geldig tijdsbestek"
 
@@ -6028,7 +6032,7 @@ msgstr "is geen geldige termijn in het aangegeven schooljaar"
 msgid "is not a valid course in the given school year"
 msgstr "is geen geldig vak in het aangegeven schooljaar"
 
-#: /src/schooltool/export/importer.py:100
+#: /src/schooltool/export/importer.py:102
 msgid "has no courses"
 msgstr "heeft geen vakken"
 
@@ -6260,7 +6264,7 @@ msgstr ""
 "Voor mensen die Schooltool willen testen en onderzoeken, zijn de volgende "
 "voorbeeldbestanden beschikbaar: ${link-to-sample-data-file}."
 
-#: /src/schooltool/export/templates/f_import_related.pt:24
+#: /src/schooltool/export/templates/f_import_related.pt:28
 msgid ""
 "We also provide a large data set: ${link-to-sample-data-file} -- 1000 "
 "students over multiple years -- for performance testing. This set can take a "
@@ -7918,7 +7922,7 @@ msgstr "deze afbeelding verwijderen"
 msgid "server running"
 msgstr "server actief"
 
-#: /src/schooltool/skin/flourish/templates/main.pt:91
+#: /src/schooltool/skin/flourish/templates/main.pt:98
 msgid "Supporting exceptional people to change the world."
 msgstr "Ondersteunt uitzonderlijke mensen om de wereld te veranderen."
 
@@ -8040,7 +8044,7 @@ msgstr "D"
 msgid "Shortcut: Alt-D"
 msgstr "Sneltoets: Alt-D"
 
-#: /src/schooltool/skin/widgets.py:91
+#: /src/schooltool/skin/widgets.py:92
 msgid "The datetime string did not match the pattern yyyy-mm-dd"
 msgstr "De ingevoerde waarde komt niet overeen met het formaat JJJJ-MM-DD"
 
@@ -9141,3 +9145,52 @@ msgstr "Schoolroosters"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "De opgegeven wachtwoorden komen niet overeen."
+
+#~ msgid "Edit site preferences"
+#~ msgstr "Sitevoorkeuren bewerken"
+
+#~ msgid "Photo (in JPEG format)"
+#~ msgstr "Foto (in JPEG-formaat)"
+
+#~ msgid "New photo"
+#~ msgstr "Nieuwe foto"
+
+#~ msgid "A small picture (about 48x48 pixels in JPEG format)"
+#~ msgstr "Een klein plaatje (ongeveer 48x48 pixels in JPEG-formaat)"
+
+#~ msgid "Clear photo"
+#~ msgstr "Foto wissen"
+
+#~ msgid "Check this to clear the photo"
+#~ msgstr "Vink dit aan om de foto te wissen"
+
+#~ msgid "Edit person"
+#~ msgstr "Bewerk persoon"
+
+#~ msgid "Calendar Preferences"
+#~ msgstr "Agendavoorkeuren"
+
+#~ msgid "Change contact information for ${first_name} ${last_name}"
+#~ msgstr "Contactinformatie wijzigen voor ${first_name} ${last_name}"
+
+#~ msgid "Verify password"
+#~ msgstr "Wachtwoord controleren"
+
+#~ msgid ""
+#~ "CSV data <strong>must</strong> contain a user name and a full name. An "
+#~ "optional password <strong>may</strong> be included as well."
+#~ msgstr ""
+#~ "CSV-gegevens <strong>moeten</strong> een gebruikersnaam en volledige naam "
+#~ "bevatten. Een optioneel wachtwoord  <strong>mag</strong> ook toegevoegd "
+#~ "worden."
+
+#~ msgid ""
+#~ "\n"
+#~ "jjones, Jimmy Jones\n"
+#~ "jbjones, Jim Bob Jones, r2m45J\n"
+#~ "howard, Howard\n"
+#~ msgstr ""
+#~ "\n"
+#~ "bpeeters, Bart, Peeters\n"
+#~ "bfpeeters, Ben Frank, Peeters, r2m45J\n"
+#~ "koen, Koen, Wouters\n"

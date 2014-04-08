@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-11-25 06:03+0000\n"
-"X-Generator: Launchpad (build 16831)\n"
+"X-Launchpad-Export-Date: 2014-02-04 06:51+0000\n"
+"X-Generator: Launchpad (build 16916)\n"
 "Language: eu\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -2808,7 +2808,7 @@ msgstr "${group} taldea."
 msgid "${group} group and the super user."
 msgstr ""
 
-#: /src/schooltool/app/security.zcml:71
+#: /src/schooltool/app/security.zcml:62
 msgid "SchoolTool application"
 msgstr "SchoolTool aplikazioa"
 
@@ -6011,7 +6011,7 @@ msgid ""
 "of sample data: ${link-to-sample-data-file}."
 msgstr ""
 
-#: /src/schooltool/export/templates/f_import_related.pt:24
+#: /src/schooltool/export/templates/f_import_related.pt:28
 msgid ""
 "We also provide a large data set: ${link-to-sample-data-file} -- 1000 "
 "students over multiple years -- for performance testing. This set can take a "
@@ -8728,3 +8728,9 @@ msgstr "Eskola ordutegiak"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Ordezkatutako pasahitzak ez dira berdin-berdinak"
+
+#~ msgid "Calendar Preferences"
+#~ msgstr "Egutegiaren hobespenak"
+
+#~ msgid "Edit site preferences"
+#~ msgstr "Editatu gunearen hobespenak"

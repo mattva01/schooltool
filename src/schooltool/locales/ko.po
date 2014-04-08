@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-10-08 02:19+0300\n"
-"PO-Revision-Date: 2013-08-21 18:44+0000\n"
-"Last-Translator: 김건환 <rjsghks2000@gmail.com>\n"
+"PO-Revision-Date: 2014-04-03 22:42+0000\n"
+"Last-Translator: MinSik CHO <Unknown>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-11-25 06:06+0000\n"
-"X-Generator: Launchpad (build 16831)\n"
+"X-Launchpad-Export-Date: 2014-04-04 07:09+0000\n"
+"X-Generator: Launchpad (build 16976)\n"
 "Language: ko\n"
 
 #: /src/schooltool/app/app.py:193
@@ -161,7 +161,7 @@ msgstr "이름"
 
 #: /src/schooltool/app/browser/app.py:923
 msgid "Logo"
-msgstr ""
+msgstr "로고"
 
 #: /src/schooltool/app/browser/app.py:951
 #: /src/schooltool/app/security.py:304
@@ -271,11 +271,11 @@ msgstr "탭"
 #: /src/schooltool/app/browser/flourish.zcml:339
 #: /src/schooltool/app/browser/flourish.zcml:350
 msgid "Name Sorting"
-msgstr ""
+msgstr "이름 정렬"
 
 #: /src/schooltool/app/browser/app.py:1562
 msgid "Sort by"
-msgstr ""
+msgstr "정렬 기준"
 
 #: /src/schooltool/app/browser/cal.py:111
 msgid "January"
@@ -1169,7 +1169,7 @@ msgstr "보여진 달력"
 #: /src/schooltool/app/browser/flourish.zcml:737
 #: /src/schooltool/app/browser/flourish.zcml:747
 msgid "School Logo"
-msgstr ""
+msgstr "학교 로고"
 
 #: /src/schooltool/app/browser/overlay.py:220
 msgid "Saved changes."
@@ -1694,7 +1694,7 @@ msgstr "$를위한 자원 예약 {제목}"
 #: /src/schooltool/app/browser/templates/event_booking.pt:17
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:5
 msgid "Event Details"
-msgstr ""
+msgstr "행사 정보"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:45
 msgid "UnBook"
@@ -1703,7 +1703,7 @@ msgstr "UnBook"
 #: /src/schooltool/app/browser/templates/event_booking.pt:54
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:55
 msgid "Available Resources"
-msgstr ""
+msgstr "사용 가능한 자원"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:60
 msgid "Book"
@@ -2090,11 +2090,11 @@ msgstr "현재 데이터베이스 생성"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:27
 msgid "Evolve?"
-msgstr ""
+msgstr "진화할까요?"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:40
 msgid "No, up to date"
-msgstr ""
+msgstr "최신 버전입니다."
 
 #: /src/schooltool/app/browser/templates/f_overlay_filter_widget.pt:2
 #: /src/schooltool/contact/browser/templates/f_contact_filter.pt:2
@@ -2106,7 +2106,7 @@ msgstr ""
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:3
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:36
 msgid "Search"
-msgstr ""
+msgstr "찾기"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
@@ -2116,7 +2116,7 @@ msgstr "데이터베이스"
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:11
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:16
 msgid "Database Size"
-msgstr ""
+msgstr "데이터베이스 크기"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:15
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:20
@@ -2757,7 +2757,7 @@ msgstr ""
 msgid "${group} group and the super user."
 msgstr ""
 
-#: /src/schooltool/app/security.zcml:71
+#: /src/schooltool/app/security.zcml:62
 msgid "SchoolTool application"
 msgstr ""
 
@@ -5960,7 +5960,7 @@ msgid ""
 "of sample data: ${link-to-sample-data-file}."
 msgstr ""
 
-#: /src/schooltool/export/templates/f_import_related.pt:24
+#: /src/schooltool/export/templates/f_import_related.pt:28
 msgid ""
 "We also provide a large data set: ${link-to-sample-data-file} -- 1000 "
 "students over multiple years -- for performance testing. This set can take a "
@@ -7645,6 +7645,8 @@ msgstr ""
 
 #: /src/schooltool/table/templates/batch.pt:5
 #: /src/schooltool/table/templates/batch.pt:7
+#: /src/schooltool/table/templates/f_batch.pt:8
+#: /src/schooltool/table/templates/f_batch.pt:10
 msgid "&laquo; Previous"
 msgstr ""
 
@@ -8667,3 +8669,9 @@ msgstr "학교 시간표"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "암호가 맞지 않습니다."
+
+#~ msgid "Calendar Preferences"
+#~ msgstr "캘린더 환경설정"
+
+#~ msgid "Edit site preferences"
+#~ msgstr "사이트 환경 설정 편집"

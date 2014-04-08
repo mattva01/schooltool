@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-11-25 06:04+0000\n"
-"X-Generator: Launchpad (build 16831)\n"
+"X-Launchpad-Export-Date: 2014-02-04 06:52+0000\n"
+"X-Generator: Launchpad (build 16916)\n"
 "Language: fr\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -2863,15 +2863,15 @@ msgstr "Gestionnaire de mot de passe : "
 msgid "No configuration file given"
 msgstr "Aucun fichier de configuration donné"
 
-#: /src/schooltool/app/main.py:575
+#: /src/schooltool/app/main.py:505
 msgid "Reading configuration from %s"
 msgstr "Lire la configuration depuis %s"
 
-#: /src/schooltool/app/main.py:574
+#: /src/schooltool/app/main.py:513
 msgid "No storage defined in the configuration file."
 msgstr "Aucun stockage n'est défini dans le fichier de configuration."
 
-#: /src/schooltool/app/main.py:672
+#: /src/schooltool/app/main.py:633
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2911,7 +2911,7 @@ msgstr "groupe ${group}."
 msgid "${group} group and the super user."
 msgstr "groupe ${group} et le super utilisateur."
 
-#: /src/schooltool/app/security.zcml:71
+#: /src/schooltool/app/security.zcml:62
 msgid "SchoolTool application"
 msgstr "Application SchoolTool"
 
@@ -4086,7 +4086,7 @@ msgstr "Ajouter un nouveau contact de ${person}"
 msgid "Change contact information for ${person}"
 msgstr "Modifier les détails du contact ${person}"
 
-#: /src/schooltool/contact/browser/contact.py:441
+#: /src/schooltool/contact/browser/contact.py:472
 msgid "Contact index"
 msgstr "Indexe du contact"
 
@@ -4424,7 +4424,7 @@ msgstr ""
 "Attribuer / supprimer des contacts d'un utilisateur, définir les relations "
 "de l'utilisateur avec un contact."
 
-#: /src/schooltool/contact/security.zcml:36
+#: /src/schooltool/contact/security.zcml:41
 msgid "Manage user's contacts"
 msgstr "gérer les contacts de l'utilisateur"
 
@@ -5024,7 +5024,7 @@ msgstr "Ce cours n'a aucun section"
 msgid "Edit responsible parties for this course"
 msgstr "Éditer les titulaires pour ce cours"
 
-#: /src/schooltool/course/browser/templates/f_course_view.pt:84
+#: /src/schooltool/course/browser/templates/f_course_view.pt:92
 msgid "These users can modify the course."
 msgstr "Ces utilisateurs peuvent modifier le cours"
 
@@ -5954,7 +5954,7 @@ msgstr "Export de l'Ecole"
 msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
 msgstr "SchoolTool ne peut pas lire ce fichier. Est-il au format .xls?"
 
-#: /src/schooltool/export/importer.py:69
+#: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
 msgstr "n'est pas un entier valide"
 
@@ -6002,15 +6002,15 @@ msgstr "La date de départ chevauche une autre période."
 msgid "end date overlaps another term"
 msgstr "La date de fin chevauche une autre période."
 
-#: /src/schooltool/export/importer.py:89
+#: /src/schooltool/export/importer.py:91
 msgid "has no days"
 msgstr "n'a pas de jours"
 
-#: /src/schooltool/export/importer.py:90
+#: /src/schooltool/export/importer.py:92
 msgid "has no day templates"
 msgstr "n'a pas de modèles de jour"
 
-#: /src/schooltool/export/importer.py:91
+#: /src/schooltool/export/importer.py:93
 msgid "is not a valid time range"
 msgstr "n'est pas une plage horaire valide"
 
@@ -6046,7 +6046,7 @@ msgstr "n'est pas une période valide dans donné l'année scolaire choisie"
 msgid "is not a valid course in the given school year"
 msgstr "n'est pas un cours valable pour l'année scolaire spécifiée"
 
-#: /src/schooltool/export/importer.py:100
+#: /src/schooltool/export/importer.py:102
 msgid "has no courses"
 msgstr "n'a pas de cours"
 
@@ -6283,7 +6283,7 @@ msgstr ""
 "fournissons un ensemble de données d'exemple ici : ${link-to-sample-data-"
 "file}."
 
-#: /src/schooltool/export/templates/f_import_related.pt:24
+#: /src/schooltool/export/templates/f_import_related.pt:28
 msgid ""
 "We also provide a large data set: ${link-to-sample-data-file} -- 1000 "
 "students over multiple years -- for performance testing. This set can take a "
@@ -7947,7 +7947,7 @@ msgstr "Supprimer cette image"
 msgid "server running"
 msgstr "le serveur exécute"
 
-#: /src/schooltool/skin/flourish/templates/main.pt:91
+#: /src/schooltool/skin/flourish/templates/main.pt:98
 msgid "Supporting exceptional people to change the world."
 msgstr "Soutient des personnes exceptionnelles pour changer le monde."
 
@@ -9170,3 +9170,53 @@ msgstr "Grilles-horaires de l'école"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Les mots de passe fournis ne sont pas identiques"
+
+#~ msgid ""
+#~ "CSV data <strong>must</strong> contain a user name and a full name. An "
+#~ "optional password <strong>may</strong> be included as well."
+#~ msgstr ""
+#~ "Les données CSV <strong>doivent</strong> comporter un nom d'utilisateur et "
+#~ "son nom complet. Le mot de passe <strong>peut</strong> aussi être ajouté."
+
+#~ msgid "Change contact information for ${first_name} ${last_name}"
+#~ msgstr "Modifier les détails du contact ${first_name} ${last_name}"
+
+#~ msgid "Edit site preferences"
+#~ msgstr "Modifier les préférence du site"
+
+#~ msgid "Photo (in JPEG format)"
+#~ msgstr "Photo(Au format JPEG)"
+
+#~ msgid "Verify password"
+#~ msgstr "Verifiez le mot de passe"
+
+#~ msgid "New photo"
+#~ msgstr "Nouvelle photo"
+
+#~ msgid "A small picture (about 48x48 pixels in JPEG format)"
+#~ msgstr "Une petite image (48x48 pixels au format JPEG)"
+
+#~ msgid "Clear photo"
+#~ msgstr "Effacer photo"
+
+#~ msgid "Check this to clear the photo"
+#~ msgstr "Verifier pour effacer la photo"
+
+#~ msgid "Edit person"
+#~ msgstr "Editer une personne"
+
+#~ msgid "Calendar Preferences"
+#~ msgstr "Préférences calendrier"
+
+#~ msgid ""
+#~ "\n"
+#~ "jjones, Jimmy Jones\n"
+#~ "jbjones, Jim Bob Jones, r2m45J\n"
+#~ "howard, Howard\n"
+#~ msgstr ""
+#~ "\n"
+#~ "ppaul, Poutz Paul\n"
+#~ "\n"
+#~ "dljean, De Lasalle Jean, r2m45j\n"
+#~ "\n"
+#~ "leon, Léon\n"

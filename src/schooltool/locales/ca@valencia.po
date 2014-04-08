@@ -1,40 +1,39 @@
-# Serbian translation for schooltool
-# Copyright (c) (c) 2006 Canonical Ltd, and Rosetta Contributors 2006
+# Catalan (Valencian) translation for schooltool
+# Copyright (c) 2013 Rosetta Contributors and Canonical Ltd 2013
 # This file is distributed under the same license as the schooltool package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2006.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-10-08 02:19+0300\n"
-"PO-Revision-Date: 2013-08-21 18:53+0000\n"
-"Last-Translator: Иван Старчевић <ivanstar61@gmail.com>\n"
-"Language-Team: Serbian <sr@li.org>\n"
+"PO-Revision-Date: 2013-08-21 15:00+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Catalan (Valencian) <ca@valencia@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-02-04 06:56+0000\n"
+"X-Launchpad-Export-Date: 2014-02-04 07:00+0000\n"
 "X-Generator: Launchpad (build 16916)\n"
-"Language: sr\n"
 
 #: /src/schooltool/app/app.py:193
 msgid "Your School"
-msgstr "Ваша школа"
+msgstr "La teua escola"
 
 #: /src/schooltool/app/browser/__init__.py:306
 #: /src/schooltool/app/browser/templates/index.pt:11
 #: /src/schooltool/person/browser/configure.zcml:26
 msgid "Persons"
-msgstr "Особе"
+msgstr "Persones"
 
 #: /src/schooltool/app/browser/__init__.py:311
 msgid "1 person"
-msgstr "једна особа"
+msgstr "1 persona"
 
 #: /src/schooltool/app/browser/__init__.py:313
 msgid "${number} persons"
-msgstr "${number} особа"
+msgstr "${number} persones"
 
 #: /src/schooltool/app/browser/app.py:262
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:37
@@ -63,7 +62,7 @@ msgstr "${number} особа"
 #: /src/schooltool/timetable/browser/templates/f_timetable_container.pt:5
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:16
 msgid "There are none."
-msgstr "Забрањен приступ."
+msgstr "No n'hi ha cap"
 
 #: /src/schooltool/app/browser/app.py:352
 #: /src/schooltool/app/browser/app.py:531
@@ -102,7 +101,7 @@ msgstr "Забрањен приступ."
 #: /src/schooltool/timetable/browser/flourish.zcml:503
 #: /src/schooltool/timetable/browser/timetable.py:342
 msgid "Add"
-msgstr "Додај"
+msgstr ""
 
 #: /src/schooltool/app/browser/app.py:276
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
@@ -110,16 +109,16 @@ msgstr "Додај"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:56
 msgid "Remove"
-msgstr "Уклони"
+msgstr ""
 
 #: /src/schooltool/app/browser/app.py:408
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:58
 msgid "Add all displayed"
-msgstr "Додај све приказане"
+msgstr "Afegueix tots els usuaris considerats"
 
 #: /src/schooltool/app/browser/app.py:677
 msgid "Username or password is incorrect"
-msgstr "Погрешно корисничко име или лозинка"
+msgstr "Usuari o contrasenya incorrecta"
 
 #: /src/schooltool/app/browser/app.py:434
 #: /src/schooltool/app/browser/flourish.zcml:54
@@ -127,62 +126,62 @@ msgstr "Погрешно корисничко име или лозинка"
 #: /src/schooltool/app/browser/templates/f_login.pt:72
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "Log in"
-msgstr "Пријави се"
+msgstr "Iniciar sessió"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
-msgstr "Одјави се"
+msgstr "Tancar sessió"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
-msgstr "Поставке календара"
+msgstr "Ajusts del calendari"
 
 #: /src/schooltool/app/browser/app.py:886
 #: /src/schooltool/app/browser/app.py:1384
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:46
 msgid "Submit"
-msgstr "Пошаљи"
+msgstr "Envia"
 
 #: /src/schooltool/app/browser/app.py:894
 #: /src/schooltool/app/browser/app.py:1393
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:47
 msgid "Cancel"
-msgstr "Откажи"
+msgstr "Cancel·la"
 
 #: /src/schooltool/app/browser/app.py:548
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/flourish.zcml:580
 msgid "School Name"
-msgstr "Назив школе"
+msgstr "Nom de l'escola"
 
 #: /src/schooltool/app/browser/app.py:557
 msgid "Name"
-msgstr "Назив"
+msgstr "Nom"
 
 #: /src/schooltool/app/browser/app.py:923
 msgid "Logo"
-msgstr "Логотип"
+msgstr "Logotip"
 
 #: /src/schooltool/app/browser/app.py:951
 #: /src/schooltool/app/security.py:304
 msgid "Leaders"
-msgstr "Вође"
+msgstr "Líders"
 
 #: /src/schooltool/app/browser/app.py:586
 msgid "Current leaders"
-msgstr "Тренутне вође"
+msgstr "Leaders actuals"
 
 #: /src/schooltool/app/browser/app.py:587
 msgid "Available leaders"
-msgstr "Доступне вође"
+msgstr "Líders disponibles"
 
 #: /src/schooltool/app/browser/app.py:598
 msgid "Current responsible parties"
-msgstr "Тренутно одговорне странке"
+msgstr "Responsables actuals"
 
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
-msgstr "Доступне одговорне странке"
+msgstr "Responsables actuals"
 
 #: /src/schooltool/app/browser/app.py:741
 #: /src/schooltool/app/browser/flourish.zcml:149
@@ -201,56 +200,56 @@ msgstr "Доступне одговорне странке"
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 msgid "Server"
-msgstr "Сервер"
+msgstr "Servidor"
 
 #: /src/schooltool/app/browser/app.py:1177
 #: /src/schooltool/app/browser/flourish.zcml:611
 msgid "Pack Database"
-msgstr "Запакуј у базу података"
+msgstr "Paquet de base de dades"
 
 #: /src/schooltool/app/browser/app.py:1198
 msgid "Database successfully packed."
-msgstr "База података је успешно запакована."
+msgstr "Paquet de base de dades correctament embalat"
 
 #: /src/schooltool/app/browser/app.py:1200
 msgid "There were errors while packing the database: ${error}"
-msgstr "Дошло је до грешки приликом паковања базе података: ${error}"
+msgstr "Hi va haver errors a l'embalatge de la base de dades: $ {error}"
 
 #: /src/schooltool/app/browser/app.py:1226
 #: /src/schooltool/skin/flourish/form.py:46
 #: /src/schooltool/timetable/browser/ttwizard.py:793
 msgid "Yes"
-msgstr "Da"
+msgstr ""
 
 #: /src/schooltool/app/browser/app.py:1228
 #: /src/schooltool/skin/flourish/form.py:47
 #: /src/schooltool/timetable/browser/ttwizard.py:794
 msgid "No"
-msgstr "Не"
+msgstr ""
 
 #: /src/schooltool/app/browser/app.py:1242
 msgid "${type} Error"
-msgstr "Грешка ${type}"
+msgstr "${type} Error"
 
 #: /src/schooltool/app/browser/app.py:962
 #: /src/schooltool/app/browser/templates/f_errors.pt:15
 msgid "Number of exceptions to show"
-msgstr "Број изузетака који ће бити приказани"
+msgstr "Nombre d'exepcions per mostrar"
 
 #: /src/schooltool/app/browser/app.py:965
 #: /src/schooltool/app/browser/templates/f_errors.pt:21
 msgid "Copy exceptions to the event log"
-msgstr "Копирај изузетке у  евиденцију догађаја"
+msgstr "Copieu excepcions al registre d'esdeveniments"
 
 #: /src/schooltool/app/browser/app.py:969
 #: /src/schooltool/app/browser/templates/f_errors.pt:27
 msgid "Ignored exception types"
-msgstr "Занемарени типови изузетака"
+msgstr "Tipus d'exepcions ignorades"
 
 #: /src/schooltool/app/browser/app.py:998
 #: /src/schooltool/app/browser/flourish.zcml:292
 msgid "Errors Settings"
-msgstr "Подешавања за грешке"
+msgstr "Configuració d'errors"
 
 #: /src/schooltool/app/browser/app.py:1409
 #: /src/schooltool/app/browser/configure.zcml:623
@@ -258,13 +257,13 @@ msgstr "Подешавања за грешке"
 #: /src/schooltool/app/browser/flourish.zcml:281
 #: /src/schooltool/devmode/devmode.pt:17
 msgid "Errors"
-msgstr "Greške"
+msgstr "Errors"
 
 #: /src/schooltool/app/browser/app.py:1419
 #: /src/schooltool/app/browser/flourish.zcml:292
 #: /src/schooltool/app/browser/flourish.zcml:301
 msgid "Tabs"
-msgstr "Језичци"
+msgstr "Pestanyes"
 
 #: /src/schooltool/app/browser/app.py:1553
 #: /src/schooltool/app/browser/app.py:1571
@@ -279,51 +278,51 @@ msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:111
 msgid "January"
-msgstr "јануар"
+msgstr "Gener"
 
 #: /src/schooltool/app/browser/cal.py:115
 msgid "February"
-msgstr "фебруар"
+msgstr "Febrer"
 
 #: /src/schooltool/app/browser/cal.py:116
 msgid "March"
-msgstr "март"
+msgstr "Març"
 
 #: /src/schooltool/app/browser/cal.py:117
 msgid "April"
-msgstr "април"
+msgstr "Abril"
 
 #: /src/schooltool/app/browser/cal.py:118
 msgid "May"
-msgstr "мај"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:119
 msgid "June"
-msgstr "јун"
+msgstr "Juny"
 
 #: /src/schooltool/app/browser/cal.py:120
 msgid "July"
-msgstr "јул"
+msgstr "Juliol"
 
 #: /src/schooltool/app/browser/cal.py:121
 msgid "August"
-msgstr "август"
+msgstr "Agost"
 
 #: /src/schooltool/app/browser/cal.py:122
 msgid "September"
-msgstr "септембар"
+msgstr "Setembre"
 
 #: /src/schooltool/app/browser/cal.py:123
 msgid "October"
-msgstr "октобар"
+msgstr "Octubre"
 
 #: /src/schooltool/app/browser/cal.py:124
 msgid "November"
-msgstr "новембар"
+msgstr "Novembre"
 
 #: /src/schooltool/app/browser/cal.py:125
 msgid "December"
-msgstr "децембар"
+msgstr "Desembre"
 
 #: /src/schooltool/app/browser/cal.py:132
 #: /src/schooltool/person/interfaces.py:176
@@ -334,7 +333,7 @@ msgstr "децембар"
 #: /src/schooltool/term/browser/templates/term_add.pt:54
 #: /src/schooltool/term/browser/templates/term_add.pt:80
 msgid "Monday"
-msgstr "понедељак"
+msgstr "Dilluns"
 
 #: /src/schooltool/app/browser/cal.py:129
 #: /src/schooltool/term/browser/templates/f_term.pt:31
@@ -344,7 +343,7 @@ msgstr "понедељак"
 #: /src/schooltool/term/browser/templates/term_add.pt:56
 #: /src/schooltool/term/browser/templates/term_add.pt:81
 msgid "Tuesday"
-msgstr "уторак"
+msgstr "Dimarts"
 
 #: /src/schooltool/app/browser/cal.py:130
 #: /src/schooltool/term/browser/templates/f_term.pt:32
@@ -354,7 +353,7 @@ msgstr "уторак"
 #: /src/schooltool/term/browser/templates/term_add.pt:58
 #: /src/schooltool/term/browser/templates/term_add.pt:82
 msgid "Wednesday"
-msgstr "среда"
+msgstr "Dimecres"
 
 #: /src/schooltool/app/browser/cal.py:131
 #: /src/schooltool/term/browser/templates/f_term.pt:33
@@ -364,7 +363,7 @@ msgstr "среда"
 #: /src/schooltool/term/browser/templates/term_add.pt:60
 #: /src/schooltool/term/browser/templates/term_add.pt:83
 msgid "Thursday"
-msgstr "четвртак"
+msgstr "Dijous"
 
 #: /src/schooltool/app/browser/cal.py:132
 #: /src/schooltool/term/browser/templates/f_term.pt:34
@@ -374,7 +373,7 @@ msgstr "четвртак"
 #: /src/schooltool/term/browser/templates/term_add.pt:62
 #: /src/schooltool/term/browser/templates/term_add.pt:84
 msgid "Friday"
-msgstr "петак"
+msgstr "Divendres"
 
 #: /src/schooltool/app/browser/cal.py:133
 #: /src/schooltool/person/interfaces.py:174
@@ -385,7 +384,7 @@ msgstr "петак"
 #: /src/schooltool/term/browser/templates/term_add.pt:64
 #: /src/schooltool/term/browser/templates/term_add.pt:85
 msgid "Saturday"
-msgstr "субота"
+msgstr "Dissabte"
 
 #: /src/schooltool/app/browser/cal.py:134
 #: /src/schooltool/person/interfaces.py:175
@@ -396,64 +395,64 @@ msgstr "субота"
 #: /src/schooltool/term/browser/templates/term_add.pt:66
 #: /src/schooltool/term/browser/templates/term_add.pt:86
 msgid "Sunday"
-msgstr "недеља"
+msgstr "Diumenge"
 
 #: /src/schooltool/app/browser/cal.py:137
 msgid "Mon"
-msgstr "пон"
+msgstr "Dl"
 
 #: /src/schooltool/app/browser/cal.py:138
 msgid "Tue"
-msgstr "уто"
+msgstr "Dt"
 
 #: /src/schooltool/app/browser/cal.py:139
 msgid "Wed"
-msgstr "сре"
+msgstr "Dc"
 
 #: /src/schooltool/app/browser/cal.py:140
 msgid "Thu"
-msgstr "чет"
+msgstr "Dj"
 
 #: /src/schooltool/app/browser/cal.py:141
 msgid "Fri"
-msgstr "пет"
+msgstr "Dv"
 
 #: /src/schooltool/app/browser/cal.py:142
 msgid "Sat"
-msgstr "суб"
+msgstr "Ds"
 
 #: /src/schooltool/app/browser/cal.py:143
 msgid "Sun"
-msgstr "нед"
+msgstr "Dg"
 
 #: /src/schooltool/app/browser/cal.py:379
 #: /src/schooltool/resource/browser/booking.py:195
 msgid "Unnamed Event"
-msgstr "Неименовани догађај"
+msgstr "Esdeveniment sense nom"
 
 #: /src/schooltool/app/browser/cal.py:818
 msgid "Next week"
-msgstr "Следећа недеља"
+msgstr "Propera setmana"
 
 #: /src/schooltool/app/browser/cal.py:819
 msgid "Current week"
-msgstr "Текућа недеља"
+msgstr "Setmana actual"
 
 #: /src/schooltool/app/browser/cal.py:820
 msgid "Previous week"
-msgstr "Претходна недеља"
+msgstr "Setmana prèvia"
 
 #: /src/schooltool/app/browser/cal.py:822
 msgid "Go to next week"
-msgstr "Иди на следећу седмицу"
+msgstr "Anar a la propera setmana"
 
 #: /src/schooltool/app/browser/cal.py:823
 msgid "Go to current week"
-msgstr "Иди на тренутну седмицу"
+msgstr "Anar a la setmana actual"
 
 #: /src/schooltool/app/browser/cal.py:824
 msgid "Go to previous week"
-msgstr "Иди на прошлу седмицу"
+msgstr "Anar a la setmana prèvia"
 
 #: /src/schooltool/app/browser/cal.py:890
 msgid "${month}, ${year} (week ${week})"
@@ -461,27 +460,27 @@ msgstr "${month}, ${year} (week ${week})"
 
 #: /src/schooltool/app/browser/cal.py:1059
 msgid "Next month"
-msgstr "Следећи месец"
+msgstr "Mes següent"
 
 #: /src/schooltool/app/browser/cal.py:1060
 msgid "Current month"
-msgstr "Текући месец"
+msgstr "Mes actual"
 
 #: /src/schooltool/app/browser/cal.py:1061
 msgid "Previous month"
-msgstr "Претходни месец"
+msgstr "Mes anterior"
 
 #: /src/schooltool/app/browser/cal.py:1063
 msgid "Go to next month"
-msgstr "idi na sledeći mesec"
+msgstr "Anar al proper mes"
 
 #: /src/schooltool/app/browser/cal.py:1064
 msgid "Go to current month"
-msgstr "Иди на тренутни месец"
+msgstr "Anar al mes actual"
 
 #: /src/schooltool/app/browser/cal.py:1065
 msgid "Go to previous month"
-msgstr "Иди на претходни месец"
+msgstr "Anar al mes anterior"
 
 #: /src/schooltool/app/browser/cal.py:1132
 msgid "${month}, ${year}"
@@ -489,59 +488,59 @@ msgstr "${month}, ${year}"
 
 #: /src/schooltool/app/browser/cal.py:1154
 msgid "Week ${week_no}"
-msgstr "Седмица ${week_no}"
+msgstr "Setmana ${week_no}"
 
 #: /src/schooltool/app/browser/cal.py:1111
 msgid "Next year"
-msgstr "Следећа година"
+msgstr "Any següent"
 
 #: /src/schooltool/app/browser/cal.py:1112
 msgid "Current year"
-msgstr "Текућа година"
+msgstr "Any actual"
 
 #: /src/schooltool/app/browser/cal.py:1113
 msgid "Previous year"
-msgstr "Претходна година"
+msgstr "Any anterior"
 
 #: /src/schooltool/app/browser/cal.py:1115
 msgid "Go to next year"
-msgstr "Иди на следећу годину"
+msgstr "Anar a l'any següent"
 
 #: /src/schooltool/app/browser/cal.py:1116
 msgid "Go to current year"
-msgstr "Иди на тренутну годину"
+msgstr "Anar a l'any actual"
 
 #: /src/schooltool/app/browser/cal.py:1117
 msgid "Go to previous year"
-msgstr "Иди на претходну годину"
+msgstr "Anar a l'any anerior"
 
 #: /src/schooltool/app/browser/cal.py:1183
 msgid "The next day"
-msgstr "Следећи дан"
+msgstr "El proper dia"
 
 #: /src/schooltool/app/browser/cal.py:1184
 msgid "Today"
-msgstr "Данас"
+msgstr "Hui"
 
 #: /src/schooltool/app/browser/cal.py:1185
 msgid "The previous day"
-msgstr "Претходни дан"
+msgstr "El dia anterior"
 
 #: /src/schooltool/app/browser/cal.py:1187
 msgid "Go to the next day"
-msgstr "idi na sledeći dan"
+msgstr "Anar al dia següent"
 
 #: /src/schooltool/app/browser/cal.py:1188
 msgid "Go to today"
-msgstr "idi na danas"
+msgstr "Anar a hui"
 
 #: /src/schooltool/app/browser/cal.py:1189
 msgid "Go to the previous day"
-msgstr "Иди на претходни дан"
+msgstr "Anar al dia anterior"
 
 #: /src/schooltool/app/browser/cal.py:1429
 msgid "Add new event starting at ${title}"
-msgstr "Додај нови догађај са почетком у ${title}"
+msgstr "Afegeix un nou esdeveniment començat a ${title}"
 
 #: /src/schooltool/app/browser/cal.py:1641
 #: /src/schooltool/app/browser/cal.py:2276
@@ -583,7 +582,7 @@ msgstr "Додај нови догађај са почетком у ${title}"
 #: /src/schooltool/timetable/browser/calendar.py:120
 #: /src/schooltool/timetable/browser/ttwizard.py:258
 msgid "Title"
-msgstr "Наслов"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1644
 #: /src/schooltool/app/browser/templates/cal_monthly.pt:38
@@ -596,7 +595,7 @@ msgstr "Наслов"
 #: /src/schooltool/calendar/browser/templates/calendar_weekly.pt:40
 #: /src/schooltool/timetable/browser/calendar.py:123
 msgid "All day"
-msgstr "Цео дан"
+msgstr "Tot el dia"
 
 #: /src/schooltool/app/browser/cal.py:1647
 #: /src/schooltool/basicperson/browser/demographics.py:311
@@ -605,29 +604,29 @@ msgstr "Цео дан"
 #: /src/schooltool/timetable/browser/templates/f_specialday_select.pt:21
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:28
 msgid "Date"
-msgstr "Датум"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1650
 #: /src/schooltool/app/browser/templates/f_errors.pt:42
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:10
 #: /src/schooltool/timetable/browser/calendar.py:129
 msgid "Time"
-msgstr "Време"
+msgstr "Marca horària"
 
 #: /src/schooltool/app/browser/cal.py:1651
 #: /src/schooltool/timetable/browser/calendar.py:130
 msgid "Start time in 24h format"
-msgstr "Започети време 24h формату"
+msgstr "Hora d'inici en format de 24 h"
 
 #: /src/schooltool/app/browser/cal.py:1655
 #: /src/schooltool/timetable/browser/calendar.py:134
 msgid "Duration"
-msgstr "Трајање"
+msgstr "Duració"
 
 #: /src/schooltool/app/browser/cal.py:1660
 #: /src/schooltool/timetable/browser/calendar.py:139
 msgid "Duration Type"
-msgstr "Врста трајања"
+msgstr "Tipus de duració"
 
 #: /src/schooltool/app/browser/cal.py:1663
 #: /src/schooltool/app/browser/templates/event_add.pt:168
@@ -636,7 +635,7 @@ msgstr "Врста трајања"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:117
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:112
 msgid "Minutes"
-msgstr "минута"
+msgstr "Minuts"
 
 #: /src/schooltool/app/browser/cal.py:1664
 #: /src/schooltool/app/browser/templates/event_add.pt:171
@@ -645,7 +644,7 @@ msgstr "минута"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:120
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:115
 msgid "Hours"
-msgstr "сати"
+msgstr "Hores"
 
 #: /src/schooltool/app/browser/cal.py:1665
 #: /src/schooltool/app/browser/templates/event_add.pt:175
@@ -654,7 +653,7 @@ msgstr "сати"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:124
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:119
 msgid "Days"
-msgstr "Дана"
+msgstr "Dies"
 
 #: /src/schooltool/app/browser/cal.py:1668
 #: /src/schooltool/app/browser/templates/event.pt:48
@@ -668,7 +667,7 @@ msgstr "Дана"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:43
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:49
 msgid "Location"
-msgstr "Локација"
+msgstr "Ubicació"
 
 #: /src/schooltool/app/browser/cal.py:1672
 #: /src/schooltool/app/browser/templates/f_database.pt:19
@@ -687,74 +686,74 @@ msgstr "Локација"
 #: /src/schooltool/timetable/browser/calendar.py:75
 #: /src/schooltool/timetable/browser/calendar.py:151
 msgid "Description"
-msgstr "Опис"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1677
 msgid "Recurring"
-msgstr "Понављање"
+msgstr "Periòdic"
 
 #: /src/schooltool/app/browser/cal.py:1681
 msgid "Recurs every"
-msgstr "Понавља се сваког"
+msgstr "Es repeteix cada"
 
 #: /src/schooltool/app/browser/cal.py:1684
 msgid "Day"
-msgstr "дан"
+msgstr "Dia"
 
 #: /src/schooltool/app/browser/cal.py:1685
 msgid "Week"
-msgstr "Седмица"
+msgstr "Setmana"
 
 #: /src/schooltool/app/browser/cal.py:1686
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:119
 #: /src/schooltool/calendar/browser/templates/calendar_jump_to.pt:9
 msgid "Month"
-msgstr "месец"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:1687
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:132
 #: /src/schooltool/calendar/browser/templates/calendar_jump_to.pt:22
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:13
 msgid "Year"
-msgstr "година"
+msgstr "Any"
 
 #: /src/schooltool/app/browser/cal.py:1690
 msgid "Repeat every"
-msgstr "Понови сваког"
+msgstr "Repeteix cada"
 
 #: /src/schooltool/app/browser/cal.py:1695
 msgid "Range"
-msgstr "Опсег"
+msgstr "Rang"
 
 #: /src/schooltool/app/browser/cal.py:1698
 msgid "Count"
-msgstr "Број"
+msgstr "Compta"
 
 #: /src/schooltool/app/browser/cal.py:1699
 msgid "Until"
-msgstr "До"
+msgstr "Fins a"
 
 #: /src/schooltool/app/browser/cal.py:1700
 msgid "forever"
-msgstr "заувек"
+msgstr "per sempre"
 
 #: /src/schooltool/app/browser/cal.py:1703
 msgid "Number of events"
-msgstr "Број догађаја"
+msgstr "Número d'esdeveniments"
 
 #: /src/schooltool/app/browser/cal.py:1707
 #: /src/schooltool/app/browser/templates/event_add.pt:303
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:309
 msgid "Repeat until"
-msgstr "Понављати до"
+msgstr "Reeteix fins a"
 
 #: /src/schooltool/app/browser/cal.py:1711
 msgid "Weekdays"
-msgstr "Радним данима"
+msgstr "Dies de la setmana"
 
 #: /src/schooltool/app/browser/cal.py:1714
 msgid "Weekday"
-msgstr "радни дани"
+msgstr "Dies de la setmana"
 
 #: /src/schooltool/app/browser/cal.py:1718
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
@@ -762,77 +761,77 @@ msgstr "радни дани"
 #: /src/schooltool/calendar/browser/calendar.py:290
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:261
 msgid "Monthly"
-msgstr "Месечно"
+msgstr "Cada mes"
 
 #: /src/schooltool/app/browser/cal.py:1726
 msgid "Exception dates"
-msgstr "Изувев датумима"
+msgstr "Dates excepcionals"
 
 #: /src/schooltool/app/browser/cal.py:1805
 msgid "same weekday"
-msgstr "исти радни дан"
+msgstr "alguns dies"
 
 #: /src/schooltool/app/browser/cal.py:1810
 msgid "1st"
-msgstr "први"
+msgstr "1r"
 
 #: /src/schooltool/app/browser/cal.py:1810
 msgid "2nd"
-msgstr "други"
+msgstr "2n"
 
 #: /src/schooltool/app/browser/cal.py:1810
 msgid "3rd"
-msgstr "трећи"
+msgstr "3r"
 
 #: /src/schooltool/app/browser/cal.py:1810
 msgid "4th"
-msgstr "четврти"
+msgstr "4t"
 
 #: /src/schooltool/app/browser/cal.py:1811
 msgid "5th"
-msgstr "пети"
+msgstr "5è"
 
 #: /src/schooltool/app/browser/cal.py:1825
 msgid "last weekday"
-msgstr "последњи радни дан"
+msgstr "última setmana"
 
 #: /src/schooltool/app/browser/cal.py:1912
 msgid "Last ${weekday}"
-msgstr "Poslednji ${weekday}"
+msgstr "Última ${weekday}"
 
 #: /src/schooltool/app/browser/cal.py:1858
 #: /src/schooltool/app/browser/cal.py:2165
 msgid "An error occurred."
-msgstr "Дошло еј до грешке"
+msgstr "S'ha produït un error."
 
 #: /src/schooltool/app/browser/cal.py:1891
 msgid "Invalid time"
-msgstr "Неисправно време"
+msgstr "Hora no vàlida"
 
 #: /src/schooltool/app/browser/cal.py:1912
 msgid "End date is earlier than start date"
-msgstr "Датум завршетка је пре датума почетка"
+msgstr "La data de fi és anterior a la data d'inici"
 
 #: /src/schooltool/app/browser/cal.py:1921
 msgid "Invalid date.  Please specify YYYY-MM-DD, one per line."
-msgstr "Погрешан датум. Молимо наведите ГГГГ-ММ-ДД, по један у линији."
+msgstr "Data invàlida. Per favor especifica YYYY-MM-DD, un per línia"
 
 #: /src/schooltool/app/browser/cal.py:1969
 msgid "Add event"
-msgstr "Додај догађај"
+msgstr "Afegeix esdeveniment"
 
 #: /src/schooltool/app/browser/cal.py:2040
 msgid "Edit event"
-msgstr "Измени догађај"
+msgstr "Edita esdeveniment"
 
 #: /src/schooltool/app/browser/cal.py:2041
 msgid "Update"
-msgstr "Ажурирај"
+msgstr "Actualitza"
 
 #: /src/schooltool/app/browser/cal.py:2270
 #: /src/schooltool/skin/form.py:76
 msgid "Updated on ${date_time}"
-msgstr "Izmenjeno ${date_time}"
+msgstr "Actualitzat ${date_time}"
 
 #: /src/schooltool/app/browser/cal.py:2280
 #: /src/schooltool/app/browser/overlay.py:274
@@ -840,11 +839,11 @@ msgstr "Izmenjeno ${date_time}"
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:374
 #: /src/schooltool/resource/types.py:107
 msgid "Type"
-msgstr "Тип"
+msgstr ""
 
 #: /src/schooltool/app/browser/cal.py:2283
 msgid "Booked by others"
-msgstr ""
+msgstr "Bloquejat per altres"
 
 #: /src/schooltool/app/browser/configure.zcml:173
 #: /src/schooltool/app/browser/flourish.zcml:196
@@ -866,40 +865,40 @@ msgstr ""
 #: /src/schooltool/timetable/browser/flourish.zcml:92
 #: /src/schooltool/timetable/browser/flourish.zcml:471
 msgid "Actions"
-msgstr "Наредбе"
+msgstr "Accions"
 
 #: /src/schooltool/app/browser/configure.zcml:287
 msgid "View Calendar"
-msgstr "Погледај календар"
+msgstr "Mirar el calendari"
 
 #: /src/schooltool/app/browser/configure.zcml:299
 #: /src/schooltool/calendar/browser/flourish.zcml:157
 msgid "New Event"
-msgstr "Нови догађај"
+msgstr "Nou esdeveniment"
 
 #: /src/schooltool/app/browser/configure.zcml:310
 msgid "Open in iCal"
-msgstr "Отвори у iCal"
+msgstr "Obrir en iCal"
 
 #: /src/schooltool/app/browser/configure.zcml:322
 msgid "Edit Leaders"
-msgstr "Измени вође"
+msgstr "Editar Líders"
 
 #: /src/schooltool/app/browser/configure.zcml:333
 msgid "Change Site Preferences"
-msgstr "Измени подешавања о сајту"
+msgstr "Canviar preferències del lloc"
 
 #: /src/schooltool/app/browser/configure.zcml:461
 msgid "Add Event"
-msgstr "dodaj događaj"
+msgstr "Afegeix esdeveniment"
 
 #: /src/schooltool/app/browser/configure.zcml:480
 msgid "Edit Event"
-msgstr "Izmeni događaj"
+msgstr "Edita l'esdeveniment"
 
 #: /src/schooltool/app/browser/configure.zcml:522
 msgid "ZODB Control"
-msgstr "Управљање ZODB"
+msgstr "ZODB Control"
 
 #: /src/schooltool/app/browser/configure.zcml:514
 #: /src/schooltool/app/browser/flourish.zcml:22
@@ -913,79 +912,79 @@ msgstr "Управљање ZODB"
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:43
 #: /src/schooltool/resource/browser/flourish.zcml:223
 msgid "Calendar"
-msgstr "Календар"
+msgstr ""
 
 #: /src/schooltool/app/browser/configure.zcml:545
 #: /src/schooltool/app/browser/templates/manage_menu.pt:3
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Manage"
-msgstr "Уреди"
+msgstr "Gestionar"
 
 #: /src/schooltool/app/browser/configure.zcml:557
 msgid "Application Control"
-msgstr "Контроле програма"
+msgstr "Control de l'aplicació"
 
 #: /src/schooltool/app/browser/configure.zcml:569
 #: /src/schooltool/app/browser/flourish.zcml:475
 #: /src/schooltool/app/browser/flourish.zcml:501
 msgid "Translation Domains"
-msgstr "Области за превођење"
+msgstr "Traducció de domini"
 
 #: /src/schooltool/app/browser/configure.zcml:580
 #: /src/schooltool/app/browser/flourish.zcml:483
 msgid "Generations"
-msgstr "Генерације"
+msgstr "Generacions"
 
 #: /src/schooltool/app/browser/configure.zcml:686
 msgid "Configure"
-msgstr "Подеси"
+msgstr "Configura"
 
 #: /src/schooltool/app/browser/configure.zcml:693
 msgid "Error List"
-msgstr "Lista grešaka"
+msgstr "Llista d'errors"
 
 #: /src/schooltool/app/browser/csvimport.py:92
 #: /src/schooltool/app/browser/timetablecsvimport.py:129
 #: /src/schooltool/export/importer.py:1262
 msgid "No data provided"
-msgstr "Nisu dobijeni podaci"
+msgstr "Cap dada proveïda"
 
 #: /src/schooltool/app/browser/csvimport.py:99
 msgid "Could not convert data to Unicode (incorrect charset?)."
-msgstr "Није могуће податке претворити у Уникод (погрешан скуп знакова?)."
+msgstr "No pot convertir dades a Unicode (caracter incorrecte?)"
 
 #: /src/schooltool/app/browser/csvimport.py:109
 msgid "CSV file imported successfully."
-msgstr "CSV datoteka uspešno učitana."
+msgstr "CSV arxiu importat satisfactòriament"
 
 #: /src/schooltool/app/browser/csvimport.py:111
 msgid "Failed to import CSV file"
-msgstr "Неуспешно учитавање CSV датотеке"
+msgstr "No s'ha pogut importar l'arxiu CSV"
 
 #: /src/schooltool/app/browser/csvimport.py:119
 msgid "CSV text imported successfully."
-msgstr "CSV tekst uspešnp učitan."
+msgstr "CSV text importat satisfactòriament."
 
 #: /src/schooltool/app/browser/csvimport.py:121
 msgid "Failed to import CSV text"
-msgstr "Neuspešno učitavanje CSV teksta"
+msgstr "No s'ha pogut importar el text CSV"
 
 #: /src/schooltool/app/browser/csvimport.py:148
 msgid "No charset specified"
-msgstr "Није одређена листа карактера"
+msgstr "Caracter no especificat"
 
 #: /src/schooltool/app/browser/csvimport.py:153
 msgid "Unknown charset"
-msgstr "Nepoznat karakter set"
+msgstr "Caracter desconegut"
 
 #: /src/schooltool/app/browser/csvimport.py:209
 msgid "Error in CSV data, line ${line_no}"
-msgstr "Грешка у CSV подацима, линија ${line_no}"
+msgstr "Error en dada CSV, linea ${line_no}"
 
 #: /src/schooltool/app/browser/csvimport.py:213
 #: /src/schooltool/app/browser/timetablecsvimport.py:502
 msgid "Conversion to unicode failed in line ${line_no}"
-msgstr "Превођење у уникод није успело у линији ${line_no}"
+msgstr "Conversió a unicode fallada en línia ${line_no}"
 
 #: /src/schooltool/app/browser/flourish.zcml:10
 #: /src/schooltool/app/browser/flourish.zcml:303
@@ -1013,13 +1012,13 @@ msgstr "Превођење у уникод није успело у линији
 #: /src/schooltool/skin/templates/table_container.pt:11
 #: /src/schooltool/timetable/browser/templates/confirm_schedule_delete.pt:10
 msgid "SchoolTool"
-msgstr "Школска табла"
+msgstr "SchoolTool"
 
 #: /src/schooltool/app/browser/flourish.zcml:54
 #: /src/schooltool/app/browser/flourish.zcml:63
 #: /src/schooltool/skin/templates/view_macros.pt:50
 msgid "Log In"
-msgstr "Пријави ме"
+msgstr "Accedeix"
 
 #: /src/schooltool/app/browser/flourish.zcml:197
 #: /src/schooltool/app/browser/templates/f_errors.pt:3
@@ -1027,11 +1026,11 @@ msgstr "Пријави ме"
 #: /src/schooltool/email/browser/configure.zcml:80
 #: /src/schooltool/email/browser/email.py:204
 msgid "Settings"
-msgstr "Подешавање"
+msgstr "Configuració"
 
 #: /src/schooltool/app/browser/flourish.zcml:218
 msgid "Calendar Settings"
-msgstr "Поставке календара"
+msgstr "Configuració del calendari"
 
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/templates/f_errors.pt:7
@@ -1089,54 +1088,54 @@ msgstr "Поставке календара"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:60
 #: /src/schooltool/timetable/browser/templates/f_timetable.pt:31
 msgid "Edit"
-msgstr "Izmeni"
+msgstr ""
 
 #: /src/schooltool/app/browser/flourish.zcml:272
 msgid "Error"
-msgstr "Грешка"
+msgstr "Error"
 
 #: /src/schooltool/app/browser/flourish.zcml:352
 msgid "About"
-msgstr "О програму"
+msgstr "Quant a"
 
 #: /src/schooltool/app/browser/flourish.zcml:313
 msgid "More Information"
-msgstr "Још података"
+msgstr "Més informació"
 
 #: /src/schooltool/app/browser/flourish.zcml:322
 #: /src/schooltool/app/browser/templates/about.pt:27
 msgid "Website"
-msgstr "Web stranica"
+msgstr "Lloc web"
 
 #: /src/schooltool/app/browser/flourish.zcml:331
 #: /src/schooltool/app/browser/templates/about.pt:28
 msgid "Launchpad project page"
-msgstr "Страница пројекта Launchpad"
+msgstr "Pàgina del projecte al Launchpad"
 
 #: /src/schooltool/app/browser/flourish.zcml:341
 #: /src/schooltool/app/browser/templates/about.pt:29
 msgid "Mailing list"
-msgstr "Дописна листа"
+msgstr "Llista de correu"
 
 #: /src/schooltool/app/browser/flourish.zcml:351
 msgid "IRC channel"
-msgstr ""
+msgstr "Canal d'IRC"
 
 #: /src/schooltool/app/browser/flourish.zcml:393
 #: /src/schooltool/export/flourish.zcml:49
 msgid "School"
-msgstr "Школа"
+msgstr "Escola"
 
 #: /src/schooltool/app/browser/flourish.zcml:410
 msgid "Customize"
-msgstr "Прилагоди"
+msgstr "Personalitza"
 
 #: /src/schooltool/app/browser/flourish.zcml:449
 #: /src/schooltool/course/browser/templates/f_course_view.pt:75
 #: /src/schooltool/group/browser/templates/f_group_view.pt:90
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:75
 msgid "Responsible parties"
-msgstr ""
+msgstr "Parts sensibles"
 
 #: /src/schooltool/app/browser/flourish.zcml:581
 #: /src/schooltool/app/browser/templates/event.pt:33
@@ -1152,76 +1151,76 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:25
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:34
 msgid "Details"
-msgstr "Детаљи"
+msgstr ""
 
 #: /src/schooltool/app/browser/flourish.zcml:608
 msgid "Information"
-msgstr "Обавештење"
+msgstr "Informació"
 
 #: /src/schooltool/app/browser/flourish.zcml:510
 msgid "Database generations"
-msgstr ""
+msgstr "Generacions de base de dades"
 
 #: /src/schooltool/app/browser/flourish.zcml:607
 msgid "Shown Calendars"
-msgstr ""
+msgstr "Mostra calendaris"
 
 #: /src/schooltool/app/browser/flourish.zcml:737
 #: /src/schooltool/app/browser/flourish.zcml:747
 msgid "School Logo"
-msgstr ""
+msgstr "Logo de l'escola"
 
 #: /src/schooltool/app/browser/overlay.py:220
 msgid "Saved changes."
-msgstr "Измене сачуване."
+msgstr "Canvis guardats"
 
 #: /src/schooltool/app/browser/overlay.py:286
 msgid "Selected calendars"
-msgstr "Одабрани календари"
+msgstr "Selecciona calendaris"
 
 #: /src/schooltool/app/browser/overlay.py:287
 msgid "Available calendars"
-msgstr "Доступни календари"
+msgstr "Calendaris disponibles"
 
 #: /src/schooltool/app/browser/overlay.py:326
 msgid "School Calendar"
-msgstr "Школски календар"
+msgstr "Calendari de l'escola"
 
 #: /src/schooltool/app/browser/pdfcal.py:52
 msgid "Daily calendar for %s"
-msgstr "Дневни календар за %s"
+msgstr "Calendari diari per a %s"
 
 #: /src/schooltool/app/browser/pdfcal.py:95
 msgid "recurrent"
-msgstr "понавља"
+msgstr "recurrent"
 
 #: /src/schooltool/app/browser/pdfcal.py:99
 msgid "from the calendar of ${calendar_owner}"
-msgstr "из календара ${calendar_owner}"
+msgstr "des del calendari de ${calendar_owner}"
 
 #: /src/schooltool/app/browser/pdfcal.py:115
 msgid "all day"
-msgstr "цео дан"
+msgstr "tot el dia"
 
 #: /src/schooltool/app/browser/pdfcal.py:177
 msgid "Weekly calendar for %s"
-msgstr "Недељни календар за %s"
+msgstr "Calendari setmanal %s"
 
 #: /src/schooltool/app/browser/pdfcal.py:186
 msgid "Week %d (%s - %s), %d"
-msgstr "Седмица %d (%s - %s), %d"
+msgstr "Setmana %d (%s - %s), %d"
 
 #: /src/schooltool/app/browser/pdfcal.py:197
 msgid "Monthly calendar for %s"
-msgstr "Месечни календар за %s"
+msgstr "Calendari mensual per a %s"
 
 #: /src/schooltool/app/browser/report.py:57
 msgid "PDF support is disabled.  It can be enabled by your administrator."
-msgstr "PDF није омогућена. Ваш администратор је може омогућити."
+msgstr "PDF no està suportat. Pot ésser hablitat pel teu administrador."
 
 #: /src/schooltool/app/browser/templates/about.pt:5
 msgid "About SchoolTool"
-msgstr "О SchoolTool"
+msgstr "Sobre SchoolTool"
 
 #: /src/schooltool/app/browser/templates/about.pt:10
 #: /src/schooltool/app/browser/templates/f_about.pt:2
@@ -1232,10 +1231,11 @@ msgid ""
 "well as a framework for building customized applications and configurations "
 "for individual schools or states."
 msgstr ""
-"SchoolTool је Бесплатан Софтвер за школе. Циљ пројекта је креирање "
-"једноставног ђачког информативног система или менаџмент Информативни систем "
-"за Основне И Средње школе, Као и оквир за креирање прилагодљивих апликација "
-"за школе или државе."
+"SchoolTool és un software d'administració lliure per a escoles al voltant "
+"del món. Els objectius del projecte han estat crear un sistema d'informació "
+"disponible per a les escoles de primària i secundària, així com un marc per "
+"a la creació d'aplicacions personalitzades i configuracions per a les "
+"escoles o els estats individuals."
 
 #: /src/schooltool/app/browser/templates/about.pt:16
 #: /src/schooltool/app/browser/templates/f_about.pt:10
@@ -1244,9 +1244,9 @@ msgid ""
 "href=\"http://python.org\">Python</a> using the <a "
 "href=\"http://zope.org\">Zope 3</a> framework."
 msgstr ""
-"SchoolTool је изграђен употпуности са софтвером отвореног кода , писан у <a "
-"href=\"http://python.org\">Python</a> користећи <a "
-"href=\"http://zope.org\">Zope 3</a> фремјворк."
+"SchoolTool ha estat construït al 100% codi obert, escrit en <a "
+"href=\"http://python.org\">Python</a> utilitzant el <a "
+"href=\"http://zope.org\">Zope 3</a> entorn de desenvolupament."
 
 #: /src/schooltool/app/browser/templates/about.pt:20
 #: /src/schooltool/app/browser/templates/f_about.pt:15
@@ -1254,162 +1254,164 @@ msgid ""
 "SchoolTool is licensed under the <a href=\"http://www.gnu.org/licenses/gpl-"
 "2.0.html\">GNU General Public License, Version 2</a>."
 msgstr ""
-"SchoolTool је лиценциран под <a href=\"http://www.gnu.org/licenses/gpl-"
-"2.0.html\">GNU General Public License, Version 2</a>."
+"SchoolTool està sota llicència <a href=\"http://www.gnu.org/licenses/gpl-"
+"2.0.html\">GNU General Public License, Versió 2</a>."
 
 #: /src/schooltool/app/browser/templates/about.pt:24
 msgid "For more information:"
-msgstr "За више информација"
+msgstr "Per a més informació"
 
 #: /src/schooltool/app/browser/templates/about.pt:30
 msgid "IRC channel: #schooltool on freenode.net"
-msgstr "ИРЦ канал: #schooltool на freenode.net"
+msgstr "Canal d'IRC: #schooltool en freenode.net"
 
 #: /src/schooltool/app/browser/templates/about.pt:35
 #: /src/schooltool/app/browser/templates/f_about.pt:21
 msgid "Founder and funder:"
-msgstr "Оснивач и финансијер:"
+msgstr "Fundador i finançador"
 
 #: /src/schooltool/app/browser/templates/about.pt:38
 #: /src/schooltool/app/browser/templates/f_about.pt:25
 msgid "Project Manager:"
-msgstr "Руководиоц Пројекта"
+msgstr "Director del projecte"
 
 #: /src/schooltool/app/browser/templates/about.pt:41
 #: /src/schooltool/app/browser/templates/f_about.pt:29
 msgid "Lead Developer:"
-msgstr "Главни Девелопер"
+msgstr "Desenvolupador principal"
 
 #: /src/schooltool/app/browser/templates/about.pt:44
 #: /src/schooltool/app/browser/templates/f_about.pt:33
 msgid "Core Developers:"
-msgstr ""
+msgstr "Desenvolupadors"
 
 #: /src/schooltool/app/browser/templates/about.pt:47
 #: /src/schooltool/app/browser/templates/f_about.pt:37
 msgid "Release Manager:"
-msgstr ""
+msgstr "Encarregat d'alliberament"
 
 #: /src/schooltool/app/browser/templates/about.pt:50
 msgid "Contributors:"
-msgstr "Сарадници:"
+msgstr "Col·laboradors:"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:4
 #: /src/schooltool/app/browser/templates/application_preferences.pt:13
 msgid "Change site preferences"
-msgstr "Промени подешавања странице"
+msgstr "Canvia les preferències del lloc"
 
 #: /src/schooltool/app/browser/templates/application_preferences.pt:19
 msgid "General preferences"
-msgstr "Главна подешавања"
+msgstr "Preferències generals"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:21
 msgid "Events for"
-msgstr "Догађаји за"
+msgstr "Esdeveniments per a"
 
 #. Default: "This is an Atom formatted XML site feed. It is intended to be viewed in a Newsreader or syndicated to another site. Please visit"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:42
 msgid "atom_description"
-msgstr "атом_опис"
+msgstr ""
+"Es tracta d'un format Atom feed del lloc XML. Està dissenyat per a ser vist "
+"en un lector de notícies o sindicat a un altre lloc. Per favor, visiteu-lo."
 
 #. Default: "Atom Enabled"
 #: /src/schooltool/app/browser/templates/cal_atom.pt:46
 msgid "atom_enabled"
-msgstr "атом_омогућен"
+msgstr "Atom habilitat"
 
 #. Default: "for more info."
 #: /src/schooltool/app/browser/templates/cal_atom.pt:49
 msgid "atom_more_info"
-msgstr "атом_више_информација"
+msgstr "Per a més informació"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "Validate my Atom feed"
-msgstr "Потврдити мој Атом феед"
+msgstr "Valida el meu feed Atom"
 
 #: /src/schooltool/app/browser/templates/cal_atom.pt:56
 msgid "[Valid Atom]"
-msgstr "[Исправан Атом]"
+msgstr "Atom validat"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 msgid "View daily calendar"
-msgstr "Преглед дневног календара"
+msgstr "Mira calendari diari"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:24
 #: /src/schooltool/calendar/browser/calendar.py:288
 msgid "Daily"
-msgstr "Дневно"
+msgstr "Diàriament"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 msgid "View weekly calendar"
-msgstr "Преглед седмичног календара"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:30
 #: /src/schooltool/app/browser/templates/event_add.pt:235
 #: /src/schooltool/calendar/browser/calendar.py:289
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:240
 msgid "Weekly"
-msgstr "седмични"
+msgstr "Setmanalment"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:36
 msgid "View monthly calendar"
-msgstr "Преглед месечног календара"
+msgstr "Mirar el calendari mensual"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 msgid "View yearly calendar"
-msgstr "Преглед годишњег календара"
+msgstr "Mirar el calendari anyal"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:42
 #: /src/schooltool/calendar/browser/calendar.py:291
 msgid "Yearly"
-msgstr "Годишње"
+msgstr "Anual"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:55
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:91
 msgid "Calendar for ${title} - ${calendar_title}"
-msgstr "Календар за ${title} — ${calendar_title}"
+msgstr "Calendari per a ${title} - ${calendar_title}"
 
 #: /src/schooltool/app/browser/templates/calendar_macros.pt:115
 msgid "Jump To ..."
-msgstr "Пређи на..."
+msgstr "Anar a..."
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:4
 msgid "Calendars"
-msgstr "Календари"
+msgstr "Calendaris"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:13
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:12
 msgid "My Calendar"
-msgstr "Мој календар"
+msgstr "El meu calendari"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:31
 #: /src/schooltool/basicperson/browser/person.py:553
 msgid "Apply"
-msgstr "Примени"
+msgstr "Aplicar"
 
 #: /src/schooltool/app/browser/templates/calendar_overlay.pt:33
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:62
 msgid "More..."
-msgstr "Још..."
+msgstr "Més..."
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:4
 msgid "Select calendars to display"
-msgstr "Изаберите календаре за приказивање"
+msgstr "Selecciona el calendari per mostrar"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:15
 msgid "Select additional calendars to display"
-msgstr "Одабери додатне календаре за приказ"
+msgstr "Selecciona calendaris adicionals per mostrar"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:27
 msgid "Hold down Ctrl or Shift to select multiple calendars."
-msgstr "Држи притиснут Ctrl или Shift за одабир већег броја календара"
+msgstr "Polsar Ctrl o Shift per a seleccionar múltiples calendaris"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:32
 msgid "Public Calendar"
-msgstr "Јавни календар"
+msgstr "Calendari públic"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:37
 msgid "site-wide calendar"
-msgstr "Календар сајта"
+msgstr "calendari de tot el lloc web"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:42
 #: /src/schooltool/app/browser/templates/index.pt:14
@@ -1420,25 +1422,25 @@ msgstr "Календар сајта"
 #: /src/schooltool/resource/browser/flourish.zcml:89
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:6
 msgid "Resources"
-msgstr "Resursi"
+msgstr "Recursos"
 
 #: /src/schooltool/app/browser/templates/calendar_selection.pt:43
 msgid "There are no resources with calendars accessible to you."
-msgstr "Нема извора са календарима који су доступни Вама."
+msgstr "No hi ha recursos en els calendaris accessibles per a tu"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:23
 msgid "Created with SchoolTool"
-msgstr "Направљен помоћу SchoolTool-а"
+msgstr "Creat amb SchoolTool"
 
 #: /src/schooltool/app/browser/templates/default_report_template.pt:37
 msgid "Page ${page_number}"
-msgstr "Страна ${page_number}"
+msgstr "Pàgina ${page_number}"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:26
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:45
 msgid "R"
-msgstr "Р"
+msgstr "R"
 
 #. Default: "Invert Selection"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:30
@@ -1448,7 +1450,7 @@ msgstr "Р"
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:49
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:71
 msgid "invert-selection-button"
-msgstr "Обрни избор"
+msgstr "Inverix la selecció"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:48
 #: /src/schooltool/app/browser/templates/event_booking.pt:42
@@ -1462,7 +1464,7 @@ msgstr "Обрни избор"
 #: /src/schooltool/skin/templates/view_macros.pt:184
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:68
 msgid "A"
-msgstr "А"
+msgstr "A"
 
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:58
 #: /src/schooltool/app/browser/templates/event_booking.pt:63
@@ -1471,21 +1473,21 @@ msgstr "А"
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:68
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:77
 msgid "There are none to add."
-msgstr "Нема ништа да се дода."
+msgstr "No hi ha cap afegit"
 
 #. Default: "OK"
 #: /src/schooltool/app/browser/templates/edit_relationships.pt:65
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:75
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:84
 msgid "ok-button"
-msgstr "У реду"
+msgstr "OK"
 
 #: /src/schooltool/app/browser/templates/event.pt:15
 #: /src/schooltool/calendar/browser/templates/event.pt:19
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:13
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:15
 msgid "All day event"
-msgstr "Целодневни догађај"
+msgstr "Tots els esdeveniments del dia"
 
 #: /src/schooltool/app/browser/templates/event.pt:20
 #: /src/schooltool/calendar/browser/templates/event.pt:36
@@ -1493,7 +1495,7 @@ msgstr "Целодневни догађај"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:37
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:21
 msgid "This is a recurring event."
-msgstr "Овај догађај се понавља"
+msgstr "Aquest és un esdeveniment recurrent"
 
 #: /src/schooltool/app/browser/templates/event.pt:37
 #: /src/schooltool/app/browser/templates/event_booking.pt:24
@@ -1505,7 +1507,7 @@ msgstr "Овај догађај се понавља"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:29
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:38
 msgid "Starts"
-msgstr "Почиње"
+msgstr "Comença"
 
 #: /src/schooltool/app/browser/templates/event.pt:42
 #: /src/schooltool/calendar/browser/templates/event.pt:32
@@ -1516,128 +1518,130 @@ msgstr "Почиње"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:33
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:43
 msgid "Ends"
-msgstr "Завршава се"
+msgstr "Acaba"
 
 #: /src/schooltool/app/browser/templates/event.pt:53
 #: /src/schooltool/calendar/browser/templates/event.pt:8
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:54
 msgid "Change the details of this event"
-msgstr "Промени детаље овог догађаја"
+msgstr "Canviar els detalls d'aquest esdeveniment"
 
 #: /src/schooltool/app/browser/templates/event.pt:53
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:54
 msgid "edit event"
-msgstr "измени догађај"
+msgstr "edita l'event"
 
 #: /src/schooltool/app/browser/templates/event.pt:64
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:65
 msgid "Scheduled resources"
-msgstr "Распоређени извори"
+msgstr "Recursos programats"
 
 #: /src/schooltool/app/browser/templates/event.pt:72
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:73
 msgid "edit resources"
-msgstr "уреди изворе"
+msgstr "Edita recursos"
 
 #: /src/schooltool/app/browser/templates/event.pt:80
 #: /src/schooltool/timetable/browser/templates/schedule_event_edit.pt:81
 msgid "delete event"
-msgstr "обриши догађај"
+msgstr "esborra esdeveniment"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:137
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:81
 msgid "Event information"
-msgstr "Информација о догађају"
+msgstr "Informació de l'esdeveniment"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:143
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:148
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:92
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:87
 msgid "Event details"
-msgstr "Детаљи догађаја"
+msgstr "Detalls de l'esdeveniment"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:197
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:141
 msgid "Book Resources"
-msgstr "Резервиши ресурсе"
+msgstr "Llibre de recursos"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:207
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:212
 msgid "Update form"
-msgstr "Ажурирај форму"
+msgstr "Actualitzat des de"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:224
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:229
 msgid "day"
-msgstr "дан"
+msgstr "dia"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:225
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:230
 msgid "week"
-msgstr "седмица"
+msgstr "setmana"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:226
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:231
 msgid "month"
-msgstr "месец"
+msgstr "mes"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:227
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:232
 msgid "year"
-msgstr "година"
+msgstr "any"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:236
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:241
 msgid "This section only applies when weekly recurrence is selected."
-msgstr "Овај део се појављује само када су седмични ресурси одабрани."
+msgstr ""
+"Aquesta secció només s'aplica quan es selecciona recurrència setmanal."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:257
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:262
 msgid "This section only applies when the monthly recurrence is selected."
-msgstr "Овај део се појављује само када су месечни ресурси одабрани."
+msgstr ""
+"Esta secció sols s'aplica quan es selecciona una recurrència mensual."
 
 #: /src/schooltool/app/browser/templates/event_add.pt:264
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:269
 msgid "Day ${monthday} of every month"
-msgstr "Дан ${monthday} сваког месеца"
+msgstr "Dia ${monthday} de cada mes"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:271
 #: /src/schooltool/app/browser/templates/event_add.pt:278
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:276
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:283
 msgid "${weekday} of every month"
-msgstr "${weekday} сваког месеца"
+msgstr "${weekday} de cada mes"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:288
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:293
 msgid "Repeat"
-msgstr "Понављај"
+msgstr "Repeteix"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:291
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:296
 msgid "times"
-msgstr "пута"
+msgstr "temps"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:306
 #: /src/schooltool/term/browser/templates/emergency_select.pt:31
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:31
 msgid "[popup calendar]"
-msgstr "[popup calendar]"
+msgstr "[popup calendari]"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:324
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:324
 msgid "Repeat forever"
-msgstr "Понављај заувек"
+msgstr "Repeteix sempre"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:348
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:148
 msgid "Booked Resources"
-msgstr "Резервисани ресурси"
+msgstr "Recursos bloquejats"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:369
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:169
 msgid "Book resources"
-msgstr "Резервиши ресурсе"
+msgstr "Llibre de recursos"
 
 #: /src/schooltool/app/browser/templates/event_add.pt:375
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:398
@@ -1649,7 +1653,7 @@ msgstr "Резервиши ресурсе"
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:187
 #: /src/schooltool/timetable/browser/templates/schedule_event_add.pt:175
 msgid "Shortcut: Alt-A"
-msgstr "Prečica: Alt-A"
+msgstr "Telca ràpida: Alt: ALT-A"
 
 #. Default: "Cancel"
 #: /src/schooltool/app/browser/templates/event_add.pt:378
@@ -1683,59 +1687,59 @@ msgstr "Prečica: Alt-A"
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:41
 #: /src/schooltool/timetable/browser/templates/timetable_container_delete.pt:29
 msgid "cancel-button"
-msgstr "Откажи"
+msgstr "Cancel·la"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:4
 msgid "Resource Booking"
-msgstr "Резервисање ресурса"
+msgstr "Llibre de recursos"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:12
 msgid "Resource Booking for ${title}"
-msgstr "Резервисање ресурса за ${title}"
+msgstr "Llibre de recursos per a ${title}"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:17
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:5
 msgid "Event Details"
-msgstr ""
+msgstr "Detalls dels esdeveniments"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:45
 msgid "UnBook"
-msgstr "Одјави"
+msgstr "No reservat"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:54
 #: /src/schooltool/calendar/browser/templates/event_booking.pt:55
 msgid "Available Resources"
-msgstr "Доступни ресурси"
+msgstr "Recursos disponibles"
 
 #: /src/schooltool/app/browser/templates/event_booking.pt:60
 msgid "Book"
-msgstr "Резервиши"
+msgstr "Llibre"
 
 #: /src/schooltool/app/browser/templates/event_info_viewlet.pt:12
 msgid "Location: ${location}"
-msgstr "Локација: ${location}"
+msgstr "Localització: ${location}"
 
 #: /src/schooltool/app/browser/templates/f_about_related.pt:2
 msgid "Contributors"
-msgstr "Сарадници"
+msgstr "Col·laboradors"
 
 #: /src/schooltool/app/browser/templates/f_calendar_settings_overview.pt:7
 msgid "Change calendar settings"
-msgstr "Промени поставке календара"
+msgstr "Canvia els paràmetres del calendari"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:10
 msgid "Import source"
-msgstr "Увоз извора"
+msgstr "Importa el codi"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:20
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:64
 msgid "Upload CSV file"
-msgstr "Отпреми CSV датотеку"
+msgstr "Puja l'arxiu CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:29
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:104
 msgid "Enter CSV text"
-msgstr ""
+msgstr "Introdueix el text CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:60
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:100
@@ -1745,11 +1749,11 @@ msgstr ""
 #: /src/schooltool/group/browser/flourish.zcml:236
 #: /src/schooltool/resource/browser/flourish.zcml:333
 msgid "Import CSV"
-msgstr "Увоз CSV"
+msgstr "Importa CSV"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:75
 msgid "Charset"
-msgstr "Скуп знакова"
+msgstr "Joc de caràcters"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:80
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:103
@@ -1761,7 +1765,7 @@ msgstr "Скуп знакова"
 #: /src/schooltool/person/browser/person-csvimport.pt:57
 #: /src/schooltool/resource/browser/resource-csvimport.pt:54
 msgid "Unicode (UTF-8)"
-msgstr "Уникод (UTF-8)"
+msgstr "Unicode (UTF-8)"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:81
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:104
@@ -1773,7 +1777,7 @@ msgstr "Уникод (UTF-8)"
 #: /src/schooltool/person/browser/person-csvimport.pt:58
 #: /src/schooltool/resource/browser/resource-csvimport.pt:55
 msgid "Western (ISO-8859-1)"
-msgstr "Западни (ISO-8859-1)"
+msgstr "Western (ISO-8859-1)"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:82
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:105
@@ -1785,7 +1789,7 @@ msgstr "Западни (ISO-8859-1)"
 #: /src/schooltool/person/browser/person-csvimport.pt:59
 #: /src/schooltool/resource/browser/resource-csvimport.pt:56
 msgid "Western (ISO-8859-15)"
-msgstr "Западни (ISO-8859-15)"
+msgstr "Western (ISO-8859-15)"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:83
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:106
@@ -1797,7 +1801,7 @@ msgstr "Западни (ISO-8859-15)"
 #: /src/schooltool/person/browser/person-csvimport.pt:60
 #: /src/schooltool/resource/browser/resource-csvimport.pt:57
 msgid "Western (Windows-1252)"
-msgstr "Западни (Windows-1252)"
+msgstr "Western (Windows-1252)"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:84
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:107
@@ -1809,11 +1813,11 @@ msgstr "Западни (Windows-1252)"
 #: /src/schooltool/person/browser/person-csvimport.pt:61
 #: /src/schooltool/resource/browser/resource-csvimport.pt:58
 msgid "Other (please specify)"
-msgstr "Други (молимо наведите)"
+msgstr "Altra (per favor especifica-ho)"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:91
 msgid "Other charset"
-msgstr ""
+msgstr "Altre joc de caracters"
 
 #. Default: "Submit"
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:112
@@ -1828,7 +1832,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:75
 #: /src/schooltool/resource/browser/resource-csvimport.pt:72
 msgid "submit-button"
-msgstr "Потврди"
+msgstr "Envia"
 
 #: /src/schooltool/app/browser/templates/f_csvimport.pt:117
 #: /src/schooltool/app/browser/templates/f_database.pt:33
@@ -1862,7 +1866,7 @@ msgstr "Потврди"
 #: /src/schooltool/timetable/browser/templates/f_timetables.pt:20
 #: /src/schooltool/timetable/browser/templates/f_timetables.pt:28
 msgid "Done"
-msgstr "Завршено"
+msgstr "Fet"
 
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:25
 #: /src/schooltool/basicperson/browser/templates/container.pt:32
@@ -1877,11 +1881,11 @@ msgstr "Завршено"
 #: /src/schooltool/skin/templates/table_container.pt:28
 #: /src/schooltool/timetable/browser/templates/f_timetables.pt:14
 msgid "Showing ${count} of ${total} items"
-msgstr "Приказивање ${count} од ${total} ставки"
+msgstr "Mostrant ${count} de ${total} items"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:4
 msgid "Manage error settings"
-msgstr "Подешавања за грешаке"
+msgstr "Gestiona la configuració de l'error"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:43
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:14
@@ -1889,17 +1893,17 @@ msgstr "Подешавања за грешаке"
 #: /src/schooltool/contact/security.zcml:86
 #: /src/schooltool/person/security.zcml:147
 msgid "User"
-msgstr "Корисник"
+msgstr "Usuari"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:44
 #: /src/schooltool/skin/templates/error.pt:19
 #: /src/schooltool/skin/templates/f_error.pt:9
 msgid "Exception"
-msgstr "Изузетак"
+msgstr "Excepció"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:49
 msgid "No exceptions logged."
-msgstr "Нема записаних грешака."
+msgstr "No hi ha excepcions enregistrades"
 
 #: /src/schooltool/app/browser/templates/f_errors.pt:76
 #: /src/schooltool/term/browser/term.py:219
@@ -1907,42 +1911,43 @@ msgstr "Нема записаних грешака."
 #: /src/schooltool/term/browser/term.py:350
 #: /src/schooltool/term/browser/term.py:399
 msgid "Refresh"
-msgstr "Освежи"
+msgstr "Actualitza"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:2
 msgid "Exception traceback"
-msgstr ""
+msgstr "Rastreig d'excepció"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:3
 #: /src/schooltool/app/browser/templates/f_errors_entry_text.pt:4
 msgid "The specified log entry was not found. It may have expired."
-msgstr "Наведени унос у евиденцији није пронађен. Можда је истекао."
+msgstr ""
+"No s'ha trobat l'entrada del registre espedivicat. Pot haver expirat."
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:18
 msgid "Request URL"
-msgstr "Тражи URL"
+msgstr "Sol·licitud d'URL"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:22
 msgid "Exception Type"
-msgstr "тип изузетка"
+msgstr "Tipus d'excepció"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:26
 msgid "Exception Value"
-msgstr "вредност изузетка"
+msgstr "Valor d'excepció"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:31
 #: /src/schooltool/skin/templates/error.pt:20
 #: /src/schooltool/skin/templates/f_error.pt:14
 msgid "Traceback"
-msgstr ""
+msgstr "Ratreig"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:40
 msgid "Display traceback as text"
-msgstr "Прикажи traceback као текст"
+msgstr "Mostrar trastreig de text"
 
 #: /src/schooltool/app/browser/templates/f_errors_entry.pt:45
 msgid "Request"
-msgstr "Захтев"
+msgstr "Sol·licita"
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:2
 #: /src/schooltool/contact/browser/templates/f_contacts_related.pt:2
@@ -1957,33 +1962,36 @@ msgstr "Захтев"
 #: /src/schooltool/timetable/browser/templates/f_specialday_related.pt:2
 #: /src/schooltool/timetable/browser/templates/f_timetable_container_related.pt:2
 msgid "What is This?"
-msgstr "Шта је Ово?"
+msgstr "Què és açò?"
 
 #: /src/schooltool/app/browser/templates/f_generations_related.pt:6
 msgid ""
 "Database generations update the structure of your database to be compatible "
 "with new versions of SchoolTool."
 msgstr ""
-"Генерације база података  ажурирају структуру Ваше базе тако да буде "
-"компатибилна са новим верзијама SchoolTool-а."
+"La generació de l'actualització de l'estructura de la teua base de dades "
+"serà compatible amb noves versions d'SchoolTool"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:5
 msgid "Set Tab Visibility"
-msgstr ""
+msgstr "Establir visibilitat de pestanya"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:10
 msgid "Visible"
-msgstr "Видљив"
+msgstr "Visible"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs.pt:25
 msgid "Default"
-msgstr ""
+msgstr "Valor per defecte"
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:6
 msgid ""
 "Schools that are not using all components of SchoolTool can reduce visual "
 "clutter by hiding unnecessary links in the top navigation bar."
 msgstr ""
+"Els col·legis que no utilitzen tots els components d'SchoolTool poden reduïr "
+"el desordre visual al amagar enllaços innecessaris a la barra de navegació "
+"superior."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:10
 msgid ""
@@ -1991,21 +1999,28 @@ msgid ""
 "links; they don't change the functionality, data, or security settings of "
 "SchoolTool in any way."
 msgstr ""
+"Tingueu en compte que aquests ajustos no tenen efectes diferents de "
+"l'eliminació d'enllaços de navegació, que no canvien la funcionalitat, les "
+"dades o la configuració de seguretat de SchoolTool de cap manera."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:15
 msgid "Links can be changed from visible to hidden at any time."
 msgstr ""
+"Els enllaços poden ser canviats des visible a invisible en algun temps."
 
 #: /src/schooltool/app/browser/templates/f_hide_unhide_tabs_related.pt:18
 msgid ""
 "When users log in, they will usually be directed to the tab selected in the "
 "default column. The default tab must also be visible."
 msgstr ""
+"Quan els usuaris es registren, en general es dirigeixen a la pestanya "
+"seleccionada a la columna de l'omissió. La pestanya per defecte també ha de "
+"ser visible."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:12
 #: /src/schooltool/app/browser/templates/login.pt:8
 msgid "Your session has expired."
-msgstr "Ваша сесија је истекла."
+msgstr "La teua sessió ha expirat."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:21
 #: /src/schooltool/app/browser/templates/login.pt:13
@@ -2013,8 +2028,9 @@ msgid ""
 "You are not allowed to access this page. You can click on the back button in "
 "your browser to go back, or ask a more privileged user to log in."
 msgstr ""
-"Није Вам дозвољен приступ страници. Можете се вратити назат или замолити "
-"корисника са одговарајућим привилегијама да се улогује."
+"No està permès accedir a aquesta pàgina. Podeu fer clic al botó enrere al "
+"teu navegador per tornar, o demanar a un usuari amb més privilegis per a "
+"entrar."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:32
 #: /src/schooltool/basicperson/browser/demographics.py:407
@@ -2028,12 +2044,12 @@ msgstr ""
 #: /src/schooltool/timetable/browser/schedule.py:269
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:82
 msgid "Please correct the marked fields below."
-msgstr "Исправите испод означена поља."
+msgstr "Corregiu els camps marcats baix."
 
 #: /src/schooltool/app/browser/templates/f_login.pt:39
 #: /src/schooltool/app/browser/templates/login.pt:35
 msgid "User Information"
-msgstr "Подаци о кориснику"
+msgstr "Informació de l'usuari"
 
 #: /src/schooltool/app/browser/templates/f_login.pt:44
 #: /src/schooltool/app/browser/templates/login.pt:38
@@ -2046,7 +2062,7 @@ msgstr "Подаци о кориснику"
 #: /src/schooltool/person/browser/person.py:502
 #: /src/schooltool/person/interfaces.py:60
 msgid "Username"
-msgstr "Корисничко име"
+msgstr "Nom d'usuari"
 
 #: /src/schooltool/app/browser/templates/f_login.pt:62
 #: /src/schooltool/app/browser/templates/login.pt:44
@@ -2056,45 +2072,47 @@ msgstr "Корисничко име"
 #: /src/schooltool/person/browser/flourish.zcml:61
 #: /src/schooltool/person/browser/person.py:505
 msgid "Password"
-msgstr "Лозинка:"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_login.pt:72
 #: /src/schooltool/app/browser/templates/login.pt:57
 msgid "L"
-msgstr "Л"
+msgstr "L"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:11
 msgid ""
 "The database was updated to generation ${generation} for ${application}."
 msgstr ""
+"La base de dades s'actualitzà a la generació ${generation} for "
+"${application}."
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:16
 msgid "The database is up to date for ${application}."
-msgstr ""
+msgstr "La base de dades està actualitzada de ${application}"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:23
 msgid "Application"
-msgstr "Program"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:24
 msgid "Minimum Generation"
-msgstr ""
+msgstr "Mínima generació"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:25
 msgid "Maximum Generation"
-msgstr ""
+msgstr "Màxima generació"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:26
 msgid "Current Database Generation"
-msgstr "Тренутна генерација база података"
+msgstr "Generació actual de la base dedades"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:27
 msgid "Evolve?"
-msgstr ""
+msgstr "Evolucionar"
 
 #: /src/schooltool/app/browser/templates/f_managers.pt:40
 msgid "No, up to date"
-msgstr "Не треба ажурирање"
+msgstr "No, al dia"
 
 #: /src/schooltool/app/browser/templates/f_overlay_filter_widget.pt:2
 #: /src/schooltool/contact/browser/templates/f_contact_filter.pt:2
@@ -2106,57 +2124,57 @@ msgstr "Не треба ажурирање"
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:3
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:36
 msgid "Search"
-msgstr "Претрага"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:7
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:12
 msgid "Database"
-msgstr "База података"
+msgstr "Base de dades"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:11
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:16
 msgid "Database Size"
-msgstr "Величина базе"
+msgstr "Mida de la base de dades"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:15
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:20
 msgid "Uptime"
-msgstr "Време рада"
+msgstr "Temps connectat"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:19
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:24
 msgid "System platform"
-msgstr "Платформа система"
+msgstr "Plataforma del sistema"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:23
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:28
 msgid "Python version"
-msgstr "верзија Python-а"
+msgstr "Versió de Python"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:27
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:32
 msgid "Command line"
-msgstr "Командна линија"
+msgstr "Línia d'ordes"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:31
 msgid "Preferred encoding"
-msgstr ""
+msgstr "Codificació preferida"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:35
 msgid "File system encoding"
-msgstr ""
+msgstr "Codificació del sistema de fitxers"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:39
 msgid "Process id"
-msgstr ""
+msgstr "ID del procés"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:43
 msgid "Developer mode"
-msgstr "Режим програмера"
+msgstr "Mode de desenvolupador"
 
 #: /src/schooltool/app/browser/templates/f_runtimeinfo.pt:48
 msgid "Python path"
-msgstr ""
+msgstr "Camí de Python"
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:3
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:24
@@ -2164,26 +2182,34 @@ msgid ""
 "You can create the CSV file in a spreadsheet and export it in CSV (Comma-"
 "Separated Values) format. The structure of the table is described below."
 msgstr ""
-"Можете креирати CSV датотеку у табели и извезти је у CSV (Comma-Separated "
-"Values) формату. Структура табеле је описана у наставку."
+"Podeu crear el fitxer CSV en un full de càlcul i exportar-lo en format CSV "
+"(valors separats per comes). A continuació es descriu l'estructura de la "
+"taula."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:10
 msgid ""
 "The first row of the file must contain two cells terms in this schoolyear. "
 "Sections will be created in terms from first to last."
 msgstr ""
+"La primera línia de l'arxiu ha de contenir dues cèl · lules termes en aquest "
+"any escolar. Seccions es crearan en termes de principi a fi."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:15
 msgid ""
 "The second row must be empty. After that, several section descriptions may "
 "follow. They are separated by an extra carriage return (i.e., a blank line)."
 msgstr ""
+"La segona línia ha d'estar buit. Després d'això, diverses descripcions "
+"secció pot seguir. Estan separats per un retorn de carro addicional (és a "
+"dir, una línia en blanc)."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:21
 msgid ""
 "Each section description's first row contains the <strong>course SchoolTool "
 "ID</strong> and the <strong>instructor username</strong> for the new section."
 msgstr ""
+"Primera fila de cada secció de descripció conté el curs <strong> SchoolTool "
+"ID </ strong> i l'instructor usuari <strong> </ strong> per a la nova secció."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:27
 msgid ""
@@ -2195,6 +2221,14 @@ msgid ""
 "\"4\" in the top of csv, you will need to provide 3 section ids, for terms "
 "\"2\", \"3\" and \"4\" respectively."
 msgstr ""
+"Si voleu actualitzar les seccions al seu lloc, a la primera fila de la "
+"secció de descripció ha d'especificar: <strong> suposat SchoolTool ID </ "
+"strong>, <strong> instructor nom d'usuari </ strong> i després <strong> "
+"secció SchoolTool ID </ strong> per a les seccions corresponents de cada "
+"terme. <strong> Nota: </ strong> si la seva escola té, diguem, 5 termes "
+"consecutius i especifica els termes \"2\", \"4\" a la part superior del csv, "
+"vostè haurà de proporcionar març secció ids, per als termes \"2\" , \"3\" i "
+"\"4\", respectivament."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:34
 msgid ""
@@ -2204,12 +2238,18 @@ msgid ""
 "<strong>period title</strong>, follows. Section schedule description is "
 "terminated by three asterisks ('***') in the first column."
 msgstr ""
+"Després de la terminació, qualsevol nombre de <strong> persona els noms "
+"d'usuari </ strong> pot seguir, s'afegirà a les persones indicades a la "
+"secció com a estudiants."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:37
 msgid ""
 "After the terminator, any number of <strong>person user names</strong> may "
 "follow, the denoted persons will be added to the section as learners."
 msgstr ""
+"Després de la terminació, qualsevol nombre de <strong> persona els noms "
+"d'usuari </ strong> pot seguir, s'afegirà a les persones indicades a la "
+"secció com a estudiants."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:43
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:54
@@ -2225,7 +2265,7 @@ msgstr ""
 #: /src/schooltool/resource/browser/resource-csvimport.pt:29
 #: /src/schooltool/resource/browser/templates/f_resource_csvimport_description.pt:8
 msgid "Example:"
-msgstr "Пример:"
+msgstr "Exemple:"
 
 #. Default: "\"Fall\", \"Spring\" \"\",\"\",\"\" \"philosophy\",\"lorch\" \"weekly-timetable\" \"Monday\",\"A\" \"Monday\",\"B\" \"Tuesday\",\"B\" \"***\" \"johnny\" \"billy\" \"\" \"literature\",\"guzman\",\"literature-f\",\"literature-s\" \"***\" \"johnny\" \"pete\""
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:52
@@ -2247,6 +2287,22 @@ msgid ""
 "\"johnny\"\n"
 "\"pete\"\n"
 msgstr ""
+"\n"
+"\"Fall\", \"Spring\"\n"
+"\"\",\"\",\"\"\n"
+"\"philosophy\",\"lorch\"\n"
+"\"weekly-timetable\"\n"
+"\"Monday\",\"A\"\n"
+"\"Monday\",\"B\"\n"
+"\"Tuesday\",\"B\"\n"
+"\"***\"\n"
+"\"joan\"\n"
+"\"guillem\"\n"
+"\"\"\n"
+"\"literatura\",\"guzman\",\"literatura-f\",\"literatura-s\"\n"
+"\"***\"\n"
+"\"joan\"\n"
+"\"pere\"\n"
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:70
 msgid ""
@@ -2259,35 +2315,43 @@ msgid ""
 "SchoolTool IDs will be set to literature-f in Fall and literature-s in "
 "Spring."
 msgstr ""
+"L'exemple anterior crearà seccions per a la filosofia i la literatura "
+"conferències. Seccions se'ls ensenya des semestre de tardor a primavera "
+"termini. La secció de la conferència filosofia tindrà persones amb noms "
+"d'usuari 'Johnny' i 'Billy' com a estudiants. També es va programar dilluns "
+"(dues lliçons, períodes 'A' i 'B') i dimarts. La secció de literatura serà "
+"processada de manera similar, però no tindrà un horari definit. El "
+"SchoolTool ID literatura s'establirà en la literatura-f a la tardor i la "
+"literatura-s a la primavera."
 
 #: /src/schooltool/app/browser/templates/f_server_settings_overview.pt:3
 msgid "Server Information"
-msgstr "podaci o serveru"
+msgstr "Informació del servidor"
 
 #: /src/schooltool/app/browser/templates/f_settings.pt:5
 msgid "Please wait for confirmation that the database has been packed."
-msgstr "Молим Вас сачекајте потврду да се је паковање базе завршено."
+msgstr "Esperar la confirmació que la base de dades s'ha embalat favor."
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:13
 msgid "Domain ${domain}"
-msgstr ""
+msgstr "Domini ${domain}"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:18
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:19
 msgid "Files"
-msgstr ""
+msgstr "Fitxers"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:31
 msgid "Reload"
-msgstr ""
+msgstr "Torna a carregar"
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
-msgstr "Добродошли на Школску Таблу"
+msgstr "Benvingut a SchoolTool"
 
 #: /src/schooltool/app/browser/templates/index.pt:12
 #: /src/schooltool/course/browser/flourish.zcml:366
@@ -2301,7 +2365,7 @@ msgstr "Добродошли на Школску Таблу"
 #: /src/schooltool/course/security.zcml:74
 #: /src/schooltool/dashboard/term.pt:4
 msgid "Courses"
-msgstr "Kursevi"
+msgstr "Cursos"
 
 #: /src/schooltool/app/browser/templates/index.pt:13
 #: /src/schooltool/group/browser/configure.zcml:61
@@ -2313,66 +2377,66 @@ msgstr "Kursevi"
 #: /src/schooltool/group/browser/templates/link_to_groups.pt:1
 #: /src/schooltool/group/security.zcml:57
 msgid "Groups"
-msgstr "Grupe"
+msgstr "Grups"
 
 #: /src/schooltool/app/browser/templates/index.pt:15
 #: /src/schooltool/dashboard/school.pt:4
 #: /src/schooltool/level/browser/configure.zcml:7
 #: /src/schooltool/level/security.zcml:7
 msgid "Levels"
-msgstr "Nivoi"
+msgstr "Nivells"
 
 #: /src/schooltool/app/browser/templates/login.pt:3
 #: /src/schooltool/app/browser/templates/menu_view.pt:3
 msgid "Login"
-msgstr "Prijava"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/login.pt:23
 msgid "Please log in"
-msgstr "Молимо Вас да се улогујете"
+msgstr "Per favor logueja't"
 
 #: /src/schooltool/app/browser/templates/portlet_tomorrow_events.pt:5
 #: /src/schooltool/calendar/browser/calendar.py:258
 msgid "Tomorrow's Events"
-msgstr "Сутрашњи догађаји"
+msgstr "Esdeveniments de demà"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:4
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:14
 msgid "Deleting a repeating event (${event_title})"
-msgstr "Бришете догађај који се понавља (${event_title})"
+msgstr "Eliminació d'una cita repetitiva (${event_title})"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:19
 msgid "You are trying to delete a repeating event."
-msgstr "Покушавате да избришете догађај који се понавља."
+msgstr "Estàs tractant d'eliminar una cita repetitiva."
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:41
 msgid "Current"
-msgstr "Тренутно"
+msgstr "Actual"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:43
 msgid "Future"
-msgstr "Будуће"
+msgstr "Futur"
 
 #: /src/schooltool/app/browser/templates/recevent_delete.pt:45
 msgid "All"
-msgstr "Све"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:4
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:13
 msgid "Deleting an event (${event_title})"
-msgstr "Брисање догађаја (${event_title})"
+msgstr "Eborra un esdeveniment (${event_title})"
 
 #: /src/schooltool/app/browser/templates/simple_event_delete.pt:18
 msgid "Are you sure you want to delete this event?"
-msgstr "Да ли сте сигурни да желите да избришете овај догађај?"
+msgstr "Estàs seguir de que vols esborrar aquest esdeveniment?"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:4
 msgid "Upload SchoolTool timetable as CSV"
-msgstr "Аплодуј распоред SchoolTool-а као CSV"
+msgstr ""
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:20
 msgid "Import Timetable"
-msgstr "Увези распоред"
+msgstr "Impirta tabla de temps"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:30
 msgid ""
@@ -2381,14 +2445,19 @@ msgid ""
 "timetable schema can be found by going to its view page under School "
 "Timetables for the school year."
 msgstr ""
+"La primera línia de l'arxiu ha de contenir l'identificador de l'esquema "
+"horari <strong> </ strong>, que s'utilitzarà per als nous horaris. La "
+"identificació d'un esquema de calendari es pot trobar a l'anar a la seva "
+"pàgina de vista sota els horaris escolars per l'any escolar."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:37
 msgid ""
 "The second row should be empty. After that, several section descriptions may "
 "follow. They are separated by an extra carriage return (i.e., a blank line)."
 msgstr ""
-"Други ред би требао бити празан. Након тога, може да следи неколико одељака "
-"описа. Они су раздвојени са (нпр. додатном празном линијом."
+"La segona fila ha d'estar buit. Després d'això, diverses descripcions secció "
+"pot seguir. Estan separats per un retorn de carro addicional (és a dir, una "
+"línia en blanc)."
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:43
 msgid ""
@@ -2400,6 +2469,14 @@ msgid ""
 "<strong>person ids</strong> may follow, the denoted persons will be added to "
 "the section as learners."
 msgstr ""
+"Primera fila de cada secció de descripció conté la <strong> Identificació "
+"del curs </ strong> i la <strong> Identificació de l'instructor </ strong> "
+"per a la nova secció. A continuació, una sèrie de files, cadascun amb un "
+"identificador de dia <strong> </ strong> i un període <strong> id </ "
+"strong>, segueix. La llista de les descripcions d'època acaba amb tres "
+"asteriscs ('***') a la primera columna. Després de la terminació, qualsevol "
+"nombre de persones ids <strong> </ strong> pot seguir, s'afegirà a les "
+"persones indicades a la secció com a estudiants."
 
 #. Default: "\"three-day\" \"\",\"\",\"\" \"philosophy\",\"lorch\" \"Monday\",\"A\" \"Monday\",\"B\" \"Tuesday\",\"C\" \"***\" \"johnny\" \"billy\" \"\" \"literature\",\"guzman\" \"Wednesday\",\"B\" \"Wednesday\",\"C\" \"***\" \"johnny\" \"pete\""
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:56
@@ -2422,6 +2499,23 @@ msgid ""
 "\"johnny\"\n"
 "\"pete\"\n"
 msgstr ""
+"\n"
+"\"tres dies\"\n"
+"\"\",\"\",\"\"\n"
+"\"filosofia\",\"lorch\"\n"
+"\"Dilluns\",\"A\"\n"
+"\"Dilluns\",\"B\"\n"
+"\"Dimarts\",\"C\"\n"
+"\"***\"\n"
+"\"joan\"\n"
+"\"quillem\"\n"
+"\"\"\n"
+"\"literatura\",\"guzman\"\n"
+"\"Dimecres\",\"B\"\n"
+"\"Dimecres\",\"C\"\n"
+"\"***\"\n"
+"\"joan\"\n"
+"\"pere\"\n"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:74
 msgid ""
@@ -2452,7 +2546,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person-csvimport.pt:48
 #: /src/schooltool/resource/browser/resource-csvimport.pt:45
 msgid "Upload CSV File"
-msgstr "Учитај CSV датотеку"
+msgstr "Puja l'arxiu CSV"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:96
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:50
@@ -2463,7 +2557,7 @@ msgstr "Учитај CSV датотеку"
 #: /src/schooltool/person/browser/person-csvimport.pt:50
 #: /src/schooltool/resource/browser/resource-csvimport.pt:47
 msgid "CSV File"
-msgstr "CSV датотека"
+msgstr "Arxiu CSV"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:101
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:55
@@ -2474,7 +2568,7 @@ msgstr "CSV датотека"
 #: /src/schooltool/person/browser/person-csvimport.pt:55
 #: /src/schooltool/resource/browser/resource-csvimport.pt:52
 msgid "Charset:"
-msgstr "Скуп знакова:"
+msgstr "Joc de caràcters:"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:111
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:65
@@ -2485,7 +2579,7 @@ msgstr "Скуп знакова:"
 #: /src/schooltool/person/browser/person-csvimport.pt:65
 #: /src/schooltool/resource/browser/resource-csvimport.pt:62
 msgid "Other charset: ${other_charset}"
-msgstr "Други знаковни скуп: ${other_charset}"
+msgstr "Altre joc de caracters: $charset:${other_charset}"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:115
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:69
@@ -2496,7 +2590,7 @@ msgstr "Други знаковни скуп: ${other_charset}"
 #: /src/schooltool/person/browser/person-csvimport.pt:69
 #: /src/schooltool/resource/browser/resource-csvimport.pt:66
 msgid "Input CSV Data"
-msgstr "Унестите CSV податке"
+msgstr "Introdueix dades CSV"
 
 #: /src/schooltool/app/browser/templates/timetables-csvimport.pt:116
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:70
@@ -2507,7 +2601,7 @@ msgstr "Унестите CSV податке"
 #: /src/schooltool/person/browser/person-csvimport.pt:70
 #: /src/schooltool/resource/browser/resource-csvimport.pt:67
 msgid "CSV Data"
-msgstr "CSV подаци"
+msgstr "Dades CSV"
 
 #: /src/schooltool/app/browser/timetable-integration-flourish.zcml:8
 #: /src/schooltool/app/browser/timetable-integration-flourish.zcml:28
@@ -2523,17 +2617,20 @@ msgstr "CSV подаци"
 #: /src/schooltool/resource/browser/flourish.zcml:323
 #: /src/schooltool/resource/browser/flourish.zcml:342
 msgid "Import"
-msgstr ""
+msgstr "Importa"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:135
 msgid "Row 2 is not empty"
-msgstr "Red 2 nije prazan"
+msgstr "Dues files buides"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:182
 msgid ""
 "Wrong section header on line ${line_no} (it should contain a course id, an "
 "instructor id and optional SchoolTool section IDs for each of the terms)"
 msgstr ""
+"Capçalera de secció incorrecte a la línia $ {line_no} (ha de tenir un curs "
+"id, Identificació de l'instructor i els ID secció SchoolTool opcionals per a "
+"cada un dels termes)"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:220
 #: /src/schooltool/app/browser/timetablecsvimport.py:231
@@ -2541,99 +2638,106 @@ msgid ""
 "Malformed line ${line_no} (it should contain either a timetable id or day id "
 "and a period id)"
 msgstr ""
+"Line Malformed $ {line_no} (ha de tenir un identificador d'horari o "
+"Identificació del dia i un identificador de període)"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:239
 msgid ""
 "Timetable id must be specified before day id and a period id at at line "
 "${line_no}"
 msgstr ""
+"Identificació de l'horari s'ha d'especificar abans d'Identificació del dia i "
+"un identificador de punt a a la línia $ {line_no}"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:276
 msgid "Incomplete section description on line ${line}"
-msgstr "Непотпун опис секције на линији ${line}"
+msgstr "Incompleta descripció de la secció en la línia ${line}"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:281
 msgid "No students in section (line ${line})"
-msgstr "Нема Ђака у секцији (line${line})"
+msgstr "No hi ha estudiants en aquesta secció (line ${line})"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:364
 msgid ""
 "The first row of the CSV file must contain the term or first and last terms "
 "for sections."
 msgstr ""
+"La primer afila de l'arxiu CSV ha de contenir un terme o un primer i un "
+"últim terme de la secció."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:444
 #: /src/schooltool/app/browser/timetablecsvimport.py:454
 msgid "The term ${term} does not exist."
-msgstr ""
+msgstr "la terminal ${term} no existeix."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:460
 msgid "First term ${first} starts after last term ${last}."
 msgstr ""
+"Primer la terminal ${first} engegada despŕes i l'última terminal ${last}."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:497
 msgid "Error in timetable CSV data, line ${line_no}"
-msgstr "Шрешка у CSV подацима распореда, линија ${line_no}"
+msgstr "Error en la tabla de temps CSV data, linia ${line_no}"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:447
 msgid "Day ids not defined in selected schema: ${args}."
-msgstr "Шифре датума нису дефинисане у одабраној шеми: ${args}."
+msgstr "Dia ids no definit en secció esquema"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:448
 msgid "Periods not defined in selected days: ${args}."
-msgstr ""
+msgstr "Periode no defint en selecció de dies: ${args}"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:449
 msgid "Persons not found: ${args}."
-msgstr "Особе нису пронађене: ${args}."
+msgstr "Perones no trobades: ${args}"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:450
 msgid "Courses not found: ${args}."
-msgstr "Курсеви нису пронађемни: ${args}."
+msgstr "Curs no trobat: ${args}"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:451
 msgid "Sections not found: ${args}."
-msgstr "Секције нису нађене: ${args}."
+msgstr "Secions no trobades: ${args}."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:452
 msgid "Invalid records: ${args}."
-msgstr "Погрешни подаци: ${args}."
+msgstr "Grabació invalida: ${args}"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:545
 #: /src/schooltool/course/browser/section.py:972
 #: /src/schooltool/course/browser/section.py:1070
 #: /src/schooltool/course/browser/section.py:1124
 msgid "Sections for ${schoolyear}"
-msgstr ""
+msgstr "Selecció per a ${schoolyear}"
 
 #: /src/schooltool/app/interfaces.py:50
 msgid "Form input is not a file object"
-msgstr ""
+msgstr "El formulari d'entrada no és un objecte d'arxiu"
 
 #: /src/schooltool/app/interfaces.py:51
 #: /src/schooltool/app/interfaces.py:55
 msgid "Invalid integer data"
-msgstr ""
+msgstr "Invàlida integració de dades"
 
 #: /src/schooltool/app/interfaces.py:52
 msgid "Invalid text data"
-msgstr ""
+msgstr "Invàlida dada de text"
 
 #: /src/schooltool/app/interfaces.py:53
 msgid "Invalid textual data"
-msgstr ""
+msgstr "Invàlida dada textual"
 
 #: /src/schooltool/app/interfaces.py:54
 msgid "Invalid unicode data"
-msgstr ""
+msgstr "Invàlidad dada unicode"
 
 #: /src/schooltool/app/interfaces.py:56
 msgid "Invalid floating point data"
-msgstr ""
+msgstr "Invàlid dada de punt flotant"
 
 #: /src/schooltool/app/interfaces.py:57
 msgid "Invalid datetime data"
-msgstr ""
+msgstr "Invàlida dada de temps"
 
 #: /src/schooltool/app/interfaces.py:120
 #: /src/schooltool/app/interfaces.py:132
@@ -2642,20 +2746,20 @@ msgid ""
 "displayed on the public calendar, the bottom of all pages and in the page "
 "title."
 msgstr ""
-"Назив школе или организације која користи овај сервер. Ово ће бити приказано "
-"на јавним календару, у дну сваке странице и у наслову странице."
+"El nom de l'escola o orgnaització corre en este server. Serà mostrat en el "
+"calendari públic, el botó de todoes les pàtines i de la pàgina de títol."
 
 #: /src/schooltool/app/interfaces.py:138
 msgid "Front Page Calendar"
-msgstr "Календар на насловној страни"
+msgstr "Pàgina frontal de calendari"
 
 #: /src/schooltool/app/interfaces.py:139
 msgid "Display site-wide calendar as the front page of the site."
-msgstr ""
+msgstr "Mostra tot el lloc calendari com la primera pàgina del lloc."
 
 #: /src/schooltool/app/interfaces.py:145
 msgid "School logo"
-msgstr ""
+msgstr "Logo de l'escola"
 
 #: /src/schooltool/app/interfaces.py:150
 msgid "Name sorting"
@@ -2666,34 +2770,38 @@ msgstr ""
 #: /src/schooltool/contact/browser/templates/filter.pt:5
 #: /src/schooltool/contact/interfaces.py:42
 msgid "First name"
-msgstr "Име"
+msgstr "Nom"
 
 #: /src/schooltool/app/interfaces.py:152
 #: /src/schooltool/basicperson/interfaces.py:52
 #: /src/schooltool/contact/browser/templates/filter.pt:12
 #: /src/schooltool/contact/interfaces.py:46
 msgid "Last name"
-msgstr "Презиме"
+msgstr "Cognoms"
 
 #: /src/schooltool/app/main.py:310
 msgid "Cannot resolve plugin action order:\n"
-msgstr ""
+msgstr "No es pot resoldre plugin mitjançant l'ordre\n"
 
 #: /src/schooltool/app/main.py:478
 msgid ""
 "Warning: font directories '%s' do not exist.\n"
 "PDF support disabled."
 msgstr ""
+"Advertència: directoris de fonts '% s' no existeix.\n"
+"Compatibilitat amb PDF desactivat."
 
 #: /src/schooltool/app/main.py:490
 msgid ""
 "Warning: font '%s' does not exist in the font directories '%s'.\n"
 "PDF support disabled."
 msgstr ""
+"Advertència: font '% s' no existeix en els directoris de fonts '% s'.\n"
+"Compatibilitat amb PDF desactivat."
 
 #: /src/schooltool/app/main.py:525
 msgid "Run %s -h for help."
-msgstr ""
+msgstr "Corre %s -h per l'ajuda."
 
 #: /src/schooltool/app/main.py:517
 msgid ""
@@ -2710,34 +2818,45 @@ msgid ""
 "'password'\n"
 "                         is '-')\n"
 msgstr ""
+"\n"
+"Usage: %s [options]\n"
+"Options:\n"
+"-c, --config xxx usa aquesta configuració de l'arxiu\n"
+"-h, --help mostra aquest missatge d'ajuda\n"
+"--pack empaqueta la base de dades\n"
+"-r, --restore-manager password\n"
+"restaura l'administrador d'usuari amb la contrasenya proporcionada\n"
+"(llegeix la contrasenya des de la entrada estandard si 'password' es '-')\n"
 
 #: /src/schooltool/app/main.py:489
 msgid "Manager password: "
-msgstr ""
+msgstr "Password de l'administrador "
 
 #: /src/schooltool/app/main.py:500
 msgid "No configuration file given"
-msgstr ""
+msgstr "Cap fitxer en la configuració"
 
 #: /src/schooltool/app/main.py:505
 msgid "Reading configuration from %s"
-msgstr ""
+msgstr "Llegint configuració de% s"
 
 #: /src/schooltool/app/main.py:513
 msgid "No storage defined in the configuration file."
-msgstr ""
+msgstr "No hi ha emmagatzematge definida en el fitxer de configuració."
 
 #: /src/schooltool/app/main.py:633
 msgid ""
 "Could not initialize the database:\n"
 "%s"
-msgstr ""
+msgstr "No es va poder inicialitzar la base de dades: %s"
 
 #: /src/schooltool/app/main.py:702
 msgid ""
 "\n"
 "Perhaps another %s instance is using it?"
 msgstr ""
+"\n"
+"Potser una altra instància% s està utilitzant?"
 
 #: /src/schooltool/app/membership.py:261
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:20
@@ -2745,15 +2864,15 @@ msgstr ""
 #: /src/schooltool/group/browser/templates/f_group_view.pt:75
 #: /src/schooltool/group/browser/templates/group.pt:16
 msgid "Members"
-msgstr "Članovi"
+msgstr "Membres"
 
 #: /src/schooltool/app/membership.py:262
 msgid "Members of the group."
-msgstr ""
+msgstr "Membres del grup"
 
 #: /src/schooltool/app/security.py:305
 msgid "Assigned leaders."
-msgstr ""
+msgstr "Líders assignats"
 
 #: /src/schooltool/app/security.py:349
 msgid "${group} group."
@@ -2765,37 +2884,37 @@ msgstr ""
 
 #: /src/schooltool/app/security.zcml:62
 msgid "SchoolTool application"
-msgstr ""
+msgstr "Aplicació d'SchoolTool"
 
 #: /src/schooltool/app/security.zcml:74
 msgid "Access"
-msgstr "Приступ"
+msgstr "Accés"
 
 #: /src/schooltool/app/security.zcml:81
 msgid "Manage school settings and configuration"
-msgstr ""
+msgstr "Administrar la configuració i la configuració de l'escola"
 
 #: /src/schooltool/app/security.zcml:89
 #: /src/schooltool/course/security.zcml:142
 #: /src/schooltool/group/security.zcml:90
 #: /src/schooltool/person/security.zcml:122
 msgid "View calendar"
-msgstr "Приказ календара"
+msgstr "Vore el calendari"
 
 #: /src/schooltool/app/security.zcml:97
 #: /src/schooltool/course/security.zcml:150
 #: /src/schooltool/group/security.zcml:98
 #: /src/schooltool/person/security.zcml:130
 msgid "Change calendar"
-msgstr ""
+msgstr "Canviar calendari"
 
 #: /src/schooltool/app/timetable-integration.zcml:28
 msgid "Assign timetables"
-msgstr ""
+msgstr "Asignar taules de temps"
 
 #: /src/schooltool/app/timetable-integration.zcml:36
 msgid "Change schedule"
-msgstr "Promeni raspored"
+msgstr "Canviar horari"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:14
 #: /src/schooltool/basicperson/browser/configure.zcml:217
@@ -2821,30 +2940,30 @@ msgstr "Promeni raspored"
 #: /src/schooltool/term/security.zcml:35
 #: /src/schooltool/timetable/security.zcml:52
 msgid "View"
-msgstr "Pogledaj"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:33
 #: /src/schooltool/basicperson/browser/flourish.zcml:692
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:6
 #: /src/schooltool/basicperson/security.py:32
 msgid "Advisors"
-msgstr ""
+msgstr "Assessors"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:60
 #: /src/schooltool/basicperson/browser/flourish.zcml:593
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:25
 msgid "Advisees"
-msgstr ""
+msgstr "assessorats"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:101
 #: /src/schooltool/person/browser/configure.zcml:172
 #: /src/schooltool/person/browser/configure.zcml:181
 msgid "New Person"
-msgstr "Нова особа"
+msgstr "Persona nova"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:109
 msgid "Add Multiple Persons"
-msgstr ""
+msgstr "Afegix multiles persones"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:131
 #: /src/schooltool/basicperson/browser/demographics.py:384
@@ -2855,39 +2974,39 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/person.py:933
 #: /src/schooltool/basicperson/security.zcml:22
 msgid "Demographics"
-msgstr "Демографија"
+msgstr "Demografia"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:161
 #: /src/schooltool/basicperson/browser/flourish.zcml:356
 msgid "New Text Field"
-msgstr ""
+msgstr "Nou camp de tex"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:168
 #: /src/schooltool/basicperson/browser/flourish.zcml:374
 msgid "New Date Field"
-msgstr ""
+msgstr "Nova data de camp"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:175
 #: /src/schooltool/basicperson/browser/flourish.zcml:383
 msgid "New Yes/No Field"
-msgstr ""
+msgstr "Nou camp Sí/No"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:182
 #: /src/schooltool/basicperson/browser/flourish.zcml:392
 msgid "New Selection List Field"
-msgstr ""
+msgstr "Nova selecció a la llista de camps"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:292
 msgid "Add Teacher"
-msgstr "Додај наставника"
+msgstr "Afegeix professor"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:302
 msgid "Add Student"
-msgstr "Додај ученика"
+msgstr "Afegeix estudiant"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:312
 msgid "Add Administrator"
-msgstr ""
+msgstr "Afegeix administrador"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:47
 #: /src/schooltool/course/browser/csvimport.py:54
@@ -2897,92 +3016,92 @@ msgstr ""
 #: /src/schooltool/person/browser/csvimport.py:43
 #: /src/schooltool/resource/browser/csvimport.py:50
 msgid "Insufficient data provided."
-msgstr ""
+msgstr "Insuficients dades previstes"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:51
 #: /src/schooltool/person/browser/csvimport.py:47
 msgid "username may not be empty"
-msgstr ""
+msgstr "el nom d'usuari no pot estar buit"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:55
 msgid "first name may not be empty"
-msgstr ""
+msgstr "El primer nom no pot estar buit"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:59
 msgid "last name may not be empty"
-msgstr ""
+msgstr "L'últim nom no pot estar buit"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:71
 #: /src/schooltool/person/browser/csvimport.py:62
 msgid "Duplicate username: ${username}"
-msgstr ""
+msgstr "Duplicar l'usuari: ${username}"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:79
 #: /src/schooltool/basicperson/browser/person.py:206
 #: /src/schooltool/person/browser/csvimport.py:70
 msgid "Names cannot begin with '+' or '@' or contain '/'"
-msgstr ""
+msgstr "Els nom no poden estar amb  '+' o '@' o contenir '/'"
 
 #: /src/schooltool/basicperson/browser/csvimport.py:88
 #: /src/schooltool/basicperson/browser/person.py:210
 msgid "Usernames cannot contain non-ascii characters"
-msgstr ""
+msgstr "Els noms d'usuari no poden contenir caracters no-ascii"
 
 #: /src/schooltool/basicperson/browser/demographics.py:83
 msgid "Duplicate entry \"${value}\""
-msgstr ""
+msgstr "Duplica l'entrada \"${value}\""
 
 #: /src/schooltool/basicperson/browser/demographics.py:88
 msgid "Value too long \"${value}\""
-msgstr ""
+msgstr "Valor massa llarg \"$ {value}\""
 
 #: /src/schooltool/basicperson/browser/demographics.py:108
 #: /src/schooltool/basicperson/browser/flourish.zcml:273
 #: /src/schooltool/basicperson/browser/flourish.zcml:282
 msgid "Demographics and Personal Information"
-msgstr ""
+msgstr "Demografia i informació personal"
 
 #: /src/schooltool/basicperson/browser/demographics.py:148
 msgid "Add new Field"
-msgstr ""
+msgstr "Afegeix un nou camp"
 
 #: /src/schooltool/basicperson/browser/demographics.py:269
 #: /src/schooltool/basicperson/browser/demographics.py:507
 msgid "Change information for ${field_title}"
-msgstr ""
+msgstr "Canvia informació per a ${field_title}"
 
 #: /src/schooltool/basicperson/browser/demographics.py:305
 msgid "Stud."
-msgstr ""
+msgstr "Setmanal"
 
 #: /src/schooltool/basicperson/browser/demographics.py:306
 msgid "Teach."
-msgstr ""
+msgstr "Ensenyar"
 
 #: /src/schooltool/basicperson/browser/demographics.py:307
 msgid "Admin."
-msgstr ""
+msgstr "Administrador"
 
 #: /src/schooltool/basicperson/browser/demographics.py:310
 msgid "Selection"
-msgstr "Избор"
+msgstr "Selecció"
 
 #: /src/schooltool/basicperson/browser/demographics.py:312
 msgid "Text"
-msgstr "Текст"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/demographics.py:313
 msgid "Yes/No"
-msgstr "Да/не"
+msgstr "Sí/No"
 
 #: /src/schooltool/basicperson/browser/demographics.py:343
 msgid "Integer"
-msgstr "Цео број"
+msgstr "Senser"
 
 #: /src/schooltool/basicperson/browser/demographics.py:422
 #: /src/schooltool/basicperson/interfaces.py:144
 msgid "Limit to group(s)"
-msgstr ""
+msgstr "Límit del grup(s)"
 
 #: /src/schooltool/basicperson/browser/demographics.py:428
 #: /src/schooltool/basicperson/interfaces.py:145
@@ -2990,141 +3109,145 @@ msgid ""
 "If you select one or more groups below, this field will only be displayed in "
 "forms and reports for members of the selected groups."
 msgstr ""
+"Si seleccioneu un o més grups a continuació, aquest camp només es mostra en "
+"els formularis i informes per als membres dels grups seleccionats."
 
 #: /src/schooltool/basicperson/browser/demographics.py:406
 #: /src/schooltool/basicperson/browser/demographics.py:462
 msgid "Field Details"
-msgstr ""
+msgstr "Detalls del camp"
 
 #: /src/schooltool/basicperson/browser/demographics.py:584
 msgid "Please enter a valid ID"
-msgstr ""
+msgstr "Per favor introdueix un ID vàlid"
 
 #: /src/schooltool/basicperson/browser/demographics.py:588
 msgid "This ID is not unique."
-msgstr ""
+msgstr "Aquest ID no és únic"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:11
 #: /src/schooltool/basicperson/browser/flourish.zcml:16
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
 msgid "People"
-msgstr "Људи"
+msgstr "Gent"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
-msgstr ""
+msgstr "Afegeix noves persones"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:112
 #: /src/schooltool/basicperson/browser/person.py:346
 msgid "Add new person"
-msgstr "Додај нову особу"
+msgstr "Afegeix nova persona"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:121
 #: /src/schooltool/basicperson/browser/person.py:979
 msgid "Add new teacher"
-msgstr "Додај новог наставника"
+msgstr "Afegeix nou professor"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:131
 #: /src/schooltool/basicperson/browser/person.py:989
 msgid "Add new student"
-msgstr "Додај новог ученика"
+msgstr "Afegeix nou estudiant"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:141
 #: /src/schooltool/basicperson/browser/person.py:999
 msgid "Add new administrator"
-msgstr "Додај новог руководиоца"
+msgstr "Afegeix nou administrador"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:153
 msgid "Person"
-msgstr "Особа"
+msgstr "Persona"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:161
 msgid "Add Person"
-msgstr "Додај особу"
+msgstr "Afegeix persona"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:173
 msgid "Teacher"
-msgstr "Наставник"
+msgstr "Professor"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:181
 #: /src/schooltool/basicperson/browser/flourish.zcml:560
 msgid "Student"
-msgstr "Ученик"
+msgstr "Estudiant"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:189
 msgid "Administrator"
-msgstr "Руководилац"
+msgstr "Administrador"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:282
 #: /src/schooltool/level/browser/flourish.zcml:110
 #: /src/schooltool/resource/browser/flourish.zcml:29
 msgid "Reorder"
-msgstr ""
+msgstr "Reordenar"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:305
 msgid "Text Field"
-msgstr "Поље за текст"
+msgstr "Camp de text"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:313
 msgid "Description Field"
-msgstr ""
+msgstr "Descripció del camp"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:322
 msgid "Date Field"
-msgstr ""
+msgstr "Dada del camp"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:331
 msgid "Yes/No Field"
-msgstr ""
+msgstr "Sí/No camp"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:340
 msgid "Selection List Field"
-msgstr ""
+msgstr "Selecció de la llista del camp"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:349
 msgid "Integer Field"
-msgstr ""
+msgstr "Camp senser"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:359
 msgid "Reorder or Delete Fields"
-msgstr ""
+msgstr "Reordenar o esborrar camps"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:365
 msgid "New Description Field"
-msgstr ""
+msgstr "Nova descripció del camp"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:412
 msgid "New Integer Field"
-msgstr ""
+msgstr "Nou camp senser"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:633
 msgid "ID Card"
-msgstr ""
+msgstr "ID Targeta"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:627
 msgid ""
 "Includes student name, ID number, birth date, contact name and contact phone "
 "number."
 msgstr ""
+"Inclou el nom de l'estudiant, número d'identificació, data de naixement, nom "
+"de contacte i número de telèfon de contacte."
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 msgid "Person profile, contacts, groups, etc."
-msgstr ""
+msgstr "Persona perfil, contactes, grups, etc."
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 #: /src/schooltool/basicperson/browser/person.py:1369
 msgid "Profile"
-msgstr ""
+msgstr "Perfil"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:784
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
 msgid "Home"
-msgstr "Дом"
+msgstr "Inici"
 
 #: /src/schooltool/basicperson/browser/person.py:79
 #: /src/schooltool/person/browser/person.py:661
 msgid "Person index"
-msgstr ""
+msgstr "Índex de la persona"
 
 #: /src/schooltool/basicperson/browser/person.py:151
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:19
@@ -3133,21 +3256,23 @@ msgstr ""
 #: /src/schooltool/group/browser/templates/f_groupsviewlet.pt:18
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:61
 msgid "Group"
-msgstr "Grupa"
+msgstr "Grup"
 
 #: /src/schooltool/basicperson/browser/person.py:153
 msgid ""
 "You can select one group membership now.  Manage multiple memberships after "
 "account creation."
 msgstr ""
+"Pots seleccionar una pertinença al grup ara. Gestió de múltiples pertinences "
+"després de la creació de comptes."
 
 #: /src/schooltool/basicperson/browser/person.py:158
 msgid "Advisor"
-msgstr ""
+msgstr "Tutor"
 
 #: /src/schooltool/basicperson/browser/person.py:164
 msgid "Cannot begin with '+' or '@,' contain non-ascii characters or '/.'"
-msgstr ""
+msgstr "No es pot començar per '+' o '@', contenir caràcters no ASCII o '/'."
 
 #: /src/schooltool/basicperson/browser/person.py:169
 msgid "Users cannot log in until a password is assigned."
@@ -3156,19 +3281,19 @@ msgstr ""
 #: /src/schooltool/basicperson/browser/person.py:173
 #: /src/schooltool/widget/password.py:39
 msgid "Confirm password"
-msgstr "Потврди лозинку"
+msgstr "Confirmeu la contrasenya"
 
 #: /src/schooltool/basicperson/browser/person.py:179
 #: /src/schooltool/basicperson/browser/person.py:237
 msgid "Passwords do not match"
-msgstr "Лозинке се не поклапају"
+msgstr "Les contrasenyes no coincideixen"
 
 #: /src/schooltool/basicperson/browser/person.py:190
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:5
 #: /src/schooltool/person/browser/person.py:611
 #: /src/schooltool/person/interfaces.py:56
 msgid "Photo"
-msgstr "Фотографија"
+msgstr "Fotografia"
 
 #: /src/schooltool/basicperson/browser/person.py:191
 msgid ""
@@ -3176,38 +3301,41 @@ msgid ""
 "(3:4 aspect ratio). Uploaded images must be JPEG or PNG files smaller than "
 "10 MB"
 msgstr ""
+"Un arxiu d'imatge que es converteix un arxiu JPEG no major de 99x132 píxels "
+"(03:04 relació d'aspecte). Les imatges pujades han de ser JPEG o PNG de "
+"menys de 10 MB"
 
 #: /src/schooltool/basicperson/browser/person.py:229
 msgid "This username is already in use"
-msgstr ""
+msgstr "El nom de l'usuari ja està en ús"
 
 #: /src/schooltool/basicperson/browser/person.py:366
 msgid "Usernames"
-msgstr ""
+msgstr "Nom d'usuari"
 
 #: /src/schooltool/basicperson/browser/person.py:383
 msgid "Add multiple persons"
-msgstr ""
+msgstr "Afegeix múltiples persones"
 
 #: /src/schooltool/basicperson/browser/person.py:493
 #: /src/schooltool/resource/browser/resource.py:648
 msgid "Change information for ${fullname}"
-msgstr ""
+msgstr "Canvia la informació per a ${fullname}"
 
 #: /src/schooltool/basicperson/browser/person.py:545
 #: /src/schooltool/basicperson/browser/person.py:927
 #: /src/schooltool/contact/browser/contact.py:190
 #: /src/schooltool/contact/browser/contact.py:379
 msgid "Full Name"
-msgstr "Име и презиме"
+msgstr "Nom complet"
 
 #: /src/schooltool/basicperson/browser/person.py:639
 msgid "Current Advisors"
-msgstr ""
+msgstr "Tutors actuals"
 
 #: /src/schooltool/basicperson/browser/person.py:640
 msgid "Add Advisors"
-msgstr ""
+msgstr "Afegeix tutors"
 
 #: /src/schooltool/basicperson/browser/person.py:630
 msgid "Advisors of ${person}"
@@ -3215,63 +3343,63 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:660
 msgid "Current advisors"
-msgstr ""
+msgstr "Tutors actuals"
 
 #: /src/schooltool/basicperson/browser/person.py:661
 msgid "Available advisors"
-msgstr ""
+msgstr "Tutors vàlids"
 
 #: /src/schooltool/basicperson/browser/person.py:678
 msgid "Current Advisees"
-msgstr ""
+msgstr "Actuals assessorats"
 
 #: /src/schooltool/basicperson/browser/person.py:679
 msgid "Add Advisees"
-msgstr ""
+msgstr "Afegeix assessorats"
 
 #: /src/schooltool/basicperson/browser/person.py:669
 msgid "Advisees of ${person}"
-msgstr ""
+msgstr "Assessorats de ${person}"
 
 #: /src/schooltool/basicperson/browser/person.py:699
 msgid "Current advisees"
-msgstr ""
+msgstr "Actuals assessorats"
 
 #: /src/schooltool/basicperson/browser/person.py:700
 msgid "Available advisees"
-msgstr ""
+msgstr "Assessorats vàlids"
 
 #: /src/schooltool/basicperson/browser/person.py:935
 msgid "Relationships"
-msgstr "Односи"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:955
 msgid "Submit and add"
-msgstr ""
+msgstr "Enviar i afegir"
 
 #: /src/schooltool/basicperson/browser/person.py:976
 msgid "Teacher identification"
-msgstr ""
+msgstr "Identificació del professor"
 
 #: /src/schooltool/basicperson/browser/person.py:978
 msgid "Teacher demographics"
-msgstr ""
+msgstr "Demografia del professor"
 
 #: /src/schooltool/basicperson/browser/person.py:986
 msgid "Student identification"
-msgstr ""
+msgstr "Identificació de l'estudiant"
 
 #: /src/schooltool/basicperson/browser/person.py:988
 msgid "Student demographics"
-msgstr ""
+msgstr "Demografia de l'estudiant"
 
 #: /src/schooltool/basicperson/browser/person.py:996
 msgid "Administrator identification"
-msgstr ""
+msgstr "Identificació de l'administrador"
 
 #: /src/schooltool/basicperson/browser/person.py:998
 msgid "Administrator demographics"
-msgstr ""
+msgstr "Demografia de l'administrador"
 
 #: /src/schooltool/basicperson/browser/person.py:1155
 #: /src/schooltool/group/browser/flourish.zcml:358
@@ -3280,7 +3408,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:1327
 msgid "ID Card: ${person}"
-msgstr ""
+msgstr "ID targetes: ${person}"
 
 #: /src/schooltool/basicperson/browser/person.py:1386
 msgid "profile report"
@@ -3288,12 +3416,12 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/person.py:1402
 msgid "Username: ${username}"
-msgstr ""
+msgstr "Usuari: ${person}"
 
 #: /src/schooltool/basicperson/browser/person.py:1404
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:2
 msgid "General Information"
-msgstr "Општи подаци"
+msgstr "Informació general"
 
 #: /src/schooltool/basicperson/browser/person.py:1494
 msgid "Received"
@@ -3311,10 +3439,12 @@ msgstr ""
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
 msgstr ""
+"Afegeix professors, estudiants o administradors, per favor estableix a "
+"${school_year}"
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid "school year"
-msgstr "школска година"
+msgstr "Curs escolar"
 
 #. Default: "Delete"
 #: /src/schooltool/basicperson/browser/templates/container.pt:42
@@ -3328,34 +3458,34 @@ msgstr "школска година"
 #: /src/schooltool/skin/templates/view_macros.pt:191
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:30
 msgid "delete-button"
-msgstr "Obriši"
+msgstr "TEsborra"
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:2
 msgid "Advisory"
-msgstr "Саветодавни"
+msgstr "Avís"
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:7
 msgid "Manage this person's advisors"
-msgstr ""
+msgstr "Gestiona els avisos d'aquesta persona"
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:18
 msgid "The person has no advisors."
-msgstr ""
+msgstr "La persona no té avisos"
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:26
 msgid "Manage this person's advisees"
-msgstr ""
+msgstr "Gestiona els avisos d'aquesta persona"
 
 #: /src/schooltool/basicperson/browser/templates/f_advisoryViewlet.pt:37
 msgid "The person has no advisees."
-msgstr ""
+msgstr "La persona no té avisos"
 
 #: /src/schooltool/basicperson/browser/templates/f_container_table_filter.pt:45
 #: /src/schooltool/person/browser/f_person_filter.pt:26
 #: /src/schooltool/person/browser/f_person_table_filter.pt:45
 #: /src/schooltool/person/browser/person_filter.pt:5
 msgid "All groups"
-msgstr ""
+msgstr "Tots els grups"
 
 #: /src/schooltool/basicperson/browser/templates/f_csvimport_description.pt:3
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:24
@@ -3363,6 +3493,8 @@ msgid ""
 "CSV data <strong>must</strong> contain a user name a first name and a last "
 "name. An optional password <strong>may</strong> be included as well."
 msgstr ""
+"<strong> Dades CSV ha </ strong> conté un nom d'usuari un nom i un cognom. "
+"Una contrasenya opcional <strong> maig </ strong> s'inclourà també."
 
 #. Default: "jjones, Jimmy, Jones jbjones, Jim Bob, Jones, r2m45J howard, Howard, Jobs"
 #: /src/schooltool/basicperson/browser/templates/f_csvimport_description.pt:9
@@ -3373,6 +3505,10 @@ msgid ""
 "jbjones, Jim Bob, Jones, r2m45J\n"
 "howard, Howard, Jobs\n"
 msgstr ""
+"\n"
+"jjones, Jimmy, Jones\n"
+"jbjones, Jim Bob, Jones, r2m45J\n"
+"howard, Howard, Jobs\n"
 
 #: /src/schooltool/basicperson/browser/templates/f_csvimport_description.pt:15
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:40
@@ -3382,16 +3518,20 @@ msgid ""
 "Of the three, only 'jbjones' has a password ('r2m45J') and will be able to "
 "login to the system. Note that passwords must be sent in plain text."
 msgstr ""
+"L'exemple anterior crearà tres usuaris, 'jjones', 'jbjones' i 'howard'. Dels "
+"tres, només \"jbjones 'té una contrasenya (\" r2m45J') i serà capaç "
+"d'iniciar sessió en el sistema. Tingueu en compte que les contrasenyes han "
+"de ser enviades en text pla."
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:8
 msgid "Order"
-msgstr "Редослед"
+msgstr "Ordre"
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:10
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:6
 #: /src/schooltool/basicperson/interfaces.py:136
 msgid "ID"
-msgstr "ИД"
+msgstr "IDENTIFICADOR"
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:11
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:34
@@ -3427,43 +3567,43 @@ msgstr "ИД"
 #: /src/schooltool/timetable/browser/flourish.zcml:481
 #: /src/schooltool/timetable/browser/schedule.py:364
 msgid "Delete"
-msgstr "Избриши"
+msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:8
 #: /src/schooltool/basicperson/interfaces.py:140
 msgid "Required"
-msgstr "Неопходно"
+msgstr "Requerit"
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:9
 msgid "Limited"
-msgstr ""
+msgstr "Limitat"
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:10
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:29
 msgid "Edit this person's information"
-msgstr ""
+msgstr "Edita la informació d'aquesta persona"
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:24
 msgid "Demographics and other personal data"
-msgstr ""
+msgstr "Demografia i altres dades personals"
 
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
 msgid "Manage people"
-msgstr ""
+msgstr "Gestiona la gent"
 
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:14
 msgid "There are ${count} people defined in ${school}."
-msgstr ""
+msgstr "Hi ha ${count} gent definida en ${school}"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_add_multiple.pt:10
 #: /src/schooltool/basicperson/browser/templates/person_add_multiple.pt:13
 msgid "Added persons"
-msgstr ""
+msgstr "Afegeix persones"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_add_subform.pt:3
 #: /src/schooltool/basicperson/browser/templates/person_add_subform.pt:2
 msgid "New person"
-msgstr "Нова особа"
+msgstr "Nova persona"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_form.pt:51
 #: /src/schooltool/contact/browser/templates/f_contact_form.pt:51
@@ -3472,23 +3612,23 @@ msgstr "Нова особа"
 #: /src/schooltool/skin/flourish/templates/z3c-schooltool-form.pt:51
 #: /src/schooltool/timetable/browser/templates/f_specialday_select.pt:12
 msgid "signifies a required field"
-msgstr ""
+msgstr "significa un camp obligatori"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:90
 msgid "ID:"
-msgstr "ИД:"
+msgstr "Identificador:"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:95
 msgid "Birth date:"
-msgstr "Датум рођења:"
+msgstr "Data de naixement"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:99
 msgid "Contact"
-msgstr "Контакт"
+msgstr "Contacte"
 
 #: /src/schooltool/basicperson/browser/templates/f_person_id_cards.pt:111
 msgid "Contact's Phone"
-msgstr ""
+msgstr "Contacte telefònic"
 
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
 #: /src/schooltool/person/browser/person-csvimport.pt:4
@@ -3499,7 +3639,7 @@ msgstr ""
 #: /src/schooltool/person/browser/configure.zcml:82
 #: /src/schooltool/person/browser/person-csvimport.pt:26
 msgid "Import Persons"
-msgstr ""
+msgstr "Importa persones"
 
 #: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:15
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:15
@@ -3507,7 +3647,7 @@ msgstr ""
 #: /src/schooltool/resource/browser/container_delete.pt:10
 #: /src/schooltool/skin/templates/container_delete.pt:15
 msgid "Are you sure you want to delete selected items?"
-msgstr ""
+msgstr "Estàs segur de que vols esborrar els ítems seleccionats?"
 
 #: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:21
 #: /src/schooltool/contact/browser/templates/contacts_delete.pt:21
@@ -3520,7 +3660,7 @@ msgstr ""
 #: /src/schooltool/term/browser/templates/term-container-delete.pt:16
 #: /src/schooltool/timetable/browser/templates/timetable_container_delete.pt:16
 msgid "You have not selected any items."
-msgstr ""
+msgstr "No tens seleccionat cap ítem"
 
 #: /src/schooltool/basicperson/browser/templates/person_container_delete.pt:23
 #: /src/schooltool/person/browser/person_container_delete.pt:23
@@ -3539,120 +3679,122 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/confirm_schedule_delete.pt:27
 #: /src/schooltool/timetable/browser/templates/timetable_container_delete.pt:27
 msgid "Confirm"
-msgstr "Потврди"
+msgstr "Confirma"
 
 #: /src/schooltool/basicperson/browser/templates/person_view.pt:13
 #: /src/schooltool/person/browser/home.pt:13
 #: /src/schooltool/person/browser/person.pt:4
 msgid "Person info: ${title}"
-msgstr ""
+msgstr "Informació personal: ${title}"
 
 #: /src/schooltool/basicperson/demographics.py:143
 msgid "Ethnicity"
-msgstr ""
+msgstr "Etnia"
 
 #: /src/schooltool/basicperson/demographics.py:144
 msgid "American Indian or Alaska Native"
-msgstr ""
+msgstr "Indi americà o Natiu d'Alaska"
 
 #: /src/schooltool/basicperson/demographics.py:145
 msgid "Asian"
-msgstr "Азијски"
+msgstr "Àsiàtic"
 
 #: /src/schooltool/basicperson/demographics.py:146
 msgid "Black or African American"
-msgstr "Црнац или Афроамериканац"
+msgstr "Negre o Afroamericà"
 
 #: /src/schooltool/basicperson/demographics.py:147
 msgid "Native Hawaiian or Other Pacific Islander"
-msgstr ""
+msgstr "Natiu Hawaiià o altra isla del Pacífic"
 
 #: /src/schooltool/basicperson/demographics.py:148
 msgid "White"
-msgstr "Бели"
+msgstr "Blanc"
 
 #: /src/schooltool/basicperson/demographics.py:150
 msgid "Place of birth"
-msgstr ""
+msgstr "Lloc de naixement"
 
 #: /src/schooltool/basicperson/demographics.py:151
 msgid "Citizenship"
-msgstr ""
+msgstr "Ciutadà"
 
 #: /src/schooltool/basicperson/interfaces.py:38
 #: /src/schooltool/contact/interfaces.py:40
 msgid "Prefix"
-msgstr "Префикс"
+msgstr "Prefix"
 
 #: /src/schooltool/basicperson/interfaces.py:47
 #: /src/schooltool/contact/interfaces.py:44
 msgid "Middle name"
-msgstr "Средње име"
+msgstr "Segon nom"
 
 #: /src/schooltool/basicperson/interfaces.py:57
 #: /src/schooltool/contact/interfaces.py:48
 msgid "Suffix"
-msgstr "Суфикс"
+msgstr "Sufix"
 
 #: /src/schooltool/basicperson/interfaces.py:62
 msgid "Preferred name"
-msgstr ""
+msgstr "Nom preferit"
 
 #: /src/schooltool/basicperson/interfaces.py:67
 msgid "Gender"
-msgstr "Пол"
+msgstr "Gènere"
 
 #: /src/schooltool/basicperson/interfaces.py:68
 msgid "Female"
-msgstr "Женски"
+msgstr "Dona"
 
 #: /src/schooltool/basicperson/interfaces.py:68
 msgid "Male"
-msgstr "Мушки"
+msgstr "Home"
 
 #: /src/schooltool/basicperson/interfaces.py:73
 msgid "Birth date"
-msgstr "Датум рођења"
+msgstr "Data de naixement"
 
 #: /src/schooltool/basicperson/interfaces.py:74
 msgid "(yyyy-mm-dd)"
-msgstr "(гггг-мм-дд)"
+msgstr "(yyyy-mm-dd)"
 
 #: /src/schooltool/basicperson/interfaces.py:133
 msgid "As it should appear on forms and reports."
-msgstr ""
+msgstr "Com apareixerà als formularis i informes."
 
 #: /src/schooltool/basicperson/interfaces.py:138
 msgid "A unique one word alphanumeric identifier."
-msgstr ""
+msgstr "Una sola paraula identificador alfanumèric únic."
 
 #: /src/schooltool/basicperson/interfaces.py:163
 msgid "Selection list"
-msgstr ""
+msgstr "Llista de selecció"
 
 #: /src/schooltool/basicperson/interfaces.py:163
 msgid ""
 "Enter the valid values for the field below.  One value per line.  These "
 "values will be displayed as a menu in forms."
 msgstr ""
+"Entre els valors vàlids per al camp de sota. Un valor per línia. Aquests "
+"valors es mostren com un menú en formularis."
 
 #: /src/schooltool/basicperson/interfaces.py:173
 msgid "Minimum value"
-msgstr ""
+msgstr "Valor mínim"
 
 #: /src/schooltool/basicperson/interfaces.py:177
 msgid "Maximum value"
-msgstr ""
+msgstr "Valor màxim"
 
 #: /src/schooltool/basicperson/person.py:75
 #: /src/schooltool/contact/browser/contact.py:503
 msgid "First Name"
-msgstr "Име"
+msgstr "Nom"
 
 #: /src/schooltool/basicperson/person.py:82
 #: /src/schooltool/contact/browser/contact.py:503
 msgid "Last Name"
-msgstr "Презиме"
+msgstr "Cognoms"
 
 #: /src/schooltool/basicperson/security.py:33
 msgid "Advisors of a person."
@@ -3660,27 +3802,27 @@ msgstr ""
 
 #: /src/schooltool/basicperson/security.zcml:26
 msgid "Create, delete demographics fields and change their order."
-msgstr ""
+msgstr "Crear, eliminar camps de la demografia i canviar el seu ordre."
 
 #: /src/schooltool/basicperson/security.zcml:35
 msgid "Edit fields"
-msgstr ""
+msgstr "Edita camps"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "View user demographics"
-msgstr ""
+msgstr "Visualitza la demografia dels usuaris"
 
 #: /src/schooltool/basicperson/security.zcml:43
 msgid "View user's demographics information"
-msgstr ""
+msgstr "Veure informació demogràfica de l'usuari"
 
 #: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user demographics"
-msgstr ""
+msgstr "Modificar demografia dels usuaris"
 
 #: /src/schooltool/basicperson/security.zcml:52
 msgid "Modify user's demographics information."
-msgstr ""
+msgstr "Modificar informació demogràfica de l'usuari."
 
 #: /src/schooltool/basicperson/vocabularies.py:131
 #: /src/schooltool/course/browser/flourish.zcml:301
@@ -3694,56 +3836,56 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/section_container.pt:77
 #: /src/schooltool/course/browser/templates/section_linkage.pt:45
 msgid "Students"
-msgstr "Ученици"
+msgstr ""
 
 #: /src/schooltool/basicperson/vocabularies.py:132
 msgid "Teachers"
-msgstr "Наставници"
+msgstr "Professors"
 
 #: /src/schooltool/basicperson/vocabularies.py:133
 msgid "Administrators"
-msgstr "Руководиоци"
+msgstr "Administradors"
 
 #: /src/schooltool/calendar/browser/calendar.py:173
 msgid "Tomorrow"
-msgstr "Сутра"
+msgstr "Demà"
 
 #: /src/schooltool/calendar/browser/calendar.py:175
 msgid "Yesterday"
-msgstr "Јуче"
+msgstr "Ahir"
 
 #: /src/schooltool/calendar/browser/calendar.py:195
 msgid "This Week"
-msgstr "Ове седмице"
+msgstr "Esta setmana"
 
 #: /src/schooltool/calendar/browser/calendar.py:197
 msgid "Last Week"
-msgstr "Прошла седмица"
+msgstr "Darrera setmana"
 
 #: /src/schooltool/calendar/browser/calendar.py:199
 msgid "Next Week"
-msgstr "Следећа седмица"
+msgstr "Propera setmana"
 
 #: /src/schooltool/calendar/browser/calendar.py:236
 msgid "Jump To"
-msgstr ""
+msgstr "Anar a"
 
 #: /src/schooltool/calendar/browser/event.py:129
 #: /src/schooltool/calendar/browser/event.py:156
 msgid "Reserved by others"
-msgstr ""
+msgstr "Reservat per a altres"
 
 #: /src/schooltool/calendar/browser/event.py:132
 msgid "Release resource"
-msgstr ""
+msgstr "Actualitza recurs"
 
 #: /src/schooltool/calendar/browser/event.py:159
 msgid "Reserve resource"
-msgstr ""
+msgstr "Reserva recurs"
 
 #: /src/schooltool/calendar/browser/event.py:187
 msgid "All occurrences of this event"
-msgstr ""
+msgstr "Totes les aparicions d'aquest esdeveniment"
 
 #: /src/schooltool/calendar/browser/event.py:188
 msgid "Only current occurrence"
@@ -3751,34 +3893,34 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/event.py:189
 msgid "This and all future occurrences"
-msgstr ""
+msgstr "Aquesta i totes les fututres aparicions"
 
 #: /src/schooltool/calendar/browser/event.py:222
 msgid "Delete event ${event}"
-msgstr ""
+msgstr "Esborra l'esdeveniment ${event}"
 
 #: /src/schooltool/calendar/browser/flourish.zcml:81
 msgid "Event"
-msgstr "Догађај"
+msgstr "Esdeveniment"
 
 #: /src/schooltool/calendar/browser/flourish.zcml:166
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:392
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:181
 msgid "Reserve resources"
-msgstr ""
+msgstr "Reserva de recursos"
 
 #: /src/schooltool/calendar/browser/overlay.py:33
 msgid "Show"
-msgstr "Прикажи"
+msgstr "Mostra"
 
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:35
 msgid "Select"
-msgstr "Изабери"
+msgstr "Selecciona"
 
 #: /src/schooltool/calendar/browser/templates/event.pt:52
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:53
 msgid "Reserved resources"
-msgstr ""
+msgstr "Recursos reservats"
 
 #: /src/schooltool/calendar/browser/templates/event.pt:54
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:55
@@ -3789,15 +3931,15 @@ msgstr ""
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:369
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:160
 msgid "Reserved Resources"
-msgstr ""
+msgstr "Recursos reservats"
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:4
 msgid "Deleting an event on ${day}."
-msgstr ""
+msgstr "Esborra un esdeveniment el dia ${day}"
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:8
 msgid "This is an all day event."
-msgstr ""
+msgstr "Aquest és un esdeveniment de tot el dia."
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:12
 msgid "You are deleting a repeating event."
@@ -3806,11 +3948,11 @@ msgstr ""
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:202
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:146
 msgid "Reserve Resources"
-msgstr ""
+msgstr "Reserva de recursos"
 
 #: /src/schooltool/common/fields.py:38
 msgid "Image size"
-msgstr ""
+msgstr "Mida de la imatge"
 
 #: /src/schooltool/common/fields.py:39
 msgid "Size in pixels"
@@ -3818,7 +3960,7 @@ msgstr ""
 
 #: /src/schooltool/common/fields.py:44
 msgid "Image format"
-msgstr ""
+msgstr "Format de la imatge"
 
 #: /src/schooltool/common/fields.py:48
 msgid "Max file size in bytes"
@@ -3833,33 +3975,33 @@ msgstr ""
 #: /src/schooltool/resource/browser/configure.zcml:257
 #: /src/schooltool/resource/browser/configure.zcml:271
 msgid "Edit Info"
-msgstr ""
+msgstr "Edita informació"
 
 #: /src/schooltool/common/security.zcml:13
 msgid "Add Info"
-msgstr ""
+msgstr "Afegeix informació"
 
 #: /src/schooltool/common/security.zcml:14
 msgid "Edit Calendar Overlays"
-msgstr ""
+msgstr "Edita calendari superposat"
 
 #: /src/schooltool/contact/browser/basicperson.py:123
 #: /src/schooltool/contact/browser/contact.py:195
 #: /src/schooltool/contact/browser/contact.py:392
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:31
 msgid "Address"
-msgstr "Адреса"
+msgstr ""
 
 #: /src/schooltool/contact/browser/basicperson.py:121
 #: /src/schooltool/contact/browser/contact.py:198
 #: /src/schooltool/contact/browser/contact.py:387
 #: /src/schooltool/contact/browser/flourish.zcml:155
 msgid "Contact Information"
-msgstr "Подаци за контакт"
+msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:41
 msgid "View Person"
-msgstr "Приказ особе"
+msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:61
 #: /src/schooltool/contact/browser/flourish.zcml:63
@@ -3867,7 +4009,7 @@ msgstr "Приказ особе"
 #: /src/schooltool/contact/browser/flourish.zcml:178
 #: /src/schooltool/contact/browser/flourish.zcml:188
 msgid "New Contact"
-msgstr "Нови контакт"
+msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:76
 #: /src/schooltool/contact/browser/configure.zcml:88
@@ -3879,7 +4021,7 @@ msgstr "Нови контакт"
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:59
 #: /src/schooltool/contact/contact.py:71
 msgid "Contacts"
-msgstr "Контакти"
+msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:110
 msgid "Manage Contacts"
@@ -3888,17 +4030,17 @@ msgstr ""
 #: /src/schooltool/contact/browser/configure.zcml:121
 #: /src/schooltool/contact/browser/configure.zcml:133
 msgid "Other Contacts"
-msgstr "Остали контакти"
+msgstr ""
 
 #: /src/schooltool/contact/browser/configure.zcml:178
 #: /src/schooltool/contact/browser/contact.py:638
 #: /src/schooltool/email/browser/email.py:689
 msgid "Send Email"
-msgstr "Пошаљи е-поруку"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:104
 msgid "Add new contact"
-msgstr "Додај нови контакт"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:248
 msgid "Add new contact for ${person}"
@@ -3924,7 +4066,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:684
 #: /src/schooltool/email/interfaces.py:39
 msgid "From"
-msgstr "Од"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:621
 #: /src/schooltool/email/browser/email.py:287
@@ -3932,7 +4074,7 @@ msgstr "Од"
 #: /src/schooltool/email/browser/email.py:664
 #: /src/schooltool/email/interfaces.py:43
 msgid "To"
-msgstr "За"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:622
 #: /src/schooltool/email/browser/email.py:297
@@ -3940,7 +4082,7 @@ msgstr "За"
 #: /src/schooltool/email/browser/email.py:668
 #: /src/schooltool/email/interfaces.py:53
 msgid "Subject"
-msgstr "Тема"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:623
 #: /src/schooltool/email/browser/email.py:301
@@ -3948,13 +4090,13 @@ msgstr "Тема"
 #: /src/schooltool/email/interfaces.py:49
 #: /src/schooltool/note/interfaces.py:46
 msgid "Body"
-msgstr "Тело"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:641
 #: /src/schooltool/email/browser/email.py:692
 #: /src/schooltool/email/browser/email.py:739
 msgid "Send"
-msgstr "Пошаљи"
+msgstr ""
 
 #: /src/schooltool/contact/browser/contact.py:645
 msgid "There were some errors."
@@ -3970,13 +4112,13 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/flourish.zcml:206
 msgid "Edit Contact Information"
-msgstr "Уреди податке контакта"
+msgstr ""
 
 #: /src/schooltool/contact/browser/relationship.py:78
 #: /src/schooltool/contact/browser/templates/contactperson_subform.pt:8
 #: /src/schooltool/contact/interfaces.py:101
 msgid "Relationship"
-msgstr "Однос"
+msgstr ""
 
 #: /src/schooltool/contact/browser/relationship.py:89
 msgid "Assigned Contacts"
@@ -4064,7 +4206,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/view_macros.pt:144
 #: /src/schooltool/table/templates/filter.pt:4
 msgid "Find Now"
-msgstr "Пронађи сада"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/filter.pt:24
 #: /src/schooltool/person/browser/person_filter.pt:13
@@ -4074,7 +4216,7 @@ msgstr "Пронађи сада"
 #: /src/schooltool/skin/templates/view_macros.pt:146
 #: /src/schooltool/table/templates/filter.pt:6
 msgid "Clear"
-msgstr "Очисти"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 msgid "Shortcut: Alt-R"
@@ -4090,7 +4232,7 @@ msgstr ""
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:58
 msgid "Assign"
-msgstr "Додели"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/noteacheremail.pt:5
 msgid ""
@@ -4106,15 +4248,15 @@ msgstr ""
 #: /src/schooltool/contact/interfaces.py:68
 #: /src/schooltool/email/browser/email.py:733
 msgid "Email"
-msgstr "Е-пошта"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:41
 msgid "Phones"
-msgstr "Телефони"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:50
 msgid "Spoken Languages"
-msgstr "Говорни језици"
+msgstr ""
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:73
 msgid "(View Details)"
@@ -4152,47 +4294,47 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:53
 msgid "Address line 1"
-msgstr "1. ред за адресу"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:55
 msgid "Address line 2"
-msgstr "2. ред за адресу"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:57
 msgid "City"
-msgstr "Град"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:59
 msgid "State"
-msgstr "Држава"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:61
 msgid "Country"
-msgstr "Регион"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:63
 msgid "Postal code"
-msgstr "Поштански број"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:73
 msgid "Home phone"
-msgstr "Кућни телефон"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:75
 msgid "Work phone"
-msgstr "Телефон на послу"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:77
 msgid "Mobile phone"
-msgstr "Мобилни телефон"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:82
 msgid "Other 1"
-msgstr "Други 1"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:84
 msgid "Other 2"
-msgstr "Други 2"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:109
 msgid "Contact's relationship with the person"
@@ -4200,7 +4342,7 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:104
 msgid "Parent"
-msgstr "Родитељ"
+msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:105
 msgid "Step-parent"
@@ -4216,7 +4358,7 @@ msgstr ""
 
 #: /src/schooltool/contact/interfaces.py:108
 msgid "Sibling"
-msgstr "Рођак"
+msgstr ""
 
 #: /src/schooltool/contact/security.zcml:29
 #: /src/schooltool/person/security.zcml:73
@@ -4263,7 +4405,7 @@ msgstr ""
 #: /src/schooltool/course/browser/configure.zcml:96
 #: /src/schooltool/course/browser/flourish.zcml:270
 msgid "Add Course"
-msgstr "Додај течај"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:25
 msgid "Edit Course Information"
@@ -4272,17 +4414,17 @@ msgstr ""
 #: /src/schooltool/course/browser/configure.zcml:85
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:21
 msgid "Import Courses"
-msgstr "Preuzmi kurseve"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:183
 #: /src/schooltool/course/browser/configure.zcml:193
 #: /src/schooltool/course/browser/flourish.zcml:394
 msgid "Add Section"
-msgstr "Додај одељак"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:203
 msgid "Edit Section Information"
-msgstr "Izmeni informacije o sekciji"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:217
 #: /src/schooltool/course/browser/section-member-csvimport.pt:21
@@ -4298,7 +4440,7 @@ msgstr ""
 #: /src/schooltool/course/security.zcml:108
 #: /src/schooltool/dashboard/term.pt:10
 msgid "Sections"
-msgstr "Одељци"
+msgstr ""
 
 #: /src/schooltool/course/browser/configure.zcml:299
 msgid "Copy from prev. term"
@@ -4329,7 +4471,7 @@ msgstr ""
 #: /src/schooltool/course/browser/course.py:545
 #: /src/schooltool/course/browser/course.py:597
 msgid "Course Information"
-msgstr "Подаци о терену"
+msgstr ""
 
 #: /src/schooltool/course/browser/course.py:669
 #: /src/schooltool/course/browser/templates/f_course_filter.pt:6
@@ -4372,7 +4514,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/link_existing.pt:15
 #: /src/schooltool/course/browser/templates/unlink_section.pt:14
 msgid "Course"
-msgstr "Течај"
+msgstr ""
 
 #: /src/schooltool/course/browser/flourish.zcml:141
 #: /src/schooltool/course/browser/flourish.zcml:149
@@ -4388,7 +4530,7 @@ msgstr "Течај"
 #: /src/schooltool/course/browser/templates/unlink_section.pt:13
 #: /src/schooltool/course/browser/templates/unlink_section.pt:28
 msgid "Section"
-msgstr "Sekcija"
+msgstr ""
 
 #: /src/schooltool/course/browser/flourish.zcml:440
 #: /src/schooltool/course/browser/templates/f_section_view.pt:141
@@ -4412,7 +4554,7 @@ msgstr ""
 #: /src/schooltool/term/browser/term.py:764
 #: /src/schooltool/term/security.zcml:19
 msgid "Terms"
-msgstr "Услови"
+msgstr ""
 
 #: /src/schooltool/course/browser/flourish.zcml:467
 msgid "Import Students CSV"
@@ -4447,7 +4589,7 @@ msgstr ""
 #: /src/schooltool/person/browser/person.py:683
 #: /src/schooltool/person/interfaces.py:52
 msgid "Full name"
-msgstr "Име и презиме"
+msgstr ""
 
 #: /src/schooltool/course/browser/section-member-csvimport.pt:4
 msgid "Upload SchoolTool section members as CSV"
@@ -4479,11 +4621,11 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:572
 msgid "Current Students"
-msgstr "Sadašnji studenti"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:573
 msgid "Available Students"
-msgstr "Dostupni studenti"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:934
 msgid "Delete ${section}"
@@ -4500,7 +4642,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/unlink_section.pt:29
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:29
 msgid "Term"
-msgstr "Услов"
+msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1077
 #: /src/schooltool/course/browser/templates/f_section_filter.pt:6
@@ -4604,11 +4746,11 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:70
 msgid "Select None"
-msgstr "Не приказуј ништа"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:74
 msgid "Invert Selection"
-msgstr "Обрни избор"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:91
 #: /src/schooltool/course/browser/templates/link_section.pt:67
@@ -4619,15 +4761,15 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/link_section.pt:72
 #: /src/schooltool/course/browser/templates/section_container.pt:45
 msgid "Current Size"
-msgstr "Trenutna veličina"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:103
 msgid "Copied"
-msgstr "Умножено"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:149
 msgid "Copy"
-msgstr "Умножи"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
 msgid "Upload schooltool courses as CSV"
@@ -4677,11 +4819,11 @@ msgstr ""
 #: /src/schooltool/person/browser/home.pt:20
 #: /src/schooltool/person/browser/person.pt:11
 msgid "photo"
-msgstr "фотографија"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/course.pt:71
 msgid "students"
-msgstr "ученици"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/course_edit.pt:22
 #: /src/schooltool/course/browser/templates/section_edit.pt:23
@@ -4719,7 +4861,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/extend_term.pt:27
 msgid "Extend"
-msgstr "Прошири"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_confirm_delete_course.pt:1
 msgid ""
@@ -4813,7 +4955,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:33
 msgid "Instructor"
-msgstr "Инструктор"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:37
 #: /src/schooltool/course/browser/templates/link_existing.pt:30
@@ -4825,7 +4967,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:51
 #: /src/schooltool/course/browser/templates/link_existing.pt:46
 msgid "Filter"
-msgstr "Сито"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:61
 #: /src/schooltool/course/browser/templates/link_existing.pt:35
@@ -4870,7 +5012,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:43
 msgid "Unlink"
-msgstr "Раскини везу"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:92
 #: /src/schooltool/course/browser/templates/section_linkage.pt:55
@@ -5018,7 +5160,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:63
 msgid "Previous"
-msgstr "Претходно"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:64
 msgid "Section in the previous term."
@@ -5050,7 +5192,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard_period_order2.pt:39
 #: /src/schooltool/timetable/browser/templates/ttwizard_slottimes.pt:32
 msgid "Next"
-msgstr "Sledeće"
+msgstr ""
 
 #: /src/schooltool/course/browser/templates/section_edit.pt:98
 msgid "Section in the next term."
@@ -5091,11 +5233,11 @@ msgstr ""
 
 #: /src/schooltool/course/interfaces.py:55
 msgid "Credits"
-msgstr "Заслуге"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:89
 msgid "Label"
-msgstr "Oznaka"
+msgstr ""
 
 #: /src/schooltool/course/interfaces.py:92
 msgid ""
@@ -5180,7 +5322,7 @@ msgstr ""
 #: /src/schooltool/schoolyear/security.zcml:9
 #: /src/schooltool/term/security.zcml:21
 msgid "List"
-msgstr "Списак"
+msgstr ""
 
 #: /src/schooltool/course/security.zcml:87
 #: /src/schooltool/course/security.zcml:121
@@ -5202,7 +5344,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:61
 #: /src/schooltool/timetable/security.zcml:59
 msgid "Modify"
-msgstr "Измени"
+msgstr ""
 
 #: /src/schooltool/course/security.zcml:107
 msgid "A section is a set of one or more learners who meet during a term."
@@ -5211,22 +5353,22 @@ msgstr ""
 #: /src/schooltool/dashboard/dashboard.pt:62
 #: /src/schooltool/dashboard/dashboard.pt:66
 msgid "Dashboard"
-msgstr "Командна табла"
+msgstr ""
 
 #: /src/schooltool/dashboard/interfaces.py:48
 msgid "Weight"
-msgstr "Вредност"
+msgstr ""
 
 #: /src/schooltool/dashboard/school.pt:10
 msgid "Activity Categories"
-msgstr "Активне категорије"
+msgstr ""
 
 #: /src/schooltool/dashboard/school.pt:16
 #: /src/schooltool/timetable/browser/app.py:84
 #: /src/schooltool/timetable/browser/flourish.zcml:29
 #: /src/schooltool/timetable/browser/templates/link_to_school_timetables.pt:1
 msgid "School Timetables"
-msgstr "Распоред школа"
+msgstr ""
 
 #: /src/schooltool/devmode/configure.zcml:52
 #: /src/schooltool/devmode/devmode.pt:20
@@ -5235,7 +5377,7 @@ msgstr ""
 
 #: /src/schooltool/devmode/devmode.pt:11
 msgid "Developer Tools"
-msgstr "Програмерске алатке"
+msgstr ""
 
 #: /src/schooltool/devmode/f_unauthorized.pt:3
 #: /src/schooltool/skin/templates/f_unauthorized.pt:3
@@ -5255,7 +5397,7 @@ msgstr ""
 #: /src/schooltool/devmode/flourish-overrides.zcml:8
 #: /src/schooltool/skin/flourish/instance/skin.zcml:68
 msgid "Unauthorized"
-msgstr "Неовлашћен"
+msgstr ""
 
 #: /src/schooltool/email/browser/configure.zcml:58
 #: /src/schooltool/email/browser/flourish.zcml:20
@@ -5267,7 +5409,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/configure.zcml:87
 msgid "Send Test"
-msgstr "Пошаљи тест"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:86
 #: /src/schooltool/email/browser/email.py:573
@@ -5280,7 +5422,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:798
 #: /src/schooltool/securitypolicy/browser/control.py:97
 msgid "Disabled"
-msgstr "Искључено"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:98
 #: /src/schooltool/email/browser/email.py:277
@@ -5292,13 +5434,13 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:102
 #: /src/schooltool/email/interfaces.py:87
 msgid "Enable"
-msgstr "Укључи"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:107
 #: /src/schooltool/email/browser/templates/f_email_settings_overview.pt:17
 #: /src/schooltool/email/interfaces.py:92
 msgid "Hostname"
-msgstr "Име домаћина"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:108
 #: /src/schooltool/email/interfaces.py:93
@@ -5308,7 +5450,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:112
 #: /src/schooltool/email/interfaces.py:97
 msgid "Port"
-msgstr "Прикључак"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:113
 #: /src/schooltool/email/interfaces.py:98
@@ -5327,7 +5469,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:129
 #: /src/schooltool/email/interfaces.py:109
 msgid "New Password"
-msgstr "Нова лозинка"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:130
 #: /src/schooltool/email/interfaces.py:110
@@ -5336,12 +5478,12 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:134
 msgid "Confirm New Password"
-msgstr "Потврди нову лозинку"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:138
 #: /src/schooltool/email/interfaces.py:114
 msgid "TLS"
-msgstr "TLS"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:139
 #: /src/schooltool/email/interfaces.py:115
@@ -5382,7 +5524,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:514
 #: /src/schooltool/email/interfaces.py:70
 msgid "Created on"
-msgstr "Створено"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:293
 #: /src/schooltool/email/interfaces.py:71
@@ -5411,7 +5553,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:345
 #: /src/schooltool/email/browser/email.py:407
 msgid "Retry"
-msgstr "Покушај поново"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:557
 #: /src/schooltool/email/browser/email.py:845
@@ -5422,7 +5564,7 @@ msgstr ""
 #: /src/schooltool/email/browser/email.py:796
 #: /src/schooltool/securitypolicy/browser/control.py:97
 msgid "Enabled"
-msgstr "Укључено"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:668
 msgid "Queue (${count} failed)"
@@ -5430,7 +5572,7 @@ msgstr ""
 
 #: /src/schooltool/email/browser/email.py:647
 msgid "Queue"
-msgstr "Ред"
+msgstr ""
 
 #: /src/schooltool/email/browser/email.py:669
 #: /src/schooltool/email/interfaces.py:54
@@ -5514,7 +5656,7 @@ msgstr ""
 
 #: /src/schooltool/email/interfaces.py:58
 msgid "Status"
-msgstr "Стање"
+msgstr ""
 
 #: /src/schooltool/email/interfaces.py:59
 msgid "Code for the status of the message"
@@ -5635,7 +5777,7 @@ msgstr ""
 #: /src/schooltool/export/flourish.zcml:23
 #: /src/schooltool/export/templates/import.pt:22
 msgid "Import Data"
-msgstr "Увези податке"
+msgstr ""
 
 #: /src/schooltool/export/flourish.zcml:49
 msgid ""
@@ -5932,7 +6074,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/error.pt:3
 #: /src/schooltool/skin/templates/error.pt:7
 msgid "Server Error"
-msgstr "Грешка сервера"
+msgstr ""
 
 #: /src/schooltool/export/templates/f_import_progress.pt:54
 msgid "Additional Info"
@@ -5995,15 +6137,15 @@ msgstr ""
 #: /src/schooltool/group/browser/configure.zcml:23
 #: /src/schooltool/group/browser/flourish.zcml:177
 msgid "Add Group"
-msgstr "Додај групу"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:36
 msgid "Edit Group Information"
-msgstr "Izmeni informacije o grupi"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:76
 msgid "New Group"
-msgstr "Nova grupa"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:91
 msgid "Add/Remove Members"
@@ -6012,7 +6154,7 @@ msgstr ""
 #: /src/schooltool/group/browser/configure.zcml:100
 #: /src/schooltool/group/browser/templates/group-csvimport.pt:21
 msgid "Import Groups"
-msgstr "Preuzmi grupe"
+msgstr ""
 
 #: /src/schooltool/group/browser/configure.zcml:110
 #: /src/schooltool/group/browser/flourish.zcml:352
@@ -6035,11 +6177,11 @@ msgstr ""
 
 #: /src/schooltool/group/browser/group.py:115
 msgid "Current Groups"
-msgstr "Trenutne grupe"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:116
 msgid "Available Groups"
-msgstr "Raspoložive grupe"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:161
 msgid "Members of ${group}"
@@ -6072,7 +6214,7 @@ msgstr ""
 #: /src/schooltool/schoolyear/browser/schoolyear.py:711
 #: /src/schooltool/schoolyear/browser/templates/f_schoolyear_activate.pt:8
 msgid "School Year"
-msgstr "Школска година"
+msgstr ""
 
 #: /src/schooltool/group/browser/group.py:443
 msgid "Delete ${group}"
@@ -6192,15 +6334,15 @@ msgstr ""
 
 #: /src/schooltool/group/browser/templates/group.pt:20
 msgid "Change the people who are members of this group."
-msgstr "Promeni ljude koji su članovi ove grupe."
+msgstr ""
 
 #: /src/schooltool/group/browser/templates/group.pt:20
 msgid "edit members"
-msgstr "izmeni članove"
+msgstr ""
 
 #: /src/schooltool/group/browser/templates/groupsviewlet.pt:23
 msgid "edit groups"
-msgstr "izmeni grupe"
+msgstr ""
 
 #: /src/schooltool/group/group.py:63
 msgid "Site Managers"
@@ -6271,15 +6413,15 @@ msgstr ""
 
 #: /src/schooltool/level/browser/flourish.zcml:62
 msgid "Level"
-msgstr "Ниво"
+msgstr ""
 
 #: /src/schooltool/level/browser/flourish.zcml:82
 msgid "Add new level"
-msgstr "Додај нови ниво"
+msgstr ""
 
 #: /src/schooltool/level/browser/flourish.zcml:92
 msgid "Edit level"
-msgstr "Уреди ниво"
+msgstr ""
 
 #: /src/schooltool/level/browser/flourish.zcml:120
 msgid "Reorder or Delete Levels"
@@ -6298,7 +6440,7 @@ msgstr ""
 
 #: /src/schooltool/level/browser/templates/f_levels_view.pt:12
 msgid "Edit this level"
-msgstr "Уреди овај ниво"
+msgstr ""
 
 #: /src/schooltool/level/browser/templates/levels.pt:11
 msgid "Levels (student learning years) taught in ${school_name}"
@@ -6314,7 +6456,7 @@ msgstr ""
 
 #: /src/schooltool/level/security.zcml:12
 msgid "Add/Remove"
-msgstr "Додај/Уклони"
+msgstr ""
 
 #: /src/schooltool/level/security.zcml:19
 msgid "Modify/Rename"
@@ -6331,15 +6473,15 @@ msgstr ""
 #: /src/schooltool/note/interfaces.py:50
 #: /src/schooltool/note/note_add.pt:24
 msgid "Privacy"
-msgstr "Приватност"
+msgstr ""
 
 #: /src/schooltool/note/note_add.pt:4
 msgid "Add note"
-msgstr "Додај белешку"
+msgstr ""
 
 #: /src/schooltool/note/note_add.pt:13
 msgid "Note"
-msgstr "Белешка"
+msgstr ""
 
 #: /src/schooltool/note/note_add.pt:24
 msgid "Who can view the note"
@@ -6347,16 +6489,16 @@ msgstr ""
 
 #: /src/schooltool/note/note_add.pt:30
 msgid "Private"
-msgstr "Приватно"
+msgstr ""
 
 #: /src/schooltool/note/note_add.pt:31
 msgid "Public"
-msgstr "Јавно"
+msgstr ""
 
 #: /src/schooltool/note/notes.pt:2
 #: /src/schooltool/resource/interfaces.py:57
 msgid "Notes"
-msgstr "Napomene"
+msgstr ""
 
 #: /src/schooltool/note/notes.pt:8
 msgid "( p )"
@@ -6364,11 +6506,11 @@ msgstr ""
 
 #: /src/schooltool/person/browser/configure.zcml:93
 msgid "Edit Preferences"
-msgstr "Уреди поставке"
+msgstr ""
 
 #: /src/schooltool/person/browser/configure.zcml:105
 msgid "Change Password"
-msgstr "Измените лозинку"
+msgstr ""
 
 #: /src/schooltool/person/browser/csvimport.py:51
 msgid "fullname may not be empty"
@@ -6377,7 +6519,7 @@ msgstr ""
 #: /src/schooltool/person/browser/f_password_changed.pt:1
 #: /src/schooltool/person/browser/person.py:362
 msgid "Password changed successfully"
-msgstr "Лозинка је успешно измењена"
+msgstr ""
 
 #: /src/schooltool/person/browser/f_person_filter.pt:7
 #: /src/schooltool/person/browser/person.py:543
@@ -6386,12 +6528,12 @@ msgstr ""
 
 #: /src/schooltool/person/browser/flourish.zcml:7
 msgid "Preferences"
-msgstr "Поставке"
+msgstr ""
 
 #: /src/schooltool/person/browser/home.pt:24
 #: /src/schooltool/person/browser/person.pt:15
 msgid "Username:"
-msgstr "Корисничко име:"
+msgstr ""
 
 #: /src/schooltool/person/browser/home.pt:27
 #: /src/schooltool/person/browser/person.pt:18
@@ -6401,7 +6543,7 @@ msgstr ""
 #: /src/schooltool/person/browser/home.pt:27
 #: /src/schooltool/person/browser/person.pt:18
 msgid "edit name"
-msgstr "уреди име"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:91
 msgid "Show periods"
@@ -6409,7 +6551,7 @@ msgstr ""
 
 #: /src/schooltool/person/browser/person.py:93
 msgid "Show hours"
-msgstr "Прикажи сате"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:98
 msgid "the public"
@@ -6434,25 +6576,25 @@ msgstr ""
 
 #: /src/schooltool/person/browser/person.py:297
 msgid "Current password"
-msgstr "Тренутна лозинка"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:301
 #: /src/schooltool/person/browser/person.py:601
 msgid "New password"
-msgstr "Нова лозинка"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:305
 msgid "Verify new password"
-msgstr "Потврди нову лозинку"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:311
 msgid "Edit password"
-msgstr "Уреди лозинку"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:391
 #: /src/schooltool/person/security.zcml:101
 msgid "Change password"
-msgstr "Промени лозинку"
+msgstr ""
 
 #: /src/schooltool/person/browser/person.py:362
 msgid "Wrong password supplied"
@@ -6468,11 +6610,11 @@ msgstr ""
 
 #: /src/schooltool/person/interfaces.py:157
 msgid "Time Zone"
-msgstr "Временска зона"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:162
 msgid "Time Format"
-msgstr "Формат времена"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:163
 msgid "HH:MM"
@@ -6484,7 +6626,7 @@ msgstr ""
 
 #: /src/schooltool/person/interfaces.py:167
 msgid "Date Format"
-msgstr "Формат датума"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:168
 msgid "MM/DD/YY"
@@ -6492,7 +6634,7 @@ msgstr ""
 
 #: /src/schooltool/person/interfaces.py:169
 msgid "YYYY-MM-DD"
-msgstr "ГГГГ-ММ-ДД"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:170
 msgid "Day Month, Year"
@@ -6500,7 +6642,7 @@ msgstr ""
 
 #: /src/schooltool/person/interfaces.py:174
 msgid "Week starts on"
-msgstr "Седмица почиње"
+msgstr ""
 
 #: /src/schooltool/person/interfaces.py:188
 msgid "Daily calendar rows..."
@@ -6540,7 +6682,7 @@ msgstr ""
 
 #: /src/schooltool/person/security.zcml:71
 msgid "Users"
-msgstr "Корисници"
+msgstr ""
 
 #: /src/schooltool/person/security.zcml:108
 msgid "View preferences"
@@ -6560,7 +6702,7 @@ msgstr ""
 
 #: /src/schooltool/person/security.zcml:167
 msgid "Calendar is public"
-msgstr "Календар је јаван"
+msgstr ""
 
 #: /src/schooltool/person/security.zcml:167
 msgid "Everybody, if the calendar is made public in user preferences."
@@ -6580,11 +6722,11 @@ msgstr ""
 #: /src/schooltool/report/browser/flourish.zcml:75
 #: /src/schooltool/report/browser/report.py:82
 msgid "Reports"
-msgstr "Извештаји"
+msgstr ""
 
 #: /src/schooltool/report/browser/flourish.zcml:25
 msgid "Overview"
-msgstr "Преглед"
+msgstr ""
 
 #: /src/schooltool/report/browser/flourish.zcml:85
 msgid "Report Overview"
@@ -6612,12 +6754,12 @@ msgstr ""
 
 #: /src/schooltool/report/browser/report.py:200
 msgid "Download"
-msgstr "Преузми"
+msgstr ""
 
 #: /src/schooltool/report/browser/report.py:300
 #: /src/schooltool/sampledata/sampledata.pt:80
 msgid "Generate"
-msgstr "Направи"
+msgstr ""
 
 #: /src/schooltool/report/browser/report.py:449
 msgid "export"
@@ -6705,12 +6847,12 @@ msgstr ""
 #: /src/schooltool/report/browser/templates/f_report_reference.pt:5
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
 msgid "Category"
-msgstr "Kategorija"
+msgstr ""
 
 #: /src/schooltool/report/browser/templates/f_report_reference.pt:7
 #: /src/schooltool/report/browser/templates/f_request_report_download.pt:11
 msgid "File Type"
-msgstr "Врста датотеке"
+msgstr ""
 
 #: /src/schooltool/report/browser/templates/f_short_report_message.pt:7
 msgid "Download ${report} ${link}."
@@ -6769,12 +6911,12 @@ msgstr ""
 #: /src/schooltool/resource/browser/configure.zcml:286
 #: /src/schooltool/resource/browser/flourish.zcml:168
 msgid "Add Resource"
-msgstr "Додај ресурс"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:300
 #: /src/schooltool/resource/browser/flourish.zcml:177
 msgid "Add Location"
-msgstr "Додај локацију"
+msgstr ""
 
 #: /src/schooltool/resource/browser/configure.zcml:314
 #: /src/schooltool/resource/browser/flourish.zcml:186
@@ -6788,7 +6930,7 @@ msgstr ""
 #: /src/schooltool/resource/resource.py:230
 #: /src/schooltool/resource/types.py:55
 msgid "Resource"
-msgstr "Извор"
+msgstr ""
 
 #: /src/schooltool/resource/browser/flourish.zcml:238
 msgid "Reserve"
@@ -6868,11 +7010,11 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:758
 msgid "Add new resource"
-msgstr "Додај нови ресурс"
+msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:706
 msgid "Edit resource"
-msgstr "Уреди ресурс"
+msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:723
 msgid "Location identification"
@@ -6884,7 +7026,7 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:795
 msgid "Add new location"
-msgstr "Додај нову локацију"
+msgstr ""
 
 #: /src/schooltool/resource/browser/resource.py:805
 msgid "Edit location"
@@ -6938,7 +7080,7 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:17
 msgid "Total"
-msgstr "Укупно"
+msgstr ""
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:24
 msgid "There are no ${resources} set up."
@@ -6946,7 +7088,7 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/templates/f_manage_resources_overview.pt:24
 msgid "school resources"
-msgstr "школски ресурси"
+msgstr ""
 
 #: /src/schooltool/resource/browser/templates/f_resource_container_related.pt:6
 msgid ""
@@ -6970,11 +7112,11 @@ msgstr ""
 
 #: /src/schooltool/resource/browser/templates/f_resource_filter.pt:26
 msgid "All types"
-msgstr "Све врсте"
+msgstr ""
 
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:4
 msgid "Edit this resource"
-msgstr "Уреди овај ресурс"
+msgstr ""
 
 #: /src/schooltool/resource/browser/templates/f_resource_view.pt:76
 msgid "Edit responsible parties for this resource"
@@ -6990,11 +7132,11 @@ msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:47
 msgid "Resource Type"
-msgstr "Врста ресурса"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:48
 msgid "Type of resource"
-msgstr "Врста ресурса"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:59
 msgid "Notes for the resource."
@@ -7002,7 +7144,7 @@ msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:82
 msgid "Location Type"
-msgstr "Врста локације"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:83
 msgid "Type of location (i.e. computer lab, class room, etc.)"
@@ -7011,11 +7153,11 @@ msgstr ""
 #: /src/schooltool/resource/interfaces.py:88
 #: /src/schooltool/resource/types.py:83
 msgid "Capacity"
-msgstr "Капацитет"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:89
 msgid "Capacity of the room"
-msgstr "Капацитет просторије"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:97
 msgid "Equipment Type"
@@ -7028,7 +7170,7 @@ msgstr ""
 #: /src/schooltool/resource/interfaces.py:102
 #: /src/schooltool/resource/types.py:113
 msgid "Manufacturer"
-msgstr "Произвођач"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:103
 msgid "Manufacturer of Equipment"
@@ -7037,7 +7179,7 @@ msgstr ""
 #: /src/schooltool/resource/interfaces.py:107
 #: /src/schooltool/resource/types.py:119
 msgid "Model"
-msgstr "Модел"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:108
 msgid "Model of Equipment"
@@ -7046,7 +7188,7 @@ msgstr ""
 #: /src/schooltool/resource/interfaces.py:112
 #: /src/schooltool/resource/types.py:125
 msgid "Serial Number"
-msgstr "Серијски број"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:113
 msgid "Serial Number of Equipment"
@@ -7055,7 +7197,7 @@ msgstr ""
 #: /src/schooltool/resource/interfaces.py:117
 #: /src/schooltool/resource/types.py:131
 msgid "Purchase Date"
-msgstr "Датум куповине"
+msgstr ""
 
 #: /src/schooltool/resource/interfaces.py:118
 msgid "Purchase Date of Equipment"
@@ -7170,7 +7312,7 @@ msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:42
 msgid "Plugins"
-msgstr "Додаци"
+msgstr ""
 
 #: /src/schooltool/sampledata/sampledata.pt:71
 msgid "View Dependencies"
@@ -7208,7 +7350,7 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:216
 msgid "Active"
-msgstr "Активан"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/schoolyear.py:237
 msgid "Delete ${schoolyear}"
@@ -7297,11 +7439,11 @@ msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/f_schoolyear_add.pt:18
 msgid "Group Name"
-msgstr "Назив групе"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/f_schoolyear_add.pt:19
 msgid "Copy Group"
-msgstr "Умножи групу"
+msgstr ""
 
 #: /src/schooltool/schoolyear/browser/templates/f_schoolyear_add.pt:20
 #: /src/schooltool/schoolyear/browser/templates/schoolyear_add.pt:62
@@ -7382,7 +7524,7 @@ msgstr ""
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:4
 #: /src/schooltool/securitypolicy/browser/templates/access_control.pt:12
 msgid "Access Control"
-msgstr "Управљање приступом"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/control.py:106
 msgid "School administration"
@@ -7391,13 +7533,13 @@ msgstr ""
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:31
 msgid "Security"
-msgstr "Безбедност"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 #: /src/schooltool/securitypolicy/browser/templates/f_security_descriptions.pt:3
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:4
 msgid "Access Rights"
-msgstr "Права приступа"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/access_setting_snippet.pt:2
 msgid "Access setting"
@@ -7410,11 +7552,11 @@ msgstr ""
 #: /src/schooltool/securitypolicy/browser/templates/f_security_descriptions.pt:48
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:56
 msgid "Legend"
-msgstr "Легенда"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/templates/security_descriptions.pt:9
 msgid "Access rights"
-msgstr "Права приступа"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/views.py:56
 msgid "Section information"
@@ -7422,7 +7564,7 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/views.py:57
 msgid "List of accounts"
-msgstr "Списак налога"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/views.py:58
 msgid "User calendars"
@@ -7470,11 +7612,11 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/browser/views.py:68
 msgid "Journal"
-msgstr "Дневник"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/crowds.py:199
 msgid "Everybody"
-msgstr "Сви"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/crowds.py:200
 msgid "Everybody, including users that are not logged in."
@@ -7490,7 +7632,7 @@ msgstr ""
 
 #: /src/schooltool/securitypolicy/crowds.py:242
 msgid "Anybody"
-msgstr "Свако"
+msgstr ""
 
 #: /src/schooltool/securitypolicy/crowds.py:243
 msgid "Users who did not log in"
@@ -7512,7 +7654,7 @@ msgstr ""
 #: /src/schooltool/skin/templates/notfound.pt:3
 #: /src/schooltool/skin/templates/notfound.pt:7
 msgid "Not Found"
-msgstr "Није пронађен"
+msgstr ""
 
 #: /src/schooltool/skin/flourish/report.py:584
 msgid "${title} (continued)"
@@ -7524,7 +7666,7 @@ msgstr ""
 
 #: /src/schooltool/skin/flourish/templates/main.pt:89
 msgid "server running"
-msgstr "Покретање сервера"
+msgstr ""
 
 #: /src/schooltool/skin/flourish/templates/main.pt:98
 msgid "Supporting exceptional people to change the world."
@@ -7602,7 +7744,7 @@ msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:71
 msgid "Log Out"
-msgstr "Одјављивање"
+msgstr ""
 
 #: /src/schooltool/skin/templates/view_macros.pt:82
 msgid "free administration software for"
@@ -7658,11 +7800,11 @@ msgstr ""
 
 #: /src/schooltool/table/templates/batch.pt:16
 msgid "Show Less"
-msgstr "Прикажи мање"
+msgstr ""
 
 #: /src/schooltool/table/templates/batch.pt:21
 msgid "Show All"
-msgstr "Прикажи све"
+msgstr ""
 
 #: /src/schooltool/table/templates/batch.pt:77
 #: /src/schooltool/table/templates/batch.pt:83
@@ -7818,14 +7960,14 @@ msgstr ""
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:32
 msgid "Replacement"
-msgstr "Замена"
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/emergency2.pt:40
 #: /src/schooltool/term/browser/templates/emergency_select.pt:39
 #: /src/schooltool/timetable/browser/templates/f_specialday_select.pt:32
 #: /src/schooltool/timetable/browser/templates/specialday_select.pt:39
 msgid "Proceed"
-msgstr "Nastavi"
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/emergency_select.pt:11
 msgid ""
@@ -7855,7 +7997,7 @@ msgstr ""
 
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:42
 msgid "term"
-msgstr "термин"
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/f_term.pt:4
 msgid "Edit this term's information"
@@ -7866,7 +8008,7 @@ msgstr ""
 #: /src/schooltool/term/browser/templates/term.pt:12
 #: /src/schooltool/term/browser/templates/term_add.pt:41
 msgid "Legend:"
-msgstr "Легенда:"
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/f_term.pt:16
 #: /src/schooltool/term/browser/templates/f_term_add.pt:36
@@ -7919,7 +8061,7 @@ msgstr ""
 #: /src/schooltool/term/browser/templates/term.pt:14
 #: /src/schooltool/term/browser/templates/term_add.pt:43
 msgid "Holiday"
-msgstr "Празник"
+msgstr ""
 
 #: /src/schooltool/term/browser/templates/term_add.pt:34
 msgid ""
@@ -7941,11 +8083,11 @@ msgstr ""
 
 #: /src/schooltool/term/browser/term.py:70
 msgid "Start date"
-msgstr "Датум почетка"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:72
 msgid "End date"
-msgstr "Датум завршетка"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:131
 msgid "Delete ${term}"
@@ -7953,11 +8095,11 @@ msgstr ""
 
 #: /src/schooltool/term/browser/term.py:195
 msgid "Add new term"
-msgstr "Додај нови термин"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:237
 msgid "Add term"
-msgstr "Додај термин"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:275
 msgid "Term Details"
@@ -7973,7 +8115,7 @@ msgstr ""
 
 #: /src/schooltool/term/browser/term.py:365
 msgid "Save changes"
-msgstr "Сачувајте измене"
+msgstr ""
 
 #: /src/schooltool/term/browser/term.py:385
 #: /src/schooltool/term/browser/term.py:400
@@ -8042,7 +8184,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/flourish.zcml:441
 #: /src/schooltool/timetable/browser/templates/f_selected_periods_edit.pt:38
 msgid "Schedule"
-msgstr "Планирање"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:116
 msgid "Change Schedule for One Day"
@@ -8054,7 +8196,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:138
 msgid "Add Timetable"
-msgstr "Додај распоред"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/configure.zcml:184
 msgid "Add Meeting"
@@ -8067,7 +8209,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/flourish.zcml:111
 msgid "Make Default"
-msgstr "Постави као подразумевано"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/flourish.zcml:376
 #: /src/schooltool/timetable/browser/templates/f_manage_timetables_overview.pt:16
@@ -8096,11 +8238,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/flourish.zcml:565
 msgid "New Meeting"
-msgstr "Нови састанак"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/flourish.zcml:574
 msgid "Edit Meeting"
-msgstr "Уреди састанак"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/schedule.py:66
 msgid "Some values were invalid.  They are highlighted in red."
@@ -8236,7 +8378,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/f_timetable.pt:14
 #: /src/schooltool/timetable/browser/templates/timetable.pt:20
 msgid "Periods"
-msgstr "Раздобља"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/f_timetable.pt:19
 #: /src/schooltool/timetable/browser/templates/selected_periods_edit.pt:59
@@ -8263,7 +8405,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/f_ttwizard_period_order2.pt:51
 #: /src/schooltool/timetable/browser/templates/f_ttwizard_slottimes.pt:43
 msgid "Back"
-msgstr "Назад"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:5
 #: /src/schooltool/timetable/browser/templates/schedule_container_view.pt:15
@@ -8363,7 +8505,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/simpletts.pt:60
 msgid "Create"
-msgstr "Направи"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:3
 #: /src/schooltool/timetable/browser/templates/specialday_change.pt:6
@@ -8393,7 +8535,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable_container.pt:68
 msgid "Change"
-msgstr "Измени"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/timetable_container_delete.pt:10
 msgid "Are you sure you want to delete the selected timetables?"
@@ -8402,7 +8544,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/templates/ttwizard.pt:3
 #: /src/schooltool/timetable/browser/templates/ttwizard.pt:6
 msgid "New timetable"
-msgstr "Нови распоред"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/templates/ttwizard.pt:11
 msgid ""
@@ -8441,7 +8583,7 @@ msgstr ""
 #: /src/schooltool/timetable/browser/timetable.py:678
 #: /src/schooltool/timetable/browser/timetable.py:821
 msgid "Save"
-msgstr "Сачувај"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/timetable.py:619
 msgid "Unschedule timetable ${timetable}"
@@ -8470,7 +8612,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:282
 msgid "Days of the week"
-msgstr "Dani u sedmici"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:283
 msgid "Rotating cycle"
@@ -8486,22 +8628,21 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:325
 msgid "Please make sure the day names are unique."
-msgstr "Proverite da li se nazivi dana ponavljaju"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:342
 msgid ""
 "Do classes begin and end at the same time each day in your school's "
 "timetable?"
 msgstr ""
-"Da li časovi u rasporedu počinju i završavaju u isto vreme svakog dana?"
 
 #: /src/schooltool/timetable/browser/ttwizard.py:345
 msgid "Same time each day"
-msgstr "Svakodnevno u isto vreme"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:346
 msgid "Different times"
-msgstr "Različito vreme"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:366
 msgid ""
@@ -8511,7 +8652,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:369
 msgid "Day of week"
-msgstr "Dan u sedmici"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:370
 msgid "Day in cycle"
@@ -8567,11 +8708,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:666
 msgid "Same"
-msgstr "Isto"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:667
 msgid "Different"
-msgstr "Različito"
+msgstr ""
 
 #: /src/schooltool/timetable/browser/ttwizard.py:684
 msgid "Please put the periods in order:"
@@ -8615,11 +8756,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:48
 msgid "Free"
-msgstr "Бесплатан"
+msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:49
 msgid "Lunch"
-msgstr "Ручак"
+msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:61
 msgid "Activity type."
@@ -8635,7 +8776,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:130
 msgid "Exceptions"
-msgstr "Изузеци"
+msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:131
 msgid "Exceptions by date."
@@ -8647,11 +8788,11 @@ msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:135
 msgid "Meetings"
-msgstr "Састанци"
+msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:137
 msgid "Meeting"
-msgstr "Састанак"
+msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:193
 msgid "Activity type"
@@ -8677,14 +8818,8 @@ msgstr ""
 msgid "Supplied passwords are not identical"
 msgstr ""
 
-#~ msgid "Calendar Preferences"
-#~ msgstr "Подешавања календара"
-
 #~ msgid "Edit site preferences"
-#~ msgstr "измени подешавања странице"
+#~ msgstr "Edició de les preferències del lloc"
 
-#~ msgid "Verify password"
-#~ msgstr "Потврди лозинку"
-
-#~ msgid "Edit person"
-#~ msgstr "Уреди особу"
+#~ msgid "Calendar Preferences"
+#~ msgstr "Preferències del calendari"
