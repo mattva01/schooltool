@@ -61,6 +61,7 @@ from schooltool.app.interfaces import IPluginInit, IPluginStartUp
 from schooltool.app.interfaces import ICatalogStartUp
 from schooltool.app.interfaces import ISchoolToolInitializationUtility
 from schooltool.app.app import SchoolToolApplication
+from schooltool.app.app import getApplicationPreferences
 from schooltool.app import pdf
 from schooltool.person.interfaces import IPersonFactory
 from schooltool.app.interfaces import ICookieLanguageSelector
@@ -619,8 +620,13 @@ class SchoolToolServer(SchoolToolMachinery):
             setSite(None)
 
             self.restoreManagerUser(app, MANAGER_PASSWORD)
+            self.initializePreferences(app)
         transaction.commit()
         connection.close()
+
+    def initializePreferences(self, app):
+        prefs = getApplicationPreferences(app)
+        prefs.initializeTimezone()
 
     def startApplication(self, db):
         last_site = getSite()
