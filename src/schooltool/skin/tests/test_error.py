@@ -60,7 +60,7 @@ def doctest_ErrorView():
         >>> try:
         ...     raise exception
         ... except:
-        ...     print view.traceback()
+        ...     print view.traceback
         File "<span class="filename">&lt;doctest...doctest_ErrorView[...]&gt;</span>",
           line <span class="lineno">2</span>, in <span class="method">...</span>
           <span class="source">raise exception</span>
