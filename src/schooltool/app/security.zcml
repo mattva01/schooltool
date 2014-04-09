@@ -55,7 +55,7 @@
   <allow
       interface=".interfaces.ISchoolToolCalendar"
       permission="schooltool.edit"
-      crowds="clerks owner calendar_editors" />
+      crowds="clerks owner calendar_editors superuser" />
 
   <!-- Security descriptions -->
 
