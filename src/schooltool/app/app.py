@@ -218,7 +218,7 @@ class ApplicationPreferences(Persistent):
 
     name_sorting = 'last_name'
 
-    def __init__(self):
+    def initializeTimezone(self):
         self.timezone = self._get_localzone()
 
     def _get_localzone(self):

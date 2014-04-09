@@ -128,7 +128,7 @@ def doctest_CkeditorZ3CFormWidget_CkeditorConfig():
                 {
                     height: 300,
                     width: 430,
-                    customConfig : "http://127.0.0.1/@@/editor_config.js",
+                    customConfig: "http://127.0.0.1/@@/editor_config.js"
                 }
             );
         </script>
@@ -244,7 +244,7 @@ def doctest_CkeditorZ3CWidget_compatibility():
         </script>
 
     You can notice zope.html widget uses relative paths for configuration;
-    this brakes the widget if admins start fiddling with Apache's mod-rewrite
+    this breaks the widget if admins start fiddling with Apache's mod-rewrite
     (to put schooltool in http://example.com/schooltool for example).
 
     Our widget also uses a different mechanism to generate the CKeditor
@@ -271,7 +271,8 @@ def doctest_CkeditorZ3CWidget_compatibility():
         height: 300,
         + width: 430,
         - customConfig : "/@@/editor_config.js",
-        + customConfig : "http://127.0.0.1/@@/editor_config.js",
+        ?             -                        -
+        + customConfig: "http://127.0.0.1/@@/editor_config.js"
         ?                 ++++++++++++++++
         }
         );

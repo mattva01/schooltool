@@ -75,6 +75,7 @@ class ZCMLLayer(_ZCMLLayer):
             if IDatabaseOpenedEvent.providedBy(event):
                 import schooltool.app.main
                 server = schooltool.app.main.SchoolToolServer()
+                server.initializePreferences = lambda app: None
                 server.bootstrapSchoolTool(event.database)
                 server.startApplication(event.database)
 
