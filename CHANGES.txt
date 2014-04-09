@@ -2,19 +2,31 @@
 CHANGES
 =======
 
-2.6.2 (unreleased)
+2.6.3 (unreleased)
 ------------------
 
+- Nothing changed yet.
+
+
+2.6.2 (2014-02-15)
+------------------
+
+- Fix upgrade from a fresh install of version 2.6.0 (https://launchpad.net/bugs/1258529)
+- Fix delete year/term if it contains non-ascii chars.
 - Updated translations
 
 
-2.6.1 (2013-11-08)
+2.6.1 (2013-11-21)
 ------------------
 
 - Synchronize timezone set in preferences with timetables and schedules (https://launchpad.net/bugs/1239468)
 - Set initial timezone from ``/etc/timezone`` (https://launchpad.net/bugs/1030211)
 - Add SchoolTool versions to the Server page.
 - Person cannot see his own preferences (https://launchpad.net/bugs/1247825)
+- Do not escape extra spaces in comments (https://launchpad.net/bugs/1241022)
+- Fix error when trying to replace existing school logo (https://launchpad.net/bugs/1250733)
+- Restore the warning about unsaved changes in gradebook, broken after adding
+  autocompletion (https://launchpad.net/bugs/1253070)
 - Updated translations
 
 

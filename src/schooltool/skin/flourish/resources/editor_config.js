@@ -38,4 +38,5 @@ FCKConfig.ForcePasteAsPlainText = true ;
 // and maybe re-enable paste from Word
 //FCKConfig.pasteFromWordRemoveFontStyles
 //FCKConfig.pasteFromWordRemoveStyles
-FCKConfig.ProcessHTMLEntities = false ;
+FCKConfig.IncludeLatinEntities = false ;
+FCKConfig.IncludeGreekEntities = false ;

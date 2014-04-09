@@ -1023,6 +1023,16 @@ class ContactPersonImporter(ImporterBase):
             self.progress(row, nrows)
 
 
+CONTACT_REL_CODES = {
+    'a': None,
+    'p': 'parent',
+    'sp': 'step_parent',
+    'fp': 'foster_parent',
+    'g': 'guardian',
+    's': 'sibling'
+}
+
+
 class ContactRelationshipImporter(ImporterBase):
 
     title = _("Contact Relationships")
@@ -1067,7 +1077,13 @@ class ContactRelationshipImporter(ImporterBase):
             data['relationship'] = self.getTextFromCell(sh, row, 2)
             relationship = data['relationship']
             if relationship and relationship not in vocab:
-                self.error(row, 2, ERROR_CONTACT_RELATIONSHIP)
+                # Forward-compat with temporal relationships
+                rel_code = self.getTextFromCell(sh, row, 3)
+                if rel_code == 'i':
+                    continue
+                relationship = CONTACT_REL_CODES.get(rel_code, relationship)
+                if relationship and relationship not in vocab:
+                    self.error(row, 2, ERROR_CONTACT_RELATIONSHIP)
 
             if num_errors == len(self.errors):
                 info = ContactPersonInfo()

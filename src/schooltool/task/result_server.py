@@ -55,7 +55,10 @@ def inplace_translate(o, markers=None):
         markers = {oid: not_translatable}
 
     if isinstance(o, zope.i18nmessageid.message.Message):
-        markers[oid] = translate(o, context=bottle.request)
+        try:
+            markers[oid] = translate(o, context=bottle.request)
+        except TypeError:
+            markers[oid] = o
     elif isinstance(o, (list, tuple)):
         if markers is None:
             markers = {}

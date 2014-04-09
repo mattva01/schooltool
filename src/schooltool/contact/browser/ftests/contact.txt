@@ -2,13 +2,15 @@ Contacts
 ========
 
     >>> browser = Browser('manager', 'schooltool')
-    >>> browser.getLink('Manage').click()
+    >>> from schooltool.app.browser.ftests import setup
+    >>> setup.setUpBasicSchool()
 
     >>> from schooltool.basicperson.browser.ftests.setup import addPerson
     >>> addPerson('Bill', 'Student', 'student', 'pwd')
 
 Let's try and add a contact:
 
+    >>> browser.getLink('Manage').click()
     >>> browser.getLink('Contacts').click()
     >>> browser.getLink('New Contact').click()
 
@@ -39,22 +41,13 @@ information.  Contacts of existing users have no deletion checkboxes.
     <tr class="odd"><td>
         </td>
         <td>
-          <a href="http://localhost/persons/student/contact">Student</a>
-        </td>
-        <td>
-          <a href="http://localhost/persons/student/contact">Bill</a>
-        </td>
-    </tr>
-    <tr class="even"><td>
-        </td>
-        <td>
           <a href="http://localhost/persons/manager/contact">Manager</a>
         </td>
         <td>
           <a href="http://localhost/persons/manager/contact">Default</a>
         </td>
     </tr>
-    <tr class="odd"><td>
+    <tr class="even"><td>
           <input type="checkbox" name="delete.contacts.Contact-..."
                                  id="delete.contacts.Contact-..." /></td>
         <td>
@@ -62,6 +55,15 @@ information.  Contacts of existing users have no deletion checkboxes.
         </td>
         <td>
           <a href="http://localhost/contacts/Contact">John</a>
+        </td>
+    </tr>
+    <tr class="odd"><td>
+        </td>
+        <td>
+          <a href="http://localhost/persons/student/contact">Student</a>
+        </td>
+        <td>
+          <a href="http://localhost/persons/student/contact">Bill</a>
         </td>
     </tr>
 
@@ -212,7 +214,7 @@ Contacts can be assigned to multiple persons.
 
     >>> browser.getLink('Manage').click()
     >>> browser.getLink('Persons').click()
-    >>> browser.getLink('Student').click()
+    >>> browser.getLink('Bill').click()
     >>> browser.getLink('Contacts').click()
     >>> browser.getLink('Manage Contacts').click()
 
@@ -320,22 +322,13 @@ Confirm deletion of Peter Peterson.
     <tr class="odd"><td>
         </td>
         <td>
-          <a href="http://localhost/persons/student/contact">Student</a>
-        </td>
-        <td>
-          <a href="http://localhost/persons/student/contact">Bill</a>
-        </td>
-    </tr>
-    <tr class="even"><td>
-        </td>
-        <td>
           <a href="http://localhost/persons/manager/contact">Manager</a>
         </td>
         <td>
           <a href="http://localhost/persons/manager/contact">Default</a>
         </td>
     </tr>
-    <tr class="odd"><td>
+    <tr class="even"><td>
           <input type="checkbox" name="delete.contacts.Contact-..."
                                  id="delete.contacts.Contact-..." /></td>
         <td>
@@ -343,6 +336,15 @@ Confirm deletion of Peter Peterson.
         </td>
         <td>
           <a href="http://localhost/contacts/Contact">John</a>
+        </td>
+    </tr>
+    <tr class="odd"><td>
+        </td>
+        <td>
+          <a href="http://localhost/persons/student/contact">Student</a>
+        </td>
+        <td>
+          <a href="http://localhost/persons/student/contact">Bill</a>
         </td>
     </tr>
 
@@ -383,7 +385,7 @@ And assign Default Manager user as contact of a student.
 
     >>> browser.getLink('Manage').click()
     >>> browser.getLink('Persons').click()
-    >>> browser.getLink('Student').click()
+    >>> browser.getLink('Bill').click()
 
     >>> browser.getLink('Contacts').click()
     >>> browser.getLink('Manage Contacts').click()

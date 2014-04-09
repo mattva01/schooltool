@@ -34,7 +34,8 @@ one for the Calendar tab, the latter being checked as it is the default
 setting for the default tab.  We do not allow control over the Server and
 School tabs.
 
-    >>> print manager.query_all.xpath('//div[@class="body"]//input[@type="radio"]')
+    >>> for input in manager.query_all.xpath('//div[@class="body"]//input[@type="radio"]')[:2]:
+    ...     print input
     <input name="default_tab" type="radio" value="home" />
     <input checked="checked" name="default_tab" type="radio" value="calendar" />
 
@@ -43,7 +44,8 @@ default is to have all the tabs visible.  Note that the calendar checkbox is
 disabled because we can't allow a tab to be hidden if it is currently the
 default tab.
 
-    >>> print manager.query_all.xpath('//div[@class="body"]//input[@type="checkbox"]')
+    >>> for input in manager.query_all.xpath('//div[@class="body"]//input[@type="checkbox"]')[:2]:
+    ...     print input
     <input checked="checked" name="visible:list" type="checkbox" value="home" />
     <input checked="checked" disabled="disabled" name="visible:list" type="checkbox" value="calendar" />
 
@@ -52,7 +54,8 @@ to the input fields.  The home checkbox will be disabled and the calendar
 checkbox enabled.
 
     >>> manager.query.xpath('//div[@class="body"]//input[@type="radio"][@value="home"]').click()
-    >>> print manager.query_all.xpath('//div[@class="body"]//input[@type="checkbox"]')
+    >>> for input in manager.query_all.xpath('//div[@class="body"]//input[@type="checkbox"]')[:2]:
+    ...     print input
     <input checked="checked" disabled="disabled" name="visible:list" type="checkbox" value="home" />
     <input checked="checked" name="visible:list" type="checkbox" value="calendar" />
 

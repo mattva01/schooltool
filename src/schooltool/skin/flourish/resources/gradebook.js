@@ -387,8 +387,14 @@ function createWorksheetsList() {
     return ul;
 }
 
+function addSaveWarning() {
+    if ($('#grades-part input[type="text"]').length > 0) {
+        return $('#unsaved-changes-warning').text();
+    }
+}
+
 function removeSavingWarning() {
-    window.onbeforeunload = null;
+    $(window).off('beforeunload', addSaveWarning);
 }
 
 function autoCompleteDisplayed() {
@@ -782,17 +788,11 @@ function initGradebook() {
         e.preventDefault();
     });
 
+    // warning dialog for unsaved changes
+    $(window).on('beforeunload', addSaveWarning);
+
     // ignore warning dialog when clicking save button
-    form.on('click', 'input[type="submit"]', function() {
-        removeSavingWarning();
-    });
+    form.on('click', 'input[type="submit"]', removeSavingWarning);
 }
 
 $(document).ready(initGradebook);
-
-// warning dialog for unsaved changes
-window.onbeforeunload = function() {
-    if ($('#grades-part input[type="text"]').length > 0) {
-        return $('#unsaved-changes-warning').text();
-    }
-};

@@ -801,6 +801,14 @@
       permission="zope.Public"
       />
 
+  <page
+      name="logo"
+      for="schooltool.app.interfaces.IApplicationPreferences"
+      layer="zope.publisher.interfaces.browser.IBrowserRequest"
+      class=".app.SchoolLogoView"
+      permission="zope.Public"
+      />
+
   <flourish:viewlet
       name="school_logo"
       before="*"

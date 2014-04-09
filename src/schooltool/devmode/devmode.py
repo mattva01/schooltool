@@ -129,3 +129,24 @@ class DebugSecurityPolicy(CachingSecurityPolicy):
 class DevmodeSchoolToolAPI(SchoolToolAPI):
 
     devmode = True
+
+
+def launch_pdb_on_exception():
+    import zope.publisher.publish
+    import sys
+    try:
+        import ipdb as pdb
+    except ImportError:
+        import pdb
+    olde_debug_call = zope.publisher.publish.debug_call
+    def interceptor(*args, **kw):
+        try:
+            result = olde_debug_call(*args, **kw)
+        except:
+            type, value, tb = sys.exc_info()
+            pdb.post_mortem(tb)
+            raise
+        return result
+    zope.publisher.publish.debug_call = interceptor
+
+#launch_pdb_on_exception()
