@@ -22,7 +22,10 @@ Base classes for report reference and request adapters
 
 import urllib
 
-import celery.utils
+try:
+    from kombu.utils import symbol_by_name
+except ImportError:
+    from celery.utils import get_symbol_by_name as symbol_by_name
 
 import zope.i18n.locales
 import zope.component
@@ -504,9 +507,7 @@ class AbstractReportTask(RemoteTask):
 
     @property
     def factory(self):
-        # higher versions of celery:
-        # result = kombu.utils.symbol_by_name(self.factory_name)
-        result = celery.utils.get_symbol_by_name(self.factory_name)
+        result = symbol_by_name(self.factory_name)
         return result
 
     @factory.setter
