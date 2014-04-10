@@ -13,6 +13,7 @@ New features
 - Parent access
 - Background import
 - Switch to CKEditor (https://bugs.launchpad.net/bugs/485898)
+- Celery 3 support (https://bugs.launchpad.net/bugs/1276384)
 
 - Added descriptions for demographic fields
 
