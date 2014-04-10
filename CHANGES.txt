@@ -12,17 +12,25 @@ New features
 - Levels for courses and persons
 - Parent access
 - Background import
+- Added descriptions for demographic fields
+
+
+2.6.3 (unreleased)
+------------------
+
+New features
+++++++++++++
+
 - Switch to CKEditor (https://bugs.launchpad.net/bugs/485898)
 - Celery 3 support (https://bugs.launchpad.net/bugs/1276384)
 - Latest translations from Launchpad
-
-- Added descriptions for demographic fields
 
 Bugfixes
 ++++++++
 
 - Fixed exception dates format in calendar widget of recurring events (https://launchpad.net/bugs/372889)
 - Updated copyright (https://launchpad.net/bugs/1289277)
+- Fixed term/section navigation in a different school year (https://launchpad.net/bugs/1281050)
 
 
 2.6.2 (2014-02-15)
