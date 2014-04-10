@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-11-10 06:53+0000\n"
-"X-Generator: Launchpad (build 16820)\n"
+"X-Launchpad-Export-Date: 2014-02-04 06:55+0000\n"
+"X-Generator: Launchpad (build 16916)\n"
 "Language: \n"
 
 #: /src/schooltool/app/app.py:193
@@ -2748,7 +2748,7 @@ msgstr "grop ${group}."
 msgid "${group} group and the super user."
 msgstr ""
 
-#: /src/schooltool/app/security.zcml:71
+#: /src/schooltool/app/security.zcml:62
 msgid "SchoolTool application"
 msgstr ""
 
@@ -5967,7 +5967,7 @@ msgid ""
 "of sample data: ${link-to-sample-data-file}."
 msgstr ""
 
-#: /src/schooltool/export/templates/f_import_related.pt:24
+#: /src/schooltool/export/templates/f_import_related.pt:28
 msgid ""
 "We also provide a large data set: ${link-to-sample-data-file} -- 1000 "
 "students over multiple years -- for performance testing. This set can take a "
@@ -8676,3 +8676,9 @@ msgstr ""
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr ""
+
+#~ msgid "Edit site preferences"
+#~ msgstr "Modificar las preferéncia del site"
+
+#~ msgid "Calendar Preferences"
+#~ msgstr "Preferéncias calendièr"
