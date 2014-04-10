@@ -27,7 +27,7 @@
       <tr tal:condition="not:terms">
         <td colspan="3" i18n:translate="">
           Please set up at least one
-          <a tal:attributes="href string:${context/schooltool:app/@@absolute_url}/terms"
+          <a tal:attributes="href view/terms_url"
              i18n:name="term" i18n:translate="">term</a>.
         </td>
       </tr>

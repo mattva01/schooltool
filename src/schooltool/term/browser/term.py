@@ -104,7 +104,7 @@ class TermView(BrowserView):
         return TermRenderer(self.context).calendar()
 
 
-class FlourishTermView(flourish.page.Page, TermView):
+class FlourishTermView(flourish.page.Page, TermView, ActiveSchoolYearContentMixin):
     """flourish view of a term."""
 
     @property
@@ -125,13 +125,13 @@ class FlourishTermView(flourish.page.Page, TermView):
         view.update()
         return view
 
+    @property
+    def schoolyear(self):
+        return ISchoolYear(self.context)
+
     def done_link(self):
-        schoolyear = ISchoolYear(self.context)
-        url = '%s/%s?schoolyear_id=%s' % (
-            absoluteURL(ISchoolToolApplication(None), self.request),
-            'terms',
-            schoolyear.__name__)
-        return url
+        app = ISchoolToolApplication(None)
+        return self.url_with_schoolyear_id(app, view_name='terms')
 
 class FlourishTermDetails(flourish.form.FormViewlet):
 
@@ -509,7 +509,6 @@ class TermBoundsValidator(SimpleFieldValidator):
 
     def validate(self, value):
         super(TermBoundsValidator, self).validate(value)
-        from schooltool.schoolyear.interfaces import ISchoolYear
         if ISchoolYear.providedBy(self.view.context):
             sy = self.view.context
         else:
@@ -773,16 +772,20 @@ class FlourishManageYearsOverview(flourish.page.Content,
         return self.url_with_schoolyear_id(self.context, view_name='terms')
 
 
-class TermContainerBreadcrumb(flourish.breadcrumbs.Breadcrumbs):
+class TermContainerBreadcrumb(flourish.breadcrumbs.Breadcrumbs, ActiveSchoolYearContentMixin):
 
     title = _('Terms')
+
+    @property
+    def schoolyear(self):
+        return ISchoolYear(self.context)
 
     @property
     def url(self):
         if not self.checkPermission():
             return None
-        base_url = absoluteURL(self.crumb_parent, self.request)
-        return '%s/terms' % base_url
+        url = self.url_with_schoolyear_id(self.crumb_parent, view_name='terms')
+        return url
 
     @property
     def crumb_parent(self):

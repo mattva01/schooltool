@@ -1201,7 +1201,7 @@ class FlourishSectionContainerDeleteView(ContainerDeleteView):
         return ContainerDeleteView.nextURL(self)
 
 
-class FlourishSectionView(DisplayForm):
+class FlourishSectionView(DisplayForm, ActiveSchoolYearContentMixin):
 
     template = InheritTemplate(Page.template)
     content_template = ViewPageTemplateFile('templates/f_section_view.pt')
@@ -1240,21 +1240,21 @@ class FlourishSectionView(DisplayForm):
             for section in sections]
 
     @property
+    def schoolyear(self):
+        return ISchoolYear(self.context)
+
+    @property
     def title(self):
-        schoolyear = ISchoolYear(self.context.__parent__)
         return _('Sections for ${schoolyear}',
-                 mapping={'schoolyear': schoolyear.title})
+                 mapping={'schoolyear': self.schoolyear.title})
 
     @property
     def subtitle(self):
         return self.context.title
 
     def done_link(self):
-        schoolyear = ISchoolYear(self.context)
-        url = '%s/%s?schoolyear_id=%s' % (
-            absoluteURL(ISchoolToolApplication(None), self.request),
-            'sections',
-            schoolyear.__name__)
+        app = ISchoolToolApplication(None)
+        url = self.url_with_schoolyear_id(app, view_name='sections')
         return url
 
     def updateWidgets(self):
@@ -1305,7 +1305,7 @@ def getSectionAddTitleHint(context):
               "course title.")
 
 
-class FlourishSectionAddView(Form, SectionAddView):
+class FlourishSectionAddView(Form, SectionAddView, ActiveSchoolYearContentMixin):
 
     template = InheritTemplate(Page.template)
     label = None
@@ -1314,10 +1314,13 @@ class FlourishSectionAddView(Form, SectionAddView):
     fields = field.Fields(ISection).select('title', 'description')
 
     @property
+    def schoolyear(self):
+        return self.context
+
+    @property
     def title(self):
-        schoolyear = self.context
         return _('Sections for ${schoolyear}',
-                 mapping={'schoolyear': schoolyear.title})
+                 mapping={'schoolyear': self.schoolyear.title})
 
     def updateWidgets(self):
         super(FlourishSectionAddView, self).updateWidgets()
@@ -1406,11 +1409,8 @@ class FlourishSectionAddView(Form, SectionAddView):
             url = self.request['camefrom']
             self.request.response.redirect(url)
             return
-        schoolyear = self.context
-        url = '%s/%s?schoolyear_id=%s' % (
-            absoluteURL(ISchoolToolApplication(None), self.request),
-            'sections',
-            schoolyear.__name__)
+        app = ISchoolToolApplication(None)
+        url = self.url_with_schoolyear_id(app, view_name='sections')
         self.request.response.redirect(url)
 
 
