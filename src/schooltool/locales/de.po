@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-02-02 06:02+0000\n"
+"X-Launchpad-Export-Date: 2014-02-04 06:53+0000\n"
 "X-Generator: Launchpad (build 16916)\n"
 "Language: de\n"
 "X-Rosetta-Version: 0.1\n"
@@ -2822,11 +2822,11 @@ msgstr ""
 msgid "Reading configuration from %s"
 msgstr "Konfiguration von %s einlesen"
 
-#: /src/schooltool/app/main.py:574
+#: /src/schooltool/app/main.py:513
 msgid "No storage defined in the configuration file."
 msgstr "Es wurde kein Speicher in der Konfigurationsdatei festgelegt."
 
-#: /src/schooltool/app/main.py:672
+#: /src/schooltool/app/main.py:633
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2867,7 +2867,7 @@ msgstr "${group} group."
 msgid "${group} group and the super user."
 msgstr "${group} Gruppe und Hauptbenutzer."
 
-#: /src/schooltool/app/security.zcml:71
+#: /src/schooltool/app/security.zcml:62
 msgid "SchoolTool application"
 msgstr "SchoolTool Anwendung"
 
@@ -4038,7 +4038,7 @@ msgstr "Neuen Kontakt hinzufügen für die Person ${person}"
 msgid "Change contact information for ${person}"
 msgstr "Ändere Kontakt Information für ${person}"
 
-#: /src/schooltool/contact/browser/contact.py:441
+#: /src/schooltool/contact/browser/contact.py:472
 msgid "Contact index"
 msgstr "Kontakt-Indew"
 
@@ -4374,7 +4374,7 @@ msgstr ""
 "Hinzufügen / entfernen von Kontakten des Nutzers, Beziehungen des Nutzers zu "
 "einem Kontakt bestimmen"
 
-#: /src/schooltool/contact/security.zcml:36
+#: /src/schooltool/contact/security.zcml:41
 msgid "Manage user's contacts"
 msgstr "Benutzerkontakte verwalten"
 
@@ -5915,15 +5915,15 @@ msgstr "Startdatum überschneidet sich mit einem anderen Termin."
 msgid "end date overlaps another term"
 msgstr "Enddatum überschneidet sich mit einem anderen Termin."
 
-#: /src/schooltool/export/importer.py:89
+#: /src/schooltool/export/importer.py:91
 msgid "has no days"
 msgstr "hat keine Tage"
 
-#: /src/schooltool/export/importer.py:90
+#: /src/schooltool/export/importer.py:92
 msgid "has no day templates"
 msgstr "hat keine Tagesvorlagen"
 
-#: /src/schooltool/export/importer.py:91
+#: /src/schooltool/export/importer.py:93
 msgid "is not a valid time range"
 msgstr "ist kein zulässiger Zeitabschnitt"
 
@@ -5959,7 +5959,7 @@ msgstr "ist kein gültiges Halbjahr im gegebenen Schuljahr"
 msgid "is not a valid course in the given school year"
 msgstr "ist kein gültiger Kurs in diesem Schuljahr"
 
-#: /src/schooltool/export/importer.py:100
+#: /src/schooltool/export/importer.py:102
 msgid "has no courses"
 msgstr "hat keine Kurse"
 
@@ -6189,7 +6189,7 @@ msgstr ""
 "Ihnen hier ein Paket mit Beispieldaten zur Verfügung: {link-to-sample-data-"
 "file}"
 
-#: /src/schooltool/export/templates/f_import_related.pt:24
+#: /src/schooltool/export/templates/f_import_related.pt:28
 msgid ""
 "We also provide a large data set: ${link-to-sample-data-file} -- 1000 "
 "students over multiple years -- for performance testing. This set can take a "
@@ -9028,3 +9028,54 @@ msgstr "Stundenpläne"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Angegebene Passworte stimmen nicht überein"
+
+#~ msgid ""
+#~ "CSV data <strong>must</strong> contain a user name and a full name. An "
+#~ "optional password <strong>may</strong> be included as well."
+#~ msgstr ""
+#~ "CSV Daten <strong>müssen</strong> einen Benutzernamen und einen "
+#~ "vollständigen Namen (Vorname Nachname) beinhalten. Ein optionales Passwort "
+#~ "<strong>kann</strong> ebenfalls vorhanden sein."
+
+#~ msgid "Change contact information for ${first_name} ${last_name}"
+#~ msgstr "Ändere Kontakt Information für ${first_name} ${last_name}"
+
+#~ msgid "Edit site preferences"
+#~ msgstr "Seiteneinstellungen bearbeiten"
+
+#~ msgid "Photo (in JPEG format)"
+#~ msgstr "Foto (im JPEG Format)"
+
+#~ msgid "Verify password"
+#~ msgstr "Passwort wiederholen:"
+
+#~ msgid "New photo"
+#~ msgstr "Neues Foto"
+
+#~ msgid "A small picture (about 48x48 pixels in JPEG format)"
+#~ msgstr "Ein kleines Foto (ungefähr 48x48 Pixel im JPEG-Format)"
+
+#~ msgid "Clear photo"
+#~ msgstr "Foto löschen"
+
+#~ msgid "Check this to clear the photo"
+#~ msgstr "Klicken sie hier um das Foto zu löschen."
+
+#~ msgid "Edit person"
+#~ msgstr "Person bearbeiten"
+
+#~ msgid "Calendar Preferences"
+#~ msgstr "Kalender Einstellungen"
+
+#~ msgid ""
+#~ "\n"
+#~ "jjones, Jimmy Jones\n"
+#~ "jbjones, Jim Bob Jones, r2m45J\n"
+#~ "howard, Howard\n"
+#~ msgstr ""
+#~ "\n"
+#~ "jjones, Jimmy Jones\n"
+#~ "\n"
+#~ "jbjones, Jim Bob Jones, r2m45J\n"
+#~ "\n"
+#~ "howard, Howard\n"

@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-10-08 02:19+0300\n"
-"PO-Revision-Date: 2013-12-25 16:30+0000\n"
-"Last-Translator: Pasha. P. Komar <Unknown>\n"
+"PO-Revision-Date: 2014-02-21 08:39+0000\n"
+"Last-Translator: mida <kovalenko1974@mail.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-12-26 06:27+0000\n"
-"X-Generator: Launchpad (build 16877)\n"
+"X-Launchpad-Export-Date: 2014-02-22 07:38+0000\n"
+"X-Generator: Launchpad (build 16926)\n"
 "Language: ru\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -2849,15 +2849,15 @@ msgstr "Менеджер паролей: "
 msgid "No configuration file given"
 msgstr "Не задан файл конфигурации"
 
-#: /src/schooltool/app/main.py:575
+#: /src/schooltool/app/main.py:505
 msgid "Reading configuration from %s"
 msgstr "Чтение конфигурации из %s"
 
-#: /src/schooltool/app/main.py:574
+#: /src/schooltool/app/main.py:513
 msgid "No storage defined in the configuration file."
 msgstr "Хранилище не определено в файле конфигурации."
 
-#: /src/schooltool/app/main.py:672
+#: /src/schooltool/app/main.py:633
 msgid ""
 "Could not initialize the database:\n"
 "%s"
@@ -2897,7 +2897,7 @@ msgstr "${group} группа."
 msgid "${group} group and the super user."
 msgstr "${group} группа и суперпользователь."
 
-#: /src/schooltool/app/security.zcml:71
+#: /src/schooltool/app/security.zcml:62
 msgid "SchoolTool application"
 msgstr "Приложение SchoolTool"
 
@@ -3704,7 +3704,7 @@ msgstr "Информация о человеке: ${title}"
 
 #: /src/schooltool/basicperson/demographics.py:143
 msgid "Ethnicity"
-msgstr "Расовая принадлежность"
+msgstr "Национальность"
 
 #: /src/schooltool/basicperson/demographics.py:144
 msgid "American Indian or Alaska Native"
@@ -4065,7 +4065,7 @@ msgstr "Добавить новые контакты для ${person}"
 msgid "Change contact information for ${person}"
 msgstr "Изменить данные контакта для ${person}"
 
-#: /src/schooltool/contact/browser/contact.py:441
+#: /src/schooltool/contact/browser/contact.py:472
 msgid "Contact index"
 msgstr "Индекс контакта"
 
@@ -4401,7 +4401,7 @@ msgstr ""
 "Назначить / удалить контакты пользователя, определить связь пользователя с "
 "контактом."
 
-#: /src/schooltool/contact/security.zcml:36
+#: /src/schooltool/contact/security.zcml:41
 msgid "Manage user's contacts"
 msgstr "Управление контактами пользователя"
 
@@ -4755,7 +4755,7 @@ msgstr "Секція списку"
 
 #: /src/schooltool/course/browser/section.py:1832
 msgid "section ${title} roster"
-msgstr ""
+msgstr "список ${title} секций*"
 
 #: /src/schooltool/course/browser/section.py:1853
 msgid "Instructors: ${instructors}"
@@ -4994,7 +4994,7 @@ msgstr "Этот курс не имеет разделов"
 msgid "Edit responsible parties for this course"
 msgstr "Изменить ответственные стороны в этом курсе"
 
-#: /src/schooltool/course/browser/templates/f_course_view.pt:84
+#: /src/schooltool/course/browser/templates/f_course_view.pt:92
 msgid "These users can modify the course."
 msgstr "Эти пользователи могут изменять курсы."
 
@@ -5866,31 +5866,31 @@ msgstr "Учебные годы"
 #: /src/schooltool/export/export.py:835
 #: /src/schooltool/export/importer.py:1518
 msgid "Section Enrollment"
-msgstr ""
+msgstr "Регистрация раздела"
 
 #: /src/schooltool/export/export.py:837
 msgid "Section Schedules"
-msgstr ""
+msgstr "Расписания Секции"
 
 #: /src/schooltool/export/export.py:841
 msgid "School Data"
-msgstr ""
+msgstr "Школьные данные"
 
 #: /src/schooltool/export/export.py:856
 msgid "Exporting school data"
-msgstr ""
+msgstr "Экспорт школьных данных"
 
 #: /src/schooltool/export/export.py:871
 msgid "Export complete"
-msgstr ""
+msgstr "Экспорт завершен"
 
 #: /src/schooltool/export/export.py:892
 msgid "school export"
-msgstr ""
+msgstr "Экспорт Школы*"
 
 #: /src/schooltool/export/export.py:918
 msgid "XLS export"
-msgstr ""
+msgstr "Экспорт XLS"
 
 #: /src/schooltool/export/flourish.zcml:32
 msgid "Import XLS"
@@ -5920,7 +5920,7 @@ msgid "SchoolTool cannot read this file. Is it a .xls formatted spreadsheet?"
 msgstr ""
 "SchoolTool не может прочитать этот файл. Это отформатированные таблицы .xls?"
 
-#: /src/schooltool/export/importer.py:69
+#: /src/schooltool/export/importer.py:80
 msgid "is not a valid integer"
 msgstr "не является допустимым целым числом"
 
@@ -5968,7 +5968,7 @@ msgstr "дата начала перекрывает другой срок"
 msgid "end date overlaps another term"
 msgstr "дата окончания перекрывает другой срок"
 
-#: /src/schooltool/export/importer.py:89
+#: /src/schooltool/export/importer.py:91
 msgid "has no days"
 msgstr "не имеет дней"
 
@@ -6014,7 +6014,7 @@ msgstr "недопустимый срок в этом учебном году"
 msgid "is not a valid course in the given school year"
 msgstr "недопустимый курс в этом учебном году"
 
-#: /src/schooltool/export/importer.py:100
+#: /src/schooltool/export/importer.py:102
 msgid "has no courses"
 msgstr "не имеет предметов"
 
@@ -6137,15 +6137,15 @@ msgstr "школьные годы должны быть согласованы �
 
 #: /src/schooltool/export/importer.py:923
 msgid "Contact Persons"
-msgstr ""
+msgstr "Контактное лицо*"
 
 #: /src/schooltool/export/importer.py:1010
 msgid "Contact Relationships"
-msgstr ""
+msgstr "Контактная связь*"
 
 #: /src/schooltool/export/importer.py:1579
 msgid "Section Timetables"
-msgstr ""
+msgstr "Расписания секций*"
 
 #: /src/schooltool/export/importer.py:1936
 msgid "${sheet_name} ${column}${row} ${message}"
@@ -6158,7 +6158,7 @@ msgstr "При импорте произошли ошибки:"
 #: /src/schooltool/export/importer.py:2067
 #: /src/schooltool/export/importer.py:2098
 msgid "Overall"
-msgstr ""
+msgstr "в общем"
 
 #: /src/schooltool/export/interfaces.py:34
 #: /src/schooltool/export/templates/f_import.pt:42
@@ -6178,7 +6178,7 @@ msgstr "Загрузить XLS-файл"
 
 #: /src/schooltool/export/templates/f_import_progress.pt:13
 msgid "Import scheduled."
-msgstr ""
+msgstr "Импорт запланирован."
 
 #: /src/schooltool/export/templates/f_import_progress.pt:18
 msgid "Importing"
@@ -6186,7 +6186,7 @@ msgstr "Импортирование"
 
 #: /src/schooltool/export/templates/f_import_progress.pt:26
 msgid "Committing to database."
-msgstr ""
+msgstr "Передача базы данных"
 
 #: /src/schooltool/export/templates/f_import_progress.pt:31
 msgid "Finished importing."
@@ -6194,7 +6194,7 @@ msgstr "Импортирование завершено."
 
 #: /src/schooltool/export/templates/f_import_progress.pt:34
 msgid "Data not saved due to these errors:"
-msgstr ""
+msgstr "Данные, не сохраненны из-за этих ошибок*:"
 
 #: /src/schooltool/export/templates/f_import_progress.pt:46
 msgid "Download ${filename}"
@@ -6209,7 +6209,7 @@ msgstr "Ошибка сервера."
 
 #: /src/schooltool/export/templates/f_import_progress.pt:54
 msgid "Additional Info"
-msgstr ""
+msgstr "Доп. инфо"
 
 #: /src/schooltool/export/templates/f_import_related.pt:9
 #: /src/schooltool/export/templates/import.pt:31
@@ -6248,7 +6248,7 @@ msgstr ""
 "Для заинтересованных в тестировании и изучении SchoolTool людей, мы "
 "предоставляем тестовые данные: ${link-to-sample-data-file}."
 
-#: /src/schooltool/export/templates/f_import_related.pt:24
+#: /src/schooltool/export/templates/f_import_related.pt:28
 msgid ""
 "We also provide a large data set: ${link-to-sample-data-file} -- 1000 "
 "students over multiple years -- for performance testing. This set can take a "
@@ -6853,7 +6853,7 @@ msgstr "пользователи не могут делать публичным
 
 #: /src/schooltool/person/security.zcml:17
 msgid "Only site managers and clerks can change passwords."
-msgstr ""
+msgstr "Только менеджеры могут изменять пароли*."
 
 #: /src/schooltool/person/security.zcml:17
 msgid "Users can change their own passwords."
@@ -6946,82 +6946,83 @@ msgstr "экспорт"
 
 #: /src/schooltool/report/browser/report.py:496
 msgid "Collecting (${name})"
-msgstr ""
+msgstr "Сбор (${name})"
 
 #: /src/schooltool/report/browser/report.py:501
 msgid "Archive"
-msgstr ""
+msgstr "Архив"
 
 #: /src/schooltool/report/browser/report.py:522
 #: /src/schooltool/report/browser/report.py:531
 msgid "files"
-msgstr ""
+msgstr "файл (ы)"
 
 #: /src/schooltool/report/browser/report.py:600
 msgid "Preparing archive"
-msgstr ""
+msgstr "Подготовка архива"
 
 #: /src/schooltool/report/browser/report.py:601
 msgid "Archiving"
-msgstr ""
+msgstr "Архивация"
 
 #: /src/schooltool/report/browser/report.py:602
 msgid "Archive complete"
-msgstr ""
+msgstr "Архив создан"
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:3
 msgid "Building the report"
-msgstr ""
+msgstr "Создание отчёта*"
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:4
 msgid "Failed to build the report"
-msgstr ""
+msgstr "неудача  составить отчет"
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:7
 msgid "Download report"
-msgstr ""
+msgstr "Отчет загрузки"
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:15
 msgid ""
 "You can close this dialog and download the report later from your ${home-"
 "link}."
 msgstr ""
+"Ты можешь закрыть этот диалог и загрузить отчет позже с твоего ${home-link}."
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:15
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:41
 msgid "home page"
-msgstr ""
+msgstr "домашняя страница"
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:33
 #: /src/schooltool/report/browser/templates/f_short_report_message.pt:17
 msgid "Generating ${report}..."
-msgstr ""
+msgstr "Генерировать* ${report}..."
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:41
 #: /src/schooltool/task/browser/templates/f_short_fail_message.pt:3
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:19
 msgid "System failure."
-msgstr ""
+msgstr "Системная ошибка (неудача)."
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:45
 #: /src/schooltool/report/browser/templates/f_short_report_message.pt:31
 #: /src/schooltool/task/browser/templates/f_short_fail_message.pt:6
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:27
 msgid "Ticket nr. ${ticket_id}."
-msgstr ""
+msgstr "Номер билета*. ${ticket_id}."
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:49
 #: /src/schooltool/report/browser/templates/f_short_report_message.pt:34
 #: /src/schooltool/task/browser/templates/f_short_fail_message.pt:9
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:29
 msgid "Please contact your administrator."
-msgstr ""
+msgstr "Свяжитесь со своим администратором."
 
 #: /src/schooltool/report/browser/templates/f_download_report_dialog.pt:64
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:56
 #: /src/schooltool/task/browser/templates/task_dialog.pt:11
 msgid "Close"
-msgstr ""
+msgstr "Закрыть"
 
 #: /src/schooltool/report/browser/templates/f_report_reference.pt:5
 #: /src/schooltool/report/browser/templates/report_reference.pt:13
@@ -7035,11 +7036,11 @@ msgstr "Тип Файла"
 
 #: /src/schooltool/report/browser/templates/f_short_report_message.pt:7
 msgid "Download ${report} ${link}."
-msgstr ""
+msgstr "Загрузка* ${report} ${link}."
 
 #: /src/schooltool/report/browser/templates/f_short_report_message.pt:27
 msgid "System failure while generating ${report}."
-msgstr ""
+msgstr "Системная неудача,при генерации* ${report}."
 
 #: /src/schooltool/report/browser/templates/report_reference.pt:3
 #: /src/schooltool/report/browser/templates/report_reference.pt:7
@@ -7048,25 +7049,25 @@ msgstr "Справочник отчетов"
 
 #: /src/schooltool/report/interfaces.py:99
 msgid "Report"
-msgstr ""
+msgstr "Отчёт"
 
 #: /src/schooltool/report/interfaces.py:104
 msgid "Filename"
-msgstr ""
+msgstr "Имя файла:"
 
 #: /src/schooltool/report/interfaces.py:108
 msgid "Requested on"
-msgstr ""
+msgstr "Просьба о"
 
 #: /src/schooltool/report/report.py:628
 #: /src/schooltool/report/report.py:652
 #: /src/schooltool/skin/flourish/report.py:178
 msgid "report"
-msgstr ""
+msgstr "отчет"
 
 #: /src/schooltool/report/security.zcml:21
 msgid "Download reports"
-msgstr ""
+msgstr "Отчеты о загрузке"
 
 #: /src/schooltool/report/templates/f_report_link_manager.pt:13
 msgid "${file_type} Reports"
@@ -7251,7 +7252,7 @@ msgstr "Отчет о ресурсах"
 
 #: /src/schooltool/resource/browser/resource.py:967
 msgid "resource report"
-msgstr ""
+msgstr "отчет о ресурсе"
 
 #: /src/schooltool/resource/browser/rml/resource_report.pt:10
 #: /src/schooltool/resource/browser/rml/resource_report.pt:23
@@ -7832,7 +7833,7 @@ msgstr "Календарь ресурсов"
 
 #: /src/schooltool/securitypolicy/browser/views.py:65
 msgid "Schedules"
-msgstr ""
+msgstr "Списки"
 
 #: /src/schooltool/securitypolicy/browser/views.py:66
 msgid "Gradebook"
@@ -7896,7 +7897,7 @@ msgstr "удалить это изображение"
 msgid "server running"
 msgstr "используемый сервер"
 
-#: /src/schooltool/skin/flourish/templates/main.pt:91
+#: /src/schooltool/skin/flourish/templates/main.pt:98
 msgid "Supporting exceptional people to change the world."
 msgstr "Помогая выдающимся людям изменять мир."
 
@@ -7922,29 +7923,32 @@ msgstr ""
 
 #: /src/schooltool/skin/templates/f_error.pt:20
 msgid "Modules"
-msgstr ""
+msgstr "Модуль(и)"
 
 #: /src/schooltool/skin/templates/f_error.pt:24
 msgid "Runtime"
-msgstr ""
+msgstr "Время выполнения"
 
 #: /src/schooltool/skin/templates/f_error.pt:30
 msgid "Automatic Bug Report"
-msgstr ""
+msgstr "Автоматический отчет об ошибках*"
 
 #: /src/schooltool/skin/templates/f_error.pt:31
 msgid ""
 "To submit automatic bug report you must be logged into <a "
 "href=\"https://launchpad.net/\">Launchpad Issue Tracker</a>"
 msgstr ""
+"Чтобы представить автоматический отчет об ошибках, Вы должны быть "
+"зарегистрированы в* <a href=\"https://launchpad.net/\">Launchpad Issue "
+"Tracker</a>"
 
 #: /src/schooltool/skin/templates/f_error.pt:36
 msgid "Please fill in steps to reproduce this bug here:"
-msgstr ""
+msgstr "Пожалуйста, заполните шаги, чтобы воспроизвести эту ошибку здесь*:"
 
 #: /src/schooltool/skin/templates/f_error.pt:62
 msgid "Submit Bug Report"
-msgstr ""
+msgstr "Отправить отчёт об ошибке"
 
 #: /src/schooltool/skin/templates/f_notfound.pt:3
 #: /src/schooltool/skin/templates/notfound.pt:10
@@ -8050,96 +8054,98 @@ msgstr "Следующие &raquo;"
 
 #: /src/schooltool/task/browser/flourish.zcml:36
 msgid "Scheduled Tasks"
-msgstr ""
+msgstr "Запланированные задания"
 
 #: /src/schooltool/task/browser/task.py:120
 msgid "JSON result"
-msgstr ""
+msgstr "JSON результат*"
 
 #: /src/schooltool/task/browser/task.py:137
 #: /src/schooltool/task/interfaces.py:34
 msgid "Task ID"
-msgstr ""
+msgstr "ID Задания"
 
 #: /src/schooltool/task/browser/task.py:142
 msgid "Signature"
-msgstr ""
+msgstr "Подпись"
 
 #: /src/schooltool/task/browser/task.py:148
 #: /src/schooltool/task/browser/templates/task_status.pt:42
 #: /src/schooltool/task/interfaces.py:43
 msgid "Internal state"
-msgstr ""
+msgstr "Внутреннее состояние*"
 
 #: /src/schooltool/task/browser/task.py:156
 msgid "Scheduled"
-msgstr ""
+msgstr "Запланировать*"
 
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:8
 msgid "Scheduled."
-msgstr ""
+msgstr "Запланировано*"
 
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:14
 msgid "Completed."
-msgstr ""
+msgstr "Завершить(ься)*."
 
 #: /src/schooltool/task/browser/templates/f_task_progress.pt:41
 msgid ""
 "You can close this dialog and download the exported data later from your "
 "${home-link}."
 msgstr ""
+"Ты можешь закрыть этот диалог и загрузить экспортируемые данные позже с "
+"твоего* ${home-link}."
 
 #: /src/schooltool/task/browser/templates/task_status.pt:15
 msgid "Task pending or removed"
-msgstr ""
+msgstr "Ожидание задачи или удаление*"
 
 #: /src/schooltool/task/browser/templates/task_status.pt:18
 msgid "In Progress"
-msgstr ""
+msgstr "Выполняется*"
 
 #: /src/schooltool/task/browser/templates/task_status.pt:22
 #: /src/schooltool/task/interfaces.py:42
 msgid "Failed"
-msgstr ""
+msgstr "Неудача*"
 
 #: /src/schooltool/task/browser/templates/task_status.pt:30
 #: /src/schooltool/task/interfaces.py:41
 msgid "Succeeded"
-msgstr ""
+msgstr "Успешно*"
 
 #: /src/schooltool/task/browser/templates/task_status.pt:34
 #: /src/schooltool/task/interfaces.py:46
 msgid "Persisted traceback"
-msgstr ""
+msgstr "Сохраненный traceback*"
 
 #: /src/schooltool/task/browser/templates/task_status.pt:38
 #: /src/schooltool/task/interfaces.py:49
 msgid "Persisted result"
-msgstr ""
+msgstr "Сохраненный(ить) результат*"
 
 #: /src/schooltool/task/security.zcml:24
 msgid "Messages"
-msgstr ""
+msgstr "Сообщения"
 
 #: /src/schooltool/task/security.zcml:29
 msgid "Read messages"
-msgstr ""
+msgstr "Прочитать сообщения"
 
 #: /src/schooltool/task/security.zcml:37
 msgid "Browse other users' messages (overview)"
-msgstr ""
+msgstr "Просмотр сообщений других пользователей* (overview)"
 
 #: /src/schooltool/task/tasks.py:672
 msgid "Internal server error, ticket ${ticket}"
-msgstr ""
+msgstr "Внутренняя ошибка сервера* ${ticket}"
 
 #: /src/schooltool/task/tasks.py:760
 msgid "Senders and recipients"
-msgstr ""
+msgstr "Отправители и получатели*"
 
 #: /src/schooltool/task/tasks.py:761
 msgid "Senders, recipients of the message, requesters of a report."
-msgstr ""
+msgstr "Отправители, получатели сообщения, запросчики отчета*."
 
 #: /src/schooltool/term/browser/configure.zcml:30
 msgid "Cancel School in Emergency"
@@ -9105,11 +9111,11 @@ msgstr "Рассматривать последовательные период
 
 #: /src/schooltool/timetable/security.zcml:5
 msgid "Instructors can schedule their own sections."
-msgstr ""
+msgstr "Преподаватели могут отметить свои собственные секции*."
 
 #: /src/schooltool/timetable/security.zcml:5
 msgid "Only clerks can schedule sections."
-msgstr ""
+msgstr "Только клерки могут от метить секции*."
 
 #: /src/schooltool/timetable/security.zcml:56
 msgid "School timetables"
@@ -9118,3 +9124,51 @@ msgstr "Расписания школы"
 #: /src/schooltool/widget/password.py:55
 msgid "Supplied passwords are not identical"
 msgstr "Введённые пароли не совпадают"
+
+#~ msgid "Change contact information for ${first_name} ${last_name}"
+#~ msgstr "Изменить данные контакта для ${first_name} ${last_name}"
+
+#~ msgid "Photo (in JPEG format)"
+#~ msgstr "Фотография (в формате JPEG)"
+
+#~ msgid "Verify password"
+#~ msgstr "Проверка пароля"
+
+#~ msgid "New photo"
+#~ msgstr "Новая фотография"
+
+#~ msgid "A small picture (about 48x48 pixels in JPEG format)"
+#~ msgstr "Маленькая картинка (ок. 48x48 пикселей в формате JPEG)"
+
+#~ msgid "Clear photo"
+#~ msgstr "Удалить фотографию"
+
+#~ msgid "Check this to clear the photo"
+#~ msgstr "Отметьте, чтобы удалить фото"
+
+#~ msgid "Edit person"
+#~ msgstr "Редактировать"
+
+#~ msgid "Calendar Preferences"
+#~ msgstr "Свойства календаря"
+
+#~ msgid ""
+#~ "CSV data <strong>must</strong> contain a user name and a full name. An "
+#~ "optional password <strong>may</strong> be included as well."
+#~ msgstr ""
+#~ "CSV-данные <strong>должны</strong> содержать имя пользователя и полное имя. "
+#~ "Также <strong>может</strong> быть указан пароль."
+
+#~ msgid ""
+#~ "\n"
+#~ "jjones, Jimmy Jones\n"
+#~ "jbjones, Jim Bob Jones, r2m45J\n"
+#~ "howard, Howard\n"
+#~ msgstr ""
+#~ "\n"
+#~ "jjones,Jimmy Jones\n"
+#~ "Jbjones, Jim Bob Jones, r2m45J\n"
+#~ "howard, Howard\n"
+
+#~ msgid "Edit site preferences"
+#~ msgstr "Редактировать параметры сайта"
