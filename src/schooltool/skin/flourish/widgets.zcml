@@ -15,7 +15,7 @@
       type="schooltool.skin.flourish.IFlourishLayer"
       for="zope.html.field.IHtmlFragmentField"
       provides="zope.app.form.interfaces.IInputWidget"
-      factory=".widgets.FlourishFckeditorFormlibWidget"
+      factory=".widgets.FlourishCkeditorFormlibWidget"
       permission="zope.Public"
       />
 
@@ -23,7 +23,7 @@
       type="schooltool.skin.flourish.IFlourishLayer"
       for="zope.html.field.IXhtmlFragmentField"
       provides="zope.app.form.interfaces.IInputWidget"
-      factory="schooltool.skin.widgets.FckeditorFormlibWidget"
+      factory="schooltool.skin.widgets.CkeditorFormlibWidget"
       permission="zope.Public"
       />
 
@@ -56,20 +56,20 @@
       />
 
   <zope:adapter
-      factory=".widgets.FlourishFckeditorFieldWidget"
+      factory=".widgets.FlourishCkeditorFieldWidget"
       for="zope.html.field.IHtmlFragmentField
            schooltool.skin.flourish.IFlourishLayer"
       />
 
   <zope:adapter
-      factory="schooltool.skin.flourish.widgets.Flourish_fckeditor_config"
+      factory="schooltool.skin.flourish.widgets.Flourish_ckeditor_config"
       name="config"
       />
 
-  <zope:class class=".widgets.FlourishFckeditorZ3CFormWidget">
+  <zope:class class=".widgets.FlourishCkeditorZ3CFormWidget">
     <require
         permission="zope.Public"
-        interface="schooltool.skin.widgets.IFckeditorWidget"
+        interface="schooltool.skin.widgets.ICkeditorWidget"
         />
   </zope:class>
 

@@ -20,10 +20,10 @@
         layer="schooltool.skin.flourish.IFlourishLayer" />
 
     <zope:resourceLibrary
-        name="schooltool.skin.flourish-fckeditor"
+        name="schooltool.skin.flourish-ckeditor"
         layer="schooltool.skin.flourish.IFlourishLayer">
       <directory
-          source="resources/fckeditor"
+          source="resources/ckeditor"
           />
     </zope:resourceLibrary>
 

@@ -18,6 +18,7 @@
 from __future__ import absolute_import
 import datetime
 
+import celery.states
 import celery.task
 
 from schooltool.common import SchoolToolMessage as _

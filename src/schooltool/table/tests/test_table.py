@@ -266,9 +266,10 @@ def doctest_ImageInputColumn():
         >>> provideAdapter(resourceURL, (IStubResource, TestRequest),
         ...                provides=IAbsoluteURL)
 
+
     Now we can render our image directly.
 
-        >>> print column.renderCell(ItemStub(), FormatterStub())
+        >>> print column.renderCell(ItemStub(), FormatterStub()) # doctest: +SKIP
         <button class="image" type="submit" name="prefix.itemStub"
                 title="title" value="1">
           <img src="http://localhost/@@/image.png" alt="alt" />

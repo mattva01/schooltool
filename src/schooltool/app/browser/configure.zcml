@@ -135,20 +135,6 @@
       template="templates/manage_menu.pt"
       />
 
-  <!-- calwidget (external) -->
-
-  <resource name="calwidget-calendar.js"
-      file="resources/calwidget/calendar.js"
-      layer="schooltool.skin.ISchoolToolLayer" />
-
-  <resource name="calwidget-calendar.css"
-      file="resources/calwidget/calendar.css"
-      layer="schooltool.skin.ISchoolToolLayer" />
-
-  <resource name="calwidget-icon.gif"
-      file="resources/calwidget/icon.gif"
-      layer="schooltool.skin.ISchoolToolLayer" />
-
   <!-- Actions menu -->
 
   <!-- TODO: remove this menu - 2006-07-04 gintas -->

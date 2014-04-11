@@ -39,7 +39,6 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.publisher.interfaces import NotFound
 from zope.publisher.browser import BrowserPage
 from zope.publisher.browser import BrowserView
-from zope.security.proxy import removeSecurityProxy
 from zope.schema.interfaces import IField
 
 import z3c.form.interfaces
@@ -51,11 +50,10 @@ import zc.resourcelibrary
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.basicperson.demographics import IDemographicsForm
-from schooltool.basicperson.interfaces import IBasicPerson
-from schooltool.skin.widgets import FCKConfig
-from schooltool.skin.widgets import IFckeditorWidget
-from schooltool.skin.widgets import FckeditorFormlibWidget
-from schooltool.skin.widgets import FckeditorZ3CFormWidget
+from schooltool.skin.widgets import CkeditorConfig
+from schooltool.skin.widgets import ICkeditorWidget
+from schooltool.skin.widgets import CkeditorFormlibWidget
+from schooltool.skin.widgets import CkeditorZ3CFormWidget
 from schooltool.skin.flourish.resource import ResourceLibrary
 from schooltool.skin.flourish.interfaces import IFlourishLayer
 from schooltool.skin.flourish.helpers import quoteFilename
@@ -109,71 +107,69 @@ class FormlibDateWidget(zope.formlib.widgets.DateWidget):
     cssClass="date-field"
 
 
-Flourish_fckeditor_config = ComputedWidgetAttribute(
-    lambda a: FCKConfig(288, 160),
+Flourish_ckeditor_config = ComputedWidgetAttribute(
+    lambda a: CkeditorConfig(288, 160),
     request=IFlourishLayer,
-    widget=IFckeditorWidget,
+    widget=ICkeditorWidget,
     )
 
 
-class FlourishFckeditorScriptBase(object):
+class FlourishCkeditorScriptBase(object):
 
     @property
     def script(self):
-        zc.resourcelibrary.need("fckeditor")
+        zc.resourcelibrary.need("ckeditor")
         config = self.config
 
         app_url = absoluteURL(ISchoolToolApplication(None), self.request)
-        fck_config_path = '%s%s' % (
+        config_path = '%s%s' % (
             app_url, config.path)
-        fck_editor_path = '%s/@@/fckeditor/%s/fckeditor/' % (
-            app_url, self.fckversion)
-        fck_skin_path = '%s/@@/schooltool.skin.flourish-fckeditor/' % (
+        skin_path = '%s/@@/schooltool.skin.flourish-ckeditor/' % (
             app_url)
-        fck_editor_css_path = '%s%s' % (fck_skin_path, 'fck_editorarea.css')
+        contents_css_path = '%s%s' % (skin_path, 'contents.css')
 
         # XXX: using some values that may be not JS safe
         return '''
             <script type="text/javascript" language="JavaScript">
-                var %(variable)s = new FCKeditor(
-                    "%(id)s", %(width)d, %(height)d, "%(toolbar)s");
-                %(variable)s.BasePath = "%(fckBasePath)s";
-                %(variable)s.Config["CustomConfigurationsPath"] = "%(customConfigPath)s";
-                %(variable)s.Config["SkinPath"] = "%(fckSkinPath)s";
-                %(variable)s.Config["EditorAreaCSS"] = "%(fckEditorAreaCSS)s";
-                %(variable)s.ReplaceTextarea();
+                var %(variable)s = new CKEDITOR.replace("%(id)s",
+                    {
+                        height: %(height)s,
+                        width: %(width)s,
+                        customConfig: "%(customConfigPath)s",
+                        skin: "v2,%(skinPath)s",
+                        contentsCss: "%(contentsCss)s"
+                    }
+                );
             </script>
             ''' % {
             'id': self.element_id,
             'variable': self.editor_var_name,
             'width': config.width,
             'height': config.height,
-            'toolbar': config.toolbar,
-            'customConfigPath': fck_config_path,
-            'fckBasePath': fck_editor_path,
-            'fckSkinPath': fck_skin_path,
-            'fckEditorAreaCSS': fck_editor_css_path,
+            'customConfigPath': config_path,
+            'skinPath': skin_path,
+            'contentsCss': contents_css_path,
             }
 
 
-class FlourishFckeditorFormlibWidget(FlourishFckeditorScriptBase,
-                                     FckeditorFormlibWidget):
+class FlourishCkeditorFormlibWidget(FlourishCkeditorScriptBase,
+                                    CkeditorFormlibWidget):
 
     def __init__(self, *args, **kw):
-        super(FlourishFckeditorFormlibWidget, self).__init__(*args, **kw)
-        self.config = FCKConfig(288, 160)
+        super(FlourishCkeditorFormlibWidget, self).__init__(*args, **kw)
+        self.config = CkeditorConfig(288, 160)
 
 
-class FlourishFckeditorZ3CFormWidget(FlourishFckeditorScriptBase,
-                                     FckeditorZ3CFormWidget):
+class FlourishCkeditorZ3CFormWidget(FlourishCkeditorScriptBase,
+                                    CkeditorZ3CFormWidget):
 
     pass
 
 
 @adapter(IField, IFlourishLayer)
 @implementer(z3c.form.interfaces.IFieldWidget)
-def FlourishFckeditorFieldWidget(field, request):
-    return FieldWidget(field, FlourishFckeditorZ3CFormWidget(request))
+def FlourishCkeditorFieldWidget(field, request):
+    return FieldWidget(field, FlourishCkeditorZ3CFormWidget(request))
 
 
 def is_required_demo_field(adapter):

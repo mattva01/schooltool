@@ -2,10 +2,29 @@
 CHANGES
 =======
 
-2.6.3 (unreleased)
+2.6.4 (unreleased)
 ------------------
 
 - Nothing changed yet.
+
+
+2.6.3 (2014-04-12)
+------------------
+
+New features
+++++++++++++
+
+- Switch to CKEditor (https://bugs.launchpad.net/bugs/485898)
+- Celery 3 support (https://bugs.launchpad.net/bugs/1276384)
+- Latest translations from Launchpad
+
+Bugfixes
+++++++++
+
+- Fixed exception dates format in calendar widget of recurring events (https://launchpad.net/bugs/372889)
+- Fixed export of deleted timetables (https://launchpad.net/bugs/1281335)
+- Updated copyright (https://launchpad.net/bugs/1289277)
+- Fixed term/section navigation in a different school year (https://launchpad.net/bugs/1281050)
 
 
 2.6.2 (2014-02-15)

@@ -1,4 +1,4 @@
-; Sample supervisor config file.
+; SchoolTool supervisor configuration.
 
 [unix_http_server]
 file=${run_dir}/supervisord.sock
@@ -73,9 +73,9 @@ killasgroup=false
 priority=110
 directory=${data_dir}
 ; celery 3.x:
-;command=${bin_dir}/celeryctl worker --loglevel=INFO --loader=schooltool.task.celery:ReportLoader --config=schooltool.task.config.worker_report --queues=zodb.report
+command=${bin_dir}/celery worker --loglevel=INFO --loader=schooltool.task.celery:ReportLoader --config=schooltool.task.config.worker_report --queues=zodb.report
 ; celery 2.x:
-command=${bin_dir}/celeryd --loader=schooltool.task.celery:ReportLoader --config=schooltool.task.config.worker_report --queues=zodb.report,default
+;command=${bin_dir}/celeryd --loader=schooltool.task.celery:ReportLoader --config=schooltool.task.config.worker_report --queues=zodb.report,default
 environment=SCHOOLTOOL_CONF=${config_dir}/schooltool.conf,REDIS_HOST=127.0.0.1,REDIS_PORT=7079
 numprocs=1
 autostart=true
@@ -93,9 +93,9 @@ redirect_stderr=true
 ;priority=110
 ;directory=${data_dir}
 ;; celery 3.x:
-;;command=${bin_dir}/celeryctl worker --loglevel=INFO --loader=schooltool.task.celery:ZopeLoader --config=schooltool.task.config.worker_import --queues=zodb.import
+;command=${bin_dir}/celery worker --loglevel=INFO --loader=schooltool.task.celery:ZopeLoader --config=schooltool.task.config.worker_import --queues=zodb.import
 ;; celery 2.x:
-;command=${bin_dir}/celeryd --loader=schooltool.task.celery:ZopeLoader --config=schooltool.task.config.worker_import --queues=zodb.import
+;;command=${bin_dir}/celeryd --loader=schooltool.task.celery:ZopeLoader --config=schooltool.task.config.worker_import --queues=zodb.import
 ;environment=SCHOOLTOOL_CONF=${config_dir}/schooltool.conf,REDIS_HOST=127.0.0.1,REDIS_PORT=7079
 ;numprocs=1
 ;autostart=true
@@ -113,3 +113,5 @@ redirect_stderr=true
 programs=zeo, redis, celery_report
 ;, celery_import
 priority=100
+
+; vim: ft=dosini

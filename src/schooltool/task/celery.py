@@ -17,9 +17,18 @@
 #
 from __future__ import absolute_import
 
-import celery.app.abstract
+import sys
+
 import celery.app.defaults
 import celery.loaders.default
+try:
+    # Celery 2
+    from celery.app.abstract import configurated as StartStopStep
+    logger = None
+except:
+    # Celery 3
+    from celery.bootsteps import StartStopStep
+    from celery.utils.log import worker_logger as logger
 
 import zope.configuration.config
 import zope.configuration.xmlconfig
@@ -47,23 +56,24 @@ celery.app.defaults.DEFAULTS.update(
 ACTIVE_MACHINERY = None
 
 
-class ConfiguratedSchoolToolMachinery(celery.app.abstract.configurated,
+class ConfiguratedSchoolToolMachinery(StartStopStep,
                                       SchoolToolMachinery):
 
-    config = celery.app.abstract.from_config()
     _configured = False
-    celery_app = None
+    app = None
     db = None
     options = None
 
     def __init__(self, celery_app, **kwargs):
         self.app = celery_app
-        self.setup_defaults(kwargs, namespace='schooltool')
+        self.logger = logger or self.app.log.get_default_logger()
 
     def loadOptions(self):
         options = self.Options()
-        if self.config:
-            options.config_file = self.config
+        options.config_file = self.app.conf.SCHOOLTOOL_CONFIG
+        if not options.config_file:
+            self.logger.error('No configuration file given')
+            sys.exit(1)
         options.config, handler = self.readConfig(options.config_file)
         if options.config.database.config.storage is None:
             raise Exception('No ZODB storage configured')
@@ -90,8 +100,7 @@ class ConfiguratedSchoolToolMachinery(celery.app.abstract.configurated,
         if self.db is not None:
             return # already running
         if not self._configured:
-            # XXX: this goes to WARNING, should go to INFO
-            print 'Configuring SchoolTool machinery.'
+            self.logger.info('SchoolTool: Loading configuration')
             self.options = self.loadOptions()
             self.configure(self.options)
             self._configured = True
@@ -107,7 +116,6 @@ class SchoolToolReportMachinery(ConfiguratedSchoolToolMachinery):
 
     def configure(self, options):
         self.options = options
-        print options.config.report_server_definition
         self.configureComponents(
             options,
             site_zcml=options.config.report_server_definition)
