@@ -798,6 +798,9 @@ class MegaExporter(SchoolTimetableExportView):
                         continue
                     timetables = []
                     for schedule in IScheduleContainer(section).values():
+                        if schedule.timetable.__name__ is None:
+                            # LP: #1281335
+                            continue
                         parts = [schedule.timetable.__name__]
                         if schedule.consecutive_periods_as_one:
                             parts.append('yes')

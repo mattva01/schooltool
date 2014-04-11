@@ -15,7 +15,7 @@ New features
 - Added descriptions for demographic fields
 
 
-2.6.3 (unreleased)
+2.6.3 (2014-04-12)
 ------------------
 
 New features
@@ -29,6 +29,7 @@ Bugfixes
 ++++++++
 
 - Fixed exception dates format in calendar widget of recurring events (https://launchpad.net/bugs/372889)
+- Fixed export of deleted timetables (https://launchpad.net/bugs/1281335)
 - Updated copyright (https://launchpad.net/bugs/1289277)
 - Fixed term/section navigation in a different school year (https://launchpad.net/bugs/1281050)
 
