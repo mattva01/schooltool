@@ -2,13 +2,14 @@
 CHANGES
 =======
 
-2.7.0 (unreleased)
+2.7.0 (2014-04-12)
 ------------------
 
 New features
 ++++++++++++
 
 - Temporal relationships
+- Checkboxes in relationship views
 - Levels for courses and persons
 - Parent access
 - Background import
