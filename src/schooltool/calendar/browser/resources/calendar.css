@@ -421,22 +421,21 @@
 }
 
 .page > .third-nav li.calendar-nav {
-    float: left;
 }
 
 .page > .third-nav li.calendar-current {
     text-align: center;
-    float: none;
-    display: block;
 }
 
 .page > .third-nav li.calendar-current span {
     font-weight: bold;
+    background: #f7f7f7;
+    border-bottom: 1px solid #f7f7f7;
 }
 
 .page > .third-nav li.calendar-type {
     float: right;
-    margin-left: 0px;
+    margin-left: -1px;
 }
 
 .page .main .content .calendar-event form #recurrence_box .buttons {

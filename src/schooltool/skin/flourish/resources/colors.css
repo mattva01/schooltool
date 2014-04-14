@@ -201,27 +201,28 @@ h3.done-link a:active {
 }
 
 .page .third-nav {
-    background-color: #f7f7f7;
     border-bottom-color: #D9D9D9;
-}
-
-.page .third-nav > li {
-    background: transparent url(subnav_divider.png) no-repeat scroll right bottom;
 }
 
 .page .third-nav > li a,
 .page .third-nav > li span {
-    color: #3c4342;
+    color: #005c61;
+    border-color: #d9d9d9;
+    outline: 0;
 }
 
 .page .third-nav > li.active a,
-.page .third-nav > li a:hover {
-    background: transparent url(subnav_active_bg.png) repeat left 1px;
+.page .third-nav > li.active span,
+.page .third-nav > li.active a:hover,
+.page .third-nav > li.active span:hover {
+    background: #f7f7f7;
+    border-bottom-color: #f7f7f7;
+    color: #3c4342;
+    cursor: default;
 }
 
-.page ul.third-nav > li.active a,
 .page .third-nav > li a:hover {
-    color: #005c61;
+    background: transparent url(subnav_active_bg.png) repeat left 1px;
 }
 
 .page > .body {
