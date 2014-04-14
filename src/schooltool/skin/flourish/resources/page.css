@@ -43,9 +43,6 @@
     margin-right: 16px;
     position: relative;
     width: 752px;
-
-    -moz-border-radius: 4px 4px 0px 0px;
-    border-radius: 4px 4px 0px 0px;
 }
 
 .page .third-nav-narrow {
@@ -55,7 +52,8 @@
 
 .page .third-nav > li {
     display: inline-block;
-    margin-left: -4px;
+    margin-left: -5px;
+    margin-top: -1px;
 }
 
 .page .third-nav > li:first-child {
@@ -64,16 +62,16 @@
 
 .page .third-nav > li a,
 .page .third-nav > li span {
+    border-style: solid;
+    border-width: 1px;
     display: block;
     font-size: 12px;
     line-height: 16px;
     padding: 8px;
     text-decoration: none;
-}
 
-.page .third-nav > li:first-child a {
-    -moz-border-radius: 4px 0px 0px 0px;
-    border-radius: 4px 0px 0px 0px;
+    -moz-border-radius: 4px 4px 0 0;
+    border-radius: 4px 4px 0 0;
 }
 
 /* Page layout */

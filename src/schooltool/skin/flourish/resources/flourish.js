@@ -248,3 +248,12 @@ $(document).ready(function() {
     $("input.birth-date-field").datepicker("option", "yearRange", 'c-20:c+10' );
     });
 
+$(document).ready(function() {
+    var tab = $('.third-nav .calendar-current'),
+        margin = 5; // inline-block
+    if (tab.length > 0) {
+        tab.width(tab.prev().position().left -
+                  tab.position().left +
+                  margin);
+    }
+});
