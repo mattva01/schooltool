@@ -79,7 +79,7 @@ def registerSeleniumSetup():
         selector = '//a[@title="Edit members for this group"]'
         browser.query.xpath(selector).click()
         if state is None:
-            state = 'Removed'
+            state = 'Removed' if group != 'Students' else 'Withdrawn'
         remove_temporal_relationship(browser, members, state, date)
 
     registry.register('SeleniumHelpers',
