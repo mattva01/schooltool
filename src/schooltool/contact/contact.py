@@ -244,6 +244,7 @@ class ContactStatesStartup(StateStartUpBase):
         states.add(_('Guardian'), ACTIVE+PARENT, 'g')
         states.add(_('Sibling'), ACTIVE, 's')
         states.add(_('Inactive'), INACTIVE, 'i')
+        states.add(_('Added in error'), INACTIVE, 'e')
         states.describe(ACTIVE, _('A contact'))
         states.describe(ACTIVE+PARENT, _('A parent'))
         states.describe(INACTIVE, _('Inactive'))

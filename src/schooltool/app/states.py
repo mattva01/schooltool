@@ -236,6 +236,7 @@ class GroupMembershipStatesStartup(StateStartUpBase):
         states.add(_('Member'), ACTIVE, 'a')
         states.add(_('Suspended'), INACTIVE, 's')
         states.add(_('Removed'), INACTIVE, 'r')
+        states.add(_('Added in error'), INACTIVE, 'e')
 
 
 GRADUATED = 'c'
@@ -255,6 +256,7 @@ class StudentMembershipStatesStartup(StateStartUpBase):
         states.add(_('Graduated/Active'), ACTIVE+GRADUATED, 'c')
         states.add(_('Graduated/Inactive'), INACTIVE+GRADUATED, 'r')
         states.add(_('Withdrawn'), INACTIVE, 'w')
+        states.add(_('Added in error'), INACTIVE, 'e')
         states.describe(INACTIVE+PREENROLLED, _('Pre-enrolled'))
         states.describe(ACTIVE+GRADUATED, _('Graduated/Active'))
         states.describe(INACTIVE+GRADUATED, _('Graduated/Inactive'))
@@ -269,6 +271,7 @@ class LeadershipStatesStartUp(StateStartUpBase):
         super(LeadershipStatesStartUp, self).populate(states)
         states.add(_('Active'), ACTIVE, 'a')
         states.add(_('Inactive'), INACTIVE, 'i')
+        states.add(_('Added in error'), INACTIVE, 'e')
 
 
 class StudentLevelsStatesStartup(StateStartUpBase):
@@ -282,5 +285,6 @@ class StudentLevelsStatesStartup(StateStartUpBase):
         states.add(_('Enrolled'), ACTIVE, 'a')
         states.add(_('Graduated'), INACTIVE+GRADUATED, 'c')
         states.add(_('Inactive'), INACTIVE, 'i')
+        states.add(_('Added in error'), INACTIVE, 'e')
         states.describe(INACTIVE+PREENROLLED, _('Pre-enrolled'))
         states.describe(INACTIVE+GRADUATED, _('Graduated'))

@@ -49,3 +49,4 @@ class AdvisorStatesStartUp(StateStartUpBase):
         super(AdvisorStatesStartUp, self).populate(states)
         states.add(_('Advising'), ACTIVE, 'a')
         states.add(_('Removed'), INACTIVE, 'i')
+        states.add(_('Added in error'), INACTIVE, 'e')
