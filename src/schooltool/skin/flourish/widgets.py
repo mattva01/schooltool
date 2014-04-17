@@ -131,12 +131,16 @@ class FlourishCkeditorScriptBase(object):
         # XXX: using some values that may be not JS safe
         return '''
             <script type="text/javascript" language="JavaScript">
+                var skin = "v2,%(skinPath)s";
+                if (CKEDITOR.skins == undefined) {
+                    skin = "moono";
+                }
                 var %(variable)s = new CKEDITOR.replace("%(id)s",
                     {
                         height: %(height)s,
                         width: %(width)s,
                         customConfig: "%(customConfigPath)s",
-                        skin: "v2,%(skinPath)s",
+                        skin: skin,
                         contentsCss: "%(contentsCss)s"
                     }
                 );
