@@ -5,7 +5,7 @@ CHANGES
 2.7.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Support CKEditor 4.x (https://bugs.launchpad.net/bugs/1309133)
 
 
 2.7.0 (2014-04-12)

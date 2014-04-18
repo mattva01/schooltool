@@ -3,6 +3,7 @@ Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
+if (CKEDITOR.skins != undefined) {
 CKEDITOR.skins.add( 'v2', (function()
 {
 	return {
@@ -13,6 +14,7 @@ CKEDITOR.skins.add( 'v2', (function()
 		margins		: [ 0, 14, 18, 14 ]
 	};
 })() );
+}
 
 (function()
 {
