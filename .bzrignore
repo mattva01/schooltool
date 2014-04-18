@@ -9,9 +9,8 @@
 ./src/schooltool.egg-info
 **/LC_MESSAGES/*.mo
 ./src/schooltool/generations/tests/Data2?.fs.*
-./src/schooltool/locales/??
-./src/schooltool/locales/???
-./src/schooltool/locales/??_??
+./src/schooltool/locales/*
+!./src/schooltool/locales/*.po
 ./ID
 ./TAGS
 ./tags
