@@ -420,22 +420,32 @@
     width: 140px;
 }
 
-.page > .third-nav li.calendar-nav {
+.page > .third-nav li.calendar-nav a {
+    background: #ffffff;
+    border: none;
 }
 
 .page > .third-nav li.calendar-current {
     text-align: center;
 }
 
+.page > .third-nav li.calendar-nav a:hover {
+    background: #ffffff;
+}
+
 .page > .third-nav li.calendar-current span {
     font-weight: bold;
-    background: #f7f7f7;
-    border-bottom: 1px solid #f7f7f7;
+    background: #ffffff;
+    border: none;
 }
 
 .page > .third-nav li.calendar-type {
     float: right;
     margin-left: -1px;
+}
+
+.page > .third-nav li.calendar-nav + li.calendar-type a {
+    margin-right: 16px;
 }
 
 .page .main .content .calendar-event form #recurrence_box .buttons {
