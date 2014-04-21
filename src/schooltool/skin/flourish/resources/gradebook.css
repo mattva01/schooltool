@@ -48,7 +48,7 @@
 }
 
 .grid a.navbar-arrow {
-    background: #F7F7F7;
+    background: #ffffff;
     display: block;
     font-size: 12px;
     line-height: 16px;
@@ -59,8 +59,7 @@
     top: 36px;
     width: 8px;
     outline: none;
-    border-radius: 4px 4px 0 0;
-    border: 1px solid #d9d9d9;
+    border: none;
     margin-left: -1px
     margin-top: -5px;
 }
@@ -69,17 +68,12 @@
     margin-left: 0;
 }
 
-.grid a.navbar-arrow:hover,
-.grid a.navbar-list-worksheets-active {
-    background: url("subnav_active_bg.png") repeat scroll left 1px transparent;
-}
-
 .grid a.navbar-arrow-inactive {
     color: gray;
 }
 
 .grid a.navbar-arrow-inactive:hover {
-    background: #F7F7F7;
+    background: #ffffff;
     cursor: default;
 }
 
@@ -92,9 +86,6 @@
 }
 
 .grid > a.navbar-list-worksheets {
-    border-left-width: 1px;
-    border-left-style: solid;
-    border-left-color: #ccc;
     right: 16px;
     width: 10px;
 }

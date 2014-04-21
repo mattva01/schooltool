@@ -256,7 +256,7 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     var tab = $('.third-nav .calendar-current'),
-        margin = 5; // inline-block
+        margin = 4; // inline-block
     if (tab.length > 0) {
         tab.width(tab.prev().position().left -
                   tab.position().left +
