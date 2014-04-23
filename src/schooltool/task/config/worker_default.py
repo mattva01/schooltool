@@ -12,7 +12,7 @@ if CELERY3:
     CELERY_QUEUES = (
         kombu.Queue('default', kombu.Exchange('default'), routing_key='default'),
     #    kombu.Queue('import',  kombu.Exchange('zodb'),   routing_key='zodb.import'),
-        kombu.Queue('report', kombu.Exchange('zodb'),   routing_key='zodb.report'),
+        kombu.Queue('zodb.report', kombu.Exchange('default'),   routing_key='zodb.report'),
     )
 else:
     CELERY_QUEUES = {
