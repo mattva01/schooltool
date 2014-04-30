@@ -891,6 +891,15 @@
       permission="schooltool.edit"
       />
 
+  <flourish:viewlet
+      name="what-is-this"
+      class="schooltool.skin.flourish.page.Related"
+      template="templates/f_relationship_states_related.pt"
+      view="schooltool.app.browser.states.RelationshipStatesEditView"
+      manager="schooltool.skin.flourish.page.IPageRelatedManager"
+      permission="schooltool.edit"
+      />
+
   <flourish:activeViewlet
       name="manage_school"
       manager="schooltool.skin.flourish.page.IHeaderNavigationManager"

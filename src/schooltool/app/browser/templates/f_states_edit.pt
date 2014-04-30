@@ -9,7 +9,7 @@
         <tal:block content="view/message" />
       </div>
     </div>
-    <table class="scoresystem-scores">
+    <table class="relationship-states">
       <thead>
         <tr>
           <th i18n:translate="">Title</th>

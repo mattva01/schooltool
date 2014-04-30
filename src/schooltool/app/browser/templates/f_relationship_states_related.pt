@@ -1,0 +1,28 @@
+<metal:block i18n:domain="schooltool">
+  <div class="header" i18n:translate="">
+    What is This?
+  </div>
+  <div class="body">
+    <p i18n:translate="">
+      SchoolTool has a set of built-in "membership states," which
+      define basic types of relationships between people and between
+      people and groups. For each relationship, there is a limited set
+      of "meanings," and the school can add custom states that act as
+      specific codes for local use.
+    </p>
+    <p i18n:translate="">
+      For example, in the Student Enrollment relationship, a school
+      could create both "Dropped out" and "Transferred." From the
+      system's point of view, the "meaning" of both would be set to
+      "Inactive," and the two states are treated the same, but to
+      users the school, the distinction between the two may be
+      important and needs to be recorded explicitly.
+    </p>
+    <p i18n:translate="">
+      In all cases "Active" is the default state, "Inactive" means
+      that the relationship has ended, at least temporarily. In each
+      case, all the built-in "meanings" must be used in at least one
+      Title/Code/Meaning option.
+    </p>
+  </div>
+</metal:block>

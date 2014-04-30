@@ -189,3 +189,12 @@ img.st-table-button-spinner {
 table.report-dialog-message td:first-child {
     width: 20%;
 }
+
+table.relationship-states td {
+    padding: 0 4px;
+    vertical-align: middle;
+}
+
+table.relationship-states input[type="text"] {
+    width: 100%;
+}
