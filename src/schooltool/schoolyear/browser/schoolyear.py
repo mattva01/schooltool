@@ -25,6 +25,7 @@ from zope.viewlet.viewlet import ViewletBase
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.cachedescriptors.property import Lazy
 from zope.component import adapts, getMultiAdapter
+from zope.event import notify
 from zope.security import checkPermission
 from zope.schema import Date, TextLine
 from zope.schema.interfaces import ValidationError
@@ -36,6 +37,7 @@ from zope.traversing.browser.absoluteurl import AbsoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser import absoluteURL
 from zope.container.interfaces import INameChooser
+from zope.container.contained import containedEvent
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.proxy import sameProxiedObjects
 from zope.i18n import translate
@@ -59,6 +61,7 @@ import schooltool.skin.flourish.containers
 import schooltool.skin.flourish.breadcrumbs
 from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.interfaces import ISchoolToolApplication
+from schooltool.app.interfaces import IApplicationPreferences
 from schooltool.common import DateRange
 from schooltool.common import SchoolToolMessage as _
 from schooltool.common.inlinept import InheritTemplate
@@ -81,7 +84,14 @@ from schooltool.skin.containers import TableContainerView
 from schooltool.skin import flourish
 from schooltool.table import table
 from schooltool.timetable.interfaces import ITimetableContainer
-
+from schooltool.timetable.timetable import Timetable
+from schooltool.timetable.interfaces import IWeekDayTemplates
+from schooltool.timetable.interfaces import ISchoolDayTemplates
+from schooltool.timetable.daytemplates import WeekDayTemplates
+from schooltool.timetable.daytemplates import SchoolDayTemplates
+from schooltool.timetable.daytemplates import DayTemplate
+from schooltool.timetable.daytemplates import TimeSlot
+from schooltool.timetable.schedule import Period
 
 class SchoolYearContainerAbsoluteURLAdapter(AbsoluteURL):
 
@@ -338,35 +348,56 @@ class ImportSchoolYearData(object):
             for level in course.levels:
                 new_course.levels.add(removeSecurityProxy(level))
 
-    def copyTimetable(self, timetable):
-        # XXX: copy-pasted old hack, would be nice
-        #      to replace with something decent!
-
-        tmp = StringIO()
-        persistent = CopyPersistent(timetable)
-
-        # Pickle the object to a temporary file
-        pickler = cPickle.Pickler(tmp, 2)
-        pickler.persistent_id = persistent.id
-        pickler.dump(timetable)
-
-        # Now load it back
-        tmp.seek(0)
-        unpickler = cPickle.Unpickler(tmp)
-        unpickler.persistent_load = persistent.load
-        new_tt = unpickler.load()
-        return new_tt
+    def setUpTimetable(self, timetable, old_timetable):
+        if IWeekDayTemplates.providedBy(old_timetable.time_slots):
+            timetable.time_slots, object_event = containedEvent(
+                WeekDayTemplates(), timetable, 'time_slots')
+        elif ISchoolDayTemplates.providedBy(old_timetable.time_slots):
+            timetable.time_slots, object_event = containedEvent(
+                SchoolDayTemplates(), timetable, 'time_slots')
+        notify(object_event)
+        timetable.time_slots.initTemplates()
+        old_templates = old_timetable.time_slots.templates
+        for old_template_key, old_template in old_templates.items():
+            template = DayTemplate(old_template.title)
+            timetable.time_slots.templates[old_template_key] = template
+            for old_timeslot_key, old_timeslot in old_template.items():
+                timeslot = TimeSlot(old_timeslot.tstart,
+                                    old_timeslot.duration,
+                                    old_timeslot.activity_type)
+                template[old_timeslot_key] = timeslot
+        if IWeekDayTemplates.providedBy(old_timetable.periods):
+            timetable.periods, object_event = containedEvent(
+                WeekDayTemplates(), timetable, 'periods')
+        elif ISchoolDayTemplates.providedBy(old_timetable.periods):
+            timetable.periods, object_event = containedEvent(
+                SchoolDayTemplates(), timetable, 'periods')
+        notify(object_event)
+        timetable.periods.initTemplates()
+        old_templates = old_timetable.periods.templates
+        for old_template_key, old_template in old_templates.items():
+            template = DayTemplate(old_template.title)
+            timetable.periods.templates[old_template_key] = template
+            for old_period_key, old_period in old_template.items():
+                period = Period(old_period.title, old_period.activity_type)
+                template[old_period_key] = period
 
     def importAllTimetables(self):
         if not self.shouldImportAllTimetables():
             return
         oldTimetables = ITimetableContainer(self.activeSchoolyear)
         newTimetables = ITimetableContainer(self.newSchoolyear)
+        chooser = INameChooser(newTimetables)
+        app = ISchoolToolApplication(None)
+        tzname = IApplicationPreferences(app).timezone
         for schooltt in oldTimetables.values():
-            newSchooltt = self.copyTimetable(schooltt)
-            newSchooltt.exceptions.clear()
-            newSchooltt.__parent__ = None
-            newTimetables[newSchooltt.__name__] = newSchooltt
+            newSchooltt = Timetable(
+                self.newSchoolyear.first, self.newSchoolyear.last,
+                title=schooltt.title,
+                timezone=tzname)
+            name = chooser.chooseName(schooltt.__name__, newSchooltt)
+            newTimetables[name] = newSchooltt
+            self.setUpTimetable(newSchooltt, schooltt)
             if (oldTimetables.default is not None and
                 sameProxiedObjects(oldTimetables.default, schooltt)):
                 newTimetables.default = newSchooltt

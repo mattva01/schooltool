@@ -1,0 +1,190 @@
+Test for the copy timetables option for new years
+=================================================
+
+See https://bugs.launchpad.net/bugs/1005962
+
+Log in as manager:
+
+    >>> manager = browsers.manager
+    >>> manager.ui.login('manager', 'schooltool')
+
+Add a school year:
+
+    >>> manager.ui.schoolyear.add('2014', '2014-01-01', '2014-12-31')
+
+Add a couple of timetables:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Timetables').click()
+    >>> manager.query.link('Timetable').click()
+    >>> manager.query.id('field.title').clear()
+    >>> manager.query.id('field.title').ui.set_value('3 periods')
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('Days of the week').click()
+    >>> manager.query.button('Same time each day').click()
+    >>> manager.query.id('field.times').clear()
+    >>> times = '\n'.join([
+    ...     '9:30-10:25',
+    ...     '10:30-11:25',
+    ...     '11:30-12:25',
+    ... ])
+    >>> manager.query.id('field.times').ui.set_value(times)
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('Have names').click()
+    >>> manager.query.id('field.periods').ui.set_value('First\nSecond\nThird')
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('Same').click()
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('No').click()
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('Timetables').click()
+    >>> manager.query.link('Timetable').click()
+    >>> manager.query.id('field.title').clear()
+    >>> manager.query.id('field.title').ui.set_value('4 periods')
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('Days of the week').click()
+    >>> manager.query.button('Same time each day').click()
+    >>> manager.query.id('field.times').clear()
+    >>> times = '\n'.join([
+    ...     '9:00-10:00',
+    ...     '10:00-11:00',
+    ...     '11:00-12:00',
+    ...     '12:00-13:00',
+    ... ])
+    >>> manager.query.id('field.times').ui.set_value(times)
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('Have names').click()
+    >>> manager.query.id('field.periods').ui.set_value('A\nB\nC\nD')
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('Same').click()
+    >>> manager.query.css('select[name="period_0"]').ui.set_value('C')
+    >>> manager.query.css('select[name="period_1"]').ui.set_value('A')
+    >>> manager.query.css('select[name="period_2"]').ui.set_value('D')
+    >>> manager.query.css('select[name="period_3"]').ui.set_value('B')
+    >>> manager.query.button('Next').click()
+    >>> manager.query.button('Yes').click()
+    >>> manager.query.id('homeroom_0_A').click()
+    >>> manager.query.id('homeroom_1_A').click()
+    >>> manager.query.id('homeroom_2_A').click()
+    >>> manager.query.id('homeroom_3_A').click()
+    >>> manager.query.id('homeroom_4_A').click()
+    >>> manager.query.id('homeroom_5_A').click()
+    >>> manager.query.id('homeroom_6_A').click()
+    >>> manager.query.button('Next').click()
+
+Check both timetables:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('2014').click()
+    >>> manager.query.link('Timetables').click()
+    >>> print_timetables_table(manager)
+    3 periods, 2014-01-01, 2014-12-31
+    4 periods, 2014-01-01, 2014-12-31
+
+    >>> manager.query.link('3 periods').click()
+    >>> print_timetable(manager)
+    3 periods
+    ---------
+    Periods
+    +---------------+---------------+---------------+---------------+---------------+---------------+---------------+
+    | Monday        | Tuesday       | Wednesday     | Thursday      | Friday        | Saturday      | Sunday        |
+    +---------------+---------------+---------------+---------------+---------------+---------------+---------------+
+    | First Lesson  | First Lesson  | First Lesson  | First Lesson  | First Lesson  | First Lesson  | First Lesson  |
+    | Second Lesson | Second Lesson | Second Lesson | Second Lesson | Second Lesson | Second Lesson | Second Lesson |
+    | Third Lesson  | Third Lesson  | Third Lesson  | Third Lesson  | Third Lesson  | Third Lesson  | Third Lesson  |
+    +---------------+---------------+---------------+---------------+---------------+---------------+---------------+
+    Time schedule
+    +-------------+-------------+-------------+-------------+-------------+----------+--------+
+    | Monday      | Tuesday     | Wednesday   | Thursday    | Friday      | Saturday | Sunday |
+    +-------------+-------------+-------------+-------------+-------------+----------+--------+
+    | 09:30-10:25 | 09:30-10:25 | 09:30-10:25 | 09:30-10:25 | 09:30-10:25 |          |        |
+    | 10:30-11:25 | 10:30-11:25 | 10:30-11:25 | 10:30-11:25 | 10:30-11:25 |          |        |
+    | 11:30-12:25 | 11:30-12:25 | 11:30-12:25 | 11:30-12:25 | 11:30-12:25 |          |        |
+    +-------------+-------------+-------------+-------------+-------------+----------+--------+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('4 periods').click()
+    >>> print_timetable(manager)
+    4 periods
+    ---------
+    Periods
+    +------------+------------+------------+------------+------------+------------+------------+
+    | Monday     | Tuesday    | Wednesday  | Thursday   | Friday     | Saturday   | Sunday     |
+    +------------+------------+------------+------------+------------+------------+------------+
+    | C Lesson   | C Lesson   | C Lesson   | C Lesson   | C Lesson   | C Lesson   | C Lesson   |
+    | A Homeroom | A Homeroom | A Homeroom | A Homeroom | A Homeroom | A Homeroom | A Homeroom |
+    | D Lesson   | D Lesson   | D Lesson   | D Lesson   | D Lesson   | D Lesson   | D Lesson   |
+    | B Lesson   | B Lesson   | B Lesson   | B Lesson   | B Lesson   | B Lesson   | B Lesson   |
+    +------------+------------+------------+------------+------------+------------+------------+
+    Time schedule
+    +-------------+-------------+-------------+-------------+-------------+----------+--------+
+    | Monday      | Tuesday     | Wednesday   | Thursday    | Friday      | Saturday | Sunday |
+    +-------------+-------------+-------------+-------------+-------------+----------+--------+
+    | 09:00-10:00 | 09:00-10:00 | 09:00-10:00 | 09:00-10:00 | 09:00-10:00 |          |        |
+    | 10:00-11:00 | 10:00-11:00 | 10:00-11:00 | 10:00-11:00 | 10:00-11:00 |          |        |
+    | 11:00-12:00 | 11:00-12:00 | 11:00-12:00 | 11:00-12:00 | 11:00-12:00 |          |        |
+    | 12:00-13:00 | 12:00-13:00 | 12:00-13:00 | 12:00-13:00 | 12:00-13:00 |          |        |
+    +-------------+-------------+-------------+-------------+-------------+----------+--------+
+
+Add a new school year copying the timetables:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('School Year').click()
+    >>> manager.query.id('form-widgets-title').ui.set_value('2015')
+    >>> manager.query.id('form-widgets-first').ui.set_value('2015-02-01')
+    >>> manager.query.id('form-widgets-last').ui.set_value('2015-12-01')
+    >>> manager.query.css('input[name="importAllTimetables"]').click()
+    >>> manager.query.id('form-buttons-add').click()
+
+Go to the new year's timetables:
+
+    >>> manager.query.link('School').click()
+    >>> manager.query.link('2015').click()
+    >>> manager.query.link('Timetables').click()
+    >>> print_timetables_table(manager)
+    3 periods, 2015-02-01, 2015-12-01
+    4 periods, 2015-02-01, 2015-12-01
+
+    >>> manager.query.link('3 periods').click()
+    >>> print_timetable(manager)
+    3 periods
+    ---------
+    Periods
+    +---------------+---------------+---------------+---------------+---------------+---------------+---------------+
+    | Monday        | Tuesday       | Wednesday     | Thursday      | Friday        | Saturday      | Sunday        |
+    +---------------+---------------+---------------+---------------+---------------+---------------+---------------+
+    | First Lesson  | First Lesson  | First Lesson  | First Lesson  | First Lesson  | First Lesson  | First Lesson  |
+    | Second Lesson | Second Lesson | Second Lesson | Second Lesson | Second Lesson | Second Lesson | Second Lesson |
+    | Third Lesson  | Third Lesson  | Third Lesson  | Third Lesson  | Third Lesson  | Third Lesson  | Third Lesson  |
+    +---------------+---------------+---------------+---------------+---------------+---------------+---------------+
+    Time schedule
+    +-------------+-------------+-------------+-------------+-------------+----------+--------+
+    | Monday      | Tuesday     | Wednesday   | Thursday    | Friday      | Saturday | Sunday |
+    +-------------+-------------+-------------+-------------+-------------+----------+--------+
+    | 09:30-10:25 | 09:30-10:25 | 09:30-10:25 | 09:30-10:25 | 09:30-10:25 |          |        |
+    | 10:30-11:25 | 10:30-11:25 | 10:30-11:25 | 10:30-11:25 | 10:30-11:25 |          |        |
+    | 11:30-12:25 | 11:30-12:25 | 11:30-12:25 | 11:30-12:25 | 11:30-12:25 |          |        |
+    +-------------+-------------+-------------+-------------+-------------+----------+--------+
+    >>> manager.query.link('Done').click()
+    >>> manager.query.link('4 periods').click()
+    >>> print_timetable(manager)
+    4 periods
+    ---------
+    Periods
+    +------------+------------+------------+------------+------------+------------+------------+
+    | Monday     | Tuesday    | Wednesday  | Thursday   | Friday     | Saturday   | Sunday     |
+    +------------+------------+------------+------------+------------+------------+------------+
+    | C Lesson   | C Lesson   | C Lesson   | C Lesson   | C Lesson   | C Lesson   | C Lesson   |
+    | A Homeroom | A Homeroom | A Homeroom | A Homeroom | A Homeroom | A Homeroom | A Homeroom |
+    | D Lesson   | D Lesson   | D Lesson   | D Lesson   | D Lesson   | D Lesson   | D Lesson   |
+    | B Lesson   | B Lesson   | B Lesson   | B Lesson   | B Lesson   | B Lesson   | B Lesson   |
+    +------------+------------+------------+------------+------------+------------+------------+
+    Time schedule
+    +-------------+-------------+-------------+-------------+-------------+----------+--------+
+    | Monday      | Tuesday     | Wednesday   | Thursday    | Friday      | Saturday | Sunday |
+    +-------------+-------------+-------------+-------------+-------------+----------+--------+
+    | 09:00-10:00 | 09:00-10:00 | 09:00-10:00 | 09:00-10:00 | 09:00-10:00 |          |        |
+    | 10:00-11:00 | 10:00-11:00 | 10:00-11:00 | 10:00-11:00 | 10:00-11:00 |          |        |
+    | 11:00-12:00 | 11:00-12:00 | 11:00-12:00 | 11:00-12:00 | 11:00-12:00 |          |        |
+    | 12:00-13:00 | 12:00-13:00 | 12:00-13:00 | 12:00-13:00 | 12:00-13:00 |          |        |
+    +-------------+-------------+-------------+-------------+-------------+----------+--------+
