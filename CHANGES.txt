@@ -6,6 +6,7 @@ CHANGES
 ------------------
 
 - Support CKEditor 4.x (https://bugs.launchpad.net/bugs/1309133)
+- Delete schedules that reference a deleted timetable (https://bugs.launchpad.net/bugs/1280528)
 
 
 2.6.3 (2014-04-12)

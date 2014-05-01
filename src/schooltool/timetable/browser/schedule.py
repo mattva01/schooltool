@@ -291,10 +291,18 @@ class ScheduleContainerView(BrowserView):
             return None
         return ISchoolYear(term, None)
 
+    def schedules(self):
+        for name, schedule in list(self.context.items()):
+            if schedule.timetable.__parent__ is not None:
+                yield schedule
+            else:
+                # Remove stray schedule (LP: #1280528)
+                del self.context[name]
+
     def timetables(self):
         snippets = filter(None, [
             queryMultiAdapter((schedule, self.request), name='schedule_table')
-            for schedule in self.context.values()])
+            for schedule in self.schedules()])
         return snippets
 
     def __call__(self):
