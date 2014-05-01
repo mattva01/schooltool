@@ -2,11 +2,11 @@
 CHANGES
 =======
 
-2.6.4 (unreleased)
+2.6.4 (2014-05-01)
 ------------------
 
-- Support CKEditor 4.x (https://bugs.launchpad.net/bugs/1309133)
-- Delete schedules that reference a deleted timetable (https://bugs.launchpad.net/bugs/1280528)
+- Support CKEditor 4.x (https://launchpad.net/bugs/1309133)
+- Delete schedules that reference a deleted timetable (https://launchpad.net/bugs/1280528)
 - Improve tab style to make active tab more clear (https://launchpad.net/bugs/1023378)
 - Timetables copied from active year retain old start/end dates (https://launchpad.net/bugs/1005962)
 - Updated translations
@@ -18,8 +18,8 @@ CHANGES
 New features
 ++++++++++++
 
-- Switch to CKEditor (https://bugs.launchpad.net/bugs/485898)
-- Celery 3 support (https://bugs.launchpad.net/bugs/1276384)
+- Switch to CKEditor (https://launchpad.net/bugs/485898)
+- Celery 3 support (https://launchpad.net/bugs/1276384)
 - Latest translations from Launchpad
 
 Bugfixes
