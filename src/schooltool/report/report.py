@@ -327,7 +327,7 @@ class RemoteReportRequest(object):
         if locale_id is not None:
             self.locale = zope.i18n.locales.Locale(locale_id)
         cookies = getattr(params, 'cookies', None)
-        if self.cookies is not None:
+        if self.cookies is not None and cookies is not None:
             self.cookies.update(cookies)
 
     def clone(self):
