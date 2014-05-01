@@ -11,14 +11,14 @@ msgstr ""
 "Project-Id-Version: schooltool\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-10-08 02:19+0300\n"
-"PO-Revision-Date: 2013-10-08 02:28+0000\n"
+"PO-Revision-Date: 2014-04-11 15:07+0000\n"
 "Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
 "Language-Team: OLENepal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-02-04 06:55+0000\n"
-"X-Generator: Launchpad (build 16916)\n"
+"X-Launchpad-Export-Date: 2014-04-12 09:51+0000\n"
+"X-Generator: Launchpad (build 16976)\n"
 "Language: ne\n"
 
 #: /src/schooltool/app/app.py:193
@@ -118,7 +118,7 @@ msgstr "हटाऊनुहोस्"
 #: /src/schooltool/app/browser/app.py:408
 #: /src/schooltool/app/browser/templates/f_edit_relationships.pt:58
 msgid "Add all displayed"
-msgstr ""
+msgstr "सबै प्रदर्शन गरिएका थप्नुहोस"
 
 #: /src/schooltool/app/browser/app.py:677
 msgid "Username or password is incorrect"
@@ -134,11 +134,11 @@ msgstr "लग इन"
 
 #: /src/schooltool/app/browser/app.py:435
 msgid "Log out"
-msgstr ""
+msgstr "लग आउट गर्नुहोस्"
 
 #: /src/schooltool/app/browser/app.py:523
 msgid "Calendar settings"
-msgstr ""
+msgstr "क्यालेन्डर सेटिंग्स"
 
 #: /src/schooltool/app/browser/app.py:886
 #: /src/schooltool/app/browser/app.py:1384
@@ -156,7 +156,7 @@ msgstr "रद्द गर्नुहोस्"
 #: /src/schooltool/app/browser/flourish.zcml:228
 #: /src/schooltool/app/browser/flourish.zcml:580
 msgid "School Name"
-msgstr ""
+msgstr "विद्यालयको नाम"
 
 #: /src/schooltool/app/browser/app.py:557
 msgid "Name"
@@ -181,11 +181,11 @@ msgstr "उपलब्ध लिडरहरु"
 
 #: /src/schooltool/app/browser/app.py:598
 msgid "Current responsible parties"
-msgstr ""
+msgstr "वर्तमान जिम्मेवार दल"
 
 #: /src/schooltool/app/browser/app.py:599
 msgid "Available responsible parties"
-msgstr ""
+msgstr "उपलब्ध जिम्मेवार दल"
 
 #: /src/schooltool/app/browser/app.py:741
 #: /src/schooltool/app/browser/flourish.zcml:149
@@ -204,16 +204,16 @@ msgstr ""
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:15
 #: /src/schooltool/securitypolicy/browser/flourish.zcml:44
 msgid "Server"
-msgstr ""
+msgstr "सर्भर"
 
 #: /src/schooltool/app/browser/app.py:1177
 #: /src/schooltool/app/browser/flourish.zcml:611
 msgid "Pack Database"
-msgstr ""
+msgstr "तथ्याङ्क प्याक गर्नुहोस् !"
 
 #: /src/schooltool/app/browser/app.py:1198
 msgid "Database successfully packed."
-msgstr ""
+msgstr "तथ्याङ्क सफलतापूर्वक प्याक गरिएको छ"
 
 #: /src/schooltool/app/browser/app.py:1200
 msgid "There were errors while packing the database: ${error}"
@@ -4106,7 +4106,7 @@ msgstr "खाली गर्नुहोस्"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:27
 msgid "Shortcut: Alt-R"
-msgstr ""
+msgstr "सर्टकट: Alt-R"
 
 #: /src/schooltool/contact/browser/templates/manage_contacts.pt:43
 msgid "Create contact"

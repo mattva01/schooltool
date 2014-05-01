@@ -10,14 +10,14 @@ msgstr ""
 "Project-Id-Version: el-1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-08 02:19+0300\n"
-"PO-Revision-Date: 2013-10-08 02:23+0000\n"
-"Last-Translator: Gediminas Paulauskas <menesis@pov.lt>\n"
+"PO-Revision-Date: 2014-04-14 20:15+0000\n"
+"Last-Translator: James Spentzos <jamesspentzos@hotmail.com>\n"
 "Language-Team: Greek <prassaschr@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-02-04 06:53+0000\n"
-"X-Generator: Launchpad (build 16916)\n"
+"X-Launchpad-Export-Date: 2014-04-15 07:54+0000\n"
+"X-Generator: Launchpad (build 16976)\n"
 "X-Poedit-Country: GREECE\n"
 "Language: el\n"
 "X-Poedit-Language: Greek\n"
@@ -280,7 +280,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/app.py:1562
 msgid "Sort by"
-msgstr ""
+msgstr "Ταξινόμηση κατά"
 
 #: /src/schooltool/app/browser/cal.py:111
 msgid "January"
@@ -2330,7 +2330,7 @@ msgstr "Αρχεία"
 
 #: /src/schooltool/app/browser/templates/f_translationdomaincontrol.pt:31
 msgid "Reload"
-msgstr ""
+msgstr "Ανανέωση"
 
 #: /src/schooltool/app/browser/templates/index.pt:6
 msgid "Welcome to SchoolTool"
@@ -3126,7 +3126,7 @@ msgstr "Αυτό το ID δεν είναι μοναδικό."
 #: /src/schooltool/basicperson/browser/flourish.zcml:16
 #: /src/schooltool/basicperson/browser/templates/f_manage_people_overview.pt:4
 msgid "People"
-msgstr ""
+msgstr "Πρόσωπα"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:94
 msgid "Add new persons"
@@ -3177,7 +3177,7 @@ msgstr "Διαχειριστής"
 #: /src/schooltool/level/browser/flourish.zcml:110
 #: /src/schooltool/resource/browser/flourish.zcml:29
 msgid "Reorder"
-msgstr ""
+msgstr "Αναδιάταξη"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:305
 msgid "Text Field"
@@ -3234,7 +3234,7 @@ msgstr "Προφίλ  του προσώπου, επαφές, ομάδες, κλ�
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 #: /src/schooltool/basicperson/browser/person.py:1369
 msgid "Profile"
-msgstr ""
+msgstr "Προφίλ"
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:784
 #: /src/schooltool/person/browser/home_tab_viewlet.pt:3
@@ -3413,7 +3413,7 @@ msgstr "Κάρτα μητρώου: ${person}"
 
 #: /src/schooltool/basicperson/browser/person.py:1386
 msgid "profile report"
-msgstr ""
+msgstr "αναφορά προφίλ"
 
 #: /src/schooltool/basicperson/browser/person.py:1402
 msgid "Username: ${username}"
@@ -3426,11 +3426,11 @@ msgstr "Γενικές πληροφορίες"
 
 #: /src/schooltool/basicperson/browser/person.py:1494
 msgid "Received"
-msgstr ""
+msgstr "Ελήφθει"
 
 #: /src/schooltool/basicperson/browser/person.py:1502
 msgid "Message"
-msgstr ""
+msgstr "Μήνυμα"
 
 #: /src/schooltool/basicperson/browser/person.py:1561
 msgid "(${number} new)"
@@ -3527,7 +3527,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:8
 msgid "Order"
-msgstr ""
+msgstr "Σειρά"
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_reorder.pt:10
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:6
@@ -3578,7 +3578,7 @@ msgstr "Απαιτούμενο"
 
 #: /src/schooltool/basicperson/browser/templates/f_demographics_view.pt:9
 msgid "Limited"
-msgstr ""
+msgstr "Περιορισμένος"
 
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:10
 #: /src/schooltool/basicperson/browser/templates/f_generalViewlet.pt:29
@@ -3712,7 +3712,7 @@ msgstr "Γηγενής Χαβανέζος ή Νησιώτης από άλλα ν
 
 #: /src/schooltool/basicperson/demographics.py:148
 msgid "White"
-msgstr ""
+msgstr "Άσπρο"
 
 #: /src/schooltool/basicperson/demographics.py:150
 msgid "Place of birth"
@@ -3763,7 +3763,7 @@ msgstr "(εεεε-μμ-ηη)"
 
 #: /src/schooltool/basicperson/interfaces.py:133
 msgid "As it should appear on forms and reports."
-msgstr ""
+msgstr "Όπως θα έπρεπε να εμφανίζεται σε φόρμες και αναφορές."
 
 #: /src/schooltool/basicperson/interfaces.py:138
 msgid "A unique one word alphanumeric identifier."
@@ -3914,11 +3914,11 @@ msgstr ""
 
 #: /src/schooltool/calendar/browser/overlay.py:33
 msgid "Show"
-msgstr ""
+msgstr "Προβολή"
 
 #: /src/schooltool/calendar/browser/templates/calendar_overlay.pt:35
 msgid "Select"
-msgstr ""
+msgstr "Επιλογή"
 
 #: /src/schooltool/calendar/browser/templates/event.pt:52
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_edit.pt:53
@@ -3946,7 +3946,7 @@ msgstr "Αυτή είναι ένα ολοήμερο γεγονός."
 
 #: /src/schooltool/calendar/browser/templates/event_delete_dialog.pt:12
 msgid "You are deleting a repeating event."
-msgstr ""
+msgstr "Διαγράφετε ένα επαναλαμβανόμενο γεγονός."
 
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:202
 #: /src/schooltool/timetable/browser/templates/f_schedule_event_add.pt:146
@@ -3955,7 +3955,7 @@ msgstr ""
 
 #: /src/schooltool/common/fields.py:38
 msgid "Image size"
-msgstr ""
+msgstr "Μέγεθος εικόνας"
 
 #: /src/schooltool/common/fields.py:39
 msgid "Size in pixels"
@@ -3963,7 +3963,7 @@ msgstr "Μέγεθος σε pixels"
 
 #: /src/schooltool/common/fields.py:44
 msgid "Image format"
-msgstr ""
+msgstr "Μορφή εικόνας"
 
 #: /src/schooltool/common/fields.py:48
 msgid "Max file size in bytes"
@@ -4170,7 +4170,7 @@ msgstr "Επαφή του/της"
 
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:3
 msgid "Contact information"
-msgstr ""
+msgstr "Στοιχεία επικοινωνίας"
 
 #: /src/schooltool/contact/browser/templates/f_contact_view.pt:6
 #: /src/schooltool/contact/browser/templates/f_contactsViewlet.pt:9
@@ -4266,7 +4266,7 @@ msgstr "Τηλέφωνα"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:50
 msgid "Spoken Languages"
-msgstr ""
+msgstr "Ομιλούμενες γλώσσες"
 
 #: /src/schooltool/contact/browser/templates/view_contacts.pt:73
 msgid "(View Details)"
@@ -4379,7 +4379,7 @@ msgstr "Απόγονος"
 #: /src/schooltool/person/security.zcml:73
 #: /src/schooltool/timetable/security.zcml:38
 msgid "List/Search"
-msgstr ""
+msgstr "Λίστα/Αναζήτηση"
 
 #: /src/schooltool/contact/security.zcml:41
 msgid ""
@@ -4414,17 +4414,17 @@ msgstr ""
 #: /src/schooltool/contact/security.zcml:86
 #: /src/schooltool/person/security.zcml:147
 msgid "The user himself."
-msgstr ""
+msgstr "Ο ίδιος ο χρήστης."
 
 #: /src/schooltool/course/browser/configure.zcml:10
 #: /src/schooltool/course/browser/configure.zcml:96
 #: /src/schooltool/course/browser/flourish.zcml:270
 msgid "Add Course"
-msgstr ""
+msgstr "Προσθήκη Μαθήματος"
 
 #: /src/schooltool/course/browser/configure.zcml:25
 msgid "Edit Course Information"
-msgstr ""
+msgstr "Επεξεργασία Πληροφοριών Μαθήματος"
 
 #: /src/schooltool/course/browser/configure.zcml:85
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:21
@@ -4435,7 +4435,7 @@ msgstr "Εισαγωγή μαθημάτων"
 #: /src/schooltool/course/browser/configure.zcml:193
 #: /src/schooltool/course/browser/flourish.zcml:394
 msgid "Add Section"
-msgstr ""
+msgstr "Προσθήκη Τμήματος"
 
 #: /src/schooltool/course/browser/configure.zcml:203
 msgid "Edit Section Information"
@@ -4444,7 +4444,7 @@ msgstr "Επεξεργασία Πληροφοριών Τμήματος"
 #: /src/schooltool/course/browser/configure.zcml:217
 #: /src/schooltool/course/browser/section-member-csvimport.pt:21
 msgid "Import Section Members"
-msgstr ""
+msgstr "Εισαγωγή Μελών Τμήματος"
 
 #: /src/schooltool/course/browser/configure.zcml:288
 #: /src/schooltool/course/browser/flourish.zcml:396
@@ -4486,7 +4486,7 @@ msgstr ""
 #: /src/schooltool/course/browser/course.py:545
 #: /src/schooltool/course/browser/course.py:597
 msgid "Course Information"
-msgstr ""
+msgstr "Πληροφορίες Μαθήματος"
 
 #: /src/schooltool/course/browser/course.py:669
 #: /src/schooltool/course/browser/templates/f_course_filter.pt:6
@@ -4513,7 +4513,7 @@ msgstr ""
 #: /src/schooltool/course/browser/csvimport.py:171
 #: /src/schooltool/group/browser/csvimport.py:111
 msgid "User names must not be empty."
-msgstr ""
+msgstr "Τα ονόματα των χρηστών δεν πρέπει να είναι κενά."
 
 #: /src/schooltool/course/browser/csvimport.py:178
 #: /src/schooltool/group/browser/csvimport.py:119
@@ -4545,12 +4545,12 @@ msgstr "Μάθημα"
 #: /src/schooltool/course/browser/templates/unlink_section.pt:13
 #: /src/schooltool/course/browser/templates/unlink_section.pt:28
 msgid "Section"
-msgstr ""
+msgstr "Τμήμα"
 
 #: /src/schooltool/course/browser/flourish.zcml:440
 #: /src/schooltool/course/browser/templates/f_section_view.pt:141
 msgid "Locations"
-msgstr ""
+msgstr "Τοποθεσίες"
 
 #: /src/schooltool/course/browser/flourish.zcml:411
 #: /src/schooltool/course/browser/templates/f_section_view.pt:164
@@ -4569,7 +4569,7 @@ msgstr "Εξοπλισμός"
 #: /src/schooltool/term/browser/term.py:764
 #: /src/schooltool/term/security.zcml:19
 msgid "Terms"
-msgstr ""
+msgstr "Όροι"
 
 #: /src/schooltool/course/browser/flourish.zcml:467
 msgid "Import Students CSV"
@@ -4577,7 +4577,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/flourish.zcml:476
 msgid "Import Students"
-msgstr ""
+msgstr "Εισαγωγή Μαθητών"
 
 #: /src/schooltool/course/browser/flourish.zcml:644
 msgid "Roster"
@@ -4644,7 +4644,7 @@ msgstr "Διαθέσιμοι Μαθητές"
 
 #: /src/schooltool/course/browser/section.py:934
 msgid "Delete ${section}"
-msgstr ""
+msgstr "Διαγραφή ${τμήματος}"
 
 #: /src/schooltool/course/browser/section.py:985
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:11
@@ -4657,12 +4657,12 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/unlink_section.pt:29
 #: /src/schooltool/term/browser/templates/f_manage_years_overview.pt:29
 msgid "Term"
-msgstr ""
+msgstr "Περίοδος"
 
 #: /src/schooltool/course/browser/section.py:1077
 #: /src/schooltool/course/browser/templates/f_section_filter.pt:6
 msgid "Section title"
-msgstr ""
+msgstr "Τίτλος τμήματος"
 
 #: /src/schooltool/course/browser/section.py:1287
 msgid ""
@@ -4672,7 +4672,7 @@ msgstr ""
 #: /src/schooltool/course/browser/section.py:1295
 #: /src/schooltool/course/browser/section.py:1517
 msgid "Section Information"
-msgstr ""
+msgstr "Πληροφορίες τμήματος"
 
 #: /src/schooltool/course/browser/section.py:1206
 msgid "Starting term is later than ending term"
@@ -4680,7 +4680,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1232
 msgid "Select a course"
-msgstr ""
+msgstr "Επιλέξετε ένα μάθημα"
 
 #: /src/schooltool/course/browser/section.py:1470
 msgid "Additional locations can be added via the section view."
@@ -8819,7 +8819,7 @@ msgstr ""
 
 #: /src/schooltool/timetable/interfaces.py:193
 msgid "Activity type"
-msgstr ""
+msgstr "Τύπος δραστηριότητας"
 
 #: /src/schooltool/timetable/interfaces.py:299
 msgid "Treat consecutive periods as one meeting"

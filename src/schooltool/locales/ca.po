@@ -21,14 +21,14 @@ msgstr ""
 "Project-Id-Version: SchoolTool Version 0.11.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-08 02:19+0300\n"
-"PO-Revision-Date: 2013-08-22 23:39+0000\n"
-"Last-Translator: Dídac Sabatés <sabatesduran@gmail.com>\n"
+"PO-Revision-Date: 2014-04-22 12:06+0000\n"
+"Last-Translator: Lotiopep <lotiopep@gmail.com>\n"
 "Language-Team: atorrell@gmail.com <atorrell@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-02-04 06:51+0000\n"
-"X-Generator: Launchpad (build 16916)\n"
+"X-Launchpad-Export-Date: 2014-04-23 07:05+0000\n"
+"X-Generator: Launchpad (build 16985)\n"
 "Language: \n"
 "Generated-By: setup.py\n"
 
@@ -2203,9 +2203,9 @@ msgid ""
 "The first row of the file must contain two cells terms in this schoolyear. "
 "Sections will be created in terms from first to last."
 msgstr ""
-"La primera columna del arxiu ha de contenir dos cel·les trimestrals en "
-"aquest any escolar. Les seccions seràn creadesen els trimestres de principi "
-"a fi."
+"La primera columna de l'arxiu ha de contenir dues cel·les trimestrals en "
+"aquest any escolar. Les seccions es crearan en els trimestres de principi a "
+"fi."
 
 #: /src/schooltool/app/browser/templates/f_section_csvimport_description.pt:15
 msgid ""
@@ -2337,7 +2337,7 @@ msgstr "Benvinguts a Schooltool"
 #: /src/schooltool/course/security.zcml:74
 #: /src/schooltool/dashboard/term.pt:4
 msgid "Courses"
-msgstr "Cursos"
+msgstr "Matèries"
 
 #: /src/schooltool/app/browser/templates/index.pt:13
 #: /src/schooltool/group/browser/configure.zcml:61
@@ -2602,7 +2602,7 @@ msgstr ""
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:276
 msgid "Incomplete section description on line ${line}"
-msgstr "Descripció de secció incompleta en línia ${line}"
+msgstr "Descripció de la secció incompleta en línia ${line}"
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:281
 msgid "No students in section (line ${line})"
@@ -2613,8 +2613,8 @@ msgid ""
 "The first row of the CSV file must contain the term or first and last terms "
 "for sections."
 msgstr ""
-"La primera fila del arxiu CSV tindria que contenir el termini o el primer i "
-"l'ultim dels terminis per seccions."
+"La primera fila de l'arxiu CSV haurà de contenir el termini o el primer i "
+"l'ultim dels terminis de les seccions."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:444
 #: /src/schooltool/app/browser/timetablecsvimport.py:454
@@ -2645,11 +2645,11 @@ msgstr "No s'han trobat els usuaris: ${args}."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:450
 msgid "Courses not found: ${args}."
-msgstr "No s'han trobat els cursos: ${args}."
+msgstr "No s'han trobat les matèries: ${args}."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:451
 msgid "Sections not found: ${args}."
-msgstr "No s'han trobat les assignatures: ${args}."
+msgstr "No s'han trobat les seccions: ${args}."
 
 #: /src/schooltool/app/browser/timetablecsvimport.py:452
 msgid "Invalid records: ${args}."
@@ -2660,7 +2660,7 @@ msgstr "Els registres no són vàlids:  ${args}."
 #: /src/schooltool/course/browser/section.py:1070
 #: /src/schooltool/course/browser/section.py:1124
 msgid "Sections for ${schoolyear}"
-msgstr ""
+msgstr "Seccions per al ${schoolyear}"
 
 #: /src/schooltool/app/interfaces.py:50
 msgid "Form input is not a file object"
@@ -2939,7 +2939,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/configure.zcml:292
 msgid "Add Teacher"
-msgstr "Afegeix un professor"
+msgstr "Afegeix un Docent"
 
 #: /src/schooltool/basicperson/browser/configure.zcml:302
 msgid "Add Student"
@@ -3169,7 +3169,7 @@ msgstr ""
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 msgid "Person profile, contacts, groups, etc."
-msgstr "Perfil de la persona. contactes, grups, etc."
+msgstr "Perfil de la persona, contactes, grups, etc."
 
 #: /src/schooltool/basicperson/browser/flourish.zcml:655
 #: /src/schooltool/basicperson/browser/person.py:1369
@@ -3371,6 +3371,8 @@ msgstr ""
 msgid ""
 "To add teachers, students or administrators, please set up a ${school_year}."
 msgstr ""
+"Per afegir docents, alumnes o administradors cal configurar un "
+"${school_year}."
 
 #: /src/schooltool/basicperson/browser/templates/container.pt:23
 msgid "school year"
@@ -3762,7 +3764,7 @@ msgstr "Alumnes"
 
 #: /src/schooltool/basicperson/vocabularies.py:132
 msgid "Teachers"
-msgstr ""
+msgstr "Docents"
 
 #: /src/schooltool/basicperson/vocabularies.py:133
 msgid "Administrators"
@@ -4212,7 +4214,7 @@ msgstr ""
 #: /src/schooltool/course/section.py:275
 #: /src/schooltool/course/section.py:286
 msgid "Instructors"
-msgstr "Professors"
+msgstr "Docents"
 
 #: /src/schooltool/contact/contact.py:203
 msgid "Instructors of student(s) related to this contact."
@@ -4331,26 +4333,26 @@ msgstr ""
 #: /src/schooltool/course/browser/configure.zcml:96
 #: /src/schooltool/course/browser/flourish.zcml:270
 msgid "Add Course"
-msgstr ""
+msgstr "Afegeix una matèria"
 
 #: /src/schooltool/course/browser/configure.zcml:25
 msgid "Edit Course Information"
-msgstr ""
+msgstr "Edita la informació de la Matèria"
 
 #: /src/schooltool/course/browser/configure.zcml:85
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:21
 msgid "Import Courses"
-msgstr "Importa cursos"
+msgstr "Importa Matèries"
 
 #: /src/schooltool/course/browser/configure.zcml:183
 #: /src/schooltool/course/browser/configure.zcml:193
 #: /src/schooltool/course/browser/flourish.zcml:394
 msgid "Add Section"
-msgstr ""
+msgstr "Afegeix una Secció"
 
 #: /src/schooltool/course/browser/configure.zcml:203
 msgid "Edit Section Information"
-msgstr "Edita la informació de l'assignatura"
+msgstr "Edita la informació de la secció."
 
 #: /src/schooltool/course/browser/configure.zcml:217
 #: /src/schooltool/course/browser/section-member-csvimport.pt:21
@@ -4366,7 +4368,7 @@ msgstr ""
 #: /src/schooltool/course/security.zcml:108
 #: /src/schooltool/dashboard/term.pt:10
 msgid "Sections"
-msgstr "Assignatures"
+msgstr "Seccions"
 
 #: /src/schooltool/course/browser/configure.zcml:299
 msgid "Copy from prev. term"
@@ -4374,11 +4376,11 @@ msgstr ""
 
 #: /src/schooltool/course/browser/course.py:99
 msgid "Course index"
-msgstr "Índex de cursos"
+msgstr "Índex de matèries"
 
 #: /src/schooltool/course/browser/course.py:368
 msgid "Delete ${course}"
-msgstr ""
+msgstr "Esborra ${course}"
 
 #: /src/schooltool/course/browser/course.py:416
 #: /src/schooltool/course/browser/course.py:430
@@ -4386,23 +4388,23 @@ msgstr ""
 #: /src/schooltool/course/browser/course.py:546
 #: /src/schooltool/course/browser/templates/course_container.pt:12
 msgid "Courses for ${schoolyear}"
-msgstr ""
+msgstr "Matèries per al ${schoolyear}"
 
 #: /src/schooltool/course/browser/course.py:448
 #: /src/schooltool/course/browser/course.py:687
 #: /src/schooltool/course/interfaces.py:52
 msgid "Course ID"
-msgstr ""
+msgstr "ID de la matèria"
 
 #: /src/schooltool/course/browser/course.py:545
 #: /src/schooltool/course/browser/course.py:597
 msgid "Course Information"
-msgstr ""
+msgstr "Informació de la matèria"
 
 #: /src/schooltool/course/browser/course.py:669
 #: /src/schooltool/course/browser/templates/f_course_filter.pt:6
 msgid "Title or course ID"
-msgstr ""
+msgstr "Títol de l'ID de la matèria"
 
 #: /src/schooltool/course/browser/csvimport.py:57
 #: /src/schooltool/group/browser/csvimport.py:54
@@ -4415,11 +4417,15 @@ msgid ""
 "Course \"${course_title}\" credits \"${invalid_credits}\" value must be a "
 "number."
 msgstr ""
+"El valor de la Matèria \"${course_title}\" credits \"${invalid_credits}\" ha "
+"de ser un nombre."
 
 #: /src/schooltool/course/browser/csvimport.py:103
 msgid ""
 "Course \"${course_title}\" id \"${invalid_id}\" is invalid. ${error_message}"
 msgstr ""
+"L'id \"${invalid_id}\" de la matèria \"${course_title}\" és invàlid. "
+"${error_message}"
 
 #: /src/schooltool/course/browser/csvimport.py:171
 #: /src/schooltool/group/browser/csvimport.py:111
@@ -4440,7 +4446,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/link_existing.pt:15
 #: /src/schooltool/course/browser/templates/unlink_section.pt:14
 msgid "Course"
-msgstr ""
+msgstr "Matèria"
 
 #: /src/schooltool/course/browser/flourish.zcml:141
 #: /src/schooltool/course/browser/flourish.zcml:149
@@ -4456,7 +4462,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/unlink_section.pt:13
 #: /src/schooltool/course/browser/templates/unlink_section.pt:28
 msgid "Section"
-msgstr "Assignatura"
+msgstr "Secció"
 
 #: /src/schooltool/course/browser/flourish.zcml:440
 #: /src/schooltool/course/browser/templates/f_section_view.pt:141
@@ -4480,15 +4486,15 @@ msgstr ""
 #: /src/schooltool/term/browser/term.py:764
 #: /src/schooltool/term/security.zcml:19
 msgid "Terms"
-msgstr "Trimestres"
+msgstr "Terminis"
 
 #: /src/schooltool/course/browser/flourish.zcml:467
 msgid "Import Students CSV"
-msgstr ""
+msgstr "Importa el CSV dels Alumnes"
 
 #: /src/schooltool/course/browser/flourish.zcml:476
 msgid "Import Students"
-msgstr ""
+msgstr "Importa els Alumnes"
 
 #: /src/schooltool/course/browser/flourish.zcml:644
 msgid "Roster"
@@ -4496,7 +4502,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/flourish.zcml:644
 msgid "Students and instructors of a section"
-msgstr ""
+msgstr "Estudiants i docents d'una secció"
 
 #: /src/schooltool/course/browser/rml/section_roster.pt:11
 msgid "Students (continued)"
@@ -4539,19 +4545,19 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:556
 msgid "Current Instructors"
-msgstr "Professors actuals"
+msgstr "Docents actuals"
 
 #: /src/schooltool/course/browser/section.py:557
 msgid "Available Instructors"
-msgstr "Professors disponibles"
+msgstr "Docents disponibles"
 
 #: /src/schooltool/course/browser/section.py:572
 msgid "Current Students"
-msgstr ""
+msgstr "Alumnes actuals"
 
 #: /src/schooltool/course/browser/section.py:573
 msgid "Available Students"
-msgstr "Estudiants disponibles"
+msgstr "Alumnes disponibles"
 
 #: /src/schooltool/course/browser/section.py:934
 msgid "Delete ${section}"
@@ -4573,17 +4579,18 @@ msgstr "Trimestre"
 #: /src/schooltool/course/browser/section.py:1077
 #: /src/schooltool/course/browser/templates/f_section_filter.pt:6
 msgid "Section title"
-msgstr ""
+msgstr "Títol de la secció"
 
 #: /src/schooltool/course/browser/section.py:1287
 msgid ""
 "If no title is specified, one will be created based on the course title."
 msgstr ""
+"Si no es detalla el títol, aquest es crearà en base al títol de la matèria."
 
 #: /src/schooltool/course/browser/section.py:1295
 #: /src/schooltool/course/browser/section.py:1517
 msgid "Section Information"
-msgstr ""
+msgstr "Informació de la secció"
 
 #: /src/schooltool/course/browser/section.py:1206
 msgid "Starting term is later than ending term"
@@ -4591,7 +4598,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1232
 msgid "Select a course"
-msgstr ""
+msgstr "Escull una matèria"
 
 #: /src/schooltool/course/browser/section.py:1470
 msgid "Additional locations can be added via the section view."
@@ -4599,19 +4606,19 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1580
 msgid "Current instructors"
-msgstr ""
+msgstr "Docents actuals"
 
 #: /src/schooltool/course/browser/section.py:1310
 msgid "Add instructors"
-msgstr ""
+msgstr "Afegeix docents"
 
 #: /src/schooltool/course/browser/section.py:1329
 msgid "Current students"
-msgstr ""
+msgstr "Alumnes actuals"
 
 #: /src/schooltool/course/browser/section.py:1330
 msgid "Add students"
-msgstr ""
+msgstr "Afegeix alumnes"
 
 #: /src/schooltool/course/browser/section.py:1380
 msgid "Current locations"
@@ -4651,20 +4658,21 @@ msgstr ""
 
 #: /src/schooltool/course/browser/section.py:1853
 msgid "Instructors: ${instructors}"
-msgstr ""
+msgstr "Docents: ${instructors}"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:9
 #: /src/schooltool/course/browser/templates/link_section.pt:9
 msgid "Copy sections to ${term} of ${schoolyear}"
-msgstr ""
+msgstr "Copia les seccions a ${term} del ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:29
 msgid "Copy sections from ${prev_term} of ${schoolyear} to ${term}"
-msgstr ""
+msgstr "Copia les seccions des de ${prev_term} del ${schoolyear} a ${term}"
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:38
 msgid "There is no (previous) term in ${schoolyear} to copy sections from."
 msgstr ""
+"No hi ha cap termini (anterior) al ${schoolyear} des d'on copiar seccions."
 
 #: /src/schooltool/course/browser/templates/copy_sections.pt:66
 msgid "Select All Visible"
@@ -4699,7 +4707,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:4
 msgid "Upload schooltool courses as CSV"
-msgstr "Importa cursos"
+msgstr "Puja les matèries del schooltool com a CSV"
 
 #: /src/schooltool/course/browser/templates/course-csvimport.pt:24
 #: /src/schooltool/course/browser/templates/f_course_csvimport_description.pt:3
@@ -4739,7 +4747,7 @@ msgstr ""
 #: /src/schooltool/course/browser/templates/course.pt:9
 #: /src/schooltool/course/browser/templates/section_linkage.pt:17
 msgid "${course} course for ${schoolyear}"
-msgstr ""
+msgstr "Matèria ${course} per al ${schoolyear}"
 
 #: /src/schooltool/course/browser/templates/course.pt:52
 #: /src/schooltool/person/browser/home.pt:20
@@ -4760,11 +4768,11 @@ msgstr "S'han trobat ${num_errors} errors d'entrada"
 
 #: /src/schooltool/course/browser/templates/coursesviewlet.pt:7
 msgid "Sections Taught"
-msgstr "Assignatures assignades"
+msgstr "Seccions Impartides"
 
 #: /src/schooltool/course/browser/templates/coursesviewlet.pt:37
 msgid "Sections Attended"
-msgstr ""
+msgstr "Seccions Assistides"
 
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:12
 #: /src/schooltool/course/browser/templates/edit_relationships.pt:24
@@ -4827,11 +4835,11 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:4
 msgid "Edit this course"
-msgstr ""
+msgstr "Edita aquesta matèria"
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:78
 msgid "This course has no sections"
-msgstr ""
+msgstr "Aquesta matèria no té seccions"
 
 #: /src/schooltool/course/browser/templates/f_course_view.pt:84
 msgid "Edit responsible parties for this course"
@@ -4857,15 +4865,15 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:6
 msgid "Sections taught"
-msgstr ""
+msgstr "Seccions impartides"
 
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:37
 msgid "Sections attended"
-msgstr ""
+msgstr "Seccions assistides"
 
 #: /src/schooltool/course/browser/templates/f_coursesviewlet.pt:79
 msgid "This person has no sections."
-msgstr ""
+msgstr "Aquesta persona no està a cap secció."
 
 #: /src/schooltool/course/browser/templates/f_link_existing.pt:21
 #: /src/schooltool/course/browser/templates/link_existing.pt:21
@@ -4921,15 +4929,15 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:25
 msgid "Manage sections"
-msgstr ""
+msgstr "Administra les seccions"
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:36
 msgid "There are ${count} sections defined for ${schoolyear}."
-msgstr ""
+msgstr "Hi ha ${count} seccions definides per al ${schoolyear}."
 
 #: /src/schooltool/course/browser/templates/f_manage_courses_overview.pt:40
 msgid "There are no sections defined for ${schoolyear}."
-msgstr ""
+msgstr "No hi ha cap secció definida per al ${schoolyear}."
 
 #: /src/schooltool/course/browser/templates/f_section_linkage.pt:25
 #: /src/schooltool/course/browser/templates/f_section_view.pt:104
@@ -4952,7 +4960,7 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_list_table_filter.pt:25
 msgid "(${count} sections)"
-msgstr ""
+msgstr "(${count} seccions)"
 
 #: /src/schooltool/course/browser/templates/f_section_member_csvimport_description.pt:3
 #: /src/schooltool/group/browser/templates/f_group_member_csvimport_description.pt:3
@@ -4991,11 +4999,11 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:115
 msgid "Edit instructors for this section"
-msgstr ""
+msgstr "Edita els docents d'aquesta secció"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:125
 msgid "This section has no instructors"
-msgstr ""
+msgstr "Aquesta secció no disposa de docents"
 
 #: /src/schooltool/course/browser/templates/f_section_view.pt:130
 msgid "Edit students for this section"
@@ -5055,7 +5063,7 @@ msgstr "Canviar el nom o la descripció d'aquesta secció."
 #: /src/schooltool/course/browser/templates/section.pt:46
 #: /src/schooltool/course/browser/templates/section_edit.pt:60
 msgid "Linked sections"
-msgstr ""
+msgstr "Seccions enllaçades"
 
 #: /src/schooltool/course/browser/templates/section.pt:52
 #: /src/schooltool/course/browser/templates/section_edit.pt:72
@@ -5065,15 +5073,15 @@ msgstr ""
 
 #: /src/schooltool/course/browser/templates/section.pt:65
 msgid "Change the instructors for this section."
-msgstr "Canvia els professors d'aquesta assignatura"
+msgstr "Canvia els docents d'aquest grup"
 
 #: /src/schooltool/course/browser/templates/section.pt:65
 msgid "edit instructors"
-msgstr "Edita els professors"
+msgstr "Edita els docents"
 
 #: /src/schooltool/course/browser/templates/section.pt:80
 msgid "Change the students in this section individually"
-msgstr "Canvia el alumnes de l'assignatura individualment"
+msgstr "Canvia els alumnes d'aquesta secció individualment."
 
 #: /src/schooltool/course/browser/templates/section.pt:80
 msgid "edit individuals"
@@ -5189,11 +5197,11 @@ msgstr ""
 
 #: /src/schooltool/course/section.py:276
 msgid "Instructors of the section."
-msgstr ""
+msgstr "Docents de la secció."
 
 #: /src/schooltool/course/section.py:287
 msgid "Instructors of a person in any of his sections."
-msgstr ""
+msgstr "Docents d'una persona en qualsevol de les seves seccions."
 
 #: /src/schooltool/course/section.py:310
 msgid "Learners"
@@ -5205,19 +5213,19 @@ msgstr ""
 
 #: /src/schooltool/course/section.py:389
 msgid "Cannot link sections in same term"
-msgstr ""
+msgstr "No es poden enllaçar seccions del mateix termini"
 
 #: /src/schooltool/course/section.py:394
 msgid "Cannot link sections in different school years"
-msgstr ""
+msgstr "No es poden enllaçar seccions d'anys escolars diferents"
 
 #: /src/schooltool/course/section.py:398
 msgid "Sections must be in consecutive terms"
-msgstr ""
+msgstr "Les seccions han d'estar en terminis consecutius"
 
 #: /src/schooltool/course/security.zcml:38
 msgid "Only clerks can modify the section."
-msgstr ""
+msgstr "Només els secretaris poden modificar la secció."
 
 #: /src/schooltool/course/security.zcml:38
 msgid ""
@@ -6284,15 +6292,15 @@ msgstr "edita els grups"
 
 #: /src/schooltool/group/group.py:63
 msgid "Site Managers"
-msgstr ""
+msgstr "Administradors de l'Aplicació"
 
 #: /src/schooltool/group/group.py:66
 msgid "Clerks"
-msgstr ""
+msgstr "Secretaris"
 
 #: /src/schooltool/group/group.py:67
 msgid "School Administrators"
-msgstr ""
+msgstr "Administradors de l'Escola"
 
 #: /src/schooltool/group/security.zcml:5
 msgid "Only school administration can view the list of groups."
@@ -6613,6 +6621,8 @@ msgstr ""
 #: /src/schooltool/person/security.zcml:17
 msgid "Only site managers and clerks can change passwords."
 msgstr ""
+"Només els administradors de l'aplicació i els secretaris poden canviar les "
+"contrasenyes."
 
 #: /src/schooltool/person/security.zcml:17
 msgid "Users can change their own passwords."
@@ -8767,11 +8777,11 @@ msgstr "Tractar períodes consecutius com una reunió"
 
 #: /src/schooltool/timetable/security.zcml:5
 msgid "Instructors can schedule their own sections."
-msgstr ""
+msgstr "Els docents poden programar les seves pròpies seccions."
 
 #: /src/schooltool/timetable/security.zcml:5
 msgid "Only clerks can schedule sections."
-msgstr ""
+msgstr "Només els secretaris poden programar les seccions."
 
 #: /src/schooltool/timetable/security.zcml:56
 msgid "School timetables"
