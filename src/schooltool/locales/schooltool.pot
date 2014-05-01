@@ -16,7 +16,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: schooltool\n"
-"POT-Creation-Date: 2013-10-08 02:19+0300\n"
+"POT-Creation-Date: 2014-05-01 21:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Schooltool Development Team <schooltool-dev@schooltool.org>\n"
@@ -1606,13 +1606,7 @@ msgstr ""
 msgid "times"
 msgstr ""
 
-#: /src/schooltool/app/browser/templates/event_add.pt:306
-#: /src/schooltool/term/browser/templates/emergency_select.pt:31
-#: /src/schooltool/timetable/browser/templates/specialday_select.pt:31
-msgid "[popup calendar]"
-msgstr ""
-
-#: /src/schooltool/app/browser/templates/event_add.pt:324
+#: /src/schooltool/app/browser/templates/event_add.pt:317
 #: /src/schooltool/calendar/browser/templates/event_edit.pt:324
 msgid "Repeat forever"
 msgstr ""
@@ -1701,6 +1695,22 @@ msgstr ""
 
 #: /src/schooltool/app/browser/templates/event_info_viewlet.pt:12
 msgid "Location: ${location}"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_about.pt:2
+msgid "SchoolTool is an open source, web based student information system designed for schools in the developing world, with strong support for translation, localization and automated deployment and updates via the Ubuntu Linux installer and package management system."
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_about.pt:11
+msgid "SchoolTool is built on a 100% open source software stack, written in ${python} using the ${zope} framework."
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_about.pt:15
+msgid "SchoolTool is licensed under the ${gpl2}"
+msgstr ""
+
+#: /src/schooltool/app/browser/templates/f_about.pt:36
+msgid "${sielibre} offers commercial support, customization, hosting and other services for SchoolTool."
 msgstr ""
 
 #: /src/schooltool/app/browser/templates/f_about_related.pt:2
@@ -2271,8 +2281,12 @@ msgstr ""
 msgid "Please log in"
 msgstr ""
 
+#: /src/schooltool/app/browser/templates/package_versions.pt:2
+msgid "SchoolTool versions"
+msgstr ""
+
 #: /src/schooltool/app/browser/templates/portlet_tomorrow_events.pt:5
-#: /src/schooltool/calendar/browser/calendar.py:258
+#: /src/schooltool/calendar/browser/calendar.py:318
 msgid "Tomorrow's Events"
 msgstr ""
 
@@ -3374,8 +3388,12 @@ msgstr ""
 msgid "Contact's Phone"
 msgstr ""
 
+#: /src/schooltool/basicperson/browser/templates/f_person_view_details.pt:6
+#: /src/schooltool/task/security.zcml:24
+msgid "Messages"
+msgstr ""
+
 #: /src/schooltool/basicperson/browser/templates/person-csvimport.pt:4
-#: /src/schooltool/person/browser/person-csvimport.pt:4
 msgid "Upload SchoolTool persons as CSV"
 msgstr ""
 
@@ -7436,10 +7454,6 @@ msgstr ""
 #: /src/schooltool/task/browser/templates/task_status.pt:38
 #: /src/schooltool/task/interfaces.py:49
 msgid "Persisted result"
-msgstr ""
-
-#: /src/schooltool/task/security.zcml:24
-msgid "Messages"
 msgstr ""
 
 #: /src/schooltool/task/security.zcml:29
