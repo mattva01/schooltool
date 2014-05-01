@@ -19,6 +19,8 @@
 SchoolTool Application
 """
 
+import stesting
+
 def registerTestSetup():
     from zope.interface import classImplements
     from schooltool.testing import registry
