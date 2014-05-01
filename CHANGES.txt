@@ -7,6 +7,8 @@ CHANGES
 
 - Support CKEditor 4.x (https://bugs.launchpad.net/bugs/1309133)
 - Delete schedules that reference a deleted timetable (https://bugs.launchpad.net/bugs/1280528)
+- Improve tab style to make active tab more clear (https://launchpad.net/bugs/1023378)
+- Timetables copied from active year retain old start/end dates (https://launchpad.net/bugs/1005962)
 
 
 2.6.3 (2014-04-12)
