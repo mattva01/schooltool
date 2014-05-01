@@ -5,7 +5,7 @@
 
 <tal:if tal:condition="context">
 
-  <tal:block repeat="schedule context/values">
+  <tal:block repeat="schedule view/schedules">
     <h3>
       <tal:block tal:content="structure schedule/schooltool:content/boundaries">
         Schedule X (date - date)
