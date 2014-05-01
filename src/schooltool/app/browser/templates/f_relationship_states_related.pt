@@ -12,11 +12,11 @@
     </p>
     <p i18n:translate="">
       For example, in the Student Enrollment relationship, a school
-      could create both "Dropped out" and "Transferred." From the
+      could create both "Dropped out" and "Transferred". From the
       system's point of view, the "meaning" of both would be set to
-      "Inactive," and the two states are treated the same, but to
-      users the school, the distinction between the two may be
-      important and needs to be recorded explicitly.
+      "Inactive", and the two states are treated the same, but to
+      users the distinction between the two may be important and needs to
+      be recorded explicitly.
     </p>
     <p i18n:translate="">
       In all cases "Active" is the default state, "Inactive" means
