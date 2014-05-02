@@ -133,6 +133,12 @@ Adding sections
     title
     description
     ends: title of the term when it ends
+    instructors: list with person usernames
+    instructors_state: title of the state
+    instructors_date: YYYY-MM-DD date
+    students: list with person usernames
+    students_state: title of the state
+    students_date: YYYY-MM-DD date
 
   NOTE: if ends is not set, the section will end in the starting term
 

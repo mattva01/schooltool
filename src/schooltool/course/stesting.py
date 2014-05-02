@@ -110,6 +110,17 @@ def registerSeleniumSetup():
         page = browser.query.tag('html')
         browser.query.button('Submit').click()
         browser.wait(lambda: page.expired)
+        redirect = browser.url
+        title = browser.query.tag('h2').text
+        if 'instructors' in kw:
+            browser.ui.section.instructors.add(
+                schoolyear, term, title, kw['instructors'],
+                kw.get('instructors_state'), kw.get('instructors_date'))
+        if 'students' in kw:
+            browser.ui.section.students.add(
+                schoolyear, term, title, kw['students'],
+                kw.get('students_state'), kw.get('students_date'))
+        browser.open(redirect)
 
     registry.register('SeleniumHelpers',
         lambda: schooltool.testing.selenium.registerBrowserUI(
