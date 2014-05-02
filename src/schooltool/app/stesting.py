@@ -19,7 +19,10 @@
 Selenium functional tests setup for gradebook functionality
 """
 
+from itertools import groupby
+
 from schooltool.app.testing import format_table
+from schooltool.testing.selenium import WebElement
 
 
 css_to_code = {
@@ -71,7 +74,50 @@ def table_header(browser):
     return result
 
 
-def table_rows(browser, show_validation):
+def group_double_rows(rows):
+    result = []
+    indexes = []
+    keep_index = False
+    for index, row in enumerate(rows):
+        if 'double-' not in row.get_attribute('class'):
+            indexes.append((index, row))
+        else:
+            if not keep_index:
+                indexes.append((index, row))
+                keep_index = True
+            else:
+                indexes.append((index-1, row))
+                keep_index = False
+    for key, iterator in groupby(indexes, lambda (i, row): i):
+        group = []
+        for j, row in iterator:
+            group.append(row)
+        result.append(group)
+    return result
+
+
+def get_grades(browser, row, show_validation):
+    result = []
+    tds = browser.driver.execute_script(
+        'return $(arguments[0]).find("td").not(".placeholder")', row)
+    for td in tds:
+        fields = browser.driver.execute_script(
+            'return $(arguments[0]).find("input")', td)
+        if fields:
+            field = fields[0]
+            value = browser.driver.execute_script(
+                'return arguments[0].value', field)
+            value = '[%s]' % value.ljust(5, '_')
+            if show_validation:
+                css_class = field.get_attribute('class')
+                value += css_to_code.get(css_class, '')
+        else:
+            value = td.text.strip()
+        result.append(value)
+    return result
+
+
+def table_rows(browser, show_validation, hide_homeroom):
     rows = []
     sel = '.students tbody tr'
     student_rows = browser.driver.execute_script(
@@ -83,27 +129,6 @@ def table_rows(browser, show_validation):
         for link in links:
             student.append(link.text.strip())
         rows.append(student)
-    sel = '.grades tbody tr'
-    grade_rows = browser.driver.execute_script(
-        'return $(arguments[0])', sel)
-    for index, row in enumerate(grade_rows):
-        student = rows[index]
-        tds = browser.driver.execute_script(
-            'return $(arguments[0]).find("td").not(".placeholder")', row)
-        for td in tds:
-            fields = browser.driver.execute_script(
-                'return $(arguments[0]).find("input")', td)
-            if fields:
-                field = fields[0]
-                value = browser.driver.execute_script(
-                    'return arguments[0].value', field)
-                value = '[%s]' % value.ljust(5, '_')
-                if show_validation:
-                    css_class = field.get_attribute('class')
-                    value += css_to_code.get(css_class, '')
-            else:
-                value = td.text.strip()
-            student.append(value)
     sel = '.totals tbody tr'
     total_rows = browser.driver.execute_script(
         'return $(arguments[0])', sel)
@@ -113,15 +138,33 @@ def table_rows(browser, show_validation):
             'return $(arguments[0]).find("td")', row)
         for td in tds:
             student.append(td.text.strip())
+    sel = '.grades tbody tr'
+    grade_row_groups = group_double_rows(browser.driver.execute_script(
+        'return $(arguments[0])', sel))
+    student_index = 0
+    for row_group in grade_row_groups:
+        if len(row_group) > 1 and hide_homeroom:
+            row_group = [row_group[-1]]
+        for index, row in enumerate(row_group):
+            grades = get_grades(browser, row, show_validation)
+            if index == 0:
+                student_row = rows[student_index]
+                rows[student_index] = student_row[:2] + grades + student_row[2:]
+            else:
+                totals_count = len(student) - 2
+                new_row = ['', ''] + grades + ([''] * totals_count)
+                rows.insert(student_index, new_row)
+            student_index += 1
     return rows
 
-def print_gradebook(browser, show_validation):
+
+def print_gradebook(browser, show_validation, hide_homeroom):
     nav = tertiary_navigation(browser)
     if nav:
         print format_table([nav])
     rows = []
     rows.extend(table_header(browser))
-    for row in table_rows(browser, show_validation):
+    for row in table_rows(browser, show_validation, hide_homeroom):
         rows.append(row)
     print format_table(rows, header_rows=2)
 
@@ -134,8 +177,8 @@ def registerSeleniumSetup():
     from schooltool.testing import registry
     import schooltool.testing.selenium
 
-    def printGradebook(browser, show_validation=False):
-        print_gradebook(browser, show_validation)
+    def printGradebook(browser, show_validation=False, hide_homeroom=False):
+        print_gradebook(browser, show_validation, hide_homeroom)
 
     registry.register('SeleniumHelpers',
         lambda: schooltool.testing.selenium.registerBrowserUI(
@@ -162,9 +205,13 @@ def registerSeleniumSetup():
             if activity == link.text:
                 column_index = index
                 break
-        sel = ('//div[contains(@class, "grades")]'
-               '//tbody/tr[%s]/td[%s]' % (row_index+1, column_index+1))
-        cell = browser.query.xpath(sel)
+        sel = '.grades tbody tr'
+        grade_row_groups = group_double_rows(browser.driver.execute_script(
+            'return $(arguments[0])', sel))
+        row = grade_row_groups[row_index][-1]
+        sel = 'td:nth-child(%d)' % (column_index + 1)
+        raw_cell = driver.execute_script('return $(arguments[0]).find(arguments[1])', row, sel)[0]
+        cell = WebElement(raw_cell)
         cell.click()
         sel = '.ui-dialog:visible'
         if not driver.execute_script('return $(arguments[0])', sel):

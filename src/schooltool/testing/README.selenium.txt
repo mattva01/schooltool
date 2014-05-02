@@ -315,7 +315,9 @@ Browser extensions
 
 These extensions are coded in the stesting.py module of the
 schooltool.app package and they're tested in the
-selenium_extesions.txt file of the schooltool.gradebook package.
+selenium_extesions.txt file of the schooltool.gradebook package and
+the selenium_extension.txt file of the schooltool.lyceum.journal
+package.
 
 We have browser extensions for:
 
