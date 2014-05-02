@@ -101,6 +101,9 @@ Adding terms
     title
     first: YYYY-MM-DD date
     last: YYYY-MM-DD date
+  Optional keyword parameters:
+    holidays: list of YYYY-MM-DD dates
+    weekends: list of day weeks (Monday, ..., Sunday)
 
 Adding courses
 --------------
