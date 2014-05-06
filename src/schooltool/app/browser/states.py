@@ -20,14 +20,13 @@ import urllib
 
 import zope.schema
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-import z3c.form.interfaces
 from zope.cachedescriptors.property import Lazy
 from zope.component import getMultiAdapter
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.traversing.browser.absoluteurl import absoluteURL
 from zope.security.proxy import removeSecurityProxy
-from z3c.form import button, field, form, widget
+from z3c.form import button, field, widget
 from zc.table.column import GetterColumn
 
 from schooltool import table
@@ -35,7 +34,6 @@ from schooltool.skin import flourish
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IRelationshipStateContainer
 from schooltool.app.states import RelationshipStateChoice
-from schooltool.app.states import RelationshipState
 from schooltool.app.states import ACTIVE
 from schooltool.app.states import INACTIVE
 from schooltool.app.browser.app import EditRelationships

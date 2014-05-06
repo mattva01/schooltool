@@ -21,7 +21,6 @@ Contact objects
 """
 from persistent import Persistent
 
-import zope.lifecycleevent.interfaces
 from zope.catalog.text import TextIndex
 from zope.component import adapter, adapts
 from zope.index.text.interfaces import ISearchableText
@@ -31,14 +30,12 @@ from zope.intid.interfaces import IIntIds
 from zope.container.contained import Contained
 from zope.container.btree import BTreeContainer
 from zope.component import getUtility
-from zope.security.proxy import removeSecurityProxy
 
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IRelationshipStateContainer
 from schooltool.app.app import InitBase, StartUpBase
 from schooltool.app.catalog import AttributeCatalog
 from schooltool.app.states import StateStartUpBase
-from schooltool.utility.utility import UtilitySetUp
 from schooltool.contact.interfaces import IContactPersonInfo
 from schooltool.contact.interfaces import IContactable
 from schooltool.contact.interfaces import IContact, IContactContained
@@ -46,16 +43,12 @@ from schooltool.contact.interfaces import IContactContainer
 from schooltool.contact.interfaces import IUniqueFormKey
 from schooltool.relationship.uri import URIObject
 from schooltool.relationship.temporal import ACTIVE, INACTIVE
-from schooltool.relationship.temporal import ACTIVE_CODE, INACTIVE_CODE
 from schooltool.relationship.temporal import TemporalURIObject
 from schooltool.relationship.relationship import RelationshipProperty
 from schooltool.relationship.relationship import RelationshipSchema
-from schooltool.relationship.interfaces import IRelationshipLink
-from schooltool.schoolyear.subscriber import ObjectEventAdapterSubscriber
 from schooltool.securitypolicy import crowds
 from schooltool.table.catalog import ConvertingIndex
 from schooltool.common import simple_form_key
-from schooltool.common import DateRange
 from schooltool.person.interfaces import IPerson
 from schooltool.course.section import PersonInstructorsCrowd
 from schooltool.app.utils import vocabulary_titled

@@ -33,7 +33,7 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 
 import zc.table.table
 import z3c.form.browser.radio
-from z3c.form import form, field, button, widget, validator
+from z3c.form import form, field, button
 
 import schooltool.skin.flourish.page
 import schooltool.skin.flourish.form

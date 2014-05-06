@@ -24,7 +24,6 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import queryMultiAdapter
 from zope.interface import implements, Interface, Attribute
 from zope.security import checkPermission
-from zope.traversing.api import getParent
 from zope.traversing.interfaces import IContainmentRoot
 from zope.traversing.browser.absoluteurl import absoluteURL
 

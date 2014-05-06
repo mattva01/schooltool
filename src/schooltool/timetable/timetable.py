@@ -27,8 +27,6 @@ from persistent.list import PersistentList
 from persistent.dict import PersistentDict
 from zope.interface import implements
 from zope.container.btree import BTreeContainer
-from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
 
 from schooltool.common import DateRange
 from schooltool.timetable import interfaces

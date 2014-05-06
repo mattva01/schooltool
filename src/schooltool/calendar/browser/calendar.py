@@ -34,13 +34,11 @@ from schooltool.app.browser.cal import DailyCalendarView
 from schooltool.app.browser.cal import WeeklyCalendarView
 from schooltool.app.browser.cal import MonthlyCalendarView
 from schooltool.app.browser.cal import YearlyCalendarView
-from schooltool.app.browser.cal import CalendarViewBase
 from schooltool.app.browser.cal import month_names
 from schooltool.app.browser.cal import short_day_of_week_names
 from schooltool.app.browser.cal import day_of_week_names
 from schooltool.calendar.interfaces import ICalendar
 from schooltool.calendar.utils import weeknum_bounds, prev_month, next_month
-from schooltool.common.inlinept import InheritTemplate
 from schooltool.skin import flourish
 
 from schooltool.common import SchoolToolMessage as _

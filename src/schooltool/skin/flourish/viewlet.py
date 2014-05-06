@@ -22,7 +22,6 @@ import zope.contentprovider.interfaces
 import zope.event
 import zope.security
 import zope.viewlet.interfaces
-from zope.cachedescriptors.property import Lazy
 from zope.component import adapts
 from zope.interface import implements
 from zope.proxy import removeAllProxies

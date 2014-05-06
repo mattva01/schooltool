@@ -59,7 +59,6 @@ from schooltool.person.browser.person import PersonTableFilter
 from schooltool.basicperson.browser.person import StatusPersonListTable
 from schooltool.basicperson.browser.person import EditPersonTemporalRelationships
 from schooltool.basicperson.browser.person import BasicPersonTable
-from schooltool.basicperson.browser.person import EditPersonRelationships
 from schooltool.course.interfaces import ISection
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.schoolyear.interfaces import ISchoolYearContainer

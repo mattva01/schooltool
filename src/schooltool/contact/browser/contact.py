@@ -58,10 +58,7 @@ from schooltool.email.interfaces import IEmailUtility
 from schooltool.email.mail import Email
 from schooltool.skin import flourish
 from schooltool.skin.containers import TableContainerView
-from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.common.inlinept import InlineViewPageTemplate
-from schooltool.contact.contact import URIPerson, URIContact
-from schooltool.contact.contact import URIContactRelationship
 from schooltool.contact.contact import getAppContactStates
 from schooltool.contact.interfaces import IContactPerson
 from schooltool.contact.interfaces import IEmails, IPhones, ILanguages

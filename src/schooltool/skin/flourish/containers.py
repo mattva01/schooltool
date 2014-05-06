@@ -18,15 +18,9 @@
 """
 SchoolTool skin containers
 """
-import urllib
-
-from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import queryMultiAdapter
-from zope.security.checker import canAccess
 from zope.traversing.browser.absoluteurl import absoluteURL
 
 from schooltool.skin.flourish.page import Page
-from schooltool.common import SchoolToolMessage as _
 
 
 class ContainerDeleteView(Page):

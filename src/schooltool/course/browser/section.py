@@ -56,11 +56,8 @@ from zc.table.interfaces import ISortableColumn
 from schooltool.app.browser.app import ActiveSchoolYearContentMixin
 from schooltool.app.browser.app import BaseEditView
 from schooltool.app.browser.app import RelationshipViewBase
-from schooltool.app.browser.states import RelationshipStatesEditView
-from schooltool.app.browser.states import AddStateActionDialog, RemoveStateActionDialog
 from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.utils import vocabulary_titled
-from schooltool.basicperson.browser.person import EditPersonRelationships
 from schooltool.basicperson.browser.person import EditPersonTemporalRelationships
 from schooltool.basicperson.browser.person import StatusPersonListTable
 from schooltool.basicperson.interfaces import IDemographics
@@ -78,7 +75,6 @@ from schooltool.resource.browser.resource import EditLocationRelationships
 from schooltool.resource.browser.resource import EditEquipmentRelationships
 from schooltool.resource.interfaces import ILocation, IEquipment
 from schooltool.schoolyear.interfaces import ISchoolYear
-from schooltool.schoolyear.interfaces import ISchoolYearContainer
 from schooltool.schoolyear.browser.schoolyear import SchoolyearNavBreadcrumbs
 from schooltool.securitypolicy.crowds import inCrowd
 from schooltool.skin.containers import ContainerView
@@ -381,7 +377,6 @@ class SectionAddView(form.AddForm):
 
     @button.buttonAndHandler(_("Cancel"), name='cancel')
     def handle_cancel_action(self, action):
-        url = absoluteURL(self.context, self.request)
         self.request.response.redirect(self.nextURL())
 
     def updateActions(self):

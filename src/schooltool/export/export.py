@@ -25,8 +25,6 @@ from StringIO import StringIO
 
 from zope.interface import implements
 from zope.security.proxy import removeSecurityProxy
-from zope.publisher.browser import BrowserView
-from zope.cachedescriptors.property import Lazy
 
 from schooltool.skin import flourish
 from schooltool.basicperson.demographics import DateFieldDescription
@@ -38,8 +36,6 @@ from schooltool.app.interfaces import ISchoolToolApplication
 from schooltool.app.interfaces import IAsset
 from schooltool.schoolyear.interfaces import ISchoolYear
 from schooltool.common import format_time_range
-from schooltool.contact.contact import URIPerson, URIContact
-from schooltool.contact.contact import URIContactRelationship
 from schooltool.contact.interfaces import IContact, IContactContainer
 from schooltool.contact.interfaces import IContactable
 from schooltool.export.interfaces import IXLSExportView
@@ -52,12 +48,10 @@ from schooltool.level.interfaces import ILevelContainer
 from schooltool.report.browser.report import RequestRemoteReportDialog
 from schooltool.report.browser.report import ProgressReportPage
 from schooltool.report.report import ReportLinkViewlet
-from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.task.progress import TaskProgress
 from schooltool.task.progress import normalized_progress
 from schooltool.report.report import AbstractReportTask
 from schooltool.report.report import NoReportException
-from schooltool.report.report import ReportFile
 from schooltool.report.report import ReportMessage
 from schooltool.report.report import OnPDFReportScheduled
 from schooltool.timetable.interfaces import ITimetableContainer

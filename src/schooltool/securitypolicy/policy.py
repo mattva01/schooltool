@@ -19,10 +19,8 @@
 SchoolTool security policy.
 
 """
-from persistent import Persistent
 import zope.keyreference.interfaces
 from zope.security.simplepolicies import ParanoidSecurityPolicy
-from zope.security.proxy import removeSecurityProxy
 from zope.component import queryAdapter
 from zope.traversing.api import getParent
 from schooltool.securitypolicy.crowds import ICrowd

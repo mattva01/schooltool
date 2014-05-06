@@ -30,7 +30,6 @@ from zope.traversing.browser.absoluteurl import absoluteURL
 
 from zc.table.column import GetterColumn
 
-from schooltool.relationship.relationship import IRelationshipLinks
 from schooltool.basicperson.interfaces import IBasicPerson
 from schooltool.app.browser.states import TemporalRelationshipAddTableMixin
 from schooltool.app.browser.states import TemporalRelationshipRemoveTableMixin

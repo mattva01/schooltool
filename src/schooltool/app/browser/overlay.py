@@ -36,7 +36,6 @@ from zc.table.column import GetterColumn
 from schooltool.common import SchoolToolMessage as _
 from schooltool.app.interfaces import ISchoolToolCalendar
 from schooltool.app.interfaces import ISchoolToolApplication
-from schooltool.app.browser.app import FlourishRelationshipViewBase
 from schooltool.app.browser.app import EditRelationships
 from schooltool.app.browser.app import RelationshipAddTableMixin
 from schooltool.app.browser.app import RelationshipRemoveTableMixin

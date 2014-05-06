@@ -289,7 +289,6 @@ class SchoolYearTermOverflowValidationSubscriber(EventAdapterSubscriber):
     implements(ISubscriber)
 
     def __call__(self):
-        overflowing_terms = []
         sy = self.event.schoolyear
         dr = DateRange(*self.event.new_dates)
         validateScholYearForOverflow(dr, sy)

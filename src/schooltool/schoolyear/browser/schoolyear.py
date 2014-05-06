@@ -18,9 +18,6 @@
 """
 Views for school years and school year container implementation
 """
-import cPickle
-from StringIO import StringIO
-
 from zope.viewlet.viewlet import ViewletBase
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.cachedescriptors.property import Lazy
@@ -32,7 +29,6 @@ from zope.schema.interfaces import ValidationError
 from zope.interface.exceptions import Invalid
 from zope.interface import implements
 from zope.interface import Interface
-from zope.location.pickling import CopyPersistent
 from zope.traversing.browser.absoluteurl import AbsoluteURL
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.traversing.browser import absoluteURL
