@@ -77,6 +77,7 @@ from schooltool.task.interfaces import IRemoteTask
 from schooltool.level.interfaces import ILevelContainer
 from schooltool.level.level import Level
 from schooltool.task.progress import Timer
+from schooltool.task.progress import normalized_progress
 from schooltool.task.tasks import RemoteTask
 from schooltool.task.state import TaskWriteState, TaskReadState
 from schooltool.task.tasks import get_message_by_id, query_message
@@ -162,17 +163,6 @@ ERROR_INCONSISTENT_SCHOOL_YEAR = _('school years must be consistent within this 
 
 no_date = object()
 no_data = object()
-
-
-def normalized_progress(*args):
-    pmin = 0.0
-    pmax = 1.0
-    n = len(args)
-    while n > 0:
-        pmin = pmin + pmax * args[n-2]
-        pmax = pmax * args[n-1]
-        n -= 2
-    return min(float(pmin) / float(pmax), 1.0)
 
 
 class ImporterBase(object):

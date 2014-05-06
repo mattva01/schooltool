@@ -1160,16 +1160,6 @@ class BasicPersonRemoveRelationshipTable(RelationshipRemoveTableMixin,
     pass
 
 
-class BasicPersonAddRelationshipTable(RelationshipAddTableMixin,
-                                      BasicPersonTable):
-    pass
-
-
-class BasicPersonRemoveRelationshipTable(RelationshipRemoveTableMixin,
-                                         BasicPersonTable):
-    pass
-
-
 class BasicPersonAddTemporalRelationshipTable(TemporalRelationshipAddTableMixin,
                                       BasicPersonTable):
     pass
