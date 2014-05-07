@@ -2,9 +2,11 @@
 CHANGES
 =======
 
-2.7.1 (unreleased)
+2.8.0 (2014-05-08)
 ------------------
 
+- Added 'Added in error' state for temporal relationships
+- Added What is this info to membership state edit view (https://launchpad.net/bugs/1308944)
 
 
 2.6.4 (2014-05-01)
