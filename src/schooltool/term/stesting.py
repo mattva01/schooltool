@@ -39,10 +39,7 @@ def registerSeleniumSetup():
     import schooltool.testing.selenium
 
     def addTerm(browser, schoolyear, title, first, last, holidays=(), weekends=()):
-        browser.query.link('School').click()
-        page = browser.query.tag('html')
-        browser.query.link('Terms').click()
-        browser.wait(lambda: page.expired)
+        browser.open('http://localhost/terms')
         browser.query.link(schoolyear).click()
         browser.query.link('Term').click()
         browser.query.name('form.widgets.title').type(title)
